@@ -23,26 +23,26 @@ namespace System.Windows.Forms
 
         internal HtmlHistory(UnsafeNativeMethods.IOmHistory history)
         {
-            this.htmlHistory = history;
-            Debug.Assert(this.NativeOmHistory != null, "The history object should implement IOmHistory");
+            htmlHistory = history;
+            Debug.Assert(NativeOmHistory != null, "The history object should implement IOmHistory");
         }
 
         private UnsafeNativeMethods.IOmHistory NativeOmHistory
         {
             get
             {
-                if (this.disposed)
+                if (disposed)
                 {
                     throw new System.ObjectDisposedException(GetType().Name);
                 }
-                return this.htmlHistory;
+                return htmlHistory;
             }
         }
 
         public void Dispose()
         {
-            this.htmlHistory = null;
-            this.disposed = true;
+            htmlHistory = null;
+            disposed = true;
             GC.SuppressFinalize(this);
         }
 
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (int)this.NativeOmHistory.GetLength();
+                return (int)NativeOmHistory.GetLength();
             }
         }
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             else if (numberBack > 0)
             {
                 object oNumForward = (object)(-numberBack);
-                this.NativeOmHistory.Go(ref oNumForward);
+                NativeOmHistory.Go(ref oNumForward);
             }
         }
 
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             else if (numberForward > 0)
             {
                 object oNumForward = (object)numberForward;
-                this.NativeOmHistory.Go(ref oNumForward);
+                NativeOmHistory.Go(ref oNumForward);
             }
         }
 
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         public void Go(string urlString)
         {
             object loc = (object)urlString;
-            this.NativeOmHistory.Go(ref loc);
+            NativeOmHistory.Go(ref loc);
         }
 
         /// <summary>
@@ -109,14 +109,14 @@ namespace System.Windows.Forms
         public void Go(int relativePosition)
         {
             object loc = (object)relativePosition;
-            this.NativeOmHistory.Go(ref loc);
+            NativeOmHistory.Go(ref loc);
         }
 
         public object DomHistory
         {
             get
             {
-                return this.NativeOmHistory;
+                return NativeOmHistory;
             }
         }
     }

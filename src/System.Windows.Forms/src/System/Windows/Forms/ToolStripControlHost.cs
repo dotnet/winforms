@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             SetBounds(c.Bounds);
 
             // now that we have a control set in, update the bounds.
-            Rectangle bounds = this.Bounds;
+            Rectangle bounds = Bounds;
             CommonProperties.UpdateSpecifiedBounds(c, bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
             c.ToolStripControlHost = this;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         }
         public ToolStripControlHost(Control c, string name) : this(c)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public override Color BackColor
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             {
                 if (control != null)
                 {
-                    return (DesignMode || this.Control.CanSelect);
+                    return (DesignMode || Control.CanSelect);
                 }
                 return false;
             }
@@ -793,7 +793,7 @@ namespace System.Windows.Forms
 
             if (itemVisibleStateFlag != controlVisibleStateFlag)
             {
-                this.Visible = Control.Visible;
+                Visible = Control.Visible;
                 // this should fire the OnVisibleChanged and raise events appropriately.
             };
         }
@@ -879,8 +879,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                Size size = LayoutUtils.DeflateRect(this.Bounds, this.Padding).Size;
-                Rectangle bounds = LayoutUtils.Align(size, this.Bounds, ControlAlign);
+                Size size = LayoutUtils.DeflateRect(Bounds, Padding).Size;
+                Rectangle bounds = LayoutUtils.Align(size, Bounds, ControlAlign);
 
                 // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
                 element.SetBounds(bounds, BoundsSpecified.None);
@@ -889,7 +889,7 @@ namespace System.Windows.Forms
                 // to re-align.
                 if (bounds != control.Bounds)
                 {
-                    bounds = LayoutUtils.Align(control.Size, this.Bounds, ControlAlign);
+                    bounds = LayoutUtils.Align(control.Size, Bounds, ControlAlign);
                     element.SetBounds(bounds, BoundsSpecified.None);
                 }
                 ResumeSizeSync();
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms
         protected virtual void OnHostedControlResize(EventArgs e)
         {
             // support for syncing the wrapper when the control size has changed
-            this.Size = Control.Size;
+            Size = Control.Size;
         }
 
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
@@ -1124,12 +1124,12 @@ namespace System.Windows.Forms
 
         private void SuspendSizeSync()
         {
-            this.suspendSyncSizeCount++;
+            suspendSyncSizeCount++;
         }
 
         private void ResumeSizeSync()
         {
-            this.suspendSyncSizeCount--;
+            suspendSyncSizeCount--;
         }
         internal override bool ShouldSerializeBackColor()
         {
@@ -1170,14 +1170,14 @@ namespace System.Windows.Forms
         {
             base.OnKeyboardToolTipHook(toolTip);
 
-            KeyboardToolTipStateMachine.Instance.Hook(this.Control, toolTip);
+            KeyboardToolTipStateMachine.Instance.Hook(Control, toolTip);
         }
 
         internal override void OnKeyboardToolTipUnhook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipUnhook(toolTip);
 
-            KeyboardToolTipStateMachine.Instance.Unhook(this.Control, toolTip);
+            KeyboardToolTipStateMachine.Instance.Unhook(Control, toolTip);
         }
 
         // Our implementation of ISite:

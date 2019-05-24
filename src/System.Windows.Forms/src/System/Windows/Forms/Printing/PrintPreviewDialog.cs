@@ -68,8 +68,8 @@ namespace System.Windows.Forms
             base.AutoScaleBaseSize = new Size(5, 13);
 #pragma warning restore 618
 
-            this.previewControl = new PrintPreviewControl();
-            this.imageList = new ImageList();
+            previewControl = new PrintPreviewControl();
+            imageList = new ImageList();
             imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
             InitForm();
         }
@@ -1265,221 +1265,221 @@ namespace System.Windows.Forms
 
 
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintPreviewDialog));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.zoomToolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.autoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
-            this.separatorToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.onepageToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.twopagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.threepagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.fourpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.sixpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.separatorToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.closeToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.pageCounter = new System.Windows.Forms.NumericUpDown();
-            this.pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-            this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pageCounter)).BeginInit();
-            this.SuspendLayout();
+            toolStrip1 = new System.Windows.Forms.ToolStrip();
+            printToolStripButton = new System.Windows.Forms.ToolStripButton();
+            zoomToolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            autoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            separatorToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            onepageToolStripButton = new System.Windows.Forms.ToolStripButton();
+            twopagesToolStripButton = new System.Windows.Forms.ToolStripButton();
+            threepagesToolStripButton = new System.Windows.Forms.ToolStripButton();
+            fourpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
+            sixpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
+            separatorToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            closeToolStripButton = new System.Windows.Forms.ToolStripButton();
+            pageCounter = new System.Windows.Forms.NumericUpDown();
+            pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(pageCounter)).BeginInit();
+            SuspendLayout();
 
             // 
             // toolStrip1
             // 
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.printToolStripButton,
-            this.zoomToolStripSplitButton,
-            this.separatorToolStripSeparator,
-            this.onepageToolStripButton,
-            this.twopagesToolStripButton,
-            this.threepagesToolStripButton,
-            this.fourpagesToolStripButton,
-            this.sixpagesToolStripButton,
-            this.separatorToolStripSeparator1,
-            this.closeToolStripButton});
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
+            resources.ApplyResources(toolStrip1, "toolStrip1");
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            printToolStripButton,
+            zoomToolStripSplitButton,
+            separatorToolStripSeparator,
+            onepageToolStripButton,
+            twopagesToolStripButton,
+            threepagesToolStripButton,
+            fourpagesToolStripButton,
+            sixpagesToolStripButton,
+            separatorToolStripSeparator1,
+            closeToolStripButton});
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
             // 
             // printToolStripButton
             // 
-            this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.printToolStripButton.Name = "printToolStripButton";
-            resources.ApplyResources(this.printToolStripButton, "printToolStripButton");
+            printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            printToolStripButton.Name = "printToolStripButton";
+            resources.ApplyResources(printToolStripButton, "printToolStripButton");
 
             // 
             // zoomToolStripSplitButton
             // 
-            this.zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.zoomToolStripSplitButton.DoubleClickEnabled = true;
-            this.zoomToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autoToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4,
-            this.toolStripMenuItem5,
-            this.toolStripMenuItem6,
-            this.toolStripMenuItem7,
-            this.toolStripMenuItem8});
-            this.zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
-            this.zoomToolStripSplitButton.SplitterWidth = 1;
-            resources.ApplyResources(this.zoomToolStripSplitButton, "zoomToolStripSplitButton");
+            zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            zoomToolStripSplitButton.DoubleClickEnabled = true;
+            zoomToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            autoToolStripMenuItem,
+            toolStripMenuItem1,
+            toolStripMenuItem2,
+            toolStripMenuItem3,
+            toolStripMenuItem4,
+            toolStripMenuItem5,
+            toolStripMenuItem6,
+            toolStripMenuItem7,
+            toolStripMenuItem8});
+            zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
+            zoomToolStripSplitButton.SplitterWidth = 1;
+            resources.ApplyResources(zoomToolStripSplitButton, "zoomToolStripSplitButton");
 
 
             // 
             // autoToolStripMenuItem
             // 
-            this.autoToolStripMenuItem.CheckOnClick = true;
-            this.autoToolStripMenuItem.DoubleClickEnabled = true;
-            this.autoToolStripMenuItem.Checked = true;
-            this.autoToolStripMenuItem.Name = "autoToolStripMenuItem";
-            resources.ApplyResources(this.autoToolStripMenuItem, "autoToolStripMenuItem");
+            autoToolStripMenuItem.CheckOnClick = true;
+            autoToolStripMenuItem.DoubleClickEnabled = true;
+            autoToolStripMenuItem.Checked = true;
+            autoToolStripMenuItem.Name = "autoToolStripMenuItem";
+            resources.ApplyResources(autoToolStripMenuItem, "autoToolStripMenuItem");
 
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMenuItem1.CheckOnClick = true;
-            this.toolStripMenuItem1.DoubleClickEnabled = true;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
+            toolStripMenuItem1.CheckOnClick = true;
+            toolStripMenuItem1.DoubleClickEnabled = true;
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            resources.ApplyResources(toolStripMenuItem1, "toolStripMenuItem1");
 
             // 
             // toolStripMenuItem2
             // 
-            this.toolStripMenuItem2.CheckOnClick = true;
-            this.toolStripMenuItem2.DoubleClickEnabled = true;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
+            toolStripMenuItem2.CheckOnClick = true;
+            toolStripMenuItem2.DoubleClickEnabled = true;
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            resources.ApplyResources(toolStripMenuItem2, "toolStripMenuItem2");
 
             // 
             // toolStripMenuItem3
             // 
-            this.toolStripMenuItem3.CheckOnClick = true;
-            this.toolStripMenuItem3.DoubleClickEnabled = true;
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
+            toolStripMenuItem3.CheckOnClick = true;
+            toolStripMenuItem3.DoubleClickEnabled = true;
+            toolStripMenuItem3.Name = "toolStripMenuItem3";
+            resources.ApplyResources(toolStripMenuItem3, "toolStripMenuItem3");
 
             // 
             // toolStripMenuItem4
             // 
-            this.toolStripMenuItem4.CheckOnClick = true;
-            this.toolStripMenuItem4.DoubleClickEnabled = true;
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
+            toolStripMenuItem4.CheckOnClick = true;
+            toolStripMenuItem4.DoubleClickEnabled = true;
+            toolStripMenuItem4.Name = "toolStripMenuItem4";
+            resources.ApplyResources(toolStripMenuItem4, "toolStripMenuItem4");
 
             // 
             // toolStripMenuItem5
             // 
-            this.toolStripMenuItem5.CheckOnClick = true;
-            this.toolStripMenuItem5.DoubleClickEnabled = true;
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
+            toolStripMenuItem5.CheckOnClick = true;
+            toolStripMenuItem5.DoubleClickEnabled = true;
+            toolStripMenuItem5.Name = "toolStripMenuItem5";
+            resources.ApplyResources(toolStripMenuItem5, "toolStripMenuItem5");
 
             // 
             // toolStripMenuItem6
             // 
-            this.toolStripMenuItem6.CheckOnClick = true;
-            this.toolStripMenuItem6.DoubleClickEnabled = true;
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
+            toolStripMenuItem6.CheckOnClick = true;
+            toolStripMenuItem6.DoubleClickEnabled = true;
+            toolStripMenuItem6.Name = "toolStripMenuItem6";
+            resources.ApplyResources(toolStripMenuItem6, "toolStripMenuItem6");
 
             // 
             // toolStripMenuItem7
             // 
-            this.toolStripMenuItem7.CheckOnClick = true;
-            this.toolStripMenuItem7.DoubleClickEnabled = true;
-            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            resources.ApplyResources(this.toolStripMenuItem7, "toolStripMenuItem7");
+            toolStripMenuItem7.CheckOnClick = true;
+            toolStripMenuItem7.DoubleClickEnabled = true;
+            toolStripMenuItem7.Name = "toolStripMenuItem7";
+            resources.ApplyResources(toolStripMenuItem7, "toolStripMenuItem7");
 
             // 
             // toolStripMenuItem8
             // 
-            this.toolStripMenuItem8.CheckOnClick = true;
-            this.toolStripMenuItem8.DoubleClickEnabled = true;
-            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            resources.ApplyResources(this.toolStripMenuItem8, "toolStripMenuItem8");
+            toolStripMenuItem8.CheckOnClick = true;
+            toolStripMenuItem8.DoubleClickEnabled = true;
+            toolStripMenuItem8.Name = "toolStripMenuItem8";
+            resources.ApplyResources(toolStripMenuItem8, "toolStripMenuItem8");
 
             // 
             // separatorToolStripSeparator
             // 
-            this.separatorToolStripSeparator.Name = "separatorToolStripSeparator";
+            separatorToolStripSeparator.Name = "separatorToolStripSeparator";
 
             // 
             // onepageToolStripButton
             // 
-            this.onepageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.onepageToolStripButton.Name = "onepageToolStripButton";
-            resources.ApplyResources(this.onepageToolStripButton, "onepageToolStripButton");
+            onepageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            onepageToolStripButton.Name = "onepageToolStripButton";
+            resources.ApplyResources(onepageToolStripButton, "onepageToolStripButton");
 
             // 
             // twopagesToolStripButton
             // 
-            this.twopagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.twopagesToolStripButton.Name = "twopagesToolStripButton";
-            resources.ApplyResources(this.twopagesToolStripButton, "twopagesToolStripButton");
+            twopagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            twopagesToolStripButton.Name = "twopagesToolStripButton";
+            resources.ApplyResources(twopagesToolStripButton, "twopagesToolStripButton");
 
             // 
             // threepagesToolStripButton
             // 
-            this.threepagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.threepagesToolStripButton.Name = "threepagesToolStripButton";
-            resources.ApplyResources(this.threepagesToolStripButton, "threepagesToolStripButton");
+            threepagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            threepagesToolStripButton.Name = "threepagesToolStripButton";
+            resources.ApplyResources(threepagesToolStripButton, "threepagesToolStripButton");
 
             // 
             // fourpagesToolStripButton
             // 
-            this.fourpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.fourpagesToolStripButton.Name = "fourpagesToolStripButton";
-            resources.ApplyResources(this.fourpagesToolStripButton, "fourpagesToolStripButton");
+            fourpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            fourpagesToolStripButton.Name = "fourpagesToolStripButton";
+            resources.ApplyResources(fourpagesToolStripButton, "fourpagesToolStripButton");
 
             // 
             // sixpagesToolStripButton
             // 
-            this.sixpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.sixpagesToolStripButton.Name = "sixpagesToolStripButton";
-            resources.ApplyResources(this.sixpagesToolStripButton, "sixpagesToolStripButton");
+            sixpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            sixpagesToolStripButton.Name = "sixpagesToolStripButton";
+            resources.ApplyResources(sixpagesToolStripButton, "sixpagesToolStripButton");
 
             // 
             // separatorToolStripSeparator1
             // 
-            this.separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
+            separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
 
             // 
             // closeToolStripButton
             // 
-            this.closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            this.closeToolStripButton.Name = "closeToolStripButton";
-            resources.ApplyResources(this.closeToolStripButton, "closeToolStripButton");
+            closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            closeToolStripButton.Name = "closeToolStripButton";
+            resources.ApplyResources(closeToolStripButton, "closeToolStripButton");
 
             // 
             // pageCounter
             // 
-            resources.ApplyResources(this.pageCounter, "pageCounter");
+            resources.ApplyResources(pageCounter, "pageCounter");
             pageCounter.Text = "1";
             pageCounter.TextAlign = HorizontalAlignment.Right;
             pageCounter.DecimalPlaces = 0;
             pageCounter.Minimum = new decimal(0d);
             pageCounter.Maximum = new decimal(1000d);
             pageCounter.ValueChanged += new EventHandler(UpdownMove);
-            this.pageCounter.Name = "pageCounter";
+            pageCounter.Name = "pageCounter";
 
             // 
             // pageToolStripLabel
             // 
-            this.pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.pageToolStripLabel.Name = "pageToolStripLabel";
-            resources.ApplyResources(this.pageToolStripLabel, "pageToolStripLabel");
+            pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            pageToolStripLabel.Name = "pageToolStripLabel";
+            resources.ApplyResources(pageToolStripLabel, "pageToolStripLabel");
 
             previewControl.Size = new Size(792, 610);
             previewControl.Location = new Point(0, 43);
@@ -1487,32 +1487,32 @@ namespace System.Windows.Forms
             previewControl.StartPageChanged += new EventHandler(previewControl_StartPageChanged);
 
             //EVENTS and Images ...
-            this.printToolStripButton.Click += new System.EventHandler(this.OnprintToolStripButtonClick);
-            this.autoToolStripMenuItem.Click += new System.EventHandler(ZoomAuto);
-            this.toolStripMenuItem1.Click += new System.EventHandler(Zoom500);
-            this.toolStripMenuItem2.Click += new System.EventHandler(Zoom250);
-            this.toolStripMenuItem3.Click += new System.EventHandler(Zoom150);
-            this.toolStripMenuItem4.Click += new System.EventHandler(Zoom100);
-            this.toolStripMenuItem5.Click += new System.EventHandler(Zoom75);
-            this.toolStripMenuItem6.Click += new System.EventHandler(Zoom50);
-            this.toolStripMenuItem7.Click += new System.EventHandler(Zoom25);
-            this.toolStripMenuItem8.Click += new System.EventHandler(Zoom10);
-            this.onepageToolStripButton.Click += new System.EventHandler(this.OnonepageToolStripButtonClick);
-            this.twopagesToolStripButton.Click += new System.EventHandler(this.OntwopagesToolStripButtonClick);
-            this.threepagesToolStripButton.Click += new System.EventHandler(this.OnthreepagesToolStripButtonClick);
-            this.fourpagesToolStripButton.Click += new System.EventHandler(this.OnfourpagesToolStripButtonClick);
-            this.sixpagesToolStripButton.Click += new System.EventHandler(this.OnsixpagesToolStripButtonClick);
-            this.closeToolStripButton.Click += new System.EventHandler(this.OncloseToolStripButtonClick);
-            this.closeToolStripButton.Paint += new PaintEventHandler(this.OncloseToolStripButtonPaint);
+            printToolStripButton.Click += new System.EventHandler(OnprintToolStripButtonClick);
+            autoToolStripMenuItem.Click += new System.EventHandler(ZoomAuto);
+            toolStripMenuItem1.Click += new System.EventHandler(Zoom500);
+            toolStripMenuItem2.Click += new System.EventHandler(Zoom250);
+            toolStripMenuItem3.Click += new System.EventHandler(Zoom150);
+            toolStripMenuItem4.Click += new System.EventHandler(Zoom100);
+            toolStripMenuItem5.Click += new System.EventHandler(Zoom75);
+            toolStripMenuItem6.Click += new System.EventHandler(Zoom50);
+            toolStripMenuItem7.Click += new System.EventHandler(Zoom25);
+            toolStripMenuItem8.Click += new System.EventHandler(Zoom10);
+            onepageToolStripButton.Click += new System.EventHandler(OnonepageToolStripButtonClick);
+            twopagesToolStripButton.Click += new System.EventHandler(OntwopagesToolStripButtonClick);
+            threepagesToolStripButton.Click += new System.EventHandler(OnthreepagesToolStripButtonClick);
+            fourpagesToolStripButton.Click += new System.EventHandler(OnfourpagesToolStripButtonClick);
+            sixpagesToolStripButton.Click += new System.EventHandler(OnsixpagesToolStripButtonClick);
+            closeToolStripButton.Click += new System.EventHandler(OncloseToolStripButtonClick);
+            closeToolStripButton.Paint += new PaintEventHandler(OncloseToolStripButtonPaint);
             //Images
-            this.toolStrip1.ImageList = imageList;
-            this.printToolStripButton.ImageIndex = 0;
-            this.zoomToolStripSplitButton.ImageIndex = 1;
-            this.onepageToolStripButton.ImageIndex = 2;
-            this.twopagesToolStripButton.ImageIndex = 3;
-            this.threepagesToolStripButton.ImageIndex = 4;
-            this.fourpagesToolStripButton.ImageIndex = 5;
-            this.sixpagesToolStripButton.ImageIndex = 6;
+            toolStrip1.ImageList = imageList;
+            printToolStripButton.ImageIndex = 0;
+            zoomToolStripSplitButton.ImageIndex = 1;
+            onepageToolStripButton.ImageIndex = 2;
+            twopagesToolStripButton.ImageIndex = 3;
+            threepagesToolStripButton.ImageIndex = 4;
+            fourpagesToolStripButton.ImageIndex = 5;
+            sixpagesToolStripButton.ImageIndex = 6;
 
             //tabIndex
             previewControl.TabIndex = 0;
@@ -1522,7 +1522,7 @@ namespace System.Windows.Forms
             zoomToolStripSplitButton.DefaultItem = autoToolStripMenuItem;
 
             //ShowCheckMargin
-            ToolStripDropDownMenu menu = this.zoomToolStripSplitButton.DropDown as ToolStripDropDownMenu;
+            ToolStripDropDownMenu menu = zoomToolStripSplitButton.DropDown as ToolStripDropDownMenu;
             if (menu != null)
             {
                 menu.ShowCheckMargin = true;
@@ -1535,25 +1535,25 @@ namespace System.Windows.Forms
             ToolStripControlHost pageCounterItem = new ToolStripControlHost(pageCounter);
             pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 
-            this.toolStrip1.Items.Add(pageCounterItem);
-            this.toolStrip1.Items.Add(this.pageToolStripLabel);
+            toolStrip1.Items.Add(pageCounterItem);
+            toolStrip1.Items.Add(pageToolStripLabel);
 
             // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
 
-            this.Controls.Add(previewControl);
-            this.Controls.Add(this.toolStrip1);
+            Controls.Add(previewControl);
+            Controls.Add(toolStrip1);
 
-            this.ClientSize = new Size(400, 300);
-            this.MinimizeBox = false;
-            this.ShowInTaskbar = false;
-            this.SizeGripStyle = SizeGripStyle.Hide;
-            this.toolStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pageCounter)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            ClientSize = new Size(400, 300);
+            MinimizeBox = false;
+            ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Hide;
+            toolStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(pageCounter)).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
 
         }
@@ -1611,9 +1611,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
-            if (this.ActiveControl == this.previewControl)
+            if (ActiveControl == previewControl)
             {
-                this.pageCounter.Focus();
+                pageCounter.Focus();
                 return true;
             }
             return false;
@@ -1638,7 +1638,7 @@ namespace System.Windows.Forms
 
         void OncloseToolStripButtonClick(object sender, System.EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         void previewControl_StartPageChanged(object sender, EventArgs e)

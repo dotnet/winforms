@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         public ToolStripMenuItem(string text, Image image, EventHandler onClick, Keys shortcutKeys) : base(text, image, onClick)
         {
             Initialize();
-            this.ShortcutKeys = shortcutKeys;
+            ShortcutKeys = shortcutKeys;
         }
         internal ToolStripMenuItem(Form mdiForm)
         {
@@ -116,10 +116,10 @@ namespace System.Windows.Forms
         internal ToolStripMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow)
         {
             Initialize();
-            this.Overflow = ToolStripItemOverflow.Never;
-            this.nativeMenuCommandID = nativeMenuCommandId;
-            this.targetWindowHandle = Control.GetSafeHandle(targetWindow);
-            this.nativeMenuHandle = hMenu;
+            Overflow = ToolStripItemOverflow.Never;
+            nativeMenuCommandID = nativeMenuCommandId;
+            targetWindowHandle = Control.GetSafeHandle(targetWindow);
+            nativeMenuHandle = hMenu;
 
             // Since fetching the image and the text is an awful lot of work
             // we're going to just cache it and assume the native stuff 
@@ -129,8 +129,8 @@ namespace System.Windows.Forms
             // to live-return the results.
 
             // fetch image
-            this.Image = GetNativeMenuItemImage();
-            this.ImageScaling = ToolStripItemImageScaling.None;
+            Image = GetNativeMenuItemImage();
+            ImageScaling = ToolStripItemImageScaling.None;
 
             // fetch text
             string text = GetNativeMenuItemTextAndShortcut();
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
 
                 if (textFields.Length >= 1)
                 {
-                    this.Text = textFields[0];
+                    Text = textFields[0];
                 }
 
                 if (textFields.Length >= 2)
@@ -151,8 +151,8 @@ namespace System.Windows.Forms
                     // We dont care about the shortcut here, the OS is going to 
                     // handle it for us by sending a WM_(SYS)COMMAND during TranslateAcellerator
                     // Just display whatever the OS would have.
-                    this.ShowShortcutKeys = true;
-                    this.ShortcutKeyDisplayString = textFields[1];
+                    ShowShortcutKeys = true;
+                    ShortcutKeyDisplayString = textFields[1];
                 }
             }
         }
@@ -200,9 +200,9 @@ namespace System.Windows.Forms
                 scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(checkMarkBitmapSize);
             }
 
-            this.Overflow = ToolStripItemOverflow.Never;
-            this.MouseDownAndUpMustBeInSameItem = false;
-            this.SupportsDisabledHotTracking = true;
+            Overflow = ToolStripItemOverflow.Never;
+            MouseDownAndUpMustBeInSameItem = false;
+            SupportsDisabledHotTracking = true;
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace System.Windows.Forms
                 if (originalShortcut != value)
                 {
                     ClearShortcutCache();
-                    ToolStrip owner = this.Owner;
+                    ToolStrip owner = Owner;
                     if (owner != null)
                     {
                         // add to the shortcut caching system.
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
                         ToolStripDropDownMenu parent = GetCurrentParentDropDown() as ToolStripDropDownMenu;
                         if (parent != null)
                         {
-                            LayoutTransaction.DoLayout(this.ParentInternal, this, "ShortcutKeys");
+                            LayoutTransaction.DoLayout(ParentInternal, this, "ShortcutKeys");
                             parent.AdjustSize();
                         }
                     }
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                     ClearShortcutCache();
                     if (ShowShortcutKeys)
                     {
-                        ToolStripDropDown parent = this.ParentInternal as ToolStripDropDown;
+                        ToolStripDropDown parent = ParentInternal as ToolStripDropDown;
                         if (parent != null)
                         {
                             LayoutTransaction.DoLayout(parent, this, "ShortcutKeyDisplayString");
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
                 {
                     ClearShortcutCache();
                     showShortcutKeys = value;
-                    ToolStripDropDown parent = this.ParentInternal as ToolStripDropDown;
+                    ToolStripDropDown parent = ParentInternal as ToolStripDropDown;
                     if (parent != null)
                     {
                         LayoutTransaction.DoLayout(parent, this, "ShortcutKeys");
@@ -636,7 +636,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (this.ParentInternal as ToolStripDropDown == null);
+                return (ParentInternal as ToolStripDropDown == null);
             }
         }
 
@@ -678,51 +678,51 @@ namespace System.Windows.Forms
             // dirt simple clone - just properties, no subitems
 
             ToolStripMenuItem menuItem = new ToolStripMenuItem();
-            menuItem.Events.AddHandlers(this.Events);
+            menuItem.Events.AddHandlers(Events);
 
-            menuItem.AccessibleName = this.AccessibleName;
-            menuItem.AccessibleRole = this.AccessibleRole;
-            menuItem.Alignment = this.Alignment;
-            menuItem.AllowDrop = this.AllowDrop;
-            menuItem.Anchor = this.Anchor;
-            menuItem.AutoSize = this.AutoSize;
-            menuItem.AutoToolTip = this.AutoToolTip;
-            menuItem.BackColor = this.BackColor;
-            menuItem.BackgroundImage = this.BackgroundImage;
-            menuItem.BackgroundImageLayout = this.BackgroundImageLayout;
-            menuItem.Checked = this.Checked;
-            menuItem.CheckOnClick = this.CheckOnClick;
-            menuItem.CheckState = this.CheckState;
-            menuItem.DisplayStyle = this.DisplayStyle;
-            menuItem.Dock = this.Dock;
-            menuItem.DoubleClickEnabled = this.DoubleClickEnabled;
-            menuItem.Enabled = this.Enabled;
-            menuItem.Font = this.Font;
-            menuItem.ForeColor = this.ForeColor;
-            menuItem.Image = this.Image;
-            menuItem.ImageAlign = this.ImageAlign;
-            menuItem.ImageScaling = this.ImageScaling;
-            menuItem.ImageTransparentColor = this.ImageTransparentColor;
-            menuItem.Margin = this.Margin;
-            menuItem.MergeAction = this.MergeAction;
-            menuItem.MergeIndex = this.MergeIndex;
-            menuItem.Name = this.Name;
-            menuItem.Overflow = this.Overflow;
-            menuItem.Padding = this.Padding;
-            menuItem.RightToLeft = this.RightToLeft;
+            menuItem.AccessibleName = AccessibleName;
+            menuItem.AccessibleRole = AccessibleRole;
+            menuItem.Alignment = Alignment;
+            menuItem.AllowDrop = AllowDrop;
+            menuItem.Anchor = Anchor;
+            menuItem.AutoSize = AutoSize;
+            menuItem.AutoToolTip = AutoToolTip;
+            menuItem.BackColor = BackColor;
+            menuItem.BackgroundImage = BackgroundImage;
+            menuItem.BackgroundImageLayout = BackgroundImageLayout;
+            menuItem.Checked = Checked;
+            menuItem.CheckOnClick = CheckOnClick;
+            menuItem.CheckState = CheckState;
+            menuItem.DisplayStyle = DisplayStyle;
+            menuItem.Dock = Dock;
+            menuItem.DoubleClickEnabled = DoubleClickEnabled;
+            menuItem.Enabled = Enabled;
+            menuItem.Font = Font;
+            menuItem.ForeColor = ForeColor;
+            menuItem.Image = Image;
+            menuItem.ImageAlign = ImageAlign;
+            menuItem.ImageScaling = ImageScaling;
+            menuItem.ImageTransparentColor = ImageTransparentColor;
+            menuItem.Margin = Margin;
+            menuItem.MergeAction = MergeAction;
+            menuItem.MergeIndex = MergeIndex;
+            menuItem.Name = Name;
+            menuItem.Overflow = Overflow;
+            menuItem.Padding = Padding;
+            menuItem.RightToLeft = RightToLeft;
 
             // No settings support for cloned items.
             // menuItem.SaveSettings= this.SaveSettings;
             // menuItem.SettingsKey = this.SettingsKey;
 
-            menuItem.ShortcutKeys = this.ShortcutKeys;
-            menuItem.ShowShortcutKeys = this.ShowShortcutKeys;
-            menuItem.Tag = this.Tag;
-            menuItem.Text = this.Text;
-            menuItem.TextAlign = this.TextAlign;
-            menuItem.TextDirection = this.TextDirection;
-            menuItem.TextImageRelation = this.TextImageRelation;
-            menuItem.ToolTipText = this.ToolTipText;
+            menuItem.ShortcutKeys = ShortcutKeys;
+            menuItem.ShowShortcutKeys = ShowShortcutKeys;
+            menuItem.Tag = Tag;
+            menuItem.Text = Text;
+            menuItem.TextAlign = TextAlign;
+            menuItem.TextDirection = TextDirection;
+            menuItem.TextImageRelation = TextImageRelation;
+            menuItem.ToolTipText = ToolTipText;
 
             // cant actually use "Visible" property as that returns whether or not the parent 
             // is visible too.. instead use ParticipatesInLayout as this queries the actual state.
@@ -730,7 +730,7 @@ namespace System.Windows.Forms
 
             if (!AutoSize)
             {
-                menuItem.Size = this.Size;
+                menuItem.Size = Size;
             }
             return menuItem;
         }
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
             {
                 if (lastOwner != null)
                 {
-                    Keys shortcut = this.ShortcutKeys;
+                    Keys shortcut = ShortcutKeys;
                     if (shortcut != Keys.None && lastOwner.Shortcuts.ContainsKey(shortcut))
                     {
                         lastOwner.Shortcuts.Remove(shortcut);
@@ -924,7 +924,7 @@ namespace System.Windows.Forms
         {
             if (cachedShortcutText == null)
             {
-                cachedShortcutText = ShortcutToText(this.ShortcutKeys, this.ShortcutKeyDisplayString);
+                cachedShortcutText = ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
             }
             return cachedShortcutText;
         }
@@ -945,7 +945,7 @@ namespace System.Windows.Forms
         {
             if (checkOnClick)
             {
-                this.Checked = !this.Checked;
+                Checked = !Checked;
             }
             base.OnClick(e);
             if (nativeMenuCommandID != -1)
@@ -967,7 +967,7 @@ namespace System.Windows.Forms
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
                 }
-                this.Invalidate();
+                Invalidate();
             }
 
         }
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms
         /// <devdoc/>
         internal void OnMenuAutoExpand()
         {
-            this.ShowDropDown();
+            ShowDropDown();
         }
 
 
@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms
                     // opening should happen on mouse down.  
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
-                    this.ShowDropDown(/*mousePush =*/true);
+                    ShowDropDown(/*mousePush =*/true);
 
                 }
                 else if (!isMouseDown && !showDropDown)
@@ -1100,10 +1100,10 @@ namespace System.Windows.Forms
         protected override void OnMouseEnter(EventArgs e)
         {
 
-            Debug.Assert(this.ParentInternal != null, "Why is parent null");
+            Debug.Assert(ParentInternal != null, "Why is parent null");
 
             // If we are in a submenu pop down the submenu.		
-            if (this.ParentInternal != null && this.ParentInternal.MenuAutoExpand && Selected)
+            if (ParentInternal != null && ParentInternal.MenuAutoExpand && Selected)
             {
                 Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
 
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
         protected override void OnOwnerChanged(EventArgs e)
         {
 
-            Keys shortcut = this.ShortcutKeys;
+            Keys shortcut = ShortcutKeys;
             if (shortcut != Keys.None)
             {
                 if (lastOwner != null)
@@ -1158,18 +1158,18 @@ namespace System.Windows.Forms
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
 
-            if (this.Owner != null)
+            if (Owner != null)
             {
-                ToolStripRenderer renderer = this.Renderer;
+                ToolStripRenderer renderer = Renderer;
                 Graphics g = e.Graphics;
                 renderer.DrawMenuItemBackground(new ToolStripItemRenderEventArgs(g, this));
 
                 Color textColor = SystemColors.MenuText;
                 if (IsForeColorSet)
                 {
-                    textColor = this.ForeColor;
+                    textColor = ForeColor;
                 }
-                else if (!this.IsTopLevel || (ToolStripManager.VisualStylesEnabled))
+                else if (!IsTopLevel || (ToolStripManager.VisualStylesEnabled))
                 {
                     if (Selected || Pressed)
                     {
@@ -1183,7 +1183,7 @@ namespace System.Windows.Forms
 
                 bool rightToLeft = (RightToLeft == RightToLeft.Yes);
 
-                ToolStripMenuItemInternalLayout menuItemInternalLayout = this.InternalLayout as ToolStripMenuItemInternalLayout;
+                ToolStripMenuItemInternalLayout menuItemInternalLayout = InternalLayout as ToolStripMenuItemInternalLayout;
                 if (menuItemInternalLayout != null && menuItemInternalLayout.UseMenuLayout)
                 {
 
@@ -1213,7 +1213,7 @@ namespace System.Windows.Forms
                     {
 
                         // render text AND shortcut
-                        renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, InternalLayout.TextRectangle, textColor, this.Font, (rightToLeft) ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft));
+                        renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, (rightToLeft) ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft));
                         bool showShortCut = ShowShortcutKeys;
                         if (!DesignMode)
                         {
@@ -1222,7 +1222,7 @@ namespace System.Windows.Forms
 
                         if (showShortCut)
                         {
-                            renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, GetShortcutText(), InternalLayout.TextRectangle, textColor, this.Font, (rightToLeft) ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleRight));
+                            renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, GetShortcutText(), InternalLayout.TextRectangle, textColor, Font, (rightToLeft) ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleRight));
                         }
                     }
 
@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms
                     // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                     {
-                        renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, InternalLayout.TextRectangle, textColor, this.Font, InternalLayout.TextFormat));
+                        renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, InternalLayout.TextFormat));
                     }
 
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image != null)

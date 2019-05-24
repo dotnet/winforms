@@ -76,7 +76,7 @@ namespace System.Windows.Forms
 
         public ToolBarButton(string text) : base()
         {
-            this.Text = text;
+            Text = text;
         }
 
 
@@ -516,21 +516,21 @@ namespace System.Windows.Forms
 
                     // COMPAT: this will force handle creation.  
                     // we could use the measurement graphics, but it looks like this has been like this since Everett.
-                    using (Graphics g = this.parent.CreateGraphicsInternal())
+                    using (Graphics g = parent.CreateGraphicsInternal())
                     {
 
-                        Size buttonSize = this.parent.buttonSize;
+                        Size buttonSize = parent.buttonSize;
                         if (!(buttonSize.IsEmpty))
                         {
                             width = buttonSize.Width;
                         }
                         else
                         {
-                            if (this.parent.ImageList != null || !string.IsNullOrEmpty(Text))
+                            if (parent.ImageList != null || !string.IsNullOrEmpty(Text))
                             {
-                                Size imageSize = this.parent.ImageSize;
+                                Size imageSize = parent.ImageSize;
                                 Size textSize = Size.Ceiling(g.MeasureString(Text, parent.Font));
-                                if (this.parent.TextAlign == ToolBarTextAlign.Right)
+                                if (parent.TextAlign == ToolBarTextAlign.Right)
                                 {
                                     if (textSize.Width == 0)
                                         width = imageSize.Width + edge.Width * 4;
@@ -544,13 +544,13 @@ namespace System.Windows.Forms
                                     else
                                         width = textSize.Width + edge.Width * 4;
                                 }
-                                if (style == ToolBarButtonStyle.DropDownButton && this.parent.DropDownArrows)
+                                if (style == ToolBarButtonStyle.DropDownButton && parent.DropDownArrows)
                                 {
                                     width += ToolBar.DDARROW_WIDTH;
                                 }
                             }
                             else
-                                width = this.parent.ButtonSize.Width;
+                                width = parent.ButtonSize.Width;
                         }
                     }
                 }
@@ -675,7 +675,7 @@ namespace System.Windows.Forms
             }
 
             button.dwData = (IntPtr)0;
-            button.iString = this.stringIndex;
+            button.iString = stringIndex;
             this.commandId = commandId;
             button.idCommand = commandId;
 
@@ -744,7 +744,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                string textValue = this.text;
+                string textValue = text;
                 PrefixAmpersands(ref textValue);
                 button.pszText = Marshal.StringToHGlobalAuto(textValue);
             }

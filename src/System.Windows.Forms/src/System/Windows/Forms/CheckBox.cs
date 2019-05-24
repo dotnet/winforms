@@ -87,11 +87,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.accObjDoDefaultAction;
+                return accObjDoDefaultAction;
             }
             set
             {
-                this.accObjDoDefaultAction = value;
+                accObjDoDefaultAction = value;
             }
         }
 
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
 
                 if (appearance != value)
                 {
-                    using (LayoutTransaction.CreateTransactionIf(AutoSize, this.ParentInternal, this, PropertyNames.Appearance))
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {
                         appearance = value;
                         if (OwnerDraw)
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
                 return base.GetPreferredSizeCore(proposedConstraints);
             }
 
-            Size textSize = TextRenderer.MeasureText(this.Text, this.Font);
+            Size textSize = TextRenderer.MeasureText(Text, Font);
             Size size = SizeFromClientSize(textSize);
             size.Width += flatSystemStylePaddingWidth;
             size.Height = Math.Max(size.Height + 5, flatSystemStyleMinimumHeight); // ensure minimum height to avoid truncation of check-box or text
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
         protected virtual void OnCheckedChanged(EventArgs e)
         {
             // accessibility stuff
-            if (this.FlatStyle == FlatStyle.System)
+            if (FlatStyle == FlatStyle.System)
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureStart, -1);
             }
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
-            if (this.FlatStyle == FlatStyle.System)
+            if (FlatStyle == FlatStyle.System)
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
             }
@@ -596,7 +596,7 @@ namespace System.Windows.Forms
                             // If the check box is clicked as a result of AccObj::DoDefaultAction
                             // then the native check box does not fire OBJ_STATE_CHANGE event when going to Indeterminate state.
                             // So the WinForms layer fires the OBJ_STATE_CHANGE event.
-                            if (this.AccObjDoDefaultAction)
+                            if (AccObjDoDefaultAction)
                             {
                                 AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
                             }
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
                         ResetFlagsandPaint();
                         if (!ValidationCancelled)
                         {
-                            if (this.Capture)
+                            if (Capture)
                             {
                                 OnClick(mevent);
                             }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                CheckBox cb = this.Owner as CheckBox;
+                CheckBox cb = Owner as CheckBox;
 
                 if (cb != null)
                 {

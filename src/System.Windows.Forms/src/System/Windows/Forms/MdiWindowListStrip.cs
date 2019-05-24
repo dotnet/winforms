@@ -47,7 +47,7 @@ namespace System.Windows.Forms
 
                 if (mergeItem.Owner == null)
                 {
-                    this.Items.Add(mergeItem);
+                    Items.Add(mergeItem);
                 }
                 return mergeItem;
             }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         public void PopulateItems(Form mdiParent, ToolStripMenuItem mdiMergeItem, bool includeSeparator)
         {
             this.mdiParent = mdiParent;
-            this.SuspendLayout();
+            SuspendLayout();
             MergeItem.DropDown.SuspendLayout();
             try
             {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
             finally
             {
                 // this is an invisible toolstrip dont even bother doing layout.
-                this.ResumeLayout(false);
+                ResumeLayout(false);
                 MergeItem.DropDown.ResumeLayout(false);
             }
         }

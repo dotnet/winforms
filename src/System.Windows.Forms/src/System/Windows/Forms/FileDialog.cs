@@ -747,7 +747,7 @@ namespace System.Windows.Forms
 
         private bool RunDialogOld(IntPtr hWndOwner)
         {
-            var hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            var hookProcPtr = new NativeMethods.WndProc(HookProc);
             var ofn = new NativeMethods.OPENFILENAME_I();
             try
             {

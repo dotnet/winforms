@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.owner.AccessibilityObject;
+                    return owner.AccessibilityObject;
                 }
             }
 
@@ -51,15 +51,15 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.Name;
+                    return Name;
                 }
             }
 
             public override AccessibleObject GetChild(int index)
             {
-                if (index >= 0 && index < this.owner.GetCellCount(DataGridViewElementStates.Selected))
+                if (index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected))
                 {
-                    return this.owner.SelectedCell(index).AccessibilityObject;
+                    return owner.SelectedCell(index).AccessibilityObject;
                 }
                 else
                 {
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                return this.owner.GetCellCount(DataGridViewElementStates.Selected);
+                return owner.GetCellCount(DataGridViewElementStates.Selected);
             }
 
             public override AccessibleObject GetSelected()
@@ -79,9 +79,9 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused()
             {
-                if (this.owner.CurrentCell != null && this.owner.CurrentCell.Selected)
+                if (owner.CurrentCell != null && owner.CurrentCell.Selected)
                 {
-                    return this.owner.CurrentCell.AccessibilityObject;
+                    return owner.CurrentCell.AccessibilityObject;
                 }
                 else
                 {
@@ -94,18 +94,18 @@ namespace System.Windows.Forms
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.FirstChild:
-                        if (this.owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
+                        if (owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
                         {
-                            return this.owner.SelectedCell(0).AccessibilityObject;
+                            return owner.SelectedCell(0).AccessibilityObject;
                         }
                         else
                         {
                             return null;
                         }
                     case AccessibleNavigation.LastChild:
-                        if (this.owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
+                        if (owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
                         {
-                            return this.owner.SelectedCell(this.owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject;
+                            return owner.SelectedCell(owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject;
                         }
                         else
                         {

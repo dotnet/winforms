@@ -347,7 +347,7 @@ namespace System.Windows.Forms
                     CheckedListBox.ObjectCollection items = (CheckedListBox.ObjectCollection)Items;
                     if ((items != null) && (items.Count > 0))
                     {
-                        this.Invalidate();
+                        Invalidate();
                     }
                 }
             }
@@ -608,7 +608,7 @@ namespace System.Windows.Forms
 
             if (Font.Height < 0)
             {
-                this.Font = Control.DefaultFont;
+                Font = Control.DefaultFont;
             }
 
             if (e.Index >= 0)
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                 }
 
                 Rectangle bounds = e.Bounds;
-                int height = this.ItemHeight;
+                int height = ItemHeight;
 
                 // set up the appearance of the checkbox
                 //
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                int[] indices = new int[this.Count];
+                int[] indices = new int[Count];
                 CopyTo(indices, 0);
                 return indices.GetEnumerator();
             }
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms
             {
                 if (index >= 0 && index < CheckedListBox.Items.Count)
                 {
-                    return new CheckedListBoxItemAccessibleObject(this.CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this);
+                    return new CheckedListBoxItemAccessibleObject(CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this);
                 }
                 else
                 {
@@ -1608,7 +1608,7 @@ namespace System.Windows.Forms
 
                 // Within the CheckedListBox bounds?
                 //
-                if (this.Bounds.Contains(x, y))
+                if (Bounds.Contains(x, y))
                 {
                     return this;
                 }

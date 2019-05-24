@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 {
                     SetStyle(ControlStyles.ResizeRedraw, true);
                 }
-                this.Invalidate();
+                Invalidate();
                 Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set it");
             }
         }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeControls()
         {
-            TableLayoutControlCollection collection = this.Controls;
+            TableLayoutControlCollection collection = Controls;
             return collection != null && collection.Count > 0;
         }
 
@@ -387,7 +387,7 @@ namespace System.Windows.Forms
         protected override void OnLayout(LayoutEventArgs levent)
         {
             base.OnLayout(levent);
-            this.Invalidate();
+            Invalidate();
         }
 
 
@@ -408,11 +408,11 @@ namespace System.Windows.Forms
 
             // paint borderstyles on top of the background image in WM_ERASEBKGND
 
-            int cellBorderWidth = this.CellBorderWidth;
+            int cellBorderWidth = CellBorderWidth;
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             TableLayout.Strip[] colStrips = containerInfo.Columns;
             TableLayout.Strip[] rowStrips = containerInfo.Rows;
-            TableLayoutPanelCellBorderStyle cellBorderStyle = this.CellBorderStyle;
+            TableLayoutPanelCellBorderStyle cellBorderStyle = CellBorderStyle;
 
 
 

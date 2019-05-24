@@ -102,15 +102,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
 #if DEBUG
             ComNativeDescriptor cnd = new ComNativeDescriptor();
-            this.dbgObjName = cnd.GetName(obj);
-            if (this.dbgObjName == null)
+            dbgObjName = cnd.GetName(obj);
+            if (dbgObjName == null)
             {
-                this.dbgObjName = "(null)";
+                dbgObjName = "(null)";
             }
-            this.dbgObjClass = cnd.GetClassName(obj);
-            if (this.dbgObjClass == null)
+            dbgObjClass = cnd.GetClassName(obj);
+            if (dbgObjClass == null)
             {
-                this.dbgObjClass = "(null)";
+                dbgObjClass = "(null)";
             }
             if (DbgCom2PropertiesSwitch.TraceVerbose)
                 Debug.WriteLine("Creating Com2Properties for object " + dbgObjName + ", class=" + dbgObjClass);
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return this.alwaysValid > 0;
+                return alwaysValid > 0;
             }
             set
             {
@@ -142,13 +142,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         return;
                     }
-                    this.alwaysValid++;
+                    alwaysValid++;
                 }
                 else
                 {
                     if (alwaysValid > 0)
                     {
-                        this.alwaysValid--;
+                        alwaysValid--;
                     }
                 }
             }
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public void AddExtendedBrowsingHandlers(Hashtable handlers)
         {
 
-            object target = this.TargetObject;
+            object target = TargetObject;
             if (target == null)
             {
                 return;
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal bool CheckValid(bool checkVersions, bool callDispose)
         {
 
-            if (this.AlwaysValid)
+            if (AlwaysValid)
             {
                 return true;
             }

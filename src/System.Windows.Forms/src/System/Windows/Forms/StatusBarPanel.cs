@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.autoSize;
+                return autoSize;
             }
 
             set
@@ -129,9 +129,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelAutoSize));
                 }
-                if (this.autoSize != value)
+                if (autoSize != value)
                 {
-                    this.autoSize = value;
+                    autoSize = value;
                     UpdateSize();
                 }
             }
@@ -166,12 +166,12 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelBorderStyle));
                 }
-                if (this.borderStyle != value)
+                if (borderStyle != value)
                 {
-                    this.borderStyle = value;
+                    borderStyle = value;
                     Realize();
                     if (Created)
-                        this.parent.Invalidate();
+                        parent.Invalidate();
                 }
             }
         }
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.parent != null && this.parent.ArePanelsRealized();
+                return parent != null && parent.ArePanelsRealized();
             }
         }
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
             get
             {
                 // unfortunately we have no way of getting the icon from the control.
-                return this.icon;
+                return icon;
             }
 
 
@@ -214,23 +214,23 @@ namespace System.Windows.Forms
 
                 if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
                 {
-                    this.icon = new Icon(value, SystemInformation.SmallIconSize);
+                    icon = new Icon(value, SystemInformation.SmallIconSize);
                 }
                 else
                 {
-                    this.icon = value;
+                    icon = value;
                 }
 
                 if (Created)
                 {
-                    IntPtr handle = (this.icon == null) ? IntPtr.Zero : this.icon.Handle;
-                    this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), handle);
+                    IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
+                    parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), handle);
 
                 }
                 UpdateSize();
                 if (Created)
                 {
-                    this.parent.Invalidate();
+                    parent.Invalidate();
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.minWidth;
+                return minWidth;
             }
             set
             {
@@ -278,12 +278,12 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinWidth), value, 0));
                 }
 
-                if (value != this.minWidth)
+                if (value != minWidth)
                 {
-                    this.minWidth = value;
+                    minWidth = value;
 
                     UpdateSize();
-                    if (this.minWidth > this.Width)
+                    if (minWidth > Width)
                     {
                         Width = value;
                     }
@@ -385,13 +385,13 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelStyle));
                 }
-                if (this.style != value)
+                if (style != value)
                 {
-                    this.style = value;
+                    style = value;
                     Realize();
                     if (Created)
                     {
-                        this.parent.Invalidate();
+                        parent.Invalidate();
                     }
                 }
             }
@@ -453,11 +453,11 @@ namespace System.Windows.Forms
 
                     if (value.Length == 0)
                     {
-                        this.text = null;
+                        text = null;
                     }
                     else
                     {
-                        this.text = value;
+                        text = value;
                     }
                     Realize();
                     UpdateSize();
@@ -481,13 +481,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.toolTipText == null)
+                if (toolTipText == null)
                 {
                     return "";
                 }
                 else
                 {
-                    return this.toolTipText;
+                    return toolTipText;
                 }
             }
             set
@@ -502,11 +502,11 @@ namespace System.Windows.Forms
 
                     if (value.Length == 0)
                     {
-                        this.toolTipText = null;
+                        toolTipText = null;
                     }
                     else
                     {
-                        this.toolTipText = value;
+                        toolTipText = value;
                     }
 
                     if (Created)
@@ -534,14 +534,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.width;
+                return width;
             }
             set
             {
-                if (!initializing && value < this.minWidth)
+                if (!initializing && value < minWidth)
                     throw new ArgumentOutOfRangeException(nameof(Width), SR.WidthGreaterThanMinWidth);
 
-                this.width = value;
+                width = value;
                 UpdateSize();
             }
         }
@@ -601,11 +601,11 @@ namespace System.Windows.Forms
             else
                 text = Text;
 
-            Graphics g = this.parent.CreateGraphicsInternal();
+            Graphics g = parent.CreateGraphicsInternal();
             Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
-            if (this.icon != null)
+            if (icon != null)
             {
-                sz.Width += this.icon.Size.Width + 5;
+                sz.Width += icon.Size.Width + 5;
             }
             g.Dispose();
 
@@ -702,13 +702,13 @@ namespace System.Windows.Forms
                 if (result == 0)
                     throw new InvalidOperationException(SR.UnableToSetPanelText);
 
-                if (this.icon != null && style != StatusBarPanelStyle.OwnerDraw)
+                if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {
-                    this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), this.icon.Handle);
+                    parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), icon.Handle);
                 }
                 else
                 {
-                    this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
+                    parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
                 }
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
@@ -718,7 +718,7 @@ namespace System.Windows.Forms
 
                     if (result != 0)
                     {
-                        this.parent.Invalidate(Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom));
+                        parent.Invalidate(Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom));
                     }
                 }
             }
@@ -726,7 +726,7 @@ namespace System.Windows.Forms
 
         private void UpdateSize()
         {
-            if (this.autoSize == StatusBarPanelAutoSize.Contents)
+            if (autoSize == StatusBarPanelAutoSize.Contents)
             {
                 ApplyContentSizing();
             }
@@ -742,13 +742,13 @@ namespace System.Windows.Forms
 
         private void ApplyContentSizing()
         {
-            if (this.autoSize == StatusBarPanelAutoSize.Contents &&
+            if (autoSize == StatusBarPanelAutoSize.Contents &&
                 parent != null)
             {
                 int newWidth = GetContentsWidth(false);
-                if (newWidth != this.Width)
+                if (newWidth != Width)
                 {
-                    this.Width = newWidth;
+                    Width = newWidth;
                     if (Created)
                     {
                         parent.DirtyLayout();

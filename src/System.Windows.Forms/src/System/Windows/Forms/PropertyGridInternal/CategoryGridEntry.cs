@@ -55,21 +55,21 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            this.IsExpandable = true;
+            IsExpandable = true;
 
             for (int i = 0; i < childGridEntries.Length; i++)
             {
                 childGridEntries[i].ParentGridEntry = this;
             }
 
-            this.ChildCollection = new GridEntryCollection(this, childGridEntries);
+            ChildCollection = new GridEntryCollection(this, childGridEntries);
 
             lock (categoryStates)
             {
-                this.InternalExpanded = (bool)categoryStates[name];
+                InternalExpanded = (bool)categoryStates[name];
             }
 
-            this.SetFlag(GridEntry.FLAG_LABEL_BOLD, true);
+            SetFlag(GridEntry.FLAG_LABEL_BOLD, true);
         }
 
 
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override Brush GetBackgroundBrush(Graphics g)
         {
-            return this.GridEntryHost.GetLineBrush(g);
+            return GridEntryHost.GetLineBrush(g);
         }
 
         protected override Color LabelTextColor
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.InternalExpanded = value;
                 lock (categoryStates)
                 {
-                    categoryStates[this.name] = value;
+                    categoryStates[name] = value;
                 }
             }
         }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // we give an extra pixel for breathing room
                 // we want to make sure that we return 0 for property depth here instead of
-                PropertyGridView gridHost = this.GridEntryHost;
+                PropertyGridView gridHost = GridEntryHost;
 
                 // we call base.PropertyDepth here because we don't want the subratction to happen.
                 return 1 + gridHost.GetOutlineIconSize() + OUTLINE_ICON_PADDING + (base.PropertyDepth * gridHost.GetDefaultOutlineIndent());
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             string str = "object = (";
             str += FullLabel;
-            str += "), Category = (" + this.PropertyLabel + ")";
+            str += "), Category = (" + PropertyLabel + ")";
             return str;
         }
 
@@ -241,9 +241,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             // now draw the focus rect
             if (selected && hasFocus)
             {
-                bool bold = ((this.Flags & GridEntry.FLAG_LABEL_BOLD) != 0);
+                bool bold = ((Flags & GridEntry.FLAG_LABEL_BOLD) != 0);
                 Font font = GetFont(bold);
-                int labelWidth = GetLabelTextWidth(this.PropertyLabel, g, font);
+                int labelWidth = GetLabelTextWidth(PropertyLabel, g, font);
 
                 int indent = PropertyLabelIndent - 2;
                 Rectangle focusRect = new Rectangle(indent, rect.Y, labelWidth + 3, rect.Height - 1);

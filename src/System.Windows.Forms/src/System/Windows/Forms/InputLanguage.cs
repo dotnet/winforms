@@ -315,7 +315,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool Equals(object value)
         {
-            return (value is InputLanguage other) && (this.handle == other.handle);
+            return (value is InputLanguage other) && (handle == other.handle);
         }
 
         /// <summary>

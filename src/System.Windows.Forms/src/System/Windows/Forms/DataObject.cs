@@ -1279,7 +1279,7 @@ namespace System.Windows.Forms
             public int Skip(int celt)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
-                if (current + celt >= this.formats.Count)
+                if (current + celt >= formats.Count)
                 {
                     return NativeMethods.S_FALSE;
                 }

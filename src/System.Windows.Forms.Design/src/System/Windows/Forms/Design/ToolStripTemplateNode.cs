@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Design
             if (currentItem is ToolStripDropDownItem stripItem)
             {
                 _miniToolStrip.RightToLeft = stripItem.RightToLeft;
-                stripItem.RightToLeftChanged += new System.EventHandler(this.OnRightToLeftChanged);
+                stripItem.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
             }
             _miniToolStrip.SuspendLayout();
             _miniToolStrip.CanOverflow = false;
@@ -1643,7 +1643,7 @@ namespace System.Windows.Forms.Design
             private bool ProcessTabKey(bool forward)
             {
                 // Give the ToolStripItem first dibs
-                ToolStripItem item = this.GetSelectedItem();
+                ToolStripItem item = GetSelectedItem();
                 if (item is ToolStripControlHost)
                 {
 

@@ -26,13 +26,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             this.controls = controls;
             SetStyle(ControlStyles.UserPaint, false);
-            this.Font = controls[0].Font;
-            this.toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
+            Font = controls[0].Font;
+            toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
 
             for (int i = 0; i < controls.Length; i++)
             {
-                controls[i].HandleCreated += new EventHandler(this.OnControlCreateHandle);
-                controls[i].HandleDestroyed += new EventHandler(this.OnControlDestroyHandle);
+                controls[i].HandleCreated += new EventHandler(OnControlCreateHandle);
+                controls[i].HandleDestroyed += new EventHandler(OnControlDestroyHandle);
 
                 if (controls[i].IsHandleCreated)
                 {
@@ -49,9 +49,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                if (this.IsHandleCreated || !string.IsNullOrEmpty(value))
+                if (IsHandleCreated || !string.IsNullOrEmpty(value))
                 {
-                    this.Reset();
+                    Reset();
                 }
 
                 if (value != null && value.Length > maximumToolTipLength)
@@ -59,16 +59,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //Let the user know the text was truncated by throwing on an ellipsis
                     value = value.Substring(0, maximumToolTipLength) + "...";
                 }
-                this.toolTipText = value;
+                toolTipText = value;
 
-                if (this.IsHandleCreated)
+                if (IsHandleCreated)
                 {
 
-                    bool visible = this.Visible;
+                    bool visible = Visible;
 
                     if (visible)
                     {
-                        this.Visible = false;
+                        Visible = false;
                     }
 
                     // here's a workaround.  if we give
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (visible && !dontShow)
                     {
-                        this.Visible = true;
+                        Visible = true;
                     }
 
                 }
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 cp.ClassName = NativeMethods.TOOLTIPS_CLASS;
                 cp.Style |= (NativeMethods.TTS_ALWAYSTIP | NativeMethods.TTS_NOPREFIX);
                 cp.ExStyle = 0;
-                cp.Caption = this.ToolTip;
+                cp.Caption = ToolTip;
                 return cp;
             }
         }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 toolInfos[index].cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
             }
-            toolInfos[index].lpszText = this.toolTipText;
+            toolInfos[index].lpszText = toolTipText;
             toolInfos[index].hwnd = c.Handle;
             toolInfos[index].uId = c.Handle;
             return toolInfos[index];
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void SetupToolTip(Control c)
         {
-            if (this.IsHandleCreated)
+            if (IsHandleCreated)
             {
                 SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOPMOST,
                                   0, 0, 0, 0,
@@ -209,8 +209,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // update the text, then it back to what it was, so the tooltip
             // thinks it's back in the regular state again
             //
-            string oldText = this.ToolTip;
-            this.toolTipText = string.Empty;
+            string oldText = ToolTip;
+            toolTipText = string.Empty;
             for (int i = 0; i < controls.Length; i++)
             {
                 if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i])))
@@ -218,8 +218,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
                 }
             }
-            this.toolTipText = oldText;
-            this.SendMessage(NativeMethods.TTM_UPDATE, 0, 0);
+            toolTipText = oldText;
+            SendMessage(NativeMethods.TTM_UPDATE, 0, 0);
         }
 
         protected override void WndProc(ref Message msg)

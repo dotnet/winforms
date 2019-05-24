@@ -517,7 +517,7 @@ namespace System.Windows.Forms
                                      ImageInstallationType installationType)
         {
             StopAnimate();
-            this.image = value;
+            image = value;
 
             LayoutTransaction.DoLayoutIf(AutoSize, this, this, PropertyNames.Image);
 
@@ -526,7 +526,7 @@ namespace System.Windows.Forms
             {
                 AdjustSize();
             }
-            this.imageInstallationType = installationType;
+            imageInstallationType = installationType;
 
             Invalidate();
             CommonProperties.xClearPreferredSizeCache(this);
@@ -614,8 +614,8 @@ namespace System.Windows.Forms
         ]
         public void Load(string url)
         {
-            this.ImageLocation = url;
-            this.Load();
+            ImageLocation = url;
+            Load();
         }
 
         [
@@ -835,8 +835,8 @@ namespace System.Windows.Forms
         ]
         public void LoadAsync(string url)
         {
-            this.ImageLocation = url;
-            this.LoadAsync();
+            ImageLocation = url;
+            LoadAsync();
         }
 
         [
@@ -845,8 +845,8 @@ namespace System.Windows.Forms
         ]
         public event AsyncCompletedEventHandler LoadCompleted
         {
-            add => this.Events.AddHandler(loadCompletedKey, value);
-            remove => this.Events.RemoveHandler(loadCompletedKey, value);
+            add => Events.AddHandler(loadCompletedKey, value);
+            remove => Events.RemoveHandler(loadCompletedKey, value);
         }
 
         [
@@ -855,8 +855,8 @@ namespace System.Windows.Forms
         ]
         public event ProgressChangedEventHandler LoadProgressChanged
         {
-            add => this.Events.AddHandler(loadProgressChangedKey, value);
-            remove => this.Events.RemoveHandler(loadProgressChangedKey, value);
+            add => Events.AddHandler(loadProgressChangedKey, value);
+            remove => Events.RemoveHandler(loadProgressChangedKey, value);
         }
 
         private void ResetInitialImage()
@@ -943,16 +943,16 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PictureBoxSizeMode));
                 }
-                if (this.sizeMode != value)
+                if (sizeMode != value)
                 {
                     if (value == PictureBoxSizeMode.AutoSize)
                     {
-                        this.AutoSize = true;
+                        AutoSize = true;
                         SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
                     }
                     if (value != PictureBoxSizeMode.AutoSize)
                     {
-                        this.AutoSize = false;
+                        AutoSize = false;
                         SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, false);
                         savedSize = Size;
                     }
@@ -1108,22 +1108,22 @@ namespace System.Windows.Forms
 
         private void Animate(bool animate)
         {
-            if (animate != this.currentlyAnimating)
+            if (animate != currentlyAnimating)
             {
                 if (animate)
                 {
-                    if (this.image != null)
+                    if (image != null)
                     {
-                        ImageAnimator.Animate(this.image, new EventHandler(this.OnFrameChanged));
-                        this.currentlyAnimating = animate;
+                        ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
+                        currentlyAnimating = animate;
                     }
                 }
                 else
                 {
-                    if (this.image != null)
+                    if (image != null)
                     {
-                        ImageAnimator.StopAnimate(this.image, new EventHandler(this.OnFrameChanged));
-                        this.currentlyAnimating = animate;
+                        ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
+                        currentlyAnimating = animate;
                     }
                 }
             }
@@ -1191,7 +1191,7 @@ namespace System.Windows.Forms
                 {
                     if (handleValid)
                     {
-                        BeginInvoke(new EventHandler(this.OnFrameChanged), o, e);
+                        BeginInvoke(new EventHandler(OnFrameChanged), o, e);
                     }
                     return;
                 }
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
             if (image != null)
             {
                 Animate();
-                ImageAnimator.UpdateFrames(this.Image);
+                ImageAnimator.UpdateFrames(Image);
 
                 // Error and initial image are drawn centered, non-stretched.
                 Rectangle drawingRect =

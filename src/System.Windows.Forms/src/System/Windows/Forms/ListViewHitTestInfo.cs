@@ -26,9 +26,9 @@ namespace System.Windows.Forms
         /// </summary>
         public ListViewHitTestInfo(ListViewItem hitItem, ListViewItem.ListViewSubItem hitSubItem, ListViewHitTestLocations hitLocation)
         {
-            this.item = hitItem;
-            this.subItem = hitSubItem;
-            this.loc = hitLocation;
+            item = hitItem;
+            subItem = hitSubItem;
+            loc = hitLocation;
         }
 
 

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         public ToolStripRendererSwitcher(Control owner, ToolStripRenderMode defaultRenderMode) : this(owner)
         {
             this.defaultRenderMode = defaultRenderMode;
-            this.RenderMode = defaultRenderMode;
+            RenderMode = defaultRenderMode;
         }
 
 
@@ -136,9 +136,9 @@ namespace System.Windows.Forms
 
         private void OnRendererChanged(EventArgs e)
         {
-            if (this.RendererChanged != null)
+            if (RendererChanged != null)
             {
-                this.RendererChanged(this, e);
+                RendererChanged(this, e);
             }
         }
         private void OnDefaultRendererChanged(object sender, EventArgs e)
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
         }
         public void ResetRenderMode()
         {
-            this.RenderMode = defaultRenderMode;
+            RenderMode = defaultRenderMode;
         }
 
     }

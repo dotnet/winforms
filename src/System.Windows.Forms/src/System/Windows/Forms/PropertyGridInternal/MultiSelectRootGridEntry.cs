@@ -71,7 +71,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, this.PropertySort, CurrentTab);
+                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, PropertySort, CurrentTab);
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps == null, "PropertyGridView: MergedProps returned null!");
 
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
-                bool fExpandable = this.Children.Count > 0;
+                bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
                     //Debug.WriteLine("Object " + rgobjs[0].GetType().FullName + " is not expandable because it has no children");

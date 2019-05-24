@@ -240,7 +240,7 @@ namespace System.Resources
                 xmlTextWriter.WriteAttributeString(NameStr, ReaderStr);
                 xmlTextWriter.WriteStartElement(ValueStr);
                 {
-                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), this.typeNameConverter));
+                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), typeNameConverter));
                 }
                 xmlTextWriter.WriteEndElement();
             }
@@ -250,7 +250,7 @@ namespace System.Resources
                 xmlTextWriter.WriteAttributeString(NameStr, WriterStr);
                 xmlTextWriter.WriteStartElement(ValueStr);
                 {
-                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), this.typeNameConverter));
+                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), typeNameConverter));
                 }
                 xmlTextWriter.WriteEndElement();
             }
@@ -405,14 +405,14 @@ namespace System.Resources
                     break;
                 case ResXFileRef fileRef:
                     {
-                        ResXDataNode node = new ResXDataNode(name, fileRef, this.typeNameConverter);
+                        ResXDataNode node = new ResXDataNode(name, fileRef, typeNameConverter);
                         DataNodeInfo info = node.GetDataNodeInfo();
                         AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
                         break;
                     }
                 default:
                     {
-                        ResXDataNode node = new ResXDataNode(name, value, this.typeNameConverter);
+                        ResXDataNode node = new ResXDataNode(name, value, typeNameConverter);
                         DataNodeInfo info = node.GetDataNodeInfo();
                         AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
                         break;
@@ -428,7 +428,7 @@ namespace System.Resources
             // if it's a null string, set it here as a resxnullref
             string typeName =
                 value == null
-                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter)
+                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), typeNameConverter)
                     : null;
             AddDataRow(elementName, name, value, typeName, null, null);
         }
@@ -458,7 +458,7 @@ namespace System.Resources
                         }
                         else if (typeObject != null)
                         {
-                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, this.typeNameConverter));
+                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, typeNameConverter));
                             alias = GetAliasFromName(new AssemblyName(assemblyName));
                         }
                     }
@@ -642,7 +642,7 @@ namespace System.Resources
 
         private string TypeNameWithAssembly(Type type)
         {
-            string result = MultitargetUtil.GetAssemblyQualifiedName(type, this.typeNameConverter);
+            string result = MultitargetUtil.GetAssemblyQualifiedName(type, typeNameConverter);
             return result;
         }
 

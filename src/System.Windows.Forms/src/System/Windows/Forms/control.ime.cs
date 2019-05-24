@@ -148,9 +148,9 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CurrentImeContextMode(), this = " + this);
 
-                if (this.IsHandleCreated)
+                if (IsHandleCreated)
                 {
-                    return ImeContext.GetImeMode(this.Handle);
+                    return ImeContext.GetImeMode(Handle);
                 }
                 else
                 {
@@ -521,7 +521,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        ImeContext.SetImeStatus(newImeContextMode, this.Handle);
+                        ImeContext.SetImeStatus(newImeContextMode, Handle);
                     }
                     finally
                     {
@@ -589,7 +589,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside VerifyImeRestrictedModeChanged(), this = " + this);
             Debug.Indent();
 
-            bool currentCanEnableIme = this.CanEnableIme;
+            bool currentCanEnableIme = CanEnableIme;
 
             if (LastCanEnableIme != currentCanEnableIme)
             {
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         private void WmImeEndComposition(ref Message m)
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeEndComposition() - Disabling ImeWmCharToIgnore, this=" + this);
-            this.ImeWmCharsToIgnore = ImeCharsToIgnoreDisabled;
+            ImeWmCharsToIgnore = ImeCharsToIgnoreDisabled;
             DefWndProc(ref m);
         }
 
@@ -839,7 +839,7 @@ namespace System.Windows.Forms
                     Debug.Indent();
 
                     // Synchronize internal properties with the IME context mode.
-                    OnImeContextStatusChanged(this.Handle);
+                    OnImeContextStatusChanged(Handle);
 
                     Debug.Unindent();
                 }

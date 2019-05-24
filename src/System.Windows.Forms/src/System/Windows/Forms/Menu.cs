@@ -324,7 +324,7 @@ namespace System.Windows.Forms
             if (handle != IntPtr.Zero)
             {
                 UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
-                this.handle = IntPtr.Zero;
+                handle = IntPtr.Zero;
                 if (disposing)
                 {
                     ClearHandles();
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
 
 

@@ -128,9 +128,9 @@ namespace System.Windows.Forms
                 // To support transparency on ToolStripContainer, we need this check
                 // to ensure that background color of the container reflects the 
                 // ContentPanel
-                if (this.ParentInternal is ToolStripContainer && value == Color.Transparent)
+                if (ParentInternal is ToolStripContainer && value == Color.Transparent)
                 {
-                    this.ParentInternal.BackColor = Color.Transparent;
+                    ParentInternal.BackColor = Color.Transparent;
                 }
                 base.BackColor = value;
             }
@@ -403,19 +403,19 @@ namespace System.Windows.Forms
             // we dont want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else dont.
             if (Renderer is ToolStripProfessionalRenderer)
             {
-                state[stateLastDoubleBuffer] = this.DoubleBuffered;
+                state[stateLastDoubleBuffer] = DoubleBuffered;
                 //this.DoubleBuffered = true;
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             }
             else
             {
                 // restore DBuf
-                this.DoubleBuffered = state[stateLastDoubleBuffer];
+                DoubleBuffered = state[stateLastDoubleBuffer];
             }
 
             Renderer.InitializeContentPanel(this);
 
-            this.Invalidate();
+            Invalidate();
 
             EventHandler handler = (EventHandler)Events[EventRendererChanged];
             if (handler != null)
@@ -425,12 +425,12 @@ namespace System.Windows.Forms
 
         private void ResetRenderMode()
         {
-            this.RendererSwitcher.ResetRenderMode();
+            RendererSwitcher.ResetRenderMode();
         }
 
         private bool ShouldSerializeRenderMode()
         {
-            return this.RendererSwitcher.ShouldSerializeRenderMode();
+            return RendererSwitcher.ShouldSerializeRenderMode();
         }
     }
 }

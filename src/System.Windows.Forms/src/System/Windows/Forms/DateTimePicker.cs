@@ -413,7 +413,7 @@ namespace System.Windows.Forms
             get
             {
                 // the information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
-                if (this.ShowCheckBox && IsHandleCreated)
+                if (ShowCheckBox && IsHandleCreated)
                 {
                     NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
                     int gdt = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_GETSYSTEMTIME, 0, sys);
@@ -426,10 +426,10 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.Checked != value)
+                if (Checked != value)
                 {
                     // set the information into the win32 DateTimePicker only if ShowCheckBoxes is True
-                    if (this.ShowCheckBox && IsHandleCreated)
+                    if (ShowCheckBox && IsHandleCreated)
                     {
                         if (value)
                         {
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                     // this.validTime is used when the DateTimePicker receives date time change notification
                     // from the Win32 control. this.validTime will be used to know when we transition from valid time to unvalid time
                     // also, validTime will be used when ShowCheckBox == false
-                    this.validTime = value;
+                    validTime = value;
                 }
             }
         }
@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                bool valueChanged = !DateTime.Equals(this.Value, value);
+                bool valueChanged = !DateTime.Equals(Value, value);
                 // Check for value set here; if we've not set the value yet, it'll be Now, so the second
                 // part of the test will fail.
                 // So, if userHasSetValue isn't set, we don't care if the value is still the same - and we'll
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), FormatDateTime(value), $"'{nameof(MinDate)}'", $"'{nameof(MaxDate)}'"));
                     }
 
-                    string oldText = this.Text;
+                    string oldText = Text;
 
                     this.value = value;
                     userHasSetValue = true;
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms
                         OnValueChanged(EventArgs.Empty);
                     }
 
-                    if (!oldText.Equals(this.Text))
+                    if (!oldText.Equals(Text))
                     {
                         OnTextChanged(EventArgs.Empty);
                     }
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
         }
 
         /// <summary>
@@ -1274,7 +1274,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
             base.OnHandleDestroyed(e);
         }
 
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms
         {
 
             // always update on reset with ShowNone = false -- as it'll take the current time.
-            this.value = DateTime.Now;
+            value = DateTime.Now;
 
             // If ShowCheckBox = true, then userHasSetValue can be false (null value).
             // otherwise, userHasSetValue is valid...
@@ -1631,7 +1631,7 @@ namespace System.Windows.Forms
             try
             {
                 //use begininvoke instead of invoke in case the destination thread is not processing messages.
-                BeginInvoke(new UserPreferenceChangedEventHandler(this.UserPreferenceChanged), new object[] { sender, pref });
+                BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), new object[] { sender, pref });
             }
             catch (InvalidOperationException) { } //if the destination thread does not exist, don't send.
         }
@@ -1686,7 +1686,7 @@ namespace System.Windows.Forms
         private void WmDropDown(ref Message m)
         {
 
-            if (this.RightToLeftLayout == true && this.RightToLeft == RightToLeft.Yes)
+            if (RightToLeftLayout == true && RightToLeft == RightToLeft.Yes)
             {
                 IntPtr handle = SendMessage(NativeMethods.DTM_GETMONTHCAL, 0, 0);
                 if (handle != IntPtr.Zero)
@@ -1818,7 +1818,7 @@ namespace System.Windows.Forms
                     // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label 
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
-                    Label previousLabel = this.PreviousLabel;
+                    Label previousLabel = PreviousLabel;
 
                     if (previousLabel != null)
                     {
@@ -1833,7 +1833,7 @@ namespace System.Windows.Forms
 
                     if ((baseShortcut == null || baseShortcut.Length == 0))
                     {
-                        char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(this.Owner.Text, false /*convertToUpperCase*/);
+                        char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(Owner.Text, false /*convertToUpperCase*/);
                         if (ownerTextMnemonic != (char)0)
                         {
                             return "Alt+" + ownerTextMnemonic;

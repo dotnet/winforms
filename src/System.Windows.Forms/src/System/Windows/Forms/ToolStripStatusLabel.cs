@@ -250,9 +250,9 @@ namespace System.Windows.Forms
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
 
-            if (this.Owner != null)
+            if (Owner != null)
             {
-                ToolStripRenderer renderer = this.Renderer;
+                ToolStripRenderer renderer = Renderer;
 
                 renderer.DrawToolStripStatusLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 

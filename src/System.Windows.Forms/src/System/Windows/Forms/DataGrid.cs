@@ -326,7 +326,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Opaque, false);
             SetStyle(ControlStyles.SupportsTransparentBackColor, false);
             SetStyle(ControlStyles.UserMouse, true);
-            this.gridState = new System.Collections.Specialized.BitVector32(0x00042827);
+            gridState = new System.Collections.Specialized.BitVector32(0x00042827);
 
             dataGridTables = new GridTableStylesCollection(this);
             layout = CreateInitialLayoutState();
@@ -355,9 +355,9 @@ namespace System.Windows.Forms
             itemChangedHandler = new ItemChangedEventHandler(DataSource_ItemChanged);
             metaDataChangedHandler = new EventHandler(DataSource_MetaDataChanged);
             dataGridTableStylesCollectionChanged = new CollectionChangeEventHandler(TableStylesCollectionChanged);
-            this.dataGridTables.CollectionChanged += dataGridTableStylesCollectionChanged;
+            dataGridTables.CollectionChanged += dataGridTableStylesCollectionChanged;
 
-            SetDataGridTable(this.defaultTableStyle, true);
+            SetDataGridTable(defaultTableStyle, true);
 
             backButtonHandler = new EventHandler(OnBackButtonClicked);
             downButtonHandler = new EventHandler(OnShowParentDetailsButtonClicked);
@@ -396,9 +396,9 @@ namespace System.Windows.Forms
                 if (AllowSorting != value)
                 {
                     gridState[GRIDSTATE_allowSorting] = value;
-                    if (!value && this.listManager != null)
+                    if (!value && listManager != null)
                     {
-                        IList list = this.listManager.List;
+                        IList list = listManager.List;
                         if (list is IBindingList)
                             ((IBindingList)list).RemoveSort();
                     }
@@ -482,9 +482,9 @@ namespace System.Windows.Forms
 
         public override void ResetBackColor()
         {
-            if (!this.BackColor.Equals(DefaultBackBrush.Color))
+            if (!BackColor.Equals(DefaultBackBrush.Color))
             {
-                this.BackColor = DefaultBackBrush.Color;
+                BackColor = DefaultBackBrush.Color;
             }
         }
 
@@ -505,9 +505,9 @@ namespace System.Windows.Forms
         }
         public override void ResetForeColor()
         {
-            if (!this.ForeColor.Equals(DefaultForeBrush.Color))
+            if (!ForeColor.Equals(DefaultForeBrush.Color))
             {
-                this.ForeColor = DefaultForeBrush.Color;
+                ForeColor = DefaultForeBrush.Color;
             }
         }
 
@@ -715,16 +715,16 @@ namespace System.Windows.Forms
                     if (value)
                     {
                         if (myGridTable.IsDefault)
-                            this.RowHeaderWidth += errorRowBitmapWidth;
+                            RowHeaderWidth += errorRowBitmapWidth;
                         else
-                            this.myGridTable.RowHeaderWidth += errorRowBitmapWidth;
+                            myGridTable.RowHeaderWidth += errorRowBitmapWidth;
                     }
                     else
                     {
                         if (myGridTable.IsDefault)
-                            this.RowHeaderWidth -= errorRowBitmapWidth;
+                            RowHeaderWidth -= errorRowBitmapWidth;
                         else
-                            this.myGridTable.RowHeaderWidth -= errorRowBitmapWidth;
+                            myGridTable.RowHeaderWidth -= errorRowBitmapWidth;
                     }
                 }
             }
@@ -953,7 +953,7 @@ namespace System.Windows.Forms
                     return;
 
                 // should we throw an exception, maybe?
-                if (DataGridRowsLength == 0 || this.myGridTable.GridColumnStyles == null || this.myGridTable.GridColumnStyles.Count == 0)
+                if (DataGridRowsLength == 0 || myGridTable.GridColumnStyles == null || myGridTable.GridColumnStyles.Count == 0)
                     return;
                 EnsureBound();
 
@@ -996,26 +996,26 @@ namespace System.Windows.Forms
                     if (currentCol != newCol)
                     {
                         cellChanged = true;
-                        int currentListManagerPosition = this.ListManager.Position;
-                        int currentListManagerCount = this.ListManager.List.Count;
+                        int currentListManagerPosition = ListManager.Position;
+                        int currentListManagerCount = ListManager.List.Count;
 
                         EndEdit();
 
-                        if (this.ListManager.Position != currentListManagerPosition ||
-                            currentListManagerCount != this.ListManager.List.Count)
+                        if (ListManager.Position != currentListManagerPosition ||
+                            currentListManagerCount != ListManager.List.Count)
                         {
                             // EndEdit changed the list.
                             // Reset the data grid rows and the current row inside the datagrid.
                             // And then exit the method.
                             RecreateDataGridRows();
-                            if (this.ListManager.List.Count > 0)
+                            if (ListManager.List.Count > 0)
                             {
-                                this.currentRow = this.ListManager.Position;
+                                currentRow = ListManager.Position;
                                 Edit();
                             }
                             else
                             {
-                                this.currentRow = -1;
+                                currentRow = -1;
                             }
 
                             return;
@@ -1030,26 +1030,26 @@ namespace System.Windows.Forms
                     if (currentRow != newRow)
                     {
                         cellChanged = true;
-                        int currentListManagerPosition = this.ListManager.Position;
-                        int currentListManagerCount = this.ListManager.List.Count;
+                        int currentListManagerPosition = ListManager.Position;
+                        int currentListManagerCount = ListManager.List.Count;
 
                         EndEdit();
 
-                        if (this.ListManager.Position != currentListManagerPosition ||
-                            currentListManagerCount != this.ListManager.List.Count)
+                        if (ListManager.Position != currentListManagerPosition ||
+                            currentListManagerCount != ListManager.List.Count)
                         {
                             // EndEdit changed the list.
                             // Reset the data grid rows and the current row inside the datagrid.
                             // And then exit the method.
                             RecreateDataGridRows();
-                            if (this.ListManager.List.Count > 0)
+                            if (ListManager.List.Count > 0)
                             {
-                                this.currentRow = this.ListManager.Position;
+                                currentRow = ListManager.Position;
                                 Edit();
                             }
                             else
                             {
-                                this.currentRow = -1;
+                                currentRow = -1;
                             }
 
                             return;
@@ -1077,23 +1077,23 @@ namespace System.Windows.Forms
                         else if (gridState[GRIDSTATE_inAddNewRow])
                         {
 #if DEBUG
-                            int currentRowCount = this.DataGridRowsLength;
+                            int currentRowCount = DataGridRowsLength;
 #endif // debug
                             // cancelCurrentEdit will change the position in the list 
                             // to the last element in the list. and the grid will get an on position changed
                             // event, and will set the current cell to the last element in the dataSource.
                             // so unhook the PositionChanged event from the listManager;
-                            this.ListManager.PositionChanged -= positionChangedHandler;
-                            this.ListManager.CancelCurrentEdit();
-                            this.ListManager.Position = this.currentRow;
-                            this.ListManager.PositionChanged += positionChangedHandler;
+                            ListManager.PositionChanged -= positionChangedHandler;
+                            ListManager.CancelCurrentEdit();
+                            ListManager.Position = currentRow;
+                            ListManager.PositionChanged += positionChangedHandler;
 #if DEBUG
 
                             Debug.Assert(currentRowSaved > currentRow, "we can only go up when we are inAddNewRow");
-                            Debug.Assert(currentRowCount == this.DataGridRowsLength, "the number of rows in the dataGrid should not change");
-                            Debug.Assert(currentRowCount == this.ListManager.Count + 1, "the listManager should have one less record");
+                            Debug.Assert(currentRowCount == DataGridRowsLength, "the number of rows in the dataGrid should not change");
+                            Debug.Assert(currentRowCount == ListManager.Count + 1, "the listManager should have one less record");
 #endif // debug
-                            localGridRows[DataGridRowsLength - 1] = new DataGridAddNewRow(this, this.myGridTable, DataGridRowsLength - 1);
+                            localGridRows[DataGridRowsLength - 1] = new DataGridAddNewRow(this, myGridTable, DataGridRowsLength - 1);
                             SetDataGridRows(localGridRows, DataGridRowsLength);
                             gridState[GRIDSTATE_inAddNewRow] = false;
                         }
@@ -1119,8 +1119,8 @@ namespace System.Windows.Forms
                                 // in the grid. in this case, we should not be using the old
                                 // localGridRows in our assertion, cause they are outdated now
                                 //
-                                Debug.Assert(this.DataGridRows[currentRow] is DataGridAddNewRow, "the last row is the DataGridAddNewRow");
-                                this.AddNewRow();
+                                Debug.Assert(DataGridRows[currentRow] is DataGridAddNewRow, "the last row is the DataGridAddNewRow");
+                                AddNewRow();
                                 Debug.Assert(ListManager.Position == currentRow || listManager.Position == -1, "the listManager should be positioned at the last row");
                             }
                             else
@@ -1165,14 +1165,14 @@ namespace System.Windows.Forms
                         // in this particular scenario, CancelCurrentEdit will cause the last row to be deleted,
                         // and this will ultimately call InvalidateRow w/ a row number larger than the number of rows
                         // so set the currentRow here:
-                        if (currentRow == this.DataGridRowsLength - 1 && currentRowSaved == this.DataGridRowsLength - 2 && DataGridRows[currentRow] is DataGridAddNewRow)
+                        if (currentRow == DataGridRowsLength - 1 && currentRowSaved == DataGridRowsLength - 2 && DataGridRows[currentRow] is DataGridAddNewRow)
                             newRow = currentRowSaved;
                         currentRow = newRow;
                         Debug.Assert(result == DialogResult.No, "we only put cancel and ok on the error message box");
-                        this.listManager.PositionChanged -= positionChangedHandler;
-                        this.listManager.CancelCurrentEdit();
-                        this.listManager.Position = newRow;
-                        this.listManager.PositionChanged += positionChangedHandler;
+                        listManager.PositionChanged -= positionChangedHandler;
+                        listManager.CancelCurrentEdit();
+                        listManager.Position = newRow;
+                        listManager.PositionChanged += positionChangedHandler;
                         currentRow = newRow;
                         currentCol = newCol;
                         if (wasEditing)
@@ -1212,13 +1212,13 @@ namespace System.Windows.Forms
             {
                 int currentCellAccIndex = 0;
                 currentCellAccIndex++;                                                 // ParentRowsAccessibleObject
-                currentCellAccIndex += this.myGridTable.GridColumnStyles.Count;         // ColumnHeaderAccessibleObject
-                currentCellAccIndex += this.DataGridRows.Length;                        // DataGridRowAccessibleObject
-                if (this.horizScrollBar.Visible)                                        // Horizontal Scroll Bar Accessible Object
+                currentCellAccIndex += myGridTable.GridColumnStyles.Count;         // ColumnHeaderAccessibleObject
+                currentCellAccIndex += DataGridRows.Length;                        // DataGridRowAccessibleObject
+                if (horizScrollBar.Visible)                                        // Horizontal Scroll Bar Accessible Object
                     currentCellAccIndex++;
-                if (this.vertScrollBar.Visible)                                         // Vertical Scroll Bar Accessible Object
+                if (vertScrollBar.Visible)                                         // Vertical Scroll Bar Accessible Object
                     currentCellAccIndex++;
-                currentCellAccIndex += (this.currentRow * this.myGridTable.GridColumnStyles.Count) + this.currentCol;
+                currentCellAccIndex += (currentRow * myGridTable.GridColumnStyles.Count) + currentCol;
                 return currentCellAccIndex;
             }
         }
@@ -1238,7 +1238,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.CurrentCell = new DataGridCell(currentRow, value);
+                CurrentCell = new DataGridCell(currentRow, value);
             }
         }
 
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.selectionBackBrush;
+                return selectionBackBrush;
             }
         }
 
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.selectionForeBrush;
+                return selectionForeBrush;
             }
         }
 
@@ -1342,7 +1342,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeForeColor()
         {
-            return !DefaultForeBrush.Color.Equals(this.ForeColor);
+            return !DefaultForeBrush.Color.Equals(ForeColor);
         }
 
         /// <summary>
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override bool ShouldSerializeBackColor()
         {
-            return !DefaultBackBrush.Color.Equals(this.BackColor);
+            return !DefaultBackBrush.Color.Equals(BackColor);
         }
 
         // Don't use dataGridRows, use the accessor!!!
@@ -1396,12 +1396,12 @@ namespace System.Windows.Forms
 
             // add toolTips for the backButton and 
             // details button on the caption.
-            if (!this.parentRows.IsEmpty())
+            if (!parentRows.IsEmpty())
             {
-                bool alignRight = this.isRightToLeft();
-                int detailsButtonWidth = this.Caption.GetDetailsButtonWidth();
-                Rectangle backButton = this.Caption.GetBackButtonRect(this.layout.Caption, alignRight, detailsButtonWidth);
-                Rectangle detailsButton = this.Caption.GetDetailsButtonRect(this.layout.Caption, alignRight);
+                bool alignRight = isRightToLeft();
+                int detailsButtonWidth = Caption.GetDetailsButtonWidth();
+                Rectangle backButton = Caption.GetBackButtonRect(layout.Caption, alignRight, detailsButtonWidth);
+                Rectangle detailsButton = Caption.GetDetailsButtonRect(layout.Caption, alignRight);
 
                 // mirror the buttons wrt RTL property
                 backButton.X = MirrorRectangle(backButton, layout.Inside, isRightToLeft());
@@ -1425,7 +1425,7 @@ namespace System.Windows.Forms
         private void CreateDataGridRows()
         {
             CurrencyManager listManager = ListManager;
-            DataGridTableStyle dgt = this.myGridTable;
+            DataGridTableStyle dgt = myGridTable;
             InitializeColumnWidths();
 
             if (listManager == null)
@@ -1446,7 +1446,7 @@ namespace System.Windows.Forms
 
             if (policy.AllowAdd)
             {
-                this.addNewRow = new DataGridAddNewRow(this, dgt, nDataGridRows - 1);
+                addNewRow = new DataGridAddNewRow(this, dgt, nDataGridRows - 1);
                 rows[nDataGridRows - 1] = addNewRow;
             }
             else
@@ -1542,10 +1542,10 @@ namespace System.Windows.Forms
                 }
 
                 // when the designer resets the dataSource to null, set the dataMember to null, too
-                if ((value == null || value == Convert.DBNull) && this.DataMember != null && this.DataMember.Length != 0)
+                if ((value == null || value == Convert.DBNull) && DataMember != null && DataMember.Length != 0)
                 {
-                    this.dataSource = null;
-                    this.DataMember = string.Empty;
+                    dataSource = null;
+                    DataMember = string.Empty;
                     return;
                 }
 
@@ -1561,7 +1561,7 @@ namespace System.Windows.Forms
                 // the same goes for all the caption UI: reset it when the datasource changes.
                 //
                 ResetParentRows();
-                Set_ListManager(value, this.DataMember, false);
+                Set_ListManager(value, DataMember, false);
             }
         }
 
@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms
                 // the same goes for all the caption UI: reset it when the datamember changes.
                 //
                 ResetParentRows();
-                Set_ListManager(this.DataSource, value, false);
+                Set_ListManager(DataSource, value, false);
             }
         }
 
@@ -1623,8 +1623,8 @@ namespace System.Windows.Forms
             get
             {
                 //try to return something useful:
-                if (listManager == null && this.BindingContext != null && this.DataSource != null)
-                    return (CurrencyManager)this.BindingContext[this.DataSource, this.DataMember];
+                if (listManager == null && BindingContext != null && DataSource != null)
+                    return (CurrencyManager)BindingContext[DataSource, DataMember];
                 else
                     return listManager;
             }
@@ -1648,19 +1648,19 @@ namespace System.Windows.Forms
         //
         internal void Set_ListManager(object newDataSource, string newDataMember, bool force, bool forceColumnCreation)
         {
-            bool dataSourceChanged = this.DataSource != newDataSource;
-            bool dataMemberChanged = this.DataMember != newDataMember;
+            bool dataSourceChanged = DataSource != newDataSource;
+            bool dataMemberChanged = DataMember != newDataMember;
 
             // if nothing happened, then why do any work?
             if (!force && !dataSourceChanged && !dataMemberChanged && gridState[GRIDSTATE_inSetListManager])
                 return;
 
             gridState[GRIDSTATE_inSetListManager] = true;
-            if (this.toBeDisposedEditingControl != null)
+            if (toBeDisposedEditingControl != null)
             {
-                Debug.Assert(this.Controls.Contains(this.toBeDisposedEditingControl));
-                this.Controls.Remove(this.toBeDisposedEditingControl);
-                this.toBeDisposedEditingControl = null;
+                Debug.Assert(Controls.Contains(toBeDisposedEditingControl));
+                Controls.Remove(toBeDisposedEditingControl);
+                toBeDisposedEditingControl = null;
             }
             bool beginUpdateInternal = true;
             try
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms
                 UpdateListManager();
 
                 // unwire the events:
-                if (this.listManager != null)
+                if (listManager != null)
                     UnWireDataSource();
 
                 CurrencyManager oldListManager = listManager;
@@ -1679,14 +1679,14 @@ namespace System.Windows.Forms
                 // in the grid. the reason is that if the BindingContext was not yet requested, and it is created in the BindingContext prop
                 // then the grid will call Set_ListManager again, and eventually that means that the dataGrid::listManager will
                 // be hooked up twice to all the events (PositionChanged, ItemChanged, CurrentChanged)
-                if (newDataSource != null && this.BindingContext != null && !(newDataSource == Convert.DBNull))
-                    this.listManager = (CurrencyManager)this.BindingContext[newDataSource, newDataMember];
+                if (newDataSource != null && BindingContext != null && !(newDataSource == Convert.DBNull))
+                    listManager = (CurrencyManager)BindingContext[newDataSource, newDataMember];
                 else
                     listManager = null;
 
                 // update the dataSource and the dateMember
-                this.dataSource = newDataSource;
-                this.dataMember = newDataMember == null ? "" : newDataMember;
+                dataSource = newDataSource;
+                dataMember = newDataMember == null ? "" : newDataMember;
 
                 listManagerChanged = (listManager != oldListManager);
 
@@ -1695,39 +1695,39 @@ namespace System.Windows.Forms
                 {
                     WireDataSource();
                     // update the policy
-                    policy.UpdatePolicy(this.listManager, this.ReadOnly);
+                    policy.UpdatePolicy(listManager, ReadOnly);
                 }
 
                 if (!Initializing)
                 {
                     if (listManager == null)
                     {
-                        if (this.ContainsFocus && this.ParentInternal == null)
+                        if (ContainsFocus && ParentInternal == null)
                         {
-                            Debug.Assert(this.toBeDisposedEditingControl == null, "we should have removed the toBeDisposedEditingControl already");
+                            Debug.Assert(toBeDisposedEditingControl == null, "we should have removed the toBeDisposedEditingControl already");
                             // if we unparent the active control then the form won't close
-                            for (int i = 0; i < this.Controls.Count; i++)
+                            for (int i = 0; i < Controls.Count; i++)
                             {
-                                if (this.Controls[i].Focused)
+                                if (Controls[i].Focused)
                                 {
-                                    this.toBeDisposedEditingControl = this.Controls[i];
+                                    toBeDisposedEditingControl = Controls[i];
                                     break;
                                 }
                             }
 
-                            if (this.toBeDisposedEditingControl == this.horizScrollBar || this.toBeDisposedEditingControl == this.vertScrollBar)
+                            if (toBeDisposedEditingControl == horizScrollBar || toBeDisposedEditingControl == vertScrollBar)
                             {
-                                this.toBeDisposedEditingControl = null;
+                                toBeDisposedEditingControl = null;
                             }
 
 #if DEBUG
                             else
                             {
-                                Debug.Assert(this.toBeDisposedEditingControl != null, "if the grid contains the focus, then the active control should be in the children of data grid control");
-                                Debug.Assert(this.editColumn != null, "if we have an editing control should be a control in the data grid column");
-                                if (this.editColumn is DataGridTextBoxColumn)
+                                Debug.Assert(toBeDisposedEditingControl != null, "if the grid contains the focus, then the active control should be in the children of data grid control");
+                                Debug.Assert(editColumn != null, "if we have an editing control should be a control in the data grid column");
+                                if (editColumn is DataGridTextBoxColumn)
                                 {
-                                    Debug.Assert(((DataGridTextBoxColumn)this.editColumn).TextBox == this.toBeDisposedEditingControl, "if we have an editing control should be a control in the data grid column");
+                                    Debug.Assert(((DataGridTextBoxColumn)editColumn).TextBox == toBeDisposedEditingControl, "if we have an editing control should be a control in the data grid column");
                                 }
                             }
 #endif // debug;
@@ -1735,12 +1735,12 @@ namespace System.Windows.Forms
                         }
 
                         SetDataGridRows(null, 0);
-                        this.defaultTableStyle.GridColumnStyles.Clear();
-                        SetDataGridTable(this.defaultTableStyle, forceColumnCreation);
+                        defaultTableStyle.GridColumnStyles.Clear();
+                        SetDataGridTable(defaultTableStyle, forceColumnCreation);
 
-                        if (this.toBeDisposedEditingControl != null)
+                        if (toBeDisposedEditingControl != null)
                         {
-                            this.Controls.Add(this.toBeDisposedEditingControl);
+                            Controls.Add(toBeDisposedEditingControl);
                         }
                     }
                 }
@@ -1755,7 +1755,7 @@ namespace System.Windows.Forms
                 //
                 if (listManagerChanged || gridState[GRIDSTATE_metaDataChanged])
                 {
-                    if (this.Visible)
+                    if (Visible)
                         BeginUpdateInternal();
 
                     if (listManager != null)
@@ -1764,12 +1764,12 @@ namespace System.Windows.Forms
                         // we need to clear the old column collection even when navigating to 
                         // a list that has a table style associated w/ it. Why? because the
                         // old column collection will be used by the parent rows to paint
-                        this.defaultTableStyle.GridColumnStyles.ResetDefaultColumnCollection();
+                        defaultTableStyle.GridColumnStyles.ResetDefaultColumnCollection();
 
-                        DataGridTableStyle newGridTable = this.dataGridTables[listManager.GetListName()];
+                        DataGridTableStyle newGridTable = dataGridTables[listManager.GetListName()];
                         if (newGridTable == null)
                         {
-                            SetDataGridTable(this.defaultTableStyle, forceColumnCreation);
+                            SetDataGridTable(defaultTableStyle, forceColumnCreation);
                         }
                         else
                         {
@@ -1783,15 +1783,15 @@ namespace System.Windows.Forms
                     // when we create the rows we need to use the current dataGridTable
                     //
                     RecreateDataGridRows();
-                    if (this.Visible)
+                    if (Visible)
                         EndUpdateInternal();
                     beginUpdateInternal = false;
 
                     ComputeMinimumRowHeaderWidth();
-                    if (this.myGridTable.IsDefault)
-                        this.RowHeaderWidth = Math.Max(this.minRowHeaderWidth, this.RowHeaderWidth);
+                    if (myGridTable.IsDefault)
+                        RowHeaderWidth = Math.Max(minRowHeaderWidth, RowHeaderWidth);
                     else
-                        this.myGridTable.RowHeaderWidth = Math.Max(this.minRowHeaderWidth, this.RowHeaderWidth);
+                        myGridTable.RowHeaderWidth = Math.Max(minRowHeaderWidth, RowHeaderWidth);
 
                     ListHasErrors = DataGridSourceHasErrors();
 
@@ -1811,7 +1811,7 @@ namespace System.Windows.Forms
             {
                 gridState[GRIDSTATE_inSetListManager] = false;
                 // start painting again
-                if (beginUpdateInternal && this.Visible)
+                if (beginUpdateInternal && Visible)
                     EndUpdateInternal();
             }
         }
@@ -1831,30 +1831,30 @@ namespace System.Windows.Forms
             get
             {
                 if (originalState == null)
-                    return this.listManager == null ? -1 : this.listManager.Position;
+                    return listManager == null ? -1 : listManager.Position;
                 else
                 {
-                    if (this.BindingContext == null)
+                    if (BindingContext == null)
                         return -1;
-                    CurrencyManager originalListManager = (CurrencyManager)this.BindingContext[originalState.DataSource, originalState.DataMember];
+                    CurrencyManager originalListManager = (CurrencyManager)BindingContext[originalState.DataSource, originalState.DataMember];
                     return originalListManager.Position;
                 }
             }
             set
             {
-                if (this.listManager == null)
+                if (listManager == null)
                     throw new InvalidOperationException(SR.DataGridSetSelectIndex);
 
                 if (originalState == null)
                 {
-                    this.listManager.Position = value;
+                    listManager.Position = value;
                     currentRow = value;
                     return;
                 }
 
                 // if we have a this.ListManager, then this.BindingManager cannot be null
                 //
-                CurrencyManager originalListManager = (CurrencyManager)this.BindingContext[originalState.DataSource, originalState.DataMember];
+                CurrencyManager originalListManager = (CurrencyManager)BindingContext[originalState.DataSource, originalState.DataMember];
                 originalListManager.Position = value;
 
                 // this is for parent rows
@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms
                 if (gridLineStyle != value)
                 {
                     gridLineStyle = value;
-                    this.myGridTable.ResetRelationsUI();
+                    myGridTable.ResetRelationsUI();
                     Invalidate(layout.Data);
                 }
             }
@@ -1990,7 +1990,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(this.GridLineStyle == DataGridLineStyle.Solid || this.GridLineStyle == DataGridLineStyle.None, "are there any other styles?");
+                Debug.Assert(GridLineStyle == DataGridLineStyle.Solid || GridLineStyle == DataGridLineStyle.None, "are there any other styles?");
                 return GridLineStyle == DataGridLineStyle.Solid ? 1 : 0;
             }
         }
@@ -2236,7 +2236,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (headerFont == null ? this.Font : headerFont);
+                return (headerFont == null ? Font : headerFont);
             }
             set
             {
@@ -2323,7 +2323,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.headerForeBrush;
+                return headerForeBrush;
             }
         }
 
@@ -2375,7 +2375,7 @@ namespace System.Windows.Forms
                     scroll = Rectangle.Union(scroll, layout.ColumnHeaders);
                 horizontalOffset = value;
 
-                this.firstVisibleCol = ComputeFirstVisibleColumn();
+                firstVisibleCol = ComputeFirstVisibleColumn();
                 // update the lastTotallyVisibleCol
                 ComputeVisibleColumns();
 
@@ -2523,7 +2523,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.LinkColor;
+                return LinkColor;
             }
             set
             {
@@ -2587,8 +2587,8 @@ namespace System.Windows.Forms
                 {
                     gridState[GRIDSTATE_allowNavigation] = value;
                     // let the Caption know about this:
-                    this.Caption.BackButtonActive = !parentRows.IsEmpty() && (value);
-                    this.Caption.BackButtonVisible = this.Caption.BackButtonActive;
+                    Caption.BackButtonActive = !parentRows.IsEmpty() && (value);
+                    Caption.BackButtonVisible = Caption.BackButtonActive;
                     RecreateDataGridRows();
 
                     OnAllowNavigationChanged(EventArgs.Empty);
@@ -2698,7 +2698,7 @@ namespace System.Windows.Forms
             {
                 if (IsTransparentColor(value))
                     throw new ArgumentException(SR.DataGridTransparentParentRowsBackColorNotAllowed);
-                this.parentRows.BackColor = value;
+                parentRows.BackColor = value;
             }
         }
 
@@ -2744,7 +2744,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.parentRows.ForeColor = value;
+                parentRows.ForeColor = value;
             }
         }
 
@@ -2868,16 +2868,16 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        recreateRows |= policy.UpdatePolicy(this.listManager, value);
+                        recreateRows |= policy.UpdatePolicy(listManager, value);
                     }
                     gridState[GRIDSTATE_readOnlyMode] = value;
-                    DataGridRow[] dataGridRows = this.DataGridRows;
+                    DataGridRow[] dataGridRows = DataGridRows;
                     if (recreateRows)
                     {
                         RecreateDataGridRows();
 
                         // keep the selected rows
-                        DataGridRow[] currentDataGridRows = this.DataGridRows;
+                        DataGridRow[] currentDataGridRows = DataGridRows;
                         int rowCount = Math.Min(currentDataGridRows.Length, dataGridRows.Length);
                         for (int i = 0; i < rowCount; i++)
                         {
@@ -3019,7 +3019,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                value = Math.Max(this.minRowHeaderWidth, value);
+                value = Math.Max(minRowHeaderWidth, value);
                 if (rowHeaderWidth != value)
                 {
                     rowHeaderWidth = value;
@@ -3092,7 +3092,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Math.Min(numVisibleCols, this.myGridTable == null ? 0 : this.myGridTable.GridColumnStyles.Count);
+                return Math.Min(numVisibleCols, myGridTable == null ? 0 : myGridTable.GridColumnStyles.Count);
             }
         }
 
@@ -3149,7 +3149,7 @@ namespace System.Windows.Forms
                     rowIndex >= firstVisibleRow && rowIndex <= firstVisibleRow + numVisibleRows)
                 {
                     Rectangle bounds = GetCellBounds(rowIndex, columnIndex);
-                    this.Invalidate(bounds);
+                    Invalidate(bounds);
                 }
             }
         }
@@ -3233,7 +3233,7 @@ namespace System.Windows.Forms
 
             // the grid will receive the dataSource_Changed event when
             // allowAdd changes on the dataView.
-            policy.UpdatePolicy(this.ListManager, this.ReadOnly);
+            policy.UpdatePolicy(ListManager, ReadOnly);
             if (gridState[GRIDSTATE_inListAddNew])
             {
                 // we are adding a new row
@@ -3246,7 +3246,7 @@ namespace System.Windows.Forms
                 int currentRowCount = DataGridRowsLength;
                 // put the added row:
                 //
-                gridRows[currentRowCount - 1] = new DataGridRelationshipRow(this, this.myGridTable, currentRowCount - 1);
+                gridRows[currentRowCount - 1] = new DataGridRelationshipRow(this, myGridTable, currentRowCount - 1);
                 SetDataGridRows(gridRows, currentRowCount);
             }
             else if (gridState[GRIDSTATE_inAddNewRow] && !gridState[GRIDSTATE_inDeleteRow])
@@ -3259,7 +3259,7 @@ namespace System.Windows.Forms
             else if (!gridState[GRIDSTATE_inDeleteRow])
             {
                 RecreateDataGridRows();
-                currentRow = Math.Min(currentRow, this.listManager.Count);
+                currentRow = Math.Min(currentRow, listManager.Count);
             }
 
             bool oldListHasErrors = ListHasErrors;
@@ -3275,7 +3275,7 @@ namespace System.Windows.Forms
         }
         private void GridLineStyleChanged(object sender, EventArgs e)
         {
-            this.myGridTable.ResetRelationsUI();
+            myGridTable.ResetRelationsUI();
             Invalidate(layout.Data);
         }
         private void HeaderBackColorChanged(object sender, EventArgs e)
@@ -3311,7 +3311,7 @@ namespace System.Windows.Forms
         private void PreferredColumnWidthChanged(object sender, EventArgs e)
         {
             // reset the dataGridRows
-            SetDataGridRows(null, this.DataGridRowsLength);
+            SetDataGridRows(null, DataGridRowsLength);
             // layout the horizontal scroll bar
             PerformLayout();
             // invalidate everything
@@ -3319,13 +3319,13 @@ namespace System.Windows.Forms
         }
         private void RowHeadersVisibleChanged(object sender, EventArgs e)
         {
-            layout.RowHeadersVisible = this.myGridTable == null ? false : this.myGridTable.RowHeadersVisible;
+            layout.RowHeadersVisible = myGridTable == null ? false : myGridTable.RowHeadersVisible;
             PerformLayout();
             InvalidateInside();
         }
         private void ColumnHeadersVisibleChanged(object sender, EventArgs e)
         {
-            layout.ColumnHeadersVisible = this.myGridTable == null ? false : this.myGridTable.ColumnHeadersVisible;
+            layout.ColumnHeadersVisible = myGridTable == null ? false : myGridTable.ColumnHeadersVisible;
             PerformLayout();
             InvalidateInside();
         }
@@ -3339,9 +3339,9 @@ namespace System.Windows.Forms
         }
         private void AllowSortingChanged(object sender, EventArgs e)
         {
-            if (!this.myGridTable.AllowSorting && this.listManager != null)
+            if (!myGridTable.AllowSorting && listManager != null)
             {
-                IList list = this.listManager.List;
+                IList list = listManager.List;
                 if (list is IBindingList)
                     ((IBindingList)list).RemoveSort();
             }
@@ -3354,8 +3354,8 @@ namespace System.Windows.Forms
             // to the latest changes in the list : CurrentChanged is fired before
             // ListChanged.
             // So invalidate the row if there is something to invalidate
-            DataGridRow[] rows = this.DataGridRows;
-            if (currentRow < this.DataGridRowsLength)
+            DataGridRow[] rows = DataGridRows;
+            if (currentRow < DataGridRowsLength)
             {
                 InvalidateRow(currentRow);
             }
@@ -3376,12 +3376,12 @@ namespace System.Windows.Forms
             // before the OnItemChanged event when a row will be deleted in the backEnd;
             // we still want to keep the old rows when the user deletes the rows using the grid
             // and we do not want to do the same work twice when the user adds a row via the grid
-            if (this.DataGridRowsLength > this.listManager.Count + (policy.AllowAdd ? 1 : 0) && !gridState[GRIDSTATE_inDeleteRow])
+            if (DataGridRowsLength > listManager.Count + (policy.AllowAdd ? 1 : 0) && !gridState[GRIDSTATE_inDeleteRow])
             {
                 Debug.Assert(!gridState[GRIDSTATE_inAddNewRow] && !gridState[GRIDSTATE_inListAddNew], "how can the list decrease when we are adding a row?");
                 RecreateDataGridRows();
             }
-            if (this.ListManager.Position != currentRow)
+            if (ListManager.Position != currentRow)
             {
                 CurrentCell = new DataGridCell(listManager.Position, currentCol);
 
@@ -3398,11 +3398,11 @@ namespace System.Windows.Forms
 
         private bool DataGridSourceHasErrors()
         {
-            if (this.listManager == null)
+            if (listManager == null)
                 return false;
-            for (int i = 0; i < this.listManager.Count; i++)
+            for (int i = 0; i < listManager.Count; i++)
             {
-                object errObj = this.listManager[i];
+                object errObj = listManager[i];
                 if (errObj is IDataErrorInfo)
                 {
                     string errString = ((IDataErrorInfo)errObj).Error;
@@ -3416,17 +3416,17 @@ namespace System.Windows.Forms
         private void TableStylesCollectionChanged(object sender, CollectionChangeEventArgs ccea)
         {
             // if the users changed the collection of tableStyles
-            if (sender != this.dataGridTables)
+            if (sender != dataGridTables)
                 return;
-            if (this.listManager == null)
+            if (listManager == null)
                 return;
 
             if (ccea.Action == CollectionChangeAction.Add)
             {
                 DataGridTableStyle tableStyle = (DataGridTableStyle)ccea.Element;
-                if (this.listManager.GetListName().Equals(tableStyle.MappingName))
+                if (listManager.GetListName().Equals(tableStyle.MappingName))
                 {
-                    Debug.Assert(this.myGridTable.IsDefault, "if the table is not default, then it had a name. how can one add another table to the collection w/ the same name and not throw an exception");
+                    Debug.Assert(myGridTable.IsDefault, "if the table is not default, then it had a name. how can one add another table to the collection w/ the same name and not throw an exception");
                     SetDataGridTable(tableStyle, true);                // true for forcing column creation
                     SetDataGridRows(null, 0);
                 }
@@ -3434,11 +3434,11 @@ namespace System.Windows.Forms
             else if (ccea.Action == CollectionChangeAction.Remove)
             {
                 DataGridTableStyle tableStyle = (DataGridTableStyle)ccea.Element;
-                if (this.myGridTable.MappingName.Equals(tableStyle.MappingName))
+                if (myGridTable.MappingName.Equals(tableStyle.MappingName))
                 {
-                    Debug.Assert(this.myGridTable.IsDefault, "if the table is not default, then it had a name. how can one add another table to the collection w/ the same name and not throw an exception");
-                    this.defaultTableStyle.GridColumnStyles.ResetDefaultColumnCollection();
-                    SetDataGridTable(this.defaultTableStyle, true);    // true for forcing column creation
+                    Debug.Assert(myGridTable.IsDefault, "if the table is not default, then it had a name. how can one add another table to the collection w/ the same name and not throw an exception");
+                    defaultTableStyle.GridColumnStyles.ResetDefaultColumnCollection();
+                    SetDataGridTable(defaultTableStyle, true);    // true for forcing column creation
                     SetDataGridRows(null, 0);
                 }
             }
@@ -3448,14 +3448,14 @@ namespace System.Windows.Forms
                 // we have to search to see if the collection of table styles contains one
                 // w/ the same name as the list in the dataGrid
 
-                DataGridTableStyle newGridTable = this.dataGridTables[listManager.GetListName()];
+                DataGridTableStyle newGridTable = dataGridTables[listManager.GetListName()];
                 if (newGridTable == null)
                 {
-                    if (!this.myGridTable.IsDefault)
+                    if (!myGridTable.IsDefault)
                     {
                         // get rid of the old gridColumns
-                        this.defaultTableStyle.GridColumnStyles.ResetDefaultColumnCollection();
-                        SetDataGridTable(this.defaultTableStyle, true);    // true for forcing column creation
+                        defaultTableStyle.GridColumnStyles.ResetDefaultColumnCollection();
+                        SetDataGridTable(defaultTableStyle, true);    // true for forcing column creation
                         SetDataGridRows(null, 0);
                     }
                 }
@@ -3490,7 +3490,7 @@ namespace System.Windows.Forms
             else
             {
                 // let's see how we are doing w/ the errors
-                object errObj = this.listManager[ea.Index];
+                object errObj = listManager[ea.Index];
                 bool oldListHasErrors = ListHasErrors;
                 if (errObj is IDataErrorInfo)
                 {
@@ -3511,7 +3511,7 @@ namespace System.Windows.Forms
                 // we update the text in the edit box only when the currentRow
                 // equals the ea.Index
                 if (editColumn != null && ea.Index == currentRow)
-                    editColumn.UpdateUI(this.ListManager, ea.Index, null);
+                    editColumn.UpdateUI(ListManager, ea.Index, null);
             }
         }
 
@@ -3657,7 +3657,7 @@ namespace System.Windows.Forms
             // boundaries possibly changed. do this with a call to Edit()
             // do this only if the firstVisibleColumn is the editColumn
             //
-            GridColumnStylesCollection columns = this.myGridTable.GridColumnStyles;
+            GridColumnStylesCollection columns = myGridTable.GridColumnStyles;
             if (firstVisibleCol > -1 && firstVisibleCol < columns.Count && columns[firstVisibleCol] == editColumn)
                 Edit();
 
@@ -3755,20 +3755,20 @@ namespace System.Windows.Forms
                 se.Type == ScrollEventType.SmallDecrement)
             {
                 int dCols = (se.Type == ScrollEventType.SmallIncrement) ? 1 : -1;
-                if (se.Type == ScrollEventType.SmallDecrement && this.negOffset == 0)
+                if (se.Type == ScrollEventType.SmallDecrement && negOffset == 0)
                 {
-                    GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
+                    GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
                     // if the column before the first visible column has width == 0 then skip it
-                    for (int i = this.firstVisibleCol - 1; i >= 0 && cols[i].Width == 0; i--)
+                    for (int i = firstVisibleCol - 1; i >= 0 && cols[i].Width == 0; i--)
                     {
                         dCols--;
                     }
                 }
 
-                if (se.Type == ScrollEventType.SmallIncrement && this.negOffset == 0)
+                if (se.Type == ScrollEventType.SmallIncrement && negOffset == 0)
                 {
-                    GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
-                    for (int i = this.firstVisibleCol; i > -1 && i < cols.Count && cols[i].Width == 0; i++)
+                    GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
+                    for (int i = firstVisibleCol; i > -1 && i < cols.Count && cols[i].Width == 0; i++)
                     {
                         dCols++;
                     }
@@ -3782,7 +3782,7 @@ namespace System.Windows.Forms
                 HorizontalOffset = se.NewValue;
             }
 
-            this.gridState[GRIDSTATE_isScrolling] = false;
+            gridState[GRIDSTATE_isScrolling] = false;
         }
 
         /// <summary>
@@ -3854,10 +3854,10 @@ namespace System.Windows.Forms
                     // and this will ultimately call InvalidateRow w/ a row number larger than the number of rows
                     // so set the currentRow here:
                     Debug.Assert(result == DialogResult.No, "we only put cancel and ok on the error message box");
-                    this.listManager.PositionChanged -= positionChangedHandler;
-                    this.listManager.CancelCurrentEdit();
-                    this.listManager.Position = currentRow;
-                    this.listManager.PositionChanged += positionChangedHandler;
+                    listManager.PositionChanged -= positionChangedHandler;
+                    listManager.CancelCurrentEdit();
+                    listManager.Position = currentRow;
+                    listManager.PositionChanged += positionChangedHandler;
                 }
             }
         }
@@ -3887,10 +3887,10 @@ namespace System.Windows.Forms
 
         protected override void OnBindingContextChanged(EventArgs e)
         {
-            if (this.DataSource != null && !gridState[GRIDSTATE_inSetListManager])
+            if (DataSource != null && !gridState[GRIDSTATE_inSetListManager])
                 try
                 {
-                    Set_ListManager(this.DataSource, this.DataMember, true, false);     // we do not want to create columns
+                    Set_ListManager(DataSource, DataMember, true, false);     // we do not want to create columns
                                                                                         // if the columns are already created
                                                                                         // the grid should not rely on OnBindingContextChanged
                                                                                         // to create columns.
@@ -3898,19 +3898,19 @@ namespace System.Windows.Forms
                 catch
                 {
                     // at runtime we will rethrow the exception
-                    if (this.Site == null || !this.Site.DesignMode)
+                    if (Site == null || !Site.DesignMode)
                         throw;
 
                     RTLAwareMessageBox.Show(null, SR.DataGridExceptionInPaint, null,
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
 
-                    if (this.Visible)
+                    if (Visible)
                         BeginUpdateInternal();
 
                     ResetParentRows();
 
                     Set_ListManager(null, string.Empty, true);
-                    if (this.Visible)
+                    if (Visible)
                         EndUpdateInternal();
                 }
             base.OnBindingContextChanged(e);
@@ -3936,7 +3936,7 @@ namespace System.Windows.Forms
             // we need to fire the ParentRowsVisibleChanged event
             // and the ParentRowsVisible property just calls SetParentRowsVisibility and
             // then fires the event.
-            this.ParentRowsVisible = !caption.ToggleDownButtonDirection();
+            ParentRowsVisible = !caption.ToggleDownButtonDirection();
 
             EventHandler handler = (EventHandler)Events[EVENT_DOWNBUTTONCLICK];
             if (handler != null)
@@ -3955,7 +3955,7 @@ namespace System.Windows.Forms
         {
             // let the caption know about the event changed
             //
-            this.Caption.OnGridFontChanged();
+            Caption.OnGridFontChanged();
             RecalculateFonts();
             RecreateDataGridRows();
             // get all the rows in the parentRows stack, and modify their height
@@ -4114,16 +4114,16 @@ namespace System.Windows.Forms
             try
             {
                 EndEdit();
-                if (this.listManager != null && !this.gridState[GRIDSTATE_editControlChanging])
+                if (listManager != null && !gridState[GRIDSTATE_editControlChanging])
                 {
                     if (gridState[GRIDSTATE_inAddNewRow])
                     {
                         // if the user did not type anything
                         // in the addNewRow, then cancel the currentedit
-                        this.listManager.CancelCurrentEdit();
+                        listManager.CancelCurrentEdit();
                         // set the addNewRow back
-                        DataGridRow[] localGridRows = this.DataGridRows;
-                        localGridRows[DataGridRowsLength - 1] = new DataGridAddNewRow(this, this.myGridTable, DataGridRowsLength - 1);
+                        DataGridRow[] localGridRows = DataGridRows;
+                        localGridRows[DataGridRowsLength - 1] = new DataGridAddNewRow(this, myGridTable, DataGridRowsLength - 1);
                         SetDataGridRows(localGridRows, DataGridRowsLength);
                     }
                     else
@@ -4138,7 +4138,7 @@ namespace System.Windows.Forms
                 gridState[GRIDSTATE_canFocus] = true;
                 // inAddNewRow should be set to false if the control was
                 // not changing
-                if (!this.gridState[GRIDSTATE_editControlChanging])
+                if (!gridState[GRIDSTATE_editControlChanging])
                     gridState[GRIDSTATE_inAddNewRow] = false;
             }
         }
@@ -4164,7 +4164,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataGridKeys.TraceVerbose, "DataGridKeys: OnKeyPress " + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(kpe.KeyChar));
 
             base.OnKeyPress(kpe);
-            GridColumnStylesCollection coll = this.myGridTable.GridColumnStyles;
+            GridColumnStylesCollection coll = myGridTable.GridColumnStyles;
             if (coll != null && currentCol > 0 && currentCol < coll.Count)
             {
                 if (!coll[currentCol].ReadOnly)
@@ -4225,7 +4225,7 @@ namespace System.Windows.Forms
             // Check column headers
             if (location.type == HitTestType.ColumnHeader)
             {
-                trackColumnHeader = this.myGridTable.GridColumnStyles[location.col].PropertyDescriptor;
+                trackColumnHeader = myGridTable.GridColumnStyles[location.col].PropertyDescriptor;
                 return;
             }
 
@@ -4257,7 +4257,7 @@ namespace System.Windows.Forms
                         // check if the row is expanded: if the row is expanded, then the user clicked
                         // on the node. when we navigate to child rows the rows are recreated
                         // and are initially collapsed
-                        localGridRows = this.DataGridRows;
+                        localGridRows = DataGridRows;
                         if (row < DataGridRowsLength && (localGridRows[row] is DataGridRelationshipRow) && ((DataGridRelationshipRow)localGridRows[row]).Expanded)
                             EnsureVisible(row, 0);
 
@@ -4276,11 +4276,11 @@ namespace System.Windows.Forms
                 EndEdit();
                 if (!(DataGridRows[location.row] is DataGridAddNewRow))
                 {
-                    int savedCurrentRow = this.currentRow;
+                    int savedCurrentRow = currentRow;
                     CurrentCell = new DataGridCell(location.row, currentCol);
                     if (location.row != savedCurrentRow &&
-                        this.currentRow != location.row &&
-                        this.currentRow == savedCurrentRow)
+                        currentRow != location.row &&
+                        currentRow == savedCurrentRow)
                     {
                         // The data grid was not able to move away from its previous current row.
                         // Be defensive and don't select the row.
@@ -4345,7 +4345,7 @@ namespace System.Windows.Forms
             //
             if (location.type == HitTestType.Cell)
             {
-                if (this.myGridTable.GridColumnStyles[location.col].MouseDown(location.row, e.X, e.Y))
+                if (myGridTable.GridColumnStyles[location.col].MouseDown(location.row, e.X, e.Y))
                     return;
                 DataGridCell target = new DataGridCell(location.row, location.col);
                 if (policy.AllowEdit && CurrentCell.Equals(target))
@@ -4387,7 +4387,7 @@ namespace System.Windows.Forms
 
         internal void TextBoxOnMouseWheel(MouseEventArgs e)
         {
-            this.OnMouseWheel(e);
+            OnMouseWheel(e);
         }
 
         /// <summary>
@@ -4539,7 +4539,7 @@ namespace System.Windows.Forms
             // Check column headers
             if (ci.type == HitTestType.ColumnHeader)
             {
-                PropertyDescriptor prop = this.myGridTable.GridColumnStyles[ci.col].PropertyDescriptor;
+                PropertyDescriptor prop = myGridTable.GridColumnStyles[ci.col].PropertyDescriptor;
                 if (prop == trackColumnHeader)
                 {
                     ColumnHeaderClicked(trackColumnHeader);
@@ -4612,7 +4612,7 @@ namespace System.Windows.Forms
             {
                 CheckHierarchyState();
 
-                if (this.layout.dirty)
+                if (layout.dirty)
                     ComputeLayout();
 
                 Graphics g = pe.Graphics;
@@ -4647,7 +4647,7 @@ namespace System.Windows.Forms
             catch
             {
                 // at runtime we will rethrow the exception
-                if (this.Site == null || !this.Site.DesignMode)
+                if (Site == null || !Site.DesignMode)
                     throw;
                 gridState[GRIDSTATE_exceptionInPaint] = true;
                 try
@@ -4655,7 +4655,7 @@ namespace System.Windows.Forms
                     RTLAwareMessageBox.Show(null, SR.DataGridExceptionInPaint, null, MessageBoxButtons.OK,
                         MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
 
-                    if (this.Visible)
+                    if (Visible)
                         BeginUpdateInternal();
 
                     ResetParentRows();
@@ -4665,7 +4665,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     gridState[GRIDSTATE_exceptionInPaint] = false;
-                    if (this.Visible)
+                    if (Visible)
                         EndUpdateInternal();
                 }
             }
@@ -4699,7 +4699,7 @@ namespace System.Windows.Forms
                                    oldClientRectangle.Width,
                                    borderWidth);
 
-            Rectangle newClientRectangle = this.ClientRectangle;
+            Rectangle newClientRectangle = ClientRectangle;
             if (newClientRectangle.Width != oldClientRectangle.Width)
             {
                 Invalidate(right);
@@ -4720,7 +4720,7 @@ namespace System.Windows.Forms
             }
 
             //also, invalidate the ResizeBoxRect
-            if (!this.layout.ResizeBoxRect.IsEmpty)
+            if (!layout.ResizeBoxRect.IsEmpty)
                 Invalidate(layout.ResizeBoxRect);
 
             layout.ClientRectangle = newClientRectangle;
@@ -4842,7 +4842,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                ISite temp = this.Site;
+                ISite temp = Site;
                 base.Site = value;
                 if (value != temp && !Disposing)
                 {
@@ -4864,7 +4864,7 @@ namespace System.Windows.Forms
             gridState[GRIDSTATE_inAddNewRow] = true;
             try
             {
-                this.ListManager.AddNew();
+                ListManager.AddNew();
             }
             catch
             {
@@ -4884,7 +4884,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber)
         {
-            if (this.DataSource == null || this.myGridTable == null)
+            if (DataSource == null || myGridTable == null)
                 return false;
 
             // We deny edit requests if we are already editing a cell.
@@ -4893,7 +4893,7 @@ namespace System.Windows.Forms
             else
             {
                 int col = -1;
-                if ((col = this.myGridTable.GridColumnStyles.IndexOf(gridColumn)) < 0)
+                if ((col = myGridTable.GridColumnStyles.IndexOf(gridColumn)) < 0)
                     return false;
                 CurrentCell = new DataGridCell(rowNumber, col);
                 ResetSelection();
@@ -4942,7 +4942,7 @@ namespace System.Windows.Forms
 
         private void CheckHierarchyState()
         {
-            if (checkHierarchy && this.listManager != null && this.myGridTable != null)
+            if (checkHierarchy && listManager != null && myGridTable != null)
             {
                 if (myGridTable == null)
                     // there was nothing to check
@@ -4988,10 +4988,10 @@ namespace System.Windows.Forms
                 string columnName = column.HeaderText;
 
                 Font headerFont;
-                if (this.myGridTable.IsDefault)
-                    headerFont = this.HeaderFont;
+                if (myGridTable.IsDefault)
+                    headerFont = HeaderFont;
                 else
-                    headerFont = this.myGridTable.HeaderFont;
+                    headerFont = myGridTable.HeaderFont;
                 size = (int)g.MeasureString(columnName, headerFont).Width + layout.ColumnHeaders.Height + 1; // The sort triangle's width is equal to it's height 
                 int rowCount = listManager.Count;
                 for (int row = 0; row < rowCount; ++row)
@@ -5009,11 +5009,11 @@ namespace System.Windows.Forms
                     ComputeVisibleColumns();
 
                     bool lastColumnIsLastTotallyVisibleCol = true;
-                    if (this.lastTotallyVisibleCol != -1)
+                    if (lastTotallyVisibleCol != -1)
                     {
-                        for (int i = this.lastTotallyVisibleCol + 1; i < this.myGridTable.GridColumnStyles.Count; i++)
+                        for (int i = lastTotallyVisibleCol + 1; i < myGridTable.GridColumnStyles.Count; i++)
                         {
-                            if (this.myGridTable.GridColumnStyles[i].PropertyDescriptor != null)
+                            if (myGridTable.GridColumnStyles[i].PropertyDescriptor != null)
                             {
                                 lastColumnIsLastTotallyVisibleCol = false;
                                 break;
@@ -5029,21 +5029,21 @@ namespace System.Windows.Forms
                     // then we need to recompute the horizontalOffset, firstVisibleCol, negOffset.
                     // lastTotallyVisibleCol remains the last column
                     if (lastColumnIsLastTotallyVisibleCol &&
-                        (this.negOffset != 0 || this.horizontalOffset != 0))
+                        (negOffset != 0 || horizontalOffset != 0))
                     {
 
                         // update the column width
                         column._width = size;
 
                         int cx = 0;
-                        int colCount = this.myGridTable.GridColumnStyles.Count;
+                        int colCount = myGridTable.GridColumnStyles.Count;
                         int visibleWidth = layout.Data.Width;
-                        GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
+                        GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
 
                         // assume everything fits
-                        this.negOffset = 0;
-                        this.horizontalOffset = 0;
-                        this.firstVisibleCol = 0;
+                        negOffset = 0;
+                        horizontalOffset = 0;
+                        firstVisibleCol = 0;
 
                         for (int i = colCount - 1; i >= 0; i--)
                         {
@@ -5055,21 +5055,21 @@ namespace System.Windows.Forms
                             cx += cols[i].Width;
                             if (cx > visibleWidth)
                             {
-                                if (this.negOffset == 0)
+                                if (negOffset == 0)
                                 {
-                                    this.firstVisibleCol = i;
-                                    this.negOffset = cx - visibleWidth;
-                                    this.horizontalOffset = this.negOffset;
-                                    this.numVisibleCols++;
+                                    firstVisibleCol = i;
+                                    negOffset = cx - visibleWidth;
+                                    horizontalOffset = negOffset;
+                                    numVisibleCols++;
                                 }
                                 else
                                 {
-                                    this.horizontalOffset += cols[i].Width;
+                                    horizontalOffset += cols[i].Width;
                                 }
                             }
                             else
                             {
-                                this.numVisibleCols++;
+                                numVisibleCols++;
                             }
                         }
 
@@ -5109,9 +5109,9 @@ namespace System.Windows.Forms
                 g.Dispose();
             }
 
-            if (this.horizScrollBar.Visible)
+            if (horizScrollBar.Visible)
             {
-                this.horizScrollBar.Value = HorizontalOffset;
+                horizScrollBar.Value = HorizontalOffset;
             }
             // OnColumnResize(EventArgs.Empty);
         }
@@ -5171,7 +5171,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataGridLayout.TraceVerbose, "DataGridLayout: ColResizeEnd");
             Debug.Assert(myGridTable != null, "Column resizing operations can't be called when myGridTable == null.");
 
-            this.gridState[GRIDSTATE_layoutSuspended] = true;
+            gridState[GRIDSTATE_layoutSuspended] = true;
             try
             {
                 if (lastSplitBar != null)
@@ -5198,9 +5198,9 @@ namespace System.Windows.Forms
                     ComputeVisibleColumns();
 
                     bool lastColumnIsLastTotallyVisibleCol = true;
-                    for (int i = this.lastTotallyVisibleCol + 1; i < this.myGridTable.GridColumnStyles.Count; i++)
+                    for (int i = lastTotallyVisibleCol + 1; i < myGridTable.GridColumnStyles.Count; i++)
                     {
-                        if (this.myGridTable.GridColumnStyles[i].PropertyDescriptor != null)
+                        if (myGridTable.GridColumnStyles[i].PropertyDescriptor != null)
                         {
                             lastColumnIsLastTotallyVisibleCol = false;
                             break;
@@ -5208,18 +5208,18 @@ namespace System.Windows.Forms
                     }
 
                     if (lastColumnIsLastTotallyVisibleCol &&
-                        (this.negOffset != 0 || this.horizontalOffset != 0))
+                        (negOffset != 0 || horizontalOffset != 0))
                     {
 
                         int cx = 0;
-                        int colCount = this.myGridTable.GridColumnStyles.Count;
-                        int visibleWidth = this.layout.Data.Width;
-                        GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
+                        int colCount = myGridTable.GridColumnStyles.Count;
+                        int visibleWidth = layout.Data.Width;
+                        GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
 
                         // assume everything fits
-                        this.negOffset = 0;
-                        this.horizontalOffset = 0;
-                        this.firstVisibleCol = 0;
+                        negOffset = 0;
+                        horizontalOffset = 0;
+                        firstVisibleCol = 0;
 
                         for (int i = colCount - 1; i > -1; i--)
                         {
@@ -5232,26 +5232,26 @@ namespace System.Windows.Forms
 
                             if (cx > visibleWidth)
                             {
-                                if (this.negOffset == 0)
+                                if (negOffset == 0)
                                 {
-                                    this.negOffset = cx - visibleWidth;
-                                    this.firstVisibleCol = i;
-                                    this.horizontalOffset = negOffset;
-                                    this.numVisibleCols++;
+                                    negOffset = cx - visibleWidth;
+                                    firstVisibleCol = i;
+                                    horizontalOffset = negOffset;
+                                    numVisibleCols++;
                                 }
                                 else
                                 {
-                                    this.horizontalOffset += cols[i].Width;
+                                    horizontalOffset += cols[i].Width;
                                 }
                             }
                             else
                             {
-                                this.numVisibleCols++;
+                                numVisibleCols++;
                             }
                         }
 
                         // and invalidate pretty much everything
-                        Invalidate(Rectangle.Union(this.layout.Data, this.layout.ColumnHeaders));
+                        Invalidate(Rectangle.Union(layout.Data, layout.ColumnHeaders));
                     }
                     else
                     {
@@ -5268,14 +5268,14 @@ namespace System.Windows.Forms
             {
                 Cursor.ClipInternal = Rectangle.Empty;
                 CaptureInternal = false;
-                this.gridState[GRIDSTATE_layoutSuspended] = false;
+                gridState[GRIDSTATE_layoutSuspended] = false;
             }
 
             PerformLayout();
 
-            if (this.horizScrollBar.Visible)
+            if (horizScrollBar.Visible)
             {
-                this.horizScrollBar.Value = HorizontalOffset;
+                horizScrollBar.Value = HorizontalOffset;
             }
             // OnColumnResize(EventArgs.Empty);
         }
@@ -5301,7 +5301,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Set_ListManager(this.DataSource, this.DataMember, true);
+                    Set_ListManager(DataSource, DataMember, true);
                 }
             }
             finally
@@ -5321,7 +5321,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataGridLayout.TraceVerbose, "DataGridLayout: RowAutoResize");
 
             EndEdit();
-            CurrencyManager listManager = this.ListManager;
+            CurrencyManager listManager = ListManager;
             if (listManager == null)
                 return;
 
@@ -5452,8 +5452,8 @@ namespace System.Windows.Forms
 
             // OnColumnHeaderClick(EventArgs.Empty);
             bool allowSorting;
-            if (this.myGridTable.IsDefault)
-                allowSorting = this.AllowSorting;
+            if (myGridTable.IsDefault)
+                allowSorting = AllowSorting;
             else
                 allowSorting = myGridTable.AllowSorting;
 
@@ -5461,8 +5461,8 @@ namespace System.Windows.Forms
                 return;
 
             // if (CompModSwitches.DataGridCursor.OutputVerbose) Debug.WriteLine("DataGridCursor: We are about to sort column " + col.ToString());
-            ListSortDirection direction = this.ListManager.GetSortDirection();
-            PropertyDescriptor sortColumn = this.ListManager.GetSortProperty();
+            ListSortDirection direction = ListManager.GetSortDirection();
+            PropertyDescriptor sortColumn = ListManager.GetSortProperty();
             if (sortColumn != null && sortColumn.Equals(prop))
                 direction = (direction == ListSortDirection.Ascending) ? ListSortDirection.Descending : ListSortDirection.Ascending;
             else
@@ -5472,7 +5472,7 @@ namespace System.Windows.Forms
             if (listManager.Count == 0)
                 return;
 
-            this.ListManager.SetSort(prop, direction);
+            ListManager.SetSort(prop, direction);
             ResetSelection();
 
             InvalidateInside();
@@ -5506,18 +5506,18 @@ namespace System.Windows.Forms
             if (editColumn.ReadOnly || gridState[GRIDSTATE_inAddNewRow])
             {
                 bool focusTheGrid = false;
-                if (this.ContainsFocus)
+                if (ContainsFocus)
                 {
                     focusTheGrid = true;
                 }
 
                 if (focusTheGrid && gridState[GRIDSTATE_canFocus])
-                    this.Focus();
+                    Focus();
                 editColumn.ConcedeFocus();
 
                 // set the focus back to the grid
                 if (focusTheGrid && gridState[GRIDSTATE_canFocus] && CanFocus && !Focused)
-                    this.Focus();
+                    Focus();
 
                 // reset the editControl flag
                 gridState[GRIDSTATE_editControlChanging] = false;
@@ -5619,7 +5619,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataGridLayout.TraceVerbose, "DataGridLayout: ComputeLayout");
 
             bool alignLeft = !isRightToLeft();
-            Rectangle oldResizeRect = this.layout.ResizeBoxRect;
+            Rectangle oldResizeRect = layout.ResizeBoxRect;
 
             // hide the EditBox
             EndEdit();
@@ -5695,10 +5695,10 @@ namespace System.Windows.Forms
                 newLayout.ColumnHeaders = Rectangle.Empty;
             }
 
-            bool newRowHeadersVisible = this.myGridTable.IsDefault ? this.RowHeadersVisible : this.myGridTable.RowHeadersVisible;
-            int newRowHeaderWidth = this.myGridTable.IsDefault ? this.RowHeaderWidth : this.myGridTable.RowHeaderWidth;
+            bool newRowHeadersVisible = myGridTable.IsDefault ? RowHeadersVisible : myGridTable.RowHeadersVisible;
+            int newRowHeaderWidth = myGridTable.IsDefault ? RowHeaderWidth : myGridTable.RowHeaderWidth;
             newLayout.RowHeadersVisible = newRowHeadersVisible;
-            if (this.myGridTable != null && newRowHeadersVisible)
+            if (myGridTable != null && newRowHeadersVisible)
             {
                 Rectangle rowHeaders = newLayout.RowHeaders;
                 if (alignLeft)
@@ -5754,7 +5754,7 @@ namespace System.Windows.Forms
             newLayout.Data = insideLeft;
             newLayout.Inside = inside;
 
-            this.layout = newLayout;
+            layout = newLayout;
 
             LayoutScrollBars();
 
@@ -5763,10 +5763,10 @@ namespace System.Windows.Forms
             // note that we can't take the Invalidate call from the OnResize method, because if the
             // user enlarges the form then the old area will not be invalidated.
             // 
-            if (!oldResizeRect.Equals(this.layout.ResizeBoxRect) && !this.layout.ResizeBoxRect.IsEmpty)
-                Invalidate(this.layout.ResizeBoxRect);
+            if (!oldResizeRect.Equals(layout.ResizeBoxRect) && !layout.ResizeBoxRect.IsEmpty)
+                Invalidate(layout.ResizeBoxRect);
 
-            this.layout.dirty = false;
+            layout.dirty = false;
             Debug.WriteLineIf(CompModSwitches.DataGridLayout.TraceVerbose, "DataGridLayout: " + layout.ToString());
         }
 
@@ -5802,9 +5802,9 @@ namespace System.Windows.Forms
         internal void ComputeMinimumRowHeaderWidth()
         {
             minRowHeaderWidth = errorRowBitmapWidth; // the size of the pencil, star and row selector images are the same as the image for the error bitmap
-            if (this.ListHasErrors)
+            if (ListHasErrors)
                 minRowHeaderWidth += errorRowBitmapWidth;
-            if (this.myGridTable != null && this.myGridTable.RelationsList.Count != 0)
+            if (myGridTable != null && myGridTable.RelationsList.Count != 0)
                 minRowHeaderWidth += 15; // the size of the plus/minus glyph and spacing around it
         }
 
@@ -5879,7 +5879,7 @@ namespace System.Windows.Forms
             lastTotallyVisibleCol = firstVisibleCol + numVisibleCols - 1;
             if (cx > visibleWidth)
             {
-                if (numVisibleCols <= 1 || (numVisibleCols == 2 && this.negOffset != 0))
+                if (numVisibleCols <= 1 || (numVisibleCols == 2 && negOffset != 0))
                 {
                     // no column is entirely visible
                     lastTotallyVisibleCol = -1;
@@ -5898,7 +5898,7 @@ namespace System.Windows.Forms
         private int ComputeFirstVisibleColumn()
         {
             int first = 0;
-            if (this.horizontalOffset == 0)
+            if (horizontalOffset == 0)
             {
                 negOffset = 0;
                 return 0;
@@ -6026,18 +6026,18 @@ namespace System.Windows.Forms
             DataGridState dgs = new DataGridState();
 
             string newDataMember;
-            if (string.IsNullOrEmpty(this.DataMember))
+            if (string.IsNullOrEmpty(DataMember))
             {
                 newDataMember = relationName;
             }
             else
             {
-                newDataMember = this.DataMember + "." + relationName;
+                newDataMember = DataMember + "." + relationName;
             }
 
-            CurrencyManager childLM = (CurrencyManager)this.BindingContext[this.DataSource, newDataMember];
+            CurrencyManager childLM = (CurrencyManager)BindingContext[DataSource, newDataMember];
 
-            dgs.DataSource = this.DataSource;
+            dgs.DataSource = DataSource;
             dgs.DataMember = newDataMember;
             dgs.ListManager = childLM;
 
@@ -6137,17 +6137,17 @@ namespace System.Windows.Forms
                 if (horizScrollBar != null)
                     horizScrollBar.Dispose();
 
-                if (this.toBeDisposedEditingControl != null)
+                if (toBeDisposedEditingControl != null)
                 {
-                    this.toBeDisposedEditingControl.Dispose();
-                    this.toBeDisposedEditingControl = null;
+                    toBeDisposedEditingControl.Dispose();
+                    toBeDisposedEditingControl = null;
                 }
 
-                GridTableStylesCollection tables = this.TableStyles;
+                GridTableStylesCollection tables = TableStyles;
                 if (tables != null)
                 {
 #if DEBUG
-                    Debug.Assert(this.myGridTable == null || this.myGridTable.IsDefault || tables.Contains(this.myGridTable), "how come that the currentTable is not in the list of tables?");
+                    Debug.Assert(myGridTable == null || myGridTable.IsDefault || tables.Contains(myGridTable), "how come that the currentTable is not in the list of tables?");
 #endif // DEBUG
                     for (int i = 0; i < tables.Count; i++)
                         tables[i].Dispose();
@@ -6240,7 +6240,7 @@ namespace System.Windows.Forms
             editRow = localGridRows[currentRow];
 
             // if the list has no columns, then what good is an edit?
-            if (this.myGridTable.GridColumnStyles.Count == 0)
+            if (myGridTable.GridColumnStyles.Count == 0)
                 return;
 
             // what if the currentCol does not have a propDesc?
@@ -6271,10 +6271,10 @@ namespace System.Windows.Forms
             // everytime the edit column gets edited
             gridState[GRIDSTATE_editControlChanging] = true;
 
-            editColumn.Edit(this.ListManager,
+            editColumn.Edit(ListManager,
                               currentRow,
                               cellBounds,
-                              myGridTable.ReadOnly || this.ReadOnly || !policy.AllowEdit,
+                              myGridTable.ReadOnly || ReadOnly || !policy.AllowEdit,
                               displayText,
                               cellIsVisible);
 
@@ -6344,18 +6344,18 @@ namespace System.Windows.Forms
         private void EnforceValidDataMember(object value)
         {
             Debug.Assert(value != null, "we should not have a null dataSource when we want to check for a valid dataMember");
-            if (this.DataMember == null || this.DataMember.Length == 0)
+            if (DataMember == null || DataMember.Length == 0)
                 return;
-            if (this.BindingContext == null)
+            if (BindingContext == null)
                 return;
             //
             try
             {
-                BindingManagerBase bm = this.BindingContext[value, this.dataMember];
+                BindingManagerBase bm = BindingContext[value, dataMember];
             }
             catch
             {
-                this.dataMember = string.Empty;
+                dataMember = string.Empty;
             }
         }
 
@@ -6370,12 +6370,12 @@ namespace System.Windows.Forms
             Debug.Assert(currentRow >= firstVisibleRow && currentRow <= firstVisibleRow + numVisibleRows, "how can one edit a row which is invisible?");
             DataGridRow[] localGridRows = DataGridRows;
 
-            if (bounds.IsEmpty && this.editColumn is DataGridTextBoxColumn && this.currentRow != -1 && this.currentCol != -1)
+            if (bounds.IsEmpty && editColumn is DataGridTextBoxColumn && currentRow != -1 && currentCol != -1)
             {
                 // set the bounds on the control
                 // this will only work w/ our DataGridTexBox control
-                DataGridTextBoxColumn col = this.editColumn as DataGridTextBoxColumn;
-                Rectangle editBounds = this.GetCellBounds(this.currentRow, this.currentCol);
+                DataGridTextBoxColumn col = editColumn as DataGridTextBoxColumn;
+                Rectangle editBounds = GetCellBounds(currentRow, currentCol);
 
                 gridState[GRIDSTATE_editControlChanging] = true;
                 try
@@ -6390,7 +6390,7 @@ namespace System.Windows.Forms
 
             if (gridState[GRIDSTATE_inAddNewRow])
             {
-                int currentRowCount = this.DataGridRowsLength;
+                int currentRowCount = DataGridRowsLength;
                 DataGridRow[] newDataGridRows = new DataGridRow[currentRowCount + 1];
                 for (int i = 0; i < currentRowCount; i++)
                 {
@@ -6399,7 +6399,7 @@ namespace System.Windows.Forms
 
 
                 // put the AddNewRow
-                newDataGridRows[currentRowCount] = new DataGridAddNewRow(this, this.myGridTable, currentRowCount);
+                newDataGridRows[currentRowCount] = new DataGridAddNewRow(this, myGridTable, currentRowCount);
                 SetDataGridRows(newDataGridRows, currentRowCount + 1);
 
                 Edit();
@@ -6413,7 +6413,7 @@ namespace System.Windows.Forms
 
             gridState[GRIDSTATE_isEditing] = true;
             gridState[GRIDSTATE_isNavigating] = false;
-            InvalidateRowHeader(this.currentRow);
+            InvalidateRowHeader(currentRow);
 
             // tell the current row to lose the childFocuse
             if (currentRow < localGridRows.Length)
@@ -6528,9 +6528,9 @@ namespace System.Windows.Forms
         public void EndInit()
         {
             inInit = false;
-            if (myGridTable == null && this.ListManager != null)
+            if (myGridTable == null && ListManager != null)
             {
-                SetDataGridTable(this.TableStyles[this.ListManager.GetListName()], true);      // true for forcing column creation
+                SetDataGridTable(TableStyles[ListManager.GetListName()], true);      // true for forcing column creation
             }
             if (myGridTable != null)
                 myGridTable.DataGrid = this;
@@ -6753,17 +6753,17 @@ namespace System.Windows.Forms
                 ScrollDown(dRows);
             }
 
-            if (this.firstVisibleCol == 0 && this.numVisibleCols == 0 && this.lastTotallyVisibleCol == -1)
+            if (firstVisibleCol == 0 && numVisibleCols == 0 && lastTotallyVisibleCol == -1)
             {
                 // no columns are displayed whatsoever
                 // some sanity checks
-                Debug.Assert(this.negOffset == 0, " no columns are displayed so the negative offset should be 0");
+                Debug.Assert(negOffset == 0, " no columns are displayed so the negative offset should be 0");
                 return;
             }
 
-            int previousFirstVisibleCol = this.firstVisibleCol;
-            int previousNegOffset = this.negOffset;
-            int previousLastTotallyVisibleCol = this.lastTotallyVisibleCol;
+            int previousFirstVisibleCol = firstVisibleCol;
+            int previousNegOffset = negOffset;
+            int previousLastTotallyVisibleCol = lastTotallyVisibleCol;
 
             while (col < firstVisibleCol
                 || col == firstVisibleCol && negOffset != 0
@@ -6773,17 +6773,17 @@ namespace System.Windows.Forms
 
                 ScrollToColumn(col);
 
-                if (previousFirstVisibleCol == this.firstVisibleCol &&
-                    previousNegOffset == this.negOffset &&
-                    previousLastTotallyVisibleCol == this.lastTotallyVisibleCol)
+                if (previousFirstVisibleCol == firstVisibleCol &&
+                    previousNegOffset == negOffset &&
+                    previousLastTotallyVisibleCol == lastTotallyVisibleCol)
                 {
                     // nothing changed since the last iteration
                     // don't get into an infinite loop
                     break;
                 }
                 previousFirstVisibleCol = firstVisibleCol;
-                previousNegOffset = this.negOffset;
-                previousLastTotallyVisibleCol = this.lastTotallyVisibleCol;
+                previousNegOffset = negOffset;
+                previousLastTotallyVisibleCol = lastTotallyVisibleCol;
 
                 // continue to scroll to the right until the scrollTo column is the totally last visible column or it is the first visible column
             }
@@ -6795,7 +6795,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle GetCurrentCellBounds()
         {
-            DataGridCell current = this.CurrentCell;
+            DataGridCell current = CurrentCell;
             return GetCellBounds(current.RowNumber, current.ColumnNumber);
         }
 
@@ -6934,7 +6934,7 @@ namespace System.Windows.Forms
             // Resize the columns to a approximation of a best fit.
             // We find the best fit width of NumRowsForAutoResize rows
             // and use it for each column.
-            int preferredColumnWidth = this.myGridTable.IsDefault ? this.PreferredColumnWidth : this.myGridTable.PreferredColumnWidth;
+            int preferredColumnWidth = myGridTable.IsDefault ? PreferredColumnWidth : myGridTable.PreferredColumnWidth;
             // if we set the PreferredColumnWidth to something else than AutoColumnSize
             // then use that value
             //
@@ -6982,7 +6982,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void InvalidateColumn(int column)
         {
-            GridColumnStylesCollection gridColumns = this.myGridTable.GridColumnStyles;
+            GridColumnStylesCollection gridColumns = myGridTable.GridColumnStyles;
             if (column < 0 || gridColumns == null || gridColumns.Count <= column)
                 return;
 
@@ -7057,7 +7057,7 @@ namespace System.Windows.Forms
                 invalid.Y = GetRowTop(rowNumber);
                 invalid.X = layout.RowHeaders.X;
                 invalid.Width = layout.RowHeaders.Width;
-                invalid.Height = this.DataGridRows[rowNumber].Height;
+                invalid.Height = DataGridRows[rowNumber].Height;
                 Invalidate(invalid);
             }
         }
@@ -7151,7 +7151,7 @@ namespace System.Windows.Forms
             //
             // and anyway, ComputeVisibleRows will call the DataGridRows accessor
             // 
-            DataGridRow[] gridRows = this.DataGridRows;
+            DataGridRow[] gridRows = DataGridRows;
 
             // at this stage, the data grid columns may have their width set to -1 ( ie, their width is uninitialized )
             // make sure that the totalWidth is at least 0
@@ -7183,7 +7183,7 @@ namespace System.Windows.Forms
                 needVertScrollbar = true;
             }
 
-            this.firstVisibleCol = ComputeFirstVisibleColumn();
+            firstVisibleCol = ComputeFirstVisibleColumn();
             // we compute the number of visible columns only after we set up the vertical scroll bar.
             ComputeVisibleColumns();
 
@@ -7237,7 +7237,7 @@ namespace System.Windows.Forms
                 horizScrollBar.Maximum = totalWidth;
                 horizScrollBar.SmallChange = 1;
                 horizScrollBar.LargeChange = Math.Max(totalWidth - widthNotVisible, 0);
-                horizScrollBar.Enabled = this.Enabled;
+                horizScrollBar.Enabled = Enabled;
                 horizScrollBar.RightToLeft = RightToLeft;
                 horizScrollBar.Bounds = new Rectangle(alignToRight ? layout.Inside.X + layout.ResizeBoxRect.Width : layout.Inside.X,
                                                             layout.Data.Bottom,
@@ -7263,7 +7263,7 @@ namespace System.Windows.Forms
                                                      vertScrollBarTop,
                                                      vertScrollBar.Width,
                                                      layout.Data.Height + layout.ColumnHeaders.Height);
-                vertScrollBar.Enabled = this.Enabled;
+                vertScrollBar.Enabled = Enabled;
                 vertScrollBar.Visible = true;
                 if (alignToRight)
                     layout.Data.X += vertScrollBar.Width;
@@ -7314,13 +7314,13 @@ namespace System.Windows.Forms
             if (parentRows.GetTopParent() == null)
                 originalState = null;
 
-            DataGridRow[] localGridRows = this.DataGridRows;
+            DataGridRow[] localGridRows = DataGridRows;
             // what if the user changed the ReadOnly property
             // on the grid while the user was navigating to the child rows?
             //
             // what if the policy does not allow for allowAdd?
             //
-            if ((this.ReadOnly || !policy.AllowAdd) == (localGridRows[DataGridRowsLength - 1] is DataGridAddNewRow))
+            if ((ReadOnly || !policy.AllowAdd) == (localGridRows[DataGridRowsLength - 1] is DataGridAddNewRow))
             {
                 int newDataGridRowsLength = (ReadOnly || !policy.AllowAdd) ? DataGridRowsLength - 1 : DataGridRowsLength + 1;
                 DataGridRow[] newDataGridRows = new DataGridRow[newDataGridRowsLength];
@@ -7328,8 +7328,8 @@ namespace System.Windows.Forms
                 {
                     newDataGridRows[i] = DataGridRows[i];
                 }
-                if (!this.ReadOnly && policy.AllowAdd)
-                    newDataGridRows[newDataGridRowsLength - 1] = new DataGridAddNewRow(this, this.myGridTable, newDataGridRowsLength - 1);
+                if (!ReadOnly && policy.AllowAdd)
+                    newDataGridRows[newDataGridRowsLength - 1] = new DataGridAddNewRow(this, myGridTable, newDataGridRowsLength - 1);
                 SetDataGridRows(newDataGridRows, newDataGridRowsLength);
             }
 
@@ -7337,14 +7337,14 @@ namespace System.Windows.Forms
             // it may be the case that in between the user added a tableStyle that is different
             // from the one that is currently in the grid
             // in that case, we need to reset the dataGridTableStyle in the rows
-            localGridRows = this.DataGridRows;
+            localGridRows = DataGridRows;
             if (localGridRows != null && localGridRows.Length != 0)
             {
                 DataGridTableStyle dgTable = localGridRows[0].DataGridTableStyle;
-                if (dgTable != this.myGridTable)
+                if (dgTable != myGridTable)
                 {
                     for (int i = 0; i < localGridRows.Length; i++)
-                        localGridRows[i].DataGridTableStyle = this.myGridTable;
+                        localGridRows[i].DataGridTableStyle = myGridTable;
                 }
             }
 
@@ -7352,21 +7352,21 @@ namespace System.Windows.Forms
             // we also have the default gridColumns, w/ width = -1
             // we need to set the width on the new gridColumns
             //
-            if (this.myGridTable.GridColumnStyles.Count > 0 && this.myGridTable.GridColumnStyles[0].Width == -1)
+            if (myGridTable.GridColumnStyles.Count > 0 && myGridTable.GridColumnStyles[0].Width == -1)
             {
 #if DEBUG
-                GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
+                GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
                 for (int i = 0; i < cols.Count; i++)
                 {
                     Debug.Assert(cols[i].Width == -1, "Sanity check");
                 }
-                Debug.Assert(this.myGridTable.IsDefault, "when we navigate to the parent rows and the columns have widths -1 we are using the default table");
+                Debug.Assert(myGridTable.IsDefault, "when we navigate to the parent rows and the columns have widths -1 we are using the default table");
 #endif // DEBUG
                 InitializeColumnWidths();
             }
 
             // reset the currentRow to the old position in the listmanager:
-            currentRow = this.ListManager.Position == -1 ? 0 : this.ListManager.Position;
+            currentRow = ListManager.Position == -1 ? 0 : ListManager.Position;
 
             // if the AllowNavigation changed while the user was navigating the 
             // child tables, so that the new navigation mode does not allow childNavigation anymore
@@ -7442,7 +7442,7 @@ namespace System.Windows.Forms
             //
             try
             {
-                this.listManager.EndCurrentEdit();
+                listManager.EndCurrentEdit();
             }
             catch
             {
@@ -7464,7 +7464,7 @@ namespace System.Windows.Forms
             // and then set the position in the listManager to the new row.
             //
             if (source.RowNumber != CurrentRow)
-                this.listManager.Position = source.RowNumber;
+                listManager.Position = source.RowNumber;
 
             // We save our state if the parent rows stack is empty.
             if (parentRows.GetTopParent() == null)
@@ -7497,9 +7497,9 @@ namespace System.Windows.Forms
             // Retrieve the child state
             childState.PullState(this, true);               // true for creating columns when we navigate to child rows
 
-            if (this.listManager.Position != this.currentRow)
+            if (listManager.Position != currentRow)
             {
-                this.currentRow = listManager.Position == -1 ? 0 : listManager.Position;
+                currentRow = listManager.Position == -1 ? 0 : listManager.Position;
             }
 
             if (parentRows.GetTopParent() != null)
@@ -7541,19 +7541,19 @@ namespace System.Windows.Forms
         internal void OnColumnCollectionChanged(object sender, CollectionChangeEventArgs e)
         {
             DataGridTableStyle table = (DataGridTableStyle)sender;
-            if (table.Equals(this.myGridTable))
+            if (table.Equals(myGridTable))
             {
                 // if we changed the column collection, then we need to set the property
                 // descriptors in the column collection.
                 // unless the user set the propertyDescriptor in the columnCollection
                 //
-                if (!this.myGridTable.IsDefault)
+                if (!myGridTable.IsDefault)
                 {
                     // if the element in the collectionChangeEventArgs is not null
                     // and the action is refresh, then it means that the user
                     // set the propDesc. we do not want to override this.
                     if (e.Action != CollectionChangeAction.Refresh || e.Element == null)
-                        PairTableStylesAndGridColumns(this.listManager, this.myGridTable, false);
+                        PairTableStylesAndGridColumns(listManager, myGridTable, false);
                 }
                 Invalidate();
                 PerformLayout();
@@ -7594,14 +7594,14 @@ namespace System.Windows.Forms
         {
             int cx = 0;
             Rectangle textBounds = boundingRect;
-            GridColumnStylesCollection gridColumns = this.myGridTable.GridColumnStyles;
+            GridColumnStylesCollection gridColumns = myGridTable.GridColumnStyles;
             bool alignRight = isRightToLeft();
 
 
             int nGridCols = gridColumns.Count;
             // for sorting
             PropertyDescriptor sortProperty = null;
-            sortProperty = this.ListManager.GetSortProperty();
+            sortProperty = ListManager.GetSortProperty();
 
             // Now paint the column header text!
             for (int col = firstVisibleCol; col < nGridCols; ++col)
@@ -7616,7 +7616,7 @@ namespace System.Windows.Forms
                 TriangleDirection whichWay = TriangleDirection.Up;
                 if (columnSorted)
                 {
-                    ListSortDirection direction = this.ListManager.GetSortDirection();
+                    ListSortDirection direction = ListManager.GetSortDirection();
                     if (direction == ListSortDirection.Descending)
                         whichWay = TriangleDirection.Down;
                 }
@@ -7640,10 +7640,10 @@ namespace System.Windows.Forms
                 // if the user set the HeaderBackBrush property on the 
                 // dataGrid, then use that property
                 Brush headerBrush;
-                if (this.myGridTable.IsDefault)
+                if (myGridTable.IsDefault)
                     headerBrush = HeaderBackBrush;
                 else
-                    headerBrush = this.myGridTable.HeaderBackBrush;
+                    headerBrush = myGridTable.HeaderBackBrush;
 
                 g.FillRectangle(headerBrush, textBounds);
                 // granted, the code would be a lot cleaner if we were using a "new Rectangle"
@@ -7678,8 +7678,8 @@ namespace System.Windows.Forms
                     format.Alignment = StringAlignment.Near;
                 }
                 g.DrawString(gridColumns[col].HeaderText,
-                             this.myGridTable.IsDefault ? this.HeaderFont : this.myGridTable.HeaderFont,
-                             this.myGridTable.IsDefault ? this.HeaderForeBrush : this.myGridTable.HeaderForeBrush,
+                             myGridTable.IsDefault ? HeaderFont : myGridTable.HeaderFont,
+                             myGridTable.IsDefault ? HeaderForeBrush : myGridTable.HeaderForeBrush,
                              textBounds,
                              format);
                 format.Dispose();
@@ -7708,8 +7708,8 @@ namespace System.Windows.Forms
                     int deflateValue = Math.Max(0, (textBounds.Height - 5) / 2);
                     triBounds.Inflate(-deflateValue, -deflateValue);
 
-                    Pen pen1 = new Pen(this.BackgroundBrush);
-                    Pen pen2 = new Pen(this.myGridTable.BackBrush);
+                    Pen pen1 = new Pen(BackgroundBrush);
+                    Pen pen2 = new Pen(myGridTable.BackBrush);
                     Triangle.Paint(g, triBounds, whichWay, headerBrush, pen1, pen2, pen1, true);
                     pen1.Dispose();
                     pen2.Dispose();
@@ -7758,10 +7758,10 @@ namespace System.Windows.Forms
             {
                 Brush br;
 
-                if (this.myGridTable.IsDefault)
-                    br = this.HeaderForeBrush;
+                if (myGridTable.IsDefault)
+                    br = HeaderForeBrush;
                 else
-                    br = this.myGridTable.HeaderForeBrush;
+                    br = myGridTable.HeaderForeBrush;
                 g.FillRectangle(br, bounds.X, bounds.Y, bounds.Width + 2, 2);
                 g.FillRectangle(br, bounds.Right - 2, bounds.Y, 2, bounds.Height + 2);
                 g.FillRectangle(br, bounds.X, bounds.Bottom - 2, bounds.Width + 2, 2);
@@ -7786,7 +7786,7 @@ namespace System.Windows.Forms
 
             Rectangle rc = gridBounds;
 
-            if (this.listManager != null)
+            if (listManager != null)
             {
                 if (layout.ColumnHeadersVisible)
                 {
@@ -7802,10 +7802,10 @@ namespace System.Windows.Forms
 
                 if (layout.TopLeftHeader.Width > 0)
                 {
-                    if (this.myGridTable.IsDefault)
-                        g.FillRectangle(this.HeaderBackBrush, layout.TopLeftHeader);
+                    if (myGridTable.IsDefault)
+                        g.FillRectangle(HeaderBackBrush, layout.TopLeftHeader);
                     else
-                        g.FillRectangle(this.myGridTable.HeaderBackBrush, layout.TopLeftHeader);
+                        g.FillRectangle(myGridTable.HeaderBackBrush, layout.TopLeftHeader);
 
                     if (!FlatMode)
                     {
@@ -7851,7 +7851,7 @@ namespace System.Windows.Forms
 
             if (gridState[GRIDSTATE_inAddNewRow])
             {
-                newDataGridRows[currentRowCount - selectedEntries] = new DataGridAddNewRow(this, this.myGridTable, currentRowCount - selectedEntries);
+                newDataGridRows[currentRowCount - selectedEntries] = new DataGridAddNewRow(this, myGridTable, currentRowCount - selectedEntries);
                 gridState[GRIDSTATE_inAddNewRow] = false;
             }
 
@@ -8056,15 +8056,15 @@ namespace System.Windows.Forms
         {
             int rowsDeleted = 0;
 
-            int currentRowsCount = this.listManager == null ? 0 : this.listManager.Count;
+            int currentRowsCount = listManager == null ? 0 : listManager.Count;
 
-            if (this.Visible)
+            if (Visible)
                 BeginUpdateInternal();
             try
             {
-                if (this.ListManager != null)
+                if (ListManager != null)
                 {
-                    for (int i = 0; i < this.DataGridRowsLength; i++)
+                    for (int i = 0; i < DataGridRowsLength; i++)
                     {
                         if (localGridRows[i].Selected)
                         {
@@ -8075,7 +8075,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                this.ListManager.RemoveAt(i - rowsDeleted);
+                                ListManager.RemoveAt(i - rowsDeleted);
                                 rowsDeleted++;
                             }
                         }
@@ -8090,14 +8090,14 @@ namespace System.Windows.Forms
                 //
                 RecreateDataGridRows();
                 gridState[GRIDSTATE_inDeleteRow] = false;
-                if (this.Visible)
+                if (Visible)
                     EndUpdateInternal();
                 throw;
             }
             // keep the copy of the old rows in place
             // it may be the case that deleting one row could cause multiple rows to be deleted in the same list
             //
-            if (this.listManager != null && currentRowsCount == this.listManager.Count + rowsDeleted)
+            if (listManager != null && currentRowsCount == listManager.Count + rowsDeleted)
             {
                 DeleteDataGridRows(rowsDeleted);
             }
@@ -8107,10 +8107,10 @@ namespace System.Windows.Forms
             }
 
             gridState[GRIDSTATE_inDeleteRow] = false;
-            if (this.Visible)
+            if (Visible)
                 EndUpdateInternal();
 
-            if (this.listManager != null && currentRowsCount != this.listManager.Count + rowsDeleted)
+            if (listManager != null && currentRowsCount != listManager.Count + rowsDeleted)
             {
                 Invalidate();
             }
@@ -8177,7 +8177,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
+            GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
             int firstColumnMarkedVisible = 0;
             int lastColumnMarkedVisible = cols.Count;
             for (int i = 0; i < cols.Count; i++)
@@ -8204,7 +8204,7 @@ namespace System.Windows.Forms
                     return ProcessTabKey(biDiKe.KeyData);
                 case Keys.Up:
                     gridState[GRIDSTATE_childLinkFocused] = false;
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8292,7 +8292,7 @@ namespace System.Windows.Forms
                     break;
                 case Keys.Down:
                     gridState[GRIDSTATE_childLinkFocused] = false;
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8406,7 +8406,7 @@ namespace System.Windows.Forms
                     return false;
                 case Keys.Space:
                     gridState[GRIDSTATE_childLinkFocused] = false;
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8424,7 +8424,7 @@ namespace System.Windows.Forms
                     return false;
                 case Keys.Next:
                     gridState[GRIDSTATE_childLinkFocused] = false;
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8460,7 +8460,7 @@ namespace System.Windows.Forms
                     }
                     break;
                 case Keys.Prior:
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8517,13 +8517,13 @@ namespace System.Windows.Forms
                     if (currentCol == firstColumnMarkedVisible && currentRow != 0)
                     {
                         CurrentRow = CurrentRow - 1;
-                        int newCol = MoveLeftRight(this.myGridTable.GridColumnStyles, this.myGridTable.GridColumnStyles.Count, false);
+                        int newCol = MoveLeftRight(myGridTable.GridColumnStyles, myGridTable.GridColumnStyles.Count, false);
                         Debug.Assert(newCol != -1, "there should be at least a visible column, right?");
                         CurrentColumn = newCol;
                     }
                     else
                     {
-                        int newCol = MoveLeftRight(this.myGridTable.GridColumnStyles, currentCol, false);
+                        int newCol = MoveLeftRight(myGridTable.GridColumnStyles, currentCol, false);
                         if (newCol == -1)
                         {
                             if (currentRow == 0)
@@ -8559,7 +8559,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        int newCol = MoveLeftRight(this.myGridTable.GridColumnStyles, this.currentCol, true);
+                        int newCol = MoveLeftRight(myGridTable.GridColumnStyles, currentCol, true);
                         if (newCol == cols.Count + 1)
                         {
                             // navigate to the first visible column
@@ -8585,7 +8585,7 @@ namespace System.Windows.Forms
 #endif
                 case Keys.Home:
                     gridState[GRIDSTATE_childLinkFocused] = false;
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8623,7 +8623,7 @@ namespace System.Windows.Forms
                         // in the listManager is -1, and the currentPosition in the grid is 0
                         if (ListManager != null && ListManager.Count > 0)
                         {
-                            Debug.Assert(ListManager.Position == this.currentRow,
+                            Debug.Assert(ListManager.Position == currentRow,
                                             "Current row out of sync with DataSource",
                                             "The DataSource's Position property should be mirrored by the CurrentCell.RowNumber of the DataGrid.");
                         }
@@ -8632,7 +8632,7 @@ namespace System.Windows.Forms
                         gridState[GRIDSTATE_inDeleteRow] = true;
                         DeleteRows(localGridRows);
                         // set the currentRow to the position in the list
-                        this.currentRow = this.listManager.Count == 0 ? 0 : this.listManager.Position;
+                        currentRow = listManager.Count == 0 ? 0 : listManager.Position;
                         numSelectedRows = 0;
                     }
                     else
@@ -8643,7 +8643,7 @@ namespace System.Windows.Forms
                     break;
                 case Keys.End:
                     gridState[GRIDSTATE_childLinkFocused] = false;
-                    if (this.dataGridRowsLength == 0)
+                    if (dataGridRowsLength == 0)
                     {
                         return true;
                     }
@@ -8726,9 +8726,9 @@ namespace System.Windows.Forms
                         AbortEdit();
 
                         // we have to invalidate the row header ( make it display the row selector instead of the pencil )
-                        if (layout.RowHeadersVisible && this.currentRow > -1)
+                        if (layout.RowHeadersVisible && currentRow > -1)
                         {
-                            Rectangle rowHdrRect = GetRowRect(this.currentRow);
+                            Rectangle rowHdrRect = GetRowRect(currentRow);
                             rowHdrRect.Width = layout.RowHeaders.Width;
                             Invalidate(rowHdrRect);
                         }
@@ -8800,7 +8800,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected bool ProcessTabKey(Keys keyData)
         {
-            if (this.listManager == null || myGridTable == null)
+            if (listManager == null || myGridTable == null)
                 return false;
             bool wasEditing = false;
             int columnCount = myGridTable.GridColumnStyles.Count;
@@ -8844,7 +8844,7 @@ namespace System.Windows.Forms
 
             // see if the child relationships can use this TAB key
             DataGridRow[] localRows = DataGridRows;
-            GridColumnStylesCollection cols = this.myGridTable.GridColumnStyles;
+            GridColumnStylesCollection cols = myGridTable.GridColumnStyles;
 
             int lastColumnMarkedVisible = 0;
             int firstColumnMarkedVisible = cols.Count - 1;
@@ -8888,14 +8888,14 @@ namespace System.Windows.Forms
                         // let the grid regain focus
                         // introduced because of that BeginInvoke thing in the OnLeave method....
                         if (gridState[GRIDSTATE_canFocus] && CanFocus && !Focused)
-                            this.Focus();
+                            Focus();
                         return true;
                     }
                 }
 
                 // actually, it turns out that we should leave the 
                 // control if we are in the last row
-                if ((this.currentRow == this.DataGridRowsLength - 1) && ((keyData & Keys.Shift) == 0))
+                if ((currentRow == DataGridRowsLength - 1) && ((keyData & Keys.Shift) == 0))
                 {
 
                     EndEdit();
@@ -8921,7 +8921,7 @@ namespace System.Windows.Forms
                             // let the grid regain focus
                             // introduced because of that BeginInvoke thing in the OnLeave method....
                             if (gridState[GRIDSTATE_canFocus] && CanFocus && !Focused)
-                                this.Focus();
+                                Focus();
                             return true;
                         }
                     }
@@ -8944,7 +8944,7 @@ namespace System.Windows.Forms
 
                 // if we are on the first cell ( not on the addNewRow )
                 // then shift - tab should move to the next control on the form
-                if (this.currentRow == 0 && ((keyData & Keys.Shift) == Keys.Shift))
+                if (currentRow == 0 && ((keyData & Keys.Shift) == Keys.Shift))
                 {
                     EndEdit();
                     return base.ProcessDialogKey(keyData);
@@ -8984,7 +8984,7 @@ namespace System.Windows.Forms
                 {
                     // part deux: when we hilite the childLink and then press shift-tab, we
                     // don't want to navigate at the second to last column
-                    InvalidateRow(this.currentRow);
+                    InvalidateRow(currentRow);
                     Edit();
                 }
                 else
@@ -9016,9 +9016,9 @@ namespace System.Windows.Forms
             if (gridState[GRIDSTATE_inAddNewRow])
             {
                 gridState[GRIDSTATE_inAddNewRow] = false;
-                DataGridRow[] localGridRows = this.DataGridRows;
+                DataGridRow[] localGridRows = DataGridRows;
 
-                localGridRows[DataGridRowsLength - 1] = new DataGridAddNewRow(this, this.myGridTable, DataGridRowsLength - 1);
+                localGridRows[DataGridRowsLength - 1] = new DataGridAddNewRow(this, myGridTable, DataGridRowsLength - 1);
                 SetDataGridRows(localGridRows, DataGridRowsLength);
             }
         }
@@ -9036,8 +9036,8 @@ namespace System.Windows.Forms
             linkFontHeight = LinkFont.Height;
             captionFontHeight = CaptionFont.Height;
 
-            if (this.myGridTable == null || this.myGridTable.IsDefault)
-                headerFontHeight = this.HeaderFont.Height;
+            if (myGridTable == null || myGridTable.IsDefault)
+                headerFontHeight = HeaderFont.Height;
             else
                 headerFontHeight = myGridTable.HeaderFont.Height;
         }
@@ -9132,11 +9132,11 @@ namespace System.Windows.Forms
                 ClearRegionCache();
 
                 // we should put "dataGridRowsLength -1"
-                int newFirstRow = Math.Max(0, Math.Min(firstVisibleRow + rows, this.DataGridRowsLength - 1));
+                int newFirstRow = Math.Max(0, Math.Min(firstVisibleRow + rows, DataGridRowsLength - 1));
                 int oldFirstRow = firstVisibleRow;
                 firstVisibleRow = newFirstRow;
                 vertScrollBar.Value = newFirstRow;
-                bool wasEditing = this.gridState[GRIDSTATE_isEditing];
+                bool wasEditing = gridState[GRIDSTATE_isEditing];
                 ComputeVisibleRows();
 
                 if (gridState[GRIDSTATE_isScrolling])
@@ -9183,15 +9183,15 @@ namespace System.Windows.Forms
 
             // if we try to scroll past the last totally visible column,
             // then the toolTips will dissapear
-            if (this.myGridTable.IsDefault)
+            if (myGridTable.IsDefault)
                 nVisibleCols = nGridCols;
             else
                 for (int i = 0; i < nGridCols; i++)
                     if (gridColumns[i].PropertyDescriptor != null)
                         nVisibleCols++;
 
-            if (this.lastTotallyVisibleCol == nVisibleCols - 1 && columns > 0 ||
-                this.firstVisibleCol == 0 && columns < 0 && negOffset == 0)
+            if (lastTotallyVisibleCol == nVisibleCols - 1 && columns > 0 ||
+                firstVisibleCol == 0 && columns < 0 && negOffset == 0)
                 return;
 
             newCol = Math.Min(newCol, nGridCols - 1);
@@ -9322,7 +9322,7 @@ namespace System.Windows.Forms
         internal void SetDataGridTable(DataGridTableStyle newTable, bool forceColumnCreation)
         {
             // we have to listen to the dataGridTable for the propertyChangedEvent
-            if (this.myGridTable != null)
+            if (myGridTable != null)
             {
                 // unwire the propertyChanged event
                 UnWireTableStylePropChanged(myGridTable);
@@ -9341,7 +9341,7 @@ namespace System.Windows.Forms
 
             WireTableStylePropChanged(myGridTable);
 
-            this.layout.RowHeadersVisible = newTable.IsDefault ? this.RowHeadersVisible : newTable.RowHeadersVisible;
+            layout.RowHeadersVisible = newTable.IsDefault ? RowHeadersVisible : newTable.RowHeadersVisible;
 
             // we need to force the grid into the dataGridTableStyle
             // this way the controls in the columns will be parented
@@ -9358,8 +9358,8 @@ namespace System.Windows.Forms
 
             // pair the tableStyles and GridColumns
             //
-            if (this.listManager != null)
-                PairTableStylesAndGridColumns(this.listManager, this.myGridTable, forceColumnCreation);
+            if (listManager != null)
+                PairTableStylesAndGridColumns(listManager, myGridTable, forceColumnCreation);
 
             // reset the relations UI on the newTable
             if (newTable != null)
@@ -9374,10 +9374,10 @@ namespace System.Windows.Forms
             // if we add a tableStyle that mapps to the
             // current listName, then we should set the currentRow to the
             // position in the listManager
-            if (this.listManager == null)
+            if (listManager == null)
                 currentRow = 0;
             else
-                currentRow = this.listManager.Position == -1 ? 0 : listManager.Position;
+                currentRow = listManager.Position == -1 ? 0 : listManager.Position;
             ResetHorizontalOffset();
             negOffset = 0;
             ResetUIState();
@@ -9585,10 +9585,10 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataGridCursor.TraceVerbose, "DataGridCursor: Requesting EndEdit()");
             try
             {
-                if (this.listManager != null)
+                if (listManager != null)
                 {
                     EndEdit();
-                    this.listManager.EndCurrentEdit();
+                    listManager.EndCurrentEdit();
                 }
             }
             catch
@@ -9763,7 +9763,7 @@ namespace System.Windows.Forms
                 {
                     n++;
                 }
-                n += this.DataGrid.DataGridRows.Length * this.DataGrid.myGridTable.GridColumnStyles.Count;
+                n += DataGrid.DataGridRows.Length * DataGrid.myGridTable.GridColumnStyles.Count;
                 return n;
             }
 
@@ -9779,7 +9779,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetSelected()
             {
-                if (this.DataGrid.DataGridRows.Length == 0 || this.DataGrid.myGridTable.GridColumnStyles.Count == 0)
+                if (DataGrid.DataGridRows.Length == 0 || DataGrid.myGridTable.GridColumnStyles.Count == 0)
                 {
                     return null;
                 }
@@ -9873,19 +9873,19 @@ namespace System.Windows.Forms
 
             private void GrabLayout(LayoutData src)
             {
-                this.Inside = src.Inside;
-                this.TopLeftHeader = src.TopLeftHeader;
-                this.ColumnHeaders = src.ColumnHeaders;
-                this.RowHeaders = src.RowHeaders;
-                this.Data = src.Data;
-                this.Caption = src.Caption;
-                this.ParentRows = src.ParentRows;
-                this.ResizeBoxRect = src.ResizeBoxRect;
-                this.ColumnHeadersVisible = src.ColumnHeadersVisible;
-                this.RowHeadersVisible = src.RowHeadersVisible;
-                this.CaptionVisible = src.CaptionVisible;
-                this.ParentRowsVisible = src.ParentRowsVisible;
-                this.ClientRectangle = src.ClientRectangle;
+                Inside = src.Inside;
+                TopLeftHeader = src.TopLeftHeader;
+                ColumnHeaders = src.ColumnHeaders;
+                RowHeaders = src.RowHeaders;
+                Data = src.Data;
+                Caption = src.Caption;
+                ParentRows = src.ParentRows;
+                ResizeBoxRect = src.ResizeBoxRect;
+                ColumnHeadersVisible = src.ColumnHeadersVisible;
+                RowHeadersVisible = src.RowHeadersVisible;
+                CaptionVisible = src.CaptionVisible;
+                ParentRowsVisible = src.ParentRowsVisible;
+                ClientRectangle = src.ClientRectangle;
             }
 
             public override string ToString()

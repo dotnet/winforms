@@ -368,7 +368,7 @@ namespace System.Windows.Forms
 
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-            var hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            var hookProcPtr = new NativeMethods.WndProc(HookProc);
 
             if (!UseEXDialog)
             {

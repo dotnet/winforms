@@ -1053,7 +1053,7 @@ namespace System.Windows.Forms
                     //set windowStyle directly instead of recreating handle to increase efficiency
                     if (IsHandleCreated)
                     {
-                        int style = this.WindowStyle;
+                        int style = WindowStyle;
                         if (!UseMnemonic)
                         {
 
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms
                         {
                             style &= ~NativeMethods.SS_NOPREFIX;
                         }
-                        this.WindowStyle = style;
+                        WindowStyle = style;
                     }
                 }
             }
@@ -1086,8 +1086,8 @@ namespace System.Windows.Forms
             // If width and/or height are constrained by anchoring, don't adjust control size
             // to fit around text, since this will cause us to lose the original anchored size.
             if (!AutoSize &&
-                ((this.Anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right) ||
-                 (this.Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom)))
+                ((Anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right) ||
+                 (Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom)))
             {
                 return;
             }
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
                 {
                     if (image != null)
                     {
-                        ImageAnimator.Animate(image, new EventHandler(this.OnFrameChanged));
+                        ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
                         labelState[StateAnimating] = animate ? 1 : 0;
                     }
                 }
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms
                 {
                     if (image != null)
                     {
-                        ImageAnimator.StopAnimate(image, new EventHandler(this.OnFrameChanged));
+                        ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
                         labelState[StateAnimating] = animate ? 1 : 0;
                     }
                 }
@@ -1189,12 +1189,12 @@ namespace System.Windows.Forms
 
         internal virtual StringFormat CreateStringFormat()
         {
-            return ControlPaint.CreateStringFormat(this, this.TextAlign, this.AutoEllipsis, this.UseMnemonic);
+            return ControlPaint.CreateStringFormat(this, TextAlign, AutoEllipsis, UseMnemonic);
         }
 
         private TextFormatFlags CreateTextFormatFlags()
         {
-            return CreateTextFormatFlags(this.Size - GetBordersAndPadding());
+            return CreateTextFormatFlags(Size - GetBordersAndPadding());
         }
         /// <summary>
         ///     Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms
             // whenever something can change the TextFormatFlags used
             // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
 
-            TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, this.TextAlign, this.AutoEllipsis, this.UseMnemonic);
+            TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, TextAlign, AutoEllipsis, UseMnemonic);
 
             // Remove WordBreak if the size is large enough to display all the text.
             if (!MeasureTextCache.TextRequiresWordBreak(Text, Font, constrainingSize, flags))
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms
                 // Holding on to images and image list is a memory leak.
                 if (ImageList != null)
                 {
-                    ImageList.Disposed -= new EventHandler(this.DetachImageList);
+                    ImageList.Disposed -= new EventHandler(DetachImageList);
                     ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
                     Properties.SetObject(PropImageList, null);
                 }
@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
             if (string.IsNullOrEmpty(Text))
             {
                 // empty labels return the font height + borders
-                using (WindowsFont font = WindowsFont.FromFont(this.Font))
+                using (WindowsFont font = WindowsFont.FromFont(Font))
                 {
                     // this is the character that Windows uses to determine the extent
                     requiredSize = WindowsGraphicsCacheManager.MeasurementGraphics.GetTextExtent("0", font);
@@ -1434,7 +1434,7 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            using (WindowsGraphics wg = WindowsGraphics.FromHwnd(this.Handle))
+            using (WindowsGraphics wg = WindowsGraphics.FromHwnd(Handle))
             {
                 TextFormatFlags flags = CreateTextFormatFlags();
 
@@ -1447,7 +1447,7 @@ namespace System.Windows.Forms
                     wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
                 }
 
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(this.Font))
+                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                 {
                     IntNativeMethods.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms
             }
             if (IsHandleCreated && InvokeRequired)
             {
-                BeginInvoke(new EventHandler(this.OnFrameChanged), o, e);
+                BeginInvoke(new EventHandler(OnFrameChanged), o, e);
                 return;
             }
 
@@ -1600,10 +1600,10 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             Animate();
-            ImageAnimator.UpdateFrames(this.Image);
+            ImageAnimator.UpdateFrames(Image);
 
             Rectangle face = LayoutUtils.DeflateRect(ClientRectangle, Padding);
-            Image i = this.Image;
+            Image i = Image;
             if (i != null)
             {
                 DrawImage(e.Graphics, i, face, RtlTranslateAlignment(ImageAlign));
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms
 
             if (AutoEllipsis)
             {
-                Rectangle clientRect = this.ClientRectangle;
+                Rectangle clientRect = ClientRectangle;
                 Size preferredSize = GetPreferredSize(new Size(clientRect.Width, clientRect.Height));
                 showToolTip = (clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height);
             }
@@ -1673,7 +1673,7 @@ namespace System.Windows.Forms
                     //Theme specs -- if the backcolor is darker than Control, we use
                     // ControlPaint.Dark(backcolor).  Otherwise we use ControlDark.
 
-                    Color disabledTextForeColor = TextRenderer.DisabledTextColor(this.BackColor);
+                    Color disabledTextForeColor = TextRenderer.DisabledTextColor(BackColor);
                     TextRenderer.DrawText(e.Graphics, Text, Font, face, disabledTextForeColor, flags);
                 }
             }
@@ -1831,7 +1831,7 @@ namespace System.Windows.Forms
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //
-                    Rectangle rectInScreen = this.RectangleToScreen(new Rectangle(0, 0, Width, Height));
+                    Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
                     Point pt = new Point(unchecked((int)(long)m.LParam));
                     m.Result = (IntPtr)((rectInScreen.Contains(pt) ? NativeMethods.HTCLIENT : NativeMethods.HTNOWHERE));
                     break;

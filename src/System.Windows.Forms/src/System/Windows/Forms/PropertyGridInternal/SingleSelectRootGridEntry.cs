@@ -44,13 +44,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             this.gridEntryHost = gridEntryHost;
             this.baseProvider = baseProvider;
             this.tab = tab;
-            this.objValue = value;
-            this.objValueClassName = TypeDescriptor.GetClassName(this.objValue);
+            objValue = value;
+            objValueClassName = TypeDescriptor.GetClassName(objValue);
 
-            this.IsExpandable = true;
+            IsExpandable = true;
             // default to categories
-            this.PropertySort = sortType;
-            this.InternalExpanded = true;
+            PropertySort = sortType;
+            InternalExpanded = true;
         }
 
         [
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
                 }
-                return this.browsableAttributes;
+                return browsableAttributes;
             }
             set
             {
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 bool same = true;
 
-                if (this.browsableAttributes != null && value != null && this.browsableAttributes.Count == value.Count)
+                if (browsableAttributes != null && value != null && browsableAttributes.Count == value.Count)
                 {
                     Attribute[] attr1 = new Attribute[browsableAttributes.Count];
                     Attribute[] attr2 = new Attribute[value.Count];
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     same = false;
                 }
 
-                this.browsableAttributes = value;
+                browsableAttributes = value;
 
                 if (!same && Children != null && Children.Count > 0)
                 {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                this.tab = value;
+                tab = value;
             }
         }
 
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                this.propDefault = value;
+                propDefault = value;
             }
         }
 
@@ -179,8 +179,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!forceReadOnlyChecked)
                 {
-                    ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(this.objValue)[typeof(ReadOnlyAttribute)];
-                    if ((readOnlyAttr != null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(this.objValue).Contains(InheritanceAttribute.InheritedReadOnly))
+                    ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(ReadOnlyAttribute)];
+                    if ((readOnlyAttr != null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(objValue).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
                         flags |= FLAG_FORCE_READONLY;
                     }
@@ -194,11 +194,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return this.gridEntryHost;
+                return gridEntryHost;
             }
             set
             {
-                this.gridEntryHost = value;
+                gridEntryHost = value;
             }
         }
 
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return helpAttribute.HelpKeyword;
                 }
 
-                return this.objValueClassName;
+                return objValueClassName;
             }
         }
 
@@ -290,9 +290,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 gridEntryHost = null;
                 changeService = null;
             }
-            this.objValue = null;
-            this.objValueClassName = null;
-            this.propDefault = null;
+            objValue = null;
+            objValueClassName = null;
+            propDefault = null;
             base.Dispose(disposing);
         }
 
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public void ResetBrowsableAttributes()
         {
-            this.browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
+            browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
         }
 
 
@@ -325,21 +325,21 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual void ShowCategories(bool fCategories)
         {
-            if (((this.PropertySort &= PropertySort.Categorized) != 0) != fCategories)
+            if (((PropertySort &= PropertySort.Categorized) != 0) != fCategories)
             {
 
                 if (fCategories)
                 {
-                    this.PropertySort |= PropertySort.Categorized;
+                    PropertySort |= PropertySort.Categorized;
                 }
                 else
                 {
-                    this.PropertySort &= ~PropertySort.Categorized;
+                    PropertySort &= ~PropertySort.Categorized;
                 }
 
 
                 // recreate the children
-                if (this.Expandable && this.ChildCollection != null)
+                if (Expandable && ChildCollection != null)
                 {
                     CreateChildren();
                 }
@@ -351,10 +351,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (Children.Count > 0)
             {
 
-                GridEntry[] childEntries = new GridEntry[this.Children.Count];
-                this.Children.CopyTo(childEntries, 0);
+                GridEntry[] childEntries = new GridEntry[Children.Count];
+                Children.CopyTo(childEntries, 0);
 
-                if ((this.PropertySort & PropertySort.Categorized) != 0)
+                if ((PropertySort & PropertySort.Categorized) != 0)
                 {
 
 
@@ -399,7 +399,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 bin.CopyTo(rgpes, 0);
                                 try
                                 {
-                                    propList.Add(new CategoryGridEntry(this.ownerGrid, this, category, rgpes));
+                                    propList.Add(new CategoryGridEntry(ownerGrid, this, category, rgpes));
                                 }
                                 catch
                                 {

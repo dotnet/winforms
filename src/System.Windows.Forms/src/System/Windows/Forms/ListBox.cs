@@ -456,7 +456,7 @@ namespace System.Windows.Forms
                     {
                         // Force a layout after RecreateHandle() completes because now
                         // the LB is definitely fully populated and can report a preferred size accurately.
-                        LayoutTransaction.DoLayoutIf(AutoSize, this.ParentInternal, this, PropertyNames.DrawMode);
+                        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.DrawMode);
                     }
                 }
             }
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
                     // added to the LB yet. Just return current height.
                     if (RecreatingHandle || GetState(STATE_CREATINGHANDLE))
                     {
-                        height = this.Height;
+                        height = Height;
                     }
                     else
                     {
@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms
         internal virtual int ComputeMaxItemWidth(int oldMax)
         {
             // pass LayoutUtils the collection of strings
-            string[] strings = new string[this.Items.Count];
+            string[] strings = new string[Items.Count];
 
             for (int i = 0; i < Items.Count; i++)
             {
@@ -1897,7 +1897,7 @@ namespace System.Windows.Forms
             base.OnParentChanged(e);
             //No need to RecreateHandle if we are removing the Listbox from controls collection...
             //so check the parent before recreating the handle...
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
                 RecreateHandle();
             }
@@ -1910,7 +1910,7 @@ namespace System.Windows.Forms
 
             // There are some repainting issues for RightToLeft - so invalidate when we resize.
             //
-            if (RightToLeft == RightToLeft.Yes || this.HorizontalScrollbar)
+            if (RightToLeft == RightToLeft.Yes || HorizontalScrollbar)
             {
                 Invalidate();
             }
@@ -1934,14 +1934,14 @@ namespace System.Windows.Forms
             // calls CurrencyManager::EndCurrentEdit, and that will pull the dataFrom the controls
             // into the backEnd. We do not need to do that.
             //
-            if (this.DataManager != null && DataManager.Position != SelectedIndex)
+            if (DataManager != null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
-                if (!FormattingEnabled || this.SelectedIndex != -1)
+                if (!FormattingEnabled || SelectedIndex != -1)
                 {
                     // Don't change dataManager position if we simply unselected everything.
                     // (Doing so would cause the first LB item to be selected...)
-                    this.DataManager.Position = this.SelectedIndex;
+                    DataManager.Position = SelectedIndex;
                 }
             }
 
@@ -1980,8 +1980,8 @@ namespace System.Windows.Forms
             // we want to use the new DisplayMember even if there is no data source
             RefreshItems();
 
-            if (SelectionMode != SelectionMode.None && this.DataManager != null)
-                this.SelectedIndex = this.DataManager.Position;
+            if (SelectionMode != SelectionMode.None && DataManager != null)
+                SelectedIndex = DataManager.Position;
         }
 
         /// <summary>
@@ -2037,12 +2037,12 @@ namespace System.Windows.Forms
             // if we have a dataSource and a DisplayMember, then use it
             // to populate the Items collection
             //
-            if (this.DataManager != null && this.DataManager.Count != -1)
+            if (DataManager != null && DataManager.Count != -1)
             {
-                newItems = new object[this.DataManager.Count];
+                newItems = new object[DataManager.Count];
                 for (int i = 0; i < newItems.Length; i++)
                 {
-                    newItems[i] = this.DataManager[i];
+                    newItems[i] = DataManager[i];
                 }
             }
             else if (savedItems != null)
@@ -2062,10 +2062,10 @@ namespace System.Windows.Forms
             //
             if (SelectionMode != SelectionMode.None)
             {
-                if (this.DataManager != null)
+                if (DataManager != null)
                 {
                     // put the selectedIndex in sync w/ the position in the dataManager
-                    this.SelectedIndex = this.DataManager.Position;
+                    SelectedIndex = DataManager.Position;
                 }
                 else
                 {
@@ -2145,14 +2145,14 @@ namespace System.Windows.Forms
             Items.ClearInternal();
             Items.AddRangeInternal(value);
 
-            this.SelectedItems.Dirty();
+            SelectedItems.Dirty();
 
             // if the list changed, we want to keep the same selected index
             // CurrencyManager will provide the PositionChanged event
             // it will be provided before changing the list though...
-            if (this.DataManager != null)
+            if (DataManager != null)
             {
-                if (this.DataSource is ICurrencyManagerProvider)
+                if (DataSource is ICurrencyManagerProvider)
                 {
                     // Everett ListControl's had a 
 
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
 
 
 
-                    this.selectedValueChangedFired = false;
+                    selectedValueChangedFired = false;
                 }
 
                 if (IsHandleCreated)
@@ -2317,7 +2317,7 @@ namespace System.Windows.Forms
                 int width;
                 using (Graphics graphics = CreateGraphicsInternal())
                 {
-                    width = (int)(Math.Ceiling(graphics.MeasureString(GetItemText(item), this.Font).Width));
+                    width = (int)(Math.Ceiling(graphics.MeasureString(GetItemText(item), Font).Width));
                 }
 
                 if (removing)
@@ -2360,11 +2360,11 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D)
+            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using (Graphics g = Graphics.FromHdc(m.WParam))
                 {
-                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                     using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder))
                     {
                         g.DrawRectangle(pen, rect);
@@ -2996,7 +2996,7 @@ namespace System.Windows.Forms
                 public Entry(object item)
                 {
                     this.item = item;
-                    this.state = 0;
+                    state = 0;
                 }
             }
 
@@ -3020,8 +3020,8 @@ namespace System.Windows.Forms
                     this.items = items;
                     this.state = state;
                     this.anyBit = anyBit;
-                    this.version = items.version;
-                    this.current = -1;
+                    version = items.version;
+                    current = -1;
                 }
 
                 /// <summary>
@@ -3114,7 +3114,7 @@ namespace System.Windows.Forms
             public ObjectCollection(ListBox owner, ObjectCollection value)
             {
                 this.owner = owner;
-                this.AddRange(value);
+                AddRange(value);
             }
 
             /// <summary>
@@ -3125,7 +3125,7 @@ namespace System.Windows.Forms
             public ObjectCollection(ListBox owner, object[] value)
             {
                 this.owner = owner;
-                this.AddRange(value);
+                AddRange(value);
             }
 
             /// <summary>
@@ -3542,7 +3542,7 @@ namespace System.Windows.Forms
                 if (owner.IsHandleCreated)
                 {
                     bool selected = (owner.SelectedIndex == index);
-                    if (string.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
+                    if (string.Compare(owner.GetItemText(value), owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
                     {
                         owner.NativeRemoveAt(index);
                         owner.SelectedItems.SetSelected(index, false);
@@ -3942,7 +3942,7 @@ namespace System.Windows.Forms
                 public CustomTabOffsetsEnumerator(IntegerCollection items)
                 {
                     this.items = items;
-                    this.current = -1;
+                    current = -1;
                 }
 
                 /// <summary>
@@ -4222,7 +4222,7 @@ namespace System.Windows.Forms
                 public SelectedIndexEnumerator(SelectedIndexCollection items)
                 {
                     this.items = items;
-                    this.current = -1;
+                    current = -1;
                 }
 
                 /// <summary>
@@ -4285,8 +4285,8 @@ namespace System.Windows.Forms
             public SelectedObjectCollection(ListBox owner)
             {
                 this.owner = owner;
-                this.stateDirty = true;
-                this.lastVersion = -1;
+                stateDirty = true;
+                lastVersion = -1;
             }
 
             /// <summary>
@@ -4500,7 +4500,7 @@ namespace System.Windows.Forms
                 // this also takes care of the case where owner.SelectionMode == SelectionMode.One
                 if (selected)
                 {
-                    this.owner.NativeSetSelected(index, true /*we signal selection to the native listBox only if the item is actually selected*/);
+                    owner.NativeSetSelected(index, true /*we signal selection to the native listBox only if the item is actually selected*/);
                 }
             }
 

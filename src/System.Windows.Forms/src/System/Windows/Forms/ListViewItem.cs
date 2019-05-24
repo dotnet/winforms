@@ -320,7 +320,7 @@ namespace System.Windows.Forms
 
                         // the setter for StateImageIndex calls ItemChecked handler
                         // thus need to verify validity of the listView again
-                        if (listView != null && !this.listView.UseCompatibleStateImageBehavior)
+                        if (listView != null && !listView.UseCompatibleStateImageBehavior)
                         {
                             if (!listView.CheckBoxes)
                             {
@@ -869,10 +869,10 @@ namespace System.Windows.Forms
 
         public virtual object Clone()
         {
-            ListViewSubItem[] clonedSubItems = new ListViewSubItem[this.SubItems.Count];
-            for (int index = 0; index < this.SubItems.Count; ++index)
+            ListViewSubItem[] clonedSubItems = new ListViewSubItem[SubItems.Count];
+            for (int index = 0; index < SubItems.Count; ++index)
             {
-                ListViewSubItem subItem = this.SubItems[index];
+                ListViewSubItem subItem = SubItems[index];
                 clonedSubItems[index] = new ListViewSubItem(null,
                                                             subItem.Text,
                                                             subItem.ForeColor,
@@ -881,7 +881,7 @@ namespace System.Windows.Forms
                 clonedSubItems[index].Tag = subItem.Tag;
             }
 
-            Type clonedType = this.GetType();
+            Type clonedType = GetType();
             ListViewItem newItem = null;
 
             if (clonedType == typeof(ListViewItem))
@@ -894,10 +894,10 @@ namespace System.Windows.Forms
             }
             newItem.subItems = clonedSubItems;
             newItem.ImageIndexer.Index = ImageIndexer.Index;
-            newItem.SubItemCount = this.SubItemCount;
-            newItem.Checked = this.Checked;
-            newItem.UseItemStyleForSubItems = this.UseItemStyleForSubItems;
-            newItem.Tag = this.Tag;
+            newItem.SubItemCount = SubItemCount;
+            newItem.Checked = Checked;
+            newItem.UseItemStyleForSubItems = UseItemStyleForSubItems;
+            newItem.Tag = Tag;
 
             // Only copy over the ImageKey if we're using it.
             if (!string.IsNullOrEmpty(ImageIndexer.Key))
@@ -905,14 +905,14 @@ namespace System.Windows.Forms
                 newItem.ImageIndexer.Key = ImageIndexer.Key;
             }
 
-            newItem.indentCount = this.indentCount;
-            newItem.StateImageIndex = this.StateImageIndex;
-            newItem.toolTipText = this.toolTipText;
-            newItem.BackColor = this.BackColor;
-            newItem.ForeColor = this.ForeColor;
-            newItem.Font = this.Font;
-            newItem.Text = this.Text;
-            newItem.Group = this.Group;
+            newItem.indentCount = indentCount;
+            newItem.StateImageIndex = StateImageIndex;
+            newItem.toolTipText = toolTipText;
+            newItem.BackColor = BackColor;
+            newItem.ForeColor = ForeColor;
+            newItem.Font = Font;
+            newItem.Text = Text;
+            newItem.Group = Group;
 
             return newItem;
         }
@@ -966,7 +966,7 @@ namespace System.Windows.Forms
             if (listView != null && listView.IsHandleCreated && listView.View == View.Details)
             {
                 listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
-                if (iItem == this.Index && iSubItem != -1 && iSubItem < SubItems.Count)
+                if (iItem == Index && iSubItem != -1 && iSubItem < SubItems.Count)
                 {
                     return SubItems[iSubItem];
                 }
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms
                 else if (entry.Name == "Group")
                 {
                     ListViewGroup group = (ListViewGroup)info.GetValue(entry.Name, typeof(ListViewGroup));
-                    this.groupName = group.Name;
+                    groupName = group.Name;
                 }
             }
 
@@ -1252,12 +1252,12 @@ namespace System.Windows.Forms
             Debug.Assert(listView != null && listView.VirtualMode, "ListViewItem::SetItemIndex should be used only when the list is virtual");
             Debug.Assert(index > -1, "can't set the index on a virtual list view item to -1");
             this.listView = listView;
-            this.lastIndex = index;
+            lastIndex = index;
         }
 
         internal bool ShouldSerializeText() => false;
 
-        private bool ShouldSerializePosition() => !this.position.Equals(new Point(-1, -1));
+        private bool ShouldSerializePosition() => !position.Equals(new Point(-1, -1));
 
         public override string ToString() => "ListViewItem: {" + Text + "}";
 

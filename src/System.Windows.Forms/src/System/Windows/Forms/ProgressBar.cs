@@ -87,11 +87,11 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_PROGRESS;
-                if (this.Style == ProgressBarStyle.Continuous)
+                if (Style == ProgressBarStyle.Continuous)
                 {
                     cp.Style |= NativeMethods.PBS_SMOOTH;
                 }
-                else if (this.Style == ProgressBarStyle.Marquee && !DesignMode)
+                else if (Style == ProgressBarStyle.Marquee && !DesignMode)
                 {
                     cp.Style |= NativeMethods.PBS_MARQUEE;
                 }
@@ -723,7 +723,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Increment(int value)
         {
-            if (this.Style == ProgressBarStyle.Marquee)
+            if (Style == ProgressBarStyle.Marquee)
             {
                 throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void PerformStep()
         {
-            if (this.Style == ProgressBarStyle.Marquee)
+            if (Style == ProgressBarStyle.Marquee)
             {
                 throw new InvalidOperationException(SR.ProgressBarPerformStepMarqueeException);
             }
@@ -903,7 +903,7 @@ namespace System.Windows.Forms
                 switch (propertyID)
                 {
                     case NativeMethods.UIA_NamePropertyId:
-                        return this.Name;
+                        return Name;
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_ProgressBarControlTypeId;
                     case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
@@ -939,7 +939,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.OwningProgressBar?.Maximum ?? double.NaN;
+                    return OwningProgressBar?.Maximum ?? double.NaN;
                 }
             }
 
@@ -947,7 +947,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.OwningProgressBar?.Minimum ?? double.NaN;
+                    return OwningProgressBar?.Minimum ?? double.NaN;
                 }
             }
 
@@ -963,7 +963,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.OwningProgressBar?.Value ?? double.NaN;
+                    return OwningProgressBar?.Value ?? double.NaN;
                 }
             }
 

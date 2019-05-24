@@ -142,7 +142,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public void RefreshValues()
         {
-            this.values = null;
+            values = null;
         }
     }
 }

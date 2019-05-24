@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         private WindowsFormsSynchronizationContext(Control marshalingControl, Thread destinationThread)
         {
             controlToSendTo = marshalingControl;
-            this.DestinationThread = destinationThread;
+            DestinationThread = destinationThread;
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 

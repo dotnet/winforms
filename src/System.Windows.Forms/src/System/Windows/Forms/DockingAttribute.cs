@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DockingAttribute()
         {
-            this.dockingBehavior = DockingBehavior.Never;
+            dockingBehavior = DockingBehavior.Never;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior)
         {
-            this.dockingBehavior = dockingBehavior;
+            dockingBehavior = dockingBehavior;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
 
             DockingAttribute other = obj as DockingAttribute;
 
-            return (other != null) && other.DockingBehavior == this.dockingBehavior;
+            return (other != null) && other.DockingBehavior == dockingBehavior;
         }
 
         public override int GetHashCode()
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool IsDefaultAttribute()
         {
-            return (this.Equals(Default));
+            return Equals(Default);
         }
     }
 }

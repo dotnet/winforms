@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.seconds;
+                return seconds;
             }
             set
             {
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(seconds), value, SR.NumericUpDownLessThanZeroError);
                 }
-                this.seconds = value;
+                seconds = value;
             }
         }
 
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
             get
             {
-                return this.increment;
+                return increment;
             }
 
             set
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(increment), value, SR.NumericUpDownLessThanZeroError);
                 }
-                this.increment = value;
+                increment = value;
             }
         }
     }

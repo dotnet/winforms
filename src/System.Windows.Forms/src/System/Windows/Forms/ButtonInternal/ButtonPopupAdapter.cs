@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ButtonInternal
             PaintImage(e, layout);
             PaintField(e, layout, colors, state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
 
-            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, this.Control.IsDefault);
+            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
 
             if (state == CheckState.Unchecked)
             {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.ButtonInternal
             PaintImage(e, layout);
             PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
 
-            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, this.Control.IsDefault);
+            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
 
             if (SystemInformation.HighContrast)
             {
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.ButtonInternal
             PaintField(e, layout, colors, colors.windowText, true);
 
             r.Inflate(1, 1);
-            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.windowFrame, this.Control.IsDefault);
+            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.windowFrame, Control.IsDefault);
             ControlPaint.DrawBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, ButtonBorderStyle.Solid);
         }
 

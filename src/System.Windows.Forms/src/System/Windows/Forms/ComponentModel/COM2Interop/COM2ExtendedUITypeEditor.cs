@@ -28,12 +28,12 @@ namespace System.Drawing.Design
 
         public Com2ExtendedUITypeEditor(UITypeEditor baseTypeEditor)
         {
-            this.innerEditor = baseTypeEditor;
+            innerEditor = baseTypeEditor;
         }
 
         public Com2ExtendedUITypeEditor(Type baseType)
         {
-            this.innerEditor = (UITypeEditor)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
+            innerEditor = (UITypeEditor)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
         }
 
         public UITypeEditor InnerEditor

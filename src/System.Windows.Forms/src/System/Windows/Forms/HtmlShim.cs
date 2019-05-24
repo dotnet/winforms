@@ -116,10 +116,10 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 DisconnectFromEvents();
-                if (this.events != null)
+                if (events != null)
                 {
-                    this.events.Dispose();
-                    this.events = null;
+                    events.Dispose();
+                    events = null;
                 }
             }
         }

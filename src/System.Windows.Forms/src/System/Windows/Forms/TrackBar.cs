@@ -961,12 +961,12 @@ namespace System.Windows.Forms
                 return; // Do not scroll when the user system setting is 0 lines per notch
             }
 
-            Debug.Assert(this.cumulativeWheelData > -NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too small");
-            Debug.Assert(this.cumulativeWheelData < NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too big");
-            this.cumulativeWheelData += e.Delta;
+            Debug.Assert(cumulativeWheelData > -NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too small");
+            Debug.Assert(cumulativeWheelData < NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too big");
+            cumulativeWheelData += e.Delta;
 
             float partialNotches;
-            partialNotches = (float)this.cumulativeWheelData / (float)NativeMethods.WHEEL_DELTA;
+            partialNotches = (float)cumulativeWheelData / (float)NativeMethods.WHEEL_DELTA;
 
             if (wheelScrollLines == -1)
             {
@@ -983,13 +983,13 @@ namespace System.Windows.Forms
                 {
                     absScrollBands = scrollBands;
                     Value = Math.Min(absScrollBands + Value, Maximum);
-                    this.cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                    cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
                 else
                 {
                     absScrollBands = -scrollBands;
                     Value = Math.Max(Value - absScrollBands, Minimum);
-                    this.cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                    cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
             }
 

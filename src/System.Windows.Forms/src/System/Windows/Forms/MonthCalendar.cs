@@ -209,7 +209,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < annualArrayOfDates.Count; ++i)
                 {
-                    dateTimes[i] = (DateTime)this.annualArrayOfDates[i];
+                    dateTimes[i] = (DateTime)annualArrayOfDates[i];
                 }
                 return dateTimes;
             }
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
 
 
 
-                this.annualArrayOfDates.Clear();
+                annualArrayOfDates.Clear();
                 for (int i = 0; i < MONTHS_IN_YEAR; ++i)
                     monthsOfYear[i] = 0;
 
@@ -229,7 +229,7 @@ namespace System.Windows.Forms
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
-                        this.annualArrayOfDates.Add(value[i]);
+                        annualArrayOfDates.Add(value[i]);
                     }
 
                     for (int i = 0; i < value.Length; ++i)
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < arrayOfDates.Count; ++i)
                 {
-                    dateTimes[i] = (DateTime)this.arrayOfDates[i];
+                    dateTimes[i] = (DateTime)arrayOfDates[i];
                 }
                 return dateTimes;
             }
@@ -328,14 +328,14 @@ namespace System.Windows.Forms
 
 
 
-                this.arrayOfDates.Clear();
+                arrayOfDates.Clear();
                 if (value != null && value.Length > 0)
                 {
 
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
-                        this.arrayOfDates.Add(value[i]);
+                        arrayOfDates.Add(value[i]);
                     }
 
                 }
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!this.dimensions.Equals(value))
+                if (!dimensions.Equals(value))
                     SetCalendarDimensions(value.Width, value.Height);
             }
         }
@@ -633,7 +633,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < monthlyArrayOfDates.Count; ++i)
                 {
-                    dateTimes[i] = (DateTime)this.monthlyArrayOfDates[i];
+                    dateTimes[i] = (DateTime)monthlyArrayOfDates[i];
                 }
                 return dateTimes;
             }
@@ -643,7 +643,7 @@ namespace System.Windows.Forms
 
 
 
-                this.monthlyArrayOfDates.Clear();
+                monthlyArrayOfDates.Clear();
                 datesToBoldMonthly = 0;
 
                 if (value != null && value.Length > 0)
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
-                        this.monthlyArrayOfDates.Add(value[i]);
+                        monthlyArrayOfDates.Add(value[i]);
                     }
 
                     for (int i = 0; i < value.Length; ++i)
@@ -1205,9 +1205,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddBoldedDate(DateTime date)
         {
-            if (!this.arrayOfDates.Contains(date))
+            if (!arrayOfDates.Contains(date))
             {
-                this.arrayOfDates.Add(date);
+                arrayOfDates.Add(date);
             }
         }
 
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddMonthlyBoldedDate(DateTime date)
         {
-            this.monthlyArrayOfDates.Add(date);
+            monthlyArrayOfDates.Add(date);
             datesToBoldMonthly |= 0x00000001 << (date.Day - 1);
         }
 
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms
             // Calculate calendar height
             //
             Size textExtent;
-            using (WindowsFont font = WindowsFont.FromFont(this.Font))
+            using (WindowsFont font = WindowsFont.FromFont(Font))
             {
                 // this is the string that Windows uses to determine the extent of the today string
                 textExtent = WindowsGraphicsCacheManager.MeasurementGraphics.GetTextExtent(DateTime.Now.ToShortDateString(), font);
@@ -1469,14 +1469,14 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(calendarHeight > INSERT_HEIGHT_SIZE, "Divide by 0");
                 int nRows = (newDimensionLength - todayHeight + INSERT_HEIGHT_SIZE) / (calendarHeight + INSERT_HEIGHT_SIZE);
-                this.dimensions.Height = (nRows < 1) ? 1 : nRows;
+                dimensions.Height = (nRows < 1) ? 1 : nRows;
             }
 
             if (updateCols)
             {
                 Debug.Assert(minSize.Width > INSERT_WIDTH_SIZE, "Divide by 0");
                 int nCols = (newDimensionLength - scaledExtraPadding) / minSize.Width;
-                this.dimensions.Width = (nCols < 1) ? 1 : nCols;
+                dimensions.Width = (nCols < 1) ? 1 : nCols;
             }
 
             minSize.Width = (minSize.Width + INSERT_WIDTH_SIZE) * dimensions.Width - INSERT_WIDTH_SIZE;
@@ -1647,7 +1647,7 @@ namespace System.Windows.Forms
                 SendMessage(NativeMethods.MCM_SETMONTHDELTA, scrollChange, 0);
             }
 
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
         }
 
 
@@ -1656,7 +1656,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
             base.OnHandleDestroyed(e);
         }
 
@@ -1728,7 +1728,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAllAnnuallyBoldedDates()
         {
-            this.annualArrayOfDates.Clear();
+            annualArrayOfDates.Clear();
             for (int i = 0; i < MONTHS_IN_YEAR; ++i)
                 monthsOfYear[i] = 0;
         }
@@ -1739,7 +1739,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAllBoldedDates()
         {
-            this.arrayOfDates.Clear();
+            arrayOfDates.Clear();
         }
 
         /// <summary>
@@ -1747,7 +1747,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAllMonthlyBoldedDates()
         {
-            this.monthlyArrayOfDates.Clear();
+            monthlyArrayOfDates.Clear();
             datesToBoldMonthly = 0;
         }
 
@@ -2068,8 +2068,8 @@ namespace System.Windows.Forms
 
             if (dimensions.Width != x || dimensions.Height != y)
             {
-                this.dimensions.Width = x;
-                this.dimensions.Height = y;
+                dimensions.Width = x;
+                dimensions.Height = y;
                 AdjustSize();
             }
         }
@@ -2301,7 +2301,7 @@ namespace System.Windows.Forms
             try
             {
                 //use begininvoke instead of invoke in case the destination thread is not processing messages.
-                BeginInvoke(new UserPreferenceChangedEventHandler(this.UserPreferenceChanged), new object[] { sender, pref });
+                BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), new object[] { sender, pref });
             }
             catch (InvalidOperationException) { } //if the destination thread does not exist, don't send.
         }
@@ -2475,8 +2475,8 @@ namespace System.Windows.Forms
             /// </summary>
             internal HitTestInfo(Point pt, HitArea area, DateTime time)
             {
-                this.point = pt;
-                this.hitArea = area;
+                point = pt;
+                hitArea = area;
                 this.time = time;
             }
 
@@ -2485,8 +2485,8 @@ namespace System.Windows.Forms
             /// </summary>
             internal HitTestInfo(Point pt, HitArea area)
             {
-                this.point = pt;
-                this.hitArea = area;
+                point = pt;
+                hitArea = area;
             }
 
             /// <summary>
@@ -2698,9 +2698,9 @@ namespace System.Windows.Forms
                                 name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
                             }
                         }
-                        else if (this.calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
+                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
                         {
-                            if (System.DateTime.Equals(this.calendar.SelectionStart.Month, this.calendar.SelectionEnd.Month))
+                            if (System.DateTime.Equals(calendar.SelectionStart.Month, calendar.SelectionEnd.Month))
                             {
                                 name = string.Format(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToString("y"));
                             }
@@ -2749,9 +2749,9 @@ namespace System.Windows.Forms
                                     value = string.Format("{0} - {1}", calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
                                 }
                             }
-                            else if (this.calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
+                            else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
                             {
-                                if (System.DateTime.Equals(this.calendar.SelectionStart.Month, this.calendar.SelectionEnd.Month))
+                                if (System.DateTime.Equals(calendar.SelectionStart.Month, calendar.SelectionEnd.Month))
                                 {
                                     value = calendar.SelectionStart.ToString("y");
                                 }

@@ -29,9 +29,9 @@ namespace System.Windows.Forms
 
         public MenuStrip()
         {
-            this.CanOverflow = false;
-            this.GripStyle = ToolStripGripStyle.Hidden;
-            this.Stretch = true;
+            CanOverflow = false;
+            GripStyle = ToolStripGripStyle.Hidden;
+            Stretch = true;
 
         }
 

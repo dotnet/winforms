@@ -143,7 +143,7 @@ namespace System.Windows.Forms
                     rect.Y += UpScrollButton.Height + UpScrollButton.Margin.Vertical;
                     rect.Height -= UpScrollButton.Height + UpScrollButton.Margin.Vertical + DownScrollButton.Height + DownScrollButton.Margin.Vertical;
                     // Because we're going to draw the scroll buttons on top of the padding, we need to add it back in here.
-                    rect = LayoutUtils.InflateRect(rect, new Padding(0, this.Padding.Top, 0, this.Padding.Bottom));
+                    rect = LayoutUtils.InflateRect(rect, new Padding(0, Padding.Top, 0, Padding.Bottom));
                 }
                 return rect;
             }
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                imageMarginBounds.Height = this.Height;
+                imageMarginBounds.Height = Height;
                 return imageMarginBounds;
             }
         }
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                         Size shortcutTextSize = menuItem.GetShortcutTextSize();
                         if (tabWidth == -1)
                         {
-                            tabWidth = TextRenderer.MeasureText("\t", this.Font).Width;
+                            tabWidth = TextRenderer.MeasureText("\t", Font).Width;
                         }
                         menuItemTextSize.Width += tabWidth + shortcutTextSize.Width;
                         menuItemTextSize.Height = Math.Max(menuItemTextSize.Height, shortcutTextSize.Height);
@@ -423,12 +423,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            this.maxItemSize.Height = Math.Max(maxTextSize.Height + scaledTextPadding.Vertical, Math.Max(maxCheckSize.Height + scaledCheckPadding.Vertical, maxArrowSize.Height + scaledArrowPadding.Vertical));
+            maxItemSize.Height = Math.Max(maxTextSize.Height + scaledTextPadding.Vertical, Math.Max(maxCheckSize.Height + scaledCheckPadding.Vertical, maxArrowSize.Height + scaledArrowPadding.Vertical));
 
             if (ShowImageMargin)
             {
                 // only add in the image into the calculation if we're going to render it.
-                this.maxItemSize.Height = Math.Max(maxImageSize.Height + scaledImagePadding.Vertical, maxItemSize.Height);
+                maxItemSize.Height = Math.Max(maxImageSize.Height + scaledImagePadding.Vertical, maxItemSize.Height);
             }
 
             bool useDefaultCheckMarginWidth = (ShowCheckMargin && (maxCheckSize.Width == 0));
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
 
             // consider: should we constrain to a reasonable width?
             //imageMarginBounds = new Rectangle(0, 0, Math.Max(imageMarginWidth,DefaultImageMarginWidth), this.Height);
-            imageMarginBounds = new Rectangle(0, 0, checkAndImageMarginWidth, this.Height);
+            imageMarginBounds = new Rectangle(0, 0, checkAndImageMarginWidth, Height);
 
             // calculate space for shortcut and text
             nextPoint.X = imageMarginBounds.Right + scaledTextPadding.Left;
@@ -527,9 +527,9 @@ namespace System.Windows.Forms
             arrowRectangle = new Rectangle(nextPoint, maxArrowSize);
 
             // calculate space required for all of these pieces
-            this.maxItemSize.Width = (arrowRectangle.Right + scaledArrowPadding.Right) - imageMarginBounds.Left;
+            maxItemSize.Width = (arrowRectangle.Right + scaledArrowPadding.Right) - imageMarginBounds.Left;
 
-            this.Padding = DefaultPadding;
+            Padding = DefaultPadding;
             int trimPadding = imageMarginBounds.Width;
 
             if (RightToLeft == RightToLeft.Yes)
@@ -555,12 +555,12 @@ namespace System.Windows.Forms
             // systems which force the text rectangle to be odd.
 
             // force this to be an even height.
-            this.maxItemSize.Height += this.maxItemSize.Height % 2;
+            maxItemSize.Height += maxItemSize.Height % 2;
 
             textRectangle.Y = LayoutUtils.VAlign(textRectangle.Size, new Rectangle(Point.Empty, maxItemSize), ContentAlignment.MiddleCenter).Y;
             textRectangle.Y += (textRectangle.Height % 2); // if the height is odd, push down by one px
             state[stateMaxItemSizeValid] = true;
-            this.PaddingToTrim = trimPadding;
+            PaddingToTrim = trimPadding;
 
         }
 
@@ -582,12 +582,12 @@ namespace System.Windows.Forms
                     {
                         delta = nextItem.Bounds.Bottom - (displayRect.Y + displayRect.Height);
                         // Now adjust so that the item at the top isn't truncated.
-                        int index = this.Items.IndexOf(nextItem);
+                        int index = Items.IndexOf(nextItem);
                         while (index >= 0)
                         {
                             // we need to roll back to the index which is visible
-                            if ((this.Items[index].Visible && displayRect.Contains(displayRect.X, this.Items[index].Bounds.Top - delta))
-                                || !this.Items[index].Visible)
+                            if ((Items[index].Visible && displayRect.Contains(displayRect.X, Items[index].Bounds.Top - delta))
+                                || !Items[index].Visible)
                             {
                                 --index;
                             }
@@ -599,15 +599,15 @@ namespace System.Windows.Forms
 
                         if (index >= 0)
                         {
-                            if (displayRect.Contains(displayRect.X, this.Items[index].Bounds.Bottom - delta))
+                            if (displayRect.Contains(displayRect.X, Items[index].Bounds.Bottom - delta))
                             {
                                 // We found an item which is truncated at the top.
-                                delta += (this.Items[index].Bounds.Bottom - delta) - displayRect.Top;
+                                delta += (Items[index].Bounds.Bottom - delta) - displayRect.Top;
                             }
                         }
                     }
-                    this.ScrollInternal(delta);
-                    this.UpdateScrollButtonStatus();
+                    ScrollInternal(delta);
+                    UpdateScrollButtonStatus();
                 }
             }
             base.ChangeSelection(nextItem);
@@ -634,23 +634,23 @@ namespace System.Windows.Forms
         internal override void Initialize()
         {
             base.Initialize();
-            this.Padding = DefaultPadding;
+            Padding = DefaultPadding;
             FlowLayoutSettings settings = FlowLayout.CreateSettings(this);
             settings.FlowDirection = FlowDirection.TopDown;
             state[stateShowImageMargin] = true;
         }
         protected override void OnLayout(LayoutEventArgs e)
         {
-            if (!this.IsDisposed)
+            if (!IsDisposed)
             {
                 // We always layout as if we don't need scroll buttons.
                 // If we do, then we'll adjust the positions to match.
-                this.RequiresScrollButtons = false;
+                RequiresScrollButtons = false;
                 CalculateInternalLayoutMetrics();
                 base.OnLayout(e);
-                if (!this.RequiresScrollButtons)
+                if (!RequiresScrollButtons)
                 {
-                    this.ResetScrollPosition();
+                    ResetScrollPosition();
                 }
             }
         }
@@ -666,7 +666,7 @@ namespace System.Windows.Forms
             base.OnPaintBackground(e);
             if (ShowCheckMargin || ShowImageMargin)
             {
-                Renderer.DrawImageMargin(new ToolStripRenderEventArgs(e.Graphics, this, this.ImageMargin, SystemColors.Control));
+                Renderer.DrawImageMargin(new ToolStripRenderEventArgs(e.Graphics, this, ImageMargin, SystemColors.Control));
             }
         }
 
@@ -683,11 +683,11 @@ namespace System.Windows.Forms
                 if (changed)
                 {
                     UpdateScrollButtonLocations();
-                    if (this.Items.Count > 0)
+                    if (Items.Count > 0)
                     {
-                        int delta = this.Items[0].Bounds.Top - this.DisplayRectangle.Top;
-                        this.ScrollInternal(delta);
-                        this.scrollAmount -= delta;
+                        int delta = Items[0].Bounds.Top - DisplayRectangle.Top;
+                        ScrollInternal(delta);
+                        scrollAmount -= delta;
                         if (value)
                         {
                             RestoreScrollPosition();
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        this.scrollAmount = 0;
+                        scrollAmount = 0;
                     }
                 }
             }
@@ -703,12 +703,12 @@ namespace System.Windows.Forms
 
         internal void ResetScrollPosition()
         {
-            this.scrollAmount = 0;
+            scrollAmount = 0;
         }
 
         internal void RestoreScrollPosition()
         {
-            if (!RequiresScrollButtons || this.Items.Count == 0)
+            if (!RequiresScrollButtons || Items.Count == 0)
             {
                 return;
             }
@@ -719,19 +719,19 @@ namespace System.Windows.Forms
             // This also deals with items of different height, so that we don't truncate
             // and items under the top scrollbar.
 
-            Rectangle displayRectangle = this.DisplayRectangle;
-            int alreadyScrolled = displayRectangle.Top - this.Items[0].Bounds.Top;
+            Rectangle displayRectangle = DisplayRectangle;
+            int alreadyScrolled = displayRectangle.Top - Items[0].Bounds.Top;
 
-            int requiredScrollAmount = this.scrollAmount - alreadyScrolled;
+            int requiredScrollAmount = scrollAmount - alreadyScrolled;
 
             int deltaToScroll = 0;
             if (requiredScrollAmount > 0)
             {
-                for (int i = 0; i < this.Items.Count && deltaToScroll < requiredScrollAmount; ++i)
+                for (int i = 0; i < Items.Count && deltaToScroll < requiredScrollAmount; ++i)
                 {
-                    if (this.Items[i].Available)
+                    if (Items[i].Available)
                     {
-                        Rectangle adjustedLastItemBounds = this.Items[this.Items.Count - 1].Bounds;
+                        Rectangle adjustedLastItemBounds = Items[Items.Count - 1].Bounds;
                         adjustedLastItemBounds.Y -= deltaToScroll;
                         if (displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Top)
                             && displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Bottom))
@@ -741,24 +741,24 @@ namespace System.Windows.Forms
                         }
 
                         // We use a delta between the tops, since it takes margin's and padding into account.
-                        if (i < this.Items.Count - 1)
+                        if (i < Items.Count - 1)
                         {
-                            deltaToScroll += this.Items[i + 1].Bounds.Top - this.Items[i].Bounds.Top;
+                            deltaToScroll += Items[i + 1].Bounds.Top - Items[i].Bounds.Top;
                         }
                         else
                         {
-                            deltaToScroll += this.Items[i].Bounds.Height;
+                            deltaToScroll += Items[i].Bounds.Height;
                         }
                     }
                 }
             }
             else
             {
-                for (int i = this.Items.Count - 1; i >= 0 && deltaToScroll > requiredScrollAmount; --i)
+                for (int i = Items.Count - 1; i >= 0 && deltaToScroll > requiredScrollAmount; --i)
                 {
-                    if (this.Items[i].Available)
+                    if (Items[i].Available)
                     {
-                        Rectangle adjustedLastItemBounds = this.Items[0].Bounds;
+                        Rectangle adjustedLastItemBounds = Items[0].Bounds;
                         adjustedLastItemBounds.Y -= deltaToScroll;
                         if (displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Top)
                             && displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Bottom))
@@ -770,17 +770,17 @@ namespace System.Windows.Forms
                         // We use a delta between the tops, since it takes margin's and padding into account.
                         if (i > 0)
                         {
-                            deltaToScroll -= this.Items[i].Bounds.Top - this.Items[i - 1].Bounds.Top;
+                            deltaToScroll -= Items[i].Bounds.Top - Items[i - 1].Bounds.Top;
                         }
                         else
                         {
-                            deltaToScroll -= this.Items[i].Bounds.Height;
+                            deltaToScroll -= Items[i].Bounds.Height;
                         }
                     }
                 }
             }
-            this.ScrollInternal(deltaToScroll);
-            this.scrollAmount = this.DisplayRectangle.Top - this.Items[0].Bounds.Top;
+            ScrollInternal(deltaToScroll);
+            scrollAmount = DisplayRectangle.Top - Items[0].Bounds.Top;
             UpdateScrollButtonLocations();
         }
 
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         internal override void ScrollInternal(int delta)
         {
             base.ScrollInternal(delta);
-            this.scrollAmount += delta;
+            scrollAmount += delta;
         }
 
         internal void ScrollInternal(bool up)
@@ -798,7 +798,7 @@ namespace System.Windows.Forms
             // calling this to get ScrollWindowEx.  In actuality it does nothing
             // to change the display rect!
             int delta;
-            if (this.indexOfFirstDisplayedItem == -1 || this.indexOfFirstDisplayedItem >= this.Items.Count)
+            if (indexOfFirstDisplayedItem == -1 || indexOfFirstDisplayedItem >= Items.Count)
             {
                 Debug.Fail("Why wasn't 'UpdateScrollButtonStatus called'? We don't have the item to scroll by");
                 int menuHeight = SystemInformation.MenuHeight;
@@ -809,29 +809,29 @@ namespace System.Windows.Forms
             {
                 if (up)
                 {
-                    if (this.indexOfFirstDisplayedItem == 0)
+                    if (indexOfFirstDisplayedItem == 0)
                     {
                         Debug.Fail("We're trying to scroll up, but the top item is displayed!!!");
                         delta = 0;
                     }
                     else
                     {
-                        ToolStripItem itemTop = this.Items[this.indexOfFirstDisplayedItem - 1];
-                        ToolStripItem itemBottom = this.Items[this.indexOfFirstDisplayedItem];
+                        ToolStripItem itemTop = Items[indexOfFirstDisplayedItem - 1];
+                        ToolStripItem itemBottom = Items[indexOfFirstDisplayedItem];
                         // We use a delta between the tops, since it takes margin's and padding into account.
                         delta = itemTop.Bounds.Top - itemBottom.Bounds.Top;
                     }
                 }
                 else
                 {
-                    if (this.indexOfFirstDisplayedItem == this.Items.Count - 1)
+                    if (indexOfFirstDisplayedItem == Items.Count - 1)
                     {
                         Debug.Fail("We're trying to scroll down, but the top item is displayed!!!");
                         delta = 0;
                     }
 
-                    ToolStripItem itemTop = this.Items[this.indexOfFirstDisplayedItem];
-                    ToolStripItem itemBottom = this.Items[this.indexOfFirstDisplayedItem + 1];
+                    ToolStripItem itemTop = Items[indexOfFirstDisplayedItem];
+                    ToolStripItem itemBottom = Items[indexOfFirstDisplayedItem + 1];
                     // We use a delta between the tops, since it takes margin's and padding into account.
                     delta = itemBottom.Bounds.Top - itemTop.Bounds.Top;
                 }
@@ -847,8 +847,8 @@ namespace System.Windows.Forms
             if (RequiresScrollButtons)
             {
 
-                this.DisplayedItems.Add(UpScrollButton);
-                this.DisplayedItems.Add(DownScrollButton);
+                DisplayedItems.Add(UpScrollButton);
+                DisplayedItems.Add(DownScrollButton);
                 UpdateScrollButtonLocations();
                 UpScrollButton.Visible = true;
                 DownScrollButton.Visible = true;
@@ -872,7 +872,7 @@ namespace System.Windows.Forms
                 UpScrollButton.SetBounds(new Rectangle(upLocation, upSize));
 
                 Size downSize = DownScrollButton.GetPreferredSize(Size.Empty);
-                int height = GetDropDownBounds(this.Bounds).Height;
+                int height = GetDropDownBounds(Bounds).Height;
 
                 Point downLocation = new Point(1, height - downSize.Height);
                 DownScrollButton.SetBounds(new Rectangle(downLocation, downSize));
@@ -883,14 +883,14 @@ namespace System.Windows.Forms
 
         private void UpdateScrollButtonStatus()
         {
-            Rectangle displayRectangle = this.DisplayRectangle;
+            Rectangle displayRectangle = DisplayRectangle;
 
-            this.indexOfFirstDisplayedItem = -1;
+            indexOfFirstDisplayedItem = -1;
             int minY = int.MaxValue, maxY = 0;
 
-            for (int i = 0; i < this.Items.Count; ++i)
+            for (int i = 0; i < Items.Count; ++i)
             {
-                ToolStripItem item = this.Items[i];
+                ToolStripItem item = Items[i];
                 if (UpScrollButton == item)
                 {
                     continue;
@@ -905,9 +905,9 @@ namespace System.Windows.Forms
                     continue;
                 }
 
-                if (this.indexOfFirstDisplayedItem == -1 && displayRectangle.Contains(displayRectangle.X, item.Bounds.Top))
+                if (indexOfFirstDisplayedItem == -1 && displayRectangle.Contains(displayRectangle.X, item.Bounds.Top))
                 {
-                    this.indexOfFirstDisplayedItem = i;
+                    indexOfFirstDisplayedItem = i;
                 }
 
                 minY = Math.Min(minY, item.Bounds.Top);

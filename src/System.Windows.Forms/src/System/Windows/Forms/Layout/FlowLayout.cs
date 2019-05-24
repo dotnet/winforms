@@ -363,8 +363,8 @@ namespace System.Windows.Forms.Layout
             private bool _isContainerRTL;
             public ContainerProxy(IArrangedElement container)
             {
-                this._container = container;
-                this._isContainerRTL = false;
+                _container = container;
+                _isContainerRTL = false;
                 if (_container is Control)
                 {
                     _isContainerRTL = ((Control)(_container)).RightToLeft == RightToLeft.Yes;

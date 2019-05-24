@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            GetAllChildren(this.parent);
+            GetAllChildren(parent);
         }
 
         private void GetAllChildren(Control ctl)
@@ -294,7 +294,7 @@ namespace System.Windows.Forms
                 components = new Hashtable();
             }
 
-            if (ctl != this.parent && !components.Contains(ctl))
+            if (ctl != parent && !components.Contains(ctl))
                 components.Add(ctl, ctl);
 
             foreach (Control c in ctl.Controls)
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
                         IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
                         if (ccs != null)
                         {
-                            ccs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                            ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                         }
                         return true;
                     }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                     IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
                     if (ccs != null)
                     {
-                        ccs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                        ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                     }
                 }
             }

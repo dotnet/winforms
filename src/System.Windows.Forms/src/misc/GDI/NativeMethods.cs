@@ -171,10 +171,10 @@ namespace System.Experimental.Gdi
 
             public RECT(System.Drawing.Rectangle r)
             {
-                this.left = r.Left;
-                this.top = r.Top;
-                this.right = r.Right;
-                this.bottom = r.Bottom;
+                left = r.Left;
+                top = r.Top;
+                right = r.Right;
+                bottom = r.Bottom;
             }
 
             public static RECT FromXYWH(int x, int y, int width, int height)
@@ -190,7 +190,7 @@ namespace System.Experimental.Gdi
             {
                 get
                 {
-                    return new Size(this.right - this.left, this.bottom - this.top);
+                    return new Size(right - left, bottom - top);
                 }
             }
 
@@ -229,7 +229,7 @@ namespace System.Experimental.Gdi
 
             public System.Drawing.Point ToPoint()
             {
-                return new System.Drawing.Point(this.x, this.y);
+                return new System.Drawing.Point(x, y);
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             public override string ToString()
@@ -259,15 +259,15 @@ namespace System.Experimental.Gdi
             }
             public DRAWTEXTPARAMS(DRAWTEXTPARAMS original)
             {
-                this.iLeftMargin = original.iLeftMargin;
-                this.iRightMargin = original.iRightMargin;
-                this.iTabLength = original.iTabLength;
+                iLeftMargin = original.iLeftMargin;
+                iRightMargin = original.iRightMargin;
+                iTabLength = original.iTabLength;
             }
 
             public DRAWTEXTPARAMS(int leftMargin, int rightMargin)
             {
-                this.iLeftMargin = leftMargin;
-                this.iRightMargin = rightMargin;
+                iLeftMargin = leftMargin;
+                iRightMargin = rightMargin;
             }
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
@@ -313,20 +313,20 @@ namespace System.Experimental.Gdi
             {
                 Debug.Assert(lf != null, "lf is null");
 
-                this.lfHeight = lf.lfHeight;
-                this.lfWidth = lf.lfWidth;
-                this.lfEscapement = lf.lfEscapement;
-                this.lfOrientation = lf.lfOrientation;
-                this.lfWeight = lf.lfWeight;
-                this.lfItalic = lf.lfItalic;
-                this.lfUnderline = lf.lfUnderline;
-                this.lfStrikeOut = lf.lfStrikeOut;
-                this.lfCharSet = lf.lfCharSet;
-                this.lfOutPrecision = lf.lfOutPrecision;
-                this.lfClipPrecision = lf.lfClipPrecision;
-                this.lfQuality = lf.lfQuality;
-                this.lfPitchAndFamily = lf.lfPitchAndFamily;
-                this.lfFaceName = lf.lfFaceName;
+                lfHeight = lf.lfHeight;
+                lfWidth = lf.lfWidth;
+                lfEscapement = lf.lfEscapement;
+                lfOrientation = lf.lfOrientation;
+                lfWeight = lf.lfWeight;
+                lfItalic = lf.lfItalic;
+                lfUnderline = lf.lfUnderline;
+                lfStrikeOut = lf.lfStrikeOut;
+                lfCharSet = lf.lfCharSet;
+                lfOutPrecision = lf.lfOutPrecision;
+                lfClipPrecision = lf.lfClipPrecision;
+                lfQuality = lf.lfQuality;
+                lfPitchAndFamily = lf.lfPitchAndFamily;
+                lfFaceName = lf.lfFaceName;
             }
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
@@ -432,7 +432,7 @@ namespace System.Experimental.Gdi
 
             public System.Drawing.Size ToSize()
             {
-                return new System.Drawing.Size(this.cx, this.cy);
+                return new System.Drawing.Size(cx, cy);
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             public override string ToString()

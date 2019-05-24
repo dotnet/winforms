@@ -16,7 +16,7 @@ namespace System.Windows.Forms
 
         internal LayoutSettings(IArrangedElement owner)
         {
-            this._owner = owner;
+            _owner = owner;
         }
 
         public virtual LayoutEngine LayoutEngine

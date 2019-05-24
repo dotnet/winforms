@@ -364,11 +364,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.refCheckThreshold;
+                    return refCheckThreshold;
                 }
                 set
                 {
-                    this.refCheckThreshold = value;
+                    refCheckThreshold = value;
                 }
             }
 
@@ -426,9 +426,9 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < Count; i++)
                 {
-                    if (this.InnerList[i] != other.InnerList[i])
+                    if (InnerList[i] != other.InnerList[i])
                     {
-                        if (this.InnerList[i] == null || !this.InnerList[i].Equals(other.InnerList[i]))
+                        if (InnerList[i] == null || !InnerList[i].Equals(other.InnerList[i]))
                         {
                             return false;
                         }
@@ -491,11 +491,11 @@ namespace System.Windows.Forms
 
                 int hash = value.GetHashCode();
 
-                for (int idx = 0; idx < this.InnerList.Count; idx++)
+                for (int idx = 0; idx < InnerList.Count; idx++)
                 {
-                    if (this.InnerList[idx] != null && this.InnerList[idx].GetHashCode() == hash)
+                    if (InnerList[idx] != null && InnerList[idx].GetHashCode() == hash)
                     {
-                        this.RemoveAt(idx);
+                        RemoveAt(idx);
                         return;
                     }
                 }
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
             public void Insert(int index, object value) { InnerList.Insert(index, CreateWeakRefObject(value)); }
             public int Add(object value)
             {
-                if (this.Count > RefCheckThreshold)
+                if (Count > RefCheckThreshold)
                 {
                     ScavengeReferences();
                 }
@@ -585,9 +585,9 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    if (other.Target != this.Target)
+                    if (other.Target != Target)
                     {
-                        if (this.Target == null || !this.Target.Equals(other.Target))
+                        if (Target == null || !Target.Equals(other.Target))
                         {
                             return false;
                         }

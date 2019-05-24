@@ -24,8 +24,8 @@ namespace System.Windows.Forms
         /// </summary>
         public TreeViewHitTestInfo(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
         {
-            this.node = hitNode;
-            this.loc = hitLocation;
+            node = hitNode;
+            loc = hitLocation;
         }
 
 

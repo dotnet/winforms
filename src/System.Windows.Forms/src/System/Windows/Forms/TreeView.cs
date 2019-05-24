@@ -174,7 +174,7 @@ namespace System.Windows.Forms
         : base()
         {
 
-            this.treeViewState = new System.Collections.Specialized.BitVector32(TREEVIEWSTATE_showRootLines |
+            treeViewState = new System.Collections.Specialized.BitVector32(TREEVIEWSTATE_showRootLines |
                                                                                 TREEVIEWSTATE_showPlusMinus |
                                                                                 TREEVIEWSTATE_showLines |
                                                                                 TREEVIEWSTATE_scrollable |
@@ -1789,7 +1789,7 @@ namespace System.Windows.Forms
             if (toolTip != null)
             {
                 UnsafeNativeMethods.SendMessage(new HandleRef(toolTip, toolTip.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
                 controlToolTipText = toolTipText;
             }
         }
@@ -2009,8 +2009,8 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
 
-            TreeNode savedSelectedNode = this.selectedNode;
-            this.selectedNode = null;
+            TreeNode savedSelectedNode = selectedNode;
+            selectedNode = null;
 
             base.OnHandleCreated(e);
 
@@ -2082,15 +2082,15 @@ namespace System.Windows.Forms
             {
 
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
-                oldSize = this.Width;
+                oldSize = Width;
                 int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef, this.Left, this.Top, int.MaxValue, this.Height, flags);
+                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, int.MaxValue, Height, flags);
 
                 root.Realize(false);
 
                 if (oldSize != 0)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef, this.Left, this.Top, oldSize, this.Height, flags);
+                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, oldSize, Height, flags);
                 }
             }
             finally
@@ -2378,7 +2378,7 @@ namespace System.Windows.Forms
             // cancelled.
             if (CheckBoxes && (e.KeyData & Keys.KeyCode) == Keys.Space)
             {
-                TreeNode node = this.SelectedNode;
+                TreeNode node = SelectedNode;
                 if (node != null)
                 {
                     bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByKeyboard);
@@ -3025,7 +3025,7 @@ namespace System.Windows.Forms
                     if (!ShowNodeToolTips) // default ToolTips
                     {
                         Rectangle bounds = tn.Bounds;
-                        bounds.Location = this.PointToScreen(bounds.Location);
+                        bounds.Location = PointToScreen(bounds.Location);
 
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, tooltipHandle), NativeMethods.TTM_ADJUSTRECT, 1, ref bounds);
                         SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHandle),
@@ -3057,7 +3057,7 @@ namespace System.Windows.Forms
                 {
                     tipText = tn.ToolTipText;
                 }
-                else if (tn != null && tn.Bounds.Right > this.Bounds.Right)
+                else if (tn != null && tn.Bounds.Right > Bounds.Right)
                 {
                     tipText = tn.Text;
                 }
@@ -3208,7 +3208,7 @@ namespace System.Windows.Forms
                     // before calling TrackPopupMenuEx, and a task switch must be
                     // forced after the call.
 
-                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, this.Handle));
+                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
 
                     contextMenu.OnPopup(EventArgs.Empty);
 
@@ -3216,18 +3216,18 @@ namespace System.Windows.Forms
                                              NativeMethods.TPM_VERTICAL,
                                              pt.x,
                                              pt.y,
-                                             new HandleRef(this, this.Handle),
+                                             new HandleRef(this, Handle),
                                              null);
 
                     // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
                 else if (menu != null)
                 {
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
                     menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
-                    menu.Closing += new ToolStripDropDownClosingEventHandler(this.ContextMenuStripClosing);
+                    menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
                 }
             }
         }
@@ -3237,7 +3237,7 @@ namespace System.Windows.Forms
         {
             ContextMenuStrip strip = sender as ContextMenuStrip;
             // Unhook the Event.
-            strip.Closing -= new ToolStripDropDownClosingEventHandler(this.ContextMenuStripClosing);
+            strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             SendMessage(NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, null);
         }
 
@@ -3245,11 +3245,11 @@ namespace System.Windows.Forms
         {
             base.WndProc(ref m);
 
-            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D)
+            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using (Graphics g = Graphics.FromHdc(m.WParam))
                 {
-                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                     g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
                     rect.Inflate(-1, -1);
                     g.DrawRectangle(SystemPens.Window, rect);
@@ -3291,7 +3291,7 @@ namespace System.Windows.Forms
                     break;
                 case NativeMethods.TVM_SETITEM:
                     base.WndProc(ref m);
-                    if (this.CheckBoxes)
+                    if (CheckBoxes)
                     {
                         NativeMethods.TV_ITEM item = (NativeMethods.TV_ITEM)m.GetLParam(typeof(NativeMethods.TV_ITEM));
                         // Check for invalid node handle
@@ -3301,7 +3301,7 @@ namespace System.Windows.Forms
                             item1.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
                             item1.hItem = item.hItem;
                             item1.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
-                            UnsafeNativeMethods.SendMessage(new HandleRef(null, this.Handle), NativeMethods.TVM_GETITEM, 0, ref item1);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(null, Handle), NativeMethods.TVM_GETITEM, 0, ref item1);
 
                             TreeNode node = NodeFromHandle(item.hItem);
                             node.CheckedStateInternal = ((item1.state >> 12) > 1);
@@ -3489,7 +3489,7 @@ namespace System.Windows.Forms
                         treeViewState[TREEVIEWSTATE_lastControlValidated] = false;
                         WmImeSetFocus();
                         DefWndProc(ref m);
-                        this.InvokeGotFocus(this, EventArgs.Empty);
+                        InvokeGotFocus(this, EventArgs.Empty);
                     }
                     else
                     {

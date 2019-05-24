@@ -610,8 +610,8 @@ namespace System.Windows.Forms.Design.Behavior
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             internal AdornerWindow(BehaviorService behaviorService, Control designerFrame)
             {
-                this._behaviorService = behaviorService;
-                this._designerFrame = designerFrame;
+                _behaviorService = behaviorService;
+                _designerFrame = designerFrame;
                 Dock = DockStyle.Fill;
                 AllowDrop = true;
                 Text = "AdornerWindow";

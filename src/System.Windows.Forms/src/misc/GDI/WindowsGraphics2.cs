@@ -50,17 +50,17 @@ namespace System.Experimental.Gdi
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             get
             {
-                Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), this.paddingFlags));
-                return this.paddingFlags;
+                Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), paddingFlags));
+                return paddingFlags;
             }
             //Since Enum.IsDefined is only used within a Debug.Assert, it is okay to leave it
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), value));
-                if (this.paddingFlags != value)
+                if (paddingFlags != value)
                 {
-                    this.paddingFlags = value;
+                    paddingFlags = value;
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace System.Experimental.Gdi
         /// </summary>
         public void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
         {
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
             if (pen != null)
             {
@@ -101,7 +101,7 @@ namespace System.Experimental.Gdi
             int nRightRect, // x-coord of lower-right corner of rectangle
             int nBottomRect)
         { // y-coord of lower-right corner of rectangle
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
             if (pen != null)
             {
@@ -204,38 +204,38 @@ namespace System.Experimental.Gdi
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
             Debug.Assert((flags & IntTextFormatFlags.CalculateRectangle) == 0, "CalculateRectangle flag is set, text won't be drawn");
 
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
             // DrawText requires default text alignment.
-            if (this.dc.TextAlignment != DeviceContextTextAlignment.Default)
+            if (dc.TextAlignment != DeviceContextTextAlignment.Default)
             {
-                this.dc.SetTextAlignment(DeviceContextTextAlignment.Default);
+                dc.SetTextAlignment(DeviceContextTextAlignment.Default);
             }
 
             // color empty means use the one currently selected in the dc.
 
-            if (!foreColor.IsEmpty && foreColor != this.dc.TextColor)
+            if (!foreColor.IsEmpty && foreColor != dc.TextColor)
             {
-                this.dc.SetTextColor(foreColor);
+                dc.SetTextColor(foreColor);
             }
 
             if (font != null)
             {
-                this.dc.SelectFont(font);
+                dc.SelectFont(font);
             }
 
             DeviceContextBackgroundMode newBackGndMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
                 DeviceContextBackgroundMode.Transparent :
                 DeviceContextBackgroundMode.Opaque;
 
-            if (this.dc.BackgroundMode != newBackGndMode)
+            if (dc.BackgroundMode != newBackGndMode)
             {
-                this.dc.SetBackgroundMode(newBackGndMode);
+                dc.SetBackgroundMode(newBackGndMode);
             }
 
-            if (newBackGndMode != DeviceContextBackgroundMode.Transparent && backColor != this.dc.BackgroundColor)
+            if (newBackGndMode != DeviceContextBackgroundMode.Transparent && backColor != dc.BackgroundColor)
             {
-                this.dc.SetBackgroundColor(backColor);
+                dc.SetBackgroundColor(backColor);
             }
 
             IntNativeMethods.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
@@ -291,7 +291,7 @@ namespace System.Experimental.Gdi
         /// </summary>
         public Color GetNearestColor(Color color)
         {
-            HandleRef hdc = new HandleRef(null, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(null, dc.Hdc);
             int colorResult = IntUnsafeNativeMethods.GetNearestColor(hdc, ColorTranslator.ToWin32(color));
             return ColorTranslator.FromWin32(colorResult);
         }
@@ -310,7 +310,7 @@ namespace System.Experimental.Gdi
 
             if (tmpfont == null)
             {
-                tmpfont = this.dc.Font;
+                tmpfont = dc.Font;
             }
 
             float overhangPadding = tmpfont.Height / 6f;
@@ -335,7 +335,7 @@ namespace System.Experimental.Gdi
             int rightMargin = 0;
             float overhangPadding = 0;
 
-            switch (this.TextPadding)
+            switch (TextPadding)
             {
                 case TextPaddingOptions.GlyphOverhangPadding:
                     // [overhang padding][Text][overhang padding][italic padding]
@@ -378,20 +378,20 @@ namespace System.Experimental.Gdi
 
             IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
 
-            HandleRef hdc = new HandleRef(null, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(null, dc.Hdc);
 
             if (font != null)
             {
-                this.dc.SelectFont(font);
+                dc.SelectFont(font);
             }
 
             IntUnsafeNativeMethods.GetTextExtentPoint32(hdc, text, size);
 
             // Unselect, but not from Measurement DC as it keeps the same
             // font selected for perf reasons.
-            if (font != null && !MeasurementDCInfo.IsMeasurementDC(this.dc))
+            if (font != null && !MeasurementDCInfo.IsMeasurementDC(dc))
             {
-                this.dc.ResetFont();
+                dc.ResetFont();
             }
 
             return new Size(size.cx, size.cy);
@@ -454,7 +454,7 @@ namespace System.Experimental.Gdi
 
 #if OPTIMIZED_MEASUREMENTDC       
             // use the cache if we've got it
-            if (MeasurementDCInfo.IsMeasurementDC(this.DeviceContext))
+            if (MeasurementDCInfo.IsMeasurementDC(DeviceContext))
             {
                 dtparams = MeasurementDCInfo.GetTextMargins(this, font);
             }
@@ -483,11 +483,11 @@ namespace System.Experimental.Gdi
 
             IntNativeMethods.RECT rect = IntNativeMethods.RECT.FromXYWH(0, 0, proposedSize.Width, proposedSize.Height);
 
-            HandleRef hdc = new HandleRef(null, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(null, dc.Hdc);
 
             if (font != null)
             {
-                this.dc.SelectFont(font);
+                dc.SelectFont(font);
             }
 
             // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SingleLine and 
@@ -582,18 +582,18 @@ namespace System.Experimental.Gdi
         {
             Debug.Assert(pen != null, "pen == null");
 
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
             if (pen != null)
             {
-                this.dc.SelectObject(pen.HPen, GdiObjectType.Pen);
+                dc.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
-            DeviceContextBinaryRasterOperationFlags rasterOp = this.dc.BinaryRasterOperation;
+            DeviceContextBinaryRasterOperationFlags rasterOp = dc.BinaryRasterOperation;
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                rasterOp = this.dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
+                rasterOp = dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
             }
 
             IntUnsafeNativeMethods.SelectObject(hdc, new HandleRef(null, IntUnsafeNativeMethods.GetStockObject(IntNativeMethods.HOLLOW_BRUSH)));
@@ -602,7 +602,7 @@ namespace System.Experimental.Gdi
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                this.dc.SetRasterOperation(rasterOp);
+                dc.SetRasterOperation(rasterOp);
             }
         }
 
@@ -617,7 +617,7 @@ namespace System.Experimental.Gdi
         {
             Debug.Assert(brush != null, "brush == null");
 
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
             IntPtr hBrush = brush.HBrush;  // We don't delete this handle since we didn't create it.   
             IntNativeMethods.RECT rect = new IntNativeMethods.RECT(x, y, x + width, y + height);
 
@@ -647,24 +647,24 @@ namespace System.Experimental.Gdi
 
         public void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
         {
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
-            DeviceContextBinaryRasterOperationFlags rasterOp = this.dc.BinaryRasterOperation;
-            DeviceContextBackgroundMode bckMode = this.dc.BackgroundMode;
+            DeviceContextBinaryRasterOperationFlags rasterOp = dc.BinaryRasterOperation;
+            DeviceContextBackgroundMode bckMode = dc.BackgroundMode;
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                rasterOp = this.dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
+                rasterOp = dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
             }
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
             {
-                bckMode = this.dc.SetBackgroundMode(DeviceContextBackgroundMode.Transparent);
+                bckMode = dc.SetBackgroundMode(DeviceContextBackgroundMode.Transparent);
             }
 
             if (pen != null)
             {
-                this.dc.SelectObject(pen.HPen, GdiObjectType.Pen);
+                dc.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
             IntNativeMethods.POINT oldPoint = new IntNativeMethods.POINT();
@@ -674,12 +674,12 @@ namespace System.Experimental.Gdi
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
             {
-                this.dc.SetBackgroundMode(bckMode);
+                dc.SetBackgroundMode(bckMode);
             }
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                this.dc.SetRasterOperation(rasterOp);
+                dc.SetRasterOperation(rasterOp);
             }
 
             IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.x, oldPoint.y, null);
@@ -692,7 +692,7 @@ namespace System.Experimental.Gdi
         public IntNativeMethods.TEXTMETRIC GetTextMetrics()
         {
             IntNativeMethods.TEXTMETRIC tm = new IntNativeMethods.TEXTMETRIC();
-            HandleRef hdc = new HandleRef(this.dc, this.dc.Hdc);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
             // Set the mapping mode to MM_TEXT so we deal with units of pixels.
             DeviceContextMapMode mapMode = dc.MapMode;

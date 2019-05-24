@@ -36,15 +36,15 @@ namespace System.Windows.Forms
             // Keep the array sorted, insert in the right spot.
             int index = 0;
 
-            while (index < this.items.Count)
+            while (index < items.Count)
             {
-                if (acceleration.Seconds < this.items[index].Seconds)
+                if (acceleration.Seconds < items[index].Seconds)
                 {
                     break;
                 }
                 index++;
             }
-            this.items.Insert(index, acceleration);
+            items.Insert(index, acceleration);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Clear()
         {
-            this.items.Clear();
+            items.Clear();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Contains(NumericUpDownAcceleration acceleration)
         {
-            return this.items.Contains(acceleration);
+            return items.Contains(acceleration);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void CopyTo(NumericUpDownAcceleration[] array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int Count
         {
-            get { return this.items.Count; }
+            get { return items.Count; }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Remove(NumericUpDownAcceleration acceleration)
         {
-            return this.items.Remove(acceleration);
+            return items.Remove(acceleration);
         }
 
         /// IEnumerable<NumericUpDownAcceleration> implementation.
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
         /// </summary>
         IEnumerator<NumericUpDownAcceleration> IEnumerable<NumericUpDownAcceleration>.GetEnumerator()
         {
-            return this.items.GetEnumerator();
+            return items.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NumericUpDownAccelerationCollection()
         {
-            this.items = new List<NumericUpDownAcceleration>();
+            items = new List<NumericUpDownAcceleration>();
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             // way we add the elements to the collection, just call Add.
             foreach (NumericUpDownAcceleration acceleration in accelerations)
             {
-                this.Add(acceleration);
+                Add(acceleration);
             }
         }
 
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NumericUpDownAcceleration this[int index]
         {
-            get { return this.items[index]; }
+            get { return items[index]; }
         }
     }
 }

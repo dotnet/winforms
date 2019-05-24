@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         public DataGridViewComboBoxEditingControl() : base()
         {
-            this.TabStop = false;
+            TabStop = false;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -36,11 +36,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridView;
+                return dataGridView;
             }
             set
             {
-                this.dataGridView = value;
+                dataGridView = value;
             }
         }
 
@@ -55,10 +55,10 @@ namespace System.Windows.Forms
                 string valueStr = value as string;
                 if (valueStr != null)
                 {
-                    this.Text = valueStr;
-                    if (string.Compare(valueStr, this.Text, true, CultureInfo.CurrentCulture) != 0)
+                    Text = valueStr;
+                    if (string.Compare(valueStr, Text, true, CultureInfo.CurrentCulture) != 0)
                     {
-                        this.SelectedIndex = -1;
+                        SelectedIndex = -1;
                     }
                 }
             }
@@ -68,11 +68,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.rowIndex;
+                return rowIndex;
             }
             set
             {
-                this.rowIndex = value;
+                rowIndex = value;
             }
         }
 
@@ -80,11 +80,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.valueChanged;
+                return valueChanged;
             }
             set
             {
-                this.valueChanged = value;
+                valueChanged = value;
             }
         }
 
@@ -106,26 +106,26 @@ namespace System.Windows.Forms
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            this.Font = dataGridViewCellStyle.Font;
+            Font = dataGridViewCellStyle.Font;
             if (dataGridViewCellStyle.BackColor.A < 255)
             {
                 // Our ComboBox does not support transparent back colors
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
-                this.BackColor = opaqueBackColor;
-                this.dataGridView.EditingPanel.BackColor = opaqueBackColor;
+                BackColor = opaqueBackColor;
+                dataGridView.EditingPanel.BackColor = opaqueBackColor;
             }
             else
             {
-                this.BackColor = dataGridViewCellStyle.BackColor;
+                BackColor = dataGridViewCellStyle.BackColor;
             }
-            this.ForeColor = dataGridViewCellStyle.ForeColor;
+            ForeColor = dataGridViewCellStyle.ForeColor;
         }
 
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
             if ((keyData & Keys.KeyCode) == Keys.Down ||
                 (keyData & Keys.KeyCode) == Keys.Up ||
-                (this.DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape) || (keyData & Keys.KeyCode) == Keys.Enter))
+                (DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape) || (keyData & Keys.KeyCode) == Keys.Enter))
             {
                 return true;
             }
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
 
         public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
         {
-            return this.Text;
+            return Text;
         }
 
         public virtual void PrepareEditingControlForEdit(bool selectAll)
@@ -147,14 +147,14 @@ namespace System.Windows.Forms
 
         private void NotifyDataGridViewOfValueChange()
         {
-            this.valueChanged = true;
-            this.dataGridView.NotifyCurrentCellDirty(true);
+            valueChanged = true;
+            dataGridView.NotifyCurrentCellDirty(true);
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
-            if (this.SelectedIndex != -1)
+            if (SelectedIndex != -1)
             {
                 NotifyDataGridViewOfValueChange();
             }

@@ -37,8 +37,8 @@ namespace System.Windows.Forms
 
         internal ArrangedElement()
         {
-            this.Padding = DefaultPadding;
-            this.Margin = DefaultMargin;
+            Padding = DefaultPadding;
+            Margin = DefaultMargin;
             state[stateVisible] = true;
         }
 
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Rectangle displayRectangle = this.Bounds;
+                Rectangle displayRectangle = Bounds;
                 return displayRectangle;
             }
         }
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties;
+                return Properties;
             }
         }
 
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
                     state[stateVisible] = value;
                     if (Parent != null)
                     {
-                        LayoutTransaction.DoLayout(this.Parent, this, PropertyNames.Visible);
+                        LayoutTransaction.DoLayout(Parent, this, PropertyNames.Visible);
                     }
                 }
             }

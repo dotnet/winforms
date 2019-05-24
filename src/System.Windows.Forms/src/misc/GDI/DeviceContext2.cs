@@ -55,7 +55,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetBkColor(new HandleRef(this, this.Hdc)));
+                return ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetBkColor(new HandleRef(this, Hdc)));
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             set
@@ -70,7 +70,7 @@ namespace System.Experimental.Gdi
         /// </summary> 
         public Color SetBackgroundColor(Color newColor)
         {
-            return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor(new HandleRef(this, this.Hdc), ColorTranslator.ToWin32(newColor)));
+            return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(newColor)));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return (DeviceContextBackgroundMode)IntUnsafeNativeMethods.GetBkMode(new HandleRef(this, this.Hdc));
+                return (DeviceContextBackgroundMode)IntUnsafeNativeMethods.GetBkMode(new HandleRef(this, Hdc));
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             set
@@ -95,7 +95,7 @@ namespace System.Experimental.Gdi
         /// </summary> 
         public DeviceContextBackgroundMode SetBackgroundMode(DeviceContextBackgroundMode newMode)
         {
-            return (DeviceContextBackgroundMode)IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, this.Hdc), (int)newMode);
+            return (DeviceContextBackgroundMode)IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, Hdc), (int)newMode);
         }
 
 
@@ -106,7 +106,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.GetROP2(new HandleRef(this, this.Hdc));
+                return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.GetROP2(new HandleRef(this, Hdc));
             }
             /*
              * CONSIDER: implement if needed.
@@ -124,7 +124,7 @@ namespace System.Experimental.Gdi
         /// </summary> 
         public DeviceContextBinaryRasterOperationFlags SetRasterOperation(DeviceContextBinaryRasterOperationFlags rasterOperation)
         {
-            return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.SetROP2(new HandleRef(this, this.Hdc), (int)rasterOperation);
+            return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.SetROP2(new HandleRef(this, Hdc), (int)rasterOperation);
         }
 
         ///<summary>
@@ -182,7 +182,7 @@ namespace System.Experimental.Gdi
                     if (font != null && (font.Hfont != IntPtr.Zero))
                     {
 #if DEBUG   
-                        WindowsFont currentDCFont = WindowsFont.FromHdc(this.Hdc);
+                        WindowsFont currentDCFont = WindowsFont.FromHdc(Hdc);
                         if (!font.Equals(currentDCFont))
                         {
                             // just use the face name, as ToString will call here re-entrantly.
@@ -200,7 +200,7 @@ namespace System.Experimental.Gdi
                 // Returns the currently selected object in the dc.
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved, 
                 // the default font is System.
-                return WindowsFont.FromHdc(this.Hdc);
+                return WindowsFont.FromHdc(Hdc);
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             set
@@ -237,7 +237,7 @@ namespace System.Experimental.Gdi
                 if (hCurrentFont == selectedFont.Hfont)
                 {
                     // select initial font back in
-                    IntUnsafeNativeMethods.SelectObject(new HandleRef(this, this.Hdc), new HandleRef(null, hInitialFont));
+                    IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(null, hInitialFont));
                     hCurrentFont = hInitialFont;
                 }
 
@@ -258,7 +258,7 @@ namespace System.Experimental.Gdi
             // with the one passed in before selecting it in the hdc.
             // Also, we avoid performing GDI operations that if done on an enhanced metafile DC would add an entry to it, hence 
             // reducing the size of the metafile.
-            if (font.Equals(this.Font))
+            if (font.Equals(Font))
             {
                 return IntPtr.Zero;
             }
@@ -304,9 +304,9 @@ namespace System.Experimental.Gdi
             // in this case, GDI will copy back the previously saved font into the DC.
             // we dont actually know what the font is in our measurement DC so 
             // we need to clear it off.
-            MeasurementDCInfo.ResetIfIsMeasurementDC(this.Hdc);
+            MeasurementDCInfo.ResetIfIsMeasurementDC(Hdc);
 #endif        
-            IntUnsafeNativeMethods.SelectObject(new HandleRef(this, this.Hdc), new HandleRef(null, hInitialFont));
+            IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(null, hInitialFont));
             selectedFont = null;
             hCurrentFont = hInitialFont;
         }
@@ -316,7 +316,7 @@ namespace System.Experimental.Gdi
         /// </summary> 
         public int GetDeviceCapabilities(DeviceCapabilities capabilityIndex)
         {
-            return IntUnsafeNativeMethods.GetDeviceCaps(new HandleRef(this, this.Hdc), (int)capabilityIndex);
+            return IntUnsafeNativeMethods.GetDeviceCaps(new HandleRef(this, Hdc), (int)capabilityIndex);
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return (DeviceContextMapMode)IntUnsafeNativeMethods.GetMapMode(new HandleRef(this, this.Hdc));
+                return (DeviceContextMapMode)IntUnsafeNativeMethods.GetMapMode(new HandleRef(this, Hdc));
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             set
@@ -359,7 +359,7 @@ namespace System.Experimental.Gdi
         /// </summary>
         public DeviceContextMapMode SetMapMode(DeviceContextMapMode newMode)
         {
-            return (DeviceContextMapMode)IntUnsafeNativeMethods.SetMapMode(new HandleRef(this, this.Hdc), (int)newMode);
+            return (DeviceContextMapMode)IntUnsafeNativeMethods.SetMapMode(new HandleRef(this, Hdc), (int)newMode);
         }
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace System.Experimental.Gdi
                     hCurrentBmp = hObj;
                     break;
             }
-            return IntUnsafeNativeMethods.SelectObject(new HandleRef(this, this.Hdc), new HandleRef(null, hObj));
+            return IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(null, hObj));
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return (DeviceContextTextAlignment)IntUnsafeNativeMethods.GetTextAlign(new HandleRef(this, this.Hdc));
+                return (DeviceContextTextAlignment)IntUnsafeNativeMethods.GetTextAlign(new HandleRef(this, Hdc));
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             set
@@ -405,7 +405,7 @@ namespace System.Experimental.Gdi
         /// </summary>  
         public DeviceContextTextAlignment SetTextAlignment(DeviceContextTextAlignment newAligment)
         {
-            return (DeviceContextTextAlignment)IntUnsafeNativeMethods.SetTextAlign(new HandleRef(this, this.Hdc), (int)newAligment);
+            return (DeviceContextTextAlignment)IntUnsafeNativeMethods.SetTextAlign(new HandleRef(this, Hdc), (int)newAligment);
         }
 
 
@@ -416,7 +416,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetTextColor(new HandleRef(this, this.Hdc)));
+                return ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetTextColor(new HandleRef(this, Hdc)));
             }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             set
@@ -431,7 +431,7 @@ namespace System.Experimental.Gdi
         /// </summary>  
         public Color SetTextColor(Color newColor)
         {
-            return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef(this, this.Hdc), ColorTranslator.ToWin32(newColor)));
+            return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(newColor)));
         }
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace System.Experimental.Gdi
             get
             {
                 IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
-                IntUnsafeNativeMethods.GetViewportExtEx(new HandleRef(this, this.Hdc), size);
+                IntUnsafeNativeMethods.GetViewportExtEx(new HandleRef(this, Hdc), size);
 
                 return size.ToSize();
             }
@@ -459,7 +459,7 @@ namespace System.Experimental.Gdi
         {
             IntNativeMethods.SIZE oldExtent = new IntNativeMethods.SIZE();
 
-            IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, this.Hdc), newExtent.Width, newExtent.Height, oldExtent);
+            IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, Hdc), newExtent.Width, newExtent.Height, oldExtent);
 
             return oldExtent.ToSize();
         }
@@ -472,7 +472,7 @@ namespace System.Experimental.Gdi
             get
             {
                 IntNativeMethods.POINT point = new IntNativeMethods.POINT();
-                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, this.Hdc), point);
+                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), point);
 
                 return point.ToPoint();
             }
@@ -488,7 +488,7 @@ namespace System.Experimental.Gdi
         public Point SetViewportOrigin(Point newOrigin)
         {
             IntNativeMethods.POINT oldOrigin = new IntNativeMethods.POINT();
-            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, this.Hdc), newOrigin.X, newOrigin.Y, oldOrigin);
+            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, oldOrigin);
 
             return oldOrigin.ToPoint();
         }

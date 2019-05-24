@@ -29,7 +29,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             propDesc = pd;
             this.guidString = guidString;
-            this.bldrType = type;
+            bldrType = type;
         }
 
         /// <summary>

@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                UnsafeNativeMethods.IMsoComponent prevActive = this.activeComponent;
+                UnsafeNativeMethods.IMsoComponent prevActive = activeComponent;
 
                 try
                 {
@@ -1997,7 +1997,7 @@ namespace System.Windows.Forms
 
                     requestingComponent = entry.component;
 
-                    this.activeComponent = requestingComponent;
+                    activeComponent = requestingComponent;
 
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Pushing message loop " + reason.ToString(CultureInfo.InvariantCulture));
                     Debug.Indent();
@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     currentState = currentLoopState;
-                    this.activeComponent = prevActive;
+                    activeComponent = prevActive;
                 }
 
                 return !continueLoop;
@@ -4103,9 +4103,9 @@ namespace System.Windows.Forms
             /// </summary>
             void UnsafeNativeMethods.IMsoComponent.Terminate()
             {
-                if (this.messageLoopCount > 0 && !(ComponentManager is ComponentManager))
+                if (messageLoopCount > 0 && !(ComponentManager is ComponentManager))
                 {
-                    this.messageLoopCount--;
+                    messageLoopCount--;
                 }
 
                 Dispose(false);
@@ -4339,7 +4339,7 @@ namespace System.Windows.Forms
                 windows = new IntPtr[16];
                 this.onlyWinForms = onlyWinForms;
                 UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(),
-                                                new NativeMethods.EnumThreadWindowsCallback(this.Callback),
+                                                new NativeMethods.EnumThreadWindowsCallback(Callback),
                                                 NativeMethods.NullHandleRef);
             }
 

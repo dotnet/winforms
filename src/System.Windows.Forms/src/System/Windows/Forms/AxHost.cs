@@ -280,17 +280,17 @@ namespace System.Windows.Forms
                 throw new ThreadStateException(string.Format(SR.AXMTAThread, clsid));
             }
 
-            this.oleSite = new OleInterfaces(this);
-            this.selectionChangeHandler = new EventHandler(this.OnNewSelection);
+            oleSite = new OleInterfaces(this);
+            selectionChangeHandler = new EventHandler(OnNewSelection);
             this.clsid = new Guid(clsid);
             this.flags = flags;
 
-            this.axState[assignUniqueID] = !this.GetType().GUID.Equals(comctlImageCombo_Clsid);
-            this.axState[needLicenseKey] = true;
-            this.axState[rejectSelection] = true;
+            axState[assignUniqueID] = !GetType().GUID.Equals(comctlImageCombo_Clsid);
+            axState[needLicenseKey] = true;
+            axState[rejectSelection] = true;
 
             isMaskEdit = this.clsid.Equals(AxHost.maskEdit_Clsid);
-            this.onContainerVisibleChanged = new EventHandler(this.OnContainerVisibleChanged);
+            onContainerVisibleChanged = new EventHandler(OnContainerVisibleChanged);
         }
 
         private bool CanUIActivate
@@ -319,12 +319,12 @@ namespace System.Windows.Forms
 
         private bool GetAxState(int mask)
         {
-            return this.axState[mask];
+            return axState[mask];
         }
 
         private void SetAxState(int mask, bool value)
         {
-            this.axState[mask] = value;
+            axState[mask] = value;
         }
 
         /// <summary>
@@ -581,7 +581,7 @@ namespace System.Windows.Forms
                 ContainerControl f = ContainingControl;
                 if (f != null)
                 {
-                    f.VisibleChanged += this.onContainerVisibleChanged;
+                    f.VisibleChanged += onContainerVisibleChanged;
                 }
             }
         }
@@ -1062,7 +1062,7 @@ namespace System.Windows.Forms
                 // if it is, call DISPID_AMBIENT_DISPLAYNAME directly on the
                 // control itself.
                 //
-                UnsafeNativeMethods.IOleControl oleCtl = this.GetOcx() as UnsafeNativeMethods.IOleControl;
+                UnsafeNativeMethods.IOleControl oleCtl = GetOcx() as UnsafeNativeMethods.IOleControl;
                 if (oleCtl != null)
                 {
                     oleCtl.OnAmbientPropertyChange(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME);
@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms
                     if (prop != null && prop.PropertyType == typeof(int))
                     {
                         int curSelectionStyle = (int)prop.GetValue(this);
-                        if (curSelectionStyle != this.selectionStyle)
+                        if (curSelectionStyle != selectionStyle)
                         {
                             prop.SetValue(this, selectionStyle);
                         }
@@ -1505,9 +1505,9 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(AxHostSwitch.TraceVerbose, "The horrible control subclassed itself w/o calling the old wndproc...");
             // we need to resubclass outselves now...
             Debug.Assert(!OwnWindow(), "why are we here if we own our window?");
-            this.WindowReleaseHandle();
+            WindowReleaseHandle();
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC, new HandleRef(this, currentWndproc));
-            this.WindowAssignHandle(handle, axState[assignUniqueID]);
+            WindowAssignHandle(handle, axState[assignUniqueID]);
             InformOfNewHandle();
             axState[manualUpdate] = true;
             return false;
@@ -1751,7 +1751,7 @@ namespace System.Windows.Forms
 
         private void UiActivate()
         {
-            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "calling uiActivate for " + this.ToString());
+            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "calling uiActivate for " + ToString());
             Debug.Assert(GetOcState() >= OC_INPLACE, "we have to be in place in order to ui activate...");
             Debug.Assert(CanUIActivate, "we have to be able to uiactivate");
             if (CanUIActivate)
@@ -2132,23 +2132,23 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.AXOcxStateLoaded);
                 }
 
-                if (this.ocxState == value)
+                if (ocxState == value)
                     return;
 
-                this.ocxState = value;
+                ocxState = value;
 
-                if (this.ocxState != null)
+                if (ocxState != null)
                 {
-                    this.axState[manualUpdate] = ocxState._GetManualUpdate();
-                    this.licenseKey = ocxState._GetLicenseKey();
+                    axState[manualUpdate] = ocxState._GetManualUpdate();
+                    licenseKey = ocxState._GetLicenseKey();
                 }
                 else
                 {
-                    this.axState[manualUpdate] = false;
-                    this.licenseKey = null;
+                    axState[manualUpdate] = false;
+                    licenseKey = null;
                 }
 
-                if (this.ocxState != null && GetOcState() >= OC_RUNNING)
+                if (ocxState != null && GetOcState() >= OC_RUNNING)
                 {
                     DepersistControl();
                 }
@@ -2493,9 +2493,9 @@ namespace System.Windows.Forms
 
         private int UiDeactivate()
         {
-            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "calling uiDeactivate for " + this.ToString());
-            bool ownDispose = this.axState[ownDisposing];
-            this.axState[ownDisposing] = true;
+            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "calling uiDeactivate for " + ToString());
+            bool ownDispose = axState[ownDisposing];
+            axState[ownDisposing] = true;
             int hr = 0;
             try
             {
@@ -2503,7 +2503,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                this.axState[ownDisposing] = ownDispose;
+                axState[ownDisposing] = ownDispose;
             }
             return hr;
         }
@@ -2521,7 +2521,7 @@ namespace System.Windows.Forms
 
         private string GetLicenseKey()
         {
-            return GetLicenseKey(this.clsid);
+            return GetLicenseKey(clsid);
         }
 
         private string GetLicenseKey(Guid clsid)
@@ -2604,7 +2604,7 @@ namespace System.Windows.Forms
             //checkThreadingModel();
             try
             {
-                instance = CreateInstanceCore(this.clsid);
+                instance = CreateInstanceCore(clsid);
                 Debug.Assert(instance != null, "w/o an exception being thrown we must have an object...");
             }
             catch (ExternalException e)
@@ -2688,7 +2688,7 @@ namespace System.Windows.Forms
 
         private void SetSelectionStyle(int selectionStyle)
         {
-            if (!this.IsUserMode())
+            if (!IsUserMode())
             {
                 // selectionStyle can be 0 (not selected), 1 (selected) or 2 (active)
                 Debug.Assert(selectionStyle >= 0 && selectionStyle <= 2, "Invalid selection style");
@@ -2711,7 +2711,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void InvokeEditMode()
         {
-            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "invoking EditMode for " + this.ToString());
+            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "invoking EditMode for " + ToString());
             Debug.Assert((flags & AxFlags.PreventEditMode) == 0, "edit mode should have been disabled");
             if (editMode != EDITM_NONE)
                 return;
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms
             if (!axState[editorRefresh] && HasPropertyPages())
             {
                 axState[editorRefresh] = true;
-                TypeDescriptor.Refresh(this.GetType());
+                TypeDescriptor.Refresh(GetType());
             }
             return TypeDescriptor.GetAttributes(this, true);
         }
@@ -2829,7 +2829,7 @@ namespace System.Windows.Forms
         {
             if (axState[refreshProperties])
             {
-                TypeDescriptor.Refresh(this.GetType());
+                TypeDescriptor.Refresh(GetType());
             }
         }
 
@@ -2844,12 +2844,12 @@ namespace System.Windows.Forms
                 axState[refreshProperties] = value;
                 if (value && !axState[listeningToIdle])
                 {
-                    Application.Idle += new EventHandler(this.OnIdle);
+                    Application.Idle += new EventHandler(OnIdle);
                     axState[listeningToIdle] = true;
                 }
                 else if (!value && axState[listeningToIdle])
                 {
-                    Application.Idle -= new EventHandler(this.OnIdle);
+                    Application.Idle -= new EventHandler(OnIdle);
                     axState[listeningToIdle] = false;
                 }
             }
@@ -2900,7 +2900,7 @@ namespace System.Windows.Forms
             {
                 propertyInfos = new Hashtable();
 
-                PropertyInfo[] propInfos = this.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                PropertyInfo[] propInfos = GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
                 foreach (PropertyInfo propInfo in propInfos)
                     propertyInfos.Add(propInfo.Name, propInfo);
@@ -3669,7 +3669,7 @@ namespace System.Windows.Forms
                     }
                     */
                 }
-                this.WindowReleaseHandle();
+                WindowReleaseHandle();
             }
         }
 
@@ -3693,10 +3693,10 @@ namespace System.Windows.Forms
 
         private void AttachWindow(IntPtr hwnd)
         {
-            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "attaching window for " + this.ToString() + " " + hwnd.ToString());
+            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "attaching window for " + ToString() + " " + hwnd.ToString());
             if (!axState[fFakingWindow])
             {
-                this.WindowAssignHandle(hwnd, axState[assignUniqueID]);
+                WindowAssignHandle(hwnd, axState[assignUniqueID]);
             }
             UpdateZOrder();
 
@@ -4566,7 +4566,7 @@ namespace System.Windows.Forms
                         prop = host.GetPropertyDescriptorFromDispid(dispid);
                         if (prop != null)
                         {
-                            prop.OnValueChanged(this.host);
+                            prop.OnValueChanged(host);
                             if (!prop.SettingValue)
                             {
                                 prop.UpdateTypeConverterAndTypeEditor(true);
@@ -4788,12 +4788,12 @@ namespace System.Windows.Forms
             // (oh, yes, and the crashes seemed to disappear...)
             //cpr: ComLib.Release(instance);
 
-            this.NoComponentChangeEvents++;
+            NoComponentChangeEvents++;
 
             ContainerControl f = ContainingControl;
             if (f != null)
             {
-                f.VisibleChanged -= this.onContainerVisibleChanged;
+                f.VisibleChanged -= onContainerVisibleChanged;
             }
 
             try
@@ -4826,7 +4826,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                this.NoComponentChangeEvents--;
+                NoComponentChangeEvents--;
             }
         }
 
@@ -5712,7 +5712,7 @@ namespace System.Windows.Forms
                             IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
                             if (ccs != null)
                             {
-                                ccs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                                ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                             }
                         }
                     }
@@ -5934,7 +5934,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                GetAllChildren(this.parent);
+                GetAllChildren(parent);
             }
 
             private void GetAllChildren(Control ctl)
@@ -5947,7 +5947,7 @@ namespace System.Windows.Forms
                     components = new Hashtable();
                 }
 
-                if (ctl != this.parent && !components.Contains(ctl))
+                if (ctl != parent && !components.Contains(ctl))
                     components.Add(ctl, ctl);
 
                 foreach (Control c in ctl.Controls)
@@ -6010,7 +6010,7 @@ namespace System.Windows.Forms
                             IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
                             if (ccs != null)
                             {
-                                ccs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                                ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                             }
                             return true;
                         }
@@ -6747,7 +6747,7 @@ namespace System.Windows.Forms
 
                 MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
                 {
-                    return new MethodInfo[] { this.GetType().GetMethod("Move") };
+                    return new MethodInfo[] { GetType().GetMethod("Move") };
                 }
 
                 FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
@@ -6765,7 +6765,7 @@ namespace System.Windows.Forms
                     PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr);
                     if (prop == null)
                     {
-                        prop = this.GetType().GetProperty(name, bindingAttr);
+                        prop = GetType().GetProperty(name, bindingAttr);
                     }
                     return prop;
                 }
@@ -6775,14 +6775,14 @@ namespace System.Windows.Forms
                     PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
                     if (prop == null)
                     {
-                        prop = this.GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
+                        prop = GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
                     }
                     return prop;
                 }
 
                 PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
                 {
-                    PropertyInfo[] extenderProps = this.GetType().GetProperties(bindingAttr);
+                    PropertyInfo[] extenderProps = GetType().GetProperties(bindingAttr);
                     PropertyInfo[] ctlProps = GetP().GetType().GetProperties(bindingAttr);
 
                     if (extenderProps == null)
@@ -6817,14 +6817,14 @@ namespace System.Windows.Forms
                     MemberInfo[] memb = GetP().GetType().GetMember(name, bindingAttr);
                     if (memb == null)
                     {
-                        memb = this.GetType().GetMember(name, bindingAttr);
+                        memb = GetType().GetMember(name, bindingAttr);
                     }
                     return memb;
                 }
 
                 MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
                 {
-                    MemberInfo[] extenderMembs = this.GetType().GetMembers(bindingAttr);
+                    MemberInfo[] extenderMembs = GetType().GetMembers(bindingAttr);
                     MemberInfo[] ctlMembs = GetP().GetType().GetMembers(bindingAttr);
 
                     if (extenderMembs == null)
@@ -6851,11 +6851,11 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        return this.GetType().InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
+                        return GetType().InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
                     }
                     catch (MissingMethodException)
                     {
-                        return this.GetP().GetType().InvokeMember(name, invokeAttr, binder, GetP(), args, modifiers, culture, namedParameters);
+                        return GetP().GetType().InvokeMember(name, invokeAttr, binder, GetP(), args, modifiers, culture, namedParameters);
                     }
                 }
 
@@ -6984,8 +6984,8 @@ namespace System.Windows.Forms
                 // dangerous?
                 length = (int)ms.Length;
                 this.ms = ms;
-                this.manualUpdate = ctl.GetAxState(AxHost.manualUpdate);
-                this.licenseKey = ctl.GetLicenseKey();
+                manualUpdate = ctl.GetAxState(AxHost.manualUpdate);
+                licenseKey = ctl.GetLicenseKey();
             }
 
             internal State(PropertyBagStream propBag)
@@ -6996,7 +6996,7 @@ namespace System.Windows.Forms
             internal State(MemoryStream ms)
             {
                 this.ms = ms;
-                this.length = (int)ms.Length;
+                length = (int)ms.Length;
                 InitializeFromStream(ms);
             }
 
@@ -7015,7 +7015,7 @@ namespace System.Windows.Forms
                 // dangerous?
                 length = (int)ms.Length;
                 this.manualUpdate = manualUpdate;
-                this.licenseKey = licKey;
+                licenseKey = licKey;
 
                 InitializeBufferFromStream(ms);
             }
@@ -7056,7 +7056,7 @@ namespace System.Windows.Forms
                             byte[] dat = (byte[])sie.Value;
                             if (dat != null)
                             {
-                                this.propBag = new PropertyBagStream();
+                                propBag = new PropertyBagStream();
                                 propBag.Read(new MemoryStream(dat));
                             }
 
@@ -7424,13 +7424,13 @@ namespace System.Windows.Forms
                     // Look to see if this property has a property page.
                     // If it does, then it needs to be Browsable(true).
                     //
-                    if (!this.IsBrowsable && !this.IsReadOnly)
+                    if (!IsBrowsable && !IsReadOnly)
                     {
                         Guid g = GetPropertyPage(dispid.Value);
 
                         if (!Guid.Empty.Equals(g))
                         {
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + this.Name + " browsable because we found an property page.");
+                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + Name + " browsable because we found an property page.");
                             AddAttribute(new BrowsableAttribute(true));
                         }
                     }
@@ -7446,7 +7446,7 @@ namespace System.Windows.Forms
                     // Check to see if this a DataSource property.
                     // If it is, we can always get and set the value of this property.
                     //
-                    if (this.PropertyType.GUID.Equals(dataSource_Guid))
+                    if (PropertyType.GUID.Equals(dataSource_Guid))
                     {
                         SetFlag(FlagIgnoreCanAccessProperties, true);
                     }
@@ -7598,7 +7598,7 @@ namespace System.Windows.Forms
 
             public void OnValueChanged(object component)
             {
-                this.OnValueChanged(component, EventArgs.Empty);
+                OnValueChanged(component, EventArgs.Empty);
             }
 
             public override void ResetValue(object o)
@@ -7630,9 +7630,9 @@ namespace System.Windows.Forms
                 try
                 {
                     SetFlag(FlagSettingValue, true);
-                    if (this.PropertyType.IsEnum && (value.GetType() != this.PropertyType))
+                    if (PropertyType.IsEnum && (value.GetType() != PropertyType))
                     {
-                        baseProp.SetValue(component, Enum.ToObject(this.PropertyType, value));
+                        baseProp.SetValue(component, Enum.ToObject(PropertyType, value));
                     }
                     else
                     {
@@ -7800,9 +7800,9 @@ namespace System.Windows.Forms
                                     // Show any non-browsable property that has an editor through a 
                                     // property page.
                                     //
-                                    if (!this.IsBrowsable)
+                                    if (!IsBrowsable)
                                     {
-                                        Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + this.Name + " browsable because we found an editor.");
+                                        Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + Name + " browsable because we found an editor.");
                                         AddAttribute(new BrowsableAttribute(true));
                                     }
                                 }
@@ -7814,7 +7814,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "could not get the type editor for property: " + this.Name + " Exception: " + e);
+                    Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "could not get the type editor for property: " + Name + " Exception: " + e);
                 }
             }
         }
@@ -7842,7 +7842,7 @@ namespace System.Windows.Forms
                 try
                 {
                     object instance = context.Instance;
-                    propDesc.owner.ShowPropertyPageForDispid(propDesc.Dispid, this.guid);
+                    propDesc.owner.ShowPropertyPageForDispid(propDesc.Dispid, guid);
                 }
                 catch (Exception ex1)
                 {
@@ -7908,11 +7908,11 @@ namespace System.Windows.Forms
 
             public AxPerPropertyBrowsingEnum(AxPropertyDescriptor targetObject, AxHost owner, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(new string[0], new object[0], allowUnknowns)
             {
-                this.target = targetObject;
-                this.nameMarshaller = names;
-                this.valueMarshaller = values;
+                target = targetObject;
+                nameMarshaller = names;
+                valueMarshaller = values;
                 this.owner = owner;
-                this.arraysFetched = false;
+                arraysFetched = false;
             }
 
             /// <summary>
@@ -7944,12 +7944,12 @@ namespace System.Windows.Forms
             //
             private void EnsureArrays()
             {
-                if (this.arraysFetched)
+                if (arraysFetched)
                 {
                     return;
                 }
 
-                this.arraysFetched = true;
+                arraysFetched = true;
 
                 try
                 {
@@ -8007,9 +8007,9 @@ namespace System.Windows.Forms
 
             internal void RefreshArrays(OleStrCAMarshaler names, Int32CAMarshaler values)
             {
-                this.nameMarshaller = names;
-                this.valueMarshaller = values;
-                this.arraysFetched = false;
+                nameMarshaller = names;
+                valueMarshaller = values;
+                arraysFetched = false;
             }
 
 #if false

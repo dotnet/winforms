@@ -812,17 +812,17 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (this.image != null)
+                    if (image != null)
                     {
-                        ImageAnimator.Animate(this.image, new EventHandler(this.OnFrameChanged));
+                        ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
                     }
                 }
                 else
                 {
-                    if (this.image != null)
+                    if (image != null)
                     {
-                        ImageAnimator.StopAnimate(this.image, new EventHandler(this.OnFrameChanged));
+                        ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
                     }
                 }
@@ -848,7 +848,7 @@ namespace System.Windows.Forms
                 StopAnimate();
                 if (imageList != null)
                 {
-                    imageList.Disposed -= new EventHandler(this.DetachImageList);
+                    imageList.Disposed -= new EventHandler(DetachImageList);
                 }
                 //Dipose the tooltip if one present..
                 if (textToolTip != null)
@@ -1122,7 +1122,7 @@ namespace System.Windows.Forms
             }
             if (IsHandleCreated && InvokeRequired)
             {
-                BeginInvoke(new EventHandler(this.OnFrameChanged), new object[] { o, e });
+                BeginInvoke(new EventHandler(OnFrameChanged), new object[] { o, e });
                 return;
             }
 
@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms
             if (AutoEllipsis)
             {
                 Size preferredSize = PreferredSize;
-                ShowToolTip = (this.ClientRectangle.Width < preferredSize.Width || this.ClientRectangle.Height < preferredSize.Height);
+                ShowToolTip = (ClientRectangle.Width < preferredSize.Width || ClientRectangle.Height < preferredSize.Height);
             }
             else
             {
@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.UserPaint))
             {
                 Animate();
-                ImageAnimator.UpdateFrames(this.Image);
+                ImageAnimator.UpdateFrames(Image);
 
                 PaintControl(pevent);
             }
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms
             {
                 isEnableVisualStyleBackgroundSet = true;
                 enableVisualStyleBackground = value;
-                this.Invalidate();
+                Invalidate();
             }
         }
 
@@ -1357,7 +1357,7 @@ namespace System.Windows.Forms
         {
             isEnableVisualStyleBackgroundSet = false;
             enableVisualStyleBackground = true;
-            this.Invalidate();
+            Invalidate();
         }
 
         private bool ShouldSerializeUseVisualStyleBackColor()

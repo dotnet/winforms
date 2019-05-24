@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             }
 
             //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal)
+            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !UseVistaDialogInternal)
             {
                 if (!PromptFileOverwrite(fileName))
                 {

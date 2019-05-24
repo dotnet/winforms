@@ -58,12 +58,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                int width = this.Width;
+                int width = Width;
 
                 listview = value;
 
                 // The below properties are set into the listview.
-                this.Width = width;
+                Width = width;
             }
         }
 
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ColumnHeader(int imageIndex) : this()
         {
-            this.ImageIndex = imageIndex;
+            ImageIndex = imageIndex;
         }
 
         /// <summary>
@@ -88,15 +88,15 @@ namespace System.Windows.Forms
         /// </summary>
         public ColumnHeader(string imageKey) : this()
         {
-            this.ImageKey = imageKey;
+            ImageKey = imageKey;
         }
 
         internal int ActualImageIndex_Internal
         {
             get
             {
-                int imgIndex = this.imageIndexer.ActualIndex;
-                if (this.ImageList == null || this.ImageList.Images == null || imgIndex >= this.ImageList.Images.Count)
+                int imgIndex = imageIndexer.ActualIndex;
+                if (ImageList == null || ImageList.Images == null || imgIndex >= ImageList.Images.Count)
                 {
                     // the ImageIndex equivalent of a ImageKey that does not exist in the ImageList
                     return -1;
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.DisplayIndexInternal;
+                return DisplayIndexInternal;
             }
 
             set
@@ -128,30 +128,30 @@ namespace System.Windows.Forms
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
-                if (this.listview == null)
+                if (listview == null)
                 {
-                    this.DisplayIndexInternal = value;
+                    DisplayIndexInternal = value;
                     return;
                 }
 
-                if (value < 0 || value > (this.listview.Columns.Count - 1))
+                if (value < 0 || value > (listview.Columns.Count - 1))
                 {
                     throw new ArgumentOutOfRangeException(nameof(DisplayIndex), SR.ColumnHeaderBadDisplayIndex);
                 }
 
-                int lowDI = Math.Min(this.DisplayIndexInternal, value);
-                int hiDI = Math.Max(this.DisplayIndexInternal, value);
-                int[] colsOrder = new int[this.listview.Columns.Count];
+                int lowDI = Math.Min(DisplayIndexInternal, value);
+                int hiDI = Math.Max(DisplayIndexInternal, value);
+                int[] colsOrder = new int[listview.Columns.Count];
 
                 // set the display indices. This is not an expensive operation because
                 // we only set an integer in the column header class
-                bool hdrMovedForward = value > this.DisplayIndexInternal;
+                bool hdrMovedForward = value > DisplayIndexInternal;
                 ColumnHeader movedHdr = null;
-                for (int i = 0; i < this.listview.Columns.Count; i++)
+                for (int i = 0; i < listview.Columns.Count; i++)
                 {
 
-                    ColumnHeader hdr = this.listview.Columns[i];
-                    if (hdr.DisplayIndex == this.DisplayIndexInternal)
+                    ColumnHeader hdr = listview.Columns[i];
+                    if (hdr.DisplayIndex == DisplayIndexInternal)
                     {
                         movedHdr = hdr;
                     }
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
                     {
                         hdr.DisplayIndexInternal -= hdrMovedForward ? 1 : -1;
                     }
-                    if (i != this.Index)
+                    if (i != Index)
                     {
                         colsOrder[hdr.DisplayIndexInternal] = i;
                     }
@@ -175,11 +175,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.displayIndexInternal;
+                return displayIndexInternal;
             }
             set
             {
-                this.displayIndexInternal = value;
+                displayIndexInternal = value;
             }
         }
 
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
             // we added the ImageList property so that the ImageIndexConverter can find our image list
             get
             {
-                return this.imageIndexer.ImageList;
+                return imageIndexer.ImageList;
             }
         }
 
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.listview;
+                return listview;
             }
         }
 
@@ -301,11 +301,11 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                 {
-                    this.name = string.Empty;
+                    name = string.Empty;
                 }
                 else
                 {
-                    this.name = value;
+                    name = value;
                 }
                 if (Site != null)
                 {
@@ -332,11 +332,11 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                 {
-                    this.text = string.Empty;
+                    text = string.Empty;
                 }
                 else
                 {
-                    this.text = value;
+                    text = value;
                 }
                 if (listview != null)
                 {
@@ -365,10 +365,10 @@ namespace System.Windows.Forms
                     //Added !IsMirrored
                     if ((Index != 0) && (listview.RightToLeft == RightToLeft.Yes) && !listview.IsMirrored)
                     {
-                        this.textAlign = HorizontalAlignment.Right;
+                        textAlign = HorizontalAlignment.Right;
                     }
                 }
-                return this.textAlign;
+                return textAlign;
             }
             set
             {
@@ -378,12 +378,12 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
-                this.textAlign = value;
+                textAlign = value;
 
                 // The first column must be left-aligned
-                if (Index == 0 && this.textAlign != HorizontalAlignment.Left)
+                if (Index == 0 && textAlign != HorizontalAlignment.Left)
                 {
-                    this.textAlign = HorizontalAlignment.Left;
+                    textAlign = HorizontalAlignment.Left;
                 }
 
                 if (listview != null)
@@ -457,7 +457,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.width = value;
+                width = value;
                 if (listview != null)
                     listview.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
             }
@@ -471,9 +471,9 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
-            if (this.listview != null)
+            if (listview != null)
             {
-                this.listview.AutoResizeColumn(this.Index, headerAutoResize);
+                listview.AutoResizeColumn(Index, headerAutoResize);
             }
         }
 
@@ -483,7 +483,7 @@ namespace System.Windows.Forms
         /// </summary>
         public object Clone()
         {
-            Type clonedType = this.GetType();
+            Type clonedType = GetType();
             ColumnHeader columnHeader = null;
 
             if (clonedType == typeof(ColumnHeader))
@@ -526,20 +526,20 @@ namespace System.Windows.Forms
         private void SetDisplayIndices(int[] cols)
         {
 
-            if (this.listview.IsHandleCreated && !this.listview.Disposing)
+            if (listview.IsHandleCreated && !listview.Disposing)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this.listview, this.listview.Handle), NativeMethods.LVM_SETCOLUMNORDERARRAY, cols.Length, cols);
+                UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), NativeMethods.LVM_SETCOLUMNORDERARRAY, cols.Length, cols);
             }
         }
 
         private bool ShouldSerializeName()
         {
-            return !string.IsNullOrEmpty(this.name);
+            return !string.IsNullOrEmpty(name);
         }
 
         private bool ShouldSerializeDisplayIndex()
         {
-            return this.DisplayIndex != this.Index;
+            return DisplayIndex != Index;
         }
 
         internal bool ShouldSerializeText()

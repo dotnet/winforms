@@ -184,12 +184,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 maxListBoxHeight = DpiHelper.LogicalToDeviceUnitsY(MAX_LISTBOX_HEIGHT);
             }
 
-            this.ehValueClick = new EventHandler(this.OnGridEntryValueClick);
-            this.ehLabelClick = new EventHandler(this.OnGridEntryLabelClick);
-            this.ehOutlineClick = new EventHandler(this.OnGridEntryOutlineClick);
-            this.ehValueDblClick = new EventHandler(this.OnGridEntryValueDoubleClick);
-            this.ehLabelDblClick = new EventHandler(this.OnGridEntryLabelDoubleClick);
-            this.ehRecreateChildren = new GridEntryRecreateChildrenEventHandler(this.OnRecreateChildren);
+            ehValueClick = new EventHandler(OnGridEntryValueClick);
+            ehLabelClick = new EventHandler(OnGridEntryLabelClick);
+            ehOutlineClick = new EventHandler(OnGridEntryOutlineClick);
+            ehValueDblClick = new EventHandler(OnGridEntryValueDoubleClick);
+            ehLabelDblClick = new EventHandler(OnGridEntryLabelDoubleClick);
+            ehRecreateChildren = new GridEntryRecreateChildrenEventHandler(OnRecreateChildren);
 
             ownerGrid = propertyGrid;
             this.serviceProvider = serviceProvider;
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             backgroundBrush = SystemBrushes.Window;
             TabStop = true;
 
-            this.Text = "PropertyGridView";
+            Text = "PropertyGridView";
 
             CreateUI();
             LayoutWindow(true);
@@ -220,7 +220,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                this.backgroundBrush = new SolidBrush(value);
+                backgroundBrush = new SolidBrush(value);
                 base.BackColor = value;
             }
         }
@@ -301,12 +301,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     btnDropDown.Image = bitmap;
                     btnDropDown.BackColor = SystemColors.Control;
                     btnDropDown.ForeColor = SystemColors.ControlText;
-                    btnDropDown.Click += new EventHandler(this.OnBtnClick);
+                    btnDropDown.Click += new EventHandler(OnBtnClick);
                     btnDropDown.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
-                    btnDropDown.LostFocus += new EventHandler(this.OnChildLostFocus);
+                    btnDropDown.LostFocus += new EventHandler(OnChildLostFocus);
                     btnDropDown.TabIndex = 2;
                     CommonEditorSetup(btnDropDown);
-                    btnDropDown.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(this.deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+                    btnDropDown.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                 }
                 return btnDropDown;
             }
@@ -330,11 +330,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     btnDialog.ForeColor = SystemColors.ControlText;
                     btnDialog.TabIndex = 3;
                     btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
-                    btnDialog.Click += new EventHandler(this.OnBtnClick);
-                    btnDialog.KeyDown += new KeyEventHandler(this.OnBtnKeyDown);
+                    btnDialog.Click += new EventHandler(OnBtnClick);
+                    btnDialog.KeyDown += new KeyEventHandler(OnBtnKeyDown);
                     btnDialog.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
-                    btnDialog.LostFocus += new EventHandler(this.OnChildLostFocus);
-                    btnDialog.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(this.deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+                    btnDialog.LostFocus += new EventHandler(OnChildLostFocus);
+                    btnDialog.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                     CommonEditorSetup(btnDialog);
                 }
                 return btnDialog;
@@ -383,12 +383,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     edit.AcceptsReturn = true;
                     edit.BackColor = BackColor;
                     edit.ForeColor = ForeColor;
-                    edit.KeyDown += new KeyEventHandler(this.OnEditKeyDown);
-                    edit.KeyPress += new KeyPressEventHandler(this.OnEditKeyPress);
-                    edit.GotFocus += new EventHandler(this.OnEditGotFocus);
-                    edit.LostFocus += new EventHandler(this.OnEditLostFocus);
-                    edit.MouseDown += new MouseEventHandler(this.OnEditMouseDown);
-                    edit.TextChanged += new EventHandler(this.OnEditChange);
+                    edit.KeyDown += new KeyEventHandler(OnEditKeyDown);
+                    edit.KeyPress += new KeyPressEventHandler(OnEditKeyPress);
+                    edit.GotFocus += new EventHandler(OnEditGotFocus);
+                    edit.LostFocus += new EventHandler(OnEditLostFocus);
+                    edit.MouseDown += new MouseEventHandler(OnEditMouseDown);
+                    edit.TextChanged += new EventHandler(OnEditChange);
                     //edit.ImeModeChanged += new EventHandler(this.OnEditImeModeChanged);
                     edit.TabIndex = 1;
                     CommonEditorSetup(edit);
@@ -424,11 +424,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     listBox = new GridViewListBox(this);
                     listBox.DrawMode = DrawMode.OwnerDrawFixed;
                     //listBox.Click += new EventHandler(this.OnListClick);
-                    listBox.MouseUp += new MouseEventHandler(this.OnListMouseUp);
-                    listBox.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
-                    listBox.SelectedIndexChanged += new EventHandler(this.OnListChange);
-                    listBox.KeyDown += new KeyEventHandler(this.OnListKeyDown);
-                    listBox.LostFocus += new EventHandler(this.OnChildLostFocus);
+                    listBox.MouseUp += new MouseEventHandler(OnListMouseUp);
+                    listBox.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+                    listBox.SelectedIndexChanged += new EventHandler(OnListChange);
+                    listBox.KeyDown += new KeyEventHandler(OnListKeyDown);
+                    listBox.LostFocus += new EventHandler(OnChildLostFocus);
                     listBox.Visible = true;
                     listBox.ItemHeight = RowHeight;
                 }
@@ -480,7 +480,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return (this.ContainsFocus || (dropDownHolder != null && dropDownHolder.ContainsFocus));
+                return (ContainsFocus || (dropDownHolder != null && dropDownHolder.ContainsFocus));
             }
         }
 
@@ -494,14 +494,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return grayTextColor;
                 }
 
-                if (this.ForeColor.ToArgb() == SystemColors.WindowText.ToArgb())
+                if (ForeColor.ToArgb() == SystemColors.WindowText.ToArgb())
                 {
                     return SystemColors.GrayText;
                 }
 
                 // compute the new color by halving the value of the old one.
                 //
-                int colorRGB = this.ForeColor.ToArgb();
+                int colorRGB = ForeColor.ToArgb();
 
                 int alphaValue = (colorRGB >> 24) & 0xff;
                 if (alphaValue != 0)
@@ -531,9 +531,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (this.errorDlg == null)
+                if (errorDlg == null)
                 {
-                    errorDlg = new GridErrorDlg(this.ownerGrid);
+                    errorDlg = new GridErrorDlg(ownerGrid);
                 }
                 return errorDlg;
             }
@@ -598,7 +598,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return this.ownerGrid;
+                return ownerGrid;
             }
         }
 
@@ -644,7 +644,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 #endif
                     scrollBar = new VScrollBar();
-                    scrollBar.Scroll += new ScrollEventHandler(this.OnScroll);
+                    scrollBar.Scroll += new ScrollEventHandler(OnScroll);
                     Controls.Add(scrollBar);
                 }
                 return scrollBar;
@@ -784,7 +784,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (value != serviceProvider)
                 {
-                    this.serviceProvider = value;
+                    serviceProvider = value;
 
                     topHelpService = null;
 
@@ -850,7 +850,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 #endif
                     toolTip = new GridToolTip(new Control[] { this, Edit });
                     toolTip.ToolTip = string.Empty;
-                    toolTip.Font = this.Font;
+                    toolTip.Font = Font;
                 }
                 return toolTip;
             }
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Edit.DontFocus = true;
                 if (Edit.Focused && !gotfocus)
                 {
-                    gotfocus = this.Focus();
+                    gotfocus = Focus();
                 }
                 Edit.Visible = false;
 
@@ -1141,13 +1141,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (DialogButton.Focused && !gotfocus)
                 {
-                    gotfocus = this.Focus();
+                    gotfocus = Focus();
                 }
                 DialogButton.Visible = false;
 
                 if (DropDownButton.Focused && !gotfocus)
                 {
-                    gotfocus = this.Focus();
+                    gotfocus = Focus();
                 }
                 DropDownButton.Visible = false;
                 currentEditor = null;
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Rectangle rectCur = ctl.Bounds;
 
             // the client rect minus the border line
-            Rectangle clientRect = this.ClientRectangle;
+            Rectangle clientRect = ClientRectangle;
 
             clientRect.Inflate(-1, -1);
 
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DoCopyCommand()
         {
-            if (this.CanCopy)
+            if (CanCopy)
             {
                 if (Edit.Focused)
                 {
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DoCutCommand()
         {
-            if (this.CanCut)
+            if (CanCut)
             {
                 DoCopyCommand();
                 if (Edit.Visible)
@@ -1365,7 +1365,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DoPasteCommand()
         {
-            if (this.CanPaste && Edit.Visible)
+            if (CanPaste && Edit.Visible)
             {
                 if (Edit.Focused)
                 {
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DoUndoCommand()
         {
-            if (this.CanUndo && Edit.Visible)
+            if (CanUndo && Edit.Visible)
             {
                 Edit.SendMessage(Interop.WindowMessages.WM_UNDO, 0, 0);
             }
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private int GetIPELabelLength(System.Drawing.Graphics g, GridEntry gridEntry)
         {
-            SizeF sizeF = PropertyGrid.MeasureTextHelper.MeasureText(this.ownerGrid, g, gridEntry.PropertyLabel, Font);
+            SizeF sizeF = PropertyGrid.MeasureTextHelper.MeasureText(ownerGrid, g, gridEntry.PropertyLabel, Font);
             Size size = Size.Ceiling(sizeF);
             return ptOurLocation.X + GetIPELabelIndent(gridEntry) + size.Width;
         }
@@ -1675,7 +1675,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (fontBold == null)
             {
-                fontBold = new Font(this.Font, FontStyle.Bold);
+                fontBold = new Font(Font, FontStyle.Bold);
             }
             return fontBold;
         }
@@ -1732,7 +1732,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool GetFlag(short flag)
         {
-            return (this.flags & flag) != 0;
+            return (flags & flag) != 0;
         }
 
         public virtual Color GetLineColor()
@@ -1815,7 +1815,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             int row = GetRowFromGridEntry(allGridEntries.GetEntry(i));
 
-                            if (row < 0 || row >= this.visibleRows)
+                            if (row < 0 || row >= visibleRows)
                             {
                                 return -1;
                             }
@@ -1966,8 +1966,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public bool EnsurePendingChangesCommitted()
         {
-            this.CloseDropDown();
-            return this.Commit();
+            CloseDropDown();
+            return Commit();
         }
 
         private bool FilterEditWndProc(ref Message m)
@@ -2127,7 +2127,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (RowHeight == -1)
                 return InvalidPosition;
-            Size size = this.GetOurSize();
+            Size size = GetOurSize();
 
             if (x < 0 || x > size.Width + ptOurLocation.X)
                 return InvalidPosition;
@@ -2143,7 +2143,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView::Flush()");
             if (Commit() && Edit.Focused)
             {
-                this.Focus();
+                Focus();
             }
         }
 
@@ -2380,7 +2380,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public Rectangle GetRectangle(int row, int flRow)
         {
             Rectangle rect = new Rectangle(0, 0, 0, 0);
-            Size size = this.GetOurSize();
+            Size size = GetOurSize();
 
             rect.X = ptOurLocation.X;
 
@@ -2471,7 +2471,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public Color GetTextColor()
         {
-            return this.ForeColor;
+            return ForeColor;
         }
 
         private void LayoutWindow(bool invalidate)
@@ -2692,7 +2692,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private void OnChildLostFocus(object sender, EventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnChildLostFocus");
-            this.InvokeLostFocus(this, e);
+            InvokeLostFocus(this, e);
         }
 
         private void OnDropDownButtonGotFocus(object sender, EventArgs e)
@@ -2752,12 +2752,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.OnSysColorChange);
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnSysColorChange);
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.OnSysColorChange);
+            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnSysColorChange);
             // We can leak this if we aren't disposed.
             //
             if (toolTip != null && !RecreatingHandle)
@@ -2905,7 +2905,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnLostFocus(e);
             }
-            if (this.FocusInside)
+            if (FocusInside)
             {
                 base.OnLostFocus(e);
                 return;
@@ -2956,7 +2956,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (!Edit.Visible)
             {
-                this.Focus();
+                Focus();
                 return;
             }
 
@@ -2971,7 +2971,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     break;
                 default:
-                    if (this.NeedsCommit)
+                    if (NeedsCommit)
                     {
                         SetCommitError(ERROR_NONE, true);
                     }
@@ -3122,7 +3122,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
             }
 
-            if (this.FocusInside)
+            if (FocusInside)
             {
                 return;
             }
@@ -3134,7 +3134,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
             // change our focus state.
-            this.InvokeLostFocus(this, EventArgs.Empty);
+            InvokeLostFocus(this, EventArgs.Empty);
         }
 
         private void OnEditMouseDown(object sender, MouseEventArgs me)
@@ -3188,7 +3188,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return false;
             }
-            if (sender == this || sender == this.ownerGrid)
+            if (sender == this || sender == ownerGrid)
                 F4Selection(true);
             else
                 UnfocusSelection();
@@ -3216,7 +3216,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return true;
                 }
 
-                if (this.NeedsCommit)
+                if (NeedsCommit)
                 {
                     bool success = false;
                     Edit.Text = originalTextValue;
@@ -3321,7 +3321,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ToolTip.ToolTip = string.Empty;
             }
 
-            if (fBoth || sender == this || sender == this.ownerGrid)
+            if (fBoth || sender == this || sender == ownerGrid)
             {
                 switch (keyCode)
                 {
@@ -3583,7 +3583,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (me.Clicks == 2)
                 {
-                    MoveSplitterTo(this.Width / 2);
+                    MoveSplitterTo(Width / 2);
                     return;
                 }
 
@@ -3675,7 +3675,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 MoveSplitterTo(me.X);
             }
 
-            if ((rowMoveCur != this.TipRow || pt.X != this.TipColumn) && !GetFlag(FlagIsSplitterMove))
+            if ((rowMoveCur != TipRow || pt.X != TipColumn) && !GetFlag(FlagIsSplitterMove))
             {
                 GridEntry gridItem = GetGridEntryFromRow(rowMoveCur);
                 string tip = string.Empty;
@@ -3687,24 +3687,24 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (onLabel && gridItem.GetLabelToolTipLocation(me.X - itemRect.X, me.Y - itemRect.Y) != InvalidPoint)
                     {
                         tip = gridItem.LabelToolTipText;
-                        this.TipRow = rowMoveCur;
-                        this.TipColumn = pt.X;
+                        TipRow = rowMoveCur;
+                        TipColumn = pt.X;
                     }
                     else if (!onLabel && gridItem.ValueToolTipLocation != InvalidPoint && !Edit.Focused)
                     {
-                        if (!this.NeedsCommit)
+                        if (!NeedsCommit)
                         {
                             tip = gridItem.GetPropertyTextValue();
                         }
-                        this.TipRow = rowMoveCur;
-                        this.TipColumn = pt.X;
+                        TipRow = rowMoveCur;
+                        TipColumn = pt.X;
                     }
                 }
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
                 IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
-                if (UnsafeNativeMethods.IsChild(new HandleRef(null, foregroundWindow), new HandleRef(null, this.Handle)))
+                if (UnsafeNativeMethods.IsChild(new HandleRef(null, foregroundWindow), new HandleRef(null, Handle)))
                 {
                     // Don't show the tips if a dropdown is showing
                     if ((dropDownHolder == null || dropDownHolder.Component == null) || rowMoveCur == selectedRow)
@@ -3737,7 +3737,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override void OnMouseWheel(MouseEventArgs me)
         {
 
-            this.ownerGrid.OnGridViewMouseWheel(me);
+            ownerGrid.OnGridViewMouseWheel(me);
 
             HandledMouseEventArgs e = me as HandledMouseEventArgs;
             if (e != null)
@@ -3760,8 +3760,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return; // Do not scroll when the user system setting is 0 lines per notch
             }
 
-            Debug.Assert(this.cumulativeVerticalWheelDelta > -NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too small");
-            Debug.Assert(this.cumulativeVerticalWheelDelta < NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too big");
+            Debug.Assert(cumulativeVerticalWheelDelta > -NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too small");
+            Debug.Assert(cumulativeVerticalWheelDelta < NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too big");
 
             // Should this only work if the Edit has focus?  anyway
             // we use the mouse wheel to change the values in the dropdown if it's
@@ -3809,24 +3809,24 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
 
                     int originalOffset = initialOffset;
-                    int large = fullNotches * this.scrollBar.LargeChange;
+                    int large = fullNotches * scrollBar.LargeChange;
                     int newOffset = Math.Max(0, initialOffset - large);
                     newOffset = Math.Min(newOffset, totalProps - visibleRows + 1);
 
 
-                    initialOffset -= fullNotches * this.scrollBar.LargeChange;
-                    if (Math.Abs(initialOffset - originalOffset) >= Math.Abs(fullNotches * this.scrollBar.LargeChange))
+                    initialOffset -= fullNotches * scrollBar.LargeChange;
+                    if (Math.Abs(initialOffset - originalOffset) >= Math.Abs(fullNotches * scrollBar.LargeChange))
                     {
-                        this.cumulativeVerticalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
+                        cumulativeVerticalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
                     }
                     else
                     {
-                        this.cumulativeVerticalWheelDelta = 0;
+                        cumulativeVerticalWheelDelta = 0;
                     }
 
                     if (!ScrollRows(newOffset))
                     {
-                        this.cumulativeVerticalWheelDelta = 0;
+                        cumulativeVerticalWheelDelta = 0;
                         return;
                     }
                 }
@@ -3853,37 +3853,37 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (scrollBands > 0)
                     {
 
-                        if (this.scrollBar.Value <= this.scrollBar.Minimum)
+                        if (scrollBar.Value <= scrollBar.Minimum)
                         {
-                            this.cumulativeVerticalWheelDelta = 0;
+                            cumulativeVerticalWheelDelta = 0;
                         }
                         else
                         {
-                            this.cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                            cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
                     else
                     {
 
-                        if (this.scrollBar.Value > (scrollBar.Maximum - visibleRows + 1))
+                        if (scrollBar.Value > (scrollBar.Maximum - visibleRows + 1))
                         {
-                            this.cumulativeVerticalWheelDelta = 0;
+                            cumulativeVerticalWheelDelta = 0;
                         }
                         else
                         {
-                            this.cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                            cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
 
                     if (!ScrollRows(newOffset))
                     {
-                        this.cumulativeVerticalWheelDelta = 0;
+                        cumulativeVerticalWheelDelta = 0;
                         return;
                     }
                 }
                 else
                 {
-                    this.cumulativeVerticalWheelDelta = 0;
+                    cumulativeVerticalWheelDelta = 0;
                 }
 
             }
@@ -3917,7 +3917,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-                Size sizeWindow = this.Size;
+                Size sizeWindow = Size;
 
                 // figure out what rows we're painting
                 Point posStart = FindPosition(clipRect.X, clipRect.Y);
@@ -3953,8 +3953,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 //SetConstants();
 
-                Size size = this.GetOurSize();
-                Point loc = this.ptOurLocation;
+                Size size = GetOurSize();
+                Point loc = ptOurLocation;
 
                 if (GetGridEntryFromRow(cPropsVisible - 1) == null)
                 {
@@ -4083,7 +4083,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnGridEntryLabelClick(object s, EventArgs e)
         {
-            this.lastClickedEntry = (GridEntry)s;
+            lastClickedEntry = (GridEntry)s;
             SelectGridEntry(lastClickedEntry, true);
         }
 
@@ -4113,7 +4113,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private void OnGridEntryValueClick(object s, EventArgs e)
         {
 
-            this.lastClickedEntry = (GridEntry)s;
+            lastClickedEntry = (GridEntry)s;
             bool setSelectTime = s != selectedGridEntry;
             SelectGridEntry(lastClickedEntry, true);
             Edit.Focus();
@@ -4163,14 +4163,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             ClearCachedFontInfo();
             cachedRowHeight = -1;
 
-            if (this.Disposing || this.ParentInternal == null || this.ParentInternal.Disposing)
+            if (Disposing || ParentInternal == null || ParentInternal.Disposing)
             {
                 return;
             }
 
             fontBold = null;    // fontBold is cached based on Font                        
 
-            ToolTip.Font = this.Font;
+            ToolTip.Font = Font;
             SetFlag(FlagNeedUpdateUIBasedOnFont, true);
             UpdateUIBasedOnFont(true);
             base.OnFontChanged(e);
@@ -4183,12 +4183,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnVisibleChanged(EventArgs e)
         {
-            if (this.Disposing || this.ParentInternal == null || this.ParentInternal.Disposing)
+            if (Disposing || ParentInternal == null || ParentInternal.Disposing)
             {
                 return;
             }
 
-            if (this.Visible && this.ParentInternal != null)
+            if (Visible && ParentInternal != null)
             {
                 SetConstants();
                 if (selectedGridEntry != null)
@@ -4197,7 +4197,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 if (toolTip != null)
                 {
-                    ToolTip.Font = this.Font;
+                    ToolTip.Font = Font;
                 }
 
             }
@@ -4666,7 +4666,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // changes sort and move to a secondary monitor with different DPI and change view sort back to original.
             if (topLevelGridEntries != null && DpiHelper.IsScalingRequirementMet)
             {
-                var outlineRectIconSize = this.GetOutlineIconSize();
+                var outlineRectIconSize = GetOutlineIconSize();
                 foreach (GridEntry gridentry in topLevelGridEntries)
                 {
                     if (gridentry.OutlineRect.Height != outlineRectIconSize || gridentry.OutlineRect.Width != outlineRectIconSize)
@@ -4697,7 +4697,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // There are cases here where the grid could get be disposed.
             // so just bail.
-            if (this.IsDisposed)
+            if (IsDisposed)
             {
                 return;
             }
@@ -4709,7 +4709,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rowStart = 0;
             }
 
-            if (fullRefresh || this.ownerGrid.HavePropEntriesChanged())
+            if (fullRefresh || ownerGrid.HavePropEntriesChanged())
             {
                 if (HasEntries && !GetInPropertySet() && !Commit())
                 {
@@ -4722,7 +4722,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // walk up to the main IPE and refresh it.
                 if (fullRefresh)
                 {
-                    this.ownerGrid.RefreshProperties(true);
+                    ownerGrid.RefreshProperties(true);
                 }
 
                 if (oldLength > 0 && !GetFlag(FlagNoDefault))
@@ -4734,7 +4734,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UpdateHelpAttributes(selectedGridEntry, null);
                 selectedGridEntry = null;
                 SetFlag(FlagIsNewSelection, true);
-                topLevelGridEntries = this.ownerGrid.GetPropEntries();
+                topLevelGridEntries = ownerGrid.GetPropEntries();
 
 
                 ClearGridEntryEvents(allGridEntries, 0, -1);
@@ -4765,7 +4765,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (gridEntry == null)
                     {
-                        gridEntry = this.ownerGrid.GetDefaultGridEntry();
+                        gridEntry = ownerGrid.GetDefaultGridEntry();
                         SetFlag(FlagNoDefault, gridEntry == null && totalProps > 0);
                     }
 
@@ -4794,7 +4794,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (!HasEntries)
             {
                 CommonEditorHide(selectedRow != -1);
-                this.ownerGrid.SetStatusBox(null, null);
+                ownerGrid.SetStatusBox(null, null);
                 SetScrollOffset(0);
                 selectedRow = -1;
                 Invalidate();
@@ -4993,7 +4993,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (!GetFlag(FlagIsNewSelection))
             {
-                if (this.FocusInside)
+                if (FocusInside)
                 {
                     // If we're in an error state, we want to bail out of this.
                     if (errorState != ERROR_NONE || (row != selectedRow && !Commit()))
@@ -5070,7 +5070,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if ((fBtnDialog || fBtnDropDown) && !gridEntry.ShouldRenderReadOnly && FocusInside)
             {
                 Control btn = fBtnDropDown ? (Control)DropDownButton : (Control)DialogButton;
-                Size sizeBtn = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(this.deviceDpi), RowHeight) :
+                Size sizeBtn = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight) :
                                                                                new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                 Rectangle rectTarget = new Rectangle(rect.X + rect.Width - sizeBtn.Width,
                                                       rect.Y,
@@ -5140,8 +5140,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rect.Width -= 1;
                 CommonEditorUse(Edit, rect);
                 bool drawReadOnly = gridEntry.ShouldRenderReadOnly;
-                Edit.ForeColor = drawReadOnly ? this.GrayTextColor : this.ForeColor;
-                Edit.BackColor = this.BackColor;
+                Edit.ForeColor = drawReadOnly ? GrayTextColor : ForeColor;
+                Edit.BackColor = BackColor;
                 Edit.ReadOnly = drawReadOnly || !gridEntry.IsTextEditable;
                 Edit.UseSystemPasswordChar = gridEntry.ShouldRenderPassword;
             }
@@ -5149,12 +5149,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             GridEntry oldSelectedGridEntry = selectedGridEntry;
             selectedRow = row;
             selectedGridEntry = gridEntry;
-            this.ownerGrid.SetStatusBox(gridEntry.PropertyLabel, gridEntry.PropertyDescription);
+            ownerGrid.SetStatusBox(gridEntry.PropertyLabel, gridEntry.PropertyDescription);
 
             // tell the new focused item that it now has focus
             if (selectedGridEntry != null)
             {
-                selectedGridEntry.Focus = this.FocusInside;
+                selectedGridEntry.Focus = FocusInside;
             }
 
             if (!GetFlag(FlagIsNewSelection))
@@ -5176,7 +5176,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (selectedGridEntry != oldSelectedGridEntry)
                 {
-                    this.ownerGrid.OnSelectedGridItemChanged(oldSelectedGridEntry, selectedGridEntry);
+                    ownerGrid.OnSelectedGridItemChanged(oldSelectedGridEntry, selectedGridEntry);
                 }
             }
             catch
@@ -5187,11 +5187,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         public virtual void SetConstants()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SetConstants");
-            Size size = this.GetOurSize();
+            Size size = GetOurSize();
 
             visibleRows = (int)Math.Ceiling(((double)size.Height) / (1 + RowHeight));
 
-            size = this.GetOurSize();
+            size = GetOurSize();
 
             if (size.Width >= 0)
             {
@@ -5373,7 +5373,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            if (!this.NeedsCommit)
+            if (!NeedsCommit)
             {
                 SetCommitError(ERROR_NONE);
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Commit() returning true because no change has been made");
@@ -5526,7 +5526,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            this.ownerGrid.OnPropertyValueSet(ipeCur, originalValue);
+            ownerGrid.OnPropertyValueSet(ipeCur, originalValue);
 
             return true;
         }
@@ -5753,7 +5753,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                revert = (DialogResult.Cancel == this.ShowDialog(ErrorDialog));
+                revert = (DialogResult.Cancel == ShowDialog(ErrorDialog));
             }
 
             Edit.DisableMouseHook = false;
@@ -5839,7 +5839,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                revert = (DialogResult.Cancel == this.ShowDialog(ErrorDialog));
+                revert = (DialogResult.Cancel == ShowDialog(ErrorDialog));
             }
 
             Edit.DisableMouseHook = false;
@@ -5954,7 +5954,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
                         if (isScalingRequirementMet)
                         {
-                            btnDropDown.Size = new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(this.deviceDpi), RowHeight);
+                            btnDropDown.Size = new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight);
                         }
                         else
                         {
@@ -5996,7 +5996,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             bool commit = Commit();
 
-            if (commit && this.FocusInside)
+            if (commit && FocusInside)
             {
                 Focus();
             }
@@ -6025,7 +6025,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (forward)
             {
-                if (this.Focused)
+                if (Focused)
                 {
                     // we want a tab if the grid has focus and
                     // we have a button or an Edit
@@ -6070,7 +6070,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             Point mouseLoc = Cursor.Position;
 
                             // convert to window coords
-                            mouseLoc = this.PointToClient(mouseLoc);
+                            mouseLoc = PointToClient(mouseLoc);
 
                             // figure out where we are and apply the offset
                             mouseLoc = FindPosition(mouseLoc.X, mouseLoc.Y);
@@ -6297,17 +6297,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal DropDownHolder(PropertyGridView psheet)
             : base()
             {
-                this.ShowInTaskbar = false;
-                this.ControlBox = false;
-                this.MinimizeBox = false;
-                this.MaximizeBox = false;
-                this.Text = string.Empty;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                this.AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
+                ShowInTaskbar = false;
+                ControlBox = false;
+                MinimizeBox = false;
+                MaximizeBox = false;
+                Text = string.Empty;
+                FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
                 mouseHook = new MouseHook(this, this, psheet);
                 Visible = false;
                 gridView = psheet;
-                this.BackColor = gridView.BackColor;
+                BackColor = gridView.BackColor;
             }
 
             protected override CreateParams CreateParams
@@ -6333,10 +6333,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (this.createNewLink == null)
+                    if (createNewLink == null)
                     {
-                        this.createNewLink = new LinkLabel();
-                        this.createNewLink.LinkClicked += new LinkLabelLinkClickedEventHandler(OnNewLinkClicked);
+                        createNewLink = new LinkLabel();
+                        createNewLink.LinkClicked += new LinkLabelLinkClickedEventHandler(OnNewLinkClicked);
                     }
                     return createNewLink;
                 }
@@ -6375,15 +6375,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         if (resizable)
                         {
-                            this.DockPadding.Bottom = 0;
-                            this.DockPadding.Top = 0;
+                            DockPadding.Bottom = 0;
+                            DockPadding.Top = 0;
                             if (value)
                             {
-                                this.DockPadding.Top = ResizeBarSize;
+                                DockPadding.Top = ResizeBarSize;
                             }
                             else
                             {
-                                this.DockPadding.Bottom = ResizeBarSize;
+                                DockPadding.Bottom = ResizeBarSize;
                             }
                         }
                     }
@@ -6414,7 +6414,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Push a modal loop.  This seems expensive, but I think it is a
                 // better user model than returning from DropDownControl immediately.
                 //  
-                while (this.Visible)
+                while (Visible)
                 {
                     Application.DoEventsModal();
                     UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
@@ -6475,7 +6475,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private Bitmap GetSizeGripGlyph(Graphics g)
             {
-                if (this.sizeGripGlyph != null)
+                if (sizeGripGlyph != null)
                 {
                     return sizeGripGlyph;
                 }
@@ -6539,7 +6539,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return false;
                     }
-                    if (hWnd == this.Handle)
+                    if (hWnd == Handle)
                     {
                         return true;
                     }
@@ -6557,7 +6557,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (currentControl != null && !resizing)
                 {
-                    int oldWidth = this.Width;
+                    int oldWidth = Width;
                     Size newSize = new Size(2 * DropDownHolderBorder + currentControl.Width, 2 * DropDownHolderBorder + currentControl.Height);
                     if (resizable)
                     {
@@ -6566,15 +6566,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     try
                     {
                         resizing = true;
-                        this.SuspendLayout();
-                        this.Size = newSize;
+                        SuspendLayout();
+                        Size = newSize;
                     }
                     finally
                     {
                         resizing = false;
-                        this.ResumeLayout(false);
+                        ResumeLayout(false);
                     }
-                    this.Left -= (this.Width - oldWidth);
+                    Left -= (Width - oldWidth);
                 }
             }
 
@@ -6658,8 +6658,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    this.currentMoveType = MoveTypeFromPoint(e.X, e.Y);
-                    if (this.currentMoveType != MoveTypeNone)
+                    currentMoveType = MoveTypeFromPoint(e.X, e.Y);
+                    if (currentMoveType != MoveTypeNone)
                     {
                         dragStart = PointToScreen(new Point(e.X, e.Y));
                         dragBaseRect = Bounds;
@@ -6680,7 +6680,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // not moving so just set the cursor.
                 //
-                if (this.currentMoveType == MoveTypeNone)
+                if (currentMoveType == MoveTypeNone)
                 {
                     int cursorMoveType = MoveTypeFromPoint(e.X, e.Y);
                     switch (cursorMoveType)
@@ -6743,7 +6743,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         try
                         {
                             resizing = true;
-                            this.Bounds = newBounds;
+                            Bounds = newBounds;
                         }
                         finally
                         {
@@ -6775,10 +6775,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // reset the world.
                     //
-                    this.currentMoveType = MoveTypeNone;
-                    this.dragStart = Point.Empty;
-                    this.dragBaseRect = Rectangle.Empty;
-                    this.Capture = false;
+                    currentMoveType = MoveTypeNone;
+                    dragStart = Point.Empty;
+                    dragBaseRect = Rectangle.Empty;
+                    Capture = false;
                 }
             }
 
@@ -6833,7 +6833,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
 
                 this.resizable = resizable;
-                this.Font = gridView.Font;
+                Font = gridView.Font;
 
                 // check to see if we're going to be adding an InstanceCreationEditor
                 //
@@ -6843,7 +6843,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 //
                 if (currentControl != null)
                 {
-                    currentControl.Resize -= new EventHandler(this.OnCurrentControlResize);
+                    currentControl.Resize -= new EventHandler(OnCurrentControlResize);
                     Controls.Remove(currentControl);
                     currentControl = null;
                 }
@@ -6852,7 +6852,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 //
                 if (createNewLink != null && createNewLink.Parent == this)
                 {
-                    this.Controls.Remove(createNewLink);
+                    Controls.Remove(createNewLink);
                 }
 
                 // now set up the new control, top to bottom
@@ -6863,7 +6863,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     currentControl = ctl;
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:SetComponent(" + (ctl.GetType().Name) + ")");
 
-                    this.DockPadding.All = 0;
+                    DockPadding.All = 0;
 
                     // first handle the control.  If it's a listbox, make sure it's got some height
                     // to it.
@@ -6903,7 +6903,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             int linkHeight = CreateNewLink.Height;
                             using (Graphics g = gridView.CreateGraphics())
                             {
-                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(this.gridView.ownerGrid, g, editor.Text, gridView.GetBaseFont());
+                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView.ownerGrid, g, editor.Text, gridView.GetBaseFont());
                                 linkHeight = (int)sizef.Height;
                             }
 
@@ -6923,11 +6923,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                             //
                             if (resizeUp)
                             {
-                                this.DockPadding.Top = ResizeBarSize;
+                                DockPadding.Top = ResizeBarSize;
                             }
                             else
                             {
-                                this.DockPadding.Bottom = ResizeBarSize;
+                                DockPadding.Bottom = ResizeBarSize;
                             }
                         }
 
@@ -6950,7 +6950,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // hook the resize event.
                     //
-                    currentControl.Resize += new EventHandler(this.OnCurrentControlResize);
+                    currentControl.Resize += new EventHandler(OnCurrentControlResize);
                 }
                 Enabled = currentControl != null;
             }
@@ -6963,7 +6963,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetState(STATE_MODAL, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
-                    if (Visible && NativeMethods.Util.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !this.OwnsWindow(activatedWindow))
+                    if (Visible && NativeMethods.Util.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         gridView.CloseDropDownInternal(false);
                         return;
@@ -7482,7 +7482,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 set
                 {
-                    this.filter = value;
+                    filter = value;
                 }
             }
 
@@ -7540,7 +7540,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     mouseHook.HookMouseDown = value;
                     if (value)
                     {
-                        this.Focus();
+                        Focus();
                     }
                 }
             }
@@ -7586,8 +7586,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (IsInputChar(keyChar))
                 {
-                    this.Focus();
-                    this.SelectAll();
+                    Focus();
+                    SelectAll();
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
                 }
             }
@@ -7665,13 +7665,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnMouseEnter(e);
 
-                if (!this.Focused)
+                if (!Focused)
                 {
                     Graphics g = CreateGraphics();
                     if (psheet.SelectedGridEntry != null &&
-                        ClientRectangle.Width <= psheet.SelectedGridEntry.GetValueTextWidth(this.Text, g, this.Font))
+                        ClientRectangle.Width <= psheet.SelectedGridEntry.GetValueTextWidth(Text, g, Font))
                     {
-                        psheet.ToolTip.ToolTip = this.PasswordProtect ? "" : this.Text;
+                        psheet.ToolTip.ToolTip = PasswordProtect ? "" : Text;
                     }
                     g.Dispose();
                 }
@@ -7793,7 +7793,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:Visible(" + (value.ToString()) + ")");
                 // make sure we dont' have the mouse captured if
                 // we're going invisible
-                if (value == false && this.HookMouseDown)
+                if (value == false && HookMouseDown)
                 {
                     mouseHook.HookMouseDown = false;
                 }
@@ -7881,7 +7881,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 }
                             }
                         }*/
-                        if (this.ReadOnly)
+                        if (ReadOnly)
                         {
                             return;
                         }
@@ -7890,7 +7890,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Interop.WindowMessages.WM_GETDLGCODE:
 
                         m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);
-                        if (psheet.NeedsCommit || this.WantsTab((ModifierKeys & Keys.Shift) == 0))
+                        if (psheet.NeedsCommit || WantsTab((ModifierKeys & Keys.Shift) == 0))
                         {
                             m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS | NativeMethods.DLGC_WANTTAB);
                         }
@@ -7917,7 +7917,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 public GridViewEditAccessibleObject(GridViewEdit owner) : base(owner)
                 {
-                    this.propertyGridView = owner.psheet;
+                    propertyGridView = owner.psheet;
                 }
 
                 public override AccessibleStates State
@@ -7925,7 +7925,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     get
                     {
                         AccessibleStates states = base.State;
-                        if (this.IsReadOnly)
+                        if (IsReadOnly)
                         {
                             states |= AccessibleStates.ReadOnly;
                         }
@@ -7980,7 +7980,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
                     {
-                        return !this.IsReadOnly;
+                        return !IsReadOnly;
                     }
                     else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId)
                     {
@@ -8041,7 +8041,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     get
                     {
-                        PropertyDescriptorGridEntry propertyDescriptorGridEntry = this.propertyGridView.SelectedGridEntry as PropertyDescriptorGridEntry;
+                        PropertyDescriptorGridEntry propertyDescriptorGridEntry = propertyGridView.SelectedGridEntry as PropertyDescriptorGridEntry;
                         return propertyDescriptorGridEntry == null || propertyDescriptorGridEntry.IsPropertyReadOnly;
                     }
                 }
@@ -8256,7 +8256,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // if this isn't our process, unhook the mouse.
                     if (pid != thisProcessID)
                     {
-                        this.HookMouseDown = false;
+                        HookMouseDown = false;
                         return false;
                     }
 
@@ -8309,7 +8309,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 public MouseHookObject(MouseHook parent)
                 {
-                    this.reference = new WeakReference(parent, false);
+                    reference = new WeakReference(parent, false);
                 }
 
                 public virtual IntPtr Callback(int nCode, IntPtr wparam, IntPtr lparam)

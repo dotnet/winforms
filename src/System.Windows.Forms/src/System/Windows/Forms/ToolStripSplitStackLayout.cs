@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 #endif
         internal ToolStripSplitStackLayout(ToolStrip owner)
         {
-            this.toolStrip = owner;
+            toolStrip = owner;
         }
 
         // this is the index we use to send items to the overflow
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStrip toolStrip = this.ToolStrip;
+                ToolStrip toolStrip = ToolStrip;
                 if (!toolStrip.CanOverflow)
                 {
                     return Size.Empty;
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
         {
             ResetItemPlacements();
 
-            ToolStrip toolStrip = this.ToolStrip;
+            ToolStrip toolStrip = ToolStrip;
             int currentWidth = 0; //toolStrip.Padding.Horizontal;
 
             if (ToolStrip.CanOverflow)
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
                     if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                     {
                         // since we havent parented the item yet - the auto size wont have reset the size yet.
-                        Size itemSize = item.AutoSize ? item.GetPreferredSize(this.displayRectangle.Size) : item.Size;
+                        Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
 
                         currentWidth += itemSize.Width + item.Margin.Horizontal;
 
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
         {
             ResetItemPlacements();
 
-            ToolStrip toolStrip = this.ToolStrip;
+            ToolStrip toolStrip = ToolStrip;
             int currentHeight = 0; //toolStrip.Padding.Vertical;
 
             if (ToolStrip.CanOverflow)
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
             }
 
             InvalidateLayout();
-            this.displayRectangle = toolStrip.DisplayRectangle;
+            displayRectangle = toolStrip.DisplayRectangle;
 
             // pick a location that's outside of the displayed region to send
             // items that will potentially clobber/overlay others.
@@ -643,7 +643,7 @@ namespace System.Windows.Forms
 
         private void PlaceItems()
         {
-            ToolStrip toolStrip = this.ToolStrip;
+            ToolStrip toolStrip = ToolStrip;
 
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
@@ -667,7 +667,7 @@ namespace System.Windows.Forms
 
         private void ResetItemPlacements()
         {
-            ToolStrip toolStrip = this.ToolStrip;
+            ToolStrip toolStrip = ToolStrip;
 
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
 
                     // send the item to the overflow.
                     item.SetPlacement(ToolStripItemPlacement.Overflow);
-                    if (this.OverflowRequired == false)
+                    if (OverflowRequired == false)
                     {
                         // this is the first item we're sending down.
                         // we now need to account for the width or height of the overflow button      
@@ -741,10 +741,10 @@ namespace System.Windows.Forms
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Turns out we now need an overflow button, space needed now: {0}", spaceNeeded.ToString(CultureInfo.InvariantCulture))); }
 #endif                        
-                        this.OverflowRequired = true;
+                        OverflowRequired = true;
                     }
 
-                    this.OverflowSpace += (horizontal) ? itemSize.Width + itemMargin.Horizontal : itemSize.Height + itemMargin.Vertical;
+                    OverflowSpace += (horizontal) ? itemSize.Width + itemMargin.Horizontal : itemSize.Height + itemMargin.Vertical;
                 }
 
                 if (freedSpace > spaceNeeded)

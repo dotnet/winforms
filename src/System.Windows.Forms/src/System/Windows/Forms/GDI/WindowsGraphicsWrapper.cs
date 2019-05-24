@@ -57,15 +57,15 @@ namespace System.Windows.Forms
                 // to be reapplied to the DC wrapped by the WindowsGraphics.
                 if (properties != ApplyGraphicsProperties.None)
                 {
-                    this.wg = WindowsGraphics.FromGraphics(idc as Graphics, properties);
+                    wg = WindowsGraphics.FromGraphics(idc as Graphics, properties);
                 }
             }
             else
             {
                 // If passed-in IDeviceContext object is a WindowsGraphics we can use it directly.
-                this.wg = idc as WindowsGraphics;
+                wg = idc as WindowsGraphics;
 
-                if (this.wg != null)
+                if (wg != null)
                 {
                     // In this case we cache the idc to compare it against the wg in the Dispose method to avoid
                     // disposing of the wg.
@@ -73,14 +73,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (this.wg == null)
+            if (wg == null)
             {
                 // The IDeviceContext object is not a WindowsGraphics, or it is a custom IDeviceContext, or
                 // it is a Graphics object but we did not need to re-apply Graphics propertiesto the hdc.  
                 // So create the WindowsGraphics from the hdc directly. 
                 // Cache the IDC so the hdc can be released on dispose.
                 this.idc = idc;
-                this.wg = WindowsGraphics.FromHdc(idc.GetHdc());
+                wg = WindowsGraphics.FromHdc(idc.GetHdc());
             }
 
             // Set text padding on the WindowsGraphics (if any).
@@ -99,8 +99,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(this.wg != null, "WindowsGraphics is null.");
-                return this.wg;
+                Debug.Assert(wg != null, "WindowsGraphics is null.");
+                return wg;
             }
         }
 
@@ -119,23 +119,23 @@ namespace System.Windows.Forms
         {
             Debug.Assert(disposing, "We should always dispose of this guy and not let GC do it for us!");
 
-            if (this.wg != null)
+            if (wg != null)
             {
                 // We need to dispose of the WindowsGraphics if it is created by this class only, if the IDeviceContext is 
                 // a WindowsGraphics object we must not dispose of it since it is owned by the caller.
-                if (this.wg != this.idc)
+                if (wg != idc)
                 {
                     // resets the hdc and disposes of the internal Graphics (if inititialized from one) which releases the hdc.
-                    this.wg.Dispose();
+                    wg.Dispose();
 
-                    if (this.idc != null) // not initialized from a Graphics idc.   
+                    if (idc != null) // not initialized from a Graphics idc.   
                     {
-                        this.idc.ReleaseHdc();
+                        idc.ReleaseHdc();
                     }
                 }
 
-                this.idc = null;
-                this.wg = null;
+                idc = null;
+                wg = null;
             }
         }
     }

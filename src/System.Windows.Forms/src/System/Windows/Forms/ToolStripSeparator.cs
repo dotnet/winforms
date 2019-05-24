@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripSeparator()
         {
-            this.ForeColor = SystemColors.ControlDark;
+            ForeColor = SystemColors.ControlDark;
         }
 
         [
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStrip parent = this.ParentInternal;
+                ToolStrip parent = ParentInternal;
 
                 if (parent == null)
                 {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            ToolStrip parent = this.ParentInternal;
+            ToolStrip parent = ParentInternal;
 
             if (parent == null)
             {
@@ -484,9 +484,9 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
-            if (this.Owner != null && this.ParentInternal != null)
+            if (Owner != null && ParentInternal != null)
             {
-                this.Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
+                Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }
         }
 
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
         internal protected override void SetBounds(Rectangle rect)
         {
 
-            ToolStripDropDownMenu dropDownMenu = this.Owner as ToolStripDropDownMenu;
+            ToolStripDropDownMenu dropDownMenu = Owner as ToolStripDropDownMenu;
             if (dropDownMenu != null)
             {
 

@@ -76,7 +76,7 @@ namespace System.Windows.Forms
 
         public DataGridViewComboBoxCell()
         {
-            this.flags = DATAGRIDVIEWCOMBOBOXCELL_autoComplete;
+            flags = DATAGRIDVIEWCOMBOBOXCELL_autoComplete;
             if (!isScalingInitialized)
             {
                 if (DpiHelper.IsScalingRequired)
@@ -109,32 +109,32 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_autoComplete) != 0x00);
+                return ((flags & DATAGRIDVIEWCOMBOBOXCELL_autoComplete) != 0x00);
             }
             set
             {
                 //CheckNoSharedCell();
-                if (value != this.AutoComplete)
+                if (value != AutoComplete)
                 {
                     if (value)
                     {
-                        this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_autoComplete;
+                        flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_autoComplete;
                     }
                     else
                     {
-                        this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_autoComplete);
+                        flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_autoComplete);
                     }
-                    if (OwnsEditingComboBox(this.RowIndex))
+                    if (OwnsEditingComboBox(RowIndex))
                     {
                         if (value)
                         {
-                            this.EditingComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-                            this.EditingComboBox.AutoCompleteMode = AutoCompleteMode.Append;
+                            EditingComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+                            EditingComboBox.AutoCompleteMode = AutoCompleteMode.Append;
                         }
                         else
                         {
-                            this.EditingComboBox.AutoCompleteMode = AutoCompleteMode.None;
-                            this.EditingComboBox.AutoCompleteSource = AutoCompleteSource.None;
+                            EditingComboBox.AutoCompleteMode = AutoCompleteMode.None;
+                            EditingComboBox.AutoCompleteSource = AutoCompleteSource.None;
                         }
                     }
                 }
@@ -145,13 +145,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetDataManager(this.DataGridView);
+                return GetDataManager(DataGridView);
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropComboBoxCellDataManager))
+                if (value != null || Properties.ContainsObject(PropComboBoxCellDataManager))
                 {
-                    this.Properties.SetObject(PropComboBoxCellDataManager, value);
+                    Properties.SetObject(PropComboBoxCellDataManager, value);
                 }
             }
         }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetObject(PropComboBoxCellDataSource);
+                return Properties.GetObject(PropComboBoxCellDataSource);
             }
             set
             {
@@ -170,24 +170,24 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.BadDataSourceForComplexBinding);
                 }
-                if (this.DataSource != value)
+                if (DataSource != value)
                 {
                     // Invalidate the currency manager
-                    this.DataManager = null;
+                    DataManager = null;
 
                     UnwireDataSource();
 
-                    this.Properties.SetObject(PropComboBoxCellDataSource, value);
+                    Properties.SetObject(PropComboBoxCellDataSource, value);
 
                     WireDataSource(value);
 
                     // Invalidate existing Items collection
-                    this.CreateItemsFromDataSource = true;
+                    CreateItemsFromDataSource = true;
                     cachedDropDownWidth = -1;
 
                     try
                     {
-                        InitializeDisplayMemberPropertyDescriptor(this.DisplayMember);
+                        InitializeDisplayMemberPropertyDescriptor(DisplayMember);
                     }
                     catch (Exception exception)
                     {
@@ -195,13 +195,13 @@ namespace System.Windows.Forms
                         {
                             throw;
                         }
-                        Debug.Assert(this.DisplayMember != null && this.DisplayMember.Length > 0);
-                        this.DisplayMemberInternal = null;
+                        Debug.Assert(DisplayMember != null && DisplayMember.Length > 0);
+                        DisplayMemberInternal = null;
                     }
 
                     try
                     {
-                        InitializeValueMemberPropertyDescriptor(this.ValueMember);
+                        InitializeValueMemberPropertyDescriptor(ValueMember);
                     }
                     catch (Exception exception)
                     {
@@ -209,19 +209,19 @@ namespace System.Windows.Forms
                         {
                             throw;
                         }
-                        Debug.Assert(this.ValueMember != null && this.ValueMember.Length > 0);
-                        this.ValueMemberInternal = null;
+                        Debug.Assert(ValueMember != null && ValueMember.Length > 0);
+                        ValueMemberInternal = null;
                     }
 
                     if (value == null)
                     {
-                        this.DisplayMemberInternal = null;
-                        this.ValueMemberInternal = null;
+                        DisplayMemberInternal = null;
+                        ValueMemberInternal = null;
                     }
 
-                    if (OwnsEditingComboBox(this.RowIndex))
+                    if (OwnsEditingComboBox(RowIndex))
                     {
-                        this.EditingComboBox.DataSource = value;
+                        EditingComboBox.DataSource = value;
                         InitializeComboBoxText();
                     }
                     else
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object displayMember = this.Properties.GetObject(PropComboBoxCellDisplayMember);
+                object displayMember = Properties.GetObject(PropComboBoxCellDisplayMember);
                 if (displayMember == null)
                 {
                     return string.Empty;
@@ -250,10 +250,10 @@ namespace System.Windows.Forms
             set
             {
                 //CheckNoSharedCell();
-                this.DisplayMemberInternal = value;
-                if (OwnsEditingComboBox(this.RowIndex))
+                DisplayMemberInternal = value;
+                if (OwnsEditingComboBox(RowIndex))
                 {
-                    this.EditingComboBox.DisplayMember = value;
+                    EditingComboBox.DisplayMember = value;
                     InitializeComboBoxText();
                 }
                 else
@@ -268,9 +268,9 @@ namespace System.Windows.Forms
             set
             {
                 InitializeDisplayMemberPropertyDescriptor(value);
-                if ((value != null && value.Length > 0) || this.Properties.ContainsObject(PropComboBoxCellDisplayMember))
+                if ((value != null && value.Length > 0) || Properties.ContainsObject(PropComboBoxCellDisplayMember))
                 {
-                    this.Properties.SetObject(PropComboBoxCellDisplayMember, value);
+                    Properties.SetObject(PropComboBoxCellDisplayMember, value);
                 }
             }
         }
@@ -279,13 +279,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (PropertyDescriptor)this.Properties.GetObject(PropComboBoxCellDisplayMemberProp);
+                return (PropertyDescriptor)Properties.GetObject(PropComboBoxCellDisplayMemberProp);
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropComboBoxCellDisplayMemberProp))
+                if (value != null || Properties.ContainsObject(PropComboBoxCellDisplayMemberProp))
                 {
-                    this.Properties.SetObject(PropComboBoxCellDisplayMemberProp, value);
+                    Properties.SetObject(PropComboBoxCellDisplayMemberProp, value);
                 }
             }
         }
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int displayStyle = this.Properties.GetInteger(PropComboBoxCellDisplayStyle, out found);
+                int displayStyle = Properties.GetInteger(PropComboBoxCellDisplayStyle, out found);
                 if (found)
                 {
                     return (DataGridViewComboBoxDisplayStyle)displayStyle;
@@ -310,18 +310,18 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewComboBoxDisplayStyle));
                 }
-                if (value != this.DisplayStyle)
+                if (value != DisplayStyle)
                 {
-                    this.Properties.SetInteger(PropComboBoxCellDisplayStyle, (int)value);
-                    if (this.DataGridView != null)
+                    Properties.SetInteger(PropComboBoxCellDisplayStyle, (int)value);
+                    if (DataGridView != null)
                     {
-                        if (this.RowIndex != -1)
+                        if (RowIndex != -1)
                         {
-                            this.DataGridView.InvalidateCell(this);
+                            DataGridView.InvalidateCell(this);
                         }
                         else
                         {
-                            this.DataGridView.InvalidateColumnInternal(this.ColumnIndex);
+                            DataGridView.InvalidateColumnInternal(ColumnIndex);
                         }
                     }
                 }
@@ -333,9 +333,9 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(value >= DataGridViewComboBoxDisplayStyle.ComboBox && value <= DataGridViewComboBoxDisplayStyle.Nothing);
-                if (value != this.DisplayStyle)
+                if (value != DisplayStyle)
                 {
-                    this.Properties.SetInteger(PropComboBoxCellDisplayStyle, (int)value);
+                    Properties.SetInteger(PropComboBoxCellDisplayStyle, (int)value);
                 }
             }
         }
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int displayStyleForCurrentCellOnly = this.Properties.GetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, out found);
+                int displayStyleForCurrentCellOnly = Properties.GetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, out found);
                 if (found)
                 {
                     return displayStyleForCurrentCellOnly == 0 ? false : true;
@@ -355,18 +355,18 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != this.DisplayStyleForCurrentCellOnly)
+                if (value != DisplayStyleForCurrentCellOnly)
                 {
-                    this.Properties.SetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, value ? 1 : 0);
-                    if (this.DataGridView != null)
+                    Properties.SetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, value ? 1 : 0);
+                    if (DataGridView != null)
                     {
-                        if (this.RowIndex != -1)
+                        if (RowIndex != -1)
                         {
-                            this.DataGridView.InvalidateCell(this);
+                            DataGridView.InvalidateCell(this);
                         }
                         else
                         {
-                            this.DataGridView.InvalidateColumnInternal(this.ColumnIndex);
+                            DataGridView.InvalidateColumnInternal(ColumnIndex);
                         }
                     }
                 }
@@ -377,9 +377,9 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (value != this.DisplayStyleForCurrentCellOnly)
+                if (value != DisplayStyleForCurrentCellOnly)
                 {
-                    this.Properties.SetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, value ? 1 : 0);
+                    Properties.SetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, value ? 1 : 0);
                 }
             }
         }
@@ -388,13 +388,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.DisplayMemberProperty != null)
+                if (DisplayMemberProperty != null)
                 {
-                    return this.DisplayMemberProperty.PropertyType;
+                    return DisplayMemberProperty.PropertyType;
                 }
-                else if (this.ValueMemberProperty != null)
+                else if (ValueMemberProperty != null)
                 {
-                    return this.ValueMemberProperty.PropertyType;
+                    return ValueMemberProperty.PropertyType;
                 }
                 else
                 {
@@ -407,13 +407,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.DataGridView != null)
+                if (DataGridView != null)
                 {
-                    return this.DataGridView.GetCachedTypeConverter(this.DisplayType);
+                    return DataGridView.GetCachedTypeConverter(DisplayType);
                 }
                 else
                 {
-                    return TypeDescriptor.GetConverter(this.DisplayType);
+                    return TypeDescriptor.GetConverter(DisplayType);
                 }
             }
         }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int dropDownWidth = this.Properties.GetInteger(PropComboBoxCellDropDownWidth, out found);
+                int dropDownWidth = Properties.GetInteger(PropComboBoxCellDropDownWidth, out found);
                 return found ? dropDownWidth : 1;
             }
             set
@@ -434,10 +434,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
                 }
-                this.Properties.SetInteger(PropComboBoxCellDropDownWidth, (int)value);
-                if (OwnsEditingComboBox(this.RowIndex))
+                Properties.SetInteger(PropComboBoxCellDropDownWidth, (int)value);
+                if (OwnsEditingComboBox(RowIndex))
                 {
-                    this.EditingComboBox.DropDownWidth = value;
+                    EditingComboBox.DropDownWidth = value;
                 }
             }
         }
@@ -446,13 +446,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewComboBoxEditingControl)this.Properties.GetObject(PropComboBoxCellEditingComboBox);
+                return (DataGridViewComboBoxEditingControl)Properties.GetObject(PropComboBoxCellEditingComboBox);
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropComboBoxCellEditingComboBox))
+                if (value != null || Properties.ContainsObject(PropComboBoxCellEditingComboBox))
                 {
-                    this.Properties.SetObject(PropComboBoxCellEditingComboBox, value);
+                    Properties.SetObject(PropComboBoxCellEditingComboBox, value);
                 }
             }
         }
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int flatStyle = this.Properties.GetInteger(PropComboBoxCellFlatStyle, out found);
+                int flatStyle = Properties.GetInteger(PropComboBoxCellFlatStyle, out found);
                 if (found)
                 {
                     return (FlatStyle)flatStyle;
@@ -485,9 +485,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
-                if (value != this.FlatStyle)
+                if (value != FlatStyle)
                 {
-                    this.Properties.SetInteger(PropComboBoxCellFlatStyle, (int)value);
+                    Properties.SetInteger(PropComboBoxCellFlatStyle, (int)value);
                     OnCommonChange();
                 }
             }
@@ -498,9 +498,9 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(value >= FlatStyle.Flat && value <= FlatStyle.System);
-                if (value != this.FlatStyle)
+                if (value != FlatStyle)
                 {
-                    this.Properties.SetInteger(PropComboBoxCellFlatStyle, (int)value);
+                    Properties.SetInteger(PropComboBoxCellFlatStyle, (int)value);
                 }
             }
         }
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.ContainsObject(PropComboBoxCellItems) && this.Properties.GetObject(PropComboBoxCellItems) != null;
+                return Properties.ContainsObject(PropComboBoxCellItems) && Properties.GetObject(PropComboBoxCellItems) != null;
             }
         }
 
@@ -526,7 +526,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetItems(this.DataGridView);
+                return GetItems(DataGridView);
             }
         }
 
@@ -536,7 +536,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int maxDropDownItems = this.Properties.GetInteger(PropComboBoxCellMaxDropDownItems, out found);
+                int maxDropDownItems = Properties.GetInteger(PropComboBoxCellMaxDropDownItems, out found);
                 if (found)
                 {
                     return maxDropDownItems;
@@ -550,10 +550,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
                 }
-                this.Properties.SetInteger(PropComboBoxCellMaxDropDownItems, (int)value);
-                if (OwnsEditingComboBox(this.RowIndex))
+                Properties.SetInteger(PropComboBoxCellMaxDropDownItems, (int)value);
+                if (OwnsEditingComboBox(RowIndex))
                 {
-                    this.EditingComboBox.MaxDropDownItems = value;
+                    EditingComboBox.MaxDropDownItems = value;
                 }
             }
         }
@@ -562,8 +562,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool paintFlat = this.FlatStyle == FlatStyle.Flat || this.FlatStyle == FlatStyle.Popup;
-                return !paintFlat && this.DataGridView.ApplyVisualStylesToInnerCells;
+                bool paintFlat = FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup;
+                return !paintFlat && DataGridView.ApplyVisualStylesToInnerCells;
             }
         }
 
@@ -580,32 +580,32 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_sorted) != 0x00);
+                return ((flags & DATAGRIDVIEWCOMBOBOXCELL_sorted) != 0x00);
             }
             set
             {
                 //CheckNoSharedCell();
-                if (value != this.Sorted)
+                if (value != Sorted)
                 {
                     if (value)
                     {
-                        if (this.DataSource == null)
+                        if (DataSource == null)
                         {
-                            this.Items.SortInternal();
+                            Items.SortInternal();
                         }
                         else
                         {
                             throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                         }
-                        this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_sorted;
+                        flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_sorted;
                     }
                     else
                     {
-                        this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_sorted);
+                        flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_sorted);
                     }
-                    if (OwnsEditingComboBox(this.RowIndex))
+                    if (OwnsEditingComboBox(RowIndex))
                     {
-                        this.EditingComboBox.Sorted = value;
+                        EditingComboBox.Sorted = value;
                     }
                 }
             }
@@ -615,11 +615,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewComboBoxColumn)this.Properties.GetObject(PropComboBoxCellColumnTemplate);
+                return (DataGridViewComboBoxColumn)Properties.GetObject(PropComboBoxCellColumnTemplate);
             }
             set
             {
-                this.Properties.SetObject(PropComboBoxCellColumnTemplate, value);
+                Properties.SetObject(PropComboBoxCellColumnTemplate, value);
             }
         }
 
@@ -628,7 +628,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object valueMember = this.Properties.GetObject(PropComboBoxCellValueMember);
+                object valueMember = Properties.GetObject(PropComboBoxCellValueMember);
                 if (valueMember == null)
                 {
                     return string.Empty;
@@ -641,10 +641,10 @@ namespace System.Windows.Forms
             set
             {
                 //CheckNoSharedCell();
-                this.ValueMemberInternal = value;
-                if (OwnsEditingComboBox(this.RowIndex))
+                ValueMemberInternal = value;
+                if (OwnsEditingComboBox(RowIndex))
                 {
-                    this.EditingComboBox.ValueMember = value;
+                    EditingComboBox.ValueMember = value;
                     InitializeComboBoxText();
                 }
                 else
@@ -659,9 +659,9 @@ namespace System.Windows.Forms
             set
             {
                 InitializeValueMemberPropertyDescriptor(value);
-                if ((value != null && value.Length > 0) || this.Properties.ContainsObject(PropComboBoxCellValueMember))
+                if ((value != null && value.Length > 0) || Properties.ContainsObject(PropComboBoxCellValueMember))
                 {
-                    this.Properties.SetObject(PropComboBoxCellValueMember, value);
+                    Properties.SetObject(PropComboBoxCellValueMember, value);
                 }
             }
         }
@@ -670,13 +670,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (PropertyDescriptor)this.Properties.GetObject(PropComboBoxCellValueMemberProp);
+                return (PropertyDescriptor)Properties.GetObject(PropComboBoxCellValueMemberProp);
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropComboBoxCellValueMemberProp))
+                if (value != null || Properties.ContainsObject(PropComboBoxCellValueMemberProp))
                 {
-                    this.Properties.SetObject(PropComboBoxCellValueMemberProp, value);
+                    Properties.SetObject(PropComboBoxCellValueMemberProp, value);
                 }
             }
         }
@@ -686,13 +686,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ValueMemberProperty != null)
+                if (ValueMemberProperty != null)
                 {
-                    return this.ValueMemberProperty.PropertyType;
+                    return ValueMemberProperty.PropertyType;
                 }
-                else if (this.DisplayMemberProperty != null)
+                else if (DisplayMemberProperty != null)
                 {
-                    return this.DisplayMemberProperty.PropertyType;
+                    return DisplayMemberProperty.PropertyType;
                 }
                 else
                 {
@@ -709,14 +709,14 @@ namespace System.Windows.Forms
         // Called when the row that owns the editing control gets unshared.
         internal override void CacheEditingControl()
         {
-            this.EditingComboBox = this.DataGridView.EditingControl as DataGridViewComboBoxEditingControl;
+            EditingComboBox = DataGridView.EditingControl as DataGridViewComboBoxEditingControl;
         }
 
         private void CheckDropDownList(int x, int y, int rowIndex)
         {
-            Debug.Assert(this.EditingComboBox != null);
+            Debug.Assert(EditingComboBox != null);
             DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
-            dgvabsEffective = AdjustCellBorderStyle(this.DataGridView.AdvancedCellBorderStyle,
+            dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle,
                 dgvabsPlaceholder,
                 false /*singleVerticalBorderAdded*/,
                 false /*singleHorizontalBorderAdded*/,
@@ -744,12 +744,12 @@ namespace System.Windows.Forms
                 y >= borderAndPaddingWidths.Y + 1 &&
                 y <= borderAndPaddingWidths.Y + 1 + dropHeight)
             {
-                if (this.DataGridView.RightToLeftInternal)
+                if (DataGridView.RightToLeftInternal)
                 {
                     if (x >= borderAndPaddingWidths.X + 1 &&
                         x <= borderAndPaddingWidths.X + dropWidth + 1)
                     {
-                        this.EditingComboBox.DroppedDown = true;
+                        EditingComboBox.DroppedDown = true;
                     }
                 }
                 else
@@ -757,7 +757,7 @@ namespace System.Windows.Forms
                     if (x >= size.Width - borderAndPaddingWidths.Width - dropWidth - 1 &&
                         x <= size.Width - borderAndPaddingWidths.Width - 1)
                     {
-                        this.EditingComboBox.DroppedDown = true;
+                        EditingComboBox.DroppedDown = true;
                     }
                 }
             }
@@ -765,7 +765,7 @@ namespace System.Windows.Forms
 
         private void CheckNoDataSource()
         {
-            if (this.DataSource != null)
+            if (DataSource != null)
             {
                 throw new ArgumentException(SR.DataSourceLocksItems);
             }
@@ -781,28 +781,28 @@ namespace System.Windows.Forms
 
         private void ComboBox_DropDown(object sender, EventArgs e)
         {
-            Debug.Assert(this.DataGridView != null);
-            Debug.Assert(this.EditingComboBox != null);
+            Debug.Assert(DataGridView != null);
+            Debug.Assert(EditingComboBox != null);
 
-            ComboBox comboBox = this.EditingComboBox;
-            DataGridViewComboBoxColumn owningComboBoxColumn = this.OwningColumn as DataGridViewComboBoxColumn;
+            ComboBox comboBox = EditingComboBox;
+            DataGridViewComboBoxColumn owningComboBoxColumn = OwningColumn as DataGridViewComboBoxColumn;
             if (owningComboBoxColumn != null)
             {
-                DataGridViewAutoSizeColumnMode autoSizeColumnMode = owningComboBoxColumn.GetInheritedAutoSizeMode(this.DataGridView);
+                DataGridViewAutoSizeColumnMode autoSizeColumnMode = owningComboBoxColumn.GetInheritedAutoSizeMode(DataGridView);
                 if (autoSizeColumnMode != DataGridViewAutoSizeColumnMode.ColumnHeader &&
                     autoSizeColumnMode != DataGridViewAutoSizeColumnMode.Fill &&
                     autoSizeColumnMode != DataGridViewAutoSizeColumnMode.None)
                 {
-                    if (this.DropDownWidth == 1)
+                    if (DropDownWidth == 1)
                     {
                         // Owning combobox column is autosized based on inner cells.
                         // Resize the dropdown list based on the max width of the items.
                         if (cachedDropDownWidth == -1)
                         {
                             int maxPreferredWidth = -1;
-                            if ((this.HasItems || this.CreateItemsFromDataSource) && this.Items.Count > 0)
+                            if ((HasItems || CreateItemsFromDataSource) && Items.Count > 0)
                             {
-                                foreach (object item in this.Items)
+                                foreach (object item in Items)
                                 {
                                     Size preferredSize = TextRenderer.MeasureText(comboBox.GetItemText(item), comboBox.Font);
                                     if (preferredSize.Width > maxPreferredWidth)
@@ -822,9 +822,9 @@ namespace System.Windows.Forms
                     // The dropdown width may have been previously adjusted to the items because of the owning column autosized.
                     // The dropdown width needs to be realigned to the DropDownWidth property value.
                     int dropDownWidth = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(comboBox, comboBox.Handle), NativeMethods.CB_GETDROPPEDWIDTH, 0, 0));
-                    if (dropDownWidth != this.DropDownWidth)
+                    if (dropDownWidth != DropDownWidth)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(comboBox, comboBox.Handle), NativeMethods.CB_SETDROPPEDWIDTH, this.DropDownWidth, 0);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(comboBox, comboBox.Handle), NativeMethods.CB_SETDROPPEDWIDTH, DropDownWidth, 0);
                     }
                 }
             }
@@ -833,7 +833,7 @@ namespace System.Windows.Forms
         public override object Clone()
         {
             DataGridViewComboBoxCell dataGridViewCell;
-            Type thisType = this.GetType();
+            Type thisType = GetType();
 
             if (thisType == cellType) //performance improvement
             {
@@ -845,21 +845,21 @@ namespace System.Windows.Forms
                 dataGridViewCell = (DataGridViewComboBoxCell)System.Activator.CreateInstance(thisType);
             }
             base.CloneInternal(dataGridViewCell);
-            dataGridViewCell.DropDownWidth = this.DropDownWidth;
-            dataGridViewCell.MaxDropDownItems = this.MaxDropDownItems;
+            dataGridViewCell.DropDownWidth = DropDownWidth;
+            dataGridViewCell.MaxDropDownItems = MaxDropDownItems;
             dataGridViewCell.CreateItemsFromDataSource = false;
-            dataGridViewCell.DataSource = this.DataSource;
-            dataGridViewCell.DisplayMember = this.DisplayMember;
-            dataGridViewCell.ValueMember = this.ValueMember;
-            if (this.HasItems && this.DataSource == null && this.Items.Count > 0)
+            dataGridViewCell.DataSource = DataSource;
+            dataGridViewCell.DisplayMember = DisplayMember;
+            dataGridViewCell.ValueMember = ValueMember;
+            if (HasItems && DataSource == null && Items.Count > 0)
             {
-                dataGridViewCell.Items.AddRangeInternal(this.Items.InnerArray.ToArray());
+                dataGridViewCell.Items.AddRangeInternal(Items.InnerArray.ToArray());
             }
-            dataGridViewCell.AutoComplete = this.AutoComplete;
-            dataGridViewCell.Sorted = this.Sorted;
-            dataGridViewCell.FlatStyleInternal = this.FlatStyle;
-            dataGridViewCell.DisplayStyleInternal = this.DisplayStyle;
-            dataGridViewCell.DisplayStyleForCurrentCellOnlyInternal = this.DisplayStyleForCurrentCellOnly;
+            dataGridViewCell.AutoComplete = AutoComplete;
+            dataGridViewCell.Sorted = Sorted;
+            dataGridViewCell.FlatStyleInternal = FlatStyle;
+            dataGridViewCell.DisplayStyleInternal = DisplayStyle;
+            dataGridViewCell.DisplayStyleForCurrentCellOnlyInternal = DisplayStyleForCurrentCellOnly;
             return dataGridViewCell;
         }
 
@@ -867,34 +867,34 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource) != 0x00);
+                return ((flags & DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource) != 0x00);
             }
             set
             {
                 if (value)
                 {
-                    this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource;
+                    flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource;
                 }
                 else
                 {
-                    this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource);
+                    flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource);
                 }
             }
         }
 
         private void DataSource_Disposed(object sender, EventArgs e)
         {
-            Debug.Assert(sender == this.DataSource, "How can we get dispose notification from anything other than our DataSource?");
-            this.DataSource = null;
+            Debug.Assert(sender == DataSource, "How can we get dispose notification from anything other than our DataSource?");
+            DataSource = null;
         }
 
         private void DataSource_Initialized(object sender, EventArgs e)
         {
-            Debug.Assert(sender == this.DataSource);
-            Debug.Assert(this.DataSource is ISupportInitializeNotification);
-            Debug.Assert((this.flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00);
+            Debug.Assert(sender == DataSource);
+            Debug.Assert(DataSource is ISupportInitializeNotification);
+            Debug.Assert((flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00);
 
-            ISupportInitializeNotification dsInit = this.DataSource as ISupportInitializeNotification;
+            ISupportInitializeNotification dsInit = DataSource as ISupportInitializeNotification;
             // Unhook the Initialized event.
             if (dsInit != null)
             {
@@ -902,29 +902,29 @@ namespace System.Windows.Forms
             }
 
             // The wait is over: DataSource is initialized.
-            this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp);
+            flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp);
 
             // Check the DisplayMember and ValueMember values - will throw if values don't match existing fields.
-            InitializeDisplayMemberPropertyDescriptor(this.DisplayMember);
-            InitializeValueMemberPropertyDescriptor(this.ValueMember);
+            InitializeDisplayMemberPropertyDescriptor(DisplayMember);
+            InitializeValueMemberPropertyDescriptor(ValueMember);
         }
 
         public override void DetachEditingControl()
         {
-            DataGridView dgv = this.DataGridView;
+            DataGridView dgv = DataGridView;
             if (dgv == null || dgv.EditingControl == null)
             {
                 throw new InvalidOperationException();
             }
 
-            if (this.EditingComboBox != null &&
-                (this.flags & DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp) != 0x00)
+            if (EditingComboBox != null &&
+                (flags & DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp) != 0x00)
             {
-                this.EditingComboBox.DropDown -= new EventHandler(ComboBox_DropDown);
-                this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp);
+                EditingComboBox.DropDown -= new EventHandler(ComboBox_DropDown);
+                flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp);
             }
 
-            this.EditingComboBox = null;
+            EditingComboBox = null;
             base.DetachEditingControl();
         }
 
@@ -935,7 +935,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (this.DataGridView == null || rowIndex < 0 || this.OwningColumn == null)
+            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
             {
                 return Rectangle.Empty;
             }
@@ -990,22 +990,22 @@ namespace System.Windows.Forms
 
         private CurrencyManager GetDataManager(DataGridView dataGridView)
         {
-            CurrencyManager cm = (CurrencyManager)this.Properties.GetObject(PropComboBoxCellDataManager);
-            if (cm == null && this.DataSource != null && dataGridView != null && dataGridView.BindingContext != null && !(this.DataSource == Convert.DBNull))
+            CurrencyManager cm = (CurrencyManager)Properties.GetObject(PropComboBoxCellDataManager);
+            if (cm == null && DataSource != null && dataGridView != null && dataGridView.BindingContext != null && !(DataSource == Convert.DBNull))
             {
-                ISupportInitializeNotification dsInit = this.DataSource as ISupportInitializeNotification;
+                ISupportInitializeNotification dsInit = DataSource as ISupportInitializeNotification;
                 if (dsInit != null && !dsInit.IsInitialized)
                 {
-                    if ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) == 0x00)
+                    if ((flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) == 0x00)
                     {
                         dsInit.Initialized += new EventHandler(DataSource_Initialized);
-                        this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp;
+                        flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp;
                     }
                 }
                 else
                 {
-                    cm = (CurrencyManager)dataGridView.BindingContext[this.DataSource];
-                    this.DataManager = cm;
+                    cm = (CurrencyManager)dataGridView.BindingContext[DataSource];
+                    DataManager = cm;
                 }
             }
             return cm;
@@ -1017,7 +1017,7 @@ namespace System.Windows.Forms
         private int GetDropDownButtonHeight(Graphics graphics, DataGridViewCellStyle cellStyle)
         {
             int adjustment = 4;
-            if (this.PaintXPThemes)
+            if (PaintXPThemes)
             {
                 if (PostXPThemesExist)
                 {
@@ -1038,10 +1038,10 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (this.DataGridView == null ||
+            if (DataGridView == null ||
                 rowIndex < 0 ||
-                this.OwningColumn == null ||
-                !this.DataGridView.ShowCellErrors ||
+                OwningColumn == null ||
+                !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
@@ -1107,17 +1107,17 @@ namespace System.Windows.Forms
         {
             if (valueTypeConverter == null)
             {
-                if (this.ValueMemberProperty != null)
+                if (ValueMemberProperty != null)
                 {
-                    valueTypeConverter = this.ValueMemberProperty.Converter;
+                    valueTypeConverter = ValueMemberProperty.Converter;
                 }
-                else if (this.DisplayMemberProperty != null)
+                else if (DisplayMemberProperty != null)
                 {
-                    valueTypeConverter = this.DisplayMemberProperty.Converter;
+                    valueTypeConverter = DisplayMemberProperty.Converter;
                 }
             }
 
-            if (value == null || ((this.ValueType != null && !this.ValueType.IsAssignableFrom(value.GetType())) && value != System.DBNull.Value))
+            if (value == null || ((ValueType != null && !ValueType.IsAssignableFrom(value.GetType())) && value != System.DBNull.Value))
             {
                 // Do not raise the DataError event if the value is null and the row is the 'new row'.
 
@@ -1126,10 +1126,10 @@ namespace System.Windows.Forms
                     // Debug.Assert(rowIndex != -1 || this.Items.Count == 0);
                     return base.GetFormattedValue(null, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
                 }
-                if (this.DataGridView != null)
+                if (DataGridView != null)
                 {
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                        new FormatException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
+                        new FormatException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), ColumnIndex,
                         rowIndex, context);
                     RaiseDataError(dgvdee);
                     if (dgvdee.ThrowException)
@@ -1141,8 +1141,8 @@ namespace System.Windows.Forms
             }
 
             string strValue = value as string;
-            if ((this.DataManager != null && (this.ValueMemberProperty != null || this.DisplayMemberProperty != null)) ||
-                !string.IsNullOrEmpty(this.ValueMember) || !string.IsNullOrEmpty(this.DisplayMember))
+            if ((DataManager != null && (ValueMemberProperty != null || DisplayMemberProperty != null)) ||
+                !string.IsNullOrEmpty(ValueMember) || !string.IsNullOrEmpty(DisplayMember))
             {
                 object displayValue;
                 if (!LookupDisplayValue(rowIndex, value, out displayValue))
@@ -1151,14 +1151,14 @@ namespace System.Windows.Forms
                     {
                         displayValue = System.DBNull.Value;
                     }
-                    else if (strValue != null && string.IsNullOrEmpty(strValue) && this.DisplayType == typeof(string))
+                    else if (strValue != null && string.IsNullOrEmpty(strValue) && DisplayType == typeof(string))
                     {
                         displayValue = string.Empty;
                     }
-                    else if (this.DataGridView != null)
+                    else if (DataGridView != null)
                     {
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
+                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), ColumnIndex,
                             rowIndex, context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
@@ -1168,23 +1168,23 @@ namespace System.Windows.Forms
 
                         if (OwnsEditingComboBox(rowIndex))
                         {
-                            ((IDataGridViewEditingControl)this.EditingComboBox).EditingControlValueChanged = true;
-                            this.DataGridView.NotifyCurrentCellDirty(true);
+                            ((IDataGridViewEditingControl)EditingComboBox).EditingControlValueChanged = true;
+                            DataGridView.NotifyCurrentCellDirty(true);
                         }
                     }
                 }
-                return base.GetFormattedValue(displayValue, rowIndex, ref cellStyle, this.DisplayTypeConverter, formattedValueTypeConverter, context);
+                return base.GetFormattedValue(displayValue, rowIndex, ref cellStyle, DisplayTypeConverter, formattedValueTypeConverter, context);
             }
             else
             {
-                if (!this.Items.Contains(value) &&
+                if (!Items.Contains(value) &&
                     value != System.DBNull.Value &&
                     (!(value is string) || !string.IsNullOrEmpty(strValue)))
                 {
-                    if (this.DataGridView != null)
+                    if (DataGridView != null)
                     {
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
+                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), ColumnIndex,
                             rowIndex, context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
@@ -1193,9 +1193,9 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (this.Items.Count > 0)
+                    if (Items.Count > 0)
                     {
-                        value = this.Items[0];
+                        value = Items[0];
                     }
                     else
                     {
@@ -1217,28 +1217,28 @@ namespace System.Windows.Forms
             Debug.Assert(item != null);
             bool displayValueSet = false;
             object displayValue = null;
-            if (this.DisplayMemberProperty != null)
+            if (DisplayMemberProperty != null)
             {
-                displayValue = this.DisplayMemberProperty.GetValue(item);
+                displayValue = DisplayMemberProperty.GetValue(item);
                 displayValueSet = true;
             }
-            else if (this.ValueMemberProperty != null)
+            else if (ValueMemberProperty != null)
             {
-                displayValue = this.ValueMemberProperty.GetValue(item);
+                displayValue = ValueMemberProperty.GetValue(item);
                 displayValueSet = true;
             }
-            else if (!string.IsNullOrEmpty(this.DisplayMember))
+            else if (!string.IsNullOrEmpty(DisplayMember))
             {
-                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(this.DisplayMember, true /*caseInsensitive*/);
+                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(DisplayMember, true /*caseInsensitive*/);
                 if (propDesc != null)
                 {
                     displayValue = propDesc.GetValue(item);
                     displayValueSet = true;
                 }
             }
-            else if (!string.IsNullOrEmpty(this.ValueMember))
+            else if (!string.IsNullOrEmpty(ValueMember))
             {
-                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(this.ValueMember, true /*caseInsensitive*/);
+                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(ValueMember, true /*caseInsensitive*/);
                 if (propDesc != null)
                 {
                     displayValue = propDesc.GetValue(item);
@@ -1254,13 +1254,13 @@ namespace System.Windows.Forms
 
         internal ObjectCollection GetItems(DataGridView dataGridView)
         {
-            ObjectCollection items = (ObjectCollection)this.Properties.GetObject(PropComboBoxCellItems);
+            ObjectCollection items = (ObjectCollection)Properties.GetObject(PropComboBoxCellItems);
             if (items == null)
             {
                 items = new ObjectCollection(this);
-                this.Properties.SetObject(PropComboBoxCellItems, items);
+                Properties.SetObject(PropComboBoxCellItems, items);
             }
-            if (this.CreateItemsFromDataSource)
+            if (CreateItemsFromDataSource)
             {
                 items.ClearInternal();
                 CurrencyManager dataManager = GetDataManager(dataGridView);
@@ -1274,9 +1274,9 @@ namespace System.Windows.Forms
                     items.AddRangeInternal(newItems);
                 }
                 // Do not clear the CreateItemsFromDataSource flag when the data source has not been initialized yet
-                if (dataManager != null || (this.flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) == 0x00)
+                if (dataManager != null || (flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) == 0x00)
                 {
-                    this.CreateItemsFromDataSource = false;
+                    CreateItemsFromDataSource = false;
                 }
             }
             return items;
@@ -1286,28 +1286,28 @@ namespace System.Windows.Forms
         {
             bool valueSet = false;
             object value = null;
-            if (this.ValueMemberProperty != null)
+            if (ValueMemberProperty != null)
             {
-                value = this.ValueMemberProperty.GetValue(item);
+                value = ValueMemberProperty.GetValue(item);
                 valueSet = true;
             }
-            else if (this.DisplayMemberProperty != null)
+            else if (DisplayMemberProperty != null)
             {
-                value = this.DisplayMemberProperty.GetValue(item);
+                value = DisplayMemberProperty.GetValue(item);
                 valueSet = true;
             }
-            else if (!string.IsNullOrEmpty(this.ValueMember))
+            else if (!string.IsNullOrEmpty(ValueMember))
             {
-                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(this.ValueMember, true /*caseInsensitive*/);
+                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(ValueMember, true /*caseInsensitive*/);
                 if (propDesc != null)
                 {
                     value = propDesc.GetValue(item);
                     valueSet = true;
                 }
             }
-            if (!valueSet && !string.IsNullOrEmpty(this.DisplayMember))
+            if (!valueSet && !string.IsNullOrEmpty(DisplayMember))
             {
-                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(this.DisplayMember, true /*caseInsensitive*/);
+                PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(DisplayMember, true /*caseInsensitive*/);
                 if (propDesc != null)
                 {
                     value = propDesc.GetValue(item);
@@ -1326,7 +1326,7 @@ namespace System.Windows.Forms
         ]
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return new Size(-1, -1);
             }
@@ -1338,10 +1338,10 @@ namespace System.Windows.Forms
 
             Size preferredSize = Size.Empty;
             DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
-            Rectangle borderWidthsRect = this.StdBorderWidths;
+            Rectangle borderWidthsRect = StdBorderWidths;
             int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
             int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
-            TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(this.DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
+            TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
             /* Changing design of DGVComboBoxCell.GetPreferredSize for performance reasons.
              * Old design required looking through each combo item
@@ -1434,7 +1434,7 @@ namespace System.Windows.Forms
             if (freeDimension != DataGridViewFreeDimension.Height)
             {
                 preferredSize.Width += SystemInformation.HorizontalScrollBarThumbWidth + 1 + 2 * DATAGRIDVIEWCOMBOBOXCELL_margin + borderAndPaddingWidths;
-                if (this.DataGridView.ShowCellErrors)
+                if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
                     preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + SystemInformation.HorizontalScrollBarThumbWidth + 1 + DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth);
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms
             }
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
-                if (this.FlatStyle == FlatStyle.Flat || this.FlatStyle == FlatStyle.Popup)
+                if (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
                 {
                     preferredSize.Height += 6;
                 }
@@ -1451,7 +1451,7 @@ namespace System.Windows.Forms
                     preferredSize.Height += 8;
                 }
                 preferredSize.Height += borderAndPaddingHeights;
-                if (this.DataGridView.ShowCellErrors)
+                if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
                     preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight);
@@ -1462,28 +1462,28 @@ namespace System.Windows.Forms
 
         private void InitializeComboBoxText()
         {
-            Debug.Assert(this.EditingComboBox != null);
-            ((IDataGridViewEditingControl)this.EditingComboBox).EditingControlValueChanged = false;
-            int rowIndex = ((IDataGridViewEditingControl)this.EditingComboBox).EditingControlRowIndex;
+            Debug.Assert(EditingComboBox != null);
+            ((IDataGridViewEditingControl)EditingComboBox).EditingControlValueChanged = false;
+            int rowIndex = ((IDataGridViewEditingControl)EditingComboBox).EditingControlRowIndex;
             Debug.Assert(rowIndex > -1);
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
-            this.EditingComboBox.Text = (string)GetFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
+            EditingComboBox.Text = (string)GetFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
         }
 
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
-            Debug.Assert(this.DataGridView != null &&
-                         this.DataGridView.EditingPanel != null &&
-                         this.DataGridView.EditingControl != null);
-            Debug.Assert(!this.ReadOnly);
+            Debug.Assert(DataGridView != null &&
+                         DataGridView.EditingPanel != null &&
+                         DataGridView.EditingControl != null);
+            Debug.Assert(!ReadOnly);
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-            ComboBox comboBox = this.DataGridView.EditingControl as ComboBox;
+            ComboBox comboBox = DataGridView.EditingControl as ComboBox;
             if (comboBox != null)
             {
                 // Use the selection backcolor for the editing panel when the cell is selected
                 if ((GetInheritedState(rowIndex) & DataGridViewElementStates.Selected) == DataGridViewElementStates.Selected)
                 {
-                    this.DataGridView.EditingPanel.BackColor = dataGridViewCellStyle.SelectionBackColor;
+                    DataGridView.EditingPanel.BackColor = dataGridViewCellStyle.SelectionBackColor;
                 }
 
                 // We need the comboBox to be parented by a control which has a handle or else the native ComboBox ends up
@@ -1496,8 +1496,8 @@ namespace System.Windows.Forms
                 h = comboBox.Handle; // make sure that assigning the DataSource property does not assert.
                 comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox.FormattingEnabled = true;
-                comboBox.MaxDropDownItems = this.MaxDropDownItems;
-                comboBox.DropDownWidth = this.DropDownWidth;
+                comboBox.MaxDropDownItems = MaxDropDownItems;
+                comboBox.DropDownWidth = DropDownWidth;
                 comboBox.DataSource = null;
                 comboBox.ValueMember = null;
                 comboBox.Items.Clear();
@@ -1512,16 +1512,16 @@ namespace System.Windows.Forms
                 }
                 */
 
-                comboBox.DataSource = this.DataSource;
-                comboBox.DisplayMember = this.DisplayMember;
-                comboBox.ValueMember = this.ValueMember;
-                if (this.HasItems && this.DataSource == null && this.Items.Count > 0)
+                comboBox.DataSource = DataSource;
+                comboBox.DisplayMember = DisplayMember;
+                comboBox.ValueMember = ValueMember;
+                if (HasItems && DataSource == null && Items.Count > 0)
                 {
-                    comboBox.Items.AddRange(this.Items.InnerArray.ToArray());
+                    comboBox.Items.AddRange(Items.InnerArray.ToArray());
                 }
-                comboBox.Sorted = this.Sorted;
-                comboBox.FlatStyle = this.FlatStyle;
-                if (this.AutoComplete)
+                comboBox.Sorted = Sorted;
+                comboBox.FlatStyle = FlatStyle;
+                if (AutoComplete)
                 {
                     comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
                     comboBox.AutoCompleteMode = AutoCompleteMode.Append;
@@ -1539,39 +1539,39 @@ namespace System.Windows.Forms
                 }
                 comboBox.Text = initialFormattedValueStr;
 
-                if ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp) == 0x00)
+                if ((flags & DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp) == 0x00)
                 {
                     comboBox.DropDown += new EventHandler(ComboBox_DropDown);
-                    this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp;
+                    flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_dropDownHookedUp;
                 }
                 cachedDropDownWidth = -1;
 
-                this.EditingComboBox = this.DataGridView.EditingControl as DataGridViewComboBoxEditingControl;
+                EditingComboBox = DataGridView.EditingControl as DataGridViewComboBoxEditingControl;
                 if (GetHeight(rowIndex) > 21)
                 {
-                    Rectangle rectBottomSection = this.DataGridView.GetCellDisplayRectangle(this.ColumnIndex, rowIndex, true);
+                    Rectangle rectBottomSection = DataGridView.GetCellDisplayRectangle(ColumnIndex, rowIndex, true);
                     rectBottomSection.Y += 21;
                     rectBottomSection.Height -= 21;
-                    this.DataGridView.Invalidate(rectBottomSection);
+                    DataGridView.Invalidate(rectBottomSection);
                 }
             }
         }
 
         private void InitializeDisplayMemberPropertyDescriptor(string displayMember)
         {
-            if (this.DataManager != null)
+            if (DataManager != null)
             {
                 if (string.IsNullOrEmpty(displayMember))
                 {
-                    this.DisplayMemberProperty = null;
+                    DisplayMemberProperty = null;
                 }
                 else
                 {
                     BindingMemberInfo displayBindingMember = new BindingMemberInfo(displayMember);
                     // make the DataManager point to the sublist inside this.DataSource
-                    this.DataManager = this.DataGridView.BindingContext[this.DataSource, displayBindingMember.BindingPath] as CurrencyManager;
+                    DataManager = DataGridView.BindingContext[DataSource, displayBindingMember.BindingPath] as CurrencyManager;
 
-                    PropertyDescriptorCollection props = this.DataManager.GetItemProperties();
+                    PropertyDescriptorCollection props = DataManager.GetItemProperties();
                     PropertyDescriptor displayMemberProperty = props.Find(displayBindingMember.BindingField, true);
                     if (displayMemberProperty == null)
                     {
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        this.DisplayMemberProperty = displayMemberProperty;
+                        DisplayMemberProperty = displayMemberProperty;
                     }
                 }
             }
@@ -1587,19 +1587,19 @@ namespace System.Windows.Forms
 
         private void InitializeValueMemberPropertyDescriptor(string valueMember)
         {
-            if (this.DataManager != null)
+            if (DataManager != null)
             {
                 if (string.IsNullOrEmpty(valueMember))
                 {
-                    this.ValueMemberProperty = null;
+                    ValueMemberProperty = null;
                 }
                 else
                 {
                     BindingMemberInfo valueBindingMember = new BindingMemberInfo(valueMember);
                     // make the DataManager point to the sublist inside this.DataSource
-                    this.DataManager = this.DataGridView.BindingContext[this.DataSource, valueBindingMember.BindingPath] as CurrencyManager;
+                    DataManager = DataGridView.BindingContext[DataSource, valueBindingMember.BindingPath] as CurrencyManager;
 
-                    PropertyDescriptorCollection props = this.DataManager.GetItemProperties();
+                    PropertyDescriptorCollection props = DataManager.GetItemProperties();
                     PropertyDescriptor valueMemberProperty = props.Find(valueBindingMember.BindingField, true);
                     if (valueMemberProperty == null)
                     {
@@ -1607,7 +1607,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        this.ValueMemberProperty = valueMemberProperty;
+                        ValueMemberProperty = valueMemberProperty;
                     }
                 }
             }
@@ -1631,24 +1631,24 @@ namespace System.Windows.Forms
             //}
 
             Debug.Assert(property != null);
-            Debug.Assert(this.DataManager != null);
+            Debug.Assert(DataManager != null);
             object item = null;
 
             //If the data source is a bindinglist use that as it's probably more efficient
-            if ((this.DataManager.List is IBindingList) && ((IBindingList)this.DataManager.List).SupportsSearching)
+            if ((DataManager.List is IBindingList) && ((IBindingList)DataManager.List).SupportsSearching)
             {
-                int index = ((IBindingList)this.DataManager.List).Find(property, key);
+                int index = ((IBindingList)DataManager.List).Find(property, key);
                 if (index != -1)
                 {
-                    item = this.DataManager.List[index];
+                    item = DataManager.List[index];
                 }
             }
             else
             {
                 //Otherwise walk across the items looking for the item we want 
-                for (int i = 0; i < this.DataManager.List.Count; i++)
+                for (int i = 0; i < DataManager.List.Count; i++)
                 {
-                    object itemTmp = this.DataManager.List[i];
+                    object itemTmp = DataManager.List[i];
                     object value = property.GetValue(itemTmp);
                     if (key.Equals(value))
                     {
@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms
             if (OwnsEditingComboBox(rowIndex))
             {
                 // It is likely that the item looked for is the selected item.
-                item = this.EditingComboBox.SelectedItem;
+                item = EditingComboBox.SelectedItem;
                 object displayValue = null;
                 PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(field, true /*caseInsensitive*/);
                 if (propDesc != null)
@@ -1683,7 +1683,7 @@ namespace System.Windows.Forms
             }
             if (item == null)
             {
-                foreach (object itemCandidate in this.Items)
+                foreach (object itemCandidate in Items)
                 {
                     object displayValue = null;
                     PropertyDescriptor propDesc = TypeDescriptor.GetProperties(itemCandidate).Find(field, true /*caseInsensitive*/);
@@ -1705,13 +1705,13 @@ namespace System.Windows.Forms
                 if (OwnsEditingComboBox(rowIndex))
                 {
                     // It is likely that the item looked for is the selected item.
-                    item = this.EditingComboBox.SelectedItem;
+                    item = EditingComboBox.SelectedItem;
                     if (item == null || !item.Equals(key))
                     {
                         item = null;
                     }
                 }
-                if (item == null && this.Items.Contains(key))
+                if (item == null && Items.Contains(key))
                 {
                     item = key;
                 }
@@ -1745,20 +1745,20 @@ namespace System.Windows.Forms
         private bool LookupDisplayValue(int rowIndex, object value, out object displayValue)
         {
             Debug.Assert(value != null);
-            Debug.Assert(this.ValueMemberProperty != null || this.DisplayMemberProperty != null ||
-                         !string.IsNullOrEmpty(this.ValueMember) || !string.IsNullOrEmpty(this.DisplayMember));
+            Debug.Assert(ValueMemberProperty != null || DisplayMemberProperty != null ||
+                         !string.IsNullOrEmpty(ValueMember) || !string.IsNullOrEmpty(DisplayMember));
 
             object item = null;
-            if (this.DisplayMemberProperty != null || this.ValueMemberProperty != null)
+            if (DisplayMemberProperty != null || ValueMemberProperty != null)
             {
                 //Now look up the item in the Combobox datasource - this can be horribly inefficient
                 //and it uses reflection which makes it expensive - ripe for optimization
-                item = this.ItemFromComboBoxDataSource(this.ValueMemberProperty != null ? this.ValueMemberProperty : this.DisplayMemberProperty, value);
+                item = ItemFromComboBoxDataSource(ValueMemberProperty != null ? ValueMemberProperty : DisplayMemberProperty, value);
             }
             else
             {
                 //Find the item in the Items collection based on the provided ValueMember or DisplayMember
-                item = ItemFromComboBoxItems(rowIndex, string.IsNullOrEmpty(this.ValueMember) ? this.DisplayMember : this.ValueMember, value);
+                item = ItemFromComboBoxItems(rowIndex, string.IsNullOrEmpty(ValueMember) ? DisplayMember : ValueMember, value);
             }
             if (item == null)
             {
@@ -1787,20 +1787,20 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            Debug.Assert(this.DisplayMemberProperty != null || this.ValueMemberProperty != null ||
-                         !string.IsNullOrEmpty(this.DisplayMember) || !string.IsNullOrEmpty(this.ValueMember));
+            Debug.Assert(DisplayMemberProperty != null || ValueMemberProperty != null ||
+                         !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember));
 
             object item = null;
-            if (this.DisplayMemberProperty != null || this.ValueMemberProperty != null)
+            if (DisplayMemberProperty != null || ValueMemberProperty != null)
             {
                 //Now look up the item in the DataGridViewComboboxCell datasource - this can be horribly inefficient
                 //and it uses reflection which makes it expensive - ripe for optimization
-                item = ItemFromComboBoxDataSource(this.DisplayMemberProperty != null ? this.DisplayMemberProperty : this.ValueMemberProperty, formattedValue);
+                item = ItemFromComboBoxDataSource(DisplayMemberProperty != null ? DisplayMemberProperty : ValueMemberProperty, formattedValue);
             }
             else
             {
                 //Find the item in the Items collection based on the provided DisplayMember or ValueMember
-                item = ItemFromComboBoxItems(this.RowIndex, string.IsNullOrEmpty(this.DisplayMember) ? this.ValueMember : this.DisplayMember, formattedValue);
+                item = ItemFromComboBoxItems(RowIndex, string.IsNullOrEmpty(DisplayMember) ? ValueMember : DisplayMember, formattedValue);
             }
             if (item == null)
             {
@@ -1815,36 +1815,36 @@ namespace System.Windows.Forms
 
         protected override void OnDataGridViewChanged()
         {
-            if (this.DataGridView != null)
+            if (DataGridView != null)
             {
                 // Will throw an error if DataGridView is set and a member is invalid
-                InitializeDisplayMemberPropertyDescriptor(this.DisplayMember);
-                InitializeValueMemberPropertyDescriptor(this.ValueMember);
+                InitializeDisplayMemberPropertyDescriptor(DisplayMember);
+                InitializeValueMemberPropertyDescriptor(ValueMember);
             }
             base.OnDataGridViewChanged();
         }
 
         protected override void OnEnter(int rowIndex, bool throughMouseClick)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            if (throughMouseClick && this.DataGridView.EditMode != DataGridViewEditMode.EditOnEnter)
+            if (throughMouseClick && DataGridView.EditMode != DataGridViewEditMode.EditOnEnter)
             {
-                this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick;
+                flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick;
             }
         }
 
         private void OnItemsCollectionChanged()
         {
-            if (this.TemplateComboBoxColumn != null)
+            if (TemplateComboBoxColumn != null)
             {
-                Debug.Assert(this.TemplateComboBoxColumn.CellTemplate == this);
-                this.TemplateComboBoxColumn.OnItemsCollectionChanged();
+                Debug.Assert(TemplateComboBoxColumn.CellTemplate == this);
+                TemplateComboBoxColumn.OnItemsCollectionChanged();
             }
             cachedDropDownWidth = -1;
-            if (OwnsEditingComboBox(this.RowIndex))
+            if (OwnsEditingComboBox(RowIndex))
             {
                 InitializeComboBoxText();
             }
@@ -1856,32 +1856,32 @@ namespace System.Windows.Forms
 
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick);
+            flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick);
         }
 
         protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            Debug.Assert(e.ColumnIndex == this.ColumnIndex);
-            Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
+            Debug.Assert(e.ColumnIndex == ColumnIndex);
+            Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == e.ColumnIndex && ptCurrentCell.Y == e.RowIndex)
             {
-                if ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick) != 0x00)
+                if ((flags & DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick) != 0x00)
                 {
-                    this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick);
+                    flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick);
                 }
-                else if ((this.EditingComboBox == null || !this.EditingComboBox.DroppedDown) &&
-                         this.DataGridView.EditMode != DataGridViewEditMode.EditProgrammatically &&
-                         this.DataGridView.BeginEdit(true /*selectAll*/))
+                else if ((EditingComboBox == null || !EditingComboBox.DroppedDown) &&
+                         DataGridView.EditMode != DataGridViewEditMode.EditProgrammatically &&
+                         DataGridView.BeginEdit(true /*selectAll*/))
                 {
-                    if (this.EditingComboBox != null && this.DisplayStyle != DataGridViewComboBoxDisplayStyle.Nothing)
+                    if (EditingComboBox != null && DisplayStyle != DataGridViewComboBoxDisplayStyle.Nothing)
                     {
                         CheckDropDownList(e.X, e.Y, e.RowIndex);
                     }
@@ -1891,14 +1891,14 @@ namespace System.Windows.Forms
 
         protected override void OnMouseEnter(int rowIndex)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
 
-            if (this.DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox && this.FlatStyle == FlatStyle.Popup)
+            if (DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox && FlatStyle == FlatStyle.Popup)
             {
-                this.DataGridView.InvalidateCell(this.ColumnIndex, rowIndex);
+                DataGridView.InvalidateCell(ColumnIndex, rowIndex);
             }
 
             base.OnMouseEnter(rowIndex);
@@ -1906,7 +1906,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(int rowIndex)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
@@ -1914,18 +1914,18 @@ namespace System.Windows.Forms
             if (mouseInDropDownButtonBounds)
             {
                 mouseInDropDownButtonBounds = false;
-                if (this.ColumnIndex >= 0 &&
+                if (ColumnIndex >= 0 &&
                     rowIndex >= 0 &&
-                    (this.FlatStyle == FlatStyle.Standard || this.FlatStyle == FlatStyle.System) &&
-                    this.DataGridView.ApplyVisualStylesToInnerCells)
+                    (FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System) &&
+                    DataGridView.ApplyVisualStylesToInnerCells)
                 {
-                    this.DataGridView.InvalidateCell(this.ColumnIndex, rowIndex);
+                    DataGridView.InvalidateCell(ColumnIndex, rowIndex);
                 }
             }
 
-            if (this.DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox && this.FlatStyle == FlatStyle.Popup)
+            if (DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox && FlatStyle == FlatStyle.Popup)
             {
-                this.DataGridView.InvalidateCell(this.ColumnIndex, rowIndex);
+                DataGridView.InvalidateCell(ColumnIndex, rowIndex);
             }
 
             base.OnMouseEnter(rowIndex);
@@ -1933,40 +1933,40 @@ namespace System.Windows.Forms
 
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            if ((this.FlatStyle == FlatStyle.Standard || this.FlatStyle == FlatStyle.System) && this.DataGridView.ApplyVisualStylesToInnerCells)
+            if ((FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System) && DataGridView.ApplyVisualStylesToInnerCells)
             {
                 int rowIndex = e.RowIndex;
                 DataGridViewCellStyle cellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
 
                 // get the border style
-                bool singleVerticalBorderAdded = !this.DataGridView.RowHeadersVisible && this.DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
-                bool singleHorizontalBorderAdded = !this.DataGridView.ColumnHeadersVisible && this.DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
-                bool isFirstDisplayedRow = rowIndex == this.DataGridView.FirstDisplayedScrollingRowIndex;
-                bool isFirstDisplayedColumn = this.OwningColumn.Index == this.DataGridView.FirstDisplayedColumnIndex;
-                bool isFirstDisplayedScrollingColumn = this.OwningColumn.Index == this.DataGridView.FirstDisplayedScrollingColumnIndex;
+                bool singleVerticalBorderAdded = !DataGridView.RowHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
+                bool singleHorizontalBorderAdded = !DataGridView.ColumnHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
+                bool isFirstDisplayedRow = rowIndex == DataGridView.FirstDisplayedScrollingRowIndex;
+                bool isFirstDisplayedColumn = OwningColumn.Index == DataGridView.FirstDisplayedColumnIndex;
+                bool isFirstDisplayedScrollingColumn = OwningColumn.Index == DataGridView.FirstDisplayedScrollingColumnIndex;
                 DataGridViewAdvancedBorderStyle dgvabsEffective, dgvabsPlaceholder;
                 dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle();
-                dgvabsEffective = AdjustCellBorderStyle(this.DataGridView.AdvancedCellBorderStyle, dgvabsPlaceholder,
+                dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle, dgvabsPlaceholder,
                                                         singleVerticalBorderAdded,
                                                         singleHorizontalBorderAdded,
                                                         isFirstDisplayedRow,
                                                         isFirstDisplayedColumn);
 
-                Rectangle cellBounds = this.DataGridView.GetCellDisplayRectangle(this.OwningColumn.Index, rowIndex, false /*cutOverflow*/);
+                Rectangle cellBounds = DataGridView.GetCellDisplayRectangle(OwningColumn.Index, rowIndex, false /*cutOverflow*/);
                 Rectangle cutoffCellBounds = cellBounds;
                 if (isFirstDisplayedScrollingColumn)
                 {
-                    cellBounds.X -= this.DataGridView.FirstDisplayedScrollingColumnHiddenWidth;
-                    cellBounds.Width += this.DataGridView.FirstDisplayedScrollingColumnHiddenWidth;
+                    cellBounds.X -= DataGridView.FirstDisplayedScrollingColumnHiddenWidth;
+                    cellBounds.Width += DataGridView.FirstDisplayedScrollingColumnHiddenWidth;
                 }
 
-                DataGridViewElementStates rowState = this.DataGridView.Rows.GetRowState(rowIndex);
-                DataGridViewElementStates cellState = this.CellStateFromColumnRowStates(rowState);
-                cellState |= this.State;
+                DataGridViewElementStates rowState = DataGridView.Rows.GetRowState(rowIndex);
+                DataGridViewElementStates cellState = CellStateFromColumnRowStates(rowState);
+                cellState |= State;
 
                 Rectangle dropDownButtonRect;
                 using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
@@ -1988,11 +1988,11 @@ namespace System.Windows.Forms
                         false /*paint*/);
                 }
 
-                bool newMouseInDropDownButtonBounds = dropDownButtonRect.Contains(this.DataGridView.PointToClient(Control.MousePosition));
+                bool newMouseInDropDownButtonBounds = dropDownButtonRect.Contains(DataGridView.PointToClient(Control.MousePosition));
                 if (newMouseInDropDownButtonBounds != mouseInDropDownButtonBounds)
                 {
                     mouseInDropDownButtonBounds = newMouseInDropDownButtonBounds;
-                    this.DataGridView.InvalidateCell(e.ColumnIndex, rowIndex);
+                    DataGridView.InvalidateCell(e.ColumnIndex, rowIndex);
                 }
             }
             base.OnMouseMove(e);
@@ -2000,7 +2000,7 @@ namespace System.Windows.Forms
 
         private bool OwnsEditingComboBox(int rowIndex)
         {
-            return rowIndex != -1 && this.EditingComboBox != null && rowIndex == ((IDataGridViewEditingControl)this.EditingComboBox).EditingControlRowIndex;
+            return rowIndex != -1 && EditingComboBox != null && rowIndex == ((IDataGridViewEditingControl)EditingComboBox).EditingControlRowIndex;
         }
 
         protected override void Paint(Graphics graphics,
@@ -2079,17 +2079,17 @@ namespace System.Windows.Forms
             Rectangle resultBounds = Rectangle.Empty;
             dropDownButtonRect = Rectangle.Empty;
 
-            bool paintFlat = this.FlatStyle == FlatStyle.Flat || this.FlatStyle == FlatStyle.Popup;
-            bool paintPopup = this.FlatStyle == FlatStyle.Popup &&
-                              this.DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
-                              this.DataGridView.MouseEnteredCellAddress.X == this.ColumnIndex;
+            bool paintFlat = FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup;
+            bool paintPopup = FlatStyle == FlatStyle.Popup &&
+                              DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
+                              DataGridView.MouseEnteredCellAddress.X == ColumnIndex;
 
-            bool paintXPThemes = !paintFlat && this.DataGridView.ApplyVisualStylesToInnerCells;
+            bool paintXPThemes = !paintFlat && DataGridView.ApplyVisualStylesToInnerCells;
             bool paintPostXPThemes = paintXPThemes && PostXPThemesExist;
 
             ComboBoxState comboBoxState = ComboBoxState.Normal;
-            if (this.DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
-                this.DataGridView.MouseEnteredCellAddress.X == this.ColumnIndex &&
+            if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
+                DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
                 mouseInDropDownButtonBounds)
             {
                 comboBoxState = ComboBoxState.Hot;
@@ -2107,31 +2107,31 @@ namespace System.Windows.Forms
             valBounds.Height -= borderWidths.Bottom;
 
             SolidBrush br;
-            Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
-            bool cellCurrent = ptCurrentCell.X == this.ColumnIndex && ptCurrentCell.Y == rowIndex;
-            bool cellEdited = cellCurrent && this.DataGridView.EditingControl != null;
+            Point ptCurrentCell = DataGridView.CurrentCellAddress;
+            bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
+            bool cellEdited = cellCurrent && DataGridView.EditingControl != null;
             bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
-            bool drawComboBox = this.DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox &&
-                                ((this.DisplayStyleForCurrentCellOnly && cellCurrent) || !this.DisplayStyleForCurrentCellOnly);
-            bool drawDropDownButton = this.DisplayStyle != DataGridViewComboBoxDisplayStyle.Nothing &&
-                                ((this.DisplayStyleForCurrentCellOnly && cellCurrent) || !this.DisplayStyleForCurrentCellOnly);
+            bool drawComboBox = DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox &&
+                                ((DisplayStyleForCurrentCellOnly && cellCurrent) || !DisplayStyleForCurrentCellOnly);
+            bool drawDropDownButton = DisplayStyle != DataGridViewComboBoxDisplayStyle.Nothing &&
+                                ((DisplayStyleForCurrentCellOnly && cellCurrent) || !DisplayStyleForCurrentCellOnly);
             if (DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected && !cellEdited)
             {
-                br = this.DataGridView.GetCachedBrush(cellStyle.SelectionBackColor);
+                br = DataGridView.GetCachedBrush(cellStyle.SelectionBackColor);
             }
             else
             {
-                br = this.DataGridView.GetCachedBrush(cellStyle.BackColor);
+                br = DataGridView.GetCachedBrush(cellStyle.BackColor);
             }
 
             if (paint && DataGridViewCell.PaintBackground(paintParts) && br.Color.A == 255 && valBounds.Width > 0 && valBounds.Height > 0)
             {
-                DataGridViewCell.PaintPadding(g, valBounds, cellStyle, br, this.DataGridView.RightToLeftInternal);
+                DataGridViewCell.PaintPadding(g, valBounds, cellStyle, br, DataGridView.RightToLeftInternal);
             }
 
             if (cellStyle.Padding != Padding.Empty)
             {
-                if (this.DataGridView.RightToLeftInternal)
+                if (DataGridView.RightToLeftInternal)
                 {
                     valBounds.Offset(cellStyle.Padding.Right, cellStyle.Padding.Top);
                 }
@@ -2202,14 +2202,14 @@ namespace System.Windows.Forms
                     {
                         if (paintPostXPThemes)
                         {
-                            dropRect = new Rectangle(this.DataGridView.RightToLeftInternal ? valBounds.Left : valBounds.Right - dropWidth,
+                            dropRect = new Rectangle(DataGridView.RightToLeftInternal ? valBounds.Left : valBounds.Right - dropWidth,
                                                     valBounds.Top,
                                                     dropWidth,
                                                     dropHeight);
                         }
                         else
                         {
-                            dropRect = new Rectangle(this.DataGridView.RightToLeftInternal ? valBounds.Left + 1 : valBounds.Right - dropWidth - 1,
+                            dropRect = new Rectangle(DataGridView.RightToLeftInternal ? valBounds.Left + 1 : valBounds.Right - dropWidth - 1,
                                                     valBounds.Top + 1,
                                                     dropWidth,
                                                     dropHeight);
@@ -2217,7 +2217,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        dropRect = new Rectangle(this.DataGridView.RightToLeftInternal ? valBounds.Left + 2 : valBounds.Right - dropWidth - 2,
+                        dropRect = new Rectangle(DataGridView.RightToLeftInternal ? valBounds.Left + 2 : valBounds.Right - dropWidth - 2,
                                                 valBounds.Top + 2,
                                                 dropWidth,
                                                 dropHeight);
@@ -2246,7 +2246,7 @@ namespace System.Windows.Forms
                                 {
                                     if (drawComboBox)
                                     {
-                                        DataGridViewComboBoxCellRenderer.DrawDropDownButton(g, dropRect, comboBoxState, this.DataGridView.RightToLeftInternal);
+                                        DataGridViewComboBoxCellRenderer.DrawDropDownButton(g, dropRect, comboBoxState, DataGridView.RightToLeftInternal);
                                     }
                                     else
                                     {
@@ -2259,7 +2259,7 @@ namespace System.Windows.Forms
                                         // In the case of ComboBox style, background is not filled in, 
                                         // in the case of DrawReadOnlyButton uses theming API to render CP_READONLY COMBOBOX part that renders the background,
                                         // this API does not have "selected" state, thus always uses BackColor
-                                        br = this.DataGridView.GetCachedBrush(cellStyle.BackColor);
+                                        br = DataGridView.GetCachedBrush(cellStyle.BackColor);
                                     }
                                 }
                                 else
@@ -2461,7 +2461,7 @@ namespace System.Windows.Forms
 
             if (paintPostXPThemes)
             {
-                if (!this.DataGridView.RightToLeftInternal)
+                if (!DataGridView.RightToLeftInternal)
                 {
                     textBounds.X--;
                 }
@@ -2474,7 +2474,7 @@ namespace System.Windows.Forms
                 {
                     errorBounds.Width -= dropWidth;
                     textBounds.Width -= dropWidth;
-                    if (this.DataGridView.RightToLeftInternal)
+                    if (DataGridView.RightToLeftInternal)
                     {
                         errorBounds.X += dropWidth;
                         textBounds.X += dropWidth;
@@ -2484,7 +2484,7 @@ namespace System.Windows.Forms
                 {
                     errorBounds.Width -= dropWidth + 1;
                     textBounds.Width -= dropWidth + 1;
-                    if (this.DataGridView.RightToLeftInternal)
+                    if (DataGridView.RightToLeftInternal)
                     {
                         errorBounds.X += dropWidth + 1;
                         textBounds.X += dropWidth + 1;
@@ -2497,15 +2497,15 @@ namespace System.Windows.Forms
                 if (cellCurrent &&
                     !cellEdited &&
                     DataGridViewCell.PaintFocus(paintParts) &&
-                    this.DataGridView.ShowFocusCues &&
-                    this.DataGridView.Focused &&
+                    DataGridView.ShowFocusCues &&
+                    DataGridView.Focused &&
                     paint)
                 {
                     // Draw focus rectangle
                     if (paintFlat)
                     {
                         Rectangle focusBounds = textBounds;
-                        if (!this.DataGridView.RightToLeftInternal)
+                        if (!DataGridView.RightToLeftInternal)
                         {
                             focusBounds.X--;
                         }
@@ -2548,7 +2548,7 @@ namespace System.Windows.Forms
                 {
                     // Font independent margins
                     int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWCOMBOBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWCOMBOBOXCELL_verticalTextMarginTopWithoutWrapping;
-                    if (this.DataGridView.RightToLeftInternal)
+                    if (DataGridView.RightToLeftInternal)
                     {
                         textBounds.Offset(DATAGRIDVIEWCOMBOBOXCELL_horizontalTextMarginLeft, verticalTextMarginTop);
                         textBounds.Width += 2 - DATAGRIDVIEWCOMBOBOXCELL_horizontalTextMarginLeft;
@@ -2562,7 +2562,7 @@ namespace System.Windows.Forms
 
                     if (textBounds.Width > 0 && textBounds.Height > 0)
                     {
-                        TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(this.DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
+                        TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
                         if (!cellEdited && paint)
                         {
                             if (DataGridViewCell.PaintContentForeground(paintParts))
@@ -2595,7 +2595,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (this.DataGridView.ShowCellErrors && paint && DataGridViewCell.PaintErrorIcon(paintParts))
+                if (DataGridView.ShowCellErrors && paint && DataGridViewCell.PaintErrorIcon(paintParts))
                 {
                     PaintErrorIcon(g, cellStyle, rowIndex, cellBounds, errorBounds, errorText);
                     if (cellEdited)
@@ -2627,23 +2627,23 @@ namespace System.Windows.Forms
         {
             if (valueTypeConverter == null)
             {
-                if (this.ValueMemberProperty != null)
+                if (ValueMemberProperty != null)
                 {
-                    valueTypeConverter = this.ValueMemberProperty.Converter;
+                    valueTypeConverter = ValueMemberProperty.Converter;
                 }
-                else if (this.DisplayMemberProperty != null)
+                else if (DisplayMemberProperty != null)
                 {
-                    valueTypeConverter = this.DisplayMemberProperty.Converter;
+                    valueTypeConverter = DisplayMemberProperty.Converter;
                 }
             }
 
             // Find the item given its display value
-            if ((this.DataManager != null &&
-                (this.DisplayMemberProperty != null || this.ValueMemberProperty != null)) ||
-                !string.IsNullOrEmpty(this.DisplayMember) || !string.IsNullOrEmpty(this.ValueMember))
+            if ((DataManager != null &&
+                (DisplayMemberProperty != null || ValueMemberProperty != null)) ||
+                !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember))
             {
-                object value = ParseFormattedValueInternal(this.DisplayType, formattedValue, cellStyle,
-                                                           formattedValueTypeConverter, this.DisplayTypeConverter);
+                object value = ParseFormattedValueInternal(DisplayType, formattedValue, cellStyle,
+                                                           formattedValueTypeConverter, DisplayTypeConverter);
                 object originalValue = value;
                 if (!LookupValue(originalValue, out value))
                 {
@@ -2653,14 +2653,14 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new FormatException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.Formatter_CantConvert), value, this.DisplayType));
+                        throw new FormatException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.Formatter_CantConvert), value, DisplayType));
                     }
                 }
                 return value;
             }
             else
             {
-                return ParseFormattedValueInternal(this.ValueType, formattedValue, cellStyle,
+                return ParseFormattedValueInternal(ValueType, formattedValue, cellStyle,
                                                    formattedValueTypeConverter, valueTypeConverter);
             }
         }
@@ -2672,25 +2672,25 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "DataGridViewComboBoxCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + this.RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return "DataGridViewComboBoxCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
         }
 
         private void UnwireDataSource()
         {
-            IComponent component = this.DataSource as IComponent;
+            IComponent component = DataSource as IComponent;
             if (component != null)
             {
                 component.Disposed -= new EventHandler(DataSource_Disposed);
             }
 
-            ISupportInitializeNotification dsInit = this.DataSource as ISupportInitializeNotification;
-            if (dsInit != null && (this.flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00)
+            ISupportInitializeNotification dsInit = DataSource as ISupportInitializeNotification;
+            if (dsInit != null && (flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00)
             {
                 // If we previously hooked the data source's ISupportInitializeNotification
                 // Initialized event, then unhook it now (we don't always hook this event,
                 // only if we needed to because the data source was previously uninitialized)
                 dsInit.Initialized -= new EventHandler(DataSource_Initialized);
-                this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp);
+                flags = (byte)(flags & ~DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp);
             }
         }
 
@@ -2727,11 +2727,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (this.comparer == null)
+                    if (comparer == null)
                     {
-                        this.comparer = new ItemComparer(this.owner);
+                        comparer = new ItemComparer(owner);
                     }
-                    return this.comparer;
+                    return comparer;
                 }
             }
 
@@ -2742,7 +2742,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.InnerArray.Count;
+                    return InnerArray.Count;
                 }
             }
 
@@ -2753,11 +2753,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (this.items == null)
+                    if (items == null)
                     {
-                        this.items = new ArrayList();
+                        items = new ArrayList();
                     }
-                    return this.items;
+                    return items;
                 }
             }
 
@@ -2803,34 +2803,34 @@ namespace System.Windows.Forms
             public int Add(object item)
             {
                 //this.owner.CheckNoSharedCell();
-                this.owner.CheckNoDataSource();
+                owner.CheckNoDataSource();
 
                 if (item == null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
 
-                int index = this.InnerArray.Add(item);
+                int index = InnerArray.Add(item);
 
                 bool success = false;
-                if (this.owner.Sorted)
+                if (owner.Sorted)
                 {
                     try
                     {
-                        this.InnerArray.Sort(this.Comparer);
-                        index = this.InnerArray.IndexOf(item);
+                        InnerArray.Sort(Comparer);
+                        index = InnerArray.IndexOf(item);
                         success = true;
                     }
                     finally
                     {
                         if (!success)
                         {
-                            this.InnerArray.Remove(item);
+                            InnerArray.Remove(item);
                         }
                     }
                 }
 
-                this.owner.OnItemsCollectionChanged();
+                owner.OnItemsCollectionChanged();
                 return index;
             }
 
@@ -2842,17 +2842,17 @@ namespace System.Windows.Forms
             public void AddRange(params object[] items)
             {
                 //this.owner.CheckNoSharedCell();
-                this.owner.CheckNoDataSource();
+                owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)items);
-                this.owner.OnItemsCollectionChanged();
+                owner.OnItemsCollectionChanged();
             }
 
             public void AddRange(ObjectCollection value)
             {
                 //this.owner.CheckNoSharedCell();
-                this.owner.CheckNoDataSource();
+                owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)value);
-                this.owner.OnItemsCollectionChanged();
+                owner.OnItemsCollectionChanged();
             }
 
             /// <summary>
@@ -2874,16 +2874,16 @@ namespace System.Windows.Forms
                 }
 
                 // Add everything to the collection first, then sort
-                this.InnerArray.AddRange(items);
-                if (this.owner.Sorted)
+                InnerArray.AddRange(items);
+                if (owner.Sorted)
                 {
-                    this.InnerArray.Sort(this.Comparer);
+                    InnerArray.Sort(Comparer);
                 }
             }
 
             internal void SortInternal()
             {
-                this.InnerArray.Sort(this.Comparer);
+                InnerArray.Sort(Comparer);
             }
 
             /// <summary>
@@ -2893,29 +2893,29 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (index < 0 || index >= this.InnerArray.Count)
+                    if (index < 0 || index >= InnerArray.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
-                    return this.InnerArray[index];
+                    return InnerArray[index];
                 }
                 set
                 {
                     //this.owner.CheckNoSharedCell();
-                    this.owner.CheckNoDataSource();
+                    owner.CheckNoDataSource();
 
                     if (value == null)
                     {
                         throw new ArgumentNullException(nameof(value));
                     }
 
-                    if (index < 0 || index >= this.InnerArray.Count)
+                    if (index < 0 || index >= InnerArray.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    this.InnerArray[index] = value;
-                    this.owner.OnItemsCollectionChanged();
+                    InnerArray[index] = value;
+                    owner.OnItemsCollectionChanged();
                 }
             }
 
@@ -2924,18 +2924,18 @@ namespace System.Windows.Forms
             /// </summary>
             public void Clear()
             {
-                if (this.InnerArray.Count > 0)
+                if (InnerArray.Count > 0)
                 {
                     //this.owner.CheckNoSharedCell();
-                    this.owner.CheckNoDataSource();
-                    this.InnerArray.Clear();
-                    this.owner.OnItemsCollectionChanged();
+                    owner.CheckNoDataSource();
+                    InnerArray.Clear();
+                    owner.OnItemsCollectionChanged();
                 }
             }
 
             internal void ClearInternal()
             {
-                this.InnerArray.Clear();
+                InnerArray.Clear();
             }
 
             public bool Contains(object value)
@@ -2948,19 +2948,19 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                int count = this.InnerArray.Count;
+                int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    destination[i + arrayIndex] = this.InnerArray[i];
+                    destination[i + arrayIndex] = InnerArray[i];
                 }
             }
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                int count = this.InnerArray.Count;
+                int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    destination.SetValue(this.InnerArray[i], i + index);
+                    destination.SetValue(InnerArray[i], i + index);
                 }
             }
 
@@ -2969,7 +2969,7 @@ namespace System.Windows.Forms
             /// </summary>
             public IEnumerator GetEnumerator()
             {
-                return this.InnerArray.GetEnumerator();
+                return InnerArray.GetEnumerator();
             }
 
             public int IndexOf(object value)
@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                return this.InnerArray.IndexOf(value);
+                return InnerArray.IndexOf(value);
             }
 
             /// <summary>
@@ -2991,28 +2991,28 @@ namespace System.Windows.Forms
             public void Insert(int index, object item)
             {
                 //this.owner.CheckNoSharedCell();
-                this.owner.CheckNoDataSource();
+                owner.CheckNoDataSource();
 
                 if (item == null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
 
-                if (index < 0 || index > this.InnerArray.Count)
+                if (index < 0 || index > InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), nameof(index)));
                 }
 
                 // If the combo box is sorted, then just treat this like an add
                 // because we are going to twiddle the index anyway.
-                if (this.owner.Sorted)
+                if (owner.Sorted)
                 {
                     Add(item);
                 }
                 else
                 {
-                    this.InnerArray.Insert(index, item);
-                    this.owner.OnItemsCollectionChanged();
+                    InnerArray.Insert(index, item);
+                    owner.OnItemsCollectionChanged();
                 }
             }
 
@@ -3022,7 +3022,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                int index = this.InnerArray.IndexOf(value);
+                int index = InnerArray.IndexOf(value);
 
                 if (index != -1)
                 {
@@ -3036,14 +3036,14 @@ namespace System.Windows.Forms
             public void RemoveAt(int index)
             {
                 //this.owner.CheckNoSharedCell();
-                this.owner.CheckNoDataSource();
+                owner.CheckNoDataSource();
 
-                if (index < 0 || index >= this.InnerArray.Count)
+                if (index < 0 || index >= InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
-                this.InnerArray.RemoveAt(index);
-                this.owner.OnItemsCollectionChanged();
+                InnerArray.RemoveAt(index);
+                owner.OnItemsCollectionChanged();
             }
         } // end ObjectCollection
 
@@ -3070,8 +3070,8 @@ namespace System.Windows.Forms
                 {
                     return 1; //item2 is null, so item 1 is greater
                 }
-                string itemName1 = this.dataGridViewComboBoxCell.GetItemDisplayText(item1);
-                string itemName2 = this.dataGridViewComboBoxCell.GetItemDisplayText(item2);
+                string itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
+                string itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
 
                 CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);

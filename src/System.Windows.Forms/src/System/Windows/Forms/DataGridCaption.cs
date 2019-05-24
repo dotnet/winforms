@@ -79,9 +79,9 @@ namespace System.Windows.Forms
         internal DataGridCaption(DataGrid dataGrid)
         {
             this.dataGrid = dataGrid;
-            this.downButtonVisible = dataGrid.ParentRowsVisible;
+            downButtonVisible = dataGrid.ParentRowsVisible;
             colorMap[0].OldColor = Color.White;
-            colorMap[0].NewColor = this.ForeColor;
+            colorMap[0].NewColor = ForeColor;
             OnGridFontChanged();
         }
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    this.dataGridFont = new Font(dataGrid.Font, FontStyle.Bold);
+                    dataGridFont = new Font(dataGrid.Font, FontStyle.Bold);
                 }
                 catch
                 {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                 // did not set the CaptionFont
                 //
                 if (textFont == null)
-                    return this.dataGridFont;
+                    return dataGridFont;
                 else
                     return textFont;
             }
@@ -220,7 +220,7 @@ namespace System.Windows.Forms
 
         internal bool ShouldSerializeFont()
         {
-            return textFont != null && !textFont.Equals(this.dataGridFont);
+            return textFont != null && !textFont.Equals(dataGridFont);
         }
 
         internal bool ShouldSerializeBackColor()
@@ -297,7 +297,7 @@ namespace System.Windows.Forms
                 if (value.IsEmpty)
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Caption ForeColor"));
                 foreBrush = new SolidBrush(value);
-                colorMap[0].NewColor = this.ForeColor;
+                colorMap[0].NewColor = ForeColor;
                 Invalidate();
             }
         }
@@ -543,7 +543,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void Paint(Graphics g, Rectangle bounds, bool alignRight)
         {
-            Size textSize = new Size((int)g.MeasureString(text, this.Font).Width + 2, this.Font.Height + 2);
+            Size textSize = new Size((int)g.MeasureString(text, Font).Width + 2, Font.Height + 2);
 
             downButtonRect = GetDetailsButtonRect(bounds, alignRight);
             int downButtonWidth = GetDetailsButtonWidth();
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
 
             if (textBorderVisible)
             {
-                g.DrawRectangle(this.textBorderPen, textBounds.X, textBounds.Y, textBounds.Width - 1, textBounds.Height - 1);
+                g.DrawRectangle(textBorderPen, textBounds.X, textBounds.Y, textBounds.Width - 1, textBounds.Height - 1);
                 textBounds.Inflate(-1, -1);
             }
 
@@ -659,21 +659,21 @@ namespace System.Windows.Forms
             {
                 Rectangle border = textBounds;
                 border.Height = textPadding;
-                g.FillRectangle(this.backBrush, border);
+                g.FillRectangle(backBrush, border);
 
                 border.Y = textBounds.Bottom - textPadding;
-                g.FillRectangle(this.backBrush, border);
+                g.FillRectangle(backBrush, border);
 
                 border = new Rectangle(textBounds.X, textBounds.Y + textPadding,
                                        textPadding, textBounds.Height - 2 * textPadding);
-                g.FillRectangle(this.backBrush, border);
+                g.FillRectangle(backBrush, border);
 
                 border.X = textBounds.Right - textPadding;
-                g.FillRectangle(this.backBrush, border);
+                g.FillRectangle(backBrush, border);
                 textBounds.Inflate(-textPadding, -textPadding);
             }
 
-            g.FillRectangle(this.backBrush, textBounds);
+            g.FillRectangle(backBrush, textBounds);
 
             // Brush foreBrush = new SolidBrush(dataGrid.CaptionForeColor);
             StringFormat format = new StringFormat();
@@ -682,7 +682,7 @@ namespace System.Windows.Forms
                 format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
                 format.Alignment = StringAlignment.Far;
             }
-            g.DrawString(text, this.Font, foreBrush, textBounds, format);
+            g.DrawString(text, Font, foreBrush, textBounds, format);
             format.Dispose();
             // foreBrush.Dispose();
         }

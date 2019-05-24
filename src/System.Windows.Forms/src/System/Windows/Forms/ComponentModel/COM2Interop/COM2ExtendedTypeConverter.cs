@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public Com2ExtendedTypeConverter(Type baseType)
         {
-            this.innerConverter = TypeDescriptor.GetConverter(baseType);
+            innerConverter = TypeDescriptor.GetConverter(baseType);
         }
 
         public TypeConverter InnerConverter

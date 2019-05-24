@@ -64,9 +64,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                long curPos = this.Position;
+                long curPos = Position;
                 long endPos = Seek(0, SeekOrigin.End);
-                this.Position = curPos;
+                Position = curPos;
                 return endPos - curPos;
             }
         }

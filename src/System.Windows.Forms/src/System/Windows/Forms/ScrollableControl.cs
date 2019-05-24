@@ -281,7 +281,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Rectangle displayRectangle = this.DisplayRectangle;
+                Rectangle displayRectangle = DisplayRectangle;
                 // V7#79 : Controls anchored the bottom of their container may disappear (be scrunched)
                 //       when scrolling is used.
                 if (AutoScrollMinSize.Width != 0 && AutoScrollMinSize.Height != 0)
@@ -693,13 +693,13 @@ namespace System.Windows.Forms
             {
                 displayRect = ClientRectangle;
             }
-            if (!AutoScroll && this.HorizontalScroll._visible == true)
+            if (!AutoScroll && HorizontalScroll._visible == true)
             {
-                displayRect = new Rectangle(displayRect.X, displayRect.Y, this.HorizontalScroll.Maximum, this.displayRect.Height);
+                displayRect = new Rectangle(displayRect.X, displayRect.Y, HorizontalScroll.Maximum, displayRect.Height);
             }
-            if (!AutoScroll && this.VerticalScroll._visible == true)
+            if (!AutoScroll && VerticalScroll._visible == true)
             {
-                displayRect = new Rectangle(displayRect.X, displayRect.Y, this.displayRect.Width, this.VerticalScroll.Maximum);
+                displayRect = new Rectangle(displayRect.X, displayRect.Y, displayRect.Width, VerticalScroll.Maximum);
             }
             return displayRect;
         }
@@ -1022,7 +1022,7 @@ namespace System.Windows.Forms
             if (activeControl.ParentInternal != this)
             {
                 Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "not direct child, original bounds: " + bounds);
-                bounds = this.RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
+                bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
             }
             Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "adjusted bounds: " + bounds);
 
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms
                     if (resetRTLHScrollValue && !IsMirrored)
                     {
                         resetRTLHScrollValue = false;
-                        BeginInvoke(new EventHandler(this.OnSetScrollPosition));
+                        BeginInvoke(new EventHandler(OnSetScrollPosition));
                     }
                     else if (-displayRect.X >= HorizontalScroll._minimum && -displayRect.X < HorizontalScroll._maximum)
                     {
@@ -1380,7 +1380,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (this.HorizontalScroll.Visible)
+                if (HorizontalScroll.Visible)
                 {
                     HorizontalScroll.Value = -displayRect.X;
                 }
@@ -1388,7 +1388,7 @@ namespace System.Windows.Forms
                 {
                     ResetScrollProperties(HorizontalScroll);
                 }
-                if (this.VerticalScroll.Visible)
+                if (VerticalScroll.Visible)
                 {
                     VerticalScroll.Value = -displayRect.Y;
                 }
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms
             int maxPos = -(client.Height - displayRect.Height);
             if (!AutoScroll)
             {
-                maxPos = this.VerticalScroll.Maximum;
+                maxPos = VerticalScroll.Maximum;
             }
 
             switch (NativeMethods.Util.LOWORD(m.WParam))
@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms
             int maxPos = -(client.Width - displayRect.Width);
             if (!AutoScroll)
             {
-                maxPos = this.HorizontalScroll.Maximum;
+                maxPos = HorizontalScroll.Maximum;
             }
 
             switch (NativeMethods.Util.LOWORD(m.WParam))

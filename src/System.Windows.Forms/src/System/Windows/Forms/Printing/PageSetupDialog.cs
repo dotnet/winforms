@@ -358,7 +358,7 @@ namespace System.Windows.Forms
         protected override bool RunDialog(IntPtr hwndOwner)
         {
 
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             if (pageSettings == null)
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
 

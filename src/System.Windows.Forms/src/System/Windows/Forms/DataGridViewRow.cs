@@ -1804,17 +1804,17 @@ namespace System.Windows.Forms
                     Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
 
                     int horizontalScrollBarHeight = 0;
-                    if (this.owner.DataGridView.HorizontalScrollBarVisible)
+                    if (owner.DataGridView.HorizontalScrollBarVisible)
                     {
-                        horizontalScrollBarHeight = this.owner.DataGridView.HorizontalScrollBarHeight;
+                        horizontalScrollBarHeight = owner.DataGridView.HorizontalScrollBarHeight;
                     }
 
                     Rectangle dataGridViewRect = ParentPrivate.Bounds;
 
                     int columnHeadersHeight = 0;
-                    if (this.owner.DataGridView.ColumnHeadersVisible)
+                    if (owner.DataGridView.ColumnHeadersVisible)
                     {
-                        columnHeadersHeight = this.owner.DataGridView.ColumnHeadersHeight;
+                        columnHeadersHeight = owner.DataGridView.ColumnHeadersHeight;
                     }
 
                     int rowRectBottom = rowRect.Bottom;

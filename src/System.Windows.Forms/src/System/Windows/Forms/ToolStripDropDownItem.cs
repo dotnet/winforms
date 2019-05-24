@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         {
             if (dropDownItems != null)
             {
-                this.DropDownItems.AddRange(dropDownItems);
+                DropDownItems.AddRange(dropDownItems);
             }
         }
 
@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         // the area which activates the dropdown.
         internal virtual Rectangle DropDownButtonArea
         {
-            get { return this.Bounds; }
+            get { return Bounds; }
         }
 
         [Browsable(false)]
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
                     if (parent != null)
                     {
                         ToolStripDropDownDirection dropDownDirection = parent.DefaultDropDownDirection;
-                        if (OppositeDropDownAlign || this.RightToLeft != parent.RightToLeft && (this.RightToLeft != RightToLeft.Inherit))
+                        if (OppositeDropDownAlign || RightToLeft != parent.RightToLeft && (RightToLeft != RightToLeft.Inherit))
                         {
                             dropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, RightToLeft);
                         }
@@ -328,21 +328,21 @@ namespace System.Windows.Forms
             switch (dropDownDirection)
             {
                 case ToolStripDropDownDirection.AboveLeft:
-                    offset.X = -dropDownBounds.Width + this.Width;
+                    offset.X = -dropDownBounds.Width + Width;
                     offset.Y = -dropDownBounds.Height + 1;
                     break;
                 case ToolStripDropDownDirection.AboveRight:
                     offset.Y = -dropDownBounds.Height + 1;
                     break;
                 case ToolStripDropDownDirection.BelowRight:
-                    offset.Y = this.Height - 1;
+                    offset.Y = Height - 1;
                     break;
                 case ToolStripDropDownDirection.BelowLeft:
-                    offset.X = -dropDownBounds.Width + this.Width;
-                    offset.Y = this.Height - 1;
+                    offset.X = -dropDownBounds.Width + Width;
+                    offset.Y = Height - 1;
                     break;
                 case ToolStripDropDownDirection.Right:
-                    offset.X = this.Width;
+                    offset.X = Width;
                     if (!IsOnDropDown)
                     {
                         // overlap the toplevel toolstrip
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            Point itemScreenLocation = this.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
+            Point itemScreenLocation = TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
             dropDownBounds.Location = new Point(itemScreenLocation.X + offset.X, itemScreenLocation.Y + offset.Y);
             dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds);
             return dropDownBounds;
@@ -381,7 +381,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (this.dropDown != null)
+            if (dropDown != null)
             {
                 dropDown.Opened -= new EventHandler(DropDown_Opened);
                 dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
@@ -406,7 +406,7 @@ namespace System.Windows.Forms
             dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
 
             // we should make sure we dont obscure the owner item.
-            Rectangle itemScreenBounds = new Rectangle(this.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), this.Size);
+            Rectangle itemScreenBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
 
             if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
             {
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
             // consider - CloseEventArgs to prevent shutting down.
             OnDropDownHide(EventArgs.Empty);
 
-            if (this.dropDown != null && this.dropDown.Visible)
+            if (dropDown != null && dropDown.Visible)
             {
                 DropDown.Visible = false;
 
@@ -463,9 +463,9 @@ namespace System.Windows.Forms
         {
             base.OnBoundsChanged();
             //Reset the Bounds...
-            if (this.dropDown != null && this.dropDown.Visible)
+            if (dropDown != null && dropDown.Visible)
             {
-                this.dropDown.Bounds = GetDropDownBounds(DropDownDirection);
+                dropDown.Bounds = GetDropDownBounds(DropDownDirection);
             }
         }
 
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDownHide(EventArgs e)
         {
-            this.Invalidate();
+            Invalidate();
 
             EventHandler handler = (EventHandler)Events[EventDropDownHide];
             if (handler != null)
@@ -540,7 +540,7 @@ namespace System.Windows.Forms
         protected internal virtual void OnDropDownClosed(System.EventArgs e)
         {
             // only send the event if we're the thing that currently owns the DropDown.
-            this.Invalidate();
+            Invalidate();
 
             if (DropDown.OwnerItem == this)
             {
@@ -601,9 +601,9 @@ namespace System.Windows.Forms
                     if (Enabled || DesignMode)
                     {
                         // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu
-                        this.ShowDropDown();
+                        ShowDropDown();
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                        this.DropDown.SelectNextToolStripItem(null, true);
+                        DropDown.SelectNextToolStripItem(null, true);
                     }// else eat the key
                     return true;
 
@@ -624,9 +624,9 @@ namespace System.Windows.Forms
 
                         if (Enabled || DesignMode)
                         {
-                            this.ShowDropDown();
+                            ShowDropDown();
                             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                            this.DropDown.SelectNextToolStripItem(null, true);
+                            DropDown.SelectNextToolStripItem(null, true);
                         } // else eat the key
                         return true;
                     }
@@ -707,13 +707,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowDropDown()
         {
-            this.ShowDropDown(false);
+            ShowDropDown(false);
         }
 
         internal void ShowDropDown(bool mousePush)
         {
-            this.ShowDropDownInternal();
-            ToolStripDropDownMenu menu = this.dropDown as ToolStripDropDownMenu;
+            ShowDropDownInternal();
+            ToolStripDropDownMenu menu = dropDown as ToolStripDropDownMenu;
             if (menu != null)
             {
                 if (!mousePush)
@@ -727,7 +727,7 @@ namespace System.Windows.Forms
         private void ShowDropDownInternal()
         {
 
-            if (this.dropDown == null || (!this.dropDown.Visible))
+            if (dropDown == null || (!dropDown.Visible))
             {
                 // We want to show if there's no dropdown
                 // or if the dropdown is not visible.
@@ -737,23 +737,23 @@ namespace System.Windows.Forms
             // the act of setting the drop down visible the first time sets the parent
             // it seems that GetVisibleCore returns true if your parent is null.
 
-            if (this.dropDown != null && !this.dropDown.Visible)
+            if (dropDown != null && !dropDown.Visible)
             {
 
-                if (this.dropDown.IsAutoGenerated && this.DropDownItems.Count <= 0)
+                if (dropDown.IsAutoGenerated && DropDownItems.Count <= 0)
                 {
                     return;  // this is a no-op for autogenerated drop downs.
                 }
 
-                if (this.DropDown == this.ParentInternal)
+                if (DropDown == ParentInternal)
                 {
                     throw new InvalidOperationException(SR.ToolStripShowDropDownInvalidOperation);
                 }
 
-                this.dropDown.OwnerItem = this;
-                this.dropDown.Location = DropDownLocation;
-                this.dropDown.Show();
-                this.Invalidate();
+                dropDown.OwnerItem = this;
+                dropDown.Location = DropDownLocation;
+                dropDown.Show();
+                Invalidate();
 
                 AccessibilityNotifyClients(AccessibleEvents.StateChange);
                 AccessibilityNotifyClients(AccessibleEvents.NameChange);
@@ -778,13 +778,13 @@ namespace System.Windows.Forms
         internal override void OnKeyboardToolTipHook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipHook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Hook(this.DropDown, toolTip);
+            KeyboardToolTipStateMachine.Instance.Hook(DropDown, toolTip);
         }
 
         internal override void OnKeyboardToolTipUnhook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipUnhook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Unhook(this.DropDown, toolTip);
+            KeyboardToolTipStateMachine.Instance.Unhook(DropDown, toolTip);
         }
     }
 

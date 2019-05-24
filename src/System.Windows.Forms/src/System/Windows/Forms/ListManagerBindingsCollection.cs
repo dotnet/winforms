@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {
             Debug.Assert(bindingManagerBase != null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
-            this._bindingManagerBase = bindingManagerBase;
+            _bindingManagerBase = bindingManagerBase;
         }
 
         protected override void AddCore(Binding dataBinding)

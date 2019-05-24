@@ -67,7 +67,7 @@ namespace System.Windows.Forms
             {
                 if (!trueValue.Equals(value))
                 {
-                    this.trueValue = value;
+                    trueValue = value;
                     OnTrueValueChanged(EventArgs.Empty);
                     Invalidate();
                 }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
             {
                 if (!falseValue.Equals(value))
                 {
-                    this.falseValue = value;
+                    falseValue = value;
                     OnFalseValueChanged(EventArgs.Empty);
                     Invalidate();
                 }
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
             {
                 if (!nullValue.Equals(value))
                 {
-                    this.nullValue = value;
+                    nullValue = value;
                     OnFalseValueChanged(EventArgs.Empty);
                     Invalidate();
                 }
@@ -141,8 +141,8 @@ namespace System.Windows.Forms
         protected internal override void ConcedeFocus()
         {
             base.ConcedeFocus();
-            this.isSelected = false;
-            this.isEditing = false;
+            isSelected = false;
+            isEditing = false;
         }
 
         private Rectangle GetCheckBoxBounds(Rectangle bounds, bool alignToRight)
@@ -179,12 +179,12 @@ namespace System.Windows.Forms
 
         private bool IsReadOnly()
         {
-            bool ret = this.ReadOnly;
-            if (this.DataGridTableStyle != null)
+            bool ret = ReadOnly;
+            if (DataGridTableStyle != null)
             {
-                ret = ret || this.DataGridTableStyle.ReadOnly;
-                if (this.DataGridTableStyle.DataGrid != null)
-                    ret = ret || this.DataGridTableStyle.DataGrid.ReadOnly;
+                ret = ret || DataGridTableStyle.ReadOnly;
+                if (DataGridTableStyle.DataGrid != null)
+                    ret = ret || DataGridTableStyle.DataGrid.ReadOnly;
             }
             return ret;
         }
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
 
             // move the focus away from the previous column and give it to the grid
             //
-            DataGrid grid = this.DataGridTableStyle.DataGrid;
+            DataGrid grid = DataGridTableStyle.DataGrid;
             if (!grid.Focused)
                 grid.Focus();
 
@@ -340,19 +340,19 @@ namespace System.Windows.Forms
 
         private void OnTrueValueChanged(EventArgs e)
         {
-            EventHandler eh = this.Events[EventTrueValue] as EventHandler;
+            EventHandler eh = Events[EventTrueValue] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
         private void OnFalseValueChanged(EventArgs e)
         {
-            EventHandler eh = this.Events[EventFalseValue] as EventHandler;
+            EventHandler eh = Events[EventFalseValue] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
         private void OnAllowNullChanged(EventArgs e)
         {
-            EventHandler eh = this.Events[EventAllowNull] as EventHandler;
+            EventHandler eh = Events[EventAllowNull] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
@@ -374,7 +374,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight)
         {
-            Paint(g, bounds, source, rowNum, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
+            Paint(g, bounds, source, rowNum, DataGridTableStyle.BackBrush, DataGridTableStyle.ForeBrush, alignToRight);
         }
 
         /// <summary>
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
             Region r = g.Clip;
             g.ExcludeClip(box);
 
-            System.Drawing.Brush selectionBrush = this.DataGridTableStyle.IsDefault ? this.DataGridTableStyle.DataGrid.SelectionBackBrush : this.DataGridTableStyle.SelectionBackBrush;
+            System.Drawing.Brush selectionBrush = DataGridTableStyle.IsDefault ? DataGridTableStyle.DataGrid.SelectionBackBrush : DataGridTableStyle.SelectionBackBrush;
             if (isSelected && editingRow == rowNum && !IsReadOnly())
             {
                 g.FillRectangle(selectionBrush, bounds);
@@ -472,7 +472,7 @@ namespace System.Windows.Forms
         {
             // do not throw an exception when the column is marked as readOnly or
             // does not allowNull
-            if (!this.AllowNull || IsReadOnly())
+            if (!AllowNull || IsReadOnly())
                 return;
             if (currentValue != Convert.DBNull)
             {
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
             isEditing = true;
             // tell the dataGrid that things are changing
             // we put Rectangle.Empty cause toggle will invalidate the row anyhow
-            this.DataGridTableStyle.DataGrid.ColumnStartedEditing(Rectangle.Empty);
+            DataGridTableStyle.DataGrid.ColumnStartedEditing(Rectangle.Empty);
         }
     }
 }

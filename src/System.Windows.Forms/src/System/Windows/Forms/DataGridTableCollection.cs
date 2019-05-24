@@ -26,12 +26,12 @@ namespace System.Windows.Forms
 
         int IList.Add(object value)
         {
-            return this.Add((DataGridTableStyle)value);
+            return Add((DataGridTableStyle)value);
         }
 
         void IList.Clear()
         {
-            this.Clear();
+            Clear();
         }
 
         bool IList.Contains(object value)
@@ -51,12 +51,12 @@ namespace System.Windows.Forms
 
         void IList.Remove(object value)
         {
-            this.Remove((DataGridTableStyle)value);
+            Remove((DataGridTableStyle)value);
         }
 
         void IList.RemoveAt(int index)
         {
-            this.RemoveAt(index);
+            RemoveAt(index);
         }
 
         bool IList.IsFixedSize
@@ -77,12 +77,12 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
         int ICollection.Count
         {
-            get { return this.items.Count; }
+            get { return items.Count; }
         }
 
         bool ICollection.IsSynchronized
@@ -175,8 +175,8 @@ namespace System.Windows.Forms
         {
             // set the rowHeaderWidth on the newly added table to at least the minimum value
             // on its owner
-            if (this.owner != null && this.owner.MinimumRowHeaderWidth() > table.RowHeaderWidth)
-                table.RowHeaderWidth = this.owner.MinimumRowHeaderWidth();
+            if (owner != null && owner.MinimumRowHeaderWidth() > table.RowHeaderWidth)
+                table.RowHeaderWidth = owner.MinimumRowHeaderWidth();
 
             if (table.DataGrid != owner && table.DataGrid != null)
                 throw new ArgumentException(SR.DataGridTableStyleCollectionAddedParentedTableStyle, "table");

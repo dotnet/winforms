@@ -32,7 +32,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             for (int i = 0; i < propDesc.Length; i++)
             {
-                propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(this.OnGetAttributes);
+                propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetAttributes);
             }
         }
 

@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
         public ToolStripProgressBar(string name) : this()
         {
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Control as ProgressBar;
+                return Control as ProgressBar;
             }
         }
 
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Owner != null && this.Owner is StatusStrip)
+                if (Owner != null && Owner is StatusStrip)
                 {
                     return scaledDefaultStatusStripMargin;
                 }
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
                 if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
                     direction == UnsafeNativeMethods.NavigateDirection.LastChild)
                 {
-                    return this.ownerItem.ProgressBar.AccessibilityObject;
+                    return ownerItem.ProgressBar.AccessibilityObject;
                 }
 
                 // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var toolStripProgressBarControl = this.Owner as ToolStripProgressBarControl;
+                    var toolStripProgressBarControl = Owner as ToolStripProgressBarControl;
                     if (toolStripProgressBarControl != null)
                     {
                         return toolStripProgressBarControl.Owner.Owner.AccessibilityObject;

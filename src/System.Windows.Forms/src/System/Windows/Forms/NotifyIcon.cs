@@ -231,7 +231,7 @@ namespace System.Windows.Forms
 
             set
             {
-                this.contextMenu = value;
+                contextMenu = value;
             }
         }
 
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
 
             set
             {
-                this.contextMenuStrip = value;
+                contextMenuStrip = value;
             }
         }
 
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
             {
                 if (icon != value)
                 {
-                    this.icon = value;
+                    icon = value;
                     UpdateIcon(visible);
                 }
             }
@@ -304,13 +304,13 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                     value = string.Empty;
-                if (value != null && !value.Equals(this.text))
+                if (value != null && !value.Equals(text))
                 {
                     if (value != null && value.Length > 63)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, string.Format(SR.TrayIcon_TextTooLong));
                     }
-                    this.text = value;
+                    text = value;
                     if (added)
                     {
                         UpdateIcon(true);
@@ -458,8 +458,8 @@ namespace System.Windows.Forms
             {
                 if (window != null)
                 {
-                    this.icon = null;
-                    this.Text = string.Empty;
+                    icon = null;
+                    Text = string.Empty;
                     UpdateIcon(false);
                     window.DestroyHandle();
                     window = null;
@@ -636,7 +636,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowBalloonTip(int timeout)
         {
-            ShowBalloonTip(timeout, this.balloonTipTitle, this.balloonTipText, this.balloonTipIcon);
+            ShowBalloonTip(timeout, balloonTipTitle, balloonTipText, balloonTipIcon);
         }
 
 

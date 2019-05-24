@@ -44,7 +44,7 @@ namespace System.Windows.Forms
 
         public ToolStripComboBox(string name) : this()
         {
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                 if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
                     direction == UnsafeNativeMethods.NavigateDirection.LastChild)
                 {
-                    return this.ownerItem.ComboBox.AccessibilityObject;
+                    return ownerItem.ComboBox.AccessibilityObject;
                 }
 
                 // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.ownerItem.RootToolStrip.AccessibilityObject;
+                    return ownerItem.RootToolStrip.AccessibilityObject;
                 }
             }
         }
@@ -607,7 +607,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeFont()
         {
-            return !object.Equals(this.Font, ToolStripManager.DefaultFont);
+            return !object.Equals(Font, ToolStripManager.DefaultFont);
         }
 
         public override string ToString()
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
 
             public ToolStripComboBoxControl()
             {
-                this.FlatStyle = FlatStyle.Popup;
+                FlatStyle = FlatStyle.Popup;
                 SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
             }
 
@@ -846,7 +846,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        var toolStripComboBoxControl = this.Owner as ToolStripComboBoxControl;
+                        var toolStripComboBoxControl = Owner as ToolStripComboBoxControl;
                         if (toolStripComboBoxControl != null)
                         {
                             return toolStripComboBoxControl.Owner.Owner.AccessibilityObject;
@@ -863,7 +863,7 @@ namespace System.Windows.Forms
                         case NativeMethods.UIA_ControlTypePropertyId:
                             return NativeMethods.UIA_ComboBoxControlTypeId;
                         case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     }
 
                     return base.GetPropertyValue(propertyID);

@@ -138,7 +138,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (this.alignment != value)
+                if (alignment != value)
                 {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAlignment.Top, (int)TabAlignment.Right))
@@ -146,8 +146,8 @@ namespace System.Windows.Forms
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAlignment));
                     }
 
-                    this.alignment = value;
-                    if (this.alignment == TabAlignment.Left || this.alignment == TabAlignment.Right)
+                    alignment = value;
+                    if (alignment == TabAlignment.Left || alignment == TabAlignment.Right)
                         Multiline = true;
                     RecreateHandle();
                 }
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (this.appearance != value)
+                if (appearance != value)
                 {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAppearance.Normal, (int)TabAppearance.FlatButtons))
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAppearance));
                     }
 
-                    this.appearance = value;
+                    appearance = value;
                     RecreateHandle();
 
                     //Fire OnStyleChanged(EventArgs.Empty) here since we are no longer calling UpdateStyles( ) but always reCreating the Handle.
@@ -425,7 +425,7 @@ namespace System.Windows.Forms
 
                 Rectangle r = Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
-                Point p = this.Location;
+                Point p = Location;
                 r.X -= p.X;
                 r.Y -= p.Y;
 
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.imageList != value)
+                if (imageList != value)
                 {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
                         imageList.Disposed -= disposedHandler;
                     }
 
-                    this.imageList = value;
+                    imageList = value;
                     IntPtr handle = (value != null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                         SendMessage(NativeMethods.TCM_SETIMAGELIST, IntPtr.Zero, handle);
@@ -633,8 +633,8 @@ namespace System.Windows.Forms
                 if (Multiline != value)
                 {
                     tabControlState[TABCONTROLSTATE_multiline] = value;
-                    if (Multiline == false && (this.alignment == TabAlignment.Left || this.alignment == TabAlignment.Right))
-                        this.alignment = TabAlignment.Top;
+                    if (Multiline == false && (alignment == TabAlignment.Left || alignment == TabAlignment.Right))
+                        alignment = TabAlignment.Top;
                     RecreateHandle();
                 }
             }
@@ -1180,7 +1180,7 @@ namespace System.Windows.Forms
             {
                 if (imageList != null)
                 {
-                    imageList.Disposed -= new EventHandler(this.DetachImageList);
+                    imageList.Disposed -= new EventHandler(DetachImageList);
                 }
             }
             base.Dispose(disposing);
@@ -1367,7 +1367,7 @@ namespace System.Windows.Forms
         {
 
             //Add the handle to hashtable for Ids ..
-            NativeWindow.AddWindowToIDTable(this, this.Handle);
+            NativeWindow.AddWindowToIDTable(this, Handle);
             handleInTable = true;
 
             // Set the padding BEFORE setting the control's font (as done
@@ -1439,7 +1439,7 @@ namespace System.Windows.Forms
             if (handleInTable)
             {
                 handleInTable = false;
-                NativeWindow.RemoveWindowFromIDTable(this.Handle);
+                NativeWindow.RemoveWindowFromIDTable(Handle);
             }
 
             base.OnHandleDestroyed(e);
@@ -1532,14 +1532,14 @@ namespace System.Windows.Forms
         {
             // Avoid temporarily resizing the TabControl while the parent 
             // recreates its handle to avoid 
-            this.skipUpdateSize = true;
+            skipUpdateSize = true;
             try
             {
                 base.OnParentHandleRecreated();
             }
             finally
             {
-                this.skipUpdateSize = false;
+                skipUpdateSize = false;
             }
         }
 
@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateSize()
         {
-            if (this.skipUpdateSize)
+            if (skipUpdateSize)
             {
                 return;
             }
@@ -1731,7 +1731,7 @@ namespace System.Windows.Forms
 
         protected void RemoveAll()
         {
-            this.Controls.Clear();
+            Controls.Clear();
 
             SendMessage(NativeMethods.TCM_DELETEALLITEMS, 0, 0);
             tabPages = null;
@@ -1783,7 +1783,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string controlToolTipText)
         {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TCM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
             controlTipText = controlToolTipText;
 
         }
@@ -2117,11 +2117,11 @@ namespace System.Windows.Forms
         /// </summary>
         private bool WmSelChange()
         {
-            TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(this.SelectedTab, this.SelectedIndex, false, TabControlAction.Selecting);
+            TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(SelectedTab, SelectedIndex, false, TabControlAction.Selecting);
             OnSelecting(tcc);
             if (!tcc.Cancel)
             {
-                OnSelected(new TabControlEventArgs(this.SelectedTab, this.SelectedIndex, TabControlAction.Selected));
+                OnSelected(new TabControlEventArgs(SelectedTab, SelectedIndex, TabControlAction.Selected));
                 OnSelectedIndexChanged(EventArgs.Empty);
             }
             else
@@ -2154,11 +2154,11 @@ namespace System.Windows.Forms
             // if 'cancelled' return from here else..
             // fire Deselected.
             lastSelection = SelectedIndex;
-            TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(this.SelectedTab, this.SelectedIndex, false, TabControlAction.Deselecting);
+            TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(SelectedTab, SelectedIndex, false, TabControlAction.Deselecting);
             OnDeselecting(tcc);
             if (!tcc.Cancel)
             {
-                OnDeselected(new TabControlEventArgs(this.SelectedTab, this.SelectedIndex, TabControlAction.Deselected));
+                OnDeselected(new TabControlEventArgs(SelectedTab, SelectedIndex, TabControlAction.Deselected));
             }
             return tcc.Cancel;
 
@@ -2555,7 +2555,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
@@ -2651,7 +2651,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
 
             public virtual void Clear()

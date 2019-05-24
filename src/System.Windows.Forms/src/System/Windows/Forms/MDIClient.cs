@@ -120,7 +120,7 @@ namespace System.Windows.Forms
                     SetState(STATE_ENABLED, false);
                 }
 
-                if (this.RightToLeft == RightToLeft.Yes && this.ParentInternal != null && this.ParentInternal.IsMirrored)
+                if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
@@ -401,12 +401,12 @@ namespace System.Windows.Forms
 
         internal override void OnInvokedSetScrollPosition(object sender, EventArgs e)
         {
-            Application.Idle += new EventHandler(this.OnIdle); //do this on idle (it must be mega-delayed).
+            Application.Idle += new EventHandler(OnIdle); //do this on idle (it must be mega-delayed).
         }
 
         private void OnIdle(object sender, EventArgs e)
         {
-            Application.Idle -= new EventHandler(this.OnIdle);
+            Application.Idle -= new EventHandler(OnIdle);
             base.OnInvokedSetScrollPosition(sender, e);
         }
 

@@ -123,7 +123,7 @@ namespace System.Windows.Forms
 
                     if (baseComp is ContainerControl)
                     {
-                        this.ContainerControl = (ContainerControl)baseComp;
+                        ContainerControl = (ContainerControl)baseComp;
                     }
                 }
             }
@@ -157,12 +157,12 @@ namespace System.Windows.Forms
 
                 // If the blinkRate == 0, then set blinkStyle = neverBlink
                 //
-                if (this.blinkRate == 0)
+                if (blinkRate == 0)
                 {
                     value = ErrorBlinkStyle.NeverBlink;
                 }
 
-                if (this.blinkStyle == value)
+                if (blinkStyle == value)
                 {
                     return;
                 }
@@ -171,8 +171,8 @@ namespace System.Windows.Forms
                 {
                     // we need to startBlinking on all the controlItems
                     // in our items hashTable.
-                    this.showIcon = true;
-                    this.blinkStyle = ErrorBlinkStyle.AlwaysBlink;
+                    showIcon = true;
+                    blinkStyle = ErrorBlinkStyle.AlwaysBlink;
                     foreach (ErrorWindow w in windows.Values)
                     {
                         w.StartBlinking();
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
                 else if (blinkStyle == ErrorBlinkStyle.AlwaysBlink)
                 {
                     // we need to stop blinking...
-                    this.blinkStyle = value;
+                    blinkStyle = value;
                     foreach (ErrorWindow w in windows.Values)
                     {
                         w.StopBlinking();
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    this.blinkStyle = value;
+                    blinkStyle = value;
                 }
             }
         }
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
                     if (parentControl != null)
                         parentControl.BindingContextChanged += propChangedEvent;
 
-                    Set_ErrorManager(this.DataSource, this.DataMember, true);
+                    Set_ErrorManager(DataSource, DataMember, true);
                 }
             }
         }
@@ -293,8 +293,8 @@ namespace System.Windows.Forms
             inSetErrorManager = true;
             try
             {
-                bool dataSourceChanged = this.DataSource != newDataSource;
-                bool dataMemberChanged = this.DataMember != newDataMember;
+                bool dataSourceChanged = DataSource != newDataSource;
+                bool dataMemberChanged = DataMember != newDataMember;
 
                 //if nothing changed, then do not do any work
                 //
@@ -305,8 +305,8 @@ namespace System.Windows.Forms
 
                 // set the dataSource and the dataMember
                 //
-                this.dataSource = newDataSource;
-                this.dataMember = newDataMember;
+                dataSource = newDataSource;
+                dataMember = newDataMember;
 
                 if (initializing)
                 {
@@ -320,9 +320,9 @@ namespace System.Windows.Forms
 
                     // get the new errorManager
                     //
-                    if (parentControl != null && this.dataSource != null && parentControl.BindingContext != null)
+                    if (parentControl != null && dataSource != null && parentControl.BindingContext != null)
                     {
-                        errorManager = parentControl.BindingContext[this.dataSource, this.dataMember];
+                        errorManager = parentControl.BindingContext[dataSource, dataMember];
                     }
                     else
                     {
@@ -362,21 +362,21 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (parentControl != null && value != null && !string.IsNullOrEmpty(this.dataMember))
+                if (parentControl != null && value != null && !string.IsNullOrEmpty(dataMember))
                 {
                     // Let's check if the datamember exists in the new data source
                     try
                     {
-                        errorManager = parentControl.BindingContext[value, this.dataMember];
+                        errorManager = parentControl.BindingContext[value, dataMember];
                     }
                     catch (ArgumentException)
                     {
                         // The data member doesn't exist in the data source, so set it to null
-                        this.dataMember = string.Empty;
+                        dataMember = string.Empty;
                     }
                 }
 
-                Set_ErrorManager(value, this.DataMember, false);
+                Set_ErrorManager(value, DataMember, false);
             }
         }
 
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                     value = string.Empty;
-                Set_ErrorManager(this.DataSource, value, false);
+                Set_ErrorManager(DataSource, value, false);
             }
         }
 
@@ -423,14 +423,14 @@ namespace System.Windows.Forms
             if (listManager != null)
             {
                 listManager.CurrentChanged += currentChanged;
-                listManager.BindingComplete += new BindingCompleteEventHandler(this.ErrorManager_BindingComplete);
+                listManager.BindingComplete += new BindingCompleteEventHandler(ErrorManager_BindingComplete);
 
                 CurrencyManager currManager = listManager as CurrencyManager;
 
                 if (currManager != null)
                 {
-                    currManager.ItemChanged += new ItemChangedEventHandler(this.ErrorManager_ItemChanged);
-                    currManager.Bindings.CollectionChanged += new CollectionChangeEventHandler(this.ErrorManager_BindingsChanged);
+                    currManager.ItemChanged += new ItemChangedEventHandler(ErrorManager_ItemChanged);
+                    currManager.Bindings.CollectionChanged += new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
                 }
             }
         }
@@ -440,14 +440,14 @@ namespace System.Windows.Forms
             if (listManager != null)
             {
                 listManager.CurrentChanged -= currentChanged;
-                listManager.BindingComplete -= new BindingCompleteEventHandler(this.ErrorManager_BindingComplete);
+                listManager.BindingComplete -= new BindingCompleteEventHandler(ErrorManager_BindingComplete);
 
                 CurrencyManager currManager = listManager as CurrencyManager;
 
                 if (currManager != null)
                 {
-                    currManager.ItemChanged -= new ItemChangedEventHandler(this.ErrorManager_ItemChanged);
-                    currManager.Bindings.CollectionChanged -= new CollectionChangeEventHandler(this.ErrorManager_BindingsChanged);
+                    currManager.ItemChanged -= new ItemChangedEventHandler(ErrorManager_ItemChanged);
+                    currManager.Bindings.CollectionChanged -= new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
                 }
             }
         }
@@ -469,7 +469,7 @@ namespace System.Windows.Forms
 
         private void ParentControl_BindingContextChanged(object sender, EventArgs e)
         {
-            Set_ErrorManager(this.DataSource, this.DataMember, true);
+            Set_ErrorManager(DataSource, DataMember, true);
         }
 
         // Work around... we should figure out if errors changed automatically.
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
             if (setErrorManagerOnEndInit)
             {
                 setErrorManagerOnEndInit = false;
-                Set_ErrorManager(this.DataSource, this.DataMember, true);
+                Set_ErrorManager(DataSource, DataMember, true);
             }
         }
 
@@ -700,7 +700,7 @@ namespace System.Windows.Forms
         //
         void ISupportInitialize.EndInit()
         {
-            ISupportInitializeNotification dsInit = (this.DataSource as ISupportInitializeNotification);
+            ISupportInitializeNotification dsInit = (DataSource as ISupportInitializeNotification);
 
             if (dsInit != null && !dsInit.IsInitialized)
             {
@@ -718,7 +718,7 @@ namespace System.Windows.Forms
         //
         private void DataSource_Initialized(object sender, EventArgs e)
         {
-            ISupportInitializeNotification dsInit = (this.DataSource as ISupportInitializeNotification);
+            ISupportInitializeNotification dsInit = (DataSource as ISupportInitializeNotification);
 
             Debug.Assert(dsInit != null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
             Debug.Assert(dsInit.IsInitialized, "ErrorProvider: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
@@ -1326,7 +1326,7 @@ namespace System.Windows.Forms
 
 
                     DeviceContext dc = null;
-                    dc = DeviceContext.FromHwnd(this.Handle);
+                    dc = DeviceContext.FromHwnd(Handle);
                     try
                     {
                         CreateMirrorDC(dc.Hdc, windowBounds.Width);
@@ -1432,9 +1432,9 @@ namespace System.Windows.Forms
             /// </summary>
             public ControlItem(ErrorProvider provider, Control control, IntPtr id)
             {
-                this.toolTipShown = false;
-                this.iconAlignment = defaultIconAlignment;
-                this.error = string.Empty;
+                toolTipShown = false;
+                iconAlignment = defaultIconAlignment;
+                error = string.Empty;
                 this.id = id;
                 this.control = control;
                 this.provider = provider;
@@ -1595,11 +1595,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.toolTipShown;
+                    return toolTipShown;
                 }
                 set
                 {
-                    this.toolTipShown = value;
+                    toolTipShown = value;
                 }
             }
 
@@ -1745,7 +1745,7 @@ namespace System.Windows.Forms
 
             void OnParentVisibleChanged(object sender, EventArgs e)
             {
-                this.BlinkPhase = 0;
+                BlinkPhase = 0;
                 RemoveFromWindow();
                 AddToWindow();
             }

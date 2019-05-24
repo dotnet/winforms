@@ -111,9 +111,9 @@ namespace System.Windows.Forms
             }
             this.keys = keys;
             this.items = items;
-            this.lcid = culture == null ? SafeNativeMethods.GetThreadLocale() : culture.LCID;
+            lcid = culture == null ? SafeNativeMethods.GetThreadLocale() : culture.LCID;
             this.options = options & CompareOptions;
-            this.descending = (options & Descending) != 0;
+            descending = (options & Descending) != 0;
         }
 
         /// <summary>

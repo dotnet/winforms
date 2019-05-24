@@ -97,7 +97,7 @@ namespace System.Windows.Forms
 
             if (strings != null)
             {
-                this.strings = newSource;
+                strings = newSource;
             }
             current = 0;
             size = (strings == null) ? 0 : strings.Length;

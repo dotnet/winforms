@@ -331,20 +331,20 @@ namespace System.Windows.Forms
                 {
 
                     NativeImageList himl = value.GetNativeImageList();
-                    if (himl != null && himl != this.nativeImageList)
+                    if (himl != null && himl != nativeImageList)
                     {
-                        bool recreatingHandle = this.HandleCreated;//We only need to fire RecreateHandle if there was a previous handle
+                        bool recreatingHandle = HandleCreated;//We only need to fire RecreateHandle if there was a previous handle
                         DestroyHandle();
                         originals = null;
-                        this.nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Duplicate(new HandleRef(himl, himl.Handle)));
+                        nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Duplicate(new HandleRef(himl, himl.Handle)));
                         int x, y;
-                        if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, this.nativeImageList.Handle), out x, out y))
+                        if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out x, out y))
                         {
                             imageSize = new Size(x, y);
                         }
                         // need to get the image bpp
                         NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image?
-                        if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, this.nativeImageList.Handle), 0, imageInfo))
+                        if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo))
                         {
                             NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
                             UnsafeNativeMethods.GetObject(new HandleRef(null, imageInfo.hbmImage), Marshal.SizeOf(bmp), bmp);
@@ -770,7 +770,7 @@ namespace System.Windows.Forms
             {
 
                 NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image inside of imageinfo?
-                if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, this.Handle), index, imageInfo))
+                if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, Handle), index, imageInfo))
                 {
                     Bitmap tmpBitmap = null;
                     BitmapData bmpData = null;
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms
                 if (imageInfoCollection != null)
                     imageInfoCollection.Clear();
 
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     imageInfoCollection.Add(new ImageCollection.ImageInfo());
                 }
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(string key, Image image)
             {
-                Debug.Assert((this.Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
+                Debug.Assert((Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
                 ImageInfo imageInfo = new ImageInfo();
@@ -1354,7 +1354,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(string key, Icon icon)
             {
-                Debug.Assert((this.Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
+                Debug.Assert((Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
                 ImageInfo imageInfo = new ImageInfo();
@@ -1613,7 +1613,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if ((imageInfoCollection[i] != null) &&
                             (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)imageInfoCollection[i]).Name, key, /* ignoreCase = */ true)))
@@ -1640,7 +1640,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
 
             void ICollection.CopyTo(Array dest, int index)

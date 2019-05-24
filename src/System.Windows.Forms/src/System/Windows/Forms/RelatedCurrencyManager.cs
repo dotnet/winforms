@@ -43,12 +43,12 @@ namespace System.Windows.Forms
 
             this.parentManager = parentManager;
             this.dataField = dataField;
-            this.fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
+            fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
             if (fieldInfo == null || !typeof(IList).IsAssignableFrom(fieldInfo.PropertyType))
             {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }
-            this.finalType = fieldInfo.PropertyType;
+            finalType = fieldInfo.PropertyType;
 
             // Wire new BindingManagerBase
             WireParentManager(this.parentManager);
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             }
 
             // Set this accessor (add to the beginning)
-            accessors[0] = this.fieldInfo;
+            accessors[0] = fieldInfo;
 
             // Get props
             return parentManager.GetItemProperties(accessors);
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            int oldlistposition = this.listposition;
+            int oldlistposition = listposition;
 
             // we only pull the data from the controls into the backEnd. we do not care about keeping the lastGoodKnownRow
             // when we are about to change the entire list in this currencymanager.

@@ -38,7 +38,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected ButtonBase Control
         {
-            get { return this.control; }
+            get { return control; }
         }
 
         internal void Paint(PaintEventArgs pevent)
@@ -645,7 +645,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!layout.options.everettButtonCompat)
             { // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, this.Control.Width - (2 * buttonBorderSize), this.Control.Height - (2 * buttonBorderSize));
+                Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, Control.Width - (2 * buttonBorderSize), Control.Height - (2 * buttonBorderSize));
 
                 Region newClip = oldClip.Clone();
                 newClip.Intersect(bounds);
@@ -950,7 +950,7 @@ namespace System.Windows.Forms.ButtonInternal
                     colors.windowText = colors.windowFrame;
                 }
 
-                IntPtr hdc = this.graphics.GetHdc();
+                IntPtr hdc = graphics.GetHdc();
 
                 try
                 {
@@ -970,7 +970,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 finally
                 {
-                    this.graphics.ReleaseHdc();
+                    graphics.ReleaseHdc();
                 }
 
                 return colors;
@@ -1045,11 +1045,11 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     StringFormat format = new StringFormat();
 
-                    format.FormatFlags = this.gdipFormatFlags;
-                    format.Trimming = this.gdipTrimming;
-                    format.HotkeyPrefix = this.gdipHotkeyPrefix;
-                    format.Alignment = this.gdipAlignment;
-                    format.LineAlignment = this.gdipLineAlignment;
+                    format.FormatFlags = gdipFormatFlags;
+                    format.Trimming = gdipTrimming;
+                    format.HotkeyPrefix = gdipHotkeyPrefix;
+                    format.Alignment = gdipAlignment;
+                    format.LineAlignment = gdipLineAlignment;
 
                     if (disableWordWrapping)
                     {
@@ -1060,11 +1060,11 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 set
                 {
-                    this.gdipFormatFlags = value.FormatFlags;
-                    this.gdipTrimming = value.Trimming;
-                    this.gdipHotkeyPrefix = value.HotkeyPrefix;
-                    this.gdipAlignment = value.Alignment;
-                    this.gdipLineAlignment = value.LineAlignment;
+                    gdipFormatFlags = value.FormatFlags;
+                    gdipTrimming = value.Trimming;
+                    gdipHotkeyPrefix = value.HotkeyPrefix;
+                    gdipAlignment = value.Alignment;
+                    gdipLineAlignment = value.LineAlignment;
                 }
             }
 
@@ -1211,12 +1211,12 @@ namespace System.Windows.Forms.ButtonInternal
                     // If someone has a carriage return in the text we'll honor that for preferred size, but we wont wrap based on constraints.
                     try
                     {
-                        this.disableWordWrapping = true;
+                        disableWordWrapping = true;
                         textSize = GetTextSize(proposedSize) + textImageInsetSize;
                     }
                     finally
                     {
-                        this.disableWordWrapping = false;
+                        disableWordWrapping = false;
                     }
                 }
 
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms.ButtonInternal
             internal LayoutData Layout()
             {
                 LayoutData layout = new LayoutData(this);
-                layout.client = this.client;
+                layout.client = client;
 
                 // subtract border size from layout area
                 int fullBorderSize = FullBorderSize;
@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms.ButtonInternal
                     layout.focus.Inflate(-1, -1);
 
                     // Adjust for padding.
-                    layout.focus = LayoutUtils.InflateRect(layout.focus, this.padding);
+                    layout.focus = LayoutUtils.InflateRect(layout.focus, padding);
                 }
                 else
                 {
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms.ButtonInternal
                 { // GDI+ text rendering.
                     using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
                     {
-                        using (StringFormat gdipStringFormat = this.StringFormat)
+                        using (StringFormat gdipStringFormat = StringFormat)
                         {
                             textSize = Size.Ceiling(g.MeasureString(text, font, new SizeF(proposedSize.Width, proposedSize.Height), gdipStringFormat));
                         }
@@ -1657,7 +1657,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else if (!string.IsNullOrEmpty(text))
                 { // GDI text rendering (Whidbey feature).
-                    textSize = TextRenderer.MeasureText(text, font, proposedSize, this.TextFormatFlags);
+                    textSize = TextRenderer.MeasureText(text, font, proposedSize, TextFormatFlags);
                 }
                 //else skip calling MeasureText, it should return 0,0
 

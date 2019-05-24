@@ -123,7 +123,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AllowSorting"));
                 }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
                 }
@@ -207,19 +207,19 @@ namespace System.Windows.Forms
 
         protected bool ShouldSerializeBackColor()
         {
-            return !System.Windows.Forms.DataGridTableStyle.DefaultBackBrush.Equals(this.backBrush);
+            return !System.Windows.Forms.DataGridTableStyle.DefaultBackBrush.Equals(backBrush);
         }
 
         protected bool ShouldSerializeForeColor()
         {
-            return !System.Windows.Forms.DataGridTableStyle.DefaultForeBrush.Equals(this.foreBrush);
+            return !System.Windows.Forms.DataGridTableStyle.DefaultForeBrush.Equals(foreBrush);
         }
 
         internal SolidBrush BackBrush
         {
             get
             {
-                return this.backBrush;
+                return backBrush;
             }
         }
 
@@ -231,11 +231,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.backBrush.Color;
+                return backBrush.Color;
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "BackColor"));
                 }
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
                 }
                 if (!backBrush.Color.Equals(value))
                 {
-                    this.backBrush = new SolidBrush(value);
+                    backBrush = new SolidBrush(value);
                     InvalidateInside();
                     OnBackColorChanged(EventArgs.Empty);
                 }
@@ -264,9 +264,9 @@ namespace System.Windows.Forms
 
         public void ResetBackColor()
         {
-            if (!this.backBrush.Equals(DefaultBackBrush))
+            if (!backBrush.Equals(DefaultBackBrush))
             {
-                this.BackColor = DefaultBackBrush.Color;
+                BackColor = DefaultBackBrush.Color;
             }
         }
 
@@ -274,22 +274,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGrid dataGrid = this.DataGrid;
+                DataGrid dataGrid = DataGrid;
                 if (dataGrid == null)
                     return 0;
                 // if the user set the GridLineStyle property on the dataGrid.
                 // then use the value of that property
                 DataGridLineStyle gridStyle;
                 int gridLineWidth;
-                if (this.IsDefault)
+                if (IsDefault)
                 {
-                    gridStyle = this.DataGrid.GridLineStyle;
-                    gridLineWidth = this.DataGrid.GridLineWidth;
+                    gridStyle = DataGrid.GridLineStyle;
+                    gridLineWidth = DataGrid.GridLineWidth;
                 }
                 else
                 {
-                    gridStyle = this.GridLineStyle;
-                    gridLineWidth = this.GridLineWidth;
+                    gridStyle = GridLineStyle;
+                    gridLineWidth = GridLineWidth;
                 }
 
                 if (gridStyle == DataGridLineStyle.None)
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.focusedTextWidth;
+                return focusedTextWidth;
             }
         }
 
@@ -411,11 +411,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.foreBrush.Color;
+                return foreBrush.Color;
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "ForeColor"));
                 }
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
                 }
                 if (!foreBrush.Color.Equals(value))
                 {
-                    this.foreBrush = new SolidBrush(value);
+                    foreBrush = new SolidBrush(value);
                     InvalidateInside();
                     OnForeColorChanged(EventArgs.Empty);
                 }
@@ -444,15 +444,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.foreBrush;
+                return foreBrush;
             }
         }
 
         public void ResetForeColor()
         {
-            if (!this.foreBrush.Equals(DefaultForeBrush))
+            if (!foreBrush.Equals(DefaultForeBrush))
             {
-                this.ForeColor = DefaultForeBrush.Color;
+                ForeColor = DefaultForeBrush.Color;
             }
         }
 
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineColor"));
                 }
@@ -516,7 +516,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(this.GridLineStyle == DataGridLineStyle.Solid || this.GridLineStyle == DataGridLineStyle.None, "are there any other styles?");
+                Debug.Assert(GridLineStyle == DataGridLineStyle.Solid || GridLineStyle == DataGridLineStyle.None, "are there any other styles?");
                 return GridLineStyle == DataGridLineStyle.Solid ? 1 : 0;
             }
         }
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
                 }
@@ -571,7 +571,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderBackColor"));
                 }
@@ -633,11 +633,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (headerFont == null ? (this.DataGrid == null ? Control.DefaultFont : this.DataGrid.Font) : headerFont);
+                return (headerFont == null ? (DataGrid == null ? Control.DefaultFont : DataGrid.Font) : headerFont);
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderFont"));
                 }
@@ -692,7 +692,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderForeColor"));
                 }
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.headerForeBrush;
+                return headerForeBrush;
             }
         }
 
@@ -763,7 +763,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "LinkColor"));
                 }
@@ -814,7 +814,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.LinkColor;
+                return LinkColor;
             }
             [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
             set
@@ -838,11 +838,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.relationshipRect.IsEmpty)
+                if (relationshipRect.IsEmpty)
                 {
                     ComputeRelationshipRect();
                 }
-                return this.relationshipRect;
+                return relationshipRect;
             }
         }
 
@@ -858,9 +858,9 @@ namespace System.Windows.Forms
 
                 // Determine the width of the widest relationship name
                 int longestRelationship = 0;
-                for (int r = 0; r < this.RelationsList.Count; ++r)
+                for (int r = 0; r < RelationsList.Count; ++r)
                 {
-                    int rwidth = (int)Math.Ceiling(g.MeasureString(((string)this.RelationsList[r]), this.DataGrid.LinkFont).Width)
+                    int rwidth = (int)Math.Ceiling(g.MeasureString(((string)RelationsList[r]), DataGrid.LinkFont).Width)
 ;
                     if (rwidth > longestRelationship)
                         longestRelationship = rwidth;
@@ -870,9 +870,9 @@ namespace System.Windows.Forms
 
                 relationshipRect.Width = longestRelationship + 5;
                 relationshipRect.Width += 2; // relationshipRect border;
-                relationshipRect.Height = BorderWidth + relationshipHeight * this.RelationsList.Count;
+                relationshipRect.Height = BorderWidth + relationshipHeight * RelationsList.Count;
                 relationshipRect.Height += 2; // relationship border
-                if (this.RelationsList.Count > 0)
+                if (RelationsList.Count > 0)
                     relationshipRect.Height += 2 * relationshipSpacing;
             }
             return relationshipRect;
@@ -880,16 +880,16 @@ namespace System.Windows.Forms
 
         internal void ResetRelationsUI()
         {
-            this.relationshipRect = Rectangle.Empty;
-            this.focusedRelation = -1;
-            this.relationshipHeight = this.dataGrid.LinkFontHeight + relationshipSpacing;
+            relationshipRect = Rectangle.Empty;
+            focusedRelation = -1;
+            relationshipHeight = dataGrid.LinkFontHeight + relationshipSpacing;
         }
 
         internal int RelationshipHeight
         {
             get
             {
-                return this.relationshipHeight;
+                return relationshipHeight;
             }
         }
 
@@ -914,7 +914,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
                 }
@@ -958,7 +958,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
                 }
@@ -1085,8 +1085,8 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.DataGrid != null)
-                    value = Math.Max(this.DataGrid.MinimumRowHeaderWidth(), value);
+                if (DataGrid != null)
+                    value = Math.Max(DataGrid.MinimumRowHeaderWidth(), value);
                 if (rowHeaderWidth != value)
                 {
                     rowHeaderWidth = value;
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionBackColor"));
                 }
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.selectionBackBrush;
+                return selectionBackBrush;
             }
         }
 
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.selectionForeBrush;
+                return selectionForeBrush;
             }
         }
 
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.isDefaultTableStyle)
+                if (isDefaultTableStyle)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionForeColor"));
                 }
@@ -1225,8 +1225,8 @@ namespace System.Windows.Forms
         //
         private void InvalidateInside()
         {
-            if (this.DataGrid != null)
-                this.DataGrid.InvalidateInside();
+            if (DataGrid != null)
+                DataGrid.InvalidateInside();
         }
 
         [
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms
         public DataGridTableStyle(bool isDefaultTableStyle)
         {
             gridColumns = new GridColumnStylesCollection(this, isDefaultTableStyle);
-            gridColumns.CollectionChanged += new CollectionChangeEventHandler(this.OnColumnCollectionChanged);
+            gridColumns.CollectionChanged += new CollectionChangeEventHandler(OnColumnCollectionChanged);
             this.isDefaultTableStyle = isDefaultTableStyle;
         }
 
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms
         public DataGridTableStyle(CurrencyManager listManager) : this()
         {
             Debug.Assert(listManager != null, "the DataGridTabel cannot use a null listManager");
-            this.mappingName = listManager.GetListName();
+            mappingName = listManager.GetListName();
             // set up the Relations and the columns
             SetGridColumnStylesCollection(listManager);
         }
@@ -1268,7 +1268,7 @@ namespace System.Windows.Forms
         internal void SetRelationsList(CurrencyManager listManager)
         {
             PropertyDescriptorCollection propCollection = listManager.GetItemProperties();
-            Debug.Assert(!this.IsDefault, "the grid can set the relations only on a table that was manually added by the user");
+            Debug.Assert(!IsDefault, "the grid can set the relations only on a table that was manually added by the user");
             int propCount = propCollection.Count;
             if (relationsList.Count > 0)
                 relationsList.Clear();
@@ -1287,7 +1287,7 @@ namespace System.Windows.Forms
         internal void SetGridColumnStylesCollection(CurrencyManager listManager)
         {
             // when we are setting the gridColumnStyles, do not handle any gridColumnCollectionChanged events
-            gridColumns.CollectionChanged -= new CollectionChangeEventHandler(this.OnColumnCollectionChanged);
+            gridColumns.CollectionChanged -= new CollectionChangeEventHandler(OnColumnCollectionChanged);
 
             PropertyDescriptorCollection propCollection = listManager.GetItemProperties();
 
@@ -1312,8 +1312,8 @@ namespace System.Windows.Forms
                 else
                 {
                     // column
-                    DataGridColumnStyle col = this.CreateGridColumn(prop, this.isDefaultTableStyle);
-                    if (this.isDefaultTableStyle)
+                    DataGridColumnStyle col = CreateGridColumn(prop, isDefaultTableStyle);
+                    if (isDefaultTableStyle)
                         gridColumns.AddDefaultColumn(col);
                     else
                     {
@@ -1325,7 +1325,7 @@ namespace System.Windows.Forms
             }
 
             // now we are able to handle the collectionChangeEvents
-            gridColumns.CollectionChanged += new CollectionChangeEventHandler(this.OnColumnCollectionChanged);
+            gridColumns.CollectionChanged += new CollectionChangeEventHandler(OnColumnCollectionChanged);
         }
 
         private static bool PropertyDescriptorIsARelation(PropertyDescriptor prop)
@@ -1335,7 +1335,7 @@ namespace System.Windows.Forms
 
         internal protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop)
         {
-            return this.CreateGridColumn(prop, false);
+            return CreateGridColumn(prop, false);
         }
 
         internal protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop, bool isDefault)
@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms
 
         internal void ResetRelationsList()
         {
-            if (this.isDefaultTableStyle)
+            if (isDefaultTableStyle)
             {
                 relationsList.Clear();
             }
@@ -1399,18 +1399,18 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 if (value.Equals(mappingName))
                     return;
-                string originalMappingName = this.MappingName;
+                string originalMappingName = MappingName;
                 mappingName = value;
 
                 // this could throw
                 try
                 {
-                    if (this.DataGrid != null)
-                        this.DataGrid.TableStyles.CheckForMappingNameDuplicates(this);
+                    if (DataGrid != null)
+                        DataGrid.TableStyles.CheckForMappingNameDuplicates(this);
                 }
                 catch
                 {
-                    this.mappingName = originalMappingName;
+                    mappingName = originalMappingName;
                     throw;
                 }
                 OnMappingNameChanged(EventArgs.Empty);
@@ -1524,7 +1524,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber)
         {
-            DataGrid grid = this.DataGrid;
+            DataGrid grid = DataGrid;
             if (grid == null)
                 return false;
             else
@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort)
         {
-            DataGrid grid = this.DataGrid;
+            DataGrid grid = DataGrid;
             if (grid == null)
                 return false;
             else
@@ -1554,11 +1554,11 @@ namespace System.Windows.Forms
 
         private void OnColumnCollectionChanged(object sender, CollectionChangeEventArgs e)
         {
-            gridColumns.CollectionChanged -= new CollectionChangeEventHandler(this.OnColumnCollectionChanged);
+            gridColumns.CollectionChanged -= new CollectionChangeEventHandler(OnColumnCollectionChanged);
 
             try
             {
-                DataGrid grid = this.DataGrid;
+                DataGrid grid = DataGrid;
                 DataGridColumnStyle col = e.Element as DataGridColumnStyle;
                 if (e.Action == CollectionChangeAction.Add)
                 {
@@ -1586,7 +1586,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                gridColumns.CollectionChanged += new CollectionChangeEventHandler(this.OnColumnCollectionChanged);
+                gridColumns.CollectionChanged += new CollectionChangeEventHandler(OnColumnCollectionChanged);
             }
         }
 
@@ -1731,7 +1731,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                GridColumnStylesCollection cols = this.GridColumnStyles;
+                GridColumnStylesCollection cols = GridColumnStyles;
                 if (cols != null)
                 {
                     for (int i = 0; i < cols.Count; i++)
@@ -1745,7 +1745,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.isDefaultTableStyle;
+                return isDefaultTableStyle;
             }
         }
 

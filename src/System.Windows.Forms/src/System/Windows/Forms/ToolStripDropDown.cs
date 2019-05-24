@@ -475,7 +475,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.IsFontSet())
+                if (IsFontSet())
                 {
                     return base.Font;
                 }
@@ -708,7 +708,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Screen.GetWorkingArea(this.Bounds).Size - this.Padding.Size;
+                return Screen.GetWorkingArea(Bounds).Size - Padding.Size;
             }
         }
 
@@ -795,15 +795,15 @@ namespace System.Windows.Forms
             {
                 if (ownerItem != value)
                 {
-                    Font originalFont = this.Font;
-                    RightToLeft startRightToLeft = this.RightToLeft;
+                    Font originalFont = Font;
+                    RightToLeft startRightToLeft = RightToLeft;
                     ownerItem = value;
                     // RESET ambient properties
                     if (!originalFont.Equals(Font))
                     {
                         OnOwnerItemFontChanged(EventArgs.Empty);
                     }
-                    if (ownerItem != null && RightToLeftInherited && startRightToLeft != this.RightToLeft)
+                    if (ownerItem != null && RightToLeftInherited && startRightToLeft != RightToLeft)
                     {
                         using (new LayoutTransaction(this, this, PropertyNames.RightToLeft))
                         {
@@ -1119,9 +1119,9 @@ namespace System.Windows.Forms
         internal void AdjustSize()
         {
             Size size = GetSuggestedSize();
-            if (size != this.Size)
+            if (size != Size)
             {
-                this.Size = size;
+                Size = size;
             }
         }
 
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms
         public void Close()
         {
             SetCloseReason(ToolStripDropDownCloseReason.CloseCalled);
-            this.Visible = false;
+            Visible = false;
             // we were the last one in the chain, roll out of menu mode.
             if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == null)
             {
@@ -1229,7 +1229,7 @@ namespace System.Windows.Forms
         public void Close(ToolStripDropDownCloseReason reason)
         {
             SetCloseReason(reason);
-            this.Visible = false;
+            Visible = false;
         }
 
         /// <summary>
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms
             {
                 return GetPreferredSize(Size.Empty);
             }
-            return this.Size;
+            return Size;
         }
 
         /// <summary>
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms
         {
             // Only clear the SourceControl if this is the last click.
             if (!LocalAppContextSwitches.UseLegacyContextMenuStripSourceControlValue &&
-                this.ActiveDropDowns.Count == 0)
+                ActiveDropDowns.Count == 0)
             {
                 // post processing after the click has happened.
                 SourceControlInternal = null;
@@ -1370,12 +1370,12 @@ namespace System.Windows.Forms
             SetState(STATE_MODAL, true);
 
             SetStyle(ControlStyles.ResizeRedraw, true);
-            this.UpdateStyles();
-            this.GripStyle = ToolStripGripStyle.Hidden;
-            this.CanOverflow = false;
-            this.LayoutStyle = ToolStripLayoutStyle.Flow;
-            this.MenuAutoExpand = true;
-            this.AutoSize = true;
+            UpdateStyles();
+            GripStyle = ToolStripGripStyle.Hidden;
+            CanOverflow = false;
+            LayoutStyle = ToolStripLayoutStyle.Flow;
+            MenuAutoExpand = true;
+            AutoSize = true;
         }
 
 
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms
 
         protected override void OnVisibleChanged(System.EventArgs e)
         {
-            if (this.Location != this.displayLocation)
+            if (Location != displayLocation)
             {
                 // If we adjusted the position from where the user wanted it,
                 // see if we can put it in the right location now that they've changed
@@ -1488,10 +1488,10 @@ namespace System.Windows.Forms
 
                 // Just because this is the case doesn't mean that we need to do another
                 // another layout however.
-                this.Location = this.displayLocation;
-                this.displayLocation = this.Location;
+                Location = displayLocation;
+                displayLocation = Location;
             }
-            if (AutoScroll || this.LayoutRequired)
+            if (AutoScroll || LayoutRequired)
             {
                 // the base here forces a layout... we really only want to do this the first
                 // time we pop the window... the subsequent times should be snappy.
@@ -1499,7 +1499,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                this.SuspendLayout();
+                SuspendLayout();
                 try
                 {
                     // scrollable control forces a layout here for scrollbar reasons only
@@ -1509,7 +1509,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    this.ResumeLayout(false);
+                    ResumeLayout(false);
                 }
             }
         }
@@ -1517,7 +1517,7 @@ namespace System.Windows.Forms
         protected override void OnParentChanged(System.EventArgs e)
         {
             base.OnParentChanged(e);
-            Rectangle bounds = this.Bounds;
+            Rectangle bounds = Bounds;
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, BoundsSpecified.Location);
         }
         protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs mea)
@@ -1546,7 +1546,7 @@ namespace System.Windows.Forms
 
         internal void OnOwnerItemFontChanged(EventArgs e)
         {
-            if (this.IsAutoGenerated)
+            if (IsAutoGenerated)
             {
                 using (new LayoutTransaction(this, OwnerItem, PropertyNames.Font))
                 {
@@ -1559,8 +1559,8 @@ namespace System.Windows.Forms
         {
             // snap the owner item before calling hide as non-auto created dropdowns will
             // exit menu mode if there's no OwnerItem.
-            ToolStripItem itemOnPreviousMenuToSelect = this.OwnerItem;
-            this.Hide();
+            ToolStripItem itemOnPreviousMenuToSelect = OwnerItem;
+            Hide();
 
             if (itemOnPreviousMenuToSelect != null)
             {
@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms
                 {
                     // this is the case where you've casecaded out to a second level dropdown and you hit the back arrow
                     // key.  In this case we want to just hide the current dropdown
-                    this.Visible = false;
+                    Visible = false;
                     return true;
                 }
                 else
@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            if (this.OwnerItem != null && this.OwnerItem.IsInDesignMode)
+            if (OwnerItem != null && OwnerItem.IsInDesignMode)
             {
                 return false;
             }
@@ -1852,7 +1852,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetAutoGeneratedInternal(bool autoGenerated)
         {
-            this.isAutoGenerated = autoGenerated;
+            isAutoGenerated = autoGenerated;
         }
 
 
@@ -2051,7 +2051,7 @@ namespace System.Windows.Forms
                                 }
 
                                 // snap our bounds, we'll need it for some invalidation later.
-                                Rectangle bounds = this.Bounds;
+                                Rectangle bounds = Bounds;
 
                                 try
                                 {
@@ -2172,14 +2172,14 @@ namespace System.Windows.Forms
             SourceControlInternal = control;
             // When we have no owner item and we're set to RTL.Inherit, translate the coordinates
             // so that the menu looks like it's swooping from the other side
-            if (this.OwnerItem == null && control.RightToLeft == RightToLeft.Yes)
+            if (OwnerItem == null && control.RightToLeft == RightToLeft.Yes)
             {
                 AdjustSize();
                 position.Offset(control.IsMirrored ? Width : -Width, 0);
             }
 
-            this.displayLocation = control.PointToScreen(position);
-            this.Location = this.displayLocation;
+            displayLocation = control.PointToScreen(position);
+            Location = displayLocation;
             ShowCore();
 
         }
@@ -2191,8 +2191,8 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(control));
             }
             SourceControlInternal = control;
-            this.displayLocation = CalculateDropDownLocation(control.PointToScreen(position), direction).Location;
-            this.Location = this.displayLocation;
+            displayLocation = CalculateDropDownLocation(control.PointToScreen(position), direction).Location;
+            Location = displayLocation;
             ShowCore();
         }
 
@@ -2211,14 +2211,14 @@ namespace System.Windows.Forms
         /// <summary> show relative to screen coordinates </summary>
         public void Show(Point screenLocation)
         {
-            this.displayLocation = screenLocation;
-            this.Location = this.displayLocation;
+            displayLocation = screenLocation;
+            Location = displayLocation;
             ShowCore();
         }
         public void Show(Point position, ToolStripDropDownDirection direction)
         {
-            this.displayLocation = CalculateDropDownLocation(position, direction).Location;
-            this.Location = this.displayLocation;
+            displayLocation = CalculateDropDownLocation(position, direction).Location;
+            Location = displayLocation;
             ShowCore();
         }
 
@@ -2226,8 +2226,8 @@ namespace System.Windows.Forms
         /// <summary> show relative to screen coordinates </summary>
         public void Show(int x, int y)
         {
-            this.displayLocation = new Point(x, y);
-            this.Location = this.displayLocation;
+            displayLocation = new Point(x, y);
+            Location = displayLocation;
             ShowCore();
         }
 
@@ -2299,12 +2299,12 @@ namespace System.Windows.Forms
         #region DropDownSpecific
         internal void DismissAll()
         {
-            ToolStripDropDown toplevel = this.GetFirstDropDown();
-            toplevel.closeReason = this.closeReason;
+            ToolStripDropDown toplevel = GetFirstDropDown();
+            toplevel.closeReason = closeReason;
             toplevel.DismissActiveDropDowns();
             if (!LocalAppContextSwitches.UseLegacyContextMenuStripSourceControlValue)
             {
-                toplevel.saveSourceControl = this.saveSourceControl;
+                toplevel.saveSourceControl = saveSourceControl;
             }
             toplevel.Visible = false;
         }

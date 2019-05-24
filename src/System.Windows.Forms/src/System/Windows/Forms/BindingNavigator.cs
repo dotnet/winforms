@@ -615,7 +615,7 @@ namespace System.Windows.Forms
         public bool Validate()
         {
             bool validatedControlAllowsFocusChange;
-            return this.ValidateActiveControl(out validatedControlAllowsFocusChange);
+            return ValidateActiveControl(out validatedControlAllowsFocusChange);
         }
 
         /// <summary>

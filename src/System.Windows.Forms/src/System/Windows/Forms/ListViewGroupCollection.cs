@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
         internal ListViewGroupCollection(ListView listView)
         {
-            this._listView = listView;
+            _listView = listView;
         }
 
         public int Count => List.Count;
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         public ListViewGroup this[int index]
         {
-            get => (ListViewGroup)this.List[index];
+            get => (ListViewGroup)List[index];
             set
             {
                 if (value == null)
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             int index = List.Add(group);
             if (_listView.IsHandleCreated)
             {
-                _listView.InsertGroupInListView(this.List.Count, group);
+                _listView.InsertGroupInListView(List.Count, group);
                 MoveGroupItems(group);
             }
 
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
 
             foreach (ListViewItem item in group.Items)
             {
-                if (item.ListView == this._listView)
+                if (item.ListView == _listView)
                 {
                     item.UpdateStateToListView(item.Index);
                 }

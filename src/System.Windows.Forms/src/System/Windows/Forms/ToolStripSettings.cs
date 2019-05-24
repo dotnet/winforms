@@ -120,7 +120,7 @@ namespace System.Windows.Forms
 
         public override void Save()
         {
-            this.IsDefault = false;
+            IsDefault = false;
             base.Save();
         }
     }
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
 
         internal ToolStripSettingsManager(Form owner, string formKey)
         {
-            this.form = owner;
+            form = owner;
             this.formKey = formKey;
         }
 
@@ -451,39 +451,39 @@ namespace System.Windows.Forms
 
             public SettingsStub(ToolStrip toolStrip)
             {
-                this.ToolStripPanelName = string.Empty;
+                ToolStripPanelName = string.Empty;
                 ToolStripPanel parentPanel = toolStrip.Parent as ToolStripPanel;
 
                 if (parentPanel != null)
                 {
                     if (!string.IsNullOrEmpty(parentPanel.Name))
                     {
-                        this.ToolStripPanelName = parentPanel.Name;
+                        ToolStripPanelName = parentPanel.Name;
                     }
                     else if (parentPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(parentPanel.Parent.Name))
                     {
                         // Handle the case when the ToolStripPanel belongs to a ToolStripContainer.
-                        this.ToolStripPanelName = parentPanel.Parent.Name + "." + parentPanel.Dock.ToString();
+                        ToolStripPanelName = parentPanel.Parent.Name + "." + parentPanel.Dock.ToString();
                     }
 
-                    Debug.Assert(!string.IsNullOrEmpty(this.ToolStripPanelName), "ToolStrip was parented to a panel, but we couldn't figure out its name.");
+                    Debug.Assert(!string.IsNullOrEmpty(ToolStripPanelName), "ToolStrip was parented to a panel, but we couldn't figure out its name.");
                 }
 
-                this.Visible = toolStrip.Visible;
-                this.Size = toolStrip.Size;
-                this.Location = toolStrip.Location;
-                this.Name = toolStrip.Name;
-                this.ItemOrder = GetItemOrder(toolStrip);
+                Visible = toolStrip.Visible;
+                Size = toolStrip.Size;
+                Location = toolStrip.Location;
+                Name = toolStrip.Name;
+                ItemOrder = GetItemOrder(toolStrip);
 
             }
             public SettingsStub(ToolStripSettings toolStripSettings)
             {
-                this.ToolStripPanelName = toolStripSettings.ToolStripPanelName;
-                this.Visible = toolStripSettings.Visible;
-                this.Size = toolStripSettings.Size;
-                this.Location = toolStripSettings.Location;
-                this.Name = toolStripSettings.Name;
-                this.ItemOrder = toolStripSettings.ItemOrder;
+                ToolStripPanelName = toolStripSettings.ToolStripPanelName;
+                Visible = toolStripSettings.Visible;
+                Size = toolStripSettings.Size;
+                Location = toolStripSettings.Location;
+                Name = toolStripSettings.Name;
+                ItemOrder = toolStripSettings.ItemOrder;
             }
         }
     }

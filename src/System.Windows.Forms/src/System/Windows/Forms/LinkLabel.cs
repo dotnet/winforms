@@ -642,8 +642,8 @@ namespace System.Windows.Forms
             {
                 // If no link or the LinkArea is one and covers the entire text, we can support UseCompatibleTextRendering = false.
                 // Observe that LinkArea refers to the first link always.
-                StringInfo stringInfo = new StringInfo(this.Text);
-                return this.LinkArea.Start == 0 && (this.LinkArea.Length == 0 || this.LinkArea.Length == stringInfo.LengthInTextElements);
+                StringInfo stringInfo = new StringInfo(Text);
+                return LinkArea.Start == 0 && (LinkArea.Length == 0 || LinkArea.Length == stringInfo.LengthInTextElements);
             }
         }
 
@@ -704,10 +704,10 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            if (this.textRegion != null)
+            if (textRegion != null)
             {
-                this.textRegion.Dispose();
-                this.textRegion = null;
+                textRegion.Dispose();
+                textRegion = null;
             }
 
             // bail early for no text
@@ -754,7 +754,7 @@ namespace System.Windows.Forms
                         }
 
                         Debug.Assert(regionIndex == (textRegions.Length - 1), "Failed to consume all link label visual regions");
-                        this.textRegion = textRegions[textRegions.Length - 1];
+                        textRegion = textRegions[textRegions.Length - 1];
                     }
                     else
                     {
@@ -777,7 +777,7 @@ namespace System.Windows.Forms
                                 wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
                             }
 
-                            using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(this.Font))
+                            using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                             {
                                 IntNativeMethods.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
@@ -791,16 +791,16 @@ namespace System.Windows.Forms
                                                                   clientRectWithPadding.Y,
                                                                   textSize.Width - iRightMargin - iLeftMargin,
                                                                   textSize.Height);
-                        visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(this.TextAlign));
+                        visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
                         // 
 
 
                         Region visualRegion = new Region(visualRectangle);
-                        if (this.links != null && this.links.Count == 1)
+                        if (links != null && links.Count == 1)
                         {
-                            this.Links[0].VisualRegion = visualRegion;
+                            Links[0].VisualRegion = visualRegion;
                         }
-                        this.textRegion = visualRegion;
+                        textRegion = visualRegion;
                     }
                 }
                 finally
@@ -1005,10 +1005,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
-            if (!this.processingOnGotFocus)
+            if (!processingOnGotFocus)
             {
                 base.OnGotFocus(e);
-                this.processingOnGotFocus = true;
+                processingOnGotFocus = true;
             }
 
             try
@@ -1028,9 +1028,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (this.processingOnGotFocus)
+                if (processingOnGotFocus)
                 {
-                    this.processingOnGotFocus = false;
+                    processingOnGotFocus = false;
                 }
             }
         }
@@ -1268,7 +1268,7 @@ namespace System.Windows.Forms
             RectangleF finalrect = RectangleF.Empty;   //the focus rectangle if there is only one link
             Animate();
 
-            ImageAnimator.UpdateFrames(this.Image);
+            ImageAnimator.UpdateFrames(Image);
             EnsureRun(e.Graphics);
 
             // bail early for no text
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
             {
                 if (AutoEllipsis)
                 {
-                    Rectangle clientRect = this.ClientRectWithPadding;
+                    Rectangle clientRect = ClientRectWithPadding;
                     Size preferredSize = GetPreferredSize(new Size(clientRect.Width, clientRect.Height));
                     showToolTip = (clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height);
                 }
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms
                     showToolTip = false;
                 }
 
-                if (this.Enabled)
+                if (Enabled)
                 { // Control.Enabled not to be confused with Link.Enabled
                     bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
                     SolidBrush foreBrush = new SolidBrush(ForeColor);
@@ -1305,7 +1305,7 @@ namespace System.Windows.Forms
                             PaintLinkBackground(e.Graphics);
                         }
 
-                        LinkUtilities.EnsureLinkFonts(this.Font, this.LinkBehavior, ref this.linkFont, ref this.hoverLinkFont);
+                        LinkUtilities.EnsureLinkFonts(Font, LinkBehavior, ref linkFont, ref hoverLinkFont);
 
                         Region originalClip = e.Graphics.Clip;
 
@@ -1328,7 +1328,7 @@ namespace System.Windows.Forms
                                     }
                                     else
                                     {
-                                        finalrect = this.ClientRectWithPadding;
+                                        finalrect = ClientRectWithPadding;
                                         Size finalRectSize = finalrect.Size.ToSize();
 
                                         Size requiredSize = MeasureTextCache.GetTextSize(Text, Font, finalRectSize, CreateTextFormatFlags(finalRectSize));
@@ -1339,7 +1339,7 @@ namespace System.Windows.Forms
                                         {
                                             finalrect.Height = requiredSize.Height;
                                         }
-                                        finalrect = CalcTextRenderBounds(System.Drawing.Rectangle.Round(finalrect) /*textRect*/, this.ClientRectWithPadding /*clientRect*/, RtlTranslateContent(this.TextAlign));
+                                        finalrect = CalcTextRenderBounds(System.Drawing.Rectangle.Round(finalrect) /*textRect*/, ClientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
                                     }
                                     using (Region region = new Region(finalrect))
                                     {
@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
                             if (optimizeBackgroundRendering)
                             {
                                 e.Graphics.Clip = originalClip;
-                                e.Graphics.ExcludeClip(this.textRegion);
+                                e.Graphics.ExcludeClip(textRegion);
                                 PaintLinkBackground(e.Graphics);
                             }
                         }
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms
                         // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
                         //
                         PaintLinkBackground(e.Graphics);
-                        e.Graphics.IntersectClip(this.textRegion);
+                        e.Graphics.IntersectClip(textRegion);
 
                         Color foreColor;
 
@@ -1447,7 +1447,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            Image i = this.Image;
+            Image i = Image;
 
             if (i != null)
             {
@@ -1662,7 +1662,7 @@ namespace System.Windows.Forms
             }
             else
             { // Painting with no link.
-                g.IntersectClip(this.textRegion);
+                g.IntersectClip(textRegion);
 
                 if (optimizeBackgroundRendering)
                 {
@@ -2389,15 +2389,15 @@ namespace System.Windows.Forms
                 }
 
                 // Set the owner control for this link
-                value.Owner = this.owner;
+                value.Owner = owner;
 
                 owner.links.Add(value);
 
-                if (this.owner.AutoSize)
+                if (owner.AutoSize)
                 {
-                    LayoutTransaction.DoLayout(this.owner.ParentInternal, this.owner, PropertyNames.Links);
-                    this.owner.AdjustSize();
-                    this.owner.Invalidate();
+                    LayoutTransaction.DoLayout(owner.ParentInternal, owner, PropertyNames.Links);
+                    owner.AdjustSize();
+                    owner.Invalidate();
                 }
 
                 if (owner.Links.Count > 1)
@@ -2507,7 +2507,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
@@ -2526,7 +2526,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
 
 
@@ -2535,14 +2535,14 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Clear()
             {
-                bool doLayout = this.owner.links.Count > 0 && this.owner.AutoSize;
+                bool doLayout = owner.links.Count > 0 && owner.AutoSize;
                 owner.links.Clear();
 
                 if (doLayout)
                 {
-                    LayoutTransaction.DoLayout(this.owner.ParentInternal, this.owner, PropertyNames.Links);
-                    this.owner.AdjustSize();
-                    this.owner.Invalidate();
+                    LayoutTransaction.DoLayout(owner.ParentInternal, owner, PropertyNames.Links);
+                    owner.AdjustSize();
+                    owner.Invalidate();
                 }
 
                 owner.UpdateSelectability();
@@ -2570,18 +2570,18 @@ namespace System.Windows.Forms
             public void Remove(Link value)
             {
 
-                if (value.Owner != this.owner)
+                if (value.Owner != owner)
                 {
                     return;
                 }
 
                 owner.links.Remove(value);
 
-                if (this.owner.AutoSize)
+                if (owner.AutoSize)
                 {
-                    LayoutTransaction.DoLayout(this.owner.ParentInternal, this.owner, PropertyNames.Links);
-                    this.owner.AdjustSize();
-                    this.owner.Invalidate();
+                    LayoutTransaction.DoLayout(owner.ParentInternal, owner, PropertyNames.Links);
+                    owner.AdjustSize();
+                    owner.Invalidate();
                 }
 
                 owner.links.Sort(LinkLabel.linkComparer);
@@ -2848,7 +2848,7 @@ namespace System.Windows.Forms
                 {
                     return new LinkAccessibleObject(hit);
                 }
-                if (this.Bounds.Contains(x, y))
+                if (Bounds.Contains(x, y))
                 {
                     return this;
                 }

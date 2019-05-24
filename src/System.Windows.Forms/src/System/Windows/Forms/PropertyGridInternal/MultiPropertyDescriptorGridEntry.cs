@@ -32,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         : base(ownerGrid, peParent, hide)
         {
             mergedPd = new MergePropertyDescriptor(propInfo);
-            this.objs = objectArray;
+            objs = objectArray;
             base.Initialize(mergedPd);
         }
 
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(mergedPd.GetValues(objs), this, this.PropertySort, this.CurrentTab);
+                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(mergedPd.GetValues(objs), this, PropertySort, CurrentTab);
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps == null, "PropertyGridView: MergedProps returned null!");
 
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
-                bool fExpandable = this.Children.Count > 0;
+                bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
                     SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         if (host != null)
                         {
-                            trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, this.PropertyName));
+                            trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
                         }
                         try
                         {
@@ -322,7 +322,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 }
                             }
 
-                            this.mergedPd.ResetValue(obj);
+                            mergedPd.ResetValue(obj);
 
                             if (needChangeNotify)
                             {

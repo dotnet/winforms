@@ -72,7 +72,7 @@ namespace System.Windows.Forms
 
             // if the edit box is in ReadOnly mode, then do not tell the DataGrid about the 
             // edit
-            if (this.ReadOnly)
+            if (ReadOnly)
                 return;
 
             // Ctrl-* should not put the grid in edit mode
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
                     // else, process the KeyEvent
                     // 
                     if (SelectionStart + SelectionLength == 0 ||
-                        (this.IsInEditOrNavigateMode && this.SelectionLength == Text.Length))
+                        (IsInEditOrNavigateMode && SelectionLength == Text.Length))
                         return ProcessKeyPreview(ref m);
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Down:

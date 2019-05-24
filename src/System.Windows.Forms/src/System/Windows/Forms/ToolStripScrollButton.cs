@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
         private void Scroll()
         {
-            ToolStripDropDownMenu parent = this.ParentInternal as ToolStripDropDownMenu;
+            ToolStripDropDownMenu parent = ParentInternal as ToolStripDropDownMenu;
             if (parent != null && Label.Enabled)
             {
                 parent.ScrollInternal(up);

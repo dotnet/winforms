@@ -113,11 +113,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.accelerations == null)
+                if (accelerations == null)
                 {
-                    this.accelerations = new NumericUpDownAccelerationCollection();
+                    accelerations = new NumericUpDownAccelerationCollection();
                 }
-                return this.accelerations;
+                return accelerations;
             }
         }
 
@@ -187,12 +187,12 @@ namespace System.Windows.Forms
 
             get
             {
-                if (this.accelerationsCurrentIndex != InvalidValue)
+                if (accelerationsCurrentIndex != InvalidValue)
                 {
-                    return this.Accelerations[this.accelerationsCurrentIndex].Increment;
+                    return Accelerations[accelerationsCurrentIndex].Increment;
                 }
 
-                return this.increment;
+                return increment;
             }
 
             set
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    this.increment = value;
+                    increment = value;
                 }
             }
         }
@@ -297,7 +297,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.accelerations != null && this.buttonPressedStartTime != InvalidValue;
+                return accelerations != null && buttonPressedStartTime != InvalidValue;
             }
         }
 
@@ -474,12 +474,12 @@ namespace System.Windows.Forms
             //
             try
             {
-                newValue -= this.Increment;
+                newValue -= Increment;
 
                 if (newValue < minimum)
                 {
                     newValue = minimum;
-                    if (this.Spinning)
+                    if (Spinning)
                     {
                         StopAcceleration();
                     }
@@ -510,7 +510,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) && !this.Spinning)
+            if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) && !Spinning)
             {
                 StartAcceleration();
             }
@@ -661,18 +661,18 @@ namespace System.Windows.Forms
         private void SetNextAcceleration()
         {
             // Spinning will check if accelerations is null.
-            if (this.Spinning && this.accelerationsCurrentIndex < (this.accelerations.Count - 1))
+            if (Spinning && accelerationsCurrentIndex < (accelerations.Count - 1))
             { // if index not the last entry ...
                 // Ticks are in 100-nanoseconds (1E-7 seconds).
                 long nowTicks = DateTime.Now.Ticks;
-                long buttonPressedElapsedTime = nowTicks - this.buttonPressedStartTime;
-                long accelerationInterval = 10000000L * this.accelerations[this.accelerationsCurrentIndex + 1].Seconds;  // next entry.
+                long buttonPressedElapsedTime = nowTicks - buttonPressedStartTime;
+                long accelerationInterval = 10000000L * accelerations[accelerationsCurrentIndex + 1].Seconds;  // next entry.
 
                 // If Up/Down button pressed for more than the current acceleration entry interval, get next entry in the accel table.
                 if (buttonPressedElapsedTime > accelerationInterval)
                 {
-                    this.buttonPressedStartTime = nowTicks;
-                    this.accelerationsCurrentIndex++;
+                    buttonPressedStartTime = nowTicks;
+                    accelerationsCurrentIndex++;
                 }
             }
         }
@@ -736,7 +736,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void StartAcceleration()
         {
-            this.buttonPressedStartTime = DateTime.Now.Ticks;
+            buttonPressedStartTime = DateTime.Now.Ticks;
         }
 
         /// <summary>
@@ -744,8 +744,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void StopAcceleration()
         {
-            this.accelerationsCurrentIndex = InvalidValue;
-            this.buttonPressedStartTime = InvalidValue;
+            accelerationsCurrentIndex = InvalidValue;
+            buttonPressedStartTime = InvalidValue;
         }
 
         /// <summary>
@@ -779,12 +779,12 @@ namespace System.Windows.Forms
             //
             try
             {
-                newValue += this.Increment;
+                newValue += Increment;
 
                 if (newValue > maximum)
                 {
                     newValue = maximum;
-                    if (this.Spinning)
+                    if (Spinning)
                     {
                         StopAcceleration();
                     }
@@ -880,7 +880,7 @@ namespace System.Windows.Forms
             // testNumber to account for the missing digit.
             int numDigits = (int)Math.Floor(Math.Log(Math.Max(-(double)Minimum, (double)Maximum), baseSize));
             int maxDigits;
-            if (this.Hexadecimal)
+            if (Hexadecimal)
             {
                 maxDigits = (int)Math.Floor(Math.Log(long.MaxValue, baseSize));
             }
@@ -917,12 +917,12 @@ namespace System.Windows.Forms
                 testNumber = testNumber * baseSize + digit;
             }
 
-            int textWidth = TextRenderer.MeasureText(GetNumberText(testNumber), this.Font).Width;
+            int textWidth = TextRenderer.MeasureText(GetNumberText(testNumber), Font).Width;
 
             if (maxDigitsReached)
             {
                 string shortText;
-                if (this.Hexadecimal)
+                if (Hexadecimal)
                 {
                     shortText = ((long)testNumber).ToString("X", CultureInfo.InvariantCulture);
                 }
@@ -930,7 +930,7 @@ namespace System.Windows.Forms
                 {
                     shortText = testNumber.ToString(CultureInfo.CurrentCulture);
                 }
-                int shortTextWidth = TextRenderer.MeasureText(shortText, this.Font).Width;
+                int shortTextWidth = TextRenderer.MeasureText(shortText, Font).Width;
                 // Adding the width of the one digit that was dropped earlier. 
                 // This assumes that no additional thousand separator is added by that digit which is correct.
                 textWidth += shortTextWidth / (numDigits + 1);
@@ -958,7 +958,7 @@ namespace System.Windows.Forms
                     ch = (char)('A' + (i - 10));
                 }
 
-                Size digitSize = TextRenderer.MeasureText(ch.ToString(), this.Font);
+                Size digitSize = TextRenderer.MeasureText(ch.ToString(), Font);
 
                 if (digitSize.Width >= digitWidth)
                 {

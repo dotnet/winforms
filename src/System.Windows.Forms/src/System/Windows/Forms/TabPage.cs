@@ -200,10 +200,10 @@ namespace System.Windows.Forms
 
                 if (parent != null)
                 {
-                    this.ImageIndexer.ImageList = parent.ImageList;
+                    ImageIndexer.ImageList = parent.ImageList;
                 }
 
-                this.ImageIndexer.Index = value;
+                ImageIndexer.Index = value;
                 UpdateParent();
             }
         }
@@ -228,13 +228,13 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.ImageIndexer.Key = value;
+                ImageIndexer.Key = value;
 
                 TabControl parent = ParentInternal as TabControl;
 
                 if (parent != null)
                 {
-                    this.ImageIndexer.ImageList = parent.ImageList;
+                    ImageIndexer.ImageList = parent.ImageList;
                 }
 
                 UpdateParent();
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
             set
             {
                 useVisualStyleBackColor = value;
-                this.Invalidate(true);
+                Invalidate(true);
             }
         }
 
@@ -693,7 +693,7 @@ namespace System.Windows.Forms
             if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal))
             {
 
-                Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : this.BackColor;
+                Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : BackColor;
                 Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 
 
@@ -714,7 +714,7 @@ namespace System.Windows.Forms
 
                 // Is there a background image to paint? The TabRenderer does not currently support
                 // painting the background image on the panel, so we need to draw it ourselves.
-                if (this.BackgroundImage != null)
+                if (BackgroundImage != null)
                 {
                     ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, bkcolor, BackgroundImageLayout, inflateRect, inflateRect, DisplayRectangle.Location);
                 }

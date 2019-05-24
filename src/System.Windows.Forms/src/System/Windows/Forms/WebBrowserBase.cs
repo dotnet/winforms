@@ -82,11 +82,11 @@ namespace System.Windows.Forms
                 throw new ThreadStateException(string.Format(SR.AXMTAThread, clsidString));
             }
 
-            this.SetStyle(ControlStyles.UserPaint, false);
+            SetStyle(ControlStyles.UserPaint, false);
 
-            this.clsid = new Guid(clsidString);
-            this.webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
-            this.SetAXHostState(WebBrowserHelper.isMaskEdit, this.clsid.Equals(WebBrowserHelper.maskEdit_Clsid));
+            clsid = new Guid(clsidString);
+            webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
+            SetAXHostState(WebBrowserHelper.isMaskEdit, clsid.Equals(WebBrowserHelper.maskEdit_Clsid));
         }
 
 
@@ -202,13 +202,13 @@ namespace System.Windows.Forms
         {
             set
             {
-                bool hadSelectionHandler = this.RemoveSelectionHandler();
+                bool hadSelectionHandler = RemoveSelectionHandler();
 
                 base.Site = value;
 
                 if (hadSelectionHandler)
                 {
-                    this.AddSelectionHandler();
+                    AddSelectionHandler();
                 }
             }
         }
@@ -221,17 +221,17 @@ namespace System.Windows.Forms
             //
             // If the ActiveX control is already InPlaceActive, make sure
             // it's bounds also change.
-            if (this.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
+            if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
                 try
                 {
-                    this.webBrowserBaseChangingSize.Width = width;
-                    this.webBrowserBaseChangingSize.Height = height;
-                    this.AXInPlaceObject.SetObjectRects(new NativeMethods.COMRECT(new Rectangle(0, 0, width, height)), WebBrowserHelper.GetClipRect());
+                    webBrowserBaseChangingSize.Width = width;
+                    webBrowserBaseChangingSize.Height = height;
+                    AXInPlaceObject.SetObjectRects(new NativeMethods.COMRECT(new Rectangle(0, 0, width, height)), WebBrowserHelper.GetClipRect());
                 }
                 finally
                 {
-                    this.webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
+                    webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
                 }
             }
 
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
         {
             if (IsUserMode)
             {
-                if (this.GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
+                if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
                 {
                     // In this case, the control called us back through IOleControlSite
                     // and is now giving us a chance to see if we want to process it.
@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                 win32Message.lParam = msg.LParam;
                 win32Message.hwnd = msg.HWnd;
 
-                this.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+                SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 try
                 {
                     if (axOleInPlaceObject != null)
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                                 }
                                 return ret;
                             }
-                            else if (this.GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
+                            else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
                             {
                                 Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
                                 return base.PreProcessMessage(ref msg);
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    this.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+                    SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 }
             }
 
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
                 try
                 {
                     NativeMethods.tagCONTROLINFO ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    int hr = this.axOleControl.GetControlInfo(ctlInfo);
+                    int hr = axOleControl.GetControlInfo(ctlInfo);
                     if (NativeMethods.Succeeded(hr))
                     {
                         //
@@ -374,7 +374,7 @@ namespace System.Windows.Forms
                         msg.pt_y = p.y;
                         if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                         {
-                            this.axOleControl.OnMnemonic(ref msg);
+                            axOleControl.OnMnemonic(ref msg);
                             Focus();
                             processed = true;
                         }
@@ -466,12 +466,12 @@ namespace System.Windows.Forms
                     // Otherwise we face all sorts of problems when we try to
                     // transition back to a state >= InPlaceActive.
                     //
-                    if (this.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
+                    if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
                         IntPtr hwndInPlaceObject;
-                        if (NativeMethods.Succeeded(this.AXInPlaceObject.GetWindow(out hwndInPlaceObject)))
+                        if (NativeMethods.Succeeded(AXInPlaceObject.GetWindow(out hwndInPlaceObject)))
                         {
-                            Application.ParkHandle(new HandleRef(this.AXInPlaceObject, hwndInPlaceObject));
+                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject));
                         }
                     }
 
@@ -487,9 +487,9 @@ namespace System.Windows.Forms
                     // up to InPlaceActivate that the ActiveX control grabs our handle).
                     TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                    if (this.axWindow != null)
+                    if (axWindow != null)
                     {
-                        this.axWindow.ReleaseHandle();
+                        axWindow.ReleaseHandle();
                     }
 
                     OnHandleDestroyed(EventArgs.Empty);
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
         protected override void OnParentChanged(EventArgs e)
         {
             Control parent = ParentInternal;
-            if ((Visible && parent != null && parent.Visible) || this.IsHandleCreated)
+            if ((Visible && parent != null && parent.Visible) || IsHandleCreated)
             {
                 TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
             }
@@ -532,7 +532,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnGotFocus(EventArgs e)
         {
-            if (this.ActiveXState < WebBrowserHelper.AXState.UIActive)
+            if (ActiveXState < WebBrowserHelper.AXState.UIActive)
             {
                 TransitionUpTo(WebBrowserHelper.AXState.UIActive);
             }
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
 
             // If the focus goes from our control window to one of the child windows,
             // we should not deactivate.
-            if (!this.ContainsFocus)
+            if (!ContainsFocus)
             {
                 TransitionDownTo(WebBrowserHelper.AXState.InPlaceActive);
             }
@@ -563,7 +563,7 @@ namespace System.Windows.Forms
         //
         internal override bool CanSelectCore()
         {
-            return this.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive ?
+            return ActiveXState >= WebBrowserHelper.AXState.InPlaceActive ?
                 base.CanSelectCore() : false;
         }
 
@@ -656,12 +656,12 @@ namespace System.Windows.Forms
 
         internal bool GetAXHostState(int mask)
         {
-            return this.axHostState[mask];
+            return axHostState[mask];
         }
 
         internal void SetAXHostState(int mask, bool value)
         {
-            this.axHostState[mask] = value;
+            axHostState[mask] = value;
         }
 
         internal IntPtr GetHandleNoCreate()
@@ -671,92 +671,92 @@ namespace System.Windows.Forms
 
         internal void TransitionUpTo(WebBrowserHelper.AXState state)
         {
-            if (!this.GetAXHostState(WebBrowserHelper.inTransition))
+            if (!GetAXHostState(WebBrowserHelper.inTransition))
             {
-                this.SetAXHostState(WebBrowserHelper.inTransition, true);
+                SetAXHostState(WebBrowserHelper.inTransition, true);
 
                 try
                 {
-                    while (state > this.ActiveXState)
+                    while (state > ActiveXState)
                     {
-                        switch (this.ActiveXState)
+                        switch (ActiveXState)
                         {
                             case WebBrowserHelper.AXState.Passive:
                                 TransitionFromPassiveToLoaded();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Loaded, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Failed transition");
                                 break;
                             case WebBrowserHelper.AXState.Loaded:
                                 TransitionFromLoadedToRunning();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Running, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Failed transition");
                                 break;
                             case WebBrowserHelper.AXState.Running:
                                 TransitionFromRunningToInPlaceActive();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Failed transition");
                                 break;
                             case WebBrowserHelper.AXState.InPlaceActive:
                                 TransitionFromInPlaceActiveToUIActive();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.UIActive, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Failed transition");
                                 break;
                             default:
                                 Debug.Fail("bad state");
-                                this.ActiveXState++; // To exit the loop
+                                ActiveXState++; // To exit the loop
                                 break;
                         }
                     }
                 }
                 finally
                 {
-                    this.SetAXHostState(WebBrowserHelper.inTransition, false);
+                    SetAXHostState(WebBrowserHelper.inTransition, false);
                 }
             }
         }
 
         internal void TransitionDownTo(WebBrowserHelper.AXState state)
         {
-            if (!this.GetAXHostState(WebBrowserHelper.inTransition))
+            if (!GetAXHostState(WebBrowserHelper.inTransition))
             {
-                this.SetAXHostState(WebBrowserHelper.inTransition, true);
+                SetAXHostState(WebBrowserHelper.inTransition, true);
 
                 try
                 {
-                    while (state < this.ActiveXState)
+                    while (state < ActiveXState)
                     {
-                        switch (this.ActiveXState)
+                        switch (ActiveXState)
                         {
                             case WebBrowserHelper.AXState.UIActive:
                                 TransitionFromUIActiveToInPlaceActive();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Failed transition");
                                 break;
                             case WebBrowserHelper.AXState.InPlaceActive:
                                 TransitionFromInPlaceActiveToRunning();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Running, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Failed transition");
                                 break;
                             case WebBrowserHelper.AXState.Running:
                                 TransitionFromRunningToLoaded();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Loaded, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Failed transition");
                                 break;
                             case WebBrowserHelper.AXState.Loaded:
                                 TransitionFromLoadedToPassive();
-                                Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Passive, "Failed transition");
+                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Passive, "Failed transition");
                                 break;
                             default:
                                 Debug.Fail("bad state");
-                                this.ActiveXState--; // To exit the loop
+                                ActiveXState--; // To exit the loop
                                 break;
                         }
                     }
                 }
                 finally
                 {
-                    this.SetAXHostState(WebBrowserHelper.inTransition, false);
+                    SetAXHostState(WebBrowserHelper.inTransition, false);
                 }
             }
         }
 
         internal bool DoVerb(int verb)
         {
-            int hr = this.axOleObject.DoVerb(verb, IntPtr.Zero, this.ActiveXSite, 0, this.Handle,
-                    new NativeMethods.COMRECT(this.Bounds));
+            int hr = axOleObject.DoVerb(verb, IntPtr.Zero, ActiveXSite, 0, Handle,
+                    new NativeMethods.COMRECT(Bounds));
 
             Debug.Assert(hr == NativeMethods.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
             return hr == NativeMethods.S_OK;
@@ -778,7 +778,7 @@ namespace System.Windows.Forms
             get
             {
                 if (containingControl == null ||
-                    this.GetAXHostState(WebBrowserHelper.recomputeContainingControl))
+                    GetAXHostState(WebBrowserHelper.recomputeContainingControl))
                 {
                     containingControl = FindContainerControlInternal();
                 }
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
 
         internal void SetEditMode(WebBrowserHelper.AXEditMode em)
         {
-            this.axEditMode = em;
+            axEditMode = em;
         }
 
         internal void SetSelectionStyle(WebBrowserHelper.SelectionStyle selectionStyle)
@@ -836,9 +836,9 @@ namespace System.Windows.Forms
 
         internal void AddSelectionHandler()
         {
-            if (!this.GetAXHostState(WebBrowserHelper.addedSelectionHandler))
+            if (!GetAXHostState(WebBrowserHelper.addedSelectionHandler))
             {
-                this.SetAXHostState(WebBrowserHelper.addedSelectionHandler, true);
+                SetAXHostState(WebBrowserHelper.addedSelectionHandler, true);
 
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 if (iss != null)
@@ -850,10 +850,10 @@ namespace System.Windows.Forms
 
         internal bool RemoveSelectionHandler()
         {
-            bool retVal = this.GetAXHostState(WebBrowserHelper.addedSelectionHandler);
+            bool retVal = GetAXHostState(WebBrowserHelper.addedSelectionHandler);
             if (retVal)
             {
-                this.SetAXHostState(WebBrowserHelper.addedSelectionHandler, false);
+                SetAXHostState(WebBrowserHelper.addedSelectionHandler, false);
 
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 if (iss != null)
@@ -866,14 +866,14 @@ namespace System.Windows.Forms
 
         internal void AttachWindow(IntPtr hwnd)
         {
-            UnsafeNativeMethods.SetParent(new HandleRef(null, hwnd), new HandleRef(this, this.Handle));
+            UnsafeNativeMethods.SetParent(new HandleRef(null, hwnd), new HandleRef(this, Handle));
 
-            if (this.axWindow != null)
+            if (axWindow != null)
             {
-                this.axWindow.ReleaseHandle();
+                axWindow.ReleaseHandle();
             }
-            this.axWindow = new WebBrowserBaseNativeWindow(this);
-            this.axWindow.AssignHandle(hwnd, false);
+            axWindow = new WebBrowserBaseNativeWindow(this);
+            axWindow.AssignHandle(hwnd, false);
 
             UpdateZOrder();
             UpdateBounds();
@@ -895,7 +895,7 @@ namespace System.Windows.Forms
 
         internal void MakeDirty()
         {
-            ISite iSite = this.Site;
+            ISite iSite = Site;
             if (iSite != null)
             {
                 IComponentChangeService ccs = (IComponentChangeService)iSite.GetService(typeof(IComponentChangeService));
@@ -932,55 +932,55 @@ namespace System.Windows.Forms
 
         private void StartEvents()
         {
-            if (!this.GetAXHostState(WebBrowserHelper.sinkAttached))
+            if (!GetAXHostState(WebBrowserHelper.sinkAttached))
             {
-                this.SetAXHostState(WebBrowserHelper.sinkAttached, true);
+                SetAXHostState(WebBrowserHelper.sinkAttached, true);
                 CreateSink();
             }
-            this.ActiveXSite.StartEvents();
+            ActiveXSite.StartEvents();
         }
 
         private void StopEvents()
         {
-            if (this.GetAXHostState(WebBrowserHelper.sinkAttached))
+            if (GetAXHostState(WebBrowserHelper.sinkAttached))
             {
-                this.SetAXHostState(WebBrowserHelper.sinkAttached, false);
+                SetAXHostState(WebBrowserHelper.sinkAttached, false);
                 DetachSink();
             }
-            this.ActiveXSite.StopEvents();
+            ActiveXSite.StopEvents();
         }
 
         private void TransitionFromPassiveToLoaded()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Passive, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.Passive)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Passive, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.Passive)
             {
                 //
                 // First, create the ActiveX control
                 Debug.Assert(activeXInstance == null, "activeXInstance must be null");
-                this.activeXInstance = UnsafeNativeMethods.CoCreateInstance(ref clsid, null, NativeMethods.CLSCTX_INPROC_SERVER, ref NativeMethods.ActiveX.IID_IUnknown);
+                activeXInstance = UnsafeNativeMethods.CoCreateInstance(ref clsid, null, NativeMethods.CLSCTX_INPROC_SERVER, ref NativeMethods.ActiveX.IID_IUnknown);
                 Debug.Assert(activeXInstance != null, "w/o an exception being thrown we must have an object...");
 
                 //
                 // We are now Loaded!
-                this.ActiveXState = WebBrowserHelper.AXState.Loaded;
+                ActiveXState = WebBrowserHelper.AXState.Loaded;
 
                 //
                 // Lets give them a chance to cast the ActiveX object
                 // to the appropriate interfaces.
-                this.AttachInterfacesInternal();
+                AttachInterfacesInternal();
             }
         }
 
         private void TransitionFromLoadedToPassive()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Loaded, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.Loaded)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.Loaded)
             {
                 //
                 // Need to make sure that we don't handle any PropertyChanged
                 // notifications at this point.
-                this.NoComponentChangeEvents++;
+                NoComponentChangeEvents++;
                 try
                 {
                     //
@@ -989,38 +989,38 @@ namespace System.Windows.Forms
                     {
                         //
                         // Lets first get the cached interface pointers of activeXInstance released.
-                        this.DetachInterfacesInternal();
+                        DetachInterfacesInternal();
 
                         Marshal.FinalReleaseComObject(activeXInstance);
-                        this.activeXInstance = null;
+                        activeXInstance = null;
                     }
                 }
                 finally
                 {
-                    this.NoComponentChangeEvents--;
+                    NoComponentChangeEvents--;
                 }
 
                 //
                 // We are now Passive!
-                this.ActiveXState = WebBrowserHelper.AXState.Passive;
+                ActiveXState = WebBrowserHelper.AXState.Passive;
             }
         }
 
         private void TransitionFromLoadedToRunning()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Loaded, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.Loaded)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.Loaded)
             {
                 //
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
                 int bits = 0;
-                int hr = this.axOleObject.GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out bits);
+                int hr = axOleObject.GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out bits);
                 if (NativeMethods.Succeeded(hr) && ((bits & NativeMethods.ActiveX.OLEMISC_SETCLIENTSITEFIRST) != 0))
                 {
                     //
                     // Simply setting the site to the ActiveX control should activate it.
                     // And this will take us to the Running state.
-                    this.axOleObject.SetClientSite(this.ActiveXSite);
+                    axOleObject.SetClientSite(ActiveXSite);
                 }
 
                 //
@@ -1033,20 +1033,20 @@ namespace System.Windows.Forms
 
                 //
                 // We are now Running!
-                this.ActiveXState = WebBrowserHelper.AXState.Running;
+                ActiveXState = WebBrowserHelper.AXState.Running;
             }
         }
 
         private void TransitionFromRunningToLoaded()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Running, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.Running)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.Running)
             {
                 StopEvents();
 
                 //
                 // Remove ourselves from our parent container...
-                WebBrowserContainer parentContainer = this.GetParentContainer();
+                WebBrowserContainer parentContainer = GetParentContainer();
                 if (parentContainer != null)
                 {
                     parentContainer.RemoveControl(this);
@@ -1054,18 +1054,18 @@ namespace System.Windows.Forms
 
                 //
                 // Now inform the ActiveX control that it's been un-sited.
-                this.axOleObject.SetClientSite(null);
+                axOleObject.SetClientSite(null);
 
                 //
                 // We are now Loaded!
-                this.ActiveXState = WebBrowserHelper.AXState.Loaded;
+                ActiveXState = WebBrowserHelper.AXState.Loaded;
             }
         }
 
         private void TransitionFromRunningToInPlaceActive()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.Running, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.Running)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.Running)
             {
                 try
                 {
@@ -1080,14 +1080,14 @@ namespace System.Windows.Forms
 
                 //
                 // We are now InPlaceActive!
-                this.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
+                ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
             }
         }
 
         private void TransitionFromInPlaceActiveToRunning()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.InPlaceActive)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.InPlaceActive)
             {
                 //
                 // First, lets make sure we transfer the ContainingControl's ActiveControl
@@ -1100,18 +1100,18 @@ namespace System.Windows.Forms
 
                 //
                 // Now, InPlaceDeactivate.
-                this.AXInPlaceObject.InPlaceDeactivate();
+                AXInPlaceObject.InPlaceDeactivate();
 
                 //
                 // We are now Running!
-                this.ActiveXState = WebBrowserHelper.AXState.Running;
+                ActiveXState = WebBrowserHelper.AXState.Running;
             }
         }
 
         private void TransitionFromInPlaceActiveToUIActive()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.InPlaceActive)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.InPlaceActive)
             {
                 try
                 {
@@ -1124,20 +1124,20 @@ namespace System.Windows.Forms
 
                 //
                 // We are now UIActive
-                this.ActiveXState = WebBrowserHelper.AXState.UIActive;
+                ActiveXState = WebBrowserHelper.AXState.UIActive;
             }
         }
 
         private void TransitionFromUIActiveToInPlaceActive()
         {
-            Debug.Assert(this.ActiveXState == WebBrowserHelper.AXState.UIActive, "Wrong start state to transition from");
-            if (this.ActiveXState == WebBrowserHelper.AXState.UIActive)
+            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Wrong start state to transition from");
+            if (ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
-                int hr = this.AXInPlaceObject.UIDeactivate();
+                int hr = AXInPlaceObject.UIDeactivate();
                 Debug.Assert(NativeMethods.Succeeded(hr), "Failed to UIDeactivate");
 
                 // We are now InPlaceActive
-                this.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
+                ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
             }
         }
 
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms
             {
                 if (axSite == null)
                 {
-                    this.axSite = CreateWebBrowserSiteBase();
+                    axSite = CreateWebBrowserSiteBase();
                 }
                 return axSite;
             }
@@ -1156,10 +1156,10 @@ namespace System.Windows.Forms
         private void AttachInterfacesInternal()
         {
             Debug.Assert(activeXInstance != null, "The native control is null");
-            this.axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
-            this.axOleInPlaceObject = (UnsafeNativeMethods.IOleInPlaceObject)activeXInstance;
-            this.axOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)activeXInstance;
-            this.axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
+            axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
+            axOleInPlaceObject = (UnsafeNativeMethods.IOleInPlaceObject)activeXInstance;
+            axOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)activeXInstance;
+            axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
             //
             // Lets give the inheriting classes a chance to cast
             // the ActiveX object to the appropriate interfaces.
@@ -1168,10 +1168,10 @@ namespace System.Windows.Forms
 
         private void DetachInterfacesInternal()
         {
-            this.axOleObject = null;
-            this.axOleInPlaceObject = null;
-            this.axOleInPlaceActiveObject = null;
-            this.axOleControl = null;
+            axOleObject = null;
+            axOleInPlaceObject = null;
+            axOleInPlaceActiveObject = null;
+            axOleControl = null;
             //
             // Lets give the inheriting classes a chance to release
             // their cached interfaces of the ActiveX object.
@@ -1184,11 +1184,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.selectionChangeHandler == null)
+                if (selectionChangeHandler == null)
                 {
-                    this.selectionChangeHandler = new EventHandler(this.OnNewSelection);
+                    selectionChangeHandler = new EventHandler(OnNewSelection);
                 }
-                return this.selectionChangeHandler;
+                return selectionChangeHandler;
             }
         }
 
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms
         // during design time when selection changes.
         private void OnNewSelection(object sender, EventArgs e)
         {
-            if (this.DesignMode)
+            if (DesignMode)
             {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 if (iss != null)
@@ -1207,13 +1207,13 @@ namespace System.Windows.Forms
                     {
                         //
                         // We need to exit editmode if we were in one.
-                        if (this.EditMode)
+                        if (EditMode)
                         {
-                            this.GetParentContainer().OnExitEditMode(this);
-                            this.SetEditMode(WebBrowserHelper.AXEditMode.None);
+                            GetParentContainer().OnExitEditMode(this);
+                            SetEditMode(WebBrowserHelper.AXEditMode.None);
                         }
-                        this.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
-                        this.RemoveSelectionHandler();
+                        SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
+                        RemoveSelectionHandler();
                     }
                     else
                     {
@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms
                         if (prop != null && prop.PropertyType == typeof(int))
                         {
                             int curSelectionStyle = (int)prop.GetValue(this);
-                            if (curSelectionStyle != (int)this.selectionStyle)
+                            if (curSelectionStyle != (int)selectionStyle)
                             {
                                 prop.SetValue(this, selectionStyle);
                             }
@@ -1242,7 +1242,7 @@ namespace System.Windows.Forms
             try
             {
                 Pixel2hiMetric(sz, sz);
-                this.axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
+                axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
             }
             catch (COMException)
             {
@@ -1250,10 +1250,10 @@ namespace System.Windows.Forms
             }
             if (resetExtents)
             {
-                this.axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
+                axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
                 try
                 {
-                    this.axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
+                    axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
                 }
                 catch (COMException e)
                 {
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms
         private Size GetExtent()
         {
             NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
-            this.axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
+            axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
             HiMetric2Pixel(sz, sz);
             return new Size(sz.cx, sz.cy);
         }
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms
             phm.x = sz.cx;
             phm.y = sz.cy;
             NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
-            ((UnsafeNativeMethods.IOleControlSite)this.ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
             szout.cx = (int)pcont.x;
             szout.cy = (int)pcont.y;
         }
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms
             pcont.x = (float)sz.cx;
             pcont.y = (float)sz.cy;
             NativeMethods._POINTL phm = new NativeMethods._POINTL();
-            ((UnsafeNativeMethods.IOleControlSite)this.ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
             szout.cx = phm.x;
             szout.cy = phm.y;
         }
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.axEditMode != WebBrowserHelper.AXEditMode.None;
+                return axEditMode != WebBrowserHelper.AXEditMode.None;
             }
         }
 
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms
                 cc = null;
             }
 
-            this.SetAXHostState(WebBrowserHelper.recomputeContainingControl, cc == null);
+            SetAXHostState(WebBrowserHelper.recomputeContainingControl, cc == null);
 
             return cc;
         }
@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms
                 try
                 {
                     Invalidate();
-                    this.axOleControl.OnAmbientPropertyChange(dispid);
+                    axOleControl.OnAmbientPropertyChange(dispid);
                 }
                 catch (Exception ex)
                 {
@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.axOleInPlaceObject;
+                return axOleInPlaceObject;
             }
         }
 
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms
 
             public WebBrowserBaseNativeWindow(WebBrowserBase ax)
             {
-                this.WebBrowserBase = ax;
+                WebBrowserBase = ax;
             }
 
             /// <summary>

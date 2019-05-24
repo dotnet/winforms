@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return !this.allowUnknownValues;
+                return !allowUnknownValues;
             }
         }
 
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return (object[])this.values.Clone();
+                return (object[])values.Clone();
             }
         }
 
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return (string[])this.names.Clone();
+                return (string[])names.Clone();
             }
         }
 
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // setup our values...since we have to walk through
             // them anyway to do the ToString, we just copy them here.
             this.names = new string[names.Length];
-            this.stringValues = new string[names.Length];
+            stringValues = new string[names.Length];
             this.values = new object[names.Length];
             for (int i = 0; i < names.Length; i++)
             {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 this.values[i] = values[i];
                 if (values[i] != null)
                 {
-                    this.stringValues[i] = values[i].ToString();
+                    stringValues[i] = values[i].ToString();
                 }
             }
         }

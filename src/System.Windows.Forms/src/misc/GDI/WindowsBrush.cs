@@ -74,7 +74,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.dc;
+                return dc;
             }
         }
 
@@ -85,13 +85,13 @@ namespace System.Experimental.Gdi
 
         protected virtual void Dispose(bool disposing)
         {
-            if (dc != null && this.nativeHandle != IntPtr.Zero)
+            if (dc != null && nativeHandle != IntPtr.Zero)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
-                dc.DeleteObject(this.nativeHandle, GdiObjectType.Brush);
+                dc.DeleteObject(nativeHandle, GdiObjectType.Brush);
 
-                this.nativeHandle = IntPtr.Zero;
+                nativeHandle = IntPtr.Zero;
             }
 
             if (disposing)
@@ -104,7 +104,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.color;
+                return color;
             }
         }
 
@@ -115,20 +115,20 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                if (this.nativeHandle == IntPtr.Zero)
+                if (nativeHandle == IntPtr.Zero)
                 {
                     CreateBrush();
                 }
 
-                return this.nativeHandle;
+                return nativeHandle;
             }
 
             set
             {
-                Debug.Assert(this.nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
+                Debug.Assert(nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
                 Debug.Assert(value != IntPtr.Zero, "WARNING: assigning IntPtr.Zero to the nativeHandle object.");
 
-                this.nativeHandle = value;
+                nativeHandle = value;
             }
         }
 
@@ -205,7 +205,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.NativeHandle;
+                return NativeHandle;
             }
         }
     }

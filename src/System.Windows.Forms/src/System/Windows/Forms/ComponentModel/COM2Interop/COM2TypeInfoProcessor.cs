@@ -1103,9 +1103,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             internal CachedProperties(PropertyDescriptor[] props, int defIndex, int majVersion, int minVersion)
             {
                 this.props = ClonePropertyDescriptors(props);
-                this.MajorVersion = majVersion;
-                this.MinorVersion = minVersion;
-                this.defaultIndex = defIndex;
+                MajorVersion = majVersion;
+                MinorVersion = minVersion;
+                defaultIndex = defIndex;
             }
 
             public PropertyDescriptor[] Properties

@@ -221,7 +221,7 @@ namespace System.Windows.Forms
                 if (autoCompleteCustomSource == null)
                 {
                     autoCompleteCustomSource = new AutoCompleteStringCollection();
-                    autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                    autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
                 return autoCompleteCustomSource;
             }
@@ -231,14 +231,14 @@ namespace System.Windows.Forms
                 {
                     if (autoCompleteCustomSource != null)
                     {
-                        autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                        autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     autoCompleteCustomSource = value;
 
                     if (value != null)
                     {
-                        autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                        autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
                     SetAutoComplete(false);
                 }
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.PasswordChar != '\0';
+                return PasswordChar != '\0';
             }
         }
 
@@ -593,7 +593,7 @@ namespace System.Windows.Forms
                 ResetAutoComplete(true);
                 if (autoCompleteCustomSource != null)
                 {
-                    autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                    autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
                 if (stringSource != null)
                 {
@@ -635,16 +635,16 @@ namespace System.Windows.Forms
         {
             base.OnBackColorChanged(e);
             // Force repainting of the entire window frame
-            if (Application.RenderWithVisualStyles && this.IsHandleCreated && this.BorderStyle == BorderStyle.Fixed3D)
+            if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                SafeNativeMethods.RedrawWindow(new HandleRef(this, this.Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
+                SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
             }
         }
 
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            if (this.AutoCompleteMode != AutoCompleteMode.None)
+            if (AutoCompleteMode != AutoCompleteMode.None)
             {
                 //we always will recreate the handle when autocomplete mode is on
                 RecreateHandle();
@@ -741,8 +741,8 @@ namespace System.Windows.Forms
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
-            if (!returnValue && this.Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox
-                && this.ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
+            if (!returnValue && Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox
+                && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
             {
                 SelectAll();
                 return true;
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
                 {
                     //RecreateHandle to avoid Leak.
                     // notice the use of member variable to avoid re-entrancy
-                    AutoCompleteMode backUpMode = this.AutoCompleteMode;
+                    AutoCompleteMode backUpMode = AutoCompleteMode;
                     autoCompleteMode = AutoCompleteMode.None;
                     RecreateHandle();
                     autoCompleteMode = backUpMode;
@@ -884,11 +884,11 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D)
+            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using (Graphics g = Graphics.FromHdc(m.WParam))
                 {
-                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                     using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder))
                     {
                         g.DrawRectangle(pen, rect);
@@ -1011,11 +1011,11 @@ namespace System.Windows.Forms
             }
 
             if ((m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
-                 !this.GetStyle(ControlStyles.UserPaint) &&
-                   string.IsNullOrEmpty(this.Text) &&
-                   !this.Focused)
+                 !GetStyle(ControlStyles.UserPaint) &&
+                   string.IsNullOrEmpty(Text) &&
+                   !Focused)
             {
-                using (Graphics g = this.CreateGraphics())
+                using (Graphics g = CreateGraphics())
                 {
                     DrawPlaceholderText(g);
                 }

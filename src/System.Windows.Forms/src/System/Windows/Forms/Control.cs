@@ -110,7 +110,7 @@ namespace System.Windows.Forms
                 string str;
                 try
                 {
-                    str = string.Format(CultureInfo.CurrentCulture, "{0}<{1}>", this.GetType().Name, this.Text);
+                    str = string.Format(CultureInfo.CurrentCulture, "{0}<{1}>", GetType().Name, Text);
                     int maxFrameCount = new StackTrace().FrameCount;
                     if (maxFrameCount > 5)
                     {
@@ -481,8 +481,8 @@ namespace System.Windows.Forms
 #if DEBUG
             if (AssertOnControlCreateSwitch.Enabled)
             {
-                Debug.Assert(this.GetType().BaseType != typeof(Control), "Direct derivative of Control Created: " + this.GetType().FullName);
-                Debug.Assert(this.GetType() != typeof(Control), "Control Created!");
+                Debug.Assert(GetType().BaseType != typeof(Control), "Direct derivative of Control Created: " + GetType().FullName);
+                Debug.Assert(GetType() != typeof(Control), "Control Created!");
             }
 #endif
             propertyStore = new PropertyStore();
@@ -575,8 +575,8 @@ namespace System.Windows.Forms
         /// </summary>
         public Control(Control parent, string text) : this()
         {
-            this.Parent = parent;
-            this.Text = text;
+            Parent = parent;
+            Text = text;
         }
 
         /// <summary>
@@ -584,8 +584,8 @@ namespace System.Windows.Forms
         /// </summary>
         public Control(Control parent, string text, int left, int top, int width, int height) : this(parent, text)
         {
-            this.Location = new Point(left, top);
-            this.Size = new Size(width, height);
+            Location = new Point(left, top);
+            Size = new Size(width, height);
         }
 
         /// <summary>
@@ -661,15 +661,15 @@ namespace System.Windows.Forms
             switch (accObjId)
             {
                 case NativeMethods.OBJID_CLIENT:
-                    accessibleObject = this.AccessibilityObject;
+                    accessibleObject = AccessibilityObject;
                     break;
                 case NativeMethods.OBJID_WINDOW:
-                    accessibleObject = this.NcAccessibilityObject;
+                    accessibleObject = NcAccessibilityObject;
                     break;
                 default:
                     if (accObjId > 0)
                     {
-                        accessibleObject = this.GetAccessibilityObjectById(accObjId);
+                        accessibleObject = GetAccessibilityObjectById(accObjId);
                     }
                     else
                     {
@@ -688,7 +688,7 @@ namespace System.Windows.Forms
         {
             if (this is IAutomationLiveRegion)
             {
-                return this.AccessibilityObject;
+                return AccessibilityObject;
             }
 
             return null;
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != this.BecomingActiveControl)
+                if (value != BecomingActiveControl)
                 {
                     Application.ThreadContext.FromCurrent().ActivatingControl = (value) ? this : null;
                     SetState2(STATE2_BECOMINGACTIVECONTROL, value);
@@ -1300,7 +1300,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeAccessibleName()
         {
-            string accName = this.AccessibleName;
+            string accName = AccessibleName;
             return accName != null && accName.Length > 0;
         }
 
@@ -1558,7 +1558,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != this.CausesValidation)
+                if (value != CausesValidation)
                 {
                     SetState(STATE_CAUSESVALIDATION, value);
                     OnCausesValidationChanged(EventArgs.Empty);
@@ -1735,12 +1735,12 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (focusHwnd == this.Handle)
+                if (focusHwnd == Handle)
                 {
                     return true;
                 }
 
-                if (UnsafeNativeMethods.IsChild(new HandleRef(this, this.Handle), new HandleRef(this, focusHwnd)))
+                if (UnsafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(this, focusHwnd)))
                 {
                     return true;
                 }
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms
 
         internal virtual void NotifyValidationResult(object sender, CancelEventArgs ev)
         {
-            this.ValidationCancelled = ev.Cancel;
+            ValidationCancelled = ev.Cancel;
         }
 
         /// <summary>
@@ -2007,7 +2007,7 @@ namespace System.Windows.Forms
             bool valid = true;
             validatedControlAllowsFocusChange = false;
             IContainerControl c = GetContainerControl();
-            if (c != null && this.CausesValidation)
+            if (c != null && CausesValidation)
             {
                 ContainerControl container = c as ContainerControl;
                 if (container != null)
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Control parent = this.ParentInternal;
+                    Control parent = ParentInternal;
                     if (parent != null)
                     {
                         return parent.ValidationCancelled;
@@ -2712,7 +2712,7 @@ namespace System.Windows.Forms
         {
             Font local = (Font)Properties.GetObject(PropFont);
             Font resolved = Font;
-            Font newFont = new Font(this.Font.FontFamily, this.Font.Size * factor, this.Font.Style);
+            Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
 
             if ((local == null) || !local.Equals(newFont))
             {
@@ -3851,7 +3851,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetStyle(ControlStyles.SupportsTransparentBackColor) && this.BackColor.A < 255;
+                return GetStyle(ControlStyles.SupportsTransparentBackColor) && BackColor.A < 255;
             }
         }
 
@@ -4304,7 +4304,7 @@ namespace System.Windows.Forms
                 WindowText = value;
                 OnTextChanged(EventArgs.Empty);
 
-                if (this.IsMnemonicsListenerAxSourced)
+                if (IsMnemonicsListenerAxSourced)
                 {
                     for (Control ctl = this; ctl != null; ctl = ctl.ParentInternal)
                     {
@@ -5575,7 +5575,7 @@ namespace System.Windows.Forms
                 {
                     OnRightToLeftChanged(EventArgs.Empty);
                 }
-                if (Properties.GetObject(PropBindingManager) == null && this.Created)
+                if (Properties.GetObject(PropBindingManager) == null && Created)
                 {
                     // We do not want to call our parent's BindingContext property here.
                     // We have no idea if us or any of our children are using data binding,
@@ -5689,14 +5689,14 @@ namespace System.Windows.Forms
 #if DEBUG
             TraceCanProcessMnemonic();
 #endif
-            if (!this.Enabled || !this.Visible)
+            if (!Enabled || !Visible)
             {
                 return false;
             }
 
-            if (this.parent != null)
+            if (parent != null)
             {
-                return this.parent.CanProcessMnemonic();
+                return parent.CanProcessMnemonic();
             }
 
             return true;
@@ -5840,7 +5840,7 @@ namespace System.Windows.Forms
 
         internal System.Drawing.Graphics CreateGraphicsInternal()
         {
-            return Graphics.FromHwndInternal(this.Handle);
+            return Graphics.FromHwndInternal(Handle);
         }
 
         /// <summary>
@@ -5871,7 +5871,7 @@ namespace System.Windows.Forms
             {
                 SetState(STATE_CREATINGHANDLE, true);
 
-                originalBounds = this.Bounds;
+                originalBounds = Bounds;
 
                 if (Application.UseVisualStyles)
                 {
@@ -5924,7 +5924,7 @@ namespace System.Windows.Forms
             // For certain controls (e.g., ComboBox) CreateWindowEx
             // may cause the control to resize.  WM_SETWINDOWPOSCHANGED takes care of
             // the control being resized, but our layout container may need a refresh as well.
-            if (this.Bounds != originalBounds)
+            if (Bounds != originalBounds)
             {
                 LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
             }
@@ -5936,7 +5936,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void CreateControl()
         {
-            bool controlIsAlreadyCreated = this.Created;
+            bool controlIsAlreadyCreated = Created;
             CreateControl(false);
 
             if (Properties.GetObject(PropBindingManager) == null && ParentInternal != null && !controlIsAlreadyCreated)
@@ -6130,7 +6130,7 @@ namespace System.Windows.Forms
                 }
 
                 SetState(STATE_DISPOSING, true);
-                this.SuspendLayout();
+                SuspendLayout();
                 try
                 {
                     DisposeAxControls();
@@ -6172,7 +6172,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    this.ResumeLayout(false);
+                    ResumeLayout(false);
                     SetState(STATE_DISPOSING, false);
                     SetState(STATE_DISPOSED, true);
                 }
@@ -6296,8 +6296,8 @@ namespace System.Windows.Forms
             }
 
 
-            int width = Math.Min(this.Width, targetBounds.Width);
-            int height = Math.Min(this.Height, targetBounds.Height);
+            int width = Math.Min(Width, targetBounds.Width);
+            int height = Math.Min(Height, targetBounds.Height);
 
             using (Bitmap image = new Bitmap(width, height, bitmap.PixelFormat))
             {
@@ -6305,7 +6305,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr hDc = g.GetHdc();
                     //send the actual wm_print message
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)hDc,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)hDc,
                         (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                     //now BLT the result to the destination bitmap.
@@ -6507,14 +6507,14 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::FocusInternal - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
                 UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
             }
-            if (Focused && this.ParentInternal != null)
+            if (Focused && ParentInternal != null)
             {
-                IContainerControl c = this.ParentInternal.GetContainerControl();
+                IContainerControl c = ParentInternal.GetContainerControl();
 
                 if (c != null)
                 {
@@ -6977,7 +6977,7 @@ namespace System.Windows.Forms
         private ArrayList GetChildWindowsTabOrderList()
         {
             ArrayList holders = new ArrayList();
-            ArrayList windows = GetChildWindows(this.Handle);
+            ArrayList windows = GetChildWindows(Handle);
 
             foreach (IntPtr hWnd in windows)
             {
@@ -6994,7 +6994,7 @@ namespace System.Windows.Forms
         internal virtual Control GetFirstChildControlInTabOrder(bool forward)
         {
 
-            ControlCollection ctlControls = (ControlCollection)this.Properties.GetObject(PropControlsCollection);
+            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(PropControlsCollection);
 
             Control found = null;
             if (ctlControls != null)
@@ -7490,7 +7490,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                NotifyInvalidate(this.ClientRectangle);
+                NotifyInvalidate(ClientRectangle);
             }
         }
 
@@ -7962,13 +7962,13 @@ namespace System.Windows.Forms
                 if (!listen)
                 {
                     SetState2(STATE2_LISTENINGTOUSERPREFERENCECHANGED, false);
-                    SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.UserPreferenceChanged);
+                    SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChanged);
                 }
             }
             else if (listen)
             {
                 SetState2(STATE2_LISTENINGTOUSERPREFERENCECHANGED, true);
-                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.UserPreferenceChanged);
+                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
             }
         }
 
@@ -8147,14 +8147,14 @@ namespace System.Windows.Forms
         // Used by form to notify the control that it has been "entered"
         internal void NotifyEnter()
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyEnter() - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyEnter() - " + Name);
             OnEnter(EventArgs.Empty);
         }
 
         // Used by form to notify the control that it has been "left"
         internal void NotifyLeave()
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyLeave() - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyLeave() - " + Name);
             OnLeave(EventArgs.Empty);
         }
 
@@ -8650,7 +8650,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    UnsafeNativeMethods.SetParent(new HandleRef(this, this.Handle), new HandleRef(parent, parent.Handle));
+                    UnsafeNativeMethods.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle));
                     UpdateZOrder();
                 }
             }
@@ -8681,7 +8681,7 @@ namespace System.Windows.Forms
             // use SetParent directly so as to not raise ParentChanged events
             if (IsHandleCreated)
             {
-                Application.ParkHandle(new HandleRef(this, this.Handle));
+                Application.ParkHandle(new HandleRef(this, Handle));
             }
         }
 
@@ -8772,7 +8772,7 @@ namespace System.Windows.Forms
                         hdc = e.Graphics.GetHdc();
                         releaseDC = true;
                     }
-                    m = Message.Create(this.Handle, Interop.WindowMessages.WM_PRINTCLIENT, hdc, flags);
+                    m = Message.Create(Handle, Interop.WindowMessages.WM_PRINTCLIENT, hdc, flags);
                 }
                 else
                 {
@@ -8835,7 +8835,7 @@ namespace System.Windows.Forms
         protected virtual void OnVisibleChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            bool visible = this.Visible;
+            bool visible = Visible;
             if (visible)
             {
                 UnhookMouseEvent();
@@ -8978,7 +8978,7 @@ namespace System.Windows.Forms
         protected virtual void OnHandleCreated(EventArgs e)
         {
             Contract.Requires(e != null);
-            if (this.IsHandleCreated)
+            if (IsHandleCreated)
             {
 
                 // Setting fonts is for some reason incredibly expensive.
@@ -8988,7 +8988,7 @@ namespace System.Windows.Forms
                     SetWindowFont();
                 }
 
-                if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType())))
+                if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(GetType())))
                 {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
@@ -9054,7 +9054,7 @@ namespace System.Windows.Forms
 
                 if (!(this is ScrollableControl) && !IsMirrored && GetState2(STATE2_SETSCROLLPOS) && !GetState2(STATE2_HAVEINVOKED))
                 {
-                    BeginInvoke(new EventHandler(this.OnSetScrollPosition));
+                    BeginInvoke(new EventHandler(OnSetScrollPosition));
                     SetState2(STATE2_HAVEINVOKED, true);
                     SetState2(STATE2_SETSCROLLPOS, false);
                 }
@@ -9070,7 +9070,7 @@ namespace System.Windows.Forms
             if (handler != null)
                 handler(this, e);
 
-            if (this.IsHandleCreated)
+            if (IsHandleCreated)
             {
                 // Now, repost the thread callback message if we found it.  We should do
                 // this last, so we're as close to the same state as when the message
@@ -9718,18 +9718,18 @@ namespace System.Windows.Forms
             if (!RenderTransparent)
                 return;
 
-            if (this.IsHandleCreated)
+            if (IsHandleCreated)
             {
                 // move invalid rect into child space
                 Rectangle cliprect = e.InvalidRect;
-                Point offs = this.Location;
+                Point offs = Location;
                 cliprect.Offset(-offs.X, -offs.Y);
-                cliprect = Rectangle.Intersect(this.ClientRectangle, cliprect);
+                cliprect = Rectangle.Intersect(ClientRectangle, cliprect);
 
                 // if we don't intersect at all, do nothing
                 if (cliprect.IsEmpty)
                     return;
-                this.Invalidate(cliprect);
+                Invalidate(cliprect);
             }
         }
 
@@ -9903,7 +9903,7 @@ namespace System.Windows.Forms
         // which does all painting under OnPaint, and tries very hard to avoid double-painting the border pixels.
         internal void PaintBackground(PaintEventArgs e, Rectangle rectangle)
         {
-            PaintBackground(e, rectangle, this.BackColor, Point.Empty);
+            PaintBackground(e, rectangle, BackColor, Point.Empty);
         }
 
         internal void PaintBackground(PaintEventArgs e, Rectangle rectangle, Color backColor)
@@ -9919,7 +9919,7 @@ namespace System.Windows.Forms
             }
 
             //If the form or mdiclient is mirrored then we do not render the background image due to GDI+ issues.
-            bool formRTL = ((this is Form || this is MdiClient) && this.IsMirrored);
+            bool formRTL = ((this is Form || this is MdiClient) && IsMirrored);
 
             // The rest of this won't do much if BackColor is transparent and there is no BackgroundImage,
             // but we need to call it in the partial alpha case.
@@ -10099,7 +10099,7 @@ namespace System.Windows.Forms
         internal void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region transparentRegion)
         {
             Graphics g = e.Graphics;
-            Control parent = this.ParentInternal;
+            Control parent = ParentInternal;
 
             if (parent != null)
             {
@@ -10138,14 +10138,14 @@ namespace System.Windows.Forms
                 {
                     // how to move the rendering area and setup it's size
                     // (we want to translate it to the parent's origin)
-                    Rectangle shift = new Rectangle(-this.Left, -this.Top, parent.Width, parent.Height);
+                    Rectangle shift = new Rectangle(-Left, -Top, parent.Width, parent.Height);
 
                     // moving the clipping rectangle to the parent coordinate system
-                    Rectangle newClipRect = new Rectangle(rectangle.Left + this.Left, rectangle.Top + this.Top, rectangle.Width, rectangle.Height);
+                    Rectangle newClipRect = new Rectangle(rectangle.Left + Left, rectangle.Top + Top, rectangle.Width, rectangle.Height);
 
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
                     {
-                        wg.DeviceContext.TranslateTransform(-this.Left, -this.Top);
+                        wg.DeviceContext.TranslateTransform(-Left, -Top);
                         using (PaintEventArgs np = new PaintEventArgs(wg.GetHdc(), newClipRect))
                         {
                             if (transparentRegion != null)
@@ -10237,7 +10237,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                for (Control c = this.ParentInternal; c != null; c = c.ParentInternal)
+                for (Control c = ParentInternal; c != null; c = c.ParentInternal)
                 {
                     if (c is ContainerControl)
                     {
@@ -10363,14 +10363,14 @@ namespace System.Windows.Forms
         {
 
             // Skip validation for controls that don't support it
-            if (!this.CausesValidation)
+            if (!CausesValidation)
             {
                 return false;
             }
 
             // Raise the 'Validating' event. Stop now if handler cancels (ie. control is invalid).
             // NOTE: Handler may throw an exception here, but we must not attempt to catch it.
-            if (this.NotifyValidating())
+            if (NotifyValidating())
             {
                 return true;
             }
@@ -10380,13 +10380,13 @@ namespace System.Windows.Forms
             // or the control is being validated as part of a bulk validation operation.
             if (bulkValidation || NativeWindow.WndProcShouldBeDebuggable)
             {
-                this.NotifyValidated();
+                NotifyValidated();
             }
             else
             {
                 try
                 {
-                    this.NotifyValidated();
+                    NotifyValidated();
                 }
                 catch (Exception e)
                 {
@@ -10710,7 +10710,7 @@ namespace System.Windows.Forms
             bool success = SafeNativeMethods.GetViewportOrgEx(hDC, viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            HandleRef hClippingRegion = new HandleRef(null, SafeNativeMethods.CreateRectRgn(viewportOrg.x, viewportOrg.y, viewportOrg.x + this.Width, viewportOrg.y + this.Height));
+            HandleRef hClippingRegion = new HandleRef(null, SafeNativeMethods.CreateRectRgn(viewportOrg.x, viewportOrg.y, viewportOrg.x + Width, viewportOrg.y + Height));
             Debug.Assert(hClippingRegion.Handle != IntPtr.Zero, "CreateRectRgn() failed.");
 
             try
@@ -10721,7 +10721,7 @@ namespace System.Windows.Forms
                               selectResult == NativeMethods.RegionFlags.NULLREGION),
                               "SIMPLEREGION or NULLLREGION expected.");
 
-                PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, this.Size));
+                PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
             }
             finally
             {
@@ -10741,7 +10741,7 @@ namespace System.Windows.Forms
 
                 // figure out mapping for the client area
                 NativeMethods.RECT windowRect = new NativeMethods.RECT();
-                bool success = UnsafeNativeMethods.GetWindowRect(new HandleRef(null, this.Handle), ref windowRect);
+                bool success = UnsafeNativeMethods.GetWindowRect(new HandleRef(null, Handle), ref windowRect);
                 Debug.Assert(success, "GetWindowRect() failed.");
                 Point clientOffset = PointToScreen(Point.Empty);
                 clientOffset = new Point(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
@@ -10787,7 +10787,7 @@ namespace System.Windows.Forms
                 // System controls must be painted into a temporary bitmap
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
-                using (MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, this.Size))
+                using (MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size))
                 {
                     SendMessage(Interop.WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
                 }
@@ -10880,14 +10880,14 @@ namespace System.Windows.Forms
 
             if (m.Msg == Interop.WindowMessages.WM_CHAR || m.Msg == Interop.WindowMessages.WM_SYSCHAR)
             {
-                int charsToIgnore = this.ImeWmCharsToIgnore;
+                int charsToIgnore = ImeWmCharsToIgnore;
 
                 if (charsToIgnore > 0)
                 {
                     charsToIgnore--;
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "charsToIgnore decreased, new val = " + charsToIgnore + ", this=" + this);
 
-                    this.ImeWmCharsToIgnore = charsToIgnore;
+                    ImeWmCharsToIgnore = charsToIgnore;
                     return false;
                 }
                 else
@@ -10899,10 +10899,10 @@ namespace System.Windows.Forms
             }
             else if (m.Msg == Interop.WindowMessages.WM_IME_CHAR)
             {
-                int charsToIgnore = this.ImeWmCharsToIgnore;
+                int charsToIgnore = ImeWmCharsToIgnore;
 
                 charsToIgnore += (3 - sizeof(char));
-                this.ImeWmCharsToIgnore = charsToIgnore;
+                ImeWmCharsToIgnore = charsToIgnore;
 
                 kpe = new KeyPressEventArgs(unchecked((char)(long)m.WParam));
 
@@ -11055,7 +11055,7 @@ namespace System.Windows.Forms
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
-                topMostParent = this.TopMostParent;
+                topMostParent = TopMostParent;
                 current = (int)topMostParent.SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0);
             }
             int toClear = 0;
@@ -11091,7 +11091,7 @@ namespace System.Windows.Forms
                 // that the entire tree of controls is 
                 if (topMostParent == null)
                 {
-                    topMostParent = this.TopMostParent;
+                    topMostParent = TopMostParent;
                 }
 
                 // A) if we're parented to a native dialog - REFRESH our child states ONLY
@@ -11136,10 +11136,10 @@ namespace System.Windows.Forms
 
         private void RemovePendingMessages(int msgMin, int msgMax)
         {
-            if (!this.IsDisposed)
+            if (!IsDisposed)
             {
                 NativeMethods.MSG msg = new NativeMethods.MSG();
-                IntPtr hwnd = this.Handle;
+                IntPtr hwnd = Handle;
                 while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, hwnd),
                                                        msgMin, msgMax,
                                                        NativeMethods.PM_REMOVE))
@@ -11259,7 +11259,7 @@ namespace System.Windows.Forms
                         UnhookMouseEvent();
                     }
 
-                    HandleRef parentHandle = new HandleRef(this, UnsafeNativeMethods.GetParent(new HandleRef(this, this.Handle)));
+                    HandleRef parentHandle = new HandleRef(this, UnsafeNativeMethods.GetParent(new HandleRef(this, Handle)));
 
                     try
                     {
@@ -11329,13 +11329,13 @@ namespace System.Windows.Forms
                     finally
                     {
                         if (parentHandle.Handle != IntPtr.Zero                               // the parent was not null
-                            && (Control.FromHandle(parentHandle.Handle) == null || this.parent == null) // but wasnt a windows forms window
+                            && (Control.FromHandle(parentHandle.Handle) == null || parent == null) // but wasnt a windows forms window
                             && UnsafeNativeMethods.IsWindow(parentHandle))
                         {                 // and still is a window
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
                             // us back.
-                            UnsafeNativeMethods.SetParent(new HandleRef(this, this.Handle), parentHandle);
+                            UnsafeNativeMethods.SetParent(new HandleRef(this, Handle), parentHandle);
                         }
                     }
 
@@ -11981,7 +11981,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
-            Control nextSelectableControl = this.GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
+            Control nextSelectableControl = GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
             if (nextSelectableControl != null)
             {
                 nextSelectableControl.Select(true, forward);
@@ -12550,7 +12550,7 @@ namespace System.Windows.Forms
                         // PERF - setting Visible=false twice can get us into this else block
                         // which makes us process WM_WINDOWPOS* messages - make sure we've already 
                         // visible=false - if not, make it so.
-                        if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this, this.Handle)))
+                        if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle)))
                         {
                             // we're already invisible - bail.
                             return;
@@ -12942,7 +12942,7 @@ namespace System.Windows.Forms
 
 
             bool newLocation = this.x != x || this.y != y;
-            bool newSize = this.Width != width || this.Height != height ||
+            bool newSize = Width != width || Height != height ||
                            this.clientWidth != clientWidth || this.clientHeight != clientHeight;
 
             this.x = x;
@@ -12955,20 +12955,20 @@ namespace System.Windows.Forms
             if (newLocation)
             {
 #if DEBUG
-                Rectangle originalBounds = this.Bounds;
+                Rectangle originalBounds = Bounds;
 #endif 
                 OnLocationChanged(EventArgs.Empty);
 #if DEBUG
-                if (this.Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
+                if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
                 {
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnLocationChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnLocationChanged()\r\nbefore={0} after={1}", originalBounds, Bounds));
                 }
 #endif 
             }
             if (newSize)
             {
 #if DEBUG
-                Rectangle originalBounds = this.Bounds;
+                Rectangle originalBounds = Bounds;
 #endif 
                 OnSizeChanged(EventArgs.Empty);
                 OnClientSizeChanged(EventArgs.Empty);
@@ -12978,9 +12978,9 @@ namespace System.Windows.Forms
                 LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
 
 #if DEBUG
-                if (this.Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
+                if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
                 {
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnSizeChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnSizeChanged()\r\nbefore={0} after={1}", originalBounds, Bounds));
                 }
 #endif 
             }
@@ -13018,21 +13018,21 @@ namespace System.Windows.Forms
             // in order to keep the method private.
             if (!LocalAppContextSwitches.AllowUpdateChildControlIndexForTabControls)
             {
-                if (this.GetType().IsAssignableFrom(typeof(TabControl)))
+                if (GetType().IsAssignableFrom(typeof(TabControl)))
                 {
                     return;
                 }
             }
 
             int newIndex = 0;
-            int curIndex = this.Controls.GetChildIndex(ctl);
+            int curIndex = Controls.GetChildIndex(ctl);
             IntPtr hWnd = ctl.InternalHandle;
             while ((hWnd = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWnd), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero)
             {
                 Control c = FromHandle(hWnd);
                 if (c != null)
                 {
-                    newIndex = this.Controls.GetChildIndex(c, false) + 1;
+                    newIndex = Controls.GetChildIndex(c, false) + 1;
                     break;
                 }
             }
@@ -13042,7 +13042,7 @@ namespace System.Windows.Forms
             }
             if (newIndex != curIndex)
             {
-                this.Controls.SetChildIndex(ctl, newIndex);
+                Controls.SetChildIndex(ctl, newIndex);
             }
         }
 
@@ -13090,7 +13090,7 @@ namespace System.Windows.Forms
             if (!IsHandleCreated || !ctl.IsHandleCreated || ctl.parent != this)
                 return;
             IntPtr prevHandle = (IntPtr)NativeMethods.HWND_TOP;
-            for (int i = this.Controls.GetChildIndex(ctl); --i >= 0;)
+            for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
             {
                 Control c = Controls[i];
                 if (c.IsHandleCreated && c.parent == this)
@@ -13436,13 +13436,13 @@ namespace System.Windows.Forms
         {
             string name;
 
-            if (this.Site != null)
+            if (Site != null)
             {
-                name = this.Site.Name;
+                name = Site.Name;
             }
             else
             {
-                name = this.Name;
+                name = Name;
             }
 
             if (name == null)
@@ -13466,15 +13466,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetObject(ref Message m)
         {
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + this.GetType().FullName + ", lParam = " + m.LParam.ToString());
+            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + GetType().FullName + ", lParam = " + m.LParam.ToString());
 
             InternalAccessibleObject intAccessibleObject = null;
 
-            if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders)
+            if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && SupportsUiaProviders)
             {
                 // If the requested object identifier is UiaRootObjectId, 
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
+                intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
                 m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
                     new HandleRef(this, Handle),
                     m.WParam,
@@ -13787,10 +13787,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKillFocus(ref Message m)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmKillFocus - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmKillFocus - " + Name);
             WmImeKillFocus();
             DefWndProc(ref m);
-            this.InvokeLostFocus(this, EventArgs.Empty);
+            InvokeLostFocus(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -13892,7 +13892,7 @@ namespace System.Windows.Forms
                     if (local != null)
                     {
                         var factor = (float)deviceDpi / deviceDpiOld;
-                        this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                        Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
                     }
 
                     RescaleConstantsForDpi(deviceDpiOld, deviceDpi);
@@ -13965,7 +13965,7 @@ namespace System.Windows.Forms
                     // we have to do it ourselves.
                     if (button == MouseButtons.Right)
                     {
-                        SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, this.Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
+                        SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
                     }
                 }
 
@@ -14147,7 +14147,7 @@ namespace System.Windows.Forms
                 {
                     // Cache Handle not only for perf but to avoid object disposed exception in case the window
                     // is destroyed in an event handler.
-                    hWnd = this.Handle;
+                    hWnd = Handle;
                     dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, hWnd), ref ps);
                     if (dc == IntPtr.Zero)
                     {
@@ -14403,7 +14403,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmSetFocus - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmSetFocus - " + Name);
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager)
@@ -14434,7 +14434,7 @@ namespace System.Windows.Forms
             }
 
             DefWndProc(ref m);
-            this.InvokeGotFocus(this, EventArgs.Empty);
+            InvokeGotFocus(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -15101,7 +15101,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        if (sizeProperty != null && !sizeProperty.IsReadOnly && (bounds.Width != this.Width || bounds.Height != this.Height))
+                        if (sizeProperty != null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
                         {
                             if (!(site is INestedSite))
                             {
@@ -15109,7 +15109,7 @@ namespace System.Windows.Forms
                             }
                             sizeChanged = true;
                         }
-                        if (locationProperty != null && !locationProperty.IsReadOnly && (bounds.X != this.x || bounds.Y != this.y))
+                        if (locationProperty != null && !locationProperty.IsReadOnly && (bounds.X != x || bounds.Y != y))
                         {
                             if (!(site is INestedSite))
                             {
@@ -15180,7 +15180,7 @@ namespace System.Windows.Forms
 
             protected override void OnHandleChange()
             {
-                target.OnHandleChange(this.Handle);
+                target.OnHandleChange(Handle);
             }
 
             // IWindowTarget method
@@ -15623,7 +15623,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
@@ -15642,7 +15642,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
 
             /// <summary>
@@ -15869,7 +15869,7 @@ namespace System.Windows.Forms
                 public ControlCollectionEnumerator(ControlCollection controls)
                 {
                     this.controls = controls;
-                    this.originalCount = controls.Count;
+                    originalCount = controls.Count;
                     current = -1;
                 }
 
@@ -16680,21 +16680,21 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
         {
-            IKeyboardToolTip host = this.ToolStripControlHost;
-            return this.IsHandleCreated && this.Visible && (host == null || host.CanShowToolTipsNow());
+            IKeyboardToolTip host = ToolStripControlHost;
+            return IsHandleCreated && Visible && (host == null || host.CanShowToolTipsNow());
         }
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle()
         {
-            return this.GetToolNativeScreenRectangle();
+            return GetToolNativeScreenRectangle();
         }
 
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
-            IKeyboardToolTip host = this.ToolStripControlHost;
+            IKeyboardToolTip host = ToolStripControlHost;
             if (host == null)
             {
-                return this.GetOwnNeighboringToolsRectangles();
+                return GetOwnNeighboringToolsRectangles();
             }
             else
             {
@@ -16704,19 +16704,19 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.IsHoveredWithMouse()
         {
-            return this.ClientRectangle.Contains(this.PointToClient(Control.MousePosition));
+            return ClientRectangle.Contains(PointToClient(Control.MousePosition));
         }
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
             Control topLevelControl = TopLevelControlInternal;
-            return topLevelControl != null && topLevelControl.RightToLeft == RightToLeft.Yes && !this.IsMirrored;
+            return topLevelControl != null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
         }
 
         bool IKeyboardToolTip.AllowsToolTip()
         {
-            IKeyboardToolTip host = this.ToolStripControlHost;
-            return (host == null || host.AllowsToolTip()) && this.AllowsKeyboardToolTip();
+            IKeyboardToolTip host = ToolStripControlHost;
+            return (host == null || host.AllowsToolTip()) && AllowsKeyboardToolTip();
         }
 
         IWin32Window IKeyboardToolTip.GetOwnerWindow()
@@ -16726,17 +16726,17 @@ namespace System.Windows.Forms
 
         void IKeyboardToolTip.OnHooked(ToolTip toolTip)
         {
-            this.OnKeyboardToolTipHook(toolTip);
+            OnKeyboardToolTipHook(toolTip);
         }
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip)
         {
-            this.OnKeyboardToolTipUnhook(toolTip);
+            OnKeyboardToolTipUnhook(toolTip);
         }
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
         {
-            IKeyboardToolTip host = this.ToolStripControlHost;
+            IKeyboardToolTip host = ToolStripControlHost;
             if (host == null)
             {
                 return toolTip.GetCaptionForTool(this);
@@ -16749,8 +16749,8 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {
-            IKeyboardToolTip host = this.ToolStripControlHost;
-            return (host == null || host.ShowsOwnToolTip()) && this.ShowsOwnKeyboardToolTip();
+            IKeyboardToolTip host = ToolStripControlHost;
+            return (host == null || host.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
         }
 
         bool IKeyboardToolTip.IsBeingTabbedTo()
@@ -16760,14 +16760,14 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
         {
-            return this.AllowsChildrenToShowToolTips();
+            return AllowsChildrenToShowToolTips();
         }
 
         #endregion
 
         private IList<Rectangle> GetOwnNeighboringToolsRectangles()
         {
-            Control controlParent = this.ParentInternal;
+            Control controlParent = ParentInternal;
             if (controlParent != null)
             {
                 Control[] neighboringControls = new Control[4] {
@@ -16812,7 +16812,7 @@ namespace System.Windows.Forms
         internal virtual Rectangle GetToolNativeScreenRectangle()
         {
             NativeMethods.RECT rectangle = new NativeMethods.RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, this.Handle), ref rectangle);
+            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rectangle);
             return Rectangle.FromLTRB(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom);
         }
 
@@ -16855,12 +16855,12 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripControlHost value;
-                this.toolStripControlHostReference.TryGetTarget(out value);
+                toolStripControlHostReference.TryGetTarget(out value);
                 return value;
             }
             set
             {
-                this.toolStripControlHostReference.SetTarget(value);
+                toolStripControlHostReference.SetTarget(value);
             }
         }
 
@@ -17981,7 +17981,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    stream = stg.OpenStream(this.GetStreamName(), IntPtr.Zero, NativeMethods.STGM_READ | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
+                    stream = stg.OpenStream(GetStreamName(), IntPtr.Zero, NativeMethods.STGM_READ | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
                 }
                 catch (COMException e)
                 {
@@ -18573,7 +18573,7 @@ namespace System.Windows.Forms
                             }
 
                             // Preserve the com ptr in the SafeHandle.
-                            this.handle = unknown;
+                            handle = unknown;
                         }
                     }
 
@@ -18625,7 +18625,7 @@ namespace System.Windows.Forms
                     /// </summary>
                     protected V LoadVtable<V>()
                     {
-                        IntPtr vtblptr = Marshal.ReadIntPtr(this.handle, 0);
+                        IntPtr vtblptr = Marshal.ReadIntPtr(handle, 0);
                         return Marshal.PtrToStructure<V>(vtblptr);
                     }
                 }
@@ -18641,7 +18641,7 @@ namespace System.Windows.Forms
                     public ComConnectionPointContainer(object obj, bool addRefIntPtr)
                         : base(obj, addRefIntPtr, typeof(System.Runtime.InteropServices.ComTypes.IConnectionPointContainer).GUID)
                     {
-                        this.vtbl = base.LoadVtable<VTABLE>();
+                        vtbl = base.LoadVtable<VTABLE>();
                     }
 
                     private VTABLE vtbl;
@@ -18662,11 +18662,11 @@ namespace System.Windows.Forms
                     /// </summary>
                     public ComConnectionPoint FindConnectionPoint(Type eventInterface)
                     {
-                        FindConnectionPointD findConnectionPoint = (FindConnectionPointD)Marshal.GetDelegateForFunctionPointer(this.vtbl.FindConnectionPointPtr, typeof(FindConnectionPointD));
+                        FindConnectionPointD findConnectionPoint = (FindConnectionPointD)Marshal.GetDelegateForFunctionPointer(vtbl.FindConnectionPointPtr, typeof(FindConnectionPointD));
                         IntPtr result = IntPtr.Zero;
 
                         Guid iid = eventInterface.GUID;
-                        int hresult = findConnectionPoint.Invoke(this.handle, ref iid, out result);
+                        int hresult = findConnectionPoint.Invoke(handle, ref iid, out result);
                         if (hresult != 0 || result == IntPtr.Zero)
                         {
                             throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
@@ -18690,7 +18690,7 @@ namespace System.Windows.Forms
                     public ComConnectionPoint(object obj, bool addRefIntPtr)
                         : base(obj, addRefIntPtr, typeof(System.Runtime.InteropServices.ComTypes.IConnectionPoint).GUID)
                     {
-                        this.vtbl = this.LoadVtable<VTABLE>();
+                        vtbl = LoadVtable<VTABLE>();
                     }
 
                     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
@@ -18714,8 +18714,8 @@ namespace System.Windows.Forms
                     /// </summary>
                     public bool Advise(IntPtr punkEventSink, out int cookie)
                     {
-                        AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(this.vtbl.AdvisePtr, typeof(AdviseD));
-                        if (advise.Invoke(this.handle, punkEventSink, out cookie) == 0)
+                        AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(vtbl.AdvisePtr, typeof(AdviseD));
+                        if (advise.Invoke(handle, punkEventSink, out cookie) == 0)
                         {
                             return true;
                         }
@@ -18759,7 +18759,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void Save(UnsafeNativeMethods.IStorage stg, bool fSameAsLoad)
             {
-                UnsafeNativeMethods.IStream stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
+                UnsafeNativeMethods.IStream stream = stg.CreateStream(GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
                 Save(stream, true);
                 Marshal.ReleaseComObject(stream);
@@ -18966,7 +18966,7 @@ namespace System.Windows.Forms
 
                     if (IsIE)
                     {
-                        this.control.Dispose();
+                        control.Dispose();
                     }
                 }
                 else
@@ -19484,7 +19484,7 @@ namespace System.Windows.Forms
             internal void UpdateAccelTable()
             {
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
-                this.accelCount = -1;
+                accelCount = -1;
 
                 UnsafeNativeMethods.IOleControlSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleControlSite;
                 if (ioleClientSite != null)
@@ -19961,8 +19961,8 @@ namespace System.Windows.Forms
             {
                 this.name = name;
                 this.dispID = dispID;
-                this.value = null;
-                this.empty = true;
+                value = null;
+                empty = true;
             }
 
             /// <summary>
@@ -20258,7 +20258,7 @@ namespace System.Windows.Forms
 
                 IntPtr handle = ownerControl.Handle;
 
-                this.Handle = handle;
+                Handle = handle;
             }
 
             internal ControlAccessibleObject(Control ownerControl, int accObjId)
@@ -20270,12 +20270,12 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(ownerControl));
                 }
 
-                this.AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
+                AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
 
                 this.ownerControl = ownerControl;
                 IntPtr handle = ownerControl.Handle;
 
-                this.Handle = handle;
+                Handle = handle;
             }
 
             /// <summary>
@@ -20417,7 +20417,7 @@ namespace System.Windows.Forms
                     {
                         runtimeId = new int[2];
                         runtimeId[0] = 0x2a;
-                        runtimeId[1] = (int)(long)this.Handle;
+                        runtimeId[1] = (int)(long)Handle;
                     }
 
                     return runtimeId;
@@ -20511,7 +20511,7 @@ namespace System.Windows.Forms
                 {
                     // For controls, the default keyboard shortcut comes directly from the accessible
                     // name property. This matches the default behavior of OLEACC.DLL exactly.
-                    char mnemonic = WindowsFormsUtils.GetMnemonic(this.TextLabel, false);
+                    char mnemonic = WindowsFormsUtils.GetMnemonic(TextLabel, false);
                     return (mnemonic == (char)0) ? null : ("Alt+" + mnemonic);
                 }
             }
@@ -20696,7 +20696,7 @@ namespace System.Windows.Forms
             public void NotifyClients(AccessibleEvents accEvent)
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  this.ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
+                                  ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
 
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, 0);
             }
@@ -20705,7 +20705,7 @@ namespace System.Windows.Forms
             {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  this.ToString() +
+                                  ToString() +
                                   ", accEvent = " + accEvent.ToString() +
                                   ", childID = " + childID.ToString(CultureInfo.InvariantCulture));
 
@@ -20716,7 +20716,7 @@ namespace System.Windows.Forms
             {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  this.ToString() +
+                                  ToString() +
                                   ", accEvent = " + accEvent.ToString() +
                                   ", childID = " + childID.ToString(CultureInfo.InvariantCulture));
 
@@ -20732,7 +20732,7 @@ namespace System.Windows.Forms
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()
             {
-                if (!(this.Owner is IAutomationLiveRegion))
+                if (!(Owner is IAutomationLiveRegion))
                 {
                     throw new InvalidOperationException(SR.OwnerControlIsNotALiveRegion);
                 }
@@ -20742,7 +20742,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (this.Owner is IAutomationLiveRegion)
+                if (Owner is IAutomationLiveRegion)
                 {
                     return true;
                 }
@@ -20896,19 +20896,19 @@ namespace System.Windows.Forms
                 this.marshaler = marshaler;
                 this.method = method;
                 this.args = args;
-                this.exception = null;
-                this.retVal = null;
+                exception = null;
+                retVal = null;
                 this.synchronous = synchronous;
-                this.isCompleted = false;
-                this.resetEvent = null;
+                isCompleted = false;
+                resetEvent = null;
                 this.executionContext = executionContext;
             }
 
             ~ThreadMethodEntry()
             {
-                if (this.resetEvent != null)
+                if (resetEvent != null)
                 {
-                    this.resetEvent.Close();
+                    resetEvent.Close();
                 }
             }
 
@@ -20924,7 +20924,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (this.resetEvent == null)
+                    if (resetEvent == null)
                     {
                         // Locking 'this' here is ok since this is an internal class.
                         lock (invokeSyncObject)
@@ -20932,17 +20932,17 @@ namespace System.Windows.Forms
                             // BeginInvoke hangs on Multi-proc system:
                             // taking the lock prevents a race condition between IsCompleted
                             // boolean flag and resetEvent mutex in multiproc scenarios.
-                            if (this.resetEvent == null)
+                            if (resetEvent == null)
                             {
-                                this.resetEvent = new ManualResetEvent(false);
-                                if (this.isCompleted)
+                                resetEvent = new ManualResetEvent(false);
+                                if (isCompleted)
                                 {
-                                    this.resetEvent.Set();
+                                    resetEvent.Set();
                                 }
                             }
                         }
                     }
-                    return (WaitHandle)this.resetEvent;
+                    return (WaitHandle)resetEvent;
                 }
             }
 
@@ -20950,7 +20950,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (this.isCompleted && this.synchronous)
+                    if (isCompleted && synchronous)
                         return true;
 
                     return false;
@@ -20961,7 +20961,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.isCompleted;
+                    return isCompleted;
                 }
             }
 
@@ -20969,10 +20969,10 @@ namespace System.Windows.Forms
             {
                 lock (invokeSyncObject)
                 {
-                    this.isCompleted = true;
-                    if (this.resetEvent != null)
+                    isCompleted = true;
+                    if (resetEvent != null)
                     {
-                        this.resetEvent.Set();
+                        resetEvent.Set();
                     }
                 }
             }

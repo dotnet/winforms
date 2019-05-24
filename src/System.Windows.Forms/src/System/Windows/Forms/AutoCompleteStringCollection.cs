@@ -72,15 +72,15 @@ namespace System.Windows.Forms
 
         public event CollectionChangeEventHandler CollectionChanged
         {
-            add => this.onCollectionChanged += value;
-            remove => this.onCollectionChanged -= value;
+            add => onCollectionChanged += value;
+            remove => onCollectionChanged -= value;
         }
 
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
-            if (this.onCollectionChanged != null)
+            if (onCollectionChanged != null)
             {
-                this.onCollectionChanged(this, e);
+                onCollectionChanged(this, e);
             }
         }
 

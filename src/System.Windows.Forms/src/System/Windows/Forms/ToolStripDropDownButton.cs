@@ -94,7 +94,7 @@ namespace System.Windows.Forms
                 if (showDropDownArrow != value)
                 {
                     showDropDownArrow = value;
-                    this.InvalidateItemLayout(PropertyNames.ShowDropDownArrow);
+                    InvalidateItemLayout(PropertyNames.ShowDropDownArrow);
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
                     // opening should happen on mouse down.  
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
-                    this.ShowDropDown(/*mousePush =*/true);
+                    ShowDropDown(/*mousePush =*/true);
                 }
             }
             base.OnMouseDown(e);
@@ -173,9 +173,9 @@ namespace System.Windows.Forms
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
 
-            if (this.Owner != null)
+            if (Owner != null)
             {
-                ToolStripRenderer renderer = this.Renderer;
+                ToolStripRenderer renderer = Renderer;
                 Graphics g = e.Graphics;
 
                 renderer.DrawDropDownButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
 
                 if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                 {
-                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, InternalLayout.TextRectangle, this.ForeColor, this.Font, InternalLayout.TextFormat));
+                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, ForeColor, Font, InternalLayout.TextFormat));
                 }
                 if (ShowDropDownArrow)
                 {

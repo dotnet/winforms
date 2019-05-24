@@ -96,11 +96,11 @@ namespace System.Windows.Forms
                     lastEndLocation = ToolStrip.InvalidMouseEnter;
                     if (movingToolStrip)
                     {
-                        ((ISupportToolStripPanel)this.ParentInternal).BeginDrag();
+                        ((ISupportToolStripPanel)ParentInternal).BeginDrag();
                     }
                     else
                     {
-                        ((ISupportToolStripPanel)this.ParentInternal).EndDrag();
+                        ((ISupportToolStripPanel)ParentInternal).EndDrag();
                     }
                 }
             }
@@ -123,15 +123,15 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = Size.Empty;
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
-                if (this.ParentInternal.LayoutStyle == ToolStripLayoutStyle.VerticalStackWithOverflow)
+                if (ParentInternal.LayoutStyle == ToolStripLayoutStyle.VerticalStackWithOverflow)
                 {
-                    preferredSize = new Size(this.ParentInternal.Width, gripThickness);
+                    preferredSize = new Size(ParentInternal.Width, gripThickness);
                 }
                 else
                 {
-                    preferredSize = new Size(gripThickness, this.ParentInternal.Height);
+                    preferredSize = new Size(gripThickness, ParentInternal.Height);
 
                 }
 

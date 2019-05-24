@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            this.Font = uiFont;
+            Font = uiFont;
 
             okButton = new Button();
             cancelButton = new Button();
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Design
             selector = new PageSelector();
 
             selector.ImageList = selectorImageList;
-            selector.AfterSelect += new TreeViewEventHandler(this.OnSelChangeSelector);
+            selector.AfterSelect += new TreeViewEventHandler(OnSelChangeSelector);
 
             Label grayStrip = new Label();
             grayStrip.BackColor = SystemColors.ControlDark;
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Design
             {
                 caption = SR.ComponentEditorFormPropertiesNoName;
             }
-            this.Text = caption;
+            Text = caption;
 
 
             Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.Design
             Size size = new Size(bounds.Width + 3 * (BUTTON_PAD + xFrame) + selectorWidth,
                                    bounds.Height + STRIP_HEIGHT + 4 * BUTTON_PAD + BUTTON_HEIGHT +
                                    2 * xFrame + SystemInformation.CaptionHeight);
-            this.Size = size;
+            Size = size;
 
             selector.Bounds = new Rectangle(BUTTON_PAD, BUTTON_PAD,
                                             selectorWidth, bounds.Height + STRIP_HEIGHT + 2 * BUTTON_PAD + BUTTON_HEIGHT);
@@ -304,33 +304,33 @@ namespace System.Windows.Forms.Design
 
             helpButton.Bounds = bounds;
             helpButton.Text = SR.HelpCaption;
-            helpButton.Click += new EventHandler(this.OnButtonClick);
+            helpButton.Click += new EventHandler(OnButtonClick);
             helpButton.Enabled = false;
             helpButton.FlatStyle = FlatStyle.System;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
             applyButton.Bounds = bounds;
             applyButton.Text = SR.ApplyCaption;
-            applyButton.Click += new EventHandler(this.OnButtonClick);
+            applyButton.Click += new EventHandler(OnButtonClick);
             applyButton.Enabled = false;
             applyButton.FlatStyle = FlatStyle.System;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
             cancelButton.Bounds = bounds;
             cancelButton.Text = SR.CancelCaption;
-            cancelButton.Click += new EventHandler(this.OnButtonClick);
+            cancelButton.Click += new EventHandler(OnButtonClick);
             cancelButton.FlatStyle = FlatStyle.System;
-            this.CancelButton = cancelButton;
+            CancelButton = cancelButton;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
             okButton.Bounds = bounds;
             okButton.Text = SR.OKCaption;
-            okButton.Click += new EventHandler(this.OnButtonClick);
+            okButton.Click += new EventHandler(OnButtonClick);
             okButton.FlatStyle = FlatStyle.System;
-            this.AcceptButton = okButton;
+            AcceptButton = okButton;
 
-            this.Controls.Clear();
-            this.Controls.AddRange(new Control[] {
+            Controls.Clear();
+            Controls.AddRange(new Control[] {
                 selector,
                 grayStrip,
                 pageHost,
@@ -551,8 +551,8 @@ namespace System.Windows.Forms.Design
             {
                 this.component = component;
                 this.parent = parent;
-                this.isActive = false;
-                this.isDirty = false;
+                isActive = false;
+                isDirty = false;
 
                 if (form == null)
                     throw new ArgumentNullException(nameof(form));
@@ -664,18 +664,18 @@ namespace System.Windows.Forms.Design
 
             public PageSelector()
             {
-                this.HotTracking = true;
-                this.HideSelection = false;
-                this.BackColor = SystemColors.Control;
-                this.Indent = 0;
-                this.LabelEdit = false;
-                this.Scrollable = false;
-                this.ShowLines = false;
-                this.ShowPlusMinus = false;
-                this.ShowRootLines = false;
-                this.BorderStyle = BorderStyle.None;
-                this.Indent = 0;
-                this.FullRowSelect = true;
+                HotTracking = true;
+                HideSelection = false;
+                BackColor = SystemColors.Control;
+                Indent = 0;
+                LabelEdit = false;
+                Scrollable = false;
+                ShowLines = false;
+                ShowPlusMinus = false;
+                ShowRootLines = false;
+                BorderStyle = BorderStyle.None;
+                Indent = 0;
+                FullRowSelect = true;
             }
 
 
@@ -721,7 +721,7 @@ namespace System.Windows.Forms.Design
                 IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
                 IntNativeMethods.RECT rc2 = new IntNativeMethods.RECT();
                 IntNativeMethods.RECT rc = new IntNativeMethods.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
-                ImageList imagelist = this.ImageList;
+                ImageList imagelist = ImageList;
                 IntPtr hfontOld = IntPtr.Zero;
 
                 // Select the font of the dialog, so we don't get the underlined font

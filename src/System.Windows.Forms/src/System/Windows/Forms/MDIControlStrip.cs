@@ -52,9 +52,9 @@ namespace System.Windows.Forms
             }
 
             // add in opposite order to how you want it merged
-            this.Items.AddRange(new ToolStripItem[] { minimize, restore, close, system });
-            this.SuspendLayout();
-            foreach (ToolStripItem item in this.Items)
+            Items.AddRange(new ToolStripItem[] { minimize, restore, close, system });
+            SuspendLayout();
+            foreach (ToolStripItem item in Items)
             {
                 item.DisplayStyle = ToolStripItemDisplayStyle.Image;
                 item.MergeIndex = 0;
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             system.DoubleClick += new EventHandler(OnSystemMenuDoubleClick);
             system.Padding = Padding.Empty;
             system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
-            this.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
 
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
                 if (Visible && ShortcutKeys == keyData)
                 {
                     ShowDropDown();
-                    this.DropDown.SelectNextToolStripItem(null, true);
+                    DropDown.SelectNextToolStripItem(null, true);
                     return true;
                 }
                 return base.ProcessCmdKey(ref m, keyData);

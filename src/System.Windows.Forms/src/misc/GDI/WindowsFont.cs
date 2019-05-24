@@ -60,19 +60,19 @@ namespace System.Experimental.Gdi
         private void CreateFont()
         {
             Debug.Assert(hFont == IntPtr.Zero, "hFont is not null, this will generate a handle leak.");
-            Debug.Assert(this.logFont != null, "WindowsFont.logFont not initialized.");
+            Debug.Assert(logFont != null, "WindowsFont.logFont not initialized.");
 
-            this.hFont = IntUnsafeNativeMethods.CreateFontIndirect(this.logFont);
+            hFont = IntUnsafeNativeMethods.CreateFontIndirect(logFont);
 
 #if TRACK_HFONT
             Debug.WriteLine( DbgUtil.StackTraceToStr(String.Format( "HFONT[0x{0:x8}] = CreateFontIndirect( LOGFONT={1} )", (int) this.hFont, this.logFont)));
 #endif
-            if (this.hFont == IntPtr.Zero)
+            if (hFont == IntPtr.Zero)
             {
-                this.logFont.lfFaceName = defaultFaceName;
-                this.logFont.lfOutPrecision = IntNativeMethods.OUT_TT_ONLY_PRECIS; // True Type only.
+                logFont.lfFaceName = defaultFaceName;
+                logFont.lfOutPrecision = IntNativeMethods.OUT_TT_ONLY_PRECIS; // True Type only.
 
-                this.hFont = IntUnsafeNativeMethods.CreateFontIndirect(this.logFont);
+                hFont = IntUnsafeNativeMethods.CreateFontIndirect(logFont);
 
 #if TRACK_HFONT
             Debug.WriteLine( DbgUtil.StackTraceToStr(String.Format( "HFONT[0x{0:x8}] = CreateFontIndirect( LOGFONT={1} )", (int) this.hFont, this.logFont)));
@@ -82,10 +82,10 @@ namespace System.Experimental.Gdi
 
             // Update logFont height and other adjusted parameters.
             //
-            IntUnsafeNativeMethods.GetObject(new HandleRef(this, this.hFont), this.logFont);
+            IntUnsafeNativeMethods.GetObject(new HandleRef(this, hFont), logFont);
 
             // We created the hFont, we will delete it on dispose.
-            this.ownHandle = true;
+            ownHandle = true;
         }
 
         /// Constructors.
@@ -132,7 +132,7 @@ namespace System.Experimental.Gdi
             Debug.Assert(size > 0.0f, "size has a negative value.");
             const byte True = 1;
             const byte False = 0;
-            this.logFont = new IntNativeMethods.LOGFONT();
+            logFont = new IntNativeMethods.LOGFONT();
 
             //
             // Get the font height from the specified size.  size is in point units and height in logical 
@@ -146,15 +146,15 @@ namespace System.Experimental.Gdi
             // leading; we specify a negative size value (in pixels) for the height so the font mapper 
             // provides the closest match for the character height rather than the cell height (MSDN).
             //
-            this.logFont.lfHeight = -pixelsY;
-            this.logFont.lfFaceName = faceName != null ? faceName : defaultFaceName;
-            this.logFont.lfCharSet = charSet;
-            this.logFont.lfOutPrecision = IntNativeMethods.OUT_TT_PRECIS;
-            this.logFont.lfQuality = (byte)fontQuality;
-            this.logFont.lfWeight = (style & FontStyle.Bold) == FontStyle.Bold ? IntNativeMethods.FW_BOLD : IntNativeMethods.FW_NORMAL;
-            this.logFont.lfItalic = (style & FontStyle.Italic) == FontStyle.Italic ? True : False;
-            this.logFont.lfUnderline = (style & FontStyle.Underline) == FontStyle.Underline ? True : False;
-            this.logFont.lfStrikeOut = (style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False;
+            logFont.lfHeight = -pixelsY;
+            logFont.lfFaceName = faceName != null ? faceName : defaultFaceName;
+            logFont.lfCharSet = charSet;
+            logFont.lfOutPrecision = IntNativeMethods.OUT_TT_PRECIS;
+            logFont.lfQuality = (byte)fontQuality;
+            logFont.lfWeight = (style & FontStyle.Bold) == FontStyle.Bold ? IntNativeMethods.FW_BOLD : IntNativeMethods.FW_NORMAL;
+            logFont.lfItalic = (style & FontStyle.Italic) == FontStyle.Italic ? True : False;
+            logFont.lfUnderline = (style & FontStyle.Underline) == FontStyle.Underline ? True : False;
+            logFont.lfStrikeOut = (style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False;
 
             // Let the Size be recomputed to be consistent with the Height (there may be some precision loss coming from size to height).
             // this.fontSize = size;
@@ -174,29 +174,29 @@ namespace System.Experimental.Gdi
         {
             Debug.Assert(lf != null, "lf is null");
 
-            this.logFont = lf;
+            logFont = lf;
 
-            if (this.logFont.lfFaceName == null)
+            if (logFont.lfFaceName == null)
             {
-                this.logFont.lfFaceName = defaultFaceName;
+                logFont.lfFaceName = defaultFaceName;
             }
 
-            this.style = FontStyle.Regular;
+            style = FontStyle.Regular;
             if (lf.lfWeight == IntNativeMethods.FW_BOLD)
             {
-                this.style |= FontStyle.Bold;
+                style |= FontStyle.Bold;
             }
             if (lf.lfItalic == 1)
             {
-                this.style |= FontStyle.Italic;
+                style |= FontStyle.Italic;
             }
             if (lf.lfUnderline == 1)
             {
-                this.style |= FontStyle.Underline;
+                style |= FontStyle.Underline;
             }
             if (lf.lfStrikeOut == 1)
             {
-                this.style |= FontStyle.Strikeout;
+                style |= FontStyle.Strikeout;
             }
 
             if (createHandle)
@@ -293,7 +293,7 @@ namespace System.Experimental.Gdi
         internal void Dispose(bool disposing)
         {
             bool deletedHandle = false;
-            if (this.ownHandle)
+            if (ownHandle)
             {
                 if (!ownedByCacheManager || !disposing)
                 {
@@ -305,15 +305,15 @@ namespace System.Experimental.Gdi
                     // and that means we're being called from the finalizer.
                     if (everOwnedByCacheManager || !disposing || !DeviceContexts.IsFontInUse(this))
                     {
-                        Debug.Assert(this.hFont != IntPtr.Zero, "Unexpected null hFont.");
+                        Debug.Assert(hFont != IntPtr.Zero, "Unexpected null hFont.");
                         DbgUtil.AssertFinalization(this, disposing);
 
-                        IntUnsafeNativeMethods.DeleteObject(new HandleRef(this, this.hFont));
+                        IntUnsafeNativeMethods.DeleteObject(new HandleRef(this, hFont));
 #if TRACK_HFONT
                         Debug.WriteLine( DbgUtil.StackTraceToStr(String.Format( "DeleteObject(HFONT[0x{0:x8}]))", (int) this.hFont)));
 #endif
-                        this.hFont = IntPtr.Zero;
-                        this.ownHandle = false;
+                        hFont = IntPtr.Zero;
+                        ownHandle = false;
                         deletedHandle = true;
                     }
                 }
@@ -346,11 +346,11 @@ namespace System.Experimental.Gdi
             //          remoting scenario and proxies cannot access internal or private members.
 
             // Compare params used to create the font.
-            return this.Name == winFont.Name &&
-                    this.LogFontHeight == winFont.LogFontHeight && // Equivalent to comparing Size but always at hand.
-                    this.Style == winFont.Style &&
-                    this.CharSet == winFont.CharSet &&
-                    this.Quality == winFont.Quality;
+            return Name == winFont.Name &&
+                    LogFontHeight == winFont.LogFontHeight && // Equivalent to comparing Size but always at hand.
+                    Style == winFont.Style &&
+                    CharSet == winFont.CharSet &&
+                    Quality == winFont.Quality;
         }
 
         /// <summary>
@@ -359,9 +359,9 @@ namespace System.Experimental.Gdi
         public override int GetHashCode()
         {
             // similar to Font.GetHashCode().
-            return (int)((((uint)this.Style << 13) | ((uint)this.Style >> 19)) ^
-                         (((uint)this.CharSet << 26) | ((uint)this.CharSet >> 6)) ^
-                         (((uint)this.Size << 7) | ((uint)this.Size >> 25)));
+            return (int)((((uint)Style << 13) | ((uint)Style >> 19)) ^
+                         (((uint)CharSet << 26) | ((uint)CharSet >> 6)) ^
+                         (((uint)Size << 7) | ((uint)Size >> 25)));
         }
 
         /// <summary>
@@ -371,12 +371,12 @@ namespace System.Experimental.Gdi
 
         public object Clone()
         {
-            return new WindowsFont(this.logFont, true);
+            return new WindowsFont(logFont, true);
         }
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "[{0}: Name={1}, Size={2} points, Height={3} pixels, Sytle={4}]", GetType().Name, logFont.lfFaceName, this.Size, this.Height, this.Style);
+            return string.Format(CultureInfo.CurrentCulture, "[{0}: Name={1}, Size={2} points, Height={3} pixels, Sytle={4}]", GetType().Name, logFont.lfFaceName, Size, Height, Style);
         }
 
         ////////////////////////////////////////////
@@ -392,7 +392,7 @@ namespace System.Experimental.Gdi
             {
                 //Assert removed. We need to be able to check for Hfont == IntPtr.Zero to determine if the object was disposed.
                 //Debug.Assert(this.hFont != IntPtr.Zero, "hFont is null, are you using a disposed object?");
-                return this.hFont;
+                return hFont;
             }
         }
 
@@ -430,7 +430,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return (WindowsFontQuality)this.logFont.lfQuality;
+                return (WindowsFontQuality)logFont.lfQuality;
             }
         }
 
@@ -441,7 +441,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.style;
+                return style;
             }
         }
 
@@ -458,7 +458,7 @@ namespace System.Experimental.Gdi
 
             get
             {
-                if (this.lineSpacing == 0)
+                if (lineSpacing == 0)
                 {
                     // Observe that the font text metrics are obtained using the resolution of the screen.
                     WindowsGraphics wg = WindowsGraphicsCacheManager.MeasurementGraphics;
@@ -468,10 +468,10 @@ namespace System.Experimental.Gdi
                     wg.DeviceContext.SelectFont(this);
 
                     IntNativeMethods.TEXTMETRIC tm = (IntNativeMethods.TEXTMETRIC)wg.GetTextMetrics();
-                    this.lineSpacing = tm.tmHeight;
+                    lineSpacing = tm.tmHeight;
                 }
 
-                return this.lineSpacing;
+                return lineSpacing;
             }
         }
 
@@ -518,7 +518,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                if (this.fontSize < 0.0f)
+                if (fontSize < 0.0f)
                 {
                     WindowsGraphics wg = WindowsGraphicsCacheManager.MeasurementGraphics;
 
@@ -534,7 +534,7 @@ namespace System.Experimental.Gdi
                     // the point size; in this case lfHeight will roughly match the tmHeight field of 
                     // the TEXTMETRIC structure less the tmInternalLeading field. 
                     //
-                    int height = this.logFont.lfHeight > 0 ? tm.tmHeight : (tm.tmHeight - tm.tmInternalLeading);
+                    int height = logFont.lfHeight > 0 ? tm.tmHeight : (tm.tmHeight - tm.tmInternalLeading);
 
                     // 
                     /*
@@ -548,10 +548,10 @@ namespace System.Experimental.Gdi
                     }
                     */
 
-                    this.fontSize = height * 72f / wg.DeviceContext.DpiY;
+                    fontSize = height * 72f / wg.DeviceContext.DpiY;
                 }
 
-                return this.fontSize;
+                return fontSize;
             }
         }
 

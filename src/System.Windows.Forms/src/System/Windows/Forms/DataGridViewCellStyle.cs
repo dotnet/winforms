@@ -44,8 +44,8 @@ namespace System.Windows.Forms
         /// </summary>
         public DataGridViewCellStyle()
         {
-            this.propertyStore = new PropertyStore();
-            this.scope = DataGridViewCellStyleScopes.None;
+            propertyStore = new PropertyStore();
+            scope = DataGridViewCellStyleScopes.None;
         }
 
         public DataGridViewCellStyle(DataGridViewCellStyle dataGridViewCellStyle)
@@ -54,24 +54,24 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }
-            this.propertyStore = new PropertyStore();
-            this.scope = DataGridViewCellStyleScopes.None;
-            this.BackColor = dataGridViewCellStyle.BackColor;
-            this.ForeColor = dataGridViewCellStyle.ForeColor;
-            this.SelectionBackColor = dataGridViewCellStyle.SelectionBackColor;
-            this.SelectionForeColor = dataGridViewCellStyle.SelectionForeColor;
-            this.Font = dataGridViewCellStyle.Font;
-            this.NullValue = dataGridViewCellStyle.NullValue;
-            this.DataSourceNullValue = dataGridViewCellStyle.DataSourceNullValue;
-            this.Format = dataGridViewCellStyle.Format;
+            propertyStore = new PropertyStore();
+            scope = DataGridViewCellStyleScopes.None;
+            BackColor = dataGridViewCellStyle.BackColor;
+            ForeColor = dataGridViewCellStyle.ForeColor;
+            SelectionBackColor = dataGridViewCellStyle.SelectionBackColor;
+            SelectionForeColor = dataGridViewCellStyle.SelectionForeColor;
+            Font = dataGridViewCellStyle.Font;
+            NullValue = dataGridViewCellStyle.NullValue;
+            DataSourceNullValue = dataGridViewCellStyle.DataSourceNullValue;
+            Format = dataGridViewCellStyle.Format;
             if (!dataGridViewCellStyle.IsFormatProviderDefault)
             {
-                this.FormatProvider = dataGridViewCellStyle.FormatProvider;
+                FormatProvider = dataGridViewCellStyle.FormatProvider;
             }
-            this.AlignmentInternal = dataGridViewCellStyle.Alignment;
-            this.WrapModeInternal = dataGridViewCellStyle.WrapMode;
-            this.Tag = dataGridViewCellStyle.Tag;
-            this.PaddingInternal = dataGridViewCellStyle.Padding;
+            AlignmentInternal = dataGridViewCellStyle.Alignment;
+            WrapModeInternal = dataGridViewCellStyle.WrapMode;
+            Tag = dataGridViewCellStyle.Tag;
+            PaddingInternal = dataGridViewCellStyle.Padding;
         }
 
         [
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int alignment = this.Properties.GetInteger(PropAlignment, out found);
+                int alignment = Properties.GetInteger(PropAlignment, out found);
                 if (found)
                 {
                     return (DataGridViewContentAlignment)alignment;
@@ -110,7 +110,7 @@ namespace System.Windows.Forms
                     default:
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment));
                 }
-                this.AlignmentInternal = value;
+                AlignmentInternal = value;
             }
         }
 
@@ -122,9 +122,9 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(DataGridViewContentAlignment), value));
-                if (this.Alignment != value)
+                if (Alignment != value)
                 {
-                    this.Properties.SetInteger(PropAlignment, (int)value);
+                    Properties.SetInteger(PropAlignment, (int)value);
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
                 }
             }
@@ -137,16 +137,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropBackColor);
+                return Properties.GetColor(PropBackColor);
             }
             set
             {
-                Color c = this.BackColor;
-                if (!value.IsEmpty || this.Properties.ContainsObject(PropBackColor))
+                Color c = BackColor;
+                if (!value.IsEmpty || Properties.ContainsObject(PropBackColor))
                 {
-                    this.Properties.SetColor(PropBackColor, value);
+                    Properties.SetColor(PropBackColor, value);
                 }
-                if (!c.Equals(this.BackColor))
+                if (!c.Equals(BackColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
                 }
@@ -162,15 +162,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Properties.ContainsObject(PropDataSourceNullValue))
+                if (Properties.ContainsObject(PropDataSourceNullValue))
                 {
-                    return this.Properties.GetObject(PropDataSourceNullValue);
+                    return Properties.GetObject(PropDataSourceNullValue);
                 }
                 return System.DBNull.Value;
             }
             set
             {
-                object oldDataSourceNullValue = this.DataSourceNullValue;
+                object oldDataSourceNullValue = DataSourceNullValue;
 
                 if ((oldDataSourceNullValue == value) ||
                     (oldDataSourceNullValue != null && oldDataSourceNullValue.Equals(value)))
@@ -179,18 +179,18 @@ namespace System.Windows.Forms
                 }
 
                 if (value == System.DBNull.Value &&
-                    this.Properties.ContainsObject(PropDataSourceNullValue))
+                    Properties.ContainsObject(PropDataSourceNullValue))
                 {
-                    this.Properties.RemoveObject(PropDataSourceNullValue);
+                    Properties.RemoveObject(PropDataSourceNullValue);
                 }
                 else
                 {
-                    this.Properties.SetObject(PropDataSourceNullValue, value);
+                    Properties.SetObject(PropDataSourceNullValue, value);
                 }
 
-                Debug.Assert((oldDataSourceNullValue == null && this.DataSourceNullValue != null) ||
-                             (oldDataSourceNullValue != null && this.DataSourceNullValue == null) ||
-                             (oldDataSourceNullValue != this.DataSourceNullValue && !oldDataSourceNullValue.Equals(this.DataSourceNullValue)));
+                Debug.Assert((oldDataSourceNullValue == null && DataSourceNullValue != null) ||
+                             (oldDataSourceNullValue != null && DataSourceNullValue == null) ||
+                             (oldDataSourceNullValue != DataSourceNullValue && !oldDataSourceNullValue.Equals(DataSourceNullValue)));
 
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
@@ -203,18 +203,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Font)this.Properties.GetObject(PropFont);
+                return (Font)Properties.GetObject(PropFont);
             }
             set
             {
-                Font f = this.Font;
-                if (value != null || this.Properties.ContainsObject(PropFont))
+                Font f = Font;
+                if (value != null || Properties.ContainsObject(PropFont))
                 {
-                    this.Properties.SetObject(PropFont, value);
+                    Properties.SetObject(PropFont, value);
                 }
                 if ((f == null && value != null) ||
                     (f != null && value == null) ||
-                    (f != null && value != null && !f.Equals(this.Font)))
+                    (f != null && value != null && !f.Equals(Font)))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Font);
                 }
@@ -228,16 +228,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropForeColor);
+                return Properties.GetColor(PropForeColor);
             }
             set
             {
-                Color c = this.ForeColor;
-                if (!value.IsEmpty || this.Properties.ContainsObject(PropForeColor))
+                Color c = ForeColor;
+                if (!value.IsEmpty || Properties.ContainsObject(PropForeColor))
                 {
-                    this.Properties.SetColor(PropForeColor, value);
+                    Properties.SetColor(PropForeColor, value);
                 }
-                if (!c.Equals(this.ForeColor))
+                if (!c.Equals(ForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
                 }
@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object format = this.Properties.GetObject(PropFormat);
+                object format = Properties.GetObject(PropFormat);
                 if (format == null)
                 {
                     return string.Empty;
@@ -266,12 +266,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                string format = this.Format;
-                if ((value != null && value.Length > 0) || this.Properties.ContainsObject(PropFormat))
+                string format = Format;
+                if ((value != null && value.Length > 0) || Properties.ContainsObject(PropFormat))
                 {
-                    this.Properties.SetObject(PropFormat, value);
+                    Properties.SetObject(PropFormat, value);
                 }
-                if (!format.Equals(this.Format))
+                if (!format.Equals(Format))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
                 }
@@ -286,7 +286,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object formatProvider = this.Properties.GetObject(PropFormatProvider);
+                object formatProvider = Properties.GetObject(PropFormatProvider);
                 if (formatProvider == null)
                 {
                     return System.Globalization.CultureInfo.CurrentCulture;
@@ -298,8 +298,8 @@ namespace System.Windows.Forms
             }
             set
             {
-                object originalFormatProvider = this.Properties.GetObject(PropFormatProvider);
-                this.Properties.SetObject(PropFormatProvider, value);
+                object originalFormatProvider = Properties.GetObject(PropFormatProvider);
+                Properties.SetObject(PropFormatProvider, value);
                 if (value != originalFormatProvider)
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
@@ -315,11 +315,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.Properties.ContainsObject(PropDataSourceNullValue))
+                if (!Properties.ContainsObject(PropDataSourceNullValue))
                 {
                     return true;
                 }
-                return this.Properties.GetObject(PropDataSourceNullValue) == System.DBNull.Value;
+                return Properties.GetObject(PropDataSourceNullValue) == System.DBNull.Value;
             }
         }
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetObject(PropFormatProvider) == null;
+                return Properties.GetObject(PropFormatProvider) == null;
             }
         }
 
@@ -343,12 +343,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.Properties.ContainsObject(PropNullValue))
+                if (!Properties.ContainsObject(PropNullValue))
                 {
                     return true;
                 }
 
-                object nullValue = this.Properties.GetObject(PropNullValue);
+                object nullValue = Properties.GetObject(PropNullValue);
                 return nullValue is string nullValueString && nullValueString.Length == 0;
             }
         }
@@ -360,15 +360,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Properties.ContainsObject(PropNullValue))
+                if (Properties.ContainsObject(PropNullValue))
                 {
-                    return this.Properties.GetObject(PropNullValue);
+                    return Properties.GetObject(PropNullValue);
                 }
                 return string.Empty;
             }
             set
             {
-                object oldNullValue = this.NullValue;
+                object oldNullValue = NullValue;
 
                 if ((oldNullValue == value) ||
                     (oldNullValue != null && oldNullValue.Equals(value)))
@@ -378,16 +378,16 @@ namespace System.Windows.Forms
 
                 if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(PropNullValue))
                 {
-                    this.Properties.RemoveObject(PropNullValue);
+                    Properties.RemoveObject(PropNullValue);
                 }
                 else
                 {
-                    this.Properties.SetObject(PropNullValue, value);
+                    Properties.SetObject(PropNullValue, value);
                 }
 
-                Debug.Assert((oldNullValue == null && this.NullValue != null) ||
-                             (oldNullValue != null && this.NullValue == null) ||
-                             (oldNullValue != this.NullValue && !oldNullValue.Equals(this.NullValue)));
+                Debug.Assert((oldNullValue == null && NullValue != null) ||
+                             (oldNullValue != null && NullValue == null) ||
+                             (oldNullValue != NullValue && !oldNullValue.Equals(NullValue)));
 
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
                         value.Bottom = Math.Max(0, value.Bottom);
                     }
                 }
-                this.PaddingInternal = value;
+                PaddingInternal = value;
             }
         }
 
@@ -428,9 +428,9 @@ namespace System.Windows.Forms
                 Debug.Assert(value.Right >= 0);
                 Debug.Assert(value.Top >= 0);
                 Debug.Assert(value.Bottom >= 0);
-                if (value != this.Padding)
+                if (value != Padding)
                 {
-                    this.Properties.SetPadding(PropPadding, value);
+                    Properties.SetPadding(PropPadding, value);
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
                 }
             }
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.propertyStore;
+                return propertyStore;
             }
         }
 
@@ -448,11 +448,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.scope;
+                return scope;
             }
             set
             {
-                this.scope = value;
+                scope = value;
             }
         }
 
@@ -463,16 +463,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropSelectionBackColor);
+                return Properties.GetColor(PropSelectionBackColor);
             }
             set
             {
-                Color c = this.SelectionBackColor;
-                if (!value.IsEmpty || this.Properties.ContainsObject(PropSelectionBackColor))
+                Color c = SelectionBackColor;
+                if (!value.IsEmpty || Properties.ContainsObject(PropSelectionBackColor))
                 {
-                    this.Properties.SetColor(PropSelectionBackColor, value);
+                    Properties.SetColor(PropSelectionBackColor, value);
                 }
-                if (!c.Equals(this.SelectionBackColor))
+                if (!c.Equals(SelectionBackColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
                 }
@@ -486,16 +486,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropSelectionForeColor);
+                return Properties.GetColor(PropSelectionForeColor);
             }
             set
             {
-                Color c = this.SelectionForeColor;
-                if (!value.IsEmpty || this.Properties.ContainsObject(PropSelectionForeColor))
+                Color c = SelectionForeColor;
+                if (!value.IsEmpty || Properties.ContainsObject(PropSelectionForeColor))
                 {
-                    this.Properties.SetColor(PropSelectionForeColor, value);
+                    Properties.SetColor(PropSelectionForeColor, value);
                 }
-                if (!c.Equals(this.SelectionForeColor))
+                if (!c.Equals(SelectionForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
                 }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropTag))
+                if (value != null || Properties.ContainsObject(PropTag))
                 {
                     Properties.SetObject(PropTag, value);
                 }
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int wrap = this.Properties.GetInteger(PropWrapMode, out found);
+                int wrap = Properties.GetInteger(PropWrapMode, out found);
                 if (found)
                 {
                     return (DataGridViewTriState)wrap;
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState));
                 }
-                this.WrapModeInternal = value;
+                WrapModeInternal = value;
             }
         }
 
@@ -554,9 +554,9 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(value >= DataGridViewTriState.NotSet && value <= DataGridViewTriState.False);
-                if (this.WrapMode != value)
+                if (WrapMode != value)
                 {
-                    this.Properties.SetInteger(PropWrapMode, (int)value);
+                    Properties.SetInteger(PropWrapMode, (int)value);
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
                 }
             }
@@ -576,55 +576,55 @@ namespace System.Windows.Forms
             }
             if (!dataGridViewCellStyle.BackColor.IsEmpty)
             {
-                this.BackColor = dataGridViewCellStyle.BackColor;
+                BackColor = dataGridViewCellStyle.BackColor;
             }
             if (!dataGridViewCellStyle.ForeColor.IsEmpty)
             {
-                this.ForeColor = dataGridViewCellStyle.ForeColor;
+                ForeColor = dataGridViewCellStyle.ForeColor;
             }
             if (!dataGridViewCellStyle.SelectionBackColor.IsEmpty)
             {
-                this.SelectionBackColor = dataGridViewCellStyle.SelectionBackColor;
+                SelectionBackColor = dataGridViewCellStyle.SelectionBackColor;
             }
             if (!dataGridViewCellStyle.SelectionForeColor.IsEmpty)
             {
-                this.SelectionForeColor = dataGridViewCellStyle.SelectionForeColor;
+                SelectionForeColor = dataGridViewCellStyle.SelectionForeColor;
             }
             if (dataGridViewCellStyle.Font != null)
             {
-                this.Font = dataGridViewCellStyle.Font;
+                Font = dataGridViewCellStyle.Font;
             }
             if (!dataGridViewCellStyle.IsNullValueDefault)
             {
-                this.NullValue = dataGridViewCellStyle.NullValue;
+                NullValue = dataGridViewCellStyle.NullValue;
             }
             if (!dataGridViewCellStyle.IsDataSourceNullValueDefault)
             {
-                this.DataSourceNullValue = dataGridViewCellStyle.DataSourceNullValue;
+                DataSourceNullValue = dataGridViewCellStyle.DataSourceNullValue;
             }
             if (dataGridViewCellStyle.Format.Length != 0)
             {
-                this.Format = dataGridViewCellStyle.Format;
+                Format = dataGridViewCellStyle.Format;
             }
             if (!dataGridViewCellStyle.IsFormatProviderDefault)
             {
-                this.FormatProvider = dataGridViewCellStyle.FormatProvider;
+                FormatProvider = dataGridViewCellStyle.FormatProvider;
             }
             if (dataGridViewCellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
-                this.AlignmentInternal = dataGridViewCellStyle.Alignment;
+                AlignmentInternal = dataGridViewCellStyle.Alignment;
             }
             if (dataGridViewCellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
-                this.WrapModeInternal = dataGridViewCellStyle.WrapMode;
+                WrapModeInternal = dataGridViewCellStyle.WrapMode;
             }
             if (dataGridViewCellStyle.Tag != null)
             {
-                this.Tag = dataGridViewCellStyle.Tag;
+                Tag = dataGridViewCellStyle.Tag;
             }
             if (dataGridViewCellStyle.Padding != Padding.Empty)
             {
-                this.PaddingInternal = dataGridViewCellStyle.Padding;
+                PaddingInternal = dataGridViewCellStyle.Padding;
             }
         }
 
@@ -651,21 +651,21 @@ namespace System.Windows.Forms
             Debug.Assert(dgvcs != null);
 
             bool preferredSizeAffectingPropDifferent = (
-                    dgvcs.Alignment != this.Alignment ||
-                    dgvcs.DataSourceNullValue != this.DataSourceNullValue ||
-                    dgvcs.Font != this.Font ||
-                    dgvcs.Format != this.Format ||
-                    dgvcs.FormatProvider != this.FormatProvider ||
-                    dgvcs.NullValue != this.NullValue ||
-                    dgvcs.Padding != this.Padding ||
-                    dgvcs.Tag != this.Tag ||
-                    dgvcs.WrapMode != this.WrapMode);
+                    dgvcs.Alignment != Alignment ||
+                    dgvcs.DataSourceNullValue != DataSourceNullValue ||
+                    dgvcs.Font != Font ||
+                    dgvcs.Format != Format ||
+                    dgvcs.FormatProvider != FormatProvider ||
+                    dgvcs.NullValue != NullValue ||
+                    dgvcs.Padding != Padding ||
+                    dgvcs.Tag != Tag ||
+                    dgvcs.WrapMode != WrapMode);
 
             bool preferredSizeNonAffectingPropDifferent = (
-                    dgvcs.BackColor != this.BackColor ||
-                    dgvcs.ForeColor != this.ForeColor ||
-                    dgvcs.SelectionBackColor != this.SelectionBackColor ||
-                    dgvcs.SelectionForeColor != this.SelectionForeColor);
+                    dgvcs.BackColor != BackColor ||
+                    dgvcs.ForeColor != ForeColor ||
+                    dgvcs.SelectionBackColor != SelectionBackColor ||
+                    dgvcs.SelectionForeColor != SelectionForeColor);
 
             if (preferredSizeAffectingPropDifferent)
             {
@@ -701,9 +701,9 @@ namespace System.Windows.Forms
 
         private void OnPropertyChanged(DataGridViewCellStylePropertyInternal property)
         {
-            if (this.dataGridView != null && this.scope != DataGridViewCellStyleScopes.None)
+            if (dataGridView != null && scope != DataGridViewCellStyleScopes.None)
             {
-                this.dataGridView.OnCellStyleContentChanged(this, property);
+                dataGridView.OnCellStyleContentChanged(this, property);
             }
 
             /*
@@ -743,50 +743,50 @@ namespace System.Windows.Forms
             this.scope &= ~scope;
             if (this.scope == DataGridViewCellStyleScopes.None)
             {
-                this.dataGridView = null;
+                dataGridView = null;
             }
         }
 
         private bool ShouldSerializeBackColor()
         {
             bool found;
-            this.Properties.GetColor(PropBackColor, out found);
+            Properties.GetColor(PropBackColor, out found);
             return found;
         }
 
         private bool ShouldSerializeFont()
         {
-            return this.Properties.GetObject(PropFont) != null;
+            return Properties.GetObject(PropFont) != null;
         }
 
         private bool ShouldSerializeForeColor()
         {
             bool found;
-            this.Properties.GetColor(PropForeColor, out found);
+            Properties.GetColor(PropForeColor, out found);
             return found;
         }
 
         private bool ShouldSerializeFormatProvider()
         {
-            return this.Properties.GetObject(PropFormatProvider) != null;
+            return Properties.GetObject(PropFormatProvider) != null;
         }
 
         private bool ShouldSerializePadding()
         {
-            return this.Padding != Padding.Empty;
+            return Padding != Padding.Empty;
         }
 
         private bool ShouldSerializeSelectionBackColor()
         {
             bool found;
-            this.Properties.GetObject(PropSelectionBackColor, out found);
+            Properties.GetObject(PropSelectionBackColor, out found);
             return found;
         }
 
         private bool ShouldSerializeSelectionForeColor()
         {
             bool found;
-            this.Properties.GetColor(PropSelectionForeColor, out found);
+            Properties.GetColor(PropSelectionForeColor, out found);
             return found;
         }
 
@@ -795,108 +795,108 @@ namespace System.Windows.Forms
             StringBuilder sb = new StringBuilder(128);
             sb.Append("DataGridViewCellStyle {");
             bool firstPropAdded = true;
-            if (this.BackColor != Color.Empty)
+            if (BackColor != Color.Empty)
             {
-                sb.Append(" BackColor=" + this.BackColor.ToString());
+                sb.Append(" BackColor=" + BackColor.ToString());
                 firstPropAdded = false;
             }
-            if (this.ForeColor != Color.Empty)
+            if (ForeColor != Color.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" ForeColor=" + this.ForeColor.ToString());
+                sb.Append(" ForeColor=" + ForeColor.ToString());
                 firstPropAdded = false;
             }
-            if (this.SelectionBackColor != Color.Empty)
+            if (SelectionBackColor != Color.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" SelectionBackColor=" + this.SelectionBackColor.ToString());
+                sb.Append(" SelectionBackColor=" + SelectionBackColor.ToString());
                 firstPropAdded = false;
             }
-            if (this.SelectionForeColor != Color.Empty)
+            if (SelectionForeColor != Color.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" SelectionForeColor=" + this.SelectionForeColor.ToString());
+                sb.Append(" SelectionForeColor=" + SelectionForeColor.ToString());
                 firstPropAdded = false;
             }
-            if (this.Font != null)
+            if (Font != null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" Font=" + this.Font.ToString());
+                sb.Append(" Font=" + Font.ToString());
                 firstPropAdded = false;
             }
-            if (!this.IsNullValueDefault && this.NullValue != null)
+            if (!IsNullValueDefault && NullValue != null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" NullValue=" + this.NullValue.ToString());
+                sb.Append(" NullValue=" + NullValue.ToString());
                 firstPropAdded = false;
             }
-            if (!this.IsDataSourceNullValueDefault && this.DataSourceNullValue != null)
+            if (!IsDataSourceNullValueDefault && DataSourceNullValue != null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" DataSourceNullValue=" + this.DataSourceNullValue.ToString());
+                sb.Append(" DataSourceNullValue=" + DataSourceNullValue.ToString());
                 firstPropAdded = false;
             }
-            if (!string.IsNullOrEmpty(this.Format))
+            if (!string.IsNullOrEmpty(Format))
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" Format=" + this.Format);
+                sb.Append(" Format=" + Format);
                 firstPropAdded = false;
             }
-            if (this.WrapMode != DataGridViewTriState.NotSet)
+            if (WrapMode != DataGridViewTriState.NotSet)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" WrapMode=" + this.WrapMode.ToString());
+                sb.Append(" WrapMode=" + WrapMode.ToString());
                 firstPropAdded = false;
             }
-            if (this.Alignment != DataGridViewContentAlignment.NotSet)
+            if (Alignment != DataGridViewContentAlignment.NotSet)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" Alignment=" + this.Alignment.ToString());
+                sb.Append(" Alignment=" + Alignment.ToString());
                 firstPropAdded = false;
             }
-            if (this.Padding != Padding.Empty)
+            if (Padding != Padding.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" Padding=" + this.Padding.ToString());
+                sb.Append(" Padding=" + Padding.ToString());
                 firstPropAdded = false;
             }
-            if (this.Tag != null)
+            if (Tag != null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
-                sb.Append(" Tag=" + this.Tag.ToString());
+                sb.Append(" Tag=" + Tag.ToString());
                 firstPropAdded = false;
             }
             sb.Append(" }");

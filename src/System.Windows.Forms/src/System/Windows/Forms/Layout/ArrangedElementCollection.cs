@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Layout
 
             for (int i = 0; i < Count; i++)
             {
-                if (this.InnerList[i] != other.InnerList[i])
+                if (InnerList[i] != other.InnerList[i])
                 {
                     return false;
                 }
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Layout
                 case -1:
                 case 1:
                     // simple swap
-                    this.InnerList[fromIndex] = this.InnerList[toIndex];
+                    InnerList[fromIndex] = InnerList[toIndex];
                     break;
 
                 default:
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Layout
                     Copy(this, start, this, dest, delta);
                     break;
             }
-            this.InnerList[toIndex] = element;
+            InnerList[toIndex] = element;
         }
 
         private static void Copy(ArrangedElementCollection sourceList, int sourceIndex, ArrangedElementCollection destinationList, int destinationIndex, int length)

@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                 // Note: The result from the BCM_GETIDEALSIZE message isn't accurate if the font has been
                 // changed, because this method is called before the font is set into the device context.
 
-                requiredSize = TextRenderer.MeasureText(this.Text, this.Font);
+                requiredSize = TextRenderer.MeasureText(Text, Font);
                 requiredSize = SizeFromClientSize(requiredSize);
 
                 // This padding makes FlatStyle.System about the same size as FlatStyle.Standard

@@ -617,7 +617,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.imageList;
+                return imageList;
             }
             set
             {
@@ -660,9 +660,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.imageList != null)
+                if (imageList != null)
                 {
-                    return this.imageList.ImageSize;
+                    return imageList.ImageSize;
                 }
                 else
                 {
@@ -1274,7 +1274,7 @@ namespace System.Windows.Forms
                     SendMessage(NativeMethods.TB_AUTOSIZE, 0, 0);
 
                     ForceButtonWidths();
-                    this.Invalidate();
+                    Invalidate();
                 }
             }
         }
@@ -1534,7 +1534,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip)
         {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
 
         }
 
@@ -1647,23 +1647,23 @@ namespace System.Windows.Forms
             // Should we set the hot item?
             NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
             if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_LEAVING == (nmTbHotItem.dwFlags & NativeMethods.HICF_LEAVING))
-                this.hotItem = -1;
+                hotItem = -1;
             else if (NativeMethods.HICF_MOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_MOUSE))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_ARROWKEYS == (nmTbHotItem.dwFlags & NativeMethods.HICF_ARROWKEYS))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_ACCELERATOR == (nmTbHotItem.dwFlags & NativeMethods.HICF_ACCELERATOR))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_DUPACCEL == (nmTbHotItem.dwFlags & NativeMethods.HICF_DUPACCEL))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_RESELECT == (nmTbHotItem.dwFlags & NativeMethods.HICF_RESELECT))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_LMOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_LMOUSE))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_TOGGLEDROPDOWN == (nmTbHotItem.dwFlags & NativeMethods.HICF_TOGGLEDROPDOWN))
-                this.hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem.idNew;
         }
 
 
@@ -1719,7 +1719,7 @@ namespace System.Windows.Forms
                             // but nowhere near the toolbar button?
                             if (wndPlacement.rcNormalPosition_left == 0 &&
                                 wndPlacement.rcNormalPosition_top == 0 &&
-                                this.hotItem != -1)
+                                hotItem != -1)
                             {
 
                                 // Assume that we're going to vertically center the tooltip on the right edge of the current
@@ -1727,7 +1727,7 @@ namespace System.Windows.Forms
 
                                 // Where is the right edge of the current hot item?
                                 int buttonRight = 0;
-                                for (int idx = 0; idx <= this.hotItem; idx++)
+                                for (int idx = 0; idx <= hotItem; idx++)
                                 {
                                     // How wide is the item at this index? (It could be a separator, and therefore a different width.)
                                     buttonRight += buttonsCollection[idx].GetButtonWidth();
@@ -1738,30 +1738,30 @@ namespace System.Windows.Forms
                                 int tooltipHeight = wndPlacement.rcNormalPosition_bottom - wndPlacement.rcNormalPosition_top;
 
                                 // We'll need screen coordinates of this position for setting the tooltip's position
-                                int x = this.Location.X + buttonRight + 1;
-                                int y = this.Location.Y + (this.ButtonSize.Height / 2);
+                                int x = Location.X + buttonRight + 1;
+                                int y = Location.Y + (ButtonSize.Height / 2);
                                 NativeMethods.POINT leftTop = new NativeMethods.POINT(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, this.Handle), leftTop);
+                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), leftTop);
 
                                 // Will the tooltip bleed off the top?
                                 if (leftTop.y < SystemInformation.WorkingArea.Y)
                                 {
                                     // Reposition the tooltip to be displayed below the button
-                                    leftTop.y += (this.ButtonSize.Height / 2) + 1;
+                                    leftTop.y += (ButtonSize.Height / 2) + 1;
                                 }
 
                                 // Will the tooltip bleed off the bottom?
                                 if (leftTop.y + tooltipHeight > SystemInformation.WorkingArea.Height)
                                 {
                                     // Reposition the tooltip to be displayed above the button
-                                    leftTop.y -= ((this.ButtonSize.Height / 2) + tooltipHeight + 1);
+                                    leftTop.y -= ((ButtonSize.Height / 2) + tooltipHeight + 1);
                                 }
 
                                 // Will the tooltip bleed off the right edge?
                                 if (leftTop.x + tooltipWidth > SystemInformation.WorkingArea.Right)
                                 {
                                     // Move the tooltip far enough left that it will display in the working area
-                                    leftTop.x -= (this.ButtonSize.Width + tooltipWidth + 2);
+                                    leftTop.x -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
                                 SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.x, leftTop.y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
@@ -2133,7 +2133,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
             /// <summary>
             ///    <para>Removes

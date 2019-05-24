@@ -86,34 +86,34 @@ namespace System.Windows.Forms
         /// </summary>
         public void PushState(DataGrid dataGrid)
         {
-            this.DataSource = dataGrid.DataSource;
-            this.DataMember = dataGrid.DataMember;
-            this.DataGrid = dataGrid;
-            this.DataGridRows = dataGrid.DataGridRows;
-            this.DataGridRowsLength = dataGrid.DataGridRowsLength;
-            this.FirstVisibleRow = dataGrid.firstVisibleRow;
-            this.FirstVisibleCol = dataGrid.firstVisibleCol;
-            this.CurrentRow = dataGrid.currentRow;
-            this.GridColumnStyles = new GridColumnStylesCollection(dataGrid.myGridTable);
+            DataSource = dataGrid.DataSource;
+            DataMember = dataGrid.DataMember;
+            DataGrid = dataGrid;
+            DataGridRows = dataGrid.DataGridRows;
+            DataGridRowsLength = dataGrid.DataGridRowsLength;
+            FirstVisibleRow = dataGrid.firstVisibleRow;
+            FirstVisibleCol = dataGrid.firstVisibleCol;
+            CurrentRow = dataGrid.currentRow;
+            GridColumnStyles = new GridColumnStylesCollection(dataGrid.myGridTable);
 
-            this.GridColumnStyles.Clear();
+            GridColumnStyles.Clear();
             foreach (DataGridColumnStyle style in dataGrid.myGridTable.GridColumnStyles)
             {
-                this.GridColumnStyles.Add(style);
+                GridColumnStyles.Add(style);
             }
 
-            this.ListManager = dataGrid.ListManager;
-            this.ListManager.ItemChanged += new ItemChangedEventHandler(DataSource_Changed);
-            this.ListManager.MetaDataChanged += new EventHandler(DataSource_MetaDataChanged);
-            this.CurrentCol = dataGrid.currentCol;
+            ListManager = dataGrid.ListManager;
+            ListManager.ItemChanged += new ItemChangedEventHandler(DataSource_Changed);
+            ListManager.MetaDataChanged += new EventHandler(DataSource_MetaDataChanged);
+            CurrentCol = dataGrid.currentCol;
         }
 
         // this is needed so that the parent rows will remove notification from the list
         // when the datagridstate is no longer needed;
         public void RemoveChangeNotification()
         {
-            this.ListManager.ItemChanged -= new ItemChangedEventHandler(DataSource_Changed);
-            this.ListManager.MetaDataChanged -= new EventHandler(DataSource_MetaDataChanged);
+            ListManager.ItemChanged -= new ItemChangedEventHandler(DataSource_Changed);
+            ListManager.MetaDataChanged -= new EventHandler(DataSource_MetaDataChanged);
         }
 
         /// <summary>
@@ -140,19 +140,19 @@ namespace System.Windows.Forms
 
         private void DataSource_Changed(object sender, ItemChangedEventArgs e)
         {
-            if (this.DataGrid != null && this.ListManager.Position == e.Index)
+            if (DataGrid != null && ListManager.Position == e.Index)
             {
                 DataGrid.InvalidateParentRows();
                 return;
             }
 
-            if (this.DataGrid != null)
+            if (DataGrid != null)
                 DataGrid.ParentRowsDataChanged();
         }
 
         private void DataSource_MetaDataChanged(object sender, EventArgs e)
         {
-            if (this.DataGrid != null)
+            if (DataGrid != null)
                 DataGrid.ParentRowsDataChanged();
         }
 
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    DataGridParentRows dataGridParentRows = ((DataGridParentRows.DataGridParentRowsAccessibleObject)this.Parent).Owner;
+                    DataGridParentRows dataGridParentRows = ((DataGridParentRows.DataGridParentRowsAccessibleObject)Parent).Owner;
                     DataGrid g = owner.LinkingRow.DataGrid;
                     Rectangle r = dataGridParentRows.GetBoundsForDataGridStateAccesibility(owner);
                     r.Y += g.ParentRowsBounds.Y;

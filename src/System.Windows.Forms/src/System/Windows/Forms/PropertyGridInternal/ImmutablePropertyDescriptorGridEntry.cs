@@ -113,7 +113,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                GridEntry parent = this.ParentGridEntry;
+                GridEntry parent = ParentGridEntry;
 
                 if (parent is CategoryGridEntry)
                 {

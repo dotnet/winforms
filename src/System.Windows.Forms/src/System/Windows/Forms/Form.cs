@@ -310,7 +310,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::set_Active - " + this.Name);
+                Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::set_Active - " + Name);
                 if ((formState[FormStateIsActive] != 0) != value)
                 {
                     if (value)
@@ -394,9 +394,9 @@ namespace System.Windows.Forms
                 if (mdiChild == null)
                 {
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
-                    if (this.ctlClient != null && this.ctlClient.IsHandleCreated)
+                    if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = this.ctlClient.SendMessage(Interop.WindowMessages.WM_MDIGETACTIVE, 0, 0);
+                        IntPtr hwnd = ctlClient.SendMessage(Interop.WindowMessages.WM_MDIGETACTIVE, 0, 0);
                         mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
                     {
                         minAutoSize = Size.Empty;
                         // If we just disabled AutoSize, restore the original size.
-                        this.Size = CommonProperties.GetSpecifiedBounds(this).Size;
+                        Size = CommonProperties.GetSpecifiedBounds(this).Size;
                     }
                     LayoutTransaction.DoLayout(this, this, PropertyNames.AutoSize);
                     OnAutoSizeChanged(EventArgs.Empty);
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                if (this.IsHandleCreated && (this.WindowStyle & NativeMethods.WS_DISABLED) != 0)
+                if (IsHandleCreated && (WindowStyle & NativeMethods.WS_DISABLED) != 0)
                 {
                     // Forms that are parent of a modal dialog must keep their WS_DISABLED style
                     cp.Style |= NativeMethods.WS_DISABLED;
@@ -1293,17 +1293,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Properties.ContainsObject(PropMdiChildFocusable))
+                if (Properties.ContainsObject(PropMdiChildFocusable))
                 {
-                    return (bool)this.Properties.GetObject(PropMdiChildFocusable);
+                    return (bool)Properties.GetObject(PropMdiChildFocusable);
                 }
                 return false;
             }
             set
             {
-                if (value != this.IsMdiChildFocusable)
+                if (value != IsMdiChildFocusable)
                 {
-                    this.Properties.SetObject(PropMdiChildFocusable, value);
+                    Properties.SetObject(PropMdiChildFocusable, value);
                 }
             }
         }
@@ -1635,7 +1635,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(MinimumSize));
                     }
 
-                    Rectangle bounds = this.Bounds;
+                    Rectangle bounds = Bounds;
                     bounds.Size = value;
                     value = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(bounds).Size;
 
@@ -1756,7 +1756,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.ctlClient;
+                return ctlClient;
             }
         }
 
@@ -1881,7 +1881,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.MergedMenuPrivate;
+                return MergedMenuPrivate;
             }
         }
 
@@ -2012,7 +2012,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    formState[FormStateLayered] = (this.TransparencyKey != Color.Empty) ? 1 : 0;
+                    formState[FormStateLayered] = (TransparencyKey != Color.Empty) ? 1 : 0;
                     if (oldLayered != (formState[FormStateLayered] != 0))
                     {
                         int exStyle = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
@@ -2533,7 +2533,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        formState[FormStateLayered] = (this.OpacityAsByte < 255) ? 1 : 0;
+                        formState[FormStateLayered] = (OpacityAsByte < 255) ? 1 : 0;
                     }
                     if (oldLayered != (formState[FormStateLayered] != 0))
                     {
@@ -2548,7 +2548,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
             // If DialogResult.OK and the value == GetVisibleCore() then this code has been called either through 
             // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again. 
@@ -3433,11 +3433,11 @@ namespace System.Windows.Forms
 
             if (control == AcceptButton)
             {
-                this.AcceptButton = null;
+                AcceptButton = null;
             }
             if (control == CancelButton)
             {
-                this.CancelButton = null;
+                CancelButton = null;
             }
             if (control == ctlClient)
             {
@@ -4027,7 +4027,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override bool CanSelectCore()
         {
-            if (!GetStyle(ControlStyles.Selectable) || !this.Enabled || !this.Visible)
+            if (!GetStyle(ControlStyles.Selectable) || !Enabled || !Visible)
             {
                 return false;
             }
@@ -4058,7 +4058,7 @@ namespace System.Windows.Forms
             TraceCanProcessMnemonic();
 #endif
             // If this is a Mdi child form, child controls should process mnemonics only if this is the active mdi child.
-            if (this.IsMdiChild && (formStateEx[FormStateExMnemonicProcessed] == 1 || this != this.MdiParentInternal.ActiveMdiChildInternal || this.WindowState == FormWindowState.Minimized))
+            if (IsMdiChild && (formStateEx[FormStateExMnemonicProcessed] == 1 || this != MdiParentInternal.ActiveMdiChildInternal || WindowState == FormWindowState.Minimized))
             {
                 return false;
             }
@@ -4079,15 +4079,15 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            if (this.IsMdiContainer)
+            if (IsMdiContainer)
             {
                 // ContainerControl have already processed the active MDI child for us (if any) in the call above,
                 // now process remaining controls (non-mdi children).
-                if (this.Controls.Count > 1)
+                if (Controls.Count > 1)
                 { // Ignore the MdiClient control
-                    for (int index = 0; index < this.Controls.Count; index++)
+                    for (int index = 0; index < Controls.Count; index++)
                     {
-                        Control ctl = this.Controls[index];
+                        Control ctl = Controls[index];
                         if (ctl is MdiClient)
                         {
                             continue;
@@ -4266,7 +4266,7 @@ namespace System.Windows.Forms
                     UpdateMenuHandles();
                     break;
                 case Windows.Forms.Menu.CHANGE_VISIBLE:
-                    if (menu == Menu || (this.ActiveMdiChildInternal != null && menu == this.ActiveMdiChildInternal.Menu))
+                    if (menu == Menu || (ActiveMdiChildInternal != null && menu == ActiveMdiChildInternal.Menu))
                     {
                         UpdateMenuHandles();
                     }
@@ -4500,7 +4500,7 @@ namespace System.Windows.Forms
             {
                 // If AutoSized, set the Form to the maximum of its preferredSize or the user
                 // specified size.
-                Size prefSize = this.PreferredSize;
+                Size prefSize = PreferredSize;
                 minAutoSize = prefSize;
 
                 // This used to use "GetSpecifiedBounds" - but it was not updated when we're in the middle of
@@ -4510,7 +4510,7 @@ namespace System.Windows.Forms
                 IArrangedElement form = this as IArrangedElement;
                 if (form != null)
                 {
-                    form.SetBounds(new Rectangle(this.Left, this.Top, adjustedSize.Width, adjustedSize.Height), BoundsSpecified.None);
+                    form.SetBounds(new Rectangle(Left, Top, adjustedSize.Width, adjustedSize.Height), BoundsSpecified.None);
                 }
             }
             base.OnLayout(levent);
@@ -4526,7 +4526,7 @@ namespace System.Windows.Forms
             Application.OpenForms.Add(this);
             if (Application.UseWaitCursor)
             {
-                this.UseWaitCursor = true;
+                UseWaitCursor = true;
             }
 
             // subhag: This will apply AutoScaling to the form just
@@ -4605,7 +4605,7 @@ namespace System.Windows.Forms
             //finally fire the newOnShown(unless the form has already been closed)
             if (IsHandleCreated)
             {
-                this.BeginInvoke(new MethodInvoker(CallShownEvent));
+                BeginInvoke(new MethodInvoker(CallShownEvent));
             }
         }
 
@@ -4801,7 +4801,7 @@ namespace System.Windows.Forms
                         SafeNativeMethods.SetWindowPos(new HandleRef(this, HandleInternal), NativeMethods.NullHandleRef, e.SuggestedRectangle.X, e.SuggestedRectangle.Y, e.SuggestedRectangle.Width, e.SuggestedRectangle.Height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
                         if (AutoScaleMode != AutoScaleMode.Font)
                         {
-                            Font = new Font(this.Font.FontFamily, this.Font.Size * factor, this.Font.Style);
+                            Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
                             FormDpiChanged(factor);
                         }
                         else
@@ -4901,7 +4901,7 @@ namespace System.Windows.Forms
             // Want to do this after we fire the event.
             if (RightToLeft == RightToLeft.Yes)
             {
-                foreach (Control c in this.Controls)
+                foreach (Control c in Controls)
                 {
                     c.RecreateHandleCore();
                 }
@@ -4928,7 +4928,7 @@ namespace System.Windows.Forms
             // If there is no control box, there should only be a title bar if text != "".
             int newTextEmpty = Text.Length == 0 ? 1 : 0;
             if (!ControlBox && formState[FormStateIsTextEmpty] != newTextEmpty)
-                this.RecreateHandle();
+                RecreateHandle();
 
             formState[FormStateIsTextEmpty] = newTextEmpty;
         }
@@ -5048,7 +5048,7 @@ namespace System.Windows.Forms
 #endif
             // If we're the top-level form or control, we need to do the mnemonic handling
             //
-            if (this.IsMdiChild && charCode != ' ')
+            if (IsMdiChild && charCode != ' ')
             {
                 if (ProcessMnemonic(charCode))
                 {
@@ -5125,7 +5125,7 @@ namespace System.Windows.Forms
                 int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
                 if (ownedFormsCount > 0)
                 {
-                    Form[] ownedForms = this.OwnedForms;
+                    Form[] ownedForms = OwnedForms;
                     FormClosedEventArgs fce = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
@@ -5170,7 +5170,7 @@ namespace System.Windows.Forms
                 int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
                 if (ownedFormsCount > 0)
                 {
-                    Form[] ownedForms = this.OwnedForms;
+                    Form[] ownedForms = OwnedForms;
                     FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.FormOwnerClosing, false);
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
@@ -5226,7 +5226,7 @@ namespace System.Windows.Forms
                     callback = new SafeNativeMethods.EnumThreadWindowsCallback(etwcb.Callback);
                     UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(),
                                                           new NativeMethods.EnumThreadWindowsCallback(callback),
-                                                          new HandleRef(this, this.Handle));
+                                                          new HandleRef(this, Handle));
                     // Reset the owner of the windows in the list
                     etwcb.ResetOwners();
                 }
@@ -5238,7 +5238,7 @@ namespace System.Windows.Forms
             if (etwcb != null)
             {
                 // Set the owner of the windows in the list back to the new Form's handle
-                etwcb.SetOwners(new HandleRef(this, this.Handle));
+                etwcb.SetOwners(new HandleRef(this, Handle));
             }
 
             if (oldStartPosition != FormStartPosition.Manual)
@@ -5574,7 +5574,7 @@ namespace System.Windows.Forms
             }
 
             // Enforce maximum size...
-            if (WindowState == FormWindowState.Normal && (this.Height != height || this.Width != width))
+            if (WindowState == FormWindowState.Normal && (Height != height || Width != width))
             {
                 Size max = SystemInformation.MaxWindowTrackSize;
                 if (height > max.Height)
@@ -5794,11 +5794,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            this.CalledOnLoad = false;
-            this.CalledMakeVisible = false;
+            CalledOnLoad = false;
+            CalledMakeVisible = false;
 
             // for modal dialogs make sure we reset close reason.
-            this.CloseReason = CloseReason.None;
+            CloseReason = CloseReason.None;
 
             IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
             if (hWndCapture != IntPtr.Zero)
@@ -5886,11 +5886,11 @@ namespace System.Windows.Forms
 
                         // If this is a dialog opened from an MDI Container, then invalidate
                         // so that child windows will be properly updated.
-                        if (this.OwnerInternal != null &&
-                            this.OwnerInternal.IsMdiContainer)
+                        if (OwnerInternal != null &&
+                            OwnerInternal.IsMdiContainer)
                         {
-                            this.OwnerInternal.Invalidate(true);
-                            this.OwnerInternal.Update();
+                            OwnerInternal.Invalidate(true);
+                            OwnerInternal.Update();
                         }
 
                         // Everett/RTM used to wrap this in an assert for AWP.
@@ -6239,19 +6239,19 @@ namespace System.Windows.Forms
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
                 if (menu == null && mainMenuStrip != null)
                 { // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
-                    IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, this.Handle));
+                    IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, Handle));
                     if (hMenu != IntPtr.Zero)
                     {
 
                         // We had a MainMenu and now we're switching over to MainMenuStrip
 
                         // Remove the current menu.
-                        UnsafeNativeMethods.SetMenu(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef);
+                        UnsafeNativeMethods.SetMenu(new HandleRef(this, Handle), NativeMethods.NullHandleRef);
 
                         // because we have messed with the child's system menu by shoving in our own dummy menu, 
                         // once we clear the main menu we're in trouble - this eats the close, minimize, maximize gadgets
                         // of the child form. (See WM_MDISETMENU in MSDN)
-                        Form activeMdiChild = this.ActiveMdiChildInternal;
+                        Form activeMdiChild = ActiveMdiChildInternal;
                         if (activeMdiChild != null && activeMdiChild.WindowState == FormWindowState.Maximized)
                         {
                             activeMdiChild.RecreateHandle();
@@ -6363,7 +6363,7 @@ namespace System.Windows.Forms
 
             try
             {
-                MdiControlStrip mdiControlStrip = this.MdiControlStrip;
+                MdiControlStrip mdiControlStrip = MdiControlStrip;
 
                 if (MdiControlStrip != null)
                 {
@@ -6398,24 +6398,24 @@ namespace System.Windows.Forms
                     if (ActiveMdiChildInternal.ControlBox)
                     {
                         Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
-                        Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose && this.Menu != null, "UpdateMdiControlStrip: Bailing as we detect there's already an HMenu to do this for us.");
+                        Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose && Menu != null, "UpdateMdiControlStrip: Bailing as we detect there's already an HMenu to do this for us.");
 
                         // determine if we need to add control gadgets into the MenuStrip
-                        if (this.Menu == null)
+                        if (Menu == null)
                         {
                             // double check GetMenu incase someone is using interop
-                            IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, this.Handle));
+                            IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, Handle));
                             if (hMenu == IntPtr.Zero)
                             {
                                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
                                 if (sourceMenuStrip != null)
                                 {
-                                    this.MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
+                                    MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
                                     Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: built up an MDI control strip for " + ActiveMdiChildInternal.Text + " with " + MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture) + " items.");
                                     Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
-                                    ToolStripManager.Merge(this.MdiControlStrip, sourceMenuStrip);
+                                    ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
                                     Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
-                                    this.MdiControlStrip.MergedMenu = sourceMenuStrip;
+                                    MdiControlStrip.MergedMenu = sourceMenuStrip;
                                 }
                             }
                         }
@@ -6673,9 +6673,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmActivate(ref Message m)
         {
-            Application.FormActivated(this.Modal, true); // inform MsoComponentManager we're active
+            Application.FormActivated(Modal, true); // inform MsoComponentManager we're active
             Active = NativeMethods.Util.LOWORD(m.WParam) != NativeMethods.WA_INACTIVE;
-            Application.FormActivated(this.Modal, Active); // inform MsoComponentManager we're active
+            Application.FormActivated(Modal, Active); // inform MsoComponentManager we're active
         }
 
         /// <summary>
@@ -6783,7 +6783,7 @@ namespace System.Windows.Forms
                     //Pass the validation result into the EventArgs...
 
                     // Call OnClosing/OnFormClosing on all the forms that current form owns.
-                    Form[] ownedForms = this.OwnedForms;
+                    Form[] ownedForms = OwnedForms;
                     int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
@@ -6850,7 +6850,7 @@ namespace System.Windows.Forms
                     }
 
                     // Call OnClosed/OnFormClosed on all the forms that current form owns.
-                    Form[] ownedForms = this.OwnedForms;
+                    Form[] ownedForms = OwnedForms;
                     int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
@@ -7126,7 +7126,7 @@ namespace System.Windows.Forms
                 // Convert to client coordinates
                 //
                 NativeMethods.POINT pt = new NativeMethods.POINT(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, this.Handle), pt);
+                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, Handle), pt);
 
                 Size clientSize = ClientSize;
 
@@ -7471,11 +7471,11 @@ namespace System.Windows.Forms
                 {
                     // Enumerated window is owned by this Form.
                     // Store it in a list for further treatment.
-                    if (this.ownedWindows == null)
+                    if (ownedWindows == null)
                     {
-                        this.ownedWindows = new List<HandleRef>();
+                        ownedWindows = new List<HandleRef>();
                     }
-                    this.ownedWindows.Add(hRef);
+                    ownedWindows.Add(hRef);
                 }
                 return true;
             }
@@ -7483,9 +7483,9 @@ namespace System.Windows.Forms
             // Resets the owner of all the windows owned by this Form before handle recreation.
             internal void ResetOwners()
             {
-                if (this.ownedWindows != null)
+                if (ownedWindows != null)
                 {
-                    foreach (HandleRef hRef in this.ownedWindows)
+                    foreach (HandleRef hRef in ownedWindows)
                     {
                         UnsafeNativeMethods.SetWindowLong(hRef, NativeMethods.GWL_HWNDPARENT, NativeMethods.NullHandleRef);
                     }
@@ -7495,9 +7495,9 @@ namespace System.Windows.Forms
             // Sets the owner of the windows back to this Form after its handle recreation.
             internal void SetOwners(HandleRef hRefOwner)
             {
-                if (this.ownedWindows != null)
+                if (ownedWindows != null)
                 {
-                    foreach (HandleRef hRef in this.ownedWindows)
+                    foreach (HandleRef hRef in ownedWindows)
                     {
                         UnsafeNativeMethods.SetWindowLong(hRef, NativeMethods.GWL_HWNDPARENT, hRefOwner);
                     }

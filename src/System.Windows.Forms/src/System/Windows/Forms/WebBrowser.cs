@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.AxIWebBrowser2.RegisterAsDropTarget;
+                return AxIWebBrowser2.RegisterAsDropTarget;
             }
             set
             {
@@ -129,8 +129,8 @@ namespace System.Windows.Forms
                 //OnDocumentCompleted.
                 if (value != AllowWebBrowserDrop)
                 {
-                    this.AxIWebBrowser2.RegisterAsDropTarget = value;
-                    this.Refresh();
+                    AxIWebBrowser2.RegisterAsDropTarget = value;
+                    Refresh();
                 }
             }
         }
@@ -147,13 +147,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.AxIWebBrowser2.Silent;
+                return AxIWebBrowser2.Silent;
             }
             set
             {
                 if (value != ScriptErrorsSuppressed)
                 {
-                    this.AxIWebBrowser2.Silent = value;
+                    AxIWebBrowser2.Silent = value;
                 }
             }
         }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object objDoc = this.AxIWebBrowser2.Document;
+                object objDoc = AxIWebBrowser2.Document;
                 if (objDoc != null)
                 {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
@@ -302,7 +302,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                HtmlDocument htmlDocument = this.Document;
+                HtmlDocument htmlDocument = Document;
                 if (htmlDocument == null)
                 {
                     return null;
@@ -326,12 +326,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.documentStreamToSetOnLoad = value;
+                documentStreamToSetOnLoad = value;
                 try
                 {
                     webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = true;
                     // Lets navigate to "about:blank" so that we get a "clean" document
-                    this.Url = new Uri("about:blank");
+                    Url = new Uri("about:blank");
                 }
                 finally
                 {
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Stream stream = this.DocumentStream;
+                Stream stream = DocumentStream;
                 if (stream == null)
                 {
                     return "";
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                 sw.Write(value);
                 sw.Flush();
                 ms.Position = 0;
-                this.DocumentStream = ms;
+                DocumentStream = ms;
             }
         }
 
@@ -389,10 +389,10 @@ namespace System.Windows.Forms
             {
                 string documentTitle;
 
-                HtmlDocument htmlDocument = this.Document;
+                HtmlDocument htmlDocument = Document;
                 if (htmlDocument == null)
                 {
-                    documentTitle = this.AxIWebBrowser2.LocationName;
+                    documentTitle = AxIWebBrowser2.LocationName;
                 }
                 else
                 {
@@ -423,7 +423,7 @@ namespace System.Windows.Forms
             get
             {
                 string docType = string.Empty;
-                HtmlDocument htmlDocument = this.Document;
+                HtmlDocument htmlDocument = Document;
                 if (htmlDocument != null)
                 {
                     UnsafeNativeMethods.IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as UnsafeNativeMethods.IHTMLDocument2;
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Document == null)
+                if (Document == null)
                 {
                     encryptionLevel = WebBrowserEncryptionLevel.Unknown;
                 }
@@ -470,13 +470,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Document == null)
+                if (Document == null)
                 {
                     return false;
                 }
                 else
                 {
-                    return this.AxIWebBrowser2.Busy;
+                    return AxIWebBrowser2.Busy;
                 }
             }
         }
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.AxIWebBrowser2.Offline;
+                return AxIWebBrowser2.Offline;
             }
         }
 
@@ -583,13 +583,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Document == null)
+                if (Document == null)
                 {
                     return WebBrowserReadyState.Uninitialized;
                 }
                 else
                 {
-                    return (WebBrowserReadyState)this.AxIWebBrowser2.ReadyState;
+                    return (WebBrowserReadyState)AxIWebBrowser2.ReadyState;
                 }
             }
         }
@@ -607,7 +607,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Document == null)
+                if (Document == null)
                 {
                     statusText = string.Empty;
                 }
@@ -634,7 +634,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                string urlString = this.AxIWebBrowser2.LocationURL;
+                string urlString = AxIWebBrowser2.LocationURL;
 
                 if (string.IsNullOrEmpty(urlString))
                 {
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
                 {
                     value = null;
                 }
-                this.PerformNavigateHelper(ReadyNavigateToUrl(value), false, null, null, null);
+                PerformNavigateHelper(ReadyNavigateToUrl(value), false, null, null, null);
             }
         }
 
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
             bool retVal = true;
             try
             {
-                this.AxIWebBrowser2.GoBack();
+                AxIWebBrowser2.GoBack();
             }
             catch (Exception ex)
             {
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
             bool retVal = true;
             try
             {
-                this.AxIWebBrowser2.GoForward();
+                AxIWebBrowser2.GoForward();
             }
             catch (Exception ex)
             {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void GoHome()
         {
-            this.AxIWebBrowser2.GoHome();
+            AxIWebBrowser2.GoHome();
         }
 
         /// <summary>
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void GoSearch()
         {
-            this.AxIWebBrowser2.GoSearch();
+            AxIWebBrowser2.GoSearch();
         }
 
         /// <summary>
@@ -871,7 +871,7 @@ namespace System.Windows.Forms
             object nullObjectArray = null;
             try
             {
-                this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref nullObjectArray, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
             catch (Exception ex)
             {
@@ -893,13 +893,13 @@ namespace System.Windows.Forms
             {
                 if (ShouldSerializeDocumentText())
                 {
-                    string text = this.DocumentText;
-                    this.AxIWebBrowser2.Refresh();
-                    this.DocumentText = text;
+                    string text = DocumentText;
+                    AxIWebBrowser2.Refresh();
+                    DocumentText = text;
                 }
                 else
                 {
-                    this.AxIWebBrowser2.Refresh();
+                    AxIWebBrowser2.Refresh();
                 }
             }
             catch (Exception ex)
@@ -925,13 +925,13 @@ namespace System.Windows.Forms
             {
                 if (ShouldSerializeDocumentText())
                 {
-                    string text = this.DocumentText;
-                    this.AxIWebBrowser2.Refresh2(ref level);
-                    this.DocumentText = text;
+                    string text = DocumentText;
+                    AxIWebBrowser2.Refresh2(ref level);
+                    DocumentText = text;
                 }
                 else
                 {
-                    this.AxIWebBrowser2.Refresh2(ref level);
+                    AxIWebBrowser2.Refresh2(ref level);
                 }
             }
             catch (Exception ex)
@@ -961,7 +961,7 @@ namespace System.Windows.Forms
                 if (value != webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled])
                 {
                     webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled] = value;
-                    this.Refresh();
+                    Refresh();
                 }
             }
         }
@@ -977,7 +977,7 @@ namespace System.Windows.Forms
             object nullObjectArray = null;
             try
             {
-                this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
             catch (Exception ex)
             {
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
 
             try
             {
-                this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
             catch (Exception ex)
             {
@@ -1022,7 +1022,7 @@ namespace System.Windows.Forms
 
             try
             {
-                this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINTPREVIEW, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINTPREVIEW, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
             catch (Exception ex)
             {
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms
 
             try
             {
-                this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PROPERTIES, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PROPERTIES, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
             catch (Exception ex)
             {
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
 
             try
             {
-                this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_SAVEAS, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObjectArray, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_SAVEAS, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObjectArray, IntPtr.Zero);
             }
             catch (Exception ex)
             {
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                this.AxIWebBrowser2.Stop();
+                AxIWebBrowser2.Stop();
             }
             catch (Exception ex)
             {
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms
                 }
                 IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
                 return hwndFocus != IntPtr.Zero
-                    && SafeNativeMethods.IsChild(new HandleRef(this, this.Handle), new HandleRef(null, hwndFocus));
+                    && SafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(null, hwndFocus));
             }
         }
 
@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void AttachInterfaces(object nativeActiveXObject)
         {
-            this.axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
+            axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
         }
 
         /// <summary>
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void DetachInterfaces()
         {
-            this.axIWebBrowser2 = null;
+            axIWebBrowser2 = null;
         }
 
         /// <summary>
@@ -1293,12 +1293,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void CreateSink()
         {
-            object ax = this.activeXInstance;
+            object ax = activeXInstance;
             if (ax != null)
             {
                 webBrowserEvent = new WebBrowserEvent(this);
                 webBrowserEvent.AllowNavigation = AllowNavigation;
-                this.cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent,
+                cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent,
                         typeof(UnsafeNativeMethods.DWebBrowserEvents2));
             }
         }
@@ -1311,10 +1311,10 @@ namespace System.Windows.Forms
         protected override void DetachSink()
         {
             //If we have a cookie get rid of it
-            if (this.cookie != null)
+            if (cookie != null)
             {
-                this.cookie.Disconnect();
-                this.cookie = null;
+                cookie.Disconnect();
+                cookie = null;
             }
         }
 
@@ -1347,9 +1347,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnCanGoBackChanged(EventArgs e)
         {
-            if (this.CanGoBackChanged != null)
+            if (CanGoBackChanged != null)
             {
-                this.CanGoBackChanged(this, e);
+                CanGoBackChanged(this, e);
             }
         }
 
@@ -1362,9 +1362,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnCanGoForwardChanged(EventArgs e)
         {
-            if (this.CanGoForwardChanged != null)
+            if (CanGoForwardChanged != null)
             {
-                this.CanGoForwardChanged(this, e);
+                CanGoForwardChanged(this, e);
             }
         }
 
@@ -1377,10 +1377,10 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnDocumentCompleted(WebBrowserDocumentCompletedEventArgs e)
         {
-            this.AxIWebBrowser2.RegisterAsDropTarget = AllowWebBrowserDrop;
-            if (this.DocumentCompleted != null)
+            AxIWebBrowser2.RegisterAsDropTarget = AllowWebBrowserDrop;
+            if (DocumentCompleted != null)
             {
-                this.DocumentCompleted(this, e);
+                DocumentCompleted(this, e);
             }
         }
 
@@ -1393,9 +1393,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnDocumentTitleChanged(EventArgs e)
         {
-            if (this.DocumentTitleChanged != null)
+            if (DocumentTitleChanged != null)
             {
-                this.DocumentTitleChanged(this, e);
+                DocumentTitleChanged(this, e);
             }
         }
 
@@ -1408,9 +1408,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnEncryptionLevelChanged(EventArgs e)
         {
-            if (this.EncryptionLevelChanged != null)
+            if (EncryptionLevelChanged != null)
             {
-                this.EncryptionLevelChanged(this, e);
+                EncryptionLevelChanged(this, e);
             }
         }
 
@@ -1423,9 +1423,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnFileDownload(EventArgs e)
         {
-            if (this.FileDownload != null)
+            if (FileDownload != null)
             {
-                this.FileDownload(this, e);
+                FileDownload(this, e);
             }
         }
 
@@ -1438,9 +1438,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e)
         {
-            if (this.Navigated != null)
+            if (Navigated != null)
             {
-                this.Navigated(this, e);
+                Navigated(this, e);
             }
         }
 
@@ -1453,9 +1453,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e)
         {
-            if (this.Navigating != null)
+            if (Navigating != null)
             {
-                this.Navigating(this, e);
+                Navigating(this, e);
             }
         }
 
@@ -1468,9 +1468,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnNewWindow(CancelEventArgs e)
         {
-            if (this.NewWindow != null)
+            if (NewWindow != null)
             {
-                this.NewWindow(this, e);
+                NewWindow(this, e);
             }
         }
 
@@ -1483,9 +1483,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e)
         {
-            if (this.ProgressChanged != null)
+            if (ProgressChanged != null)
             {
-                this.ProgressChanged(this, e);
+                ProgressChanged(this, e);
             }
         }
 
@@ -1498,9 +1498,9 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnStatusTextChanged(EventArgs e)
         {
-            if (this.StatusTextChanged != null)
+            if (StatusTextChanged != null)
             {
-                this.StatusTextChanged(this, e);
+                StatusTextChanged(this, e);
             }
         }
 
@@ -1528,14 +1528,14 @@ namespace System.Windows.Forms
         {
             if (WebBrowser.createdInIE)
             {
-                if (this.ParentInternal != null)
+                if (ParentInternal != null)
                 {
-                    this.ParentInternal.Controls.Remove(this);
-                    this.Dispose();
+                    ParentInternal.Controls.Remove(this);
+                    Dispose();
                 }
                 else
                 {
-                    this.Dispose();
+                    Dispose();
                     throw new NotSupportedException(SR.WebBrowserInIENotSupported);
                 }
             }
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms
             // Nullify any calls to set_DocumentStream which may still be pending
             if (!webBrowserState[WEBBROWSERSTATE_documentStreamJustSet])
             {
-                this.documentStreamToSetOnLoad = null;
+                documentStreamToSetOnLoad = null;
             }
 
             return urlString;
@@ -1596,7 +1596,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                this.AxIWebBrowser2.Navigate2(ref URL, ref flags, ref targetFrameName, ref postData, ref headers);
+                AxIWebBrowser2.Navigate2(ref URL, ref flags, ref targetFrameName, ref postData, ref headers);
             }
             catch (COMException ce)
             {
@@ -1699,9 +1699,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.axIWebBrowser2 == null)
+                if (axIWebBrowser2 == null)
                 {
-                    if (!this.IsDisposed)
+                    if (!IsDisposed)
                     {
                         // This should call AttachInterfaces
                         TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
@@ -1712,11 +1712,11 @@ namespace System.Windows.Forms
                     }
                 }
                 // We still don't have this.axIWebBrowser2. Throw an exception.
-                if (this.axIWebBrowser2 == null)
+                if (axIWebBrowser2 == null)
                 {
                     throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
-                return this.axIWebBrowser2;
+                return axIWebBrowser2;
             }
         }
 
@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms
             //
             int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(int dwID, NativeMethods.POINT pt, object pcmdtReserved, object pdispReserved)
             {
-                WebBrowser wb = (WebBrowser)this.Host;
+                WebBrowser wb = (WebBrowser)Host;
 
                 if (wb.IsWebBrowserContextMenuEnabled)
                 {
@@ -1774,7 +1774,7 @@ namespace System.Windows.Forms
 
             int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info)
             {
-                WebBrowser wb = (WebBrowser)this.Host;
+                WebBrowser wb = (WebBrowser)Host;
 
                 info.dwDoubleClick = (int)NativeMethods.DOCHOSTUIDBLCLICK.DEFAULT;
                 info.dwFlags = (int)NativeMethods.DOCHOSTUIFLAG.NO3DOUTERBORDER |
@@ -1854,7 +1854,7 @@ namespace System.Windows.Forms
 
             int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch)
             {
-                WebBrowser wb = (WebBrowser)this.Host;
+                WebBrowser wb = (WebBrowser)Host;
                 ppDispatch = wb.ObjectForScripting;
                 return NativeMethods.S_OK;
             }
@@ -1866,7 +1866,7 @@ namespace System.Windows.Forms
                 // Returning S_FALSE will allow the native control to do default processing,
                 // i.e., execute the shortcut key. Returning S_OK will cancel the shortcut key.
 
-                WebBrowser wb = (WebBrowser)this.Host;
+                WebBrowser wb = (WebBrowser)Host;
 
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
@@ -1945,11 +1945,11 @@ namespace System.Windows.Forms
             {
                 if (command == NativeMethods.CSC_NAVIGATEBACK)
                 {
-                    this.parent.CanGoBackInternal = enable;
+                    parent.CanGoBackInternal = enable;
                 }
                 else if (command == NativeMethods.CSC_NAVIGATEFORWARD)
                 {
-                    this.parent.CanGoForwardInternal = enable;
+                    parent.CanGoForwardInternal = enable;
                 }
             }
 
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms
                     string urlString = urlObject == null ? "" : (string)urlObject;
                     WebBrowserNavigatingEventArgs e = new WebBrowserNavigatingEventArgs(
                         new Uri(urlString), targetFrameName == null ? "" : (string)targetFrameName);
-                    this.parent.OnNavigating(e);
+                    parent.OnNavigating(e);
                     cancel = e.Cancel;
                 }
                 else
@@ -1991,38 +1991,38 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(urlObject == null || urlObject is string, "invalid url");
                 haveNavigated = true;
-                if (this.parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank")
+                if (parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank")
                 {
-                    HtmlDocument htmlDocument = this.parent.Document;
+                    HtmlDocument htmlDocument = parent.Document;
                     if (htmlDocument != null)
                     {
                         UnsafeNativeMethods.IPersistStreamInit psi = htmlDocument.DomDocument as UnsafeNativeMethods.IPersistStreamInit;
                         Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
                         UnsafeNativeMethods.IStream iStream = (UnsafeNativeMethods.IStream)new UnsafeNativeMethods.ComStreamFromDataStream(
-                                                    this.parent.documentStreamToSetOnLoad);
+                                                    parent.documentStreamToSetOnLoad);
                         psi.Load(iStream);
                         htmlDocument.Encoding = "unicode";
                     }
-                    this.parent.documentStreamToSetOnLoad = null;
+                    parent.documentStreamToSetOnLoad = null;
                 }
                 else
                 {
                     string urlString = urlObject == null ? "" : urlObject.ToString();
                     WebBrowserDocumentCompletedEventArgs e = new WebBrowserDocumentCompletedEventArgs(
                             new Uri(urlString));
-                    this.parent.OnDocumentCompleted(e);
+                    parent.OnDocumentCompleted(e);
                 }
             }
 
             public void TitleChange(string text)
             {
-                this.parent.OnDocumentTitleChanged(EventArgs.Empty);
+                parent.OnDocumentTitleChanged(EventArgs.Empty);
             }
 
             public void SetSecureLockIcon(int secureLockIcon)
             {
-                this.parent.encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
-                this.parent.OnEncryptionLevelChanged(EventArgs.Empty);
+                parent.encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
+                parent.OnEncryptionLevelChanged(EventArgs.Empty);
             }
 
             public void NavigateComplete2(object pDisp, ref object urlObject)
@@ -2031,31 +2031,31 @@ namespace System.Windows.Forms
                 string urlString = urlObject == null ? "" : (string)urlObject;
                 WebBrowserNavigatedEventArgs e = new WebBrowserNavigatedEventArgs(
                         new Uri(urlString));
-                this.parent.OnNavigated(e);
+                parent.OnNavigated(e);
             }
 
             public void NewWindow2(ref object ppDisp, ref bool cancel)
             {
                 CancelEventArgs e = new CancelEventArgs();
-                this.parent.OnNewWindow(e);
+                parent.OnNewWindow(e);
                 cancel = e.Cancel;
             }
 
             public void ProgressChange(int progress, int progressMax)
             {
                 WebBrowserProgressChangedEventArgs e = new WebBrowserProgressChangedEventArgs(progress, progressMax);
-                this.parent.OnProgressChanged(e);
+                parent.OnProgressChanged(e);
             }
 
             public void StatusTextChange(string text)
             {
-                this.parent.statusText = (text == null) ? "" : text;
-                this.parent.OnStatusTextChanged(EventArgs.Empty);
+                parent.statusText = (text == null) ? "" : text;
+                parent.OnStatusTextChanged(EventArgs.Empty);
             }
 
             public void DownloadBegin()
             {
-                this.parent.OnFileDownload(EventArgs.Empty);
+                parent.OnFileDownload(EventArgs.Empty);
             }
 
             public void FileDownload(ref bool cancel) { }

@@ -189,11 +189,11 @@ namespace System.Windows.Forms
             state[stateEnabled | stateAutoSize | stateVisible | stateContstructing | stateSupportsItemClick | stateInvalidMirroredImage | stateMouseDownAndUpMustBeInSameItem | stateUseAmbientMargin] = true;
             state[stateAllowDrop | stateMouseDownAndNoDrag | stateSupportsRightClick | statePressed | stateSelected | stateDisposed | stateDoubleClickEnabled | stateRightToLeftAutoMirrorImage | stateSupportsSpaceKey] = false;
             SetAmbientMargin();
-            this.Size = DefaultSize;
-            this.DisplayStyle = DefaultDisplayStyle;
+            Size = DefaultSize;
+            DisplayStyle = DefaultDisplayStyle;
             CommonProperties.SetAutoSize(this, true);
             state[stateContstructing] = false;
-            this.AutoToolTip = DefaultAutoToolTip;
+            AutoToolTip = DefaultAutoToolTip;
 
         }
 
@@ -205,13 +205,13 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         protected ToolStripItem(string text, Image image, EventHandler onClick, string name) : this()
         {
-            this.Text = text;
-            this.Image = image;
+            Text = text;
+            Image = image;
             if (onClick != null)
             {
                 Click += onClick;
             }
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -368,9 +368,9 @@ namespace System.Windows.Forms
                 {
                     alignment = value;
 
-                    if ((this.ParentInternal != null) && this.ParentInternal.IsHandleCreated)
+                    if ((ParentInternal != null) && ParentInternal.IsHandleCreated)
                     {
-                        this.ParentInternal.PerformLayout();
+                        ParentInternal.PerformLayout();
                     }
                 }
             }
@@ -624,7 +624,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Rectangle content = LayoutUtils.InflateRect(InternalLayout.ContentRectangle, this.Padding);
+                Rectangle content = LayoutUtils.InflateRect(InternalLayout.ContentRectangle, Padding);
                 content.Size = LayoutUtils.UnionSizes(Size.Empty, content.Size);
                 return content;
             }
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.Owner != null && this.Owner is StatusStrip)
+                if (Owner != null && Owner is StatusStrip)
                 {
                     return scaledDefaultStatusStripMargin;
                 }
@@ -954,9 +954,9 @@ namespace System.Windows.Forms
             {
                 bool parentEnabled = true;
 
-                if (this.Owner != null)
+                if (Owner != null)
                 {
-                    parentEnabled = this.Owner.Enabled;
+                    parentEnabled = Owner.Enabled;
                 }
 
                 return state[stateEnabled] && parentEnabled;
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Rectangle currentBounds = this.Bounds;
+                Rectangle currentBounds = Bounds;
                 SetBounds(currentBounds.X, currentBounds.Y, currentBounds.Width, value);
             }
         }
@@ -1148,11 +1148,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ParentInternal == null)
+                if (ParentInternal == null)
                 {
-                    return this.Owner;
+                    return Owner;
                 }
-                return this.ParentInternal;
+                return ParentInternal;
             }
         }
 
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Bounds;
+                return Bounds;
             }
         }
 
@@ -1180,7 +1180,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties;
+                return Properties;
             }
         }
 
@@ -1345,7 +1345,7 @@ namespace System.Windows.Forms
                 {
                     return Owner.ImageList.Images.Count - 1;
                 }
-                return this.ImageIndexer.Index;
+                return ImageIndexer.Index;
             }
             set
             {
@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.ImageIndexer.Key;
+                return ImageIndexer.Key;
             }
             set
             {
@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (this.Placement == ToolStripItemPlacement.Overflow);
+                return (Placement == ToolStripItemPlacement.Overflow);
             }
         }
 
@@ -1764,7 +1764,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.owner;
+                return owner;
             }
             set
             {
@@ -1886,7 +1886,7 @@ namespace System.Windows.Forms
                     overflow = value;
                     if (Owner != null)
                     {
-                        LayoutTransaction.DoLayout(Owner, this.Owner, "Overflow");
+                        LayoutTransaction.DoLayout(Owner, Owner, "Overflow");
                     }
                 }
             }
@@ -2405,7 +2405,7 @@ namespace System.Windows.Forms
 
                 if (textDirection == ToolStripTextDirection.Inherit)
                 {
-                    if (this.ParentInternal != null)
+                    if (ParentInternal != null)
                     {
                         // in the case we're on a ToolStripOverflow
                         textDirection = ParentInternal.TextDirection;
@@ -2526,7 +2526,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Rectangle currentBounds = this.Bounds;
+                Rectangle currentBounds = Bounds;
                 SetBounds(currentBounds.X, currentBounds.Y, value, currentBounds.Height);
             }
         }
@@ -2562,7 +2562,7 @@ namespace System.Windows.Forms
                 {
                     if (Image != null)
                     {
-                        ImageAnimator.Animate(Image, new EventHandler(this.OnAnimationFrameChanged));
+                        ImageAnimator.Animate(Image, new EventHandler(OnAnimationFrameChanged));
                         state[stateCurrentlyAnimatingImage] = animate;
                     }
                 }
@@ -2570,7 +2570,7 @@ namespace System.Windows.Forms
                 {
                     if (Image != null)
                     {
-                        ImageAnimator.StopAnimate(Image, new EventHandler(this.OnAnimationFrameChanged));
+                        ImageAnimator.StopAnimate(Image, new EventHandler(OnAnimationFrameChanged));
                         state[stateCurrentlyAnimatingImage] = animate;
                     }
                 }
@@ -2583,7 +2583,7 @@ namespace System.Windows.Forms
             if (Control.ModifierKeys == Keys.Alt)
             {
 
-                if (this.ParentInternal.Items.Contains(this) && this.ParentInternal.AllowItemReorder)
+                if (ParentInternal.Items.Contains(this) && ParentInternal.AllowItemReorder)
                 {
                     // we only drag
                     ToolStripItem item = this as ToolStripItem;
@@ -2624,11 +2624,11 @@ namespace System.Windows.Forms
             {
                 state[stateDisposing] = true;
 
-                if (this.Owner != null)
+                if (Owner != null)
                 {
                     StopAnimate();
-                    Debug.Assert(this.Owner.Items.Contains(this), "How can there be a owner and not be in the collection?");
-                    this.Owner.Items.Remove(this);
+                    Debug.Assert(Owner.Items.Contains(this), "How can there be a owner and not be in the collection?");
+                    Owner.Items.Remove(this);
                     toolStripItemInternalLayout = null;
                     state[stateDisposed] = true;
                 }
@@ -2665,7 +2665,7 @@ namespace System.Windows.Forms
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
             int[] finalEffect = new int[] { (int)DragDropEffects.None };
-            UnsafeNativeMethods.IOleDropSource dropSource = this.DropSource;
+            UnsafeNativeMethods.IOleDropSource dropSource = DropSource;
             IComDataObject dataObject = null;
 
             dataObject = data as IComDataObject;
@@ -2815,7 +2815,7 @@ namespace System.Windows.Forms
         ///          except for things like the overflow button</summary>
         public ToolStrip GetCurrentParent()
         {
-            return this.Parent;
+            return Parent;
         }
         internal ToolStripDropDown GetCurrentParentDropDown()
         {
@@ -2856,9 +2856,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void Invalidate()
         {
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
-                ParentInternal.Invalidate(this.Bounds, true);
+                ParentInternal.Invalidate(Bounds, true);
             }
         }
 
@@ -2871,9 +2871,9 @@ namespace System.Windows.Forms
             // the only value add to this over calling invalidate on the ToolStrip is that 
             // you can specify the rectangle with coordinates relative to the upper left hand
             // corner of the ToolStripItem.
-            Point rectangleLocation = this.TranslatePoint(r.Location, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ToolStripCoords);
+            Point rectangleLocation = TranslatePoint(r.Location, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ToolStripCoords);
 
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
                 ParentInternal.Invalidate(new Rectangle(rectangleLocation, r.Size), true);
             }
@@ -2881,7 +2881,7 @@ namespace System.Windows.Forms
 
         internal void InvalidateItemLayout(string affectedProperty, bool invalidatePainting)
         {
-            this.toolStripItemInternalLayout = null;
+            toolStripItemInternalLayout = null;
 
             if (Owner != null)
             {
@@ -2910,9 +2910,9 @@ namespace System.Windows.Forms
 
         internal void InvokePaint()
         {
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
-                this.ParentInternal.InvokePaintItem(this);
+                ParentInternal.InvokePaintItem(this);
             }
         }
 
@@ -2932,7 +2932,7 @@ namespace System.Windows.Forms
 
         private void HandleClick(System.EventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] HandleClick");
+            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] HandleClick");
 
             try
             {
@@ -2946,7 +2946,7 @@ namespace System.Windows.Forms
 
                 if (SupportsItemClick && Owner != null)
                 {
-                    Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] HandleItemClick");
+                    Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClick");
                     Owner.HandleItemClick(this);
                 }
 
@@ -2954,7 +2954,7 @@ namespace System.Windows.Forms
 
                 if (SupportsItemClick && Owner != null)
                 {
-                    Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] HandleItemClicked");
+                    Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClicked");
                     Owner.HandleItemClicked(this);
                 }
             }
@@ -2973,7 +2973,7 @@ namespace System.Windows.Forms
         private void HandlePaint(PaintEventArgs e)
         {
             Animate();
-            ImageAnimator.UpdateFrames(this.Image);
+            ImageAnimator.UpdateFrames(Image);
 
             OnPaint(e);
             RaisePaintEvent(EventPaint, e);
@@ -2999,7 +2999,7 @@ namespace System.Windows.Forms
                             // Same as Control.MouseButtons == MouseButtons.Left, but slightly more efficient.
                             if (UnsafeNativeMethods.GetKeyState((int)Keys.LButton) < 0)
                             {
-                                this.Push(true);
+                                Push(true);
                             }
                         }
 
@@ -3018,14 +3018,14 @@ namespace System.Windows.Forms
             if (Enabled)
             {
                 OnMouseEnter(e);
-                Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] MouseEnter");
+                Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseEnter");
                 RaiseEvent(EventMouseEnter, e);
             }
 
         }
         private void HandleMouseMove(System.Windows.Forms.MouseEventArgs mea)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] MouseMove");
+            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseMove");
 
             if (Enabled && CanSelect && !Selected)
             {
@@ -3046,7 +3046,7 @@ namespace System.Windows.Forms
         }
         private void HandleMouseHover(EventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] MouseHover");
+            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseHover");
             OnMouseHover(e);
             RaiseEvent(EventMouseHover, e);
         }
@@ -3063,7 +3063,7 @@ namespace System.Windows.Forms
         }
         private void HandleMouseLeave(System.EventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] MouseLeave");
+            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseLeave");
             HandleLeave();
             if (Enabled)
             {
@@ -3073,14 +3073,14 @@ namespace System.Windows.Forms
         }
         private void HandleMouseDown(MouseEventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] MouseDown");
+            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseDown");
 
             state[stateMouseDownAndNoDrag] = !BeginDragForItemReorder();
             if (state[stateMouseDownAndNoDrag])
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    this.Push(true);
+                    Push(true);
                 }
                 // 
                 OnMouseDown(e);
@@ -3090,7 +3090,7 @@ namespace System.Windows.Forms
         private void HandleMouseUp(MouseEventArgs e)
         {
 
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] MouseUp");
+            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseUp");
 
             bool fireMouseUp = (ParentInternal.LastMouseDownedItem == this);
 
@@ -3107,7 +3107,7 @@ namespace System.Windows.Forms
 
             if (state[stateMouseDownAndNoDrag] || fireMouseUp)
             {
-                this.Push(false);
+                Push(false);
 
                 if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Right && state[stateSupportsRightClick]))
                 {
@@ -3162,13 +3162,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e)
         {
-            this.Invalidate();
+            Invalidate();
             RaiseEvent(EventBackColorChanged, e);
         }
 
         protected virtual void OnBoundsChanged()
         {
-            LayoutTransaction.DoLayout(this.ParentInternal, this, PropertyNames.Bounds);
+            LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
             InternalLayout.PerformLayout();
         }
 
@@ -3228,7 +3228,7 @@ namespace System.Windows.Forms
 
                 if (parent.IsHandleCreated && parent.InvokeRequired)
                 {
-                    parent.BeginInvoke(new EventHandler(this.OnAnimationFrameChanged), new object[] { o, e });
+                    parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), new object[] { o, e });
                     return;
                 }
 
@@ -3346,7 +3346,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e)
         {
-            this.Invalidate();
+            Invalidate();
             RaiseEvent(EventForeColorChanged, e);
         }
 
@@ -3357,11 +3357,11 @@ namespace System.Windows.Forms
             // PERF - only invalidate if we actually care about the font
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
-                this.InvalidateItemLayout(PropertyNames.Font);
+                InvalidateItemLayout(PropertyNames.Font);
             }
             else
             {
-                this.toolStripItemInternalLayout = null;
+                toolStripItemInternalLayout = null;
             }
             RaiseEvent(EventFontChanged, e);
         }
@@ -3588,7 +3588,7 @@ namespace System.Windows.Forms
                 state[statePressed] = push;
                 if (Available)
                 {
-                    this.Invalidate();
+                    Invalidate();
                 }
             }
         }
@@ -3694,7 +3694,7 @@ namespace System.Windows.Forms
             // let's not snap the stack trace unless we're debugging selection.
             if (ToolStrip.SelectionDebug.TraceVerbose)
             {
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", this.ToString(), new StackTrace().ToString().Substring(0, 200)));
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", ToString(), new StackTrace().ToString().Substring(0, 200)));
             }
 #endif
             if (!CanSelect)
@@ -3747,14 +3747,14 @@ namespace System.Windows.Forms
         {
             if (owner != newOwner)
             {
-                Font f = this.Font;
+                Font f = Font;
                 owner = newOwner;
 
                 // clear the parent if the owner is null...
                 //
                 if (newOwner == null)
                 {
-                    this.ParentInternal = null;
+                    ParentInternal = null;
                 }
                 if (!state[stateDisposing] && !IsDisposed)
                 {
@@ -4128,9 +4128,9 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            if (Text != null && this.Text.Length != 0)
+            if (Text != null && Text.Length != 0)
             {
-                return this.Text;
+                return Text;
             }
             return base.ToString();
         }
@@ -4140,7 +4140,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void Unselect()
         {
-            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", this.ToString()));
+            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
             if (state[stateSelected])
             {
                 state[stateSelected] = false;
@@ -4164,20 +4164,20 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
         {
-            return this.Visible && this.parent != null && ((IKeyboardToolTip)this.parent).AllowsChildrenToShowToolTips();
+            return Visible && parent != null && ((IKeyboardToolTip)parent).AllowsChildrenToShowToolTips();
         }
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle()
         {
-            return this.AccessibilityObject.Bounds;
+            return AccessibilityObject.Bounds;
         }
 
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
             List<Rectangle> neighbors = new List<Rectangle>(3);
-            if (this.parent != null)
+            if (parent != null)
             {
-                ToolStripItemCollection items = this.parent.DisplayedItems;
+                ToolStripItemCollection items = parent.DisplayedItems;
                 int i = 0, count = items.Count;
                 bool found = false;
                 while (!found && i < count)
@@ -4205,7 +4205,7 @@ namespace System.Windows.Forms
                 Debug.Assert(i < count, "Item has a parent set but the parent doesn't own the item");
             }
 
-            ToolStripDropDown dropDown = this.parent as ToolStripDropDown;
+            ToolStripDropDown dropDown = parent as ToolStripDropDown;
             if (dropDown != null && dropDown.OwnerItem != null)
             {
                 neighbors.Add(((IKeyboardToolTip)dropDown.OwnerItem).GetNativeScreenRectangle());
@@ -4221,7 +4221,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
-            return this.parent != null && ((IKeyboardToolTip)this.parent).HasRtlModeEnabled();
+            return parent != null && ((IKeyboardToolTip)parent).HasRtlModeEnabled();
         }
 
         bool IKeyboardToolTip.AllowsToolTip()
@@ -4231,23 +4231,23 @@ namespace System.Windows.Forms
 
         IWin32Window IKeyboardToolTip.GetOwnerWindow()
         {
-            Debug.Assert(this.ParentInternal != null, "Tool Strip Item Parent is null");
-            return this.ParentInternal;
+            Debug.Assert(ParentInternal != null, "Tool Strip Item Parent is null");
+            return ParentInternal;
         }
 
         void IKeyboardToolTip.OnHooked(ToolTip toolTip)
         {
-            this.OnKeyboardToolTipHook(toolTip);
+            OnKeyboardToolTipHook(toolTip);
         }
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip)
         {
-            this.OnKeyboardToolTipUnhook(toolTip);
+            OnKeyboardToolTipUnhook(toolTip);
         }
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
         {
-            return this.ToolTipText;
+            return ToolTipText;
         }
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
@@ -4257,7 +4257,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.IsBeingTabbedTo()
         {
-            return this.IsBeingTabbedTo();
+            return IsBeingTabbedTo();
         }
 
         bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
@@ -4406,7 +4406,7 @@ namespace System.Windows.Forms
                     case NativeMethods.UIA_NamePropertyId:
                         return Name;
                     case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                        return (object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                     case NativeMethods.UIA_IsEnabledPropertyId:
                         return ownerItem.Enabled;
                     case NativeMethods.UIA_IsOffscreenPropertyId:
@@ -5101,9 +5101,9 @@ namespace System.Windows.Forms
 
             public ToolStripLayoutData(ToolStrip toolStrip)
             {
-                this.layoutStyle = toolStrip.LayoutStyle;
-                this.autoSize = toolStrip.AutoSize;
-                this.size = toolStrip.Size;
+                layoutStyle = toolStrip.LayoutStyle;
+                autoSize = toolStrip.AutoSize;
+                size = toolStrip.Size;
             }
             public bool IsCurrent(ToolStrip toolStrip)
             {

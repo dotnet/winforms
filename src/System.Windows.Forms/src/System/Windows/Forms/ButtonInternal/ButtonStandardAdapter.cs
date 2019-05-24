@@ -83,7 +83,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                ButtonRenderer.DrawButtonForHandle(e.Graphics, Control.ClientRectangle, false, pbState, this.Control.HandleInternal);
+                ButtonRenderer.DrawButtonForHandle(e.Graphics, Control.ClientRectangle, false, pbState, Control.HandleInternal);
             }
 
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a 
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             Graphics g = e.Graphics;
 
-            Button thisbutton = this.Control as Button;
+            Button thisbutton = Control as Button;
             if (Application.RenderWithVisualStyles)
             {
                 PaintThemedButtonBackground(e, Control.ClientRectangle, up);
@@ -238,7 +238,7 @@ namespace System.Windows.Forms.ButtonInternal
                     r.Inflate(-1, -1);
                 }
 
-                DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+                DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
 
                 if (up)
                 {

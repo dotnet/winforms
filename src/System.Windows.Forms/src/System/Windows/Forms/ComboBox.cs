@@ -188,8 +188,8 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
                 }
-                if (this.DropDownStyle == ComboBoxStyle.DropDownList &&
-                    this.AutoCompleteSource != AutoCompleteSource.ListItems &&
+                if (DropDownStyle == ComboBoxStyle.DropDownList &&
+                    AutoCompleteSource != AutoCompleteSource.ListItems &&
                     value != AutoCompleteMode.None)
                 {
                     throw new NotSupportedException(SR.ComboBoxAutoCompleteModeOnlyNoneAllowed);
@@ -241,8 +241,8 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
                 }
 
-                if (this.DropDownStyle == ComboBoxStyle.DropDownList &&
-                    this.AutoCompleteMode != AutoCompleteMode.None &&
+                if (DropDownStyle == ComboBoxStyle.DropDownList &&
+                    AutoCompleteMode != AutoCompleteMode.None &&
                     value != AutoCompleteSource.ListItems)
                 {
                     throw new NotSupportedException(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed);
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
                 if (autoCompleteCustomSource == null)
                 {
                     autoCompleteCustomSource = new AutoCompleteStringCollection();
-                    autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                    autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
                 return autoCompleteCustomSource;
             }
@@ -286,14 +286,14 @@ namespace System.Windows.Forms
 
                     if (autoCompleteCustomSource != null)
                     {
-                        autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                        autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     autoCompleteCustomSource = value;
 
                     if (autoCompleteCustomSource != null)
                     {
-                        autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                        autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
                     SetAutoComplete(false, true);
                 }
@@ -841,7 +841,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropMatchingText))
+                if (value != null || Properties.ContainsObject(PropMatchingText))
                 {
                     Properties.SetObject(PropMatchingText, value);
                 }
@@ -935,7 +935,7 @@ namespace System.Windows.Forms
                     // Nothing to see here... Just keep on walking...
                     // Turns out that with Theming off, we don't get quite the same messages as with theming on, so
                     // our drawing gets a little messed up. So in case theming is off, force a draw here.
-                    if ((!ContainsFocus || !Application.RenderWithVisualStyles) && this.FlatStyle == FlatStyle.Popup)
+                    if ((!ContainsFocus || !Application.RenderWithVisualStyles) && FlatStyle == FlatStyle.Popup)
                     {
                         Invalidate();
                         Update();
@@ -999,7 +999,7 @@ namespace System.Windows.Forms
                     //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidey.(1) above
                     //  user usually uses nondefault size and will experience whidbey.(2) above
 
-                    Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+                    Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
                     prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
 
                     return prefHeightCache;
@@ -1011,7 +1011,7 @@ namespace System.Windows.Forms
                     // which is used by GetPreferredSize (infinite loop).
                     if (prefHeightCache < 0)
                     {
-                        Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+                        Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
 
                         // For a "simple" style combobox, the preferred height depends on the
                         // number of items in the combobox.
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms
             // controls to be the same height.
             Size textExtent = Size.Empty;
 
-            using (WindowsFont font = WindowsFont.FromFont(this.Font))
+            using (WindowsFont font = WindowsFont.FromFont(Font))
             {
                 // this is the character that Windows uses to determine the extent
                 textExtent = WindowsGraphicsCacheManager.MeasurementGraphics.GetTextExtent("0", font);
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms
             {
                 if (sorted != value)
                 {
-                    if (this.DataSource != null && value)
+                    if (DataSource != null && value)
                     {
                         throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                     }
@@ -1347,10 +1347,10 @@ namespace System.Windows.Forms
                     }
 
                     if (value == ComboBoxStyle.DropDownList &&
-                        this.AutoCompleteSource != AutoCompleteSource.ListItems &&
-                        this.AutoCompleteMode != AutoCompleteMode.None)
+                        AutoCompleteSource != AutoCompleteSource.ListItems &&
+                        AutoCompleteMode != AutoCompleteMode.None)
                     {
-                        this.AutoCompleteMode = AutoCompleteMode.None;
+                        AutoCompleteMode = AutoCompleteMode.None;
                     }
 
                     // reset preferred height.
@@ -1460,8 +1460,8 @@ namespace System.Windows.Forms
         // If it matches an item in the list, this will fire SIC and SVC
         private void NotifyAutoComplete(bool setSelectedIndex)
         {
-            string text = this.Text;
-            bool textChanged = (text != this.lastTextChangedValue);
+            string text = Text;
+            bool textChanged = (text != lastTextChangedValue);
             bool selectedIndexSet = false;
 
             if (setSelectedIndex)
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms
             }
 
             // Save the new value
-            this.lastTextChangedValue = text;
+            lastTextChangedValue = text;
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((this.autoCompleteMode != AutoCompleteMode.None) && (this.DropDownStyle != ComboBoxStyle.DropDownList));
+                return ((autoCompleteMode != AutoCompleteMode.None) && (DropDownStyle != ComboBoxStyle.DropDownList));
             }
         }
 
@@ -1743,13 +1743,13 @@ namespace System.Windows.Forms
                         char keyChar = unchecked((char)(long)m.WParam);
                         if (keyChar == (char)(int)Keys.Escape)
                         {
-                            this.DroppedDown = false;
+                            DroppedDown = false;
                         }
-                        else if (keyChar == (char)(int)Keys.Return && this.DroppedDown)
+                        else if (keyChar == (char)(int)Keys.Return && DroppedDown)
                         {
                             UpdateText();
                             OnSelectionChangeCommittedInternal(EventArgs.Empty);
-                            this.DroppedDown = false;
+                            DroppedDown = false;
                         }
                     }
 
@@ -1810,12 +1810,12 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (fireLostFocus)
                     {
-                        this.InvokeLostFocus(this, EventArgs.Empty);
+                        InvokeLostFocus(this, EventArgs.Empty);
                     }
 
                     if (FlatStyle == FlatStyle.Popup)
                     {
-                        this.Invalidate();
+                        Invalidate();
                     }
 
                     break;
@@ -1850,12 +1850,12 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (fireSetFocus)
                     {
-                        this.InvokeGotFocus(this, EventArgs.Empty);
+                        InvokeGotFocus(this, EventArgs.Empty);
                     }
 
                     if (FlatStyle == FlatStyle.Popup)
                     {
-                        this.Invalidate();
+                        Invalidate();
                     }
                     break;
 
@@ -1992,7 +1992,7 @@ namespace System.Windows.Forms
 
 
 
-                    if (this.ContextMenu != null || this.ContextMenuStrip != null)
+                    if (ContextMenu != null || ContextMenuStrip != null)
                         CaptureInternal = true;
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
@@ -2015,7 +2015,7 @@ namespace System.Windows.Forms
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
                     //
-                    if (this.ContextMenu != null)
+                    if (ContextMenu != null)
                         CaptureInternal = false;
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
@@ -2027,7 +2027,7 @@ namespace System.Windows.Forms
 
                 case Interop.WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
-                    if (this.ContextMenu != null || this.ContextMenuStrip != null)
+                    if (ContextMenu != null || ContextMenuStrip != null)
                     {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
@@ -2134,7 +2134,7 @@ namespace System.Windows.Forms
             {
                 if (autoCompleteCustomSource != null)
                 {
-                    autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
+                    autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
                 if (stringSource != null)
                 {
@@ -2327,9 +2327,9 @@ namespace System.Windows.Forms
                 if ((Keys)unchecked((int)(long)m.WParam) == Keys.Delete)
                 {
                     // Reset matching text and remove any selection
-                    this.MatchingText = string.Empty;
-                    this.autoCompleteTimeStamp = DateTime.Now.Ticks;
-                    if (this.Items.Count > 0)
+                    MatchingText = string.Empty;
+                    autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    if (Items.Count > 0)
                     {
                         SelectedIndex = 0;
                     }
@@ -2342,12 +2342,12 @@ namespace System.Windows.Forms
                 char keyChar = unchecked((char)(long)m.WParam);
                 if (keyChar == (char)Keys.Back)
                 {
-                    if (DateTime.Now.Ticks - this.autoCompleteTimeStamp > AutoCompleteTimeout ||
-                        this.MatchingText.Length <= 1)
+                    if (DateTime.Now.Ticks - autoCompleteTimeStamp > AutoCompleteTimeout ||
+                        MatchingText.Length <= 1)
                     {
                         // Reset matching text and remove any selection
-                        this.MatchingText = string.Empty;
-                        if (this.Items.Count > 0)
+                        MatchingText = string.Empty;
+                        if (Items.Count > 0)
                         {
                             SelectedIndex = 0;
                         }
@@ -2355,15 +2355,15 @@ namespace System.Windows.Forms
                     else
                     {
                         // Remove one character from matching text and rematch
-                        this.MatchingText = this.MatchingText.Remove(this.MatchingText.Length - 1);
-                        this.SelectedIndex = FindString(this.MatchingText);
+                        MatchingText = MatchingText.Remove(MatchingText.Length - 1);
+                        SelectedIndex = FindString(MatchingText);
                     }
-                    this.autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return false;
                 }
                 else if (keyChar == (char)Keys.Escape)
                 {
-                    this.MatchingText = string.Empty;
+                    MatchingText = string.Empty;
                 }
 
                 string newMatchingText;
@@ -2372,31 +2372,31 @@ namespace System.Windows.Forms
                 {
                     DroppedDown = true;
                 }
-                if (DateTime.Now.Ticks - this.autoCompleteTimeStamp > AutoCompleteTimeout)
+                if (DateTime.Now.Ticks - autoCompleteTimeStamp > AutoCompleteTimeout)
                 {
                     newMatchingText = new string(keyChar, 1);
                     if (FindString(newMatchingText) != -1)
                     {
-                        this.MatchingText = newMatchingText;
+                        MatchingText = newMatchingText;
                         // Select the found item
                     }
-                    this.autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return false;
                 }
                 else
                 {
-                    newMatchingText = this.MatchingText + keyChar;
+                    newMatchingText = MatchingText + keyChar;
                     int itemFound = FindString(newMatchingText);
                     if (itemFound != -1)
                     {
-                        this.MatchingText = newMatchingText;
-                        if (itemFound != this.SelectedIndex)
+                        MatchingText = newMatchingText;
+                        if (itemFound != SelectedIndex)
                         {
-                            this.SelectedIndex = itemFound;
+                            SelectedIndex = itemFound;
                         }
                     }
                     // Do not change the selection
-                    this.autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return true;
                 }
             }
@@ -2425,7 +2425,7 @@ namespace System.Windows.Forms
             Keys keyCode = keyData & (Keys.KeyCode | Keys.Alt);
             if (keyCode == Keys.Return || keyCode == Keys.Escape)
             {
-                if (this.DroppedDown || autoCompleteDroppedDown)
+                if (DroppedDown || autoCompleteDroppedDown)
                 {
                     //old behavior
                     return true;
@@ -2878,12 +2878,12 @@ namespace System.Windows.Forms
             // into the backEnd. We do not need to do that.
             //
             // don't change the position if SelectedIndex is -1 because this indicates a selection not from the list.
-            if (this.DataManager != null && DataManager.Position != SelectedIndex)
+            if (DataManager != null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || SelectedIndex != -1)
                 {
-                    this.DataManager.Position = this.SelectedIndex;
+                    DataManager.Position = SelectedIndex;
                 }
             }
         }
@@ -2937,7 +2937,7 @@ namespace System.Windows.Forms
             base.OnFontChanged(e);
             ResetHeightCache();
 
-            if (this.AutoCompleteMode == AutoCompleteMode.None)
+            if (AutoCompleteMode == AutoCompleteMode.None)
             {
                 UpdateControl(true);
             }
@@ -3001,11 +3001,11 @@ namespace System.Windows.Forms
         {
             if (canFireLostFocus)
             {
-                if (this.AutoCompleteMode != AutoCompleteMode.None &&
-                    this.AutoCompleteSource == AutoCompleteSource.ListItems &&
-                    this.DropDownStyle == ComboBoxStyle.DropDownList)
+                if (AutoCompleteMode != AutoCompleteMode.None &&
+                    AutoCompleteSource == AutoCompleteSource.ListItems &&
+                    DropDownStyle == ComboBoxStyle.DropDownList)
                 {
-                    this.MatchingText = string.Empty;
+                    MatchingText = string.Empty;
                 }
                 base.OnLostFocus(e);
                 canFireLostFocus = false;
@@ -3017,16 +3017,16 @@ namespace System.Windows.Forms
         {
             if (SystemAutoCompleteEnabled)
             {
-                string text = this.Text;
+                string text = Text;
 
                 // Prevent multiple TextChanges...
-                if (text != this.lastTextChangedValue)
+                if (text != lastTextChangedValue)
                 {
                     // Need to still fire a TextChanged
                     base.OnTextChanged(e);
 
                     // Save the new value
-                    this.lastTextChangedValue = text;
+                    lastTextChangedValue = text;
                 }
             }
             else
@@ -3189,9 +3189,9 @@ namespace System.Windows.Forms
         }
 
         protected override bool ProcessKeyEventArgs(ref Message m) {
-            if (this.AutoCompleteMode != AutoCompleteMode.None &&
-                this.AutoCompleteSource == AutoCompleteSource.ListItems &&
-                this.DropDownStyle == ComboBoxStyle.DropDownList &&
+            if (AutoCompleteMode != AutoCompleteMode.None &&
+                AutoCompleteSource == AutoCompleteSource.ListItems &&
+                DropDownStyle == ComboBoxStyle.DropDownList &&
                 InterceptAutoCompleteKeystroke(m))
             {
                 return true;
@@ -3225,12 +3225,12 @@ namespace System.Windows.Forms
             // if we have a dataSource and a DisplayMember, then use it
             // to populate the Items collection
             //
-            if (this.DataManager != null && this.DataManager.Count != -1)
+            if (DataManager != null && DataManager.Count != -1)
             {
-                newItems = new object[this.DataManager.Count];
+                newItems = new object[DataManager.Count];
                 for (int i = 0; i < newItems.Length; i++)
                 {
-                    newItems[i] = this.DataManager[i];
+                    newItems[i] = DataManager[i];
                 }
             }
             else if (savedItems != null)
@@ -3253,10 +3253,10 @@ namespace System.Windows.Forms
                 {
                     Items.AddRangeInternal(newItems);
                 }
-                if (this.DataManager != null)
+                if (DataManager != null)
                 {
                     // put the selectedIndex in sync w/ the position in the dataManager
-                    this.SelectedIndex = this.DataManager.Position;
+                    SelectedIndex = DataManager.Position;
                 }
                 else
                 {
@@ -3359,7 +3359,7 @@ namespace System.Windows.Forms
                 {
                     //RecreateHandle to avoid Leak.
                     // notice the use of member variable to avoid re-entrancy
-                    AutoCompleteMode backUpMode = this.AutoCompleteMode;
+                    AutoCompleteMode backUpMode = AutoCompleteMode;
                     autoCompleteMode = AutoCompleteMode.None;
                     RecreateHandle();
                     autoCompleteMode = backUpMode;
@@ -3513,11 +3513,11 @@ namespace System.Windows.Forms
             // if the list changed, we want to keep the same selected index
             // CurrencyManager will provide the PositionChanged event
             // it will be provided before changing the list though...
-            if (this.DataManager != null)
+            if (DataManager != null)
             {
-                if (this.DataSource is ICurrencyManagerProvider)
+                if (DataSource is ICurrencyManagerProvider)
                 {
-                    this.selectedValueChangedFired = false;
+                    selectedValueChangedFired = false;
                 }
 
                 if (IsHandleCreated)
@@ -3928,7 +3928,7 @@ namespace System.Windows.Forms
                         // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                         // as with Theming on.
 
-                        if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && this.DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
+                        if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                         {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);
                         }
@@ -4007,11 +4007,11 @@ namespace System.Windows.Forms
 
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
                         {
-                            using (WindowsRegion wr = new WindowsRegion(this.Bounds))
+                            using (WindowsRegion wr = new WindowsRegion(Bounds))
                             {
 
                                 // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                                NativeMethods.RegionFlags updateRegionFlags = (NativeMethods.RegionFlags)SafeNativeMethods.GetUpdateRgn(new HandleRef(this, this.Handle), new HandleRef(this, wr.HRegion), true);
+                                NativeMethods.RegionFlags updateRegionFlags = (NativeMethods.RegionFlags)SafeNativeMethods.GetUpdateRgn(new HandleRef(this, Handle), new HandleRef(this, wr.HRegion), true);
 
                                 dr.CombineRegion(wr, dr, RegionCombineMode.DIFF);
 
@@ -4697,7 +4697,7 @@ namespace System.Windows.Forms
                 {
                     bool selected = (index == owner.SelectedIndex);
 
-                    if (string.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
+                    if (string.Compare(owner.GetItemText(value), owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
                     {
                         owner.NativeRemoveAt(index);
                         owner.NativeInsert(index, value);
@@ -5175,11 +5175,11 @@ namespace System.Windows.Forms
 
             internal override string get_accNameInternal(object childID)
             {
-                this.ValidateChildID(ref childID);
+                ValidateChildID(ref childID);
 
                 if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
                 {
-                    return this.Name;
+                    return Name;
                 }
                 else
                 {
@@ -5189,10 +5189,10 @@ namespace System.Windows.Forms
 
             internal override string get_accKeyboardShortcutInternal(object childID)
             {
-                this.ValidateChildID(ref childID);
+                ValidateChildID(ref childID);
                 if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
                 {
-                    return this.KeyboardShortcut;
+                    return KeyboardShortcut;
                 }
                 else
                 {
@@ -6221,7 +6221,7 @@ namespace System.Windows.Forms
             internal ACNativeWindow(IntPtr acHandle)
             {
                 Debug.Assert(!ACWindows.ContainsKey(acHandle));
-                this.AssignHandle(acHandle);
+                AssignHandle(acHandle);
                 ACWindows.Add(acHandle, this);
                 UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, acHandle),
                     new NativeMethods.EnumChildrenCallback(ACNativeWindow.RegisterACWindowRecursive),
@@ -6280,8 +6280,8 @@ namespace System.Windows.Forms
 
                 if (m.Msg == Interop.WindowMessages.WM_NCDESTROY)
                 {
-                    Debug.Assert(ACWindows.ContainsKey(this.Handle));
-                    ACWindows.Remove(this.Handle);   //so we do not leak ac windows.
+                    Debug.Assert(ACWindows.ContainsKey(Handle));
+                    ACWindows.Remove(Handle);   //so we do not leak ac windows.
                 }
             }
 
@@ -6354,7 +6354,7 @@ namespace System.Windows.Forms
                 }
                 // Look for a popped up dropdown
                 shouldSubClass = subclass;
-                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(), new NativeMethods.EnumThreadWindowsCallback(this.Callback), new HandleRef(null, IntPtr.Zero));
+                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(), new NativeMethods.EnumThreadWindowsCallback(Callback), new HandleRef(null, IntPtr.Zero));
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lParam)

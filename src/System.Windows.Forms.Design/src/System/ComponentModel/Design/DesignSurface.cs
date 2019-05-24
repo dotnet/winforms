@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
             {
                 if (_host == null)
                 {
-                    throw new ObjectDisposedException(this.GetType().FullName);
+                    throw new ObjectDisposedException(GetType().FullName);
                 }
                 return ((IDesignerHost)_host).Container;
             }

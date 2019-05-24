@@ -43,7 +43,7 @@ namespace System.Windows.Forms
 
         public ToolStripTextBox(string name) : this()
         {
-            this.Name = name;
+            Name = name;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
                 if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
                     direction == UnsafeNativeMethods.NavigateDirection.LastChild)
                 {
-                    return this.ownerItem.TextBox.AccessibilityObject;
+                    return ownerItem.TextBox.AccessibilityObject;
                 }
 
                 // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
@@ -607,7 +607,7 @@ namespace System.Windows.Forms
             public ToolStripTextBoxControl()
             {
                 // required to make the text box height match the combo.
-                this.Font = ToolStripManager.DefaultFont;
+                Font = ToolStripManager.DefaultFont;
                 isFontSet = false;
             }
 
@@ -627,7 +627,7 @@ namespace System.Windows.Forms
                     int offsetY = -rect.top;
 
                     // fetch the client rect, then apply the offset.
-                    UnsafeNativeMethods.GetClientRect(new HandleRef(this, this.Handle), ref rect);
+                    UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
 
                     rect.left += offsetX;
                     rect.right += offsetX;
@@ -720,7 +720,7 @@ namespace System.Windows.Forms
                 try
                 {
                     // get the total client area, then exclude the client by using XOR
-                    hTotalRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, this.Width, this.Height));
+                    hTotalRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, Width, Height));
                     hClientRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom));
                     hNonClientRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, 0, 0));
 
@@ -829,7 +829,7 @@ namespace System.Windows.Forms
                 {
                     if (!isFontSet)
                     {
-                        this.Font = ToolStripManager.DefaultFont;
+                        Font = ToolStripManager.DefaultFont;
                     }
                 }
             }
@@ -880,8 +880,8 @@ namespace System.Windows.Forms
                 {
                     // Don't set the clipping region based on the WParam - windows seems to take out the two pixels intended for the non-client border.
 
-                    Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : this.BackColor;
-                    Color innerBorderColor = this.BackColor;
+                    Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : BackColor;
+                    Color innerBorderColor = BackColor;
 
                     if (!Enabled)
                     {
@@ -896,23 +896,23 @@ namespace System.Windows.Forms
                         // could have set up a clip and fill-rectangled, thought this would be faster.
                         using (Brush b = new SolidBrush(innerBorderColor))
                         {
-                            g.FillRectangle(b, 0, 0, this.Width, clientRect.Top); // top border
-                            g.FillRectangle(b, 0, 0, clientRect.Left, this.Height); // left border
-                            g.FillRectangle(b, 0, clientRect.Bottom, this.Width, this.Height - clientRect.Height); // bottom border
-                            g.FillRectangle(b, clientRect.Right, 0, this.Width - clientRect.Right, this.Height); // right border
+                            g.FillRectangle(b, 0, 0, Width, clientRect.Top); // top border
+                            g.FillRectangle(b, 0, 0, clientRect.Left, Height); // left border
+                            g.FillRectangle(b, 0, clientRect.Bottom, Width, Height - clientRect.Height); // bottom border
+                            g.FillRectangle(b, clientRect.Right, 0, Width - clientRect.Right, Height); // right border
                         }
 
                         // paint the outside rect.
                         using (Pen p = new Pen(outerBorderColor))
                         {
-                            g.DrawRectangle(p, 0, 0, this.Width - 1, this.Height - 1);
+                            g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
                         }
 
                     }
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ReleaseDC(new HandleRef(this, this.Handle), hdc);
+                    UnsafeNativeMethods.ReleaseDC(new HandleRef(this, Handle), hdc);
                 }
                 // we've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
@@ -943,7 +943,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var toolStripTextBoxControl = this.Owner as ToolStripTextBoxControl;
+                    var toolStripTextBoxControl = Owner as ToolStripTextBoxControl;
                     if (toolStripTextBoxControl != null)
                     {
                         return toolStripTextBoxControl.Owner.Owner.AccessibilityObject;

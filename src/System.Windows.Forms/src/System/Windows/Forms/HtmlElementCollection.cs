@@ -15,24 +15,24 @@ namespace System.Windows.Forms
 
         internal HtmlElementCollection(HtmlShimManager shimManager)
         {
-            this.htmlElementCollection = null;
-            this.elementsArray = null;
+            htmlElementCollection = null;
+            elementsArray = null;
 
             this.shimManager = shimManager;
         }
 
         internal HtmlElementCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLElementCollection elements)
         {
-            this.htmlElementCollection = elements;
-            this.elementsArray = null;
+            htmlElementCollection = elements;
+            elementsArray = null;
             this.shimManager = shimManager;
-            Debug.Assert(this.NativeHtmlElementCollection != null, "The element collection object should implement IHTMLElementCollection");
+            Debug.Assert(NativeHtmlElementCollection != null, "The element collection object should implement IHTMLElementCollection");
         }
 
         internal HtmlElementCollection(HtmlShimManager shimManager, HtmlElement[] array)
         {
-            this.htmlElementCollection = null;
-            this.elementsArray = array;
+            htmlElementCollection = null;
+            elementsArray = array;
             this.shimManager = shimManager;
         }
 
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.htmlElementCollection;
+                return htmlElementCollection;
             }
         }
 
@@ -54,15 +54,15 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
                 }
 
-                if (this.NativeHtmlElementCollection != null)
+                if (NativeHtmlElementCollection != null)
                 {
                     UnsafeNativeMethods.IHTMLElement htmlElement =
-                            this.NativeHtmlElementCollection.Item((object)index, (object)0) as UnsafeNativeMethods.IHTMLElement;
+                            NativeHtmlElementCollection.Item((object)index, (object)0) as UnsafeNativeMethods.IHTMLElement;
                     return (htmlElement != null) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
                 else if (elementsArray != null)
                 {
-                    return this.elementsArray[index];
+                    return elementsArray[index];
                 }
                 else
                 {
@@ -75,18 +75,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.NativeHtmlElementCollection != null)
+                if (NativeHtmlElementCollection != null)
                 {
                     UnsafeNativeMethods.IHTMLElement htmlElement =
-                            this.NativeHtmlElementCollection.Item((object)elementId, (object)0) as UnsafeNativeMethods.IHTMLElement;
+                            NativeHtmlElementCollection.Item((object)elementId, (object)0) as UnsafeNativeMethods.IHTMLElement;
                     return (htmlElement != null) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
                 else if (elementsArray != null)
                 {
-                    int count = this.elementsArray.Length;
+                    int count = elementsArray.Length;
                     for (int i = 0; i < count; i++)
                     {
-                        HtmlElement element = this.elementsArray[i];
+                        HtmlElement element = elementsArray[i];
                         if (element.Id == elementId)
                         {
                             return element;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
         public HtmlElementCollection GetElementsByName(string name)
         {
-            int count = this.Count;
+            int count = Count;
             HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches
             int tempIndex = 0;
 
@@ -139,13 +139,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.NativeHtmlElementCollection != null)
+                if (NativeHtmlElementCollection != null)
                 {
-                    return this.NativeHtmlElementCollection.GetLength();
+                    return NativeHtmlElementCollection.GetLength();
                 }
                 else if (elementsArray != null)
                 {
-                    return this.elementsArray.Length;
+                    return elementsArray.Length;
                 }
                 else
                 {
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array dest, int index)
         {
-            int count = this.Count;
+            int count = Count;
             for (int i = 0; i < count; i++)
             {
                 dest.SetValue(this[i], index++);
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
 
         public IEnumerator GetEnumerator()
         {
-            HtmlElement[] htmlElements = new HtmlElement[this.Count];
+            HtmlElement[] htmlElements = new HtmlElement[Count];
             ((ICollection)this).CopyTo(htmlElements, 0);
 
             return htmlElements.GetEnumerator();

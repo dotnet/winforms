@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
                         }
 
                         IKeyboardToolTip tool;
-                        if (this.lastFocusedTool.TryGetTarget(out tool) && tool != null)
+                        if (lastFocusedTool.TryGetTarget(out tool) && tool != null)
                         {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                         }
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms
                 int countDropDowns = _inputFilterQueue.Count;
                 for (int i = 0; i < countDropDowns; i++)
                 {
-                    ToolStripDropDown activeDropDown = this.GetActiveToolStripInternal() as ToolStripDropDown;
+                    ToolStripDropDown activeDropDown = GetActiveToolStripInternal() as ToolStripDropDown;
                     if (activeDropDown != null && activeDropDown.AutoClose)
                     {
                         activeDropDown.Visible = false;
@@ -1591,7 +1591,7 @@ namespace System.Windows.Forms
                             return;
                         }
 
-                        hookProc = new NativeMethods.HookProc(this.MessageHookProc);
+                        hookProc = new NativeMethods.HookProc(MessageHookProc);
 
                         messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_GETMESSAGE,
                                                                    hookProc,

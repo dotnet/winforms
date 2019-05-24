@@ -100,7 +100,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context)
         {
-            return this.allowExpand;
+            return allowExpand;
         }
 
         // no dropdown, please!

@@ -726,8 +726,8 @@ namespace System.Windows.Forms.Layout
             {
                 public PreferredSizeCache(Size constrainingSize, Size preferredSize)
                 {
-                    this.ConstrainingSize = constrainingSize;
-                    this.PreferredSize = preferredSize;
+                    ConstrainingSize = constrainingSize;
+                    PreferredSize = preferredSize;
                 }
                 public Size ConstrainingSize;
                 public Size PreferredSize;

@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
                 //Add event Handlers
                 imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
                 enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
-                this.AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem });
+                AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem });
                 if (selectedItem is ToolStripMenuItem)
                 {
                     checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");

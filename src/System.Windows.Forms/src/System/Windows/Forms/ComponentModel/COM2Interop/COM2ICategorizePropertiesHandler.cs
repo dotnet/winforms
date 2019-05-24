@@ -88,7 +88,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             for (int i = 0; i < propDesc.Length; i++)
             {
-                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetAttributes);
+                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetAttributes);
             }
         }
 

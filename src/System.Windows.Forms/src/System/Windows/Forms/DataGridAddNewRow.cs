@@ -95,11 +95,11 @@ namespace System.Windows.Forms
         {
             Rectangle dataBounds = bounds;
             DataGridLineStyle gridStyle;
-            if (this.dgTable.IsDefault)
-                gridStyle = this.DataGrid.GridLineStyle;
+            if (dgTable.IsDefault)
+                gridStyle = DataGrid.GridLineStyle;
             else
-                gridStyle = this.dgTable.GridLineStyle;
-            int bWidth = this.DataGrid == null ? 0 : gridStyle == DataGridLineStyle.Solid ? 1 : 0;
+                gridStyle = dgTable.GridLineStyle;
+            int bWidth = DataGrid == null ? 0 : gridStyle == DataGridLineStyle.Solid ? 1 : 0;
             dataBounds.Height -= bWidth;
             int cx = base.PaintData(g, dataBounds, firstVisibleColumn, columnCount, alignToRight);
 
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
             if (DataBound)
             {
                 CurrencyManager listManager = DataGrid.ListManager;
-                column.Paint(g, cellBounds, listManager, this.RowNumber, alignToRight);
+                column.Paint(g, cellBounds, listManager, RowNumber, alignToRight);
             }
             else
             {

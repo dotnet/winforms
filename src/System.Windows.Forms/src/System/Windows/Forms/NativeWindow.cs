@@ -658,12 +658,12 @@ namespace System.Windows.Forms
                 if (WndProcShouldBeDebuggable)
                 {
                     Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Using debuggable wndproc");
-                    windowProc = new NativeMethods.WndProc(this.DebuggableCallback);
+                    windowProc = new NativeMethods.WndProc(DebuggableCallback);
                 }
                 else
                 {
                     Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Using normal wndproc");
-                    windowProc = new NativeMethods.WndProc(this.Callback);
+                    windowProc = new NativeMethods.WndProc(Callback);
                 }
 
                 AddWindowToTable(handle, this);
@@ -763,7 +763,7 @@ namespace System.Windows.Forms
                     // If a message comes through (say a WM_ACTIVATE for the parent) which
                     // causes the handle to be created, we can try to create the handle twice
                     // for NativeWindow. Check the handle again t avoid this.
-                    if (this.handle != IntPtr.Zero)
+                    if (handle != IntPtr.Zero)
                     {
                         return;
                     }
@@ -773,7 +773,7 @@ namespace System.Windows.Forms
 
                     // Parking window dpi awarness context need to match with dpi awarenss context of control being 
                     // parented to this parkign window. Otherwise, reparenting of control will fail.
-                    using (DpiHelper.EnterDpiAwarenessScope(this.windowDpiAwarenessContext))
+                    using (DpiHelper.EnterDpiAwarenessScope(windowDpiAwarenessContext))
                     {
                         IntPtr modHandle = UnsafeNativeMethods.GetModuleHandle(null);
 
@@ -1732,7 +1732,7 @@ namespace System.Windows.Forms
                 // our window class name.  This way our static table always matches what Win32 thinks.
                 // 
                 windowClassName = GetFullClassName(localClassName);
-                windowProc = new NativeMethods.WndProc(this.Callback);
+                windowProc = new NativeMethods.WndProc(Callback);
                 wndclass.lpfnWndProc = windowProc;
                 wndclass.hInstance = UnsafeNativeMethods.GetModuleHandle(null);
                 wndclass.lpszClassName = windowClassName;

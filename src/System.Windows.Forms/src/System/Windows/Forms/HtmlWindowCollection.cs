@@ -15,17 +15,17 @@ namespace System.Windows.Forms
 
         internal HtmlWindowCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLFramesCollection2 collection)
         {
-            this.htmlFramesCollection2 = collection;
+            htmlFramesCollection2 = collection;
             this.shimManager = shimManager;
 
-            Debug.Assert(this.NativeHTMLFramesCollection2 != null, "The window collection object should implement IHTMLFramesCollection2");
+            Debug.Assert(NativeHTMLFramesCollection2 != null, "The window collection object should implement IHTMLFramesCollection2");
         }
 
         private UnsafeNativeMethods.IHTMLFramesCollection2 NativeHTMLFramesCollection2
         {
             get
             {
-                return this.htmlFramesCollection2;
+                return htmlFramesCollection2;
             }
         }
 
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
                 }
 
                 object oIndex = (object)index;
-                UnsafeNativeMethods.IHTMLWindow2 htmlWindow2 = this.NativeHTMLFramesCollection2.Item(ref oIndex)
+                UnsafeNativeMethods.IHTMLWindow2 htmlWindow2 = NativeHTMLFramesCollection2.Item(ref oIndex)
                         as UnsafeNativeMethods.IHTMLWindow2;
                 return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.IHTMLWindow2 htmlWindow2 = null;
                 try
                 {
-                    htmlWindow2 = this.htmlFramesCollection2.Item(ref oWindowId)
+                    htmlWindow2 = htmlFramesCollection2.Item(ref oWindowId)
                             as UnsafeNativeMethods.IHTMLWindow2;
                 }
                 catch (COMException)
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHTMLFramesCollection2.GetLength();
+                return NativeHTMLFramesCollection2.GetLength();
             }
         }
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array dest, int index)
         {
-            int count = this.Count;
+            int count = Count;
             for (int i = 0; i < count; i++)
             {
                 dest.SetValue(this[i], index++);
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
         public IEnumerator GetEnumerator()
         {
-            HtmlWindow[] htmlWindows = new HtmlWindow[this.Count];
+            HtmlWindow[] htmlWindows = new HtmlWindow[Count];
             ((ICollection)this).CopyTo(htmlWindows, 0);
 
             return htmlWindows.GetEnumerator();

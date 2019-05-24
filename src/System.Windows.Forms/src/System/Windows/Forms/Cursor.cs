@@ -109,7 +109,7 @@ namespace System.Windows.Forms
             }
 
             this.handle = handle;
-            this.ownHandle = false;
+            ownHandle = false;
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace System.Windows.Forms
                 NativeMethods.ICONINFO info = new NativeMethods.ICONINFO();
                 Icon currentIcon = null;
 
-                currentIcon = Icon.FromHandle(this.Handle);
+                currentIcon = Icon.FromHandle(Handle);
 
                 try
                 {
@@ -705,7 +705,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(stream));
             }
-            if (this.resourceId != 0)
+            if (resourceId != 0)
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
@@ -747,7 +747,7 @@ namespace System.Windows.Forms
         {
             string s = null;
 
-            if (!this.ownHandle)
+            if (!ownHandle)
                 s = TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this);
             else
                 s = base.ToString();

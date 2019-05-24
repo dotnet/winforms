@@ -60,16 +60,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             for (int i = 0; i < propDesc.Length; i++)
             {
-                propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(this.OnGetDynamicAttributes);
-                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetBaseAttributes);
-                propDesc[i].QueryGetDisplayName += new GetNameItemEventHandler(this.OnGetDisplayName);
-                propDesc[i].QueryGetIsReadOnly += new GetBoolValueEventHandler(this.OnGetIsReadOnly);
+                propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetDynamicAttributes);
+                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetBaseAttributes);
+                propDesc[i].QueryGetDisplayName += new GetNameItemEventHandler(OnGetDisplayName);
+                propDesc[i].QueryGetIsReadOnly += new GetBoolValueEventHandler(OnGetIsReadOnly);
 
-                propDesc[i].QueryShouldSerializeValue += new GetBoolValueEventHandler(this.OnShouldSerializeValue);
-                propDesc[i].QueryCanResetValue += new GetBoolValueEventHandler(this.OnCanResetPropertyValue);
-                propDesc[i].QueryResetValue += new Com2EventHandler(this.OnResetPropertyValue);
+                propDesc[i].QueryShouldSerializeValue += new GetBoolValueEventHandler(OnShouldSerializeValue);
+                propDesc[i].QueryCanResetValue += new GetBoolValueEventHandler(OnCanResetPropertyValue);
+                propDesc[i].QueryResetValue += new Com2EventHandler(OnResetPropertyValue);
 
-                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(this.OnGetTypeConverterAndTypeEditor);
+                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
 
             }
         }

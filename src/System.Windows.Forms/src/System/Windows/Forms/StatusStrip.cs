@@ -38,13 +38,13 @@ namespace System.Windows.Forms
         public StatusStrip()
         {
             SuspendLayout();
-            this.CanOverflow = false;
-            this.LayoutStyle = ToolStripLayoutStyle.Table;
-            this.RenderMode = ToolStripRenderMode.System;
-            this.GripStyle = ToolStripGripStyle.Hidden;
+            CanOverflow = false;
+            LayoutStyle = ToolStripLayoutStyle.Table;
+            RenderMode = ToolStripRenderMode.System;
+            GripStyle = ToolStripGripStyle.Hidden;
 
             SetStyle(ControlStyles.ResizeRedraw, true);
-            this.Stretch = true;
+            Stretch = true;
             state[stateSizingGrip] = true;
             ResumeLayout(true);
 
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
             {
                 if (SizingGrip)
                 {
-                    Size statusStripSize = this.Size;
+                    Size statusStripSize = Size;
                     // we cant necessarily make this the height of the status strip, as
                     // the orientation could change.
                     int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
@@ -294,7 +294,7 @@ namespace System.Windows.Forms
 
         private TableLayoutSettings TableLayoutSettings
         {
-            get { return this.LayoutSettings as TableLayoutSettings; }
+            get { return LayoutSettings as TableLayoutSettings; }
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -326,9 +326,9 @@ namespace System.Windows.Forms
             if (SizingGrip && RightToLeft == RightToLeft.Yes)
             {
                 RTLGrip.Bounds = SizeGripBounds;
-                if (!this.Controls.Contains(RTLGrip))
+                if (!Controls.Contains(RTLGrip))
                 {
-                    WindowsFormsUtils.ReadOnlyControlCollection controlCollection = this.Controls as WindowsFormsUtils.ReadOnlyControlCollection;
+                    WindowsFormsUtils.ReadOnlyControlCollection controlCollection = Controls as WindowsFormsUtils.ReadOnlyControlCollection;
 
                     if (controlCollection != null)
                     {
@@ -338,9 +338,9 @@ namespace System.Windows.Forms
             }
             else if (rtlLayoutGrip != null)
             {
-                if (this.Controls.Contains(rtlLayoutGrip))
+                if (Controls.Contains(rtlLayoutGrip))
                 {
-                    WindowsFormsUtils.ReadOnlyControlCollection controlCollection = this.Controls as WindowsFormsUtils.ReadOnlyControlCollection;
+                    WindowsFormsUtils.ReadOnlyControlCollection controlCollection = Controls as WindowsFormsUtils.ReadOnlyControlCollection;
 
                     if (controlCollection != null)
                     {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
             }
 
 
-            if (this.LayoutStyle == ToolStripLayoutStyle.Table)
+            if (LayoutStyle == ToolStripLayoutStyle.Table)
             {
                 OnSpringTableLayoutCore();
             }
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
                 // the SpringTableLayoutCore requires the count of displayed items to
                 // be accurate.
                 // - so we need to perform layout again.   
-                if (this.LayoutStyle == ToolStripLayoutStyle.Table)
+                if (LayoutStyle == ToolStripLayoutStyle.Table)
                 {
                     OnSpringTableLayoutCore();
                     base.OnLayout(levent);
@@ -517,15 +517,15 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSpringTableLayoutCore()
         {
-            if (this.LayoutStyle == ToolStripLayoutStyle.Table)
+            if (LayoutStyle == ToolStripLayoutStyle.Table)
             {
                 state[stateCalledSpringTableLayout] = true;
 
-                this.SuspendLayout();
+                SuspendLayout();
 
                 if (lastOrientation != Orientation)
                 {
-                    TableLayoutSettings settings = this.TableLayoutSettings;
+                    TableLayoutSettings settings = TableLayoutSettings;
                     settings.RowCount = 0;
                     settings.ColumnCount = 0;
                     settings.ColumnStyles.Clear();
@@ -541,15 +541,15 @@ namespace System.Windows.Forms
                     //
                     TableLayoutSettings.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
 
-                    int originalColumnCount = this.TableLayoutSettings.ColumnStyles.Count;
+                    int originalColumnCount = TableLayoutSettings.ColumnStyles.Count;
 
                     // iterate through the elements which are going to be displayed.
-                    for (int i = 0; i < this.DisplayedItems.Count; i++)
+                    for (int i = 0; i < DisplayedItems.Count; i++)
                     {
                         if (i >= originalColumnCount)
                         {
                             // add if it's necessary.
-                            this.TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());
+                            TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());
                         }
 
                         // determine if we "spring" or "autosize" the column
@@ -558,7 +558,7 @@ namespace System.Windows.Forms
                         DisplayedItems[i].Anchor = (spring) ? AllAnchor : VerticalAnchor;
 
                         // spring is achieved by using 100% as the column style
-                        ColumnStyle colStyle = this.TableLayoutSettings.ColumnStyles[i];
+                        ColumnStyle colStyle = TableLayoutSettings.ColumnStyles[i];
                         colStyle.Width = 100; // this width is ignored in AutoSize.
                         colStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
                     }
@@ -571,13 +571,13 @@ namespace System.Windows.Forms
                     TableLayoutSettings.RowCount = 1;
 
                     TableLayoutSettings.RowStyles[0].SizeType = SizeType.Absolute;
-                    TableLayoutSettings.RowStyles[0].Height = Math.Max(0, this.DisplayRectangle.Height);
+                    TableLayoutSettings.RowStyles[0].Height = Math.Max(0, DisplayRectangle.Height);
                     TableLayoutSettings.ColumnCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
                     // dont remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.ColumnStyles.Count; i++)
                     {
-                        this.TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
+                        TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
                     }
                 }
                 else
@@ -588,15 +588,15 @@ namespace System.Windows.Forms
 
                     TableLayoutSettings.GrowStyle = TableLayoutPanelGrowStyle.AddRows;
 
-                    int originalRowCount = this.TableLayoutSettings.RowStyles.Count;
+                    int originalRowCount = TableLayoutSettings.RowStyles.Count;
 
                     // iterate through the elements which are going to be displayed.
-                    for (int i = 0; i < this.DisplayedItems.Count; i++)
+                    for (int i = 0; i < DisplayedItems.Count; i++)
                     {
                         if (i >= originalRowCount)
                         {
                             // add if it's necessary.
-                            this.TableLayoutSettings.RowStyles.Add(new RowStyle());
+                            TableLayoutSettings.RowStyles.Add(new RowStyle());
                         }
 
                         // determine if we "spring" or "autosize" the row
@@ -605,7 +605,7 @@ namespace System.Windows.Forms
                         DisplayedItems[i].Anchor = (spring) ? AllAnchor : HorizontalAnchor;
 
                         // spring is achieved by using 100% as the row style
-                        RowStyle rowStyle = this.TableLayoutSettings.RowStyles[i];
+                        RowStyle rowStyle = TableLayoutSettings.RowStyles[i];
                         rowStyle.Height = 100; // this width is ignored in AutoSize.
                         rowStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
                     }
@@ -619,19 +619,19 @@ namespace System.Windows.Forms
 
                     TableLayoutSettings.ColumnCount = 1;
                     TableLayoutSettings.ColumnStyles[0].SizeType = SizeType.Absolute;
-                    TableLayoutSettings.ColumnStyles[0].Width = Math.Max(0, this.DisplayRectangle.Width);
+                    TableLayoutSettings.ColumnStyles[0].Width = Math.Max(0, DisplayRectangle.Width);
 
                     TableLayoutSettings.RowCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
                     // dont remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.RowStyles.Count; i++)
                     {
-                        this.TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
+                        TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
                     }
 
                 }
 
-                this.ResumeLayout(false);
+                ResumeLayout(false);
             }
         }
 
@@ -669,7 +669,7 @@ namespace System.Windows.Forms
                         {
                             gripLocation = new NativeMethods.POINT(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, this.Handle), rootHwnd, gripLocation, 1);
+                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, gripLocation, 1);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.y);
                         int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.x);
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
             public RightToLeftLayoutGrip()
             {
                 SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-                this.BackColor = Color.Transparent;
+                BackColor = Color.Transparent;
             }
             protected override CreateParams CreateParams
             {

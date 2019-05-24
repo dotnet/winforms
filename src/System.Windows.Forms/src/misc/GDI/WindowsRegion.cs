@@ -119,9 +119,9 @@ namespace System.Experimental.Gdi
             // WARNING: WindowsRegion currently supports rectangulare regions only, if the WindowsRegion was created
             //          from an HRegion and it is not rectangular this method won't work as expected.
             // Note:    This method is currently not used and is here just to implement ICloneable.
-            return this.IsInfinite ?
+            return IsInfinite ?
                 new WindowsRegion() :
-                new WindowsRegion(this.ToRectangle());
+                new WindowsRegion(ToRectangle());
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace System.Experimental.Gdi
         /// </summary>
         public IntNativeMethods.RegionFlags CombineRegion(WindowsRegion region1, WindowsRegion region2, RegionCombineMode mode)
         {
-            return IntUnsafeNativeMethods.CombineRgn(new HandleRef(this, this.HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
+            return IntUnsafeNativeMethods.CombineRgn(new HandleRef(this, HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace System.Experimental.Gdi
         private void CreateRegion(Rectangle rect)
         {
             Debug.Assert(nativeHandle == IntPtr.Zero, "nativeHandle should be null, we're leaking handle");
-            this.nativeHandle = IntSafeNativeMethods.CreateRectRgn(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height);
+            nativeHandle = IntSafeNativeMethods.CreateRectRgn(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height);
             ownHandle = true;
         }
 
@@ -155,16 +155,16 @@ namespace System.Experimental.Gdi
         /// </summary>
         public void Dispose(bool disposing)
         {
-            if (this.nativeHandle != IntPtr.Zero)
+            if (nativeHandle != IntPtr.Zero)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
-                if (this.ownHandle)
+                if (ownHandle)
                 {
-                    IntUnsafeNativeMethods.DeleteObject(new HandleRef(this, this.nativeHandle));
+                    IntUnsafeNativeMethods.DeleteObject(new HandleRef(this, nativeHandle));
                 }
 
-                this.nativeHandle = IntPtr.Zero;
+                nativeHandle = IntPtr.Zero;
 
                 if (disposing)
                 {
@@ -187,7 +187,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.nativeHandle;
+                return nativeHandle;
             }
         }
 
@@ -197,7 +197,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.nativeHandle == IntPtr.Zero;
+                return nativeHandle == IntPtr.Zero;
             }
         }
 
@@ -206,13 +206,13 @@ namespace System.Experimental.Gdi
         /// </summary>
         public Rectangle ToRectangle()
         {
-            if (this.IsInfinite)
+            if (IsInfinite)
             {
                 return new Rectangle(-int.MaxValue, -int.MaxValue, int.MaxValue, int.MaxValue);
             }
 
             IntNativeMethods.RECT rect = new IntNativeMethods.RECT();
-            IntUnsafeNativeMethods.GetRgnBox(new HandleRef(this, this.nativeHandle), ref rect);
+            IntUnsafeNativeMethods.GetRgnBox(new HandleRef(this, nativeHandle), ref rect);
             return new Rectangle(new Point(rect.left, rect.top), rect.Size);
         }
     }

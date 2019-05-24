@@ -231,7 +231,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.dc;
+                return dc;
             }
         }
 
@@ -252,24 +252,24 @@ namespace System.Experimental.Gdi
 
         internal void Dispose(bool disposing)
         {
-            if (this.dc != null)
+            if (dc != null)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
                 try
                 {
                     // Restore original dc.
-                    this.dc.RestoreHdc();
+                    dc.RestoreHdc();
 
-                    if (this.disposeDc)
+                    if (disposeDc)
                     {
-                        this.dc.Dispose(disposing);
+                        dc.Dispose(disposing);
                     }
 
-                    if (this.graphics != null)    // if created from a Graphics object...
+                    if (graphics != null)    // if created from a Graphics object...
                     {
-                        this.graphics.ReleaseHdcInternal(this.dc.Hdc);
-                        this.graphics = null;
+                        graphics.ReleaseHdcInternal(dc.Hdc);
+                        graphics = null;
                     }
 
                 }
@@ -283,7 +283,7 @@ namespace System.Experimental.Gdi
                 }
                 finally
                 {
-                    this.dc = null;
+                    dc = null;
                 }
             }
         }
@@ -292,12 +292,12 @@ namespace System.Experimental.Gdi
 
         public IntPtr GetHdc()
         {
-            return this.dc.Hdc;
+            return dc.Hdc;
         }
 
         public void ReleaseHdc()
         {
-            this.dc.Dispose();
+            dc.Dispose();
         }
     }
 }

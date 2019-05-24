@@ -2380,10 +2380,10 @@ namespace System.Windows.Forms
 
             public RECT(System.Drawing.Rectangle r)
             {
-                this.left = r.Left;
-                this.top = r.Top;
-                this.right = r.Right;
-                this.bottom = r.Bottom;
+                left = r.Left;
+                top = r.Top;
+                right = r.Right;
+                bottom = r.Bottom;
             }
 
             public static RECT FromXYWH(int x, int y, int width, int height)
@@ -2395,7 +2395,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return new System.Drawing.Size(this.right - this.left, this.bottom - this.top);
+                    return new System.Drawing.Size(right - left, bottom - top);
                 }
             }
         }
@@ -2933,20 +2933,20 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(lf != null, "lf is null");
 
-                this.lfHeight = lf.lfHeight;
-                this.lfWidth = lf.lfWidth;
-                this.lfEscapement = lf.lfEscapement;
-                this.lfOrientation = lf.lfOrientation;
-                this.lfWeight = lf.lfWeight;
-                this.lfItalic = lf.lfItalic;
-                this.lfUnderline = lf.lfUnderline;
-                this.lfStrikeOut = lf.lfStrikeOut;
-                this.lfCharSet = lf.lfCharSet;
-                this.lfOutPrecision = lf.lfOutPrecision;
-                this.lfClipPrecision = lf.lfClipPrecision;
-                this.lfQuality = lf.lfQuality;
-                this.lfPitchAndFamily = lf.lfPitchAndFamily;
-                this.lfFaceName = lf.lfFaceName;
+                lfHeight = lf.lfHeight;
+                lfWidth = lf.lfWidth;
+                lfEscapement = lf.lfEscapement;
+                lfOrientation = lf.lfOrientation;
+                lfWeight = lf.lfWeight;
+                lfItalic = lf.lfItalic;
+                lfUnderline = lf.lfUnderline;
+                lfStrikeOut = lf.lfStrikeOut;
+                lfCharSet = lf.lfCharSet;
+                lfOutPrecision = lf.lfOutPrecision;
+                lfClipPrecision = lf.lfClipPrecision;
+                lfQuality = lf.lfQuality;
+                lfPitchAndFamily = lf.lfPitchAndFamily;
+                lfFaceName = lf.lfFaceName;
             }
             public int lfHeight;
             public int lfWidth;
@@ -3275,10 +3275,10 @@ namespace System.Windows.Forms
 
             public COMRECT(System.Drawing.Rectangle r)
             {
-                this.left = r.X;
-                this.top = r.Y;
-                this.right = r.Right;
-                this.bottom = r.Bottom;
+                left = r.X;
+                top = r.Y;
+                right = r.Right;
+                bottom = r.Bottom;
             }
 
             public COMRECT(int left, int top, int right, int bottom)
@@ -3515,18 +3515,18 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if ((this.vt == (int)tagVT.VT_UNKNOWN || this.vt == (int)tagVT.VT_DISPATCH) && this.data1 != IntPtr.Zero)
+                if ((vt == (int)tagVT.VT_UNKNOWN || vt == (int)tagVT.VT_DISPATCH) && data1 != IntPtr.Zero)
                 {
-                    Marshal.Release(this.data1);
+                    Marshal.Release(data1);
                 }
 
-                if (this.vt == (int)tagVT.VT_BSTR && this.data1 != IntPtr.Zero)
+                if (vt == (int)tagVT.VT_BSTR && data1 != IntPtr.Zero)
                 {
-                    SysFreeString(this.data1);
+                    SysFreeString(data1);
                 }
 
-                this.data1 = this.data2 = IntPtr.Zero;
-                this.vt = (int)tagVT.VT_EMPTY;
+                data1 = data2 = IntPtr.Zero;
+                vt = (int)tagVT.VT_EMPTY;
             }
 
             ~VARIANT()
@@ -3553,7 +3553,7 @@ namespace System.Windows.Forms
                 IntPtr val = data1;
                 long longVal;
 
-                int vtType = (int)(this.vt & (short)tagVT.VT_TYPEMASK);
+                int vtType = (int)(vt & (short)tagVT.VT_TYPEMASK);
 
                 switch (vtType)
                 {
@@ -3704,7 +3704,7 @@ namespace System.Windows.Forms
                     case (int)tagVT.VT_VECTOR:
                     case (int)tagVT.VT_BYREF:
                     default:
-                        int iVt = this.vt;
+                        int iVt = vt;
                         throw new ArgumentException(string.Format(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
                 }
             }
@@ -5353,16 +5353,16 @@ namespace System.Windows.Forms
             public tagTYPEDESC Get_tdescAlias()
             {
                 tagTYPEDESC td;
-                td.unionMember = (IntPtr)this.tdescAlias_unionMember;
-                td.vt = this.tdescAlias_vt;
+                td.unionMember = (IntPtr)tdescAlias_unionMember;
+                td.vt = tdescAlias_vt;
                 return td;
             }
 
             public tagIDLDESC Get_idldescType()
             {
                 tagIDLDESC id = new tagIDLDESC();
-                id.dwReserved = this.idldescType_dwReserved;
-                id.wIDLFlags = this.idldescType_wIDLFlags;
+                id.dwReserved = idldescType_dwReserved;
+                id.wIDLFlags = idldescType_wIDLFlags;
                 return id;
             }
         }
@@ -5536,10 +5536,10 @@ namespace System.Windows.Forms
 
             public UiaRect(System.Drawing.Rectangle r)
             {
-                this.left = r.Left;
-                this.top = r.Top;
-                this.width = r.Width;
-                this.height = r.Height;
+                left = r.Left;
+                top = r.Top;
+                width = r.Width;
+                height = r.Height;
             }
         }
 

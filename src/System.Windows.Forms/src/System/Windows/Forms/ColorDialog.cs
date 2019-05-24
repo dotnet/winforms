@@ -279,7 +279,7 @@ namespace System.Windows.Forms
         protected override bool RunDialog(IntPtr hwndOwner)
         {
 
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             NativeMethods.CHOOSECOLOR cc = new NativeMethods.CHOOSECOLOR();
             IntPtr custColorPtr = Marshal.AllocCoTaskMem(64);
             try

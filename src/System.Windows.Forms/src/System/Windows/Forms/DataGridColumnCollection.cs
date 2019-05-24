@@ -34,12 +34,12 @@ namespace System.Windows.Forms
         //
         int IList.Add(object value)
         {
-            return this.Add((DataGridColumnStyle)value);
+            return Add((DataGridColumnStyle)value);
         }
 
         void IList.Clear()
         {
-            this.Clear();
+            Clear();
         }
 
         bool IList.Contains(object value)
@@ -59,12 +59,12 @@ namespace System.Windows.Forms
 
         void IList.Remove(object value)
         {
-            this.Remove((DataGridColumnStyle)value);
+            Remove((DataGridColumnStyle)value);
         }
 
         void IList.RemoveAt(int index)
         {
-            this.RemoveAt(index);
+            RemoveAt(index);
         }
 
         bool IList.IsFixedSize
@@ -85,12 +85,12 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
         int ICollection.Count
         {
-            get { return this.items.Count; }
+            get { return items.Count; }
         }
 
         bool ICollection.IsSynchronized
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.owner;
+                return owner;
             }
         }
 
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
 
         public virtual int Add(DataGridColumnStyle column)
         {
-            if (this.isDefault)
+            if (isDefault)
             {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
             }
@@ -281,8 +281,8 @@ namespace System.Windows.Forms
 
             // columns which are not the default should have a default
             // width of DataGrid.PreferredColumnWidth
-            if (this.DataGridTableStyle != null && column.Width == -1)
-                column._width = this.DataGridTableStyle.PreferredColumnWidth;
+            if (DataGridTableStyle != null && column.Width == -1)
+                column._width = DataGridTableStyle.PreferredColumnWidth;
 #if false
             column.AddOnPropertyChanged(owner.OnColumnChanged);
 #endif
@@ -308,16 +308,16 @@ namespace System.Windows.Forms
         internal void AddDefaultColumn(DataGridColumnStyle column)
         {
 #if DEBUG
-            Debug.Assert(this.isDefault, "we should be calling this function only for default tables");
+            Debug.Assert(isDefault, "we should be calling this function only for default tables");
             Debug.Assert(column.IsDefault, "we should be a default column");
 #endif // DEBUG
             column.SetDataGridTableInColumn(owner, true);
-            this.items.Add(column);
+            items.Add(column);
         }
 
         internal void ResetDefaultColumnCollection()
         {
-            Debug.Assert(this.isDefault, "we should be calling this function only for default tables");
+            Debug.Assert(isDefault, "we should be calling this function only for default tables");
             // unparent the edit controls
             for (int i = 0; i < Count; i++)
             {
@@ -522,7 +522,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Remove(DataGridColumnStyle column)
         {
-            if (this.isDefault)
+            if (isDefault)
             {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
             }
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAt(int index)
         {
-            if (this.isDefault)
+            if (isDefault)
             {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
             }
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
 
         public void ResetPropertyDescriptors()
         {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 this[i].PropertyDescriptor = null;
             }

@@ -520,7 +520,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 set
                 {
-                    this.locked = value;
+                    locked = value;
                 }
             }
 

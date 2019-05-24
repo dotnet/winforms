@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
-                propPageSvc.ShowPropertyPage(propDesc.Name, instance, propDesc.DISPID, this.guid, hWndParent);
+                propPageSvc.ShowPropertyPage(propDesc.Name, instance, propDesc.DISPID, guid, hWndParent);
 
             }
             catch (Exception ex1)

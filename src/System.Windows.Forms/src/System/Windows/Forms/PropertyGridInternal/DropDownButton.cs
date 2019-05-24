@@ -117,7 +117,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    ComboBoxRenderer.DrawDropDownButtonForHandle(pevent.Graphics, dropDownButtonRect, cbState, this.HandleInternal);
+                    ComboBoxRenderer.DrawDropDownButtonForHandle(pevent.Graphics, dropDownButtonRect, cbState, HandleInternal);
                 }
 
                 // Redraw focus cues
@@ -143,11 +143,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (useComboBoxTheme)
             {
-                this.AccessibleName = SR.PropertyGridDropDownButtonComboBoxAccessibleName;
+                AccessibleName = SR.PropertyGridDropDownButtonComboBoxAccessibleName;
             }
             else
             {
-                this.AccessibleName = SR.PropertyGridDropDownButtonAccessibleName;
+                AccessibleName = SR.PropertyGridDropDownButtonAccessibleName;
             }
         }
 
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, ButtonBaseAdapter.LayoutData layout)
         {
-            ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, this.IsHighContrastHighlighted() && !this.Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
+            ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, IsHighContrastHighlighted() && !Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
         }
     }
 

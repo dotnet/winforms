@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ListBindingHelper.GetListItemType(this.List);
+                return ListBindingHelper.GetListItemType(List);
             }
         }
 
@@ -185,8 +185,8 @@ namespace System.Windows.Forms
             {
                 Release();
                 this.dataSource = dataSource;
-                this.list = null;
-                this.finalType = null;
+                list = null;
+                finalType = null;
 
                 object tempList = dataSource;
                 if (tempList is Array)
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
                     {
                         finalType = tempList.GetType();
                     }
-                    this.list = (IList)tempList;
+                    list = (IList)tempList;
                     WireEvents(list);
                     if (list.Count > 0)
                         listposition = 0;
@@ -351,13 +351,13 @@ namespace System.Windows.Forms
                 ICancelAddNew iListWithCancelAddNewSupport = list as ICancelAddNew;
                 if (iListWithCancelAddNewSupport != null)
                 {
-                    iListWithCancelAddNewSupport.CancelNew(this.Position);
+                    iListWithCancelAddNewSupport.CancelNew(Position);
                 }
 
                 OnItemChanged(new ItemChangedEventArgs(Position));
-                if (this.Position != -1)
+                if (Position != -1)
                 {
-                    OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, this.Position));
+                    OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, Position));
                 }
             }
         }
@@ -368,13 +368,13 @@ namespace System.Windows.Forms
             {
                 if (listposition != -1)
                 {
-                    this.listposition = -1;
+                    listposition = -1;
                     OnPositionChanged(EventArgs.Empty);
                 }
                 return;
             }
 
-            if ((newPosition < 0 || newPosition >= Count) && this.IsBinding)
+            if ((newPosition < 0 || newPosition >= Count) && IsBinding)
             {
                 throw new IndexOutOfRangeException(SR.ListManagerBadPosition);
             }
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
             }
 
             // EndCurrentEdit or PullData can cause the list managed by the CurrencyManager to shrink.
-            this.listposition = Math.Min(newPosition, Count - 1);
+            listposition = Math.Min(newPosition, Count - 1);
 
             if (validating)
             {
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
                     ICancelAddNew iListWithCancelAddNewSupport = list as ICancelAddNew;
                     if (iListWithCancelAddNewSupport != null)
                     {
-                        iListWithCancelAddNewSupport.EndNew(this.Position);
+                        iListWithCancelAddNewSupport.EndNew(Position);
                     }
                 }
             }
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
 
         private void FindGoodRow()
         {
-            int rowCount = this.list.Count;
+            int rowCount = list.Count;
             for (int i = 0; i < rowCount; i++)
             {
                 listposition = i;
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {
-            return ListBindingHelper.GetListItemProperties(this.list, listAccessors);
+            return ListBindingHelper.GetListItemProperties(list, listAccessors);
         }
 
         /// <summary>
@@ -758,7 +758,7 @@ namespace System.Windows.Forms
                                 OnPositionChanged(EventArgs.Empty);
                             break;
                         }
-                        else if (dbe.NewIndex == this.listposition && this.listposition == list.Count - 1 && this.listposition != -1)
+                        else if (dbe.NewIndex == listposition && listposition == list.Count - 1 && listposition != -1)
                         {
                             // The CurrencyManager has a non-empty list.
                             // The position inside the currency manager is at the end of the list and the list still fired an ItemAdded event.
@@ -808,7 +808,7 @@ namespace System.Windows.Forms
                     case System.ComponentModel.ListChangedType.ItemChanged:
                         Debug.WriteLineIf(CompModSwitches.DataCursor.TraceVerbose, "System.ComponentModel.ListChangedType.ItemChanged " + dbe.NewIndex.ToString(CultureInfo.InvariantCulture));
                         // the current item changed
-                        if (dbe.NewIndex == this.listposition)
+                        if (dbe.NewIndex == listposition)
                         {
                             OnCurrentItemChanged(EventArgs.Empty);
                         }
@@ -820,12 +820,12 @@ namespace System.Windows.Forms
                         if (dbe.OldIndex == listposition)
                         { // current got moved.
                             // the position changes, so end the current edit. Make sure there is something that we can end edit...
-                            ChangeRecordState(dbe.NewIndex, true, this.Position > -1 && this.Position < list.Count, true, false);
+                            ChangeRecordState(dbe.NewIndex, true, Position > -1 && Position < list.Count, true, false);
                         }
                         else if (dbe.NewIndex == listposition)
                         { // current was moved
                             // the position changes, so end the current edit. Make sure there is something that we can end edit
-                            ChangeRecordState(dbe.OldIndex, true, this.Position > -1 && this.Position < list.Count, true, false);
+                            ChangeRecordState(dbe.OldIndex, true, Position > -1 && Position < list.Count, true, false);
                         }
                         OnItemChanged(resetEvent);
                         break;
@@ -833,7 +833,7 @@ namespace System.Windows.Forms
                     case System.ComponentModel.ListChangedType.PropertyDescriptorDeleted:
                     case System.ComponentModel.ListChangedType.PropertyDescriptorChanged:
                         // reset lastGoodKnownRow because it was computed against property descriptors which changed
-                        this.lastGoodKnownRow = -1;
+                        lastGoodKnownRow = -1;
 
                         // In Everett, metadata changes did not alter current list position. In Whidbey, this behavior
                         // preserved - except that we will now force the position to stay in valid range if necessary.
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms
                 {
                     shouldBind = true;
                     // we need to put the listPosition at the beginning of the list if the list is not empty
-                    this.listposition = (this.list != null && this.list.Count != 0) ? 0 : -1;
+                    listposition = (list != null && list.Count != 0) ? 0 : -1;
                     UpdateIsBinding();
                 }
             }
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms
                     lastGoodKnownRow = -1;
                     break;
                 case System.ComponentModel.ListChangedType.ItemAdded:
-                    if (e.NewIndex <= lastGoodKnownRow && lastGoodKnownRow < this.List.Count - 1)
+                    if (e.NewIndex <= lastGoodKnownRow && lastGoodKnownRow < List.Count - 1)
                         lastGoodKnownRow++;
                     break;
                 case System.ComponentModel.ListChangedType.ItemMoved:

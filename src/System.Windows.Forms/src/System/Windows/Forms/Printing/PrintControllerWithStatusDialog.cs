@@ -251,8 +251,8 @@ namespace System.Windows.Forms
 
                 InitializeComponent();
                 this.backgroundThread = backgroundThread;
-                this.Text = dialogTitle;
-                this.MinimumSize = Size;
+                Text = dialogTitle;
+                MinimumSize = Size;
             }
 
             /// <summary>
@@ -271,12 +271,12 @@ namespace System.Windows.Forms
             {
                 if (IsRTLResources)
                 {
-                    this.RightToLeft = RightToLeft.Yes;
+                    RightToLeft = RightToLeft.Yes;
                 }
 
-                this.tableLayoutPanel1 = new TableLayoutPanel();
-                this.label1 = new Label();
-                this.button1 = new Button();
+                tableLayoutPanel1 = new TableLayoutPanel();
+                label1 = new Label();
+                button1 = new Button();
 
                 label1.AutoSize = true;
                 label1.Location = new Point(8, 16);
@@ -305,23 +305,23 @@ namespace System.Windows.Forms
                 tableLayoutPanel1.Controls.Add(label1, 0, 0);
                 tableLayoutPanel1.Controls.Add(button1, 0, 1);
 
-                this.AutoScaleDimensions = new Size(6, 13);
-                this.AutoScaleMode = AutoScaleMode.Font;
-                this.MaximizeBox = false;
-                this.ControlBox = false;
-                this.MinimizeBox = false;
+                AutoScaleDimensions = new Size(6, 13);
+                AutoScaleMode = AutoScaleMode.Font;
+                MaximizeBox = false;
+                ControlBox = false;
+                MinimizeBox = false;
                 Size clientSize = new Size(256, 122);
                 if (DpiHelper.IsScalingRequired)
                 {
-                    this.ClientSize = DpiHelper.LogicalToDeviceUnits(clientSize);
+                    ClientSize = DpiHelper.LogicalToDeviceUnits(clientSize);
                 }
                 else
                 {
-                    this.ClientSize = clientSize;
+                    ClientSize = clientSize;
                 }
-                this.CancelButton = button1;
-                this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-                this.Controls.Add(tableLayoutPanel1);
+                CancelButton = button1;
+                SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+                Controls.Add(tableLayoutPanel1);
             }
             private void button1_Click(object sender, System.EventArgs e)
             {

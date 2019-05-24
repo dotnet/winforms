@@ -68,7 +68,7 @@ namespace System.Windows.Forms
             if (rowNumber < 0)
                 throw new ArgumentException(SR.DataGridRowRowNumber, "rowNumber");
             // this.dataGrid = dataGrid;
-            this.number = rowNumber;
+            number = rowNumber;
 
             // map the black color in the pictures to the DataGrid's HeaderForeColor
             //
@@ -103,11 +103,11 @@ namespace System.Windows.Forms
 
         internal protected virtual int MinimumRowHeight(GridColumnStylesCollection columns)
         {
-            int h = dgTable.IsDefault ? this.DataGrid.PreferredRowHeight : dgTable.PreferredRowHeight;
+            int h = dgTable.IsDefault ? DataGrid.PreferredRowHeight : dgTable.PreferredRowHeight;
 
             try
             {
-                if (this.dgTable.DataGrid.DataSource != null)
+                if (dgTable.DataGrid.DataSource != null)
                 {
                     int nCols = columns.Count;
                     for (int i = 0; i < nCols; ++i)
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dgTable.DataGrid;
+                return dgTable.DataGrid;
             }
         }
 
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dgTable;
+                return dgTable;
             }
             set
             {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
                 // when we resize the row, or when we set the PreferredRowHeigth on the
                 // DataGridTableStyle, we change the height of the Row, which will cause to invalidate,
                 // then the grid itself will do another invalidate call.
-                this.dgTable.DataGrid.OnRowHeightChanged(this);
+                dgTable.DataGrid.OnRowHeightChanged(this);
             }
         }
 
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.number;
+                return number;
             }
         }
 
@@ -243,17 +243,17 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual Rectangle GetCellBounds(int col)
         {
-            int firstVisibleCol = this.dgTable.DataGrid.FirstVisibleColumn;
+            int firstVisibleCol = dgTable.DataGrid.FirstVisibleColumn;
             int cx = 0;
             Rectangle cellBounds = new Rectangle();
-            GridColumnStylesCollection columns = this.dgTable.GridColumnStyles;
+            GridColumnStylesCollection columns = dgTable.GridColumnStyles;
             if (columns != null)
             {
                 for (int i = firstVisibleCol; i < col; i++)
                     if (columns[i].PropertyDescriptor != null)
                         cx += columns[i].Width;
 
-                int borderWidth = this.dgTable.GridLineWidth;
+                int borderWidth = dgTable.GridLineWidth;
                 cellBounds = new Rectangle(cx,
                                      0,
                                      columns[col].Width - borderWidth,
@@ -318,12 +318,12 @@ namespace System.Windows.Forms
 
         public virtual void InvalidateRow()
         {
-            this.dgTable.DataGrid.InvalidateRow(number);
+            dgTable.DataGrid.InvalidateRow(number);
         }
 
         public virtual void InvalidateRowRect(Rectangle r)
         {
-            this.dgTable.DataGrid.InvalidateRowRect(number, r);
+            dgTable.DataGrid.InvalidateRowRect(number, r);
         }
 
         /// <summary>
@@ -339,12 +339,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool OnKeyPress(Keys keyData)
         {
-            int currentColIndex = this.dgTable.DataGrid.CurrentCell.ColumnNumber;
-            GridColumnStylesCollection columns = this.dgTable.GridColumnStyles;
+            int currentColIndex = dgTable.DataGrid.CurrentCell.ColumnNumber;
+            GridColumnStylesCollection columns = dgTable.GridColumnStyles;
             if (columns != null && currentColIndex >= 0 && currentColIndex < columns.Count)
             {
                 DataGridColumnStyle currentColumn = columns[currentColIndex];
-                if (currentColumn.KeyPress(this.RowNumber, keyData))
+                if (currentColumn.KeyPress(RowNumber, keyData))
                 {
                     return true;
                 }
@@ -439,7 +439,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void PaintBottomBorder(Graphics g, Rectangle bounds, int dataWidth)
         {
-            PaintBottomBorder(g, bounds, dataWidth, this.dgTable.GridLineWidth, false);
+            PaintBottomBorder(g, bounds, dataWidth, dgTable.GridLineWidth, false);
         }
 
         protected virtual void PaintBottomBorder(Graphics g, Rectangle bounds, int dataWidth, int borderWidth, bool alignToRight)
@@ -450,12 +450,12 @@ namespace System.Windows.Forms
                                                    dataWidth,
                                                    borderWidth);
 
-            g.FillRectangle(this.dgTable.IsDefault ? this.DataGrid.GridLineBrush : this.dgTable.GridLineBrush, bottomBorder);
+            g.FillRectangle(dgTable.IsDefault ? DataGrid.GridLineBrush : dgTable.GridLineBrush, bottomBorder);
 
             // paint any exposed region to the right
             if (dataWidth < bounds.Width)
             {
-                g.FillRectangle(this.dgTable.DataGrid.BackgroundBrush,
+                g.FillRectangle(dgTable.DataGrid.BackgroundBrush,
                                 alignToRight ? bounds.X : bottomBorder.Right,
                                 bottomBorder.Y,
                                 bounds.Width - bottomBorder.Width,
@@ -483,10 +483,10 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DGRowPaint.TraceVerbose, "Painting DataGridAddNewRow: bounds = " + bounds.ToString());
 
             Rectangle cellBounds = bounds;
-            int bWidth = this.dgTable.IsDefault ? this.DataGrid.GridLineWidth : this.dgTable.GridLineWidth;
+            int bWidth = dgTable.IsDefault ? DataGrid.GridLineWidth : dgTable.GridLineWidth;
             int cx = 0;
 
-            DataGridCell current = this.dgTable.DataGrid.CurrentCell;
+            DataGridCell current = dgTable.DataGrid.CurrentCell;
 
             GridColumnStylesCollection columns = dgTable.GridColumnStyles;
             int nCols = columns.Count;
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
                 // Paint the border to the right of each cell
                 if (bWidth > 0)
                 {
-                    g.FillRectangle(this.dgTable.IsDefault ? this.DataGrid.GridLineBrush : this.dgTable.GridLineBrush,
+                    g.FillRectangle(dgTable.IsDefault ? DataGrid.GridLineBrush : dgTable.GridLineBrush,
                                     alignToRight ? cellBounds.X - bWidth : cellBounds.Right,
                                     cellBounds.Y,
                                     bWidth,
@@ -532,7 +532,7 @@ namespace System.Windows.Forms
             // Paint any exposed area to the right ( or left ) of the data cell area
             if (cx < bounds.Width)
             {
-                g.FillRectangle(this.dgTable.DataGrid.BackgroundBrush,
+                g.FillRectangle(dgTable.DataGrid.BackgroundBrush,
                                 alignToRight ? bounds.X : bounds.X + cx,
                                 bounds.Y,
                                 bounds.Width - cx,
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
         protected Rectangle PaintIcon(Graphics g, Rectangle visualBounds, bool paintIcon, bool alignToRight, Bitmap bmp)
         {
             return PaintIcon(g, visualBounds, paintIcon, alignToRight, bmp,
-                             this.dgTable.IsDefault ? this.DataGrid.HeaderBackBrush : this.dgTable.HeaderBackBrush);
+                             dgTable.IsDefault ? DataGrid.HeaderBackBrush : dgTable.HeaderBackBrush);
         }
         protected Rectangle PaintIcon(Graphics g, Rectangle visualBounds, bool paintIcon, bool alignToRight, Bitmap bmp, Brush backBrush)
         {
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
             g.FillRectangle(backBrush, visualBounds);
             if (paintIcon)
             {
-                colorMap[0].NewColor = this.dgTable.IsDefault ? this.DataGrid.HeaderForeColor : this.dgTable.HeaderForeColor;
+                colorMap[0].NewColor = dgTable.IsDefault ? DataGrid.HeaderForeColor : dgTable.HeaderForeColor;
                 colorMap[0].OldColor = Color.Black;
                 ImageAttributes attr = new ImageAttributes();
                 attr.SetRemapTable(colorMap, ColorAdjustType.Bitmap);
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
                 bmp = GetPencilBitmap();
                 lock (bmp)
                 {
-                    bounds.X += PaintIcon(g, bounds, RowNumber == this.DataGrid.CurrentCell.RowNumber, alignToRight, bmp).Width + xOffset;
+                    bounds.X += PaintIcon(g, bounds, RowNumber == DataGrid.CurrentCell.RowNumber, alignToRight, bmp).Width + xOffset;
                 }
             }
             else
@@ -628,13 +628,13 @@ namespace System.Windows.Forms
                 bmp = alignToRight ? GetLeftArrowBitmap() : GetRightArrowBitmap();
                 lock (bmp)
                 {
-                    bounds.X += PaintIcon(g, bounds, RowNumber == this.DataGrid.CurrentCell.RowNumber, alignToRight, bmp).Width + xOffset;
+                    bounds.X += PaintIcon(g, bounds, RowNumber == DataGrid.CurrentCell.RowNumber, alignToRight, bmp).Width + xOffset;
                 }
             }
 
             // Paint the error icon
             //
-            object errorInfo = DataGrid.ListManager[this.number];
+            object errorInfo = DataGrid.ListManager[number];
             if (!(errorInfo is IDataErrorInfo))
                 return;
 
@@ -671,10 +671,10 @@ namespace System.Windows.Forms
 
         protected Brush GetBackBrush()
         {
-            Brush br = this.dgTable.IsDefault ? DataGrid.BackBrush : this.dgTable.BackBrush;
+            Brush br = dgTable.IsDefault ? DataGrid.BackBrush : dgTable.BackBrush;
             if (DataGrid.LedgerStyle && (RowNumber % 2 == 1))
             {
-                br = this.dgTable.IsDefault ? this.DataGrid.AlternatingBackBrush : this.dgTable.AlternatingBackBrush;
+                br = dgTable.IsDefault ? DataGrid.AlternatingBackBrush : dgTable.AlternatingBackBrush;
             }
             return br;
         }
@@ -686,11 +686,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected Brush BackBrushForDataPaint(ref DataGridCell current, DataGridColumnStyle gridColumn, int column)
         {
-            Brush backBr = this.GetBackBrush();
+            Brush backBr = GetBackBrush();
 
             if (Selected)
             {
-                backBr = this.dgTable.IsDefault ? this.DataGrid.SelectionBackBrush : this.dgTable.SelectionBackBrush;
+                backBr = dgTable.IsDefault ? DataGrid.SelectionBackBrush : dgTable.SelectionBackBrush;
             }
             /*
             if (RowNumber == current.RowNumber && column == current.ColumnNumber) {
@@ -703,11 +703,11 @@ namespace System.Windows.Forms
         protected Brush ForeBrushForDataPaint(ref DataGridCell current, DataGridColumnStyle gridColumn, int column)
         {
             // Brush foreBrush = gridColumn.ForeBrush;
-            Brush foreBrush = this.dgTable.IsDefault ? this.DataGrid.ForeBrush : this.dgTable.ForeBrush;
+            Brush foreBrush = dgTable.IsDefault ? DataGrid.ForeBrush : dgTable.ForeBrush;
 
             if (Selected)
             {
-                foreBrush = this.dgTable.IsDefault ? this.DataGrid.SelectionForeBrush : this.dgTable.SelectionForeBrush;
+                foreBrush = dgTable.IsDefault ? DataGrid.SelectionForeBrush : dgTable.SelectionForeBrush;
             }
             /*
             if (RowNumber == current.RowNumber && column == current.ColumnNumber) {

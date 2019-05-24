@@ -75,7 +75,7 @@ namespace System.Windows.Forms
 
         internal DataGridParentRows(DataGrid dataGrid)
         {
-            this.colorMap[0].OldColor = Color.Black;
+            colorMap[0].OldColor = Color.Black;
             this.dataGrid = dataGrid;
             // UpdateGridLinePen();
         }
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
             if (parentsCount > rowHeights.Count)
             {
                 Debug.Assert(parentsCount == rowHeights.Count + 1 || rowHeights.Count == 0, "see comment above for more info");
-                int rowHeightsCount = this.rowHeights.Count;
+                int rowHeightsCount = rowHeights.Count;
                 for (int i = rowHeightsCount; i < parentsCount; i++)
                 {
                     DataGridState dgs = (DataGridState)parents[i];
@@ -853,7 +853,7 @@ namespace System.Windows.Forms
 
             // now draw the bitmap
             ImageAttributes attr = new ImageAttributes();
-            this.colorMap[0].NewColor = this.ForeColor;
+            colorMap[0].NewColor = ForeColor;
             attr.SetRemapTable(colorMap, ColorAdjustType.Bitmap);
             g.DrawImage(b, bmpRect, 0, 0, bmpRect.Width, bmpRect.Height, GraphicsUnit.Pixel, attr);
             attr.Dispose();

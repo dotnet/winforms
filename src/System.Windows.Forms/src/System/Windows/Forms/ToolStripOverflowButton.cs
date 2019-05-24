@@ -48,9 +48,9 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && this.HasDropDownItems)
+            if (disposing && HasDropDownItems)
             {
-                this.DropDown.Dispose();
+                DropDown.Dispose();
             }
 
             base.Dispose(disposing);
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.ParentInternal.OverflowItems.Count > 0;
+                return ParentInternal.OverflowItems.Count > 0;
             }
         }
 
@@ -114,9 +114,9 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = constrainingSize;
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
-                if (this.ParentInternal.Orientation == Orientation.Horizontal)
+                if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
                     preferredSize.Width = Math.Min(constrainingSize.Width, maxWidth);
                 }
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
                 }
             }
-            return preferredSize + this.Padding.Size;
+            return preferredSize + Padding.Size;
         }
 
         // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
@@ -150,9 +150,9 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (this.ParentInternal != null)
+            if (ParentInternal != null)
             {
-                ToolStripRenderer renderer = this.ParentInternal.Renderer;
+                ToolStripRenderer renderer = ParentInternal.Renderer;
                 renderer.DrawOverflowButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
             }
         }

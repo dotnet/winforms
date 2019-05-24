@@ -269,7 +269,7 @@ namespace System.Windows.Forms
         {
             if (IsLink)
             {
-                ToolStrip parent = this.Parent;
+                ToolStrip parent = Parent;
                 if (parent != null)
                 {
                     lastCursor = parent.Cursor;
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
         {
             if (IsLink)
             {
-                ToolStrip parent = this.Parent;
+                ToolStrip parent = Parent;
                 if (parent != null)
                 {
                     parent.Cursor = lastCursor;
@@ -350,9 +350,9 @@ namespace System.Windows.Forms
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
 
-            if (this.Owner != null)
+            if (Owner != null)
             {
-                ToolStripRenderer renderer = this.Renderer;
+                ToolStripRenderer renderer = Renderer;
 
                 renderer.DrawLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
@@ -366,34 +366,34 @@ namespace System.Windows.Forms
 
         internal void PaintText(Graphics g)
         {
-            ToolStripRenderer renderer = this.Renderer;
+            ToolStripRenderer renderer = Renderer;
 
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
-                Font font = this.Font;
-                Color textColor = this.ForeColor;
+                Font font = Font;
+                Color textColor = ForeColor;
                 if (IsLink)
                 {
-                    LinkUtilities.EnsureLinkFonts(font, this.LinkBehavior, ref this.linkFont, ref this.hoverLinkFont);
+                    LinkUtilities.EnsureLinkFonts(font, LinkBehavior, ref linkFont, ref hoverLinkFont);
 
-                    if (this.Pressed)
+                    if (Pressed)
                     {
                         font = hoverLinkFont;
-                        textColor = this.ActiveLinkColor;
+                        textColor = ActiveLinkColor;
                     }
-                    else if (this.Selected)
+                    else if (Selected)
                     {
                         font = hoverLinkFont;
-                        textColor = (this.LinkVisited) ? this.VisitedLinkColor : this.LinkColor;
+                        textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
                     }
                     else
                     {
                         font = linkFont;
-                        textColor = (this.LinkVisited) ? this.VisitedLinkColor : this.LinkColor;
+                        textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
                     }
                 }
                 Rectangle textRect = InternalLayout.TextRectangle;
-                renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, textRect, textColor, font, InternalLayout.TextFormat));
+                renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, textRect, textColor, font, InternalLayout.TextFormat));
             }
         }
 
@@ -461,7 +461,7 @@ namespace System.Windows.Forms
                 }
                 else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId)
                 {
-                    return this.State;
+                    return State;
                 }
 
                 return base.GetPropertyValue(propertyID);

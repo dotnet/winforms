@@ -164,7 +164,7 @@ namespace System.Drawing.Design
                 for (int i = 0; i < staticCells.Length; i++)
                     staticColors[i] = ColorTranslator.FromOle(staticCells[i]);
 
-                this.CustomColors = customColors;
+                CustomColors = customColors;
             }
 
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -806,27 +806,27 @@ namespace System.Drawing.Design
                 tabControl.TabPages.Add(systemTabPage);
                 tabControl.TabStop = false;
                 tabControl.SelectedTab = systemTabPage;
-                tabControl.SelectedIndexChanged += new EventHandler(this.OnTabControlSelChange);
+                tabControl.SelectedIndexChanged += new EventHandler(OnTabControlSelChange);
                 tabControl.Dock = DockStyle.Fill;
-                tabControl.Resize += new EventHandler(this.OnTabControlResize);
+                tabControl.Resize += new EventHandler(OnTabControlResize);
 
                 lbSystem = new ColorEditorListBox();
                 lbSystem.DrawMode = DrawMode.OwnerDrawFixed;
                 lbSystem.BorderStyle = BorderStyle.FixedSingle;
                 lbSystem.IntegralHeight = false;
                 lbSystem.Sorted = false;
-                lbSystem.Click += new EventHandler(this.OnListClick);
+                lbSystem.Click += new EventHandler(OnListClick);
                 lbSystem.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbSystem.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbSystem.Dock = DockStyle.Fill;
-                lbSystem.FontChanged += new EventHandler(this.OnFontChanged);
+                lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
                 lbCommon = new ColorEditorListBox();
                 lbCommon.DrawMode = DrawMode.OwnerDrawFixed;
                 lbCommon.BorderStyle = BorderStyle.FixedSingle;
                 lbCommon.IntegralHeight = false;
                 lbCommon.Sorted = false;
-                lbCommon.Click += new EventHandler(this.OnListClick);
+                lbCommon.Click += new EventHandler(OnListClick);
                 lbCommon.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbCommon.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbCommon.Dock = DockStyle.Fill;
@@ -846,7 +846,7 @@ namespace System.Drawing.Design
                 }
 
                 pal = new ColorPalette(this, CustomColors);
-                pal.Picked += new EventHandler(this.OnPalettePick);
+                pal.Picked += new EventHandler(OnPalettePick);
 
                 paletteTabPage.Controls.Add(pal);
                 systemTabPage.Controls.Add(lbSystem);

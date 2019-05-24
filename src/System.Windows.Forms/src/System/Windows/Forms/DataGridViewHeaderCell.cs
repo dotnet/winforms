@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             get
             {
                 bool found;
-                int buttonState = this.Properties.GetInteger(PropButtonState, out found);
+                int buttonState = Properties.GetInteger(PropButtonState, out found);
                 if (found)
                 {
                     return (ButtonState)buttonState;
@@ -55,9 +55,9 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(ButtonState), value));
-                if (this.ButtonState != value)
+                if (ButtonState != value)
                 {
-                    this.Properties.SetInteger(PropButtonState, (int)value);
+                    Properties.SetInteger(PropButtonState, (int)value);
                 }
             }
         }
@@ -79,27 +79,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.DataGridView == null || !this.DataGridView.Visible)
+                if (DataGridView == null || !DataGridView.Visible)
                 {
                     // No detached or invisible element is displayed.
                     return false;
                 }
 
-                if (this.OwningRow != null)
+                if (OwningRow != null)
                 {
                     // row header cell
-                    return this.DataGridView.RowHeadersVisible && this.OwningRow.Displayed;
+                    return DataGridView.RowHeadersVisible && OwningRow.Displayed;
                 }
 
-                if (this.OwningColumn != null)
+                if (OwningColumn != null)
                 {
                     // column header cell
-                    return this.DataGridView.ColumnHeadersVisible && this.OwningColumn.Displayed;
+                    return DataGridView.ColumnHeadersVisible && OwningColumn.Displayed;
                 }
 
                 // top left header cell
-                Debug.Assert(!this.DataGridView.LayoutInfo.dirty);
-                return this.DataGridView.LayoutInfo.TopLeftHeader != Rectangle.Empty;
+                Debug.Assert(!DataGridView.LayoutInfo.dirty);
+                return DataGridView.LayoutInfo.TopLeftHeader != Rectangle.Empty;
             }
         }
 
@@ -107,13 +107,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Bitmap)this.Properties.GetObject(PropFlipXPThemesBitmap);
+                return (Bitmap)Properties.GetObject(PropFlipXPThemesBitmap);
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropFlipXPThemesBitmap))
+                if (value != null || Properties.ContainsObject(PropFlipXPThemesBitmap))
                 {
-                    this.Properties.SetObject(PropFlipXPThemesBitmap, value);
+                    Properties.SetObject(PropFlipXPThemesBitmap, value);
                 }
             }
         }
@@ -133,19 +133,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.OwningRow != null)
+                if (OwningRow != null)
                 {
                     // row header cell
-                    return this.OwningRow.Frozen;
+                    return OwningRow.Frozen;
                 }
 
-                if (this.OwningColumn != null)
+                if (OwningColumn != null)
                 {
                     // column header cell
-                    return this.OwningColumn.Frozen;
+                    return OwningColumn.Frozen;
                 }
 
-                if (this.DataGridView != null)
+                if (DataGridView != null)
                 {
                     // top left header cell
                     return true;
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.ContainsObject(PropValueType) && this.Properties.GetObject(PropValueType) != null;
+                return Properties.ContainsObject(PropValueType) && Properties.GetObject(PropValueType) != null;
             }
         }
 
@@ -187,21 +187,21 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.OwningRow != null)
+                if (OwningRow != null)
                 {
                     // must be a row header cell
-                    return (this.OwningRow.Resizable == DataGridViewTriState.True) || (this.DataGridView != null && this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing);
+                    return (OwningRow.Resizable == DataGridViewTriState.True) || (DataGridView != null && DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing);
                 }
 
-                if (this.OwningColumn != null)
+                if (OwningColumn != null)
                 {
                     // must be a column header cell
-                    return (this.OwningColumn.Resizable == DataGridViewTriState.True) ||
-                           (this.DataGridView != null && this.DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
+                    return (OwningColumn.Resizable == DataGridViewTriState.True) ||
+                           (DataGridView != null && DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
                 }
 
                 // must be the top left header cell
-                return this.DataGridView != null && (this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || this.DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
+                return DataGridView != null && (DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
             }
         }
 
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Type valueType = (Type)this.Properties.GetObject(PropValueType);
+                Type valueType = (Type)Properties.GetObject(PropValueType);
                 if (valueType != null)
                 {
                     return valueType;
@@ -234,9 +234,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || this.Properties.ContainsObject(PropValueType))
+                if (value != null || Properties.ContainsObject(PropValueType))
                 {
-                    this.Properties.SetObject(PropValueType, value);
+                    Properties.SetObject(PropValueType, value);
                 }
             }
         }
@@ -248,24 +248,24 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.OwningRow != null)
+                if (OwningRow != null)
                 {
                     // row header cell
-                    return this.OwningRow.Visible &&
-                            (this.DataGridView == null || this.DataGridView.RowHeadersVisible);
+                    return OwningRow.Visible &&
+                            (DataGridView == null || DataGridView.RowHeadersVisible);
                 }
 
-                if (this.OwningColumn != null)
+                if (OwningColumn != null)
                 {
                     // column header cell
-                    return this.OwningColumn.Visible &&
-                            (this.DataGridView == null || this.DataGridView.ColumnHeadersVisible);
+                    return OwningColumn.Visible &&
+                            (DataGridView == null || DataGridView.ColumnHeadersVisible);
                 }
 
-                if (this.DataGridView != null)
+                if (DataGridView != null)
                 {
                     // top left header cell
-                    return this.DataGridView.RowHeadersVisible && this.DataGridView.ColumnHeadersVisible;
+                    return DataGridView.RowHeadersVisible && DataGridView.ColumnHeadersVisible;
                 }
 
                 return false;
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
         public override object Clone()
         {
             DataGridViewHeaderCell dataGridViewCell;
-            Type thisType = this.GetType();
+            Type thisType = GetType();
             if (thisType == cellType) //performance improvement
             {
                 dataGridViewCell = new DataGridViewHeaderCell();
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 dataGridViewCell = (DataGridViewHeaderCell)System.Activator.CreateInstance(thisType);
             }
             base.CloneInternal(dataGridViewCell);
-            dataGridViewCell.Value = this.Value;
+            dataGridViewCell.Value = Value;
             return dataGridViewCell;
         }
 
@@ -299,9 +299,9 @@ namespace System.Windows.Forms
                 return contextMenuStrip;
             }
 
-            if (this.DataGridView != null)
+            if (DataGridView != null)
             {
-                return this.DataGridView.ContextMenuStrip;
+                return DataGridView.ContextMenuStrip;
             }
             else
             {
@@ -313,55 +313,55 @@ namespace System.Windows.Forms
         {
             DataGridViewElementStates state = DataGridViewElementStates.ResizableSet | DataGridViewElementStates.ReadOnly;
 
-            if (this.OwningRow != null)
+            if (OwningRow != null)
             {
                 // row header cell
-                if ((this.DataGridView == null && rowIndex != -1) ||
-                    (this.DataGridView != null && (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)))
+                if ((DataGridView == null && rowIndex != -1) ||
+                    (DataGridView != null && (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)))
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
-                if (this.DataGridView != null && this.DataGridView.Rows.SharedRow(rowIndex) != this.OwningRow)
+                if (DataGridView != null && DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
-                state |= (this.OwningRow.GetState(rowIndex) & DataGridViewElementStates.Frozen);
-                if (this.OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True || (this.DataGridView != null && this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing))
+                state |= (OwningRow.GetState(rowIndex) & DataGridViewElementStates.Frozen);
+                if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True || (DataGridView != null && DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing))
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
-                if (this.OwningRow.GetVisible(rowIndex) && (this.DataGridView == null || this.DataGridView.RowHeadersVisible))
+                if (OwningRow.GetVisible(rowIndex) && (DataGridView == null || DataGridView.RowHeadersVisible))
                 {
                     state |= DataGridViewElementStates.Visible;
-                    if (this.OwningRow.GetDisplayed(rowIndex))
+                    if (OwningRow.GetDisplayed(rowIndex))
                     {
                         state |= DataGridViewElementStates.Displayed;
                     }
                 }
             }
-            else if (this.OwningColumn != null)
+            else if (OwningColumn != null)
             {
                 // column header cell
                 if (rowIndex != -1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
-                state |= (this.OwningColumn.State & DataGridViewElementStates.Frozen);
-                if (this.OwningColumn.Resizable == DataGridViewTriState.True ||
-                    (this.DataGridView != null && this.DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing))
+                state |= (OwningColumn.State & DataGridViewElementStates.Frozen);
+                if (OwningColumn.Resizable == DataGridViewTriState.True ||
+                    (DataGridView != null && DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing))
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
-                if (this.OwningColumn.Visible && (this.DataGridView == null || this.DataGridView.ColumnHeadersVisible))
+                if (OwningColumn.Visible && (DataGridView == null || DataGridView.ColumnHeadersVisible))
                 {
                     state |= DataGridViewElementStates.Visible;
-                    if (this.OwningColumn.Displayed)
+                    if (OwningColumn.Displayed)
                     {
                         state |= DataGridViewElementStates.Displayed;
                     }
                 }
             }
-            else if (this.DataGridView != null)
+            else if (DataGridView != null)
             {
                 // top left header cell
                 if (rowIndex != -1)
@@ -369,14 +369,14 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 state |= DataGridViewElementStates.Frozen;
-                if (this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || this.DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing)
+                if (DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing)
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
-                if (this.DataGridView.RowHeadersVisible && this.DataGridView.ColumnHeadersVisible)
+                if (DataGridView.RowHeadersVisible && DataGridView.ColumnHeadersVisible)
                 {
                     state |= DataGridViewElementStates.Visible;
-                    if (this.DataGridView.LayoutInfo.TopLeftHeader != Rectangle.Empty)
+                    if (DataGridView.LayoutInfo.TopLeftHeader != Rectangle.Empty)
                     {
                         state |= DataGridViewElementStates.Displayed;
                     }
@@ -384,30 +384,30 @@ namespace System.Windows.Forms
             }
 
 #if DEBUG
-            if (this.OwningRow == null || this.OwningRow.Index != -1)
+            if (OwningRow == null || OwningRow.Index != -1)
             {
                 DataGridViewElementStates stateDebug = DataGridViewElementStates.ResizableSet;
-                if (this.Displayed)
+                if (Displayed)
                 {
                     stateDebug |= DataGridViewElementStates.Displayed;
                 }
-                if (this.Frozen)
+                if (Frozen)
                 {
                     stateDebug |= DataGridViewElementStates.Frozen;
                 }
-                if (this.ReadOnly)
+                if (ReadOnly)
                 {
                     stateDebug |= DataGridViewElementStates.ReadOnly;
                 }
-                if (this.Resizable)
+                if (Resizable)
                 {
                     stateDebug |= DataGridViewElementStates.Resizable;
                 }
-                if (this.Selected)
+                if (Selected)
                 {
                     stateDebug |= DataGridViewElementStates.Selected;
                 }
-                if (this.Visible)
+                if (Visible)
                 {
                     stateDebug |= DataGridViewElementStates.Visible;
                 }
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
 
         protected override Size GetSize(int rowIndex)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 // detached cell
                 if (rowIndex != -1)
@@ -429,27 +429,27 @@ namespace System.Windows.Forms
                 }
                 return new Size(-1, -1);
             }
-            if (this.OwningColumn != null)
+            if (OwningColumn != null)
             {
                 // must be a column header cell
                 if (rowIndex != -1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
-                return new Size(this.OwningColumn.Thickness, this.DataGridView.ColumnHeadersHeight);
+                return new Size(OwningColumn.Thickness, DataGridView.ColumnHeadersHeight);
             }
-            else if (this.OwningRow != null)
+            else if (OwningRow != null)
             {
                 // must be a row header cell
-                if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
+                if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
-                if (this.DataGridView.Rows.SharedRow(rowIndex) != this.OwningRow)
+                if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
-                return new Size(this.DataGridView.RowHeadersWidth, this.OwningRow.GetHeight(rowIndex));
+                return new Size(DataGridView.RowHeadersWidth, OwningRow.GetHeight(rowIndex));
             }
             else
             {
@@ -458,7 +458,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
-                return new Size(this.DataGridView.RowHeadersWidth, this.DataGridView.ColumnHeadersHeight);
+                return new Size(DataGridView.RowHeadersWidth, DataGridView.ColumnHeadersHeight);
             }
         }
 
@@ -507,40 +507,40 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
-            return this.Properties.GetObject(PropCellValue);
+            return Properties.GetObject(PropCellValue);
         }
 
         protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
-            return e.Button == MouseButtons.Left && this.DataGridView.ApplyVisualStylesToHeaderCells;
+            return e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
         protected override bool MouseEnterUnsharesRow(int rowIndex)
         {
-            return this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X &&
-                   rowIndex == this.DataGridView.MouseDownCellAddress.Y &&
-                   this.DataGridView.ApplyVisualStylesToHeaderCells;
+            return ColumnIndex == DataGridView.MouseDownCellAddress.X &&
+                   rowIndex == DataGridView.MouseDownCellAddress.Y &&
+                   DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
         protected override bool MouseLeaveUnsharesRow(int rowIndex)
         {
-            return this.ButtonState != ButtonState.Normal && this.DataGridView.ApplyVisualStylesToHeaderCells;
+            return ButtonState != ButtonState.Normal && DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
         protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
-            return e.Button == MouseButtons.Left && this.DataGridView.ApplyVisualStylesToHeaderCells;
+            return e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
             if (e.Button == MouseButtons.Left &&
-                this.DataGridView.ApplyVisualStylesToHeaderCells &&
-                !this.DataGridView.ResizingOperationAboutToStart)
+                DataGridView.ApplyVisualStylesToHeaderCells &&
+                !DataGridView.ResizingOperationAboutToStart)
             {
                 UpdateButtonState(ButtonState.Pushed, e.RowIndex);
             }
@@ -548,50 +548,50 @@ namespace System.Windows.Forms
 
         protected override void OnMouseEnter(int rowIndex)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            if (this.DataGridView.ApplyVisualStylesToHeaderCells)
+            if (DataGridView.ApplyVisualStylesToHeaderCells)
             {
-                if (this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X &&
-                    rowIndex == this.DataGridView.MouseDownCellAddress.Y &&
-                    this.ButtonState == ButtonState.Normal &&
+                if (ColumnIndex == DataGridView.MouseDownCellAddress.X &&
+                    rowIndex == DataGridView.MouseDownCellAddress.Y &&
+                    ButtonState == ButtonState.Normal &&
                     Control.MouseButtons == MouseButtons.Left &&
-                    !this.DataGridView.ResizingOperationAboutToStart)
+                    !DataGridView.ResizingOperationAboutToStart)
                 {
                     UpdateButtonState(ButtonState.Pushed, rowIndex);
                 }
-                this.DataGridView.InvalidateCell(this.ColumnIndex, rowIndex);
+                DataGridView.InvalidateCell(ColumnIndex, rowIndex);
             }
         }
 
         protected override void OnMouseLeave(int rowIndex)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            if (this.DataGridView.ApplyVisualStylesToHeaderCells)
+            if (DataGridView.ApplyVisualStylesToHeaderCells)
             {
-                if (this.ButtonState != ButtonState.Normal)
+                if (ButtonState != ButtonState.Normal)
                 {
-                    Debug.Assert(this.ButtonState == ButtonState.Pushed);
-                    Debug.Assert(this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X);
-                    Debug.Assert(rowIndex == this.DataGridView.MouseDownCellAddress.Y);
+                    Debug.Assert(ButtonState == ButtonState.Pushed);
+                    Debug.Assert(ColumnIndex == DataGridView.MouseDownCellAddress.X);
+                    Debug.Assert(rowIndex == DataGridView.MouseDownCellAddress.Y);
                     UpdateButtonState(ButtonState.Normal, rowIndex);
                 }
-                this.DataGridView.InvalidateCell(this.ColumnIndex, rowIndex);
+                DataGridView.InvalidateCell(ColumnIndex, rowIndex);
             }
         }
 
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return;
             }
-            if (e.Button == MouseButtons.Left && this.DataGridView.ApplyVisualStylesToHeaderCells)
+            if (e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells)
             {
                 UpdateButtonState(ButtonState.Normal, e.RowIndex);
             }
@@ -629,7 +629,7 @@ namespace System.Windows.Forms
                 valBounds.Height -= borderWidths.Bottom;
 
                 bool cellSelected = (dataGridViewElementState & DataGridViewElementStates.Selected) != 0;
-                SolidBrush br = this.DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) ? cellStyle.SelectionBackColor : cellStyle.BackColor);
+                SolidBrush br = DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) ? cellStyle.SelectionBackColor : cellStyle.BackColor);
                 if (br.Color.A == 255)
                 {
                     graphics.FillRectangle(br, valBounds);
@@ -644,14 +644,14 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "DataGridViewHeaderCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + this.RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return "DataGridViewHeaderCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
         }
 
         private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
         {
-            Debug.Assert(this.DataGridView != null);
-            this.ButtonStatePrivate = newButtonState;
-            this.DataGridView.InvalidateCell(this.ColumnIndex, rowIndex);
+            Debug.Assert(DataGridView != null);
+            ButtonStatePrivate = newButtonState;
+            DataGridView.InvalidateCell(ColumnIndex, rowIndex);
         }
 
         private class DataGridViewHeaderCellRenderer

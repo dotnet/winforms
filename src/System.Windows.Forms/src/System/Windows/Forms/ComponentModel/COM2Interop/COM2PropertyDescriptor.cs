@@ -150,10 +150,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public Com2PropertyDescriptor(int dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
         : base(name, attrs)
         {
-            this.baseReadOnly = readOnly;
+            baseReadOnly = readOnly;
             this.readOnly = readOnly;
 
-            this.baseAttrs = attrs;
+            baseAttrs = attrs;
             SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, true);
 
             this.hrHidden = hrHidden;
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // readonly to begin with are always read only
             SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, readOnly);
 
-            this.propertyType = propType;
+            propertyType = propType;
 
             this.dispid = dispid;
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // check if this thing is hidden from metadata
-            this.canShow = true;
+            canShow = true;
 
             if (attrs != null)
             {
@@ -187,15 +187,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     if (attrs[i].Equals(BrowsableAttribute.No) && !hrHidden)
                     {
-                        this.canShow = false;
+                        canShow = false;
                         break;
                     }
                 }
             }
 
-            if (this.canShow && (propType == typeof(object) || (valueConverter == null && propType == typeof(UnsafeNativeMethods.IDispatch))))
+            if (canShow && (propType == typeof(object) || (valueConverter == null && propType == typeof(UnsafeNativeMethods.IDispatch))))
             {
-                this.typeHide = true;
+                typeHide = true;
             }
         }
 
@@ -221,12 +221,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     if (attrList.Count != baseCount)
                     {
-                        this.baseAttrs = new Attribute[attrList.Count];
+                        baseAttrs = new Attribute[attrList.Count];
                     }
 
                     if (baseAttrs != null)
                     {
-                        attrList.CopyTo(this.baseAttrs, 0);
+                        attrList.CopyTo(baseAttrs, 0);
                     }
                     else
                     {
@@ -249,13 +249,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (this.AttributesValid || this.InAttrQuery)
+                if (AttributesValid || InAttrQuery)
                 {
                     return base.Attributes;
                 }
 
                 // restore our base attributes
-                this.AttributeArray = this.BaseAttributes;
+                AttributeArray = BaseAttributes;
 
                 ArrayList newAttributes = null;
 
@@ -271,10 +271,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 else if (hrHidden)
                 {
                     // check to see if the get still fails
-                    object target = this.TargetObject;
+                    object target = TargetObject;
                     if (target != null)
                     {
-                        int hr = new ComNativeDescriptor().GetPropertyValue(target, this.dispid, new object[1]);
+                        int hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
                         if (NativeMethods.Succeeded(hr))
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
-                this.inAttrQuery = true;
+                inAttrQuery = true;
                 try
                 {
 
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 finally
                 {
-                    this.inAttrQuery = false;
+                    inAttrQuery = false;
                 }
 
                 // these are now valid.
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return this.canShow;
+                return canShow;
             }
         }
 
@@ -395,7 +395,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!TypeEditorValid)
                 {
-                    this.editor = typeEd;
+                    editor = typeEd;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
                 }
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
@@ -433,7 +433,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return this.dispid;
+                return dispid;
             }
         }
 
@@ -445,14 +445,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (!this.DisplayNameValid)
+                if (!DisplayNameValid)
                 {
                     GetNameItemEvent gni = new GetNameItemEvent(base.DisplayName);
                     OnGetDisplayName(gni);
-                    this.displayName = gni.NameString;
+                    displayName = gni.NameString;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName, false);
                 }
-                return this.displayName;
+                return displayName;
             }
         }
 
@@ -492,7 +492,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return this.inAttrQuery;
+                return inAttrQuery;
             }
         }
 
@@ -503,15 +503,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (!this.ReadOnlyValid)
+                if (!ReadOnlyValid)
                 {
-                    this.readOnly |= (this.Attributes[typeof(ReadOnlyAttribute)].Equals(ReadOnlyAttribute.Yes));
-                    GetBoolValueEvent gbv = new GetBoolValueEvent(this.readOnly);
+                    readOnly |= (Attributes[typeof(ReadOnlyAttribute)].Equals(ReadOnlyAttribute.Yes));
+                    GetBoolValueEvent gbv = new GetBoolValueEvent(readOnly);
                     OnGetIsReadOnly(gbv);
-                    this.readOnly = gbv.Value;
+                    readOnly = gbv.Value;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, false);
                 }
-                return this.readOnly;
+                return readOnly;
             }
         }
 
@@ -519,11 +519,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             set
             {
-                this.com2props = value;
+                com2props = value;
             }
             get
             {
-                return this.com2props;
+                return com2props;
             }
         }
 
@@ -691,7 +691,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
             }
 
-            if (component == this.TargetObject)
+            if (component == TargetObject)
             {
                 GetBoolValueEvent gbv = new GetBoolValueEvent(false);
                 OnCanResetValue(gbv);
@@ -702,7 +702,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public object Clone()
         {
-            return new Com2PropertyDescriptor(this.dispid, this.Name, (Attribute[])this.baseAttrs.Clone(), this.readOnly, this.propertyType, this.typeData, this.hrHidden);
+            return new Com2PropertyDescriptor(dispid, Name, (Attribute[])baseAttrs.Clone(), readOnly, propertyType, typeData, hrHidden);
         }
 
         /// <summary>
@@ -780,7 +780,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // we don't want to create the value editor for the IDispatch props because
                 // that will create the reference editor.  We don't want that guy!
                 //
-                if (!typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(this.PropertyType))
+                if (!typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(PropertyType))
                 {
                     localConverter = base.Converter;
                 }
@@ -878,7 +878,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!TypeConverterValid)
                 {
-                    this.converter = c;
+                    converter = c;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
                 }
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
@@ -914,7 +914,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
             Guid g = Guid.Empty;
 
-            int hr = pDisp.Invoke(this.dispid,
+            int hr = pDisp.Invoke(dispid,
                                   ref g,
                                   SafeNativeMethods.GetThreadLCID(),
                                   NativeMethods.DISPATCH_PROPERTYGET,
@@ -962,7 +962,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             lastValue = GetNativeValue(component);
             // do we need to convert the type?
-            if (this.ConvertingNativeType && lastValue != null)
+            if (ConvertingNativeType && lastValue != null)
             {
                 lastValue = valueConverter.ConvertNativeToManaged(lastValue, this);
             }
@@ -1010,7 +1010,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // if this is a object, get the value and attempt to create the correct value editor based on that value.
             // we don't do this if the state came from an attribute
             //
-            if (0 == (refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) && this.PropertyType == typeof(Com2Variant))
+            if (0 == (refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) && PropertyType == typeof(Com2Variant))
             {
                 Type editorType = PropertyType;
                 object value = GetValue(TargetObject);
@@ -1246,7 +1246,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
             }
 
-            if (component == this.TargetObject)
+            if (component == TargetObject)
             {
                 OnResetValue(EventArgs.Empty);
             }
@@ -1278,9 +1278,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override void SetValue(object component, object value)
         {
 
-            if (this.readOnly)
+            if (readOnly)
             {
-                throw new NotSupportedException(string.Format(SR.COM2ReadonlyProperty, this.Name));
+                throw new NotSupportedException(string.Format(SR.COM2ReadonlyProperty, Name));
             }
 
             object owner = component;
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
 
                     Guid g = Guid.Empty;
-                    int hr = pDisp.Invoke(this.dispid,
+                    int hr = pDisp.Invoke(dispid,
                                           ref g,
                                           SafeNativeMethods.GetThreadLCID(),
                                           NativeMethods.DISPATCH_PROPERTYPUT,
@@ -1515,7 +1515,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         // special case the font converter here.
                         //
-                        if ((pd.valueConverter != null && pd.valueConverter.AllowExpand) || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(this.pd))
+                        if ((pd.valueConverter != null && pd.valueConverter.AllowExpand) || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(pd))
                         {
                             subprops = AllowSubprops;
                         }
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public GetNameItemEvent(object defName)
         {
-            this.nameItem = defName;
+            nameItem = defName;
         }
 
         public object Name
@@ -1588,7 +1588,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public GetBoolValueEvent(bool defValue)
         {
-            this.value = defValue;
+            value = defValue;
         }
 
         public bool Value

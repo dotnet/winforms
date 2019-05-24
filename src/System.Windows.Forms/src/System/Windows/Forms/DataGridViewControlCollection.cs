@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
             public override void Remove(Control value)
             {
-                if (value != owner.horizScrollBar && value != owner.vertScrollBar && value != this.owner.editingPanel)
+                if (value != owner.horizScrollBar && value != owner.vertScrollBar && value != owner.editingPanel)
                 {
                     base.Remove(value);
                 }
@@ -49,9 +49,9 @@ namespace System.Windows.Forms
 
             public override void Clear()
             {
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
-                    if (this[i] == this.owner.horizScrollBar || this[i] == this.owner.vertScrollBar || this[i] == this.owner.editingPanel)
+                    if (this[i] == owner.horizScrollBar || this[i] == owner.vertScrollBar || this[i] == owner.editingPanel)
                     {
                         continue;
                     }

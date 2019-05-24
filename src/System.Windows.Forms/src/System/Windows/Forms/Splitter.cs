@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms
 
             public SplitterMessageFilter(Splitter splitter)
             {
-                this.owner = splitter;
+                owner = splitter;
             }
 
             /// <summary>

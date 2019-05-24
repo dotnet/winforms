@@ -51,13 +51,13 @@ namespace System.Resources
         private ResXResourceReader(ITypeResolutionService typeResolver)
         {
             this.typeResolver = typeResolver;
-            this.aliasResolver = new ReaderAliasResolver();
+            aliasResolver = new ReaderAliasResolver();
         }
 
         private ResXResourceReader(AssemblyName[] assemblyNames)
         {
             this.assemblyNames = assemblyNames;
-            this.aliasResolver = new ReaderAliasResolver();
+            aliasResolver = new ReaderAliasResolver();
         }
 
 
@@ -167,7 +167,7 @@ namespace System.Resources
         {
             get
             {
-                return this.useResXDataNodes;
+                return useResXDataNodes;
             }
             set
             {
@@ -175,7 +175,7 @@ namespace System.Resources
                 {
                     throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
                 }
-                this.useResXDataNodes = value;
+                useResXDataNodes = value;
             }
         }
 
@@ -716,7 +716,7 @@ namespace System.Resources
 
             internal ReaderAliasResolver()
             {
-                this.cachedAliases = new Hashtable();
+                cachedAliases = new Hashtable();
             }
 
             public AssemblyName ResolveAlias(string alias)
@@ -732,7 +732,7 @@ namespace System.Resources
 
             public void PushAlias(string alias, AssemblyName name)
             {
-                if (this.cachedAliases != null && !string.IsNullOrEmpty(alias))
+                if (cachedAliases != null && !string.IsNullOrEmpty(alias))
                 {
                     cachedAliases[alias] = name;
                 }

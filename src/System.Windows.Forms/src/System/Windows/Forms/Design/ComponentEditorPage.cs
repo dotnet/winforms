@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual void SetSite(IComponentEditorPageSite site)
         {
-            this.pageSite = site;
+            pageSite = site;
 
             pageSite.GetControl().Controls.Add(this);
         }

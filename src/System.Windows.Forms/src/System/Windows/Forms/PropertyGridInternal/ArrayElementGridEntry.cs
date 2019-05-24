@@ -28,7 +28,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         : base(ownerGrid, peParent)
         {
             this.index = index;
-            this.SetFlag(FLAG_RENDER_READONLY, (peParent.Flags & FLAG_RENDER_READONLY) != 0 || peParent.ForceReadOnly);
+            SetFlag(FLAG_RENDER_READONLY, (peParent.Flags & FLAG_RENDER_READONLY) != 0 || peParent.ForceReadOnly);
         }
 
 

@@ -233,8 +233,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler AutoValidateChanged
         {
-            add => this.autoValidateChanged += value;
-            remove => this.autoValidateChanged -= value;
+            add => autoValidateChanged += value;
+            remove => autoValidateChanged -= value;
         }
 
         /// <summary>
@@ -409,13 +409,13 @@ namespace System.Windows.Forms
 
         internal bool ActivateControlInternal(Control control, bool originator)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::ActivateControlInternal(" + (control == null ? "null" : control.Name) + "," + originator.ToString() + ") - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::ActivateControlInternal(" + (control == null ? "null" : control.Name) + "," + originator.ToString() + ") - " + Name);
             // Recursive function that makes sure that the chain of active controls
             // is coherent.
             bool ret = true;
             bool updateContainerActiveControl = false;
             ContainerControl cc = null;
-            Control parent = this.ParentInternal;
+            Control parent = ParentInternal;
             if (parent != null)
             {
                 cc = (parent.GetContainerControl()) as ContainerControl;
@@ -484,17 +484,17 @@ namespace System.Windows.Forms
         {
             ContainerControl cc;
             Debug.Assert(control != null);
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AfterControlRemoved(" + control.Name + ") - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AfterControlRemoved(" + control.Name + ") - " + Name);
             if (control == activeControl || control.Contains(activeControl))
             {
                 bool selected = SelectNextControl(control, true, true, true, true);
 
-                if (selected && this.activeControl != control)
+                if (selected && activeControl != control)
                 {
                     // Add the check. If it is set to true, do not call into FocusActiveControlInternal().
                     // The TOP MDI window could be gone and CreateHandle method will fail 
                     // because it try to create a parking window Parent for the MDI children 
-                    if (!this.activeControl.Parent.IsTopMdiWindowClosing)
+                    if (!activeControl.Parent.IsTopMdiWindowClosing)
                     {
                         FocusActiveControlInternal();
                     }
@@ -558,7 +558,7 @@ namespace System.Windows.Forms
             }
 #endif
 
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AssignActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AssignActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + Name);
             if (activeControl != value)
             {
                 // cpb: #7318
@@ -627,7 +627,7 @@ namespace System.Windows.Forms
 #if DEBUG
             TraceCanProcessMnemonic();
 #endif
-            if (this.state[stateProcessingMnemonic])
+            if (state[stateProcessingMnemonic])
             {
                 return true;
             }
@@ -683,10 +683,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal void FocusActiveControlInternal()
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::FocusActiveControlInternal() - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::FocusActiveControlInternal() - " + Name);
 #if DEBUG
             // Things really get ugly if you try to pop up an assert dialog here
-            if (activeControl != null && !this.Contains(activeControl))
+            if (activeControl != null && !Contains(activeControl))
                 Debug.WriteLine("ActiveControl is not a child of this ContainerControl");
 #endif
 
@@ -734,13 +734,13 @@ namespace System.Windows.Forms
 
         internal override Rectangle GetToolNativeScreenRectangle()
         {
-            if (this.GetTopLevel())
+            if (GetTopLevel())
             {
                 // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
                 NativeMethods.RECT clientRectangle = new NativeMethods.RECT();
-                UnsafeNativeMethods.GetClientRect(new HandleRef(this, this.Handle), ref clientRectangle);
+                UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
                 NativeMethods.POINT topLeftPoint = new NativeMethods.POINT(0, 0);
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, this.Handle), topLeftPoint);
+                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), topLeftPoint);
                 return new Rectangle(topLeftPoint.x, topLeftPoint.y, clientRectangle.right, clientRectangle.bottom);
             }
             else
@@ -1323,7 +1323,7 @@ namespace System.Windows.Forms
 
             // Set the processing mnemonic flag so child controls don't check for it when checking if they
             // can process the mnemonic.
-            this.state[stateProcessingMnemonic] = true;
+            state[stateProcessingMnemonic] = true;
 
             bool processed = false;
 
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                this.state[stateProcessingMnemonic] = false;
+                state[stateProcessingMnemonic] = false;
             }
 
             Debug.Unindent();
@@ -1542,7 +1542,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateFocusedControl()
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::UpdateFocusedControl() - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::UpdateFocusedControl() - " + Name);
 
             // Capture the current focusedControl as the unvalidatedControl if we don't have one/are not validating.
             EnsureUnvalidatedControl(focusedControl);
@@ -1809,7 +1809,7 @@ namespace System.Windows.Forms
         {
             validatedControlAllowsFocusChange = false;
 
-            if (this.AutoValidate == AutoValidate.EnablePreventFocusChange ||
+            if (AutoValidate == AutoValidate.EnablePreventFocusChange ||
                 (activeControl != null && activeControl.CausesValidation))
             {
                 if (unvalidatedControl == null)
@@ -1895,7 +1895,7 @@ namespace System.Windows.Forms
             if (!ancestorControl.IsDescendant(unvalidatedControl))
                 return false;
 
-            this.state[stateValidating] = true;
+            state[stateValidating] = true;
             bool cancel = false;
 
             Control currentActiveControl = activeControl;
@@ -1977,7 +1977,7 @@ namespace System.Windows.Forms
             // PERFNOTE: This is more efficient than using Foreach.  Foreach
             // forces the creation of an array subset enum each time we
             // enumerate
-            Control.ControlCollection children = this.Controls;
+            Control.ControlCollection children = Controls;
             int count = children.Count;
             for (int i = 0; i < count; i++)
             {
@@ -2006,7 +2006,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::WmSetFocus() - " + this.Name);
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::WmSetFocus() - " + Name);
             if (!HostedInWin32DialogManager)
             {
                 if (ActiveControl != null)
@@ -2016,7 +2016,7 @@ namespace System.Windows.Forms
                     //         is given to the visible ActiveControl
                     if (!ActiveControl.Visible)
                     {
-                        this.InvokeGotFocus(this, EventArgs.Empty);
+                        InvokeGotFocus(this, EventArgs.Empty);
                     }
                     FocusActiveControlInternal();
                 }

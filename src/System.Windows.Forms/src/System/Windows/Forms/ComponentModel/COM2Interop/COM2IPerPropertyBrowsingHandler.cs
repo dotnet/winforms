@@ -31,10 +31,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             for (int i = 0; i < propDesc.Length; i++)
             {
-                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetBaseAttributes);
-                propDesc[i].QueryGetDisplayValue += new GetNameItemEventHandler(this.OnGetDisplayValue);
+                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetBaseAttributes);
+                propDesc[i].QueryGetDisplayValue += new GetNameItemEventHandler(OnGetDisplayValue);
 
-                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(this.OnGetTypeConverterAndTypeEditor);
+                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
             }
         }
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             private Com2IPerPropertyBrowsingEnum itemsEnum;
             public Com2IPerPropertyEnumConverter(Com2IPerPropertyBrowsingEnum items) : base(items)
             {
-                this.itemsEnum = items;
+                itemsEnum = items;
             }
 
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
@@ -250,11 +250,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             public Com2IPerPropertyBrowsingEnum(Com2PropertyDescriptor targetObject, Com2IPerPropertyBrowsingHandler handler, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(new string[0], new object[0], allowUnknowns)
             {
-                this.target = targetObject;
-                this.nameMarshaller = names;
-                this.valueMarshaller = values;
+                target = targetObject;
+                nameMarshaller = names;
+                valueMarshaller = values;
                 this.handler = handler;
-                this.arraysFetched = false;
+                arraysFetched = false;
             }
 
             /// <summary>
@@ -293,12 +293,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             //
             private void EnsureArrays()
             {
-                if (this.arraysFetched)
+                if (arraysFetched)
                 {
                     return;
                 }
 
-                this.arraysFetched = true;
+                arraysFetched = true;
 
                 try
                 {

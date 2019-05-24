@@ -69,8 +69,8 @@ namespace System.Windows.Forms
         /// </summary>
         public SelectionRange(SelectionRange range)
         {
-            this.start = range.start;
-            this.end = range.end;
+            start = range.start;
+            end = range.end;
         }
 
         /// <summary>

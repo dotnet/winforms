@@ -29,12 +29,12 @@ namespace System.Windows.Forms
 
             internal HitTestInfo()
             {
-                this.type = DataGridViewHitTestType.None;
-                this.typeInternal = DataGridViewHitTestTypeInternal.None;
+                type = DataGridViewHitTestType.None;
+                typeInternal = DataGridViewHitTestTypeInternal.None;
                 //this.edge = DataGridViewHitTestTypeCloseEdge.None;
-                this.row = this.col = -1;
-                this.rowStart = this.colStart = -1;
-                this.adjacentRow = this.adjacentCol = -1;
+                row = col = -1;
+                rowStart = colStart = -1;
+                adjacentRow = adjacentCol = -1;
             }
 
             /// <summary>
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.col;
+                    return col;
                 }
             }
 
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.row;
+                    return row;
                 }
             }
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.colStart;
+                    return colStart;
                 }
             }
 
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.rowStart;
+                    return rowStart;
                 }
             }
 
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.type;
+                    return type;
                 }
             }
 
@@ -102,9 +102,9 @@ namespace System.Windows.Forms
                 HitTestInfo hti = value as HitTestInfo;
                 if (hti != null)
                 {
-                    return (this.type == hti.type &&
-                            this.row == hti.row &&
-                            this.col == hti.col);
+                    return (type == hti.type &&
+                            row == hti.row &&
+                            col == hti.col);
                 }
                 return false;
             }

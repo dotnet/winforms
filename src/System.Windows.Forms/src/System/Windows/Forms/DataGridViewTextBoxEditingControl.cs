@@ -26,7 +26,7 @@ namespace System.Windows.Forms
 
         public DataGridViewTextBoxEditingControl() : base()
         {
-            this.TabStop = false;
+            TabStop = false;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -38,11 +38,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridView;
+                return dataGridView;
             }
             set
             {
-                this.dataGridView = value;
+                dataGridView = value;
             }
         }
 
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.Text = (string)value;
+                Text = (string)value;
             }
         }
 
@@ -62,11 +62,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.rowIndex;
+                return rowIndex;
             }
             set
             {
-                this.rowIndex = value;
+                rowIndex = value;
             }
         }
 
@@ -74,11 +74,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.valueChanged;
+                return valueChanged;
             }
             set
             {
-                this.valueChanged = value;
+                valueChanged = value;
             }
         }
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.repositionOnValueChange;
+                return repositionOnValueChange;
             }
         }
 
@@ -102,25 +102,25 @@ namespace System.Windows.Forms
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            this.Font = dataGridViewCellStyle.Font;
+            Font = dataGridViewCellStyle.Font;
             if (dataGridViewCellStyle.BackColor.A < 255)
             {
                 // Our TextBox does not support transparent back colors
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
-                this.BackColor = opaqueBackColor;
-                this.dataGridView.EditingPanel.BackColor = opaqueBackColor;
+                BackColor = opaqueBackColor;
+                dataGridView.EditingPanel.BackColor = opaqueBackColor;
             }
             else
             {
-                this.BackColor = dataGridViewCellStyle.BackColor;
+                BackColor = dataGridViewCellStyle.BackColor;
             }
-            this.ForeColor = dataGridViewCellStyle.ForeColor;
+            ForeColor = dataGridViewCellStyle.ForeColor;
             if (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True)
             {
-                this.WordWrap = true;
+                WordWrap = true;
             }
-            this.TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
-            this.repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & anyTop) == 0);
+            TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
+            repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & anyTop) == 0);
         }
 
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
@@ -130,8 +130,8 @@ namespace System.Windows.Forms
                 case Keys.Right:
                     // If the end of the selection is at the end of the string
                     // let the DataGridView treat the key message
-                    if ((this.RightToLeft == RightToLeft.No && !(this.SelectionLength == 0 && this.SelectionStart == this.Text.Length)) ||
-                        (this.RightToLeft == RightToLeft.Yes && !(this.SelectionLength == 0 && this.SelectionStart == 0)))
+                    if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == Text.Length)) ||
+                        (RightToLeft == RightToLeft.Yes && !(SelectionLength == 0 && SelectionStart == 0)))
                     {
                         return true;
                     }
@@ -141,8 +141,8 @@ namespace System.Windows.Forms
                     // If the end of the selection is at the begining of the string
                     // or if the entire text is selected and we did not start editing
                     // send this character to the dataGridView, else process the key event
-                    if ((this.RightToLeft == RightToLeft.No && !(this.SelectionLength == 0 && this.SelectionStart == 0)) ||
-                        (this.RightToLeft == RightToLeft.Yes && !(this.SelectionLength == 0 && this.SelectionStart == this.Text.Length)))
+                    if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == 0)) ||
+                        (RightToLeft == RightToLeft.Yes && !(SelectionLength == 0 && SelectionStart == Text.Length)))
                     {
                         return true;
                     }
@@ -151,8 +151,8 @@ namespace System.Windows.Forms
                 case Keys.Down:
                     // If the end of the selection is on the last line of the text then 
                     // send this character to the dataGridView, else process the key event
-                    int end = this.SelectionStart + this.SelectionLength;
-                    if (this.Text.IndexOf("\r\n", end) != -1)
+                    int end = SelectionStart + SelectionLength;
+                    if (Text.IndexOf("\r\n", end) != -1)
                     {
                         return true;
                     }
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                 case Keys.Up:
                     // If the end of the selection is on the first line of the text then 
                     // send this character to the dataGridView, else process the key event
-                    if (!(this.Text.IndexOf("\r\n") < 0 || this.SelectionStart + this.SelectionLength < this.Text.IndexOf("\r\n")))
+                    if (!(Text.IndexOf("\r\n") < 0 || SelectionStart + SelectionLength < Text.IndexOf("\r\n")))
                     {
                         return true;
                     }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
 
                 case Keys.Home:
                 case Keys.End:
-                    if (this.SelectionLength != this.Text.Length)
+                    if (SelectionLength != Text.Length)
                     {
                         return true;
                     }
@@ -177,22 +177,22 @@ namespace System.Windows.Forms
 
                 case Keys.Prior:
                 case Keys.Next:
-                    if (this.valueChanged)
+                    if (valueChanged)
                     {
                         return true;
                     }
                     break;
 
                 case Keys.Delete:
-                    if (this.SelectionLength > 0 ||
-                        this.SelectionStart < this.Text.Length)
+                    if (SelectionLength > 0 ||
+                        SelectionStart < Text.Length)
                     {
                         return true;
                     }
                     break;
 
                 case Keys.Enter:
-                    if ((keyData & (Keys.Control | Keys.Shift | Keys.Alt)) == Keys.Shift && this.Multiline && this.AcceptsReturn)
+                    if ((keyData & (Keys.Control | Keys.Shift | Keys.Alt)) == Keys.Shift && Multiline && AcceptsReturn)
                     {
                         return true;
                     }
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
 
         public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
         {
-            return this.Text;
+            return Text;
         }
 
         public virtual void PrepareEditingControlForEdit(bool selectAll)
@@ -216,14 +216,14 @@ namespace System.Windows.Forms
             {
                 // Do not select all the text, but
                 // position the caret at the end of the text
-                this.SelectionStart = this.Text.Length;
+                SelectionStart = Text.Length;
             }
         }
 
         private void NotifyDataGridViewOfValueChange()
         {
-            this.valueChanged = true;
-            this.dataGridView.NotifyCurrentCellDirty(true);
+            valueChanged = true;
+            dataGridView.NotifyCurrentCellDirty(true);
         }
 
         protected override void OnGotFocus(EventArgs e)
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
-            this.dataGridView.OnMouseWheelInternal(e);
+            dataGridView.OnMouseWheelInternal(e);
         }
 
         protected override void OnTextChanged(EventArgs e)
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
             {
                 case Keys.Enter:
                     if (m.Msg == Interop.WindowMessages.WM_CHAR &&
-                        !(ModifierKeys == Keys.Shift && this.Multiline && this.AcceptsReturn))
+                        !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
                     {
                         // Ignore the Enter key and don't add it to the textbox content. This happens when failing validation brings
                         // up a dialog box for example.
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
                 case Keys.LineFeed:
                     if (m.Msg == Interop.WindowMessages.WM_CHAR &&
-                        ModifierKeys == Keys.Control && this.Multiline && this.AcceptsReturn)
+                        ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
                     {
                         // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
                         return true;

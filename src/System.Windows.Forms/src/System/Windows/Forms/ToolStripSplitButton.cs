@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
         internal override Rectangle DropDownButtonArea
         {
-            get { return this.DropDownButtonBounds; }
+            get { return DropDownButtonBounds; }
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Selected;
+                return Selected;
             }
         }
         /// <summary>
@@ -314,14 +314,14 @@ namespace System.Windows.Forms
                 {
                     splitButtonButton = new ToolStripSplitButtonButton(this);
                 }
-                splitButtonButton.Image = this.Image;
-                splitButtonButton.Text = this.Text;
-                splitButtonButton.BackColor = this.BackColor;
-                splitButtonButton.ForeColor = this.ForeColor;
-                splitButtonButton.Font = this.Font;
-                splitButtonButton.ImageAlign = this.ImageAlign;
-                splitButtonButton.TextAlign = this.TextAlign;
-                splitButtonButton.TextImageRelation = this.TextImageRelation;
+                splitButtonButton.Image = Image;
+                splitButtonButton.Text = Text;
+                splitButtonButton.BackColor = BackColor;
+                splitButtonButton.ForeColor = ForeColor;
+                splitButtonButton.Font = Font;
+                splitButtonButton.ImageAlign = ImageAlign;
+                splitButtonButton.TextAlign = TextAlign;
+                splitButtonButton.TextImageRelation = TextImageRelation;
                 return splitButtonButton;
             }
         }
@@ -391,22 +391,22 @@ namespace System.Windows.Forms
         {
 
             // Figure out where the DropDown image goes.
-            Rectangle dropDownButtonBounds = new Rectangle(Point.Empty, this.Size);
+            Rectangle dropDownButtonBounds = new Rectangle(Point.Empty, Size);
             Rectangle splitButtonButtonBounds = Rectangle.Empty;
 
 
-            dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(this.Width, DropDownButtonWidth), this.Height));
+            dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(Width, DropDownButtonWidth), Height));
 
             // Figure out the height and width of the selected item.
-            int splitButtonButtonWidth = Math.Max(0, this.Width - dropDownButtonBounds.Width);
-            int splitButtonButtonHeight = Math.Max(0, this.Height);
+            int splitButtonButtonWidth = Math.Max(0, Width - dropDownButtonBounds.Width);
+            int splitButtonButtonHeight = Math.Max(0, Height);
 
             splitButtonButtonBounds = new Rectangle(Point.Empty, new Size(splitButtonButtonWidth, splitButtonButtonHeight));
 
             // grow the selected item by one since we're overlapping the borders.
             splitButtonButtonBounds.Width -= splitterWidth;
 
-            if (this.RightToLeft == RightToLeft.No)
+            if (RightToLeft == RightToLeft.No)
             {
                 // the dropdown button goes on the right
                 dropDownButtonBounds.Offset(splitButtonButtonBounds.Right + splitterWidth, 0);
@@ -420,8 +420,8 @@ namespace System.Windows.Forms
 
             }
 
-            this.SplitButtonButton.SetBounds(splitButtonButtonBounds);
-            this.SetDropDownButtonBounds(dropDownButtonBounds);
+            SplitButtonButton.SetBounds(splitButtonButtonBounds);
+            SetDropDownButtonBounds(dropDownButtonBounds);
 
         }
 
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
         internal override ToolStripItemInternalLayout CreateInternalLayout()
         {
             // whenever the master layout is invalidated - invalidate the splitbuttonbutton layout.
-            this.splitButtonButtonLayout = null;
+            splitButtonButtonLayout = null;
             return new ToolStripItemInternalLayout(this);
 
         }
@@ -457,7 +457,7 @@ namespace System.Windows.Forms
         /// </summary>	
         private void InvalidateSplitButtonLayout()
         {
-            this.splitButtonButtonLayout = null;
+            splitButtonButtonLayout = null;
             CalculateLayout();
         }
 
@@ -552,7 +552,7 @@ namespace System.Windows.Forms
                     {
                         Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                         openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
-                        this.ShowDropDown(/*mousePress = */true);
+                        ShowDropDown(/*mousePress = */true);
                     }
                 }
             }
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
                 }
             }
             Point clickPoint = new Point(e.X, e.Y);
-            if ((e.Button == MouseButtons.Left) && this.SplitButtonButton.Bounds.Contains(clickPoint))
+            if ((e.Button == MouseButtons.Left) && SplitButtonButton.Bounds.Contains(clickPoint))
             {
                 bool shouldFireDoubleClick = false;
                 if (DoubleClickEnabled)
@@ -647,7 +647,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
 
-            ToolStripRenderer renderer = this.Renderer;
+            ToolStripRenderer renderer = Renderer;
             if (renderer != null)
             {
                 InvalidateSplitButtonLayout();
@@ -662,7 +662,7 @@ namespace System.Windows.Forms
 
                 if ((DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.None)
                 {
-                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, SplitButtonButton.Text, SplitButtonButtonLayout.TextRectangle, this.ForeColor, this.Font, SplitButtonButtonLayout.TextFormat));
+                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, SplitButtonButton.Text, SplitButtonButtonLayout.TextRectangle, ForeColor, Font, SplitButtonButtonLayout.TextFormat));
                 }
             }
         }
@@ -748,7 +748,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.owner.Padding;
+                    return owner.Padding;
                 }
                 set
                 {

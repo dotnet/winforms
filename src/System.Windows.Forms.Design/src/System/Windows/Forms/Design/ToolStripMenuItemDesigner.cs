@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                     else if (selectedItem is ContextMenuStrip &&
-                        ((ContextMenuStrip)selectedItem).OwnerItem == this.Component && // VSO 214130--SelectedItem must belong to this designer
+                        ((ContextMenuStrip)selectedItem).OwnerItem == Component && // VSO 214130--SelectedItem must belong to this designer
                         MenuItem.DropDown == selectedItem)
                     {
                         return true;
@@ -968,12 +968,12 @@ namespace System.Windows.Forms.Design
                 //clean up
                 if (selSvc != null)
                 {
-                    selSvc.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                    selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
                 if (undoEngine != null)
                 {
-                    undoEngine.Undoing -= new EventHandler(this.OnUndoing);
-                    undoEngine.Undone -= new EventHandler(this.OnUndone);
+                    undoEngine.Undoing -= new EventHandler(OnUndoing);
+                    undoEngine.Undone -= new EventHandler(OnUndone);
                 }
                 if (MenuItem != null && MenuItem.HasDropDown)
                 {
@@ -1475,11 +1475,11 @@ namespace System.Windows.Forms.Design
                 MenuItem.DropDownOpening += new EventHandler(DropDownItem_DropDownOpening);
                 MenuItem.DropDownOpened += new EventHandler(DropDownItem_DropDownOpened);
                 MenuItem.DropDownClosed += new EventHandler(DropDownItem_DropDownClosed);
-                MenuItem.DropDown.Resize += new System.EventHandler(this.DropDownResize);
+                MenuItem.DropDown.Resize += new System.EventHandler(DropDownResize);
                 MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
                 MenuItem.DropDown.Paint += new PaintEventHandler(this.DropDownPaint);
-                MenuItem.DropDown.Click += new EventHandler(this.DropDownClick);
-                MenuItem.DropDown.LocationChanged += new EventHandler(this.DropDownLocationChanged);
+                MenuItem.DropDown.Click += new EventHandler(DropDownClick);
+                MenuItem.DropDown.LocationChanged += new EventHandler(DropDownLocationChanged);
             }
         }
 
@@ -1496,7 +1496,7 @@ namespace System.Windows.Forms.Design
             selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
-                selSvc.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
 
             //hookup to the AdornerService..
@@ -1510,8 +1510,8 @@ namespace System.Windows.Forms.Design
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine != null)
                 {
-                    undoEngine.Undoing += new EventHandler(this.OnUndoing);
-                    undoEngine.Undone += new EventHandler(this.OnUndone);
+                    undoEngine.Undoing += new EventHandler(OnUndoing);
+                    undoEngine.Undone += new EventHandler(OnUndone);
                 }
             }
         }

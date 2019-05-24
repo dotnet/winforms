@@ -60,7 +60,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Size = new Size(CXDEF, cydef);
 
-            this.Text = SR.PBRSDocCommentPaneTitle;
+            Text = SR.PBRSDocCommentPaneTitle;
             SetStyle(ControlStyles.Selectable, false);
             ResumeLayout(false);
         }
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // do this to avoid getting parented to the Parking window.
             //
-            if (this.ownerGrid.IsHandleCreated && !IsHandleCreated)
+            if (ownerGrid.IsHandleCreated && !IsHandleCreated)
             {
                 CreateControl();
             }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // compute optimal text height
             var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
             Graphics g = m_labelDesc.CreateGraphicsInternal();
-            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(this.ownerGrid, g, m_labelTitle.Text, Font, width);
+            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(ownerGrid, g, m_labelTitle.Text, Font, width);
             Size sz = Size.Ceiling(sizef);
             g.Dispose();
             var padding = isScalingRequirementMet ? LogicalToDeviceUnits(2) : 2;
@@ -118,8 +118,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             UpdateUIWithFont();
             SetChildLabelsBounds();
-            m_labelDesc.Text = this.fullDesc;
-            m_labelDesc.AccessibleName = this.fullDesc; // Don't crop the description for accessibility clients
+            m_labelDesc.Text = fullDesc;
+            m_labelDesc.AccessibleName = fullDesc; // Don't crop the description for accessibility clients
             base.OnLayout(e);
         }
 
@@ -203,9 +203,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (desc != fullDesc)
             {
-                this.fullDesc = desc;
+                fullDesc = desc;
                 m_labelDesc.Text = fullDesc;
-                m_labelDesc.AccessibleName = this.fullDesc; // Don't crop the description for accessibility clients
+                m_labelDesc.AccessibleName = fullDesc; // Don't crop the description for accessibility clients
             }
         }
 
@@ -233,8 +233,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal void UpdateTextRenderingEngine()
         {
-            m_labelTitle.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;
-            m_labelDesc.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;
+            m_labelTitle.UseCompatibleTextRendering = ownerGrid.UseCompatibleTextRendering;
+            m_labelDesc.UseCompatibleTextRendering = ownerGrid.UseCompatibleTextRendering;
         }
 
         private void UpdateUIWithFont()

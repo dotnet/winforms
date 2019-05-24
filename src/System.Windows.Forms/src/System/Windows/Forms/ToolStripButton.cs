@@ -246,9 +246,9 @@ namespace System.Windows.Forms
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
 
-            if (this.Owner != null)
+            if (Owner != null)
             {
-                ToolStripRenderer renderer = this.Renderer;
+                ToolStripRenderer renderer = Renderer;
 
                 renderer.DrawButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
 
                 if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                 {
-                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(e.Graphics, this, this.Text, InternalLayout.TextRectangle, this.ForeColor, this.Font, InternalLayout.TextFormat));
+                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(e.Graphics, this, Text, InternalLayout.TextRectangle, ForeColor, Font, InternalLayout.TextFormat));
                 }
             }
         }
@@ -270,7 +270,7 @@ namespace System.Windows.Forms
         {
             if (checkOnClick)
             {
-                this.Checked = !this.Checked;
+                Checked = !Checked;
             }
             base.OnClick(e);
         }

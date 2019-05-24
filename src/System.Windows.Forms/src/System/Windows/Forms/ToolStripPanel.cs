@@ -81,10 +81,10 @@ namespace System.Windows.Forms
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
             InitFlowLayout();
-            this.AutoSize = true;
-            this.MinimumSize = Size.Empty; // consider 1,1
-            this.state[stateLocked | stateBeginInit | stateChangingZOrder] = false;
-            this.TabStop = false;
+            AutoSize = true;
+            MinimumSize = Size.Empty; // consider 1,1
+            state[stateLocked | stateBeginInit | stateChangingZOrder] = false;
+            TabStop = false;
 
             ToolStripManager.ToolStripPanels.Add(this);
             // not setting ControlStyles.AllPaintingInWmPaint as we dont do any painting in OnPaint... all
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return LayoutUtils.InflateRect(this.ClientRectangle, DragMargin);
+                return LayoutUtils.InflateRect(ClientRectangle, DragMargin);
             }
         }
 
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
                     orientation = value;
                     scaledRowMargin = LayoutUtils.FlipPadding(scaledRowMargin);
                     InitFlowLayout();
-                    foreach (ToolStripPanelRow row in this.RowsInternal)
+                    foreach (ToolStripPanelRow row in RowsInternal)
                     {
                         row.OnOrientationChanged();
                     }
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
             {
                 if (!state[stateLayoutSuspended])
                 {
-                    this.Join(e.Control as ToolStrip, e.Control.Location);
+                    Join(e.Control as ToolStrip, e.Control.Location);
                 }
                 else
                 {
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
             if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control != null)
             {
                 ISupportToolStripPanel draggedControl = e.AffectedComponent as ISupportToolStripPanel;
-                if (draggedControl != null && this.RowsInternal.Contains(draggedControl.ToolStripPanelRow))
+                if (draggedControl != null && RowsInternal.Contains(draggedControl.ToolStripPanelRow))
                 {
                     // there's a problem in the base onlayout... if toolstrip needs more space it talks to us
                     // not the row that needs layout.
@@ -632,10 +632,10 @@ namespace System.Windows.Forms
                 {
                     // rejoin the controls on the other side of the toolstrippanel.
                     SuspendLayout();
-                    Control[] controls = new Control[this.Controls.Count];
-                    Point[] controlLocations = new Point[this.Controls.Count];
+                    Control[] controls = new Control[Controls.Count];
+                    Point[] controlLocations = new Point[Controls.Count];
                     int j = 0;
-                    foreach (ToolStripPanelRow row in this.RowsInternal)
+                    foreach (ToolStripPanelRow row in RowsInternal)
                     {
                         foreach (Control control in row.ControlsInternal)
                         {
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    this.Controls.Clear();
+                    Controls.Clear();
 
                     for (int i = 0; i < controls.Length; i++)
                     {
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
         {
             Renderer.InitializePanel(this);
 
-            this.Invalidate();
+            Invalidate();
 
             EventHandler handler = (EventHandler)Events[EventRendererChanged];
             if (handler != null)
@@ -727,7 +727,7 @@ namespace System.Windows.Forms
         private void JoinControls(bool forceLayout)
         {
             // undone: config - shift to other container
-            ToolStripPanelControlCollection controls = this.Controls as ToolStripPanelControlCollection;
+            ToolStripPanelControlCollection controls = Controls as ToolStripPanelControlCollection;
             if (controls.Count > 0)
             {
                 controls.Sort();
@@ -758,9 +758,9 @@ namespace System.Windows.Forms
                     // right to left has changed while layout was deferred...
                     if (state[stateRightToLeftChanged])
                     {
-                        controlLocation = new Point(this.Width - controlArray[i].Right, controlLocation.Y);
+                        controlLocation = new Point(Width - controlArray[i].Right, controlLocation.Y);
                     }
-                    this.Join(controlArray[i] as ToolStrip, controlArray[i].Location);
+                    Join(controlArray[i] as ToolStrip, controlArray[i].Location);
                     if (numRows < RowsInternal.Count || forceLayout)
                     {
                         // OK this is wierd but here we're in the midst of a suspend layout.
@@ -924,10 +924,10 @@ namespace System.Windows.Forms
                     SetStyle(ControlStyles.AllPaintingInWmPaint, false);
                     SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                     SetStyle(ControlStyles.CacheText, true);
-                    this.AutoClose = false;
-                    this.AutoSize = false;
-                    this.DropShadowEnabled = false;
-                    this.Bounds = bounds;
+                    AutoClose = false;
+                    AutoSize = false;
+                    DropShadowEnabled = false;
+                    Bounds = bounds;
 
                     // caching as this is unlikely to change during the lifetime
                     // of the dropdown.
@@ -939,7 +939,7 @@ namespace System.Windows.Forms
                     rgn.Exclude(regionRect);          // exclude the center part
 
                     // set it into the toolstripdropdown’s region
-                    this.Region = rgn;
+                    Region = rgn;
                 }
 
                 // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs 
@@ -996,7 +996,7 @@ namespace System.Windows.Forms
 
                 public void MoveTo(Point newLocation)
                 {
-                    this.Location = newLocation;
+                    Location = newLocation;
                     // if we dont force a paint here, we'll only send WM_ERASEBKGNDs right away
                     // and leave rectangles all over controls that dont respond to that window message.
                     ForceSynchronousPaint();
@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                dragRect = this.RowsInternal[row].DragBounds;
+                dragRect = RowsInternal[row].DragBounds;
             }
 
             if (Orientation == Orientation.Horizontal)
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                this.Controls.Add(toolStripToDrag);
+                Controls.Add(toolStripToDrag);
                 toolStripToDrag.Location = location;
             }
         }
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms
             }
 
             Point clientLocation = PointToClient(screenLocation);
-            if (!this.DragBounds.Contains(clientLocation))
+            if (!DragBounds.Contains(clientLocation))
             {
                 Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "RC.MoveControl - Point {0} is not in current rafting container drag bounds {1}, calling MoveOutsideContainer", clientLocation, DragBounds));
                 MoveOutsideContainer(toolStripToDrag, screenLocation);
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms
             ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
             // if the point is not in this rafting container forward on to the appropriate container.
 
-            if (draggedControl.IsCurrentlyDragging && !this.DragBounds.Contains(clientLocation))
+            if (draggedControl.IsCurrentlyDragging && !DragBounds.Contains(clientLocation))
             {
                 return;
             }
@@ -1187,29 +1187,29 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
 
                     // there's no row at this point so lets create one
-                    int index = this.RowsInternal.Count;
+                    int index = RowsInternal.Count;
 
                     if (Orientation == Orientation.Horizontal)
                     {
                         // if it's above the first row, insert at the front.
-                        index = (clientLocation.Y <= this.Padding.Left) ? 0 : index;
+                        index = (clientLocation.Y <= Padding.Left) ? 0 : index;
                     }
                     else
                     { // Orientation.Vertical
                         // if it's before the first row, insert at the front.
-                        index = (clientLocation.X <= this.Padding.Left) ? 0 : index;
+                        index = (clientLocation.X <= Padding.Left) ? 0 : index;
                     }
 
                     ToolStripPanelRow previousRow = null;
-                    if (this.RowsInternal.Count > 0)
+                    if (RowsInternal.Count > 0)
                     {
                         if (index == 0)
                         {
-                            previousRow = this.RowsInternal[0];
+                            previousRow = RowsInternal[0];
                         }
                         else if (index > 0)
                         {
-                            previousRow = this.RowsInternal[index - 1];
+                            previousRow = RowsInternal[index - 1];
                         }
                     }
                     if (previousRow != null /* there was a previous row */
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms
                         //
                         Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelRowCreationDebug.TraceVerbose, "Inserting a new row at " + index.ToString(CultureInfo.InvariantCulture));
                         row = new ToolStripPanelRow(this);
-                        this.RowsInternal.Insert(index, row);
+                        RowsInternal.Insert(index, row);
 
                     }
                 }
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms
                         }
                     }
                     row = new ToolStripPanelRow(this);
-                    this.RowsInternal.Insert(index, row);
+                    RowsInternal.Insert(index, row);
                     clientLocation.Y = row.Bounds.Y;
                 }
 
@@ -1358,7 +1358,7 @@ namespace System.Windows.Forms
         {
             // PERF: since we're using the PropertyStore for this.RowsInternal, its actually
             // faster to use foreach.
-            foreach (ToolStripPanelRow row in this.RowsInternal)
+            foreach (ToolStripPanelRow row in RowsInternal)
             {
                 Rectangle bounds = LayoutUtils.InflateRect(row.Bounds, row.Margin);
 
@@ -1391,9 +1391,9 @@ namespace System.Windows.Forms
         [Conditional("DEBUG")]
         private void Debug_VerifyOneToOneCellRowControlMatchup()
         {
-            for (int i = 0; i < this.RowsInternal.Count; i++)
+            for (int i = 0; i < RowsInternal.Count; i++)
             {
-                ToolStripPanelRow row = this.RowsInternal[i];
+                ToolStripPanelRow row = RowsInternal[i];
                 foreach (ToolStripPanelCell cell in row.Cells)
                 {
 
@@ -1444,9 +1444,9 @@ namespace System.Windows.Forms
         [Conditional("DEBUG")]
         private void Debug_VerifyNoOverlaps()
         {
-            foreach (Control c1 in this.Controls)
+            foreach (Control c1 in Controls)
             {
-                foreach (Control c2 in this.Controls)
+                foreach (Control c2 in Controls)
                 {
                     if (c1 == c2)
                     {
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                ToolStripPanel currentOwner = this.owner;
+                ToolStripPanel currentOwner = owner;
                 if (currentOwner != null)
                 {
                     currentOwner.SuspendLayout();
@@ -1550,7 +1550,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < value.Length; i++)
                     {
-                        this.Add(value[i]);
+                        Add(value[i]);
                     }
                 }
                 finally
@@ -1568,7 +1568,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                ToolStripPanel currentOwner = this.owner;
+                ToolStripPanel currentOwner = owner;
                 if (currentOwner != null)
                 {
                     currentOwner.SuspendLayout();
@@ -1578,7 +1578,7 @@ namespace System.Windows.Forms
                     int currentCount = value.Count;
                     for (int i = 0; i < currentCount; i++)
                     {
-                        this.Add(value[i]);
+                        Add(value[i]);
                     }
                 }
                 finally

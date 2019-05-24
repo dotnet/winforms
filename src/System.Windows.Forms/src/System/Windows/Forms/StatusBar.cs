@@ -106,13 +106,13 @@ namespace System.Windows.Forms
                         // gripper pane width...
                         thisElement = VisualStyleElement.Status.GripperPane.Normal;
                         vsRenderer.SetParameters(thisElement);
-                        elementSize = vsRenderer.GetPartSize(Graphics.FromHwndInternal(this.Handle), ThemeSizeType.True);
+                        elementSize = vsRenderer.GetPartSize(Graphics.FromHwndInternal(Handle), ThemeSizeType.True);
                         sizeGripWidth = elementSize.Width;
 
                         // ...plus gripper width
                         thisElement = VisualStyleElement.Status.Gripper.Normal;
                         vsRenderer.SetParameters(thisElement);
-                        elementSize = vsRenderer.GetPartSize(Graphics.FromHwndInternal(this.Handle), ThemeSizeType.True);
+                        elementSize = vsRenderer.GetPartSize(Graphics.FromHwndInternal(Handle), ThemeSizeType.True);
                         sizeGripWidth += elementSize.Width;
 
                         // Either GetPartSize could have returned a width of zero, so make sure we have a reasonable number:
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_STATUSBAR;
 
-                if (this.sizeGrip)
+                if (sizeGrip)
                 {
                     cp.Style |= NativeMethods.SBARS_SIZEGRIP;
                 }
@@ -573,7 +573,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool ArePanelsRealized()
         {
-            return this.showPanels && IsHandleCreated;
+            return showPanels && IsHandleCreated;
         }
 
         /// <summary>
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
                 return;
 
             StatusBarPanel panel = null;
-            int length = this.panels.Count;
+            int length = panels.Count;
 
             if (length == 0)
             {
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
             int currentOffset = 0;
             for (int i = 0; i < length; i++)
             {
-                panel = (StatusBarPanel)this.panels[i];
+                panel = (StatusBarPanel)panels[i];
                 currentOffset += panel.Width;
                 offsets2[i] = currentOffset;
                 panel.Right = offsets2[i];
@@ -627,7 +627,7 @@ namespace System.Windows.Forms
             //
             for (int i = 0; i < length; i++)
             {
-                panel = (StatusBarPanel)this.panels[i];
+                panel = (StatusBarPanel)panels[i];
                 UpdateTooltip(panel);
             }
 
@@ -707,7 +707,7 @@ namespace System.Windows.Forms
                 tooltips = new ControlToolTip(this);
             }
 
-            if (!this.showPanels)
+            if (!showPanels)
             {
                 SendMessage(NativeMethods.SB_SIMPLE, 1, 0);
                 SetSimpleText(simpleText);
@@ -789,7 +789,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnLayout(LayoutEventArgs levent)
         {
-            if (this.showPanels)
+            if (showPanels)
             {
                 LayoutPanels();
                 if (IsHandleCreated && panelsRealized != panels.Count)
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
         internal void RealizePanels()
         {
             StatusBarPanel panel = null;
-            int length = this.panels.Count;
+            int length = panels.Count;
             int old = panelsRealized;
 
             panelsRealized = 0;
@@ -820,7 +820,7 @@ namespace System.Windows.Forms
             int i;
             for (i = 0; i < length; i++)
             {
-                panel = (StatusBarPanel)this.panels[i];
+                panel = (StatusBarPanel)panels[i];
                 try
                 {
                     panel.Realize();
@@ -841,16 +841,16 @@ namespace System.Windows.Forms
         /// </summary>
         internal void RemoveAllPanelsWithoutUpdate()
         {
-            int size = this.panels.Count;
+            int size = panels.Count;
             // remove the parent reference
             for (int i = 0; i < size; i++)
             {
-                StatusBarPanel sbp = (StatusBarPanel)this.panels[i];
+                StatusBarPanel sbp = (StatusBarPanel)panels[i];
                 sbp.ParentInternal = null;
             }
 
-            this.panels.Clear();
-            if (this.showPanels == true)
+            panels.Clear();
+            if (showPanels == true)
             {
                 ApplyPanelWidths();
                 ForcePanelUpdate();
@@ -910,12 +910,12 @@ namespace System.Windows.Forms
             StatusBarPanel panel = null;
             int barPanelWidth = 0;
             int springNum = 0;
-            StatusBarPanel[] pArray = new StatusBarPanel[this.panels.Count];
+            StatusBarPanel[] pArray = new StatusBarPanel[panels.Count];
             bool changed = false;
 
             for (int i = 0; i < pArray.Length; i++)
             {
-                panel = (StatusBarPanel)this.panels[i];
+                panel = (StatusBarPanel)panels[i];
                 if (panel.AutoSize == StatusBarPanelAutoSize.Spring)
                 {
                     pArray[springNum] = panel;
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms
         //call this when System.Windows.forms.toolTip is Associated with Statusbar....
         internal void SetToolTip(ToolTip t)
         {
-            this.mainToolTip = t;
+            mainToolTip = t;
             toolTipSet = true;
 
         }
@@ -1080,18 +1080,18 @@ namespace System.Windows.Forms
         {
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
 
-            int length = this.panels.Count;
+            int length = panels.Count;
             if (dis.itemID < 0 || dis.itemID >= length)
                 Debug.Fail("OwnerDraw item out of range");
 
             StatusBarPanel panel = (StatusBarPanel)
-                                   this.panels[dis.itemID];
+                                   panels[dis.itemID];
 
             Graphics g = Graphics.FromHdcInternal(dis.hDC);
             Rectangle r = Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom);
 
             //The itemstate is not defined for a statusbar control
-            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, r, dis.itemID, DrawItemState.None, panel, this.ForeColor, this.BackColor));
+            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, r, dis.itemID, DrawItemState.None, panel, ForeColor, BackColor));
             g.Dispose();
         }
 
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < this.Count));
+                return ((index >= 0) && (index < Count));
             }
 
             /// <summary>

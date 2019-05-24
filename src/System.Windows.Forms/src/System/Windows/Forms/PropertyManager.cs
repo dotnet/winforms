@@ -57,8 +57,8 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
         internal PropertyManager(object dataSource, string propName) : base()
         {
-            this._propName = propName;
-            this.SetDataSource(dataSource);
+            _propName = propName;
+            SetDataSource(dataSource);
         }
 
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)

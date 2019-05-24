@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 rightPanel.Dock = DockStyle.Right;
                 leftPanel.Dock = DockStyle.Left;
 
-                ToolStripContainerTypedControlCollection controlCollection = this.Controls as ToolStripContainerTypedControlCollection;
+                ToolStripContainerTypedControlCollection controlCollection = Controls as ToolStripContainerTypedControlCollection;
                 if (controlCollection != null)
                 {
                     controlCollection.AddInternal(contentPanel);
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             base.OnRightToLeftChanged(e);
-            RightToLeft rightToLeft = this.RightToLeft;
+            RightToLeft rightToLeft = RightToLeft;
 
             // no need to suspend layout - we're already in a layout transaction.
             if (rightToLeft == RightToLeft.Yes)
@@ -438,12 +438,12 @@ namespace System.Windows.Forms
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            foreach (Control c in this.Controls)
+            foreach (Control c in Controls)
             {
                 c.SuspendLayout();
             }
             base.OnSizeChanged(e);
-            foreach (Control c in this.Controls)
+            foreach (Control c in Controls)
             {
                 c.ResumeLayout();
             }
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
             public ToolStripContainerTypedControlCollection(Control c, bool isReadOnly)
                 : base(c, isReadOnly)
             {
-                this.owner = c as ToolStripContainer;
+                owner = c as ToolStripContainer;
             }
 
             public override void Add(Control value)

@@ -324,7 +324,7 @@ namespace System.Windows.Forms
                 // the GroupBox controls immediately draws when teh WM_SETTEXT comes through, but
                 // does so in the wrong font, so we suspend that behavior, and then
                 // invalidate.
-                bool suspendRedraw = this.Visible;
+                bool suspendRedraw = Visible;
                 try
                 {
                     if (suspendRedraw && IsHandleCreated)
@@ -501,9 +501,9 @@ namespace System.Windows.Forms
                 // We only pass in the text color if it is explicitly set, else we let the renderer use the
                 // color specified by the theme. This is a temporary workaround till we find a good
                 // solution for the "default theme color" issue.
-                if (ShouldSerializeForeColor() || this.Enabled == false)
+                if (ShouldSerializeForeColor() || Enabled == false)
                 {
-                    Color textcolor = this.Enabled ? ForeColor : TextRenderer.DisabledTextColor(this.BackColor);
+                    Color textcolor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
                     GroupBoxRenderer.DrawGroupBox(e.Graphics, new Rectangle(0, 0, Width, Height), Text, Font, textcolor, textFlags, gbState);
                 }
                 else
@@ -582,7 +582,7 @@ namespace System.Windows.Forms
                         }
 
 
-                        using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(this.Font))
+                        using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                         {
                             textSize = wg.MeasureText(Text, wfont, new Size(textRectangle.Width, int.MaxValue), flags);
 

@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ApplicationContext(Form mainForm)
         {
-            this.MainForm = mainForm;
+            MainForm = mainForm;
         }
 
         ~ApplicationContext()

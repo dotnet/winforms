@@ -72,14 +72,14 @@ namespace System.Windows.Forms
             }
 
             this.parent = parent;
-            this.state[stateVisible] = visible;
-            this.state[stateDisposing | stateLocked | stateInitialized] = false;
+            state[stateVisible] = visible;
+            state[stateDisposing | stateLocked | stateInitialized] = false;
 
             Debug.WriteLineIf(ToolStripPanelRowCreationDebug.TraceVerbose, "Created new ToolStripPanelRow");
 
             using (LayoutTransaction lt = new LayoutTransaction(parent, this, null))
             {
-                this.Margin = DefaultMargin;
+                Margin = DefaultMargin;
                 CommonProperties.SetAutoSize(this, true);
             }
 
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
 
                     Debug.WriteLineIf(ToolStripPanelRowCreationDebug.TraceVerbose, "Disposed ToolStripPanelRow");
                     state[stateDisposing] = true;
-                    this.ControlsInternal.Clear();
+                    ControlsInternal.Clear();
                 }
             }
             finally
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
         protected internal virtual void OnOrientationChanged()
         {
-            this.rowManager = null;
+            rowManager = null;
         }
 
         protected void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
         {
             if (!state[stateDisposing])
             {
-                this.SuspendLayout();
+                SuspendLayout();
                 RowManager.OnControlRemoved(control, index);
 
                 // if previously added - remove.
@@ -374,8 +374,8 @@ namespace System.Windows.Forms
                     controlToBeDragged.ToolStripPanelRow = null;
                 }
 
-                this.ResumeLayout(true);
-                if (this.ControlsInternal.Count <= 0)
+                ResumeLayout(true);
+                if (ControlsInternal.Count <= 0)
                 {
                     ToolStripPanel.RowsInternal.Remove(this);
                     Dispose();
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
 
         private void ApplyCachedBounds()
         {
-            for (int i = 0; i < this.Cells.Count; i++)
+            for (int i = 0; i < Cells.Count; i++)
             {
                 IArrangedElement element = Cells[i] as IArrangedElement;
                 if (element.ParticipatesInLayout)
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
                 state[stateInLayout] = true;
                 try
                 {
-                    this.Margin = DefaultMargin;
+                    Margin = DefaultMargin;
                     CachedBoundsMode = true;
                     try
                     {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
                         CachedBoundsMode = false;
                     }
 
-                    ToolStripPanelCell cell = RowManager.GetNextVisibleCell(this.Cells.Count - 1, /*forward*/false);
+                    ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
                     if (cell == null)
                     {
                         ApplyCachedBounds();
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
         private void OnLayoutHorizontalPostFix()
         {
 
-            ToolStripPanelCell cell = RowManager.GetNextVisibleCell(this.Cells.Count - 1, /*forward*/false);
+            ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
             if (cell == null)
             {
                 ApplyCachedBounds();
@@ -555,7 +555,7 @@ namespace System.Windows.Forms
         private void OnLayoutVerticalPostFix()
         {
 
-            ToolStripPanelCell cell = RowManager.GetNextVisibleCell(this.Cells.Count - 1, /*forward*/false);
+            ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
             // figure out how much space we actually need to free.
             int spaceToFree = cell.CachedBounds.Bottom - RowManager.DisplayRectangle.Bottom;
 
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.ToolStripPanel;
+                return ToolStripPanel;
             }
         }
 
@@ -726,7 +726,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Rectangle displayRectangle = this.Bounds;
+                Rectangle displayRectangle = Bounds;
 
                 return displayRectangle;
             }
@@ -745,7 +745,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties;
+                return Properties;
             }
         }
 
@@ -944,7 +944,7 @@ namespace System.Windows.Forms
                     for (int i = index; i < Row.Cells.Count; i++)
                     {
                         ToolStripPanelCell cell = Row.Cells[i] as ToolStripPanelCell;
-                        if ((cell.Visible || (owner.parent.Visible && cell.ControlInDesignMode)) && cell.ToolStripPanelRow == this.owner)
+                        if ((cell.Visible || (owner.parent.Visible && cell.ControlInDesignMode)) && cell.ToolStripPanelRow == owner)
                         {
                             return cell;
                         }
@@ -955,7 +955,7 @@ namespace System.Windows.Forms
                     for (int i = index; i >= 0; i--)
                     {
                         ToolStripPanelCell cell = Row.Cells[i] as ToolStripPanelCell;
-                        if ((cell.Visible || (owner.parent.Visible && cell.ControlInDesignMode)) && cell.ToolStripPanelRow == this.owner)
+                        if ((cell.Visible || (owner.parent.Visible && cell.ControlInDesignMode)) && cell.ToolStripPanelRow == owner)
                         {
                             return cell;
                         }
@@ -2390,7 +2390,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < value.Length; i++)
                     {
-                        this.Add(value[i]);
+                        Add(value[i]);
                     }
                 }
                 finally

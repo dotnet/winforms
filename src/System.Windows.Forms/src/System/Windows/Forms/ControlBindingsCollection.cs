@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
         public ControlBindingsCollection(IBindableComponent control)
         {
-            this._control = control;
+            _control = control;
         }
 
         public IBindableComponent BindableComponent => _control;

@@ -61,7 +61,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal PropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, bool hide)
         : base(ownerGrid, peParent)
         {
-            this.activeXHide = hide;
+            activeXHide = hide;
         }
 
         [
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         : base(ownerGrid, peParent)
         {
 
-            this.activeXHide = hide;
+            activeXHide = hide;
             Initialize(propInfo);
         }
 
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (this.helpKeyword == null)
+                if (helpKeyword == null)
                 {
 
                     object owner = GetValueOwner();
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else if (this is ImmutablePropertyDescriptorGridEntry)
                     {
-                        helpKeyword = this.PropertyName;
+                        helpKeyword = PropertyName;
 
                         GridEntry ge = this;
 
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             Type ownerType = owner.GetType();
                             if (!componentType.IsPublic || !componentType.IsAssignableFrom(ownerType))
                             {
-                                PropertyDescriptor componentProperty = TypeDescriptor.GetProperties(ownerType)[this.PropertyName];
+                                PropertyDescriptor componentProperty = TypeDescriptor.GetProperties(ownerType)[PropertyName];
                                 if (componentProperty != null)
                                 {
                                     componentType = componentProperty.ComponentType;
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         helpKeyword = typeName + "." + propertyInfo.Name;
                     }
                 }
-                return this.helpKeyword;
+                return helpKeyword;
             }
         }
 
@@ -212,7 +212,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return this.PropertyLabel;
+                return PropertyLabel;
             }
         }
 
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return this.exceptionConverter == null && !IsPropertyReadOnly && base.IsValueEditable;
+                return exceptionConverter == null && !IsPropertyReadOnly && base.IsValueEditable;
             }
         }
 
@@ -253,18 +253,18 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (ParensAroundNameUnknown == this.parensAroundName)
+                if (ParensAroundNameUnknown == parensAroundName)
                 {
                     if (((ParenthesizePropertyNameAttribute)propertyInfo.Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis)
                     {
-                        this.parensAroundName = ParensAroundNameYes;
+                        parensAroundName = ParensAroundNameYes;
                     }
                     else
                     {
-                        this.parensAroundName = ParensAroundNameNo;
+                        parensAroundName = ParensAroundNameNo;
                     }
                 }
-                return (this.parensAroundName == ParensAroundNameYes);
+                return (parensAroundName == ParensAroundNameYes);
             }
         }
 
@@ -353,7 +353,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     object objRet = GetPropertyValueCore(GetValueOwner());
 
-                    if (this.exceptionConverter != null)
+                    if (exceptionConverter != null)
                     {
                         // undo the exception converter
                         SetFlagsAndExceptionInfo(0, null, null);
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 catch (Exception e)
                 {
-                    if (this.exceptionConverter == null)
+                    if (exceptionConverter == null)
                     {
                         // clear the flags
                         SetFlagsAndExceptionInfo(0, new ExceptionConverter(), new ExceptionEditor());
@@ -381,20 +381,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (!pvSvcChecked && this.pvSvc == null)
+                if (!pvSvcChecked && pvSvc == null)
                 {
-                    this.pvSvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
+                    pvSvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
                     pvSvcChecked = true;
                 }
-                return this.pvSvc;
+                return pvSvc;
             }
         }
 
         private void SetFlagsAndExceptionInfo(int flags, ExceptionConverter converter, ExceptionEditor editor)
         {
-            this.Flags = flags;
-            this.exceptionConverter = converter;
-            this.exceptionEditor = editor;
+            Flags = flags;
+            exceptionConverter = converter;
+            exceptionEditor = editor;
         }
 
         public override bool ShouldRenderReadOnly
@@ -410,7 +410,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 //
                 if (propertyInfo.IsReadOnly && !readOnlyVerified && GetFlagSet(GridEntry.FLAG_READONLY_EDITABLE))
                 {
-                    Type propType = this.PropertyType;
+                    Type propType = PropertyType;
 
                     if (propType != null && (propType.IsArray || propType.IsValueType || propType.IsPrimitive))
                     {
@@ -423,7 +423,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (base.ShouldRenderReadOnly)
                 {
-                    if (!this.isSerializeContentsProp && !base.NeedsCustomEditorButton)
+                    if (!isSerializeContentsProp && !base.NeedsCustomEditorButton)
                     {
                         return true;
                     }
@@ -484,7 +484,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 RefreshPropertiesAttribute refreshAttr = (RefreshPropertiesAttribute)propertyInfo.Attributes[typeof(RefreshPropertiesAttribute)];
                 if ((refreshAttr != null && !refreshAttr.RefreshProperties.Equals(RefreshProperties.None)))
                 {
-                    this.GridEntryHost.Refresh(refreshAttr != null && refreshAttr.Equals(RefreshPropertiesAttribute.All));
+                    GridEntryHost.Refresh(refreshAttr != null && refreshAttr.Equals(RefreshPropertiesAttribute.All));
                 }
             }
         }
@@ -498,12 +498,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (uiItemRects[i].Contains(mouseX, GridEntryHost.GetGridEntryHeight() / 2))
                     {
-                        this.toolTipText = pvUIItems[i].ToolTip;
+                        toolTipText = pvUIItems[i].ToolTip;
                         return new Point(mouseX, mouseY);
                     }
                 }
             }
-            this.toolTipText = null;
+            toolTipText = null;
             return base.GetLabelToolTipLocation(mouseX, mouseY);
         }
 
@@ -532,12 +532,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             propertyInfo = propInfo;
 
-            this.isSerializeContentsProp = (propertyInfo.SerializationVisibility == DesignerSerializationVisibility.Content);
+            isSerializeContentsProp = (propertyInfo.SerializationVisibility == DesignerSerializationVisibility.Content);
 
 
             Debug.Assert(propInfo != null, "Can't create propEntry because of null prop info");
 
-            if (!this.activeXHide && IsPropertyReadOnly)
+            if (!activeXHide && IsPropertyReadOnly)
             {
                 SetFlag(FLAG_TEXT_EDITABLE, false);
             }
@@ -588,7 +588,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     ge.ClearCachedValues(false); //clear the value so it paints correctly next time.
-                    PropertyGridView gv = this.GridEntryHost;
+                    PropertyGridView gv = GridEntryHost;
                     if (gv != null)
                     {
                         gv.InvalidateGridEntryValue(ge);
@@ -608,7 +608,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 case NOTIFY_RESET:
 
-                    SetPropertyValue(obj, null, true, string.Format(SR.PropertyGridResetValue, this.PropertyName));
+                    SetPropertyValue(obj, null, true, string.Format(SR.PropertyGridResetValue, PropertyName));
                     if (pvUIItems != null)
                     {
                         for (int i = 0; i < pvUIItems.Length; i++)
@@ -626,12 +626,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     catch
                     {
 
-                        if (this.exceptionConverter == null)
+                        if (exceptionConverter == null)
                         {
                             // clear the flags
-                            this.Flags = 0;
-                            this.exceptionConverter = new ExceptionConverter();
-                            this.exceptionEditor = new ExceptionEditor();
+                            Flags = 0;
+                            exceptionConverter = new ExceptionConverter();
+                            exceptionEditor = new ExceptionEditor();
                         }
                         return false;
                     }
@@ -643,12 +643,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     catch
                     {
 
-                        if (this.exceptionConverter == null)
+                        if (exceptionConverter == null)
                         {
                             // clear the flags
-                            this.Flags = 0;
-                            this.exceptionConverter = new ExceptionConverter();
-                            this.exceptionEditor = new ExceptionEditor();
+                            Flags = 0;
+                            exceptionConverter = new ExceptionConverter();
+                            exceptionEditor = new ExceptionEditor();
                         }
                         return false;
                     }
@@ -701,7 +701,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             base.PaintLabel(g, rect, clipRect, selected, paintFullLabel);
 
-            IPropertyValueUIService propValSvc = this.PropertyValueUIService;
+            IPropertyValueUIService propValSvc = PropertyValueUIService;
 
             if (propValSvc == null)
             {
@@ -790,11 +790,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
 
-                bool wasExpanded = this.InternalExpanded;
+                bool wasExpanded = InternalExpanded;
                 int childCount = -1;
                 if (wasExpanded)
                 {
-                    childCount = this.ChildCount;
+                    childCount = ChildCount;
                 }
 
                 RefreshPropertiesAttribute refreshAttr = (RefreshPropertiesAttribute)propertyInfo.Attributes[typeof(RefreshPropertiesAttribute)];
@@ -879,12 +879,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // 1) if this property has the refreshpropertiesattribute, or
                     // 2) it's got expanded sub properties
                     //
-                    if (needsRefresh && this.GridEntryHost != null)
+                    if (needsRefresh && GridEntryHost != null)
                     {
                         RecreateChildren(childCount);
                         if (setSuccessful)
                         {
-                            this.GridEntryHost.Refresh(refreshAttr != null && refreshAttr.Equals(RefreshPropertiesAttribute.All));
+                            GridEntryHost.Refresh(refreshAttr != null && refreshAttr.Equals(RefreshPropertiesAttribute.All));
                         }
                     }
                 }
@@ -970,7 +970,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     if (treatAsValueType)
                     {
-                        GridEntry parent = this.ParentGridEntry;
+                        GridEntry parent = ParentGridEntry;
                         if (parent != null && parent.IsValueEditable)
                         {
                             parent.PropertyValue = obj;
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            IDesignerHost host = this.DesignerHost;
+            IDesignerHost host = DesignerHost;
             DesignerTransaction trans = null;
 
             try
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (host != null)
                 {
                     string compName = component.Site != null ? component.Site.Name : component.GetType().Name;
-                    trans = DesignerHost.CreateTransaction(string.Format(SR.WindowsFormsSetEvent, compName + "." + this.PropertyName));
+                    trans = DesignerHost.CreateTransaction(string.Format(SR.WindowsFormsSetEvent, compName + "." + PropertyName));
                 }
 
                 if (eventBindings == null)
@@ -1114,9 +1114,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                             trans = null;
                         }
 
-                        if (this.GridEntryHost != null && this.GridEntryHost is PropertyGridView)
+                        if (GridEntryHost != null && GridEntryHost is PropertyGridView)
                         {
-                            PropertyGridView pgv = this.GridEntryHost as PropertyGridView;
+                            PropertyGridView pgv = GridEntryHost as PropertyGridView;
                             pgv.ShowInvalidMessage(newHandler, obj, ex);
                         }
 

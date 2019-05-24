@@ -96,7 +96,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
             {
-                DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+                DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
             }
 
             //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
@@ -184,7 +184,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
             {
-                DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+                DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
             }
 
             //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                 if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
                 {
-                    DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+                    DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
                 }
 
                 //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.

@@ -143,11 +143,11 @@ namespace System.Windows.Forms
 
             // ToolStripDropDown will look for PropertyNames.Items to determine if it needs
             // to resize itself.
-            using (new LayoutTransaction(this.owner, this.owner, PropertyNames.Items))
+            using (new LayoutTransaction(owner, owner, PropertyNames.Items))
             {
                 for (int i = 0; i < toolStripItems.Length; i++)
                 {
-                    this.Add(toolStripItems[i]);
+                    Add(toolStripItems[i]);
                 }
             }
         }
@@ -165,12 +165,12 @@ namespace System.Windows.Forms
 
             // ToolStripDropDown will look for PropertyNames.Items to determine if it needs
             // to resize itself.
-            using (new LayoutTransaction(this.owner, this.owner, PropertyNames.Items))
+            using (new LayoutTransaction(owner, owner, PropertyNames.Items))
             {
                 int currentCount = toolStripItems.Count;
                 for (int i = 0; i < currentCount; i++)
                 {
-                    this.Add(toolStripItems[i]);
+                    Add(toolStripItems[i]);
                 }
             }
 
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
 
 
 
-        public override bool IsReadOnly { get { return this.isReadOnly; } }
+        public override bool IsReadOnly { get { return isReadOnly; } }
 
         void IList.Clear() { Clear(); }
         bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
             }
 
             // step 2 - search for the item
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                 {
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool IsValidIndex(int index)
         {
-            return ((index >= 0) && (index < this.Count));
+            return ((index >= 0) && (index < Count));
         }
 
         /// <summary>
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
         {
 
             // if moving to the end - call add instead.
-            if (index == this.Count)
+            if (index == Count)
             {
                 MoveItem(value);
                 return;

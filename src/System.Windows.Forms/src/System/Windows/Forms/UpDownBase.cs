@@ -90,14 +90,14 @@ namespace System.Windows.Forms
             upDownEdit = new UpDownEdit(this);
             upDownEdit.BorderStyle = BorderStyle.None;
             upDownEdit.AutoSize = false;
-            upDownEdit.KeyDown += new KeyEventHandler(this.OnTextBoxKeyDown);
-            upDownEdit.KeyPress += new KeyPressEventHandler(this.OnTextBoxKeyPress);
-            upDownEdit.TextChanged += new EventHandler(this.OnTextBoxTextChanged);
-            upDownEdit.LostFocus += new EventHandler(this.OnTextBoxLostFocus);
-            upDownEdit.Resize += new EventHandler(this.OnTextBoxResize);
+            upDownEdit.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
+            upDownEdit.KeyPress += new KeyPressEventHandler(OnTextBoxKeyPress);
+            upDownEdit.TextChanged += new EventHandler(OnTextBoxTextChanged);
+            upDownEdit.LostFocus += new EventHandler(OnTextBoxLostFocus);
+            upDownEdit.Resize += new EventHandler(OnTextBoxResize);
             upDownButtons.TabStop = false;
             upDownButtons.Size = new Size(defaultButtonsWidth, PreferredHeight);
-            upDownButtons.UpDown += new UpDownEventHandler(this.OnUpDown);
+            upDownButtons.UpDown += new UpDownEventHandler(OnUpDown);
 
             Controls.AddRange(new Control[] { upDownButtons, upDownEdit });
 
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
             set
             {
                 base.ContextMenu = value;
-                this.upDownEdit.ContextMenu = value;
+                upDownEdit.ContextMenu = value;
             }
         }
 
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
             set
             {
                 base.ContextMenuStrip = value;
-                this.upDownEdit.ContextMenuStrip = value;
+                upDownEdit.ContextMenuStrip = value;
             }
         }
 
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
             PositionControls();
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.UserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
         }
 
         /// <summary>
@@ -784,7 +784,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.UserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChanged);
             base.OnHandleDestroyed(e);
         }
 
@@ -865,7 +865,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
         {
-            this.OnKeyDown(e);
+            OnKeyDown(e);
             if (interceptArrowKeys)
             {
 
@@ -898,7 +898,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
-            this.OnKeyPress(e);
+            OnKeyPress(e);
 
         }
 
@@ -918,7 +918,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnTextBoxResize(object source, EventArgs e)
         {
-            this.Height = PreferredHeight;
+            Height = PreferredHeight;
             PositionControls();
         }
 
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
                 UserEdit = true;
             }
 
-            this.OnTextChanged(e);
+            OnTextChanged(e);
             OnChanged(source, EventArgs.Empty);
         }
 
@@ -1023,12 +1023,12 @@ namespace System.Windows.Forms
                 return; // Do not scroll when the user system setting is 0 lines per notch
             }
 
-            Debug.Assert(this.wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
-            Debug.Assert(this.wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
-            this.wheelDelta += e.Delta;
+            Debug.Assert(wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
+            Debug.Assert(wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
+            wheelDelta += e.Delta;
 
             float partialNotches;
-            partialNotches = (float)this.wheelDelta / (float)NativeMethods.WHEEL_DELTA;
+            partialNotches = (float)wheelDelta / (float)NativeMethods.WHEEL_DELTA;
 
             if (wheelScrollLines == -1)
             {
@@ -1048,7 +1048,7 @@ namespace System.Windows.Forms
                         UpButton();
                         absScrollBands--;
                     }
-                    this.wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                    wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
                 else
                 {
@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms
                         DownButton();
                         absScrollBands--;
                     }
-                    this.wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                    wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
             }
         }
@@ -1276,8 +1276,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string caption)
         {
-            toolTip.SetToolTip(this.upDownEdit, caption);
-            toolTip.SetToolTip(this.upDownButtons, caption);
+            toolTip.SetToolTip(upDownEdit, caption);
+            toolTip.SetToolTip(upDownButtons, caption);
         }
 
         internal class UpDownEdit : TextBox
@@ -1594,7 +1594,7 @@ namespace System.Windows.Forms
 
                 // Focus the parent
                 //
-                this.parent.Focus();
+                parent.Focus();
 
                 if (!parent.ValidationCancelled && e.Button == MouseButtons.Left)
                 {
@@ -1731,13 +1731,13 @@ namespace System.Windows.Forms
                     {
                         if (!doubleClickFired)
                         {
-                            this.parent.OnClick(me);
+                            parent.OnClick(me);
                         }
                         else
                         {
                             doubleClickFired = false;
-                            this.parent.OnDoubleClick(me);
-                            this.parent.OnMouseDoubleClick(me);
+                            parent.OnDoubleClick(me);
+                            parent.OnMouseDoubleClick(me);
                         }
                     }
                     doubleClickFired = false;
@@ -1815,7 +1815,7 @@ namespace System.Windows.Forms
                 if (half_height != (ClientSize.Height + 1) / 2)
                 {
                     // When control has odd height, a line needs to be drawn below the buttons with the backcolor.
-                    using (Pen pen = new Pen(this.parent.BackColor))
+                    using (Pen pen = new Pen(parent.BackColor))
                     {
                         Rectangle clientRect = ClientRectangle;
                         e.Graphics.DrawLine(pen, clientRect.Left, clientRect.Bottom - 1, clientRect.Right - 1, clientRect.Bottom - 1);
@@ -1847,9 +1847,9 @@ namespace System.Windows.Forms
                     timer.Tick += new EventHandler(TimerHandler);
                 }
 
-                this.timerInterval = DefaultTimerInterval;
+                timerInterval = DefaultTimerInterval;
 
-                timer.Interval = this.timerInterval;
+                timer.Interval = timerInterval;
                 timer.Start();
             }
 
@@ -1887,15 +1887,15 @@ namespace System.Windows.Forms
                 if (timer != null)
                 {
                     // Accelerate timer.
-                    this.timerInterval *= 7;
-                    this.timerInterval /= 10;
+                    timerInterval *= 7;
+                    timerInterval /= 10;
 
-                    if (this.timerInterval < 1)
+                    if (timerInterval < 1)
                     {
-                        this.timerInterval = 1;
+                        timerInterval = 1;
                     }
 
-                    timer.Interval = this.timerInterval;
+                    timer.Interval = timerInterval;
                 }
             }
 

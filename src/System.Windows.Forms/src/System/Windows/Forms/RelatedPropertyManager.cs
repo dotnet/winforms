@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             Debug.Assert(parentManager != null, "How could this be a null parentManager.");
             this.parentManager = parentManager;
             this.dataField = dataField;
-            this.fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
+            fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
             if (fieldInfo == null)
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             // this.finalType = fieldInfo.PropertyType;
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             }
 
             // Set this accessor (add to the beginning)
-            accessors[0] = this.fieldInfo;
+            accessors[0] = fieldInfo;
 
             // Get props
             return parentManager.GetItemProperties(accessors);
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (this.DataSource != null) ? fieldInfo.GetValue(this.DataSource) : null;
+                return (DataSource != null) ? fieldInfo.GetValue(DataSource) : null;
             }
         }
 

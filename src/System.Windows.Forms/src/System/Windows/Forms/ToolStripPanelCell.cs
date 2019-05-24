@@ -51,8 +51,8 @@ namespace System.Windows.Forms
             Debug.Assert(cellCount <= ToolStripManager.ToolStrips.Count, "who is allocating an extra toolstrippanel cell?");
 #endif
 
-            this.ToolStripPanelRow = parent;
-            this._wrappedToolStrip = control as ToolStrip;
+            ToolStripPanelRow = parent;
+            _wrappedToolStrip = control as ToolStrip;
             if (control == null)
             {
                 throw new ArgumentNullException(nameof(control));
@@ -62,8 +62,8 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
             CommonProperties.SetAutoSize(this, true);
-            _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(this.OnToolStripLocationChanging);
-            _wrappedToolStrip.VisibleChanged += new EventHandler(this.OnToolStripVisibleChanged);
+            _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
+            _wrappedToolStrip.VisibleChanged += new EventHandler(OnToolStripVisibleChanged);
 
         }
 
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                         ((IList)parent.Cells).Remove(this);
                     }
                     parent = value;
-                    this.Margin = Padding.Empty;
+                    Margin = Padding.Empty;
 
                 }
 
@@ -244,8 +244,8 @@ namespace System.Windows.Forms
 #if DEBUG
                         cellCount--;
 #endif
-                        _wrappedToolStrip.LocationChanging -= new ToolStripLocationCancelEventHandler(this.OnToolStripLocationChanging);
-                        _wrappedToolStrip.VisibleChanged -= new EventHandler(this.OnToolStripVisibleChanged);
+                        _wrappedToolStrip.LocationChanging -= new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
+                        _wrappedToolStrip.VisibleChanged -= new EventHandler(OnToolStripVisibleChanged);
                     }
                     _wrappedToolStrip = null;
                     if (parent != null)
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
         {
 
             currentlySizing = true;
-            this.CachedBounds = bounds;
+            CachedBounds = bounds;
             try
             {
                 if (DraggedControl.IsCurrentlyDragging)

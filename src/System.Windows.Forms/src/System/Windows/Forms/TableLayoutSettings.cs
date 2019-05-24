@@ -58,7 +58,7 @@ namespace System.Windows.Forms
                 TableLayoutSettings tls = converter.ConvertFromInvariantString(stringVal) as TableLayoutSettings;
                 if (tls != null)
                 {
-                    this.ApplySettings(tls);
+                    ApplySettings(tls);
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
 
         private TableLayout TableLayout
         {
-            get { return (TableLayout)this.LayoutEngine; }
+            get { return (TableLayout)LayoutEngine; }
         }
 
 
@@ -863,14 +863,14 @@ namespace System.Windows.Forms
 
         public ColumnStyle(SizeType sizeType)
         {
-            this.SizeType = sizeType;
+            SizeType = sizeType;
         }
 
 
         public ColumnStyle(SizeType sizeType, float width)
         {
-            this.SizeType = sizeType;
-            this.Width = width;
+            SizeType = sizeType;
+            Width = width;
         }
 
 
@@ -890,14 +890,14 @@ namespace System.Windows.Forms
 
         public RowStyle(SizeType sizeType)
         {
-            this.SizeType = sizeType;
+            SizeType = sizeType;
         }
 
 
         public RowStyle(SizeType sizeType, float height)
         {
-            this.SizeType = sizeType;
-            this.Height = height;
+            SizeType = sizeType;
+            Height = height;
         }
 
 

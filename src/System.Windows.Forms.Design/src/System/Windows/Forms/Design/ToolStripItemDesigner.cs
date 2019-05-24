@@ -667,14 +667,14 @@ namespace System.Windows.Forms.Design
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs != null)
             {
-                cs.ComponentRename += new ComponentRenameEventHandler(this.OnComponentRename);
+                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
             //hook our SelectionService.
             selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
-                selSvc.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
         }
 

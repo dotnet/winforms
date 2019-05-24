@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(BulletIndent), value));
                 }
 
-                this.bulletIndent = value;
+                bulletIndent = value;
 
                 // Call to update the control only if the bullet is set.
                 if (IsHandleCreated && SelectionBullet)
@@ -441,7 +441,7 @@ namespace System.Windows.Forms
                     richTextBoxFlags[autoUrlDetectSection] = value ? 1 : 0;
                     if (IsHandleCreated)
                     {
-                        this.SendMessage(Interop.EditMessages.EM_AUTOURLDETECT, value ? 1 : 0, 0);
+                        SendMessage(Interop.EditMessages.EM_AUTOURLDETECT, value ? 1 : 0, 0);
                         RecreateHandle();
                     }
                 }
@@ -604,9 +604,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.LanguageOption != value)
+                if (LanguageOption != value)
                 {
-                    this.languageOption = value;
+                    languageOption = value;
                     if (IsHandleCreated)
                     {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETLANGOPTIONS, 0, (int)value);
@@ -715,11 +715,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.rightMargin != value)
+                if (rightMargin != value)
                 {
                     if (value < 0)
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RightMargin), value, 0));
-                    this.rightMargin = value;
+                    rightMargin = value;
 
                     if (value == 0)
                     {
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
                     // If the effects member contains valid info
                     if ((cf2.dwEffects & RichTextBoxConstants.CFE_AUTOBACKCOLOR) != 0)
                     {
-                        selColor = this.BackColor;
+                        selColor = BackColor;
                     }
                     else if ((cf2.dwMask & RichTextBoxConstants.CFM_BACKCOLOR) != 0)
                     {
@@ -2067,7 +2067,7 @@ namespace System.Windows.Forms
                 //represent Arabic characters and _ represents a kashida).  We should highlight the text
                 //including the kashida.
                 char kashida = (char)0x640;
-                string text = this.Text;
+                string text = Text;
                 string foundString = text.Substring(position, str.Length);
                 int startIndex = foundString.IndexOf(kashida);
                 if (startIndex == -1)
@@ -2379,7 +2379,7 @@ namespace System.Windows.Forms
             NativeMethods.POINT wpt = new NativeMethods.POINT(pt.X, pt.Y);
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_CHARFROMPOS, 0, wpt);
 
-            string t = this.Text;
+            string t = Text;
             // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
             // is a newline.
             //
@@ -2502,7 +2502,7 @@ namespace System.Windows.Forms
                     flags = RichTextBoxConstants.SF_RTF;
                     break;
                 case RichTextBoxStreamType.PlainText:
-                    this.Rtf = string.Empty;
+                    Rtf = string.Empty;
                     flags = RichTextBoxConstants.SF_TEXT;
                     break;
                 case RichTextBoxStreamType.UnicodePlainText:
@@ -2609,10 +2609,10 @@ namespace System.Windows.Forms
             //
 
 
-            this.SendMessage(Interop.EditMessages.EM_AUTOURLDETECT, DetectUrls ? 1 : 0, 0);
+            SendMessage(Interop.EditMessages.EM_AUTOURLDETECT, DetectUrls ? 1 : 0, 0);
             if (selectionBackColorToSetOnHandleCreated != Color.Empty)
             {
-                this.SelectionBackColor = selectionBackColorToSetOnHandleCreated;
+                SelectionBackColor = selectionBackColorToSetOnHandleCreated;
             }
 
             // Initialize colors before initializing RTF, otherwise CFE_AUTOCOLOR will be in effect
@@ -2663,9 +2663,9 @@ namespace System.Windows.Forms
                                                 (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
             }
 
-            if (languageOption != this.LanguageOption)
+            if (languageOption != LanguageOption)
             {
-                this.LanguageOption = languageOption;
+                LanguageOption = languageOption;
             }
 
             ClearUndo();
@@ -2767,7 +2767,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
-            if (this.RichTextShortcutsEnabled == false)
+            if (RichTextShortcutsEnabled == false)
             {
                 foreach (int shortcutValue in shortcutsToDisable)
                 {
@@ -3101,7 +3101,7 @@ namespace System.Windows.Forms
                     cookieVal |= TEXTLF;
                 }
                 es.dwCookie = (IntPtr)cookieVal;
-                es.pfnCallback = new NativeMethods.EditStreamCallback(this.EditStreamProc);
+                es.pfnCallback = new NativeMethods.EditStreamCallback(EditStreamProc);
 
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
@@ -3219,7 +3219,7 @@ namespace System.Windows.Forms
                     }
                 }
                 es.dwCookie = (IntPtr)cookieVal;
-                es.pfnCallback = new NativeMethods.EditStreamCallback(this.EditStreamProc);
+                es.pfnCallback = new NativeMethods.EditStreamCallback(EditStreamProc);
 
                 // Get Text
                 // Needed for 64-bit
@@ -3328,7 +3328,7 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(RichTextDbg.TraceVerbose, "binding ole callback");
 
-                    this.AllowOleObjects = true;
+                    AllowOleObjects = true;
 
                     oleCallback = CreateRichEditOleCallback();
 
@@ -3365,11 +3365,11 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                if (this.BackColor.IsSystemColor)
+                if (BackColor.IsSystemColor)
                 {
                     SendMessage(Interop.EditMessages.EM_SETBKGNDCOLOR, 0, ColorTranslator.ToWin32(BackColor));
                 }
-                if (this.ForeColor.IsSystemColor)
+                if (ForeColor.IsSystemColor)
                 {
                     InternalSetForeColor(ForeColor);
                 }
@@ -3872,7 +3872,7 @@ namespace System.Windows.Forms
             public int GetNewStorage(out UnsafeNativeMethods.IStorage storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
-                if (!this.owner.AllowOleObjects)
+                if (!owner.AllowOleObjects)
                 {
                     storage = null;
                     return NativeMethods.E_FAIL;

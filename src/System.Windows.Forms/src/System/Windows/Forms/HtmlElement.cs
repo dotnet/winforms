@@ -36,8 +36,8 @@ namespace System.Windows.Forms
 
         internal HtmlElement(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLElement element)
         {
-            this.htmlElement = element;
-            Debug.Assert(this.NativeHtmlElement != null, "The element object should implement IHTMLElement");
+            htmlElement = element;
+            Debug.Assert(NativeHtmlElement != null, "The element object should implement IHTMLElement");
 
             this.shimManager = shimManager;
 
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = this.NativeHtmlElement.GetAll() as UnsafeNativeMethods.IHTMLElementCollection;
+                UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = NativeHtmlElement.GetAll() as UnsafeNativeMethods.IHTMLElementCollection;
                 return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
             }
         }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = this.NativeHtmlElement.GetChildren() as UnsafeNativeMethods.IHTMLElementCollection;
+                UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = NativeHtmlElement.GetChildren() as UnsafeNativeMethods.IHTMLElementCollection;
                 return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
             }
         }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).CanHaveChildren();
+                return ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).CanHaveChildren();
             }
         }
 
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement2 htmlElement2 = (UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement;
+                UnsafeNativeMethods.IHTMLElement2 htmlElement2 = (UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement;
                 return new Rectangle(htmlElement2.ClientLeft(), htmlElement2.ClientTop(),
                     htmlElement2.ClientWidth(), htmlElement2.ClientHeight());
             }
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLDocument iHTMLDocument = this.NativeHtmlElement.GetDocument() as UnsafeNativeMethods.IHTMLDocument;
+                UnsafeNativeMethods.IHTMLDocument iHTMLDocument = NativeHtmlElement.GetDocument() as UnsafeNativeMethods.IHTMLDocument;
                 return iHTMLDocument != null ? new HtmlDocument(shimManager, iHTMLDocument) : null;
             }
         }
@@ -93,11 +93,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return !(((UnsafeNativeMethods.IHTMLElement3)this.NativeHtmlElement).GetDisabled());
+                return !(((UnsafeNativeMethods.IHTMLElement3)NativeHtmlElement).GetDisabled());
             }
             set
             {
-                ((UnsafeNativeMethods.IHTMLElement3)this.NativeHtmlElement).SetDisabled(!value);
+                ((UnsafeNativeMethods.IHTMLElement3)NativeHtmlElement).SetDisabled(!value);
             }
         }
 
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
             get
             {
                 UnsafeNativeMethods.IHTMLElement iHtmlElement = null;
-                UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode = this.NativeHtmlElement as UnsafeNativeMethods.IHTMLDOMNode;
+                UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode = NativeHtmlElement as UnsafeNativeMethods.IHTMLDOMNode;
 
                 if (iHtmlDomNode != null)
                 {
@@ -139,11 +139,11 @@ namespace System.Windows.Forms
             [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             get
             {
-                return this.NativeHtmlElement.GetId();
+                return NativeHtmlElement.GetId();
             }
             set
             {
-                this.NativeHtmlElement.SetId(value);
+                NativeHtmlElement.SetId(value);
             }
         }
 
@@ -152,13 +152,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement.GetInnerHTML();
+                return NativeHtmlElement.GetInnerHTML();
             }
             set
             {
                 try
                 {
-                    this.NativeHtmlElement.SetInnerHTML(value);
+                    NativeHtmlElement.SetInnerHTML(value);
                 }
                 catch (COMException ex)
                 {
@@ -175,13 +175,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement.GetInnerText();
+                return NativeHtmlElement.GetInnerText();
             }
             set
             {
                 try
                 {
-                    this.NativeHtmlElement.SetInnerText(value);
+                    NativeHtmlElement.SetInnerText(value);
                 }
                 catch (COMException ex)
                 {
@@ -198,11 +198,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.GetAttribute("Name");
+                return GetAttribute("Name");
             }
             set
             {
-                this.SetAttribute("Name", value);
+                SetAttribute("Name", value);
             }
         }
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.htmlElement;
+                return htmlElement;
             }
         }
 
@@ -220,7 +220,7 @@ namespace System.Windows.Forms
             get
             {
                 UnsafeNativeMethods.IHTMLElement iHtmlElement = null;
-                UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode = this.NativeHtmlElement as UnsafeNativeMethods.IHTMLDOMNode;
+                UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode = NativeHtmlElement as UnsafeNativeMethods.IHTMLDOMNode;
 
                 if (iHtmlDomNode != null)
                 {
@@ -235,8 +235,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                return new Rectangle(this.NativeHtmlElement.GetOffsetLeft(), this.NativeHtmlElement.GetOffsetTop(),
-                    this.NativeHtmlElement.GetOffsetWidth(), this.NativeHtmlElement.GetOffsetHeight());
+                return new Rectangle(NativeHtmlElement.GetOffsetLeft(), NativeHtmlElement.GetOffsetTop(),
+                    NativeHtmlElement.GetOffsetWidth(), NativeHtmlElement.GetOffsetHeight());
             }
         }
 
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement iHtmlElement = this.NativeHtmlElement.GetOffsetParent();
+                UnsafeNativeMethods.IHTMLElement iHtmlElement = NativeHtmlElement.GetOffsetParent();
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
@@ -253,13 +253,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement.GetOuterHTML();
+                return NativeHtmlElement.GetOuterHTML();
             }
             set
             {
                 try
                 {
-                    this.NativeHtmlElement.SetOuterHTML(value);
+                    NativeHtmlElement.SetOuterHTML(value);
                 }
                 catch (COMException ex)
                 {
@@ -276,13 +276,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement.GetOuterText();
+                return NativeHtmlElement.GetOuterText();
             }
             set
             {
                 try
                 {
-                    this.NativeHtmlElement.SetOuterText(value);
+                    NativeHtmlElement.SetOuterText(value);
                 }
                 catch (COMException ex)
                 {
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement iHtmlElement = this.NativeHtmlElement.GetParentElement();
+                UnsafeNativeMethods.IHTMLElement iHtmlElement = NativeHtmlElement.GetParentElement();
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement2 htmlElement2 = (UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement;
+                UnsafeNativeMethods.IHTMLElement2 htmlElement2 = (UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement;
                 return new Rectangle(htmlElement2.GetScrollLeft(), htmlElement2.GetScrollTop(),
                     htmlElement2.GetScrollWidth(), htmlElement2.GetScrollHeight());
             }
@@ -320,11 +320,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetScrollLeft();
+                return ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).GetScrollLeft();
             }
             set
             {
-                ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).SetScrollLeft(value);
+                ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).SetScrollLeft(value);
             }
         }
 
@@ -332,11 +332,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetScrollTop();
+                return ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).GetScrollTop();
             }
             set
             {
-                ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).SetScrollTop(value);
+                ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).SetScrollTop(value);
             }
         }
 
@@ -352,11 +352,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement.GetStyle().GetCssText();
+                return NativeHtmlElement.GetStyle().GetCssText();
             }
             set
             {
-                this.NativeHtmlElement.GetStyle().SetCssText(value);
+                NativeHtmlElement.GetStyle().SetCssText(value);
             }
         }
 
@@ -364,7 +364,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement.GetTagName();
+                return NativeHtmlElement.GetTagName();
             }
         }
 
@@ -372,11 +372,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetTabIndex();
+                return ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).GetTabIndex();
             }
             set
             {
-                ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).SetTabIndex(value);
+                ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).SetTabIndex(value);
             }
         }
 
@@ -385,14 +385,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.NativeHtmlElement;
+                return NativeHtmlElement;
             }
         }
 
 
         public HtmlElement AppendChild(HtmlElement newElement)
         {
-            return this.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
+            return InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
         }
 
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).Focus();
+                ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).Focus();
             }
             catch (COMException ex)
             {
@@ -425,18 +425,18 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public string GetAttribute(string attributeName)
         {
-            object oAttributeValue = this.NativeHtmlElement.GetAttribute(attributeName, 0);
+            object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);
             return oAttributeValue == null ? "" : oAttributeValue.ToString();
         }
 
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
-            UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetElementsByTagName(tagName);
+            UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
             return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
         }
         public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
         {
-            UnsafeNativeMethods.IHTMLElement iHtmlElement = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
+            UnsafeNativeMethods.IHTMLElement iHtmlElement = ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
                 (UnsafeNativeMethods.IHTMLElement)newElement.DomElement);
             return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
         }
@@ -453,7 +453,7 @@ namespace System.Windows.Forms
             dp.rgvarg = IntPtr.Zero;
             try
             {
-                UnsafeNativeMethods.IDispatch scriptObject = this.NativeHtmlElement as UnsafeNativeMethods.IDispatch;
+                UnsafeNativeMethods.IDispatch scriptObject = NativeHtmlElement as UnsafeNativeMethods.IDispatch;
                 if (scriptObject != null)
                 {
                     Guid g = Guid.Empty;
@@ -506,27 +506,27 @@ namespace System.Windows.Forms
 
         public void RemoveFocus()
         {
-            ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).Blur();
+            ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).Blur();
         }
 
         // PM review done
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         public void RaiseEvent(string eventName)
         {
-            ((UnsafeNativeMethods.IHTMLElement3)this.NativeHtmlElement).FireEvent(eventName, IntPtr.Zero);
+            ((UnsafeNativeMethods.IHTMLElement3)NativeHtmlElement).FireEvent(eventName, IntPtr.Zero);
         }
 
 
         public void ScrollIntoView(bool alignWithTop)
         {
-            this.NativeHtmlElement.ScrollIntoView((object)alignWithTop);
+            NativeHtmlElement.ScrollIntoView((object)alignWithTop);
         }
 
         public void SetAttribute(string attributeName, string value)
         {
             try
             {
-                this.NativeHtmlElement.SetAttribute(attributeName, (object)value, 0);
+                NativeHtmlElement.SetAttribute(attributeName, (object)value, 0);
             }
             catch (COMException comException)
             {
@@ -697,11 +697,11 @@ namespace System.Windows.Forms
 
             public HTMLElementEvents2(HtmlElement htmlElement)
             {
-                this.parent = htmlElement;
+                parent = htmlElement;
             }
             private void FireEvent(object key, EventArgs e)
             {
-                if (this.parent != null)
+                if (parent != null)
                 {
                     parent.ElementShim.FireEvent(key, e);
                 }
@@ -1072,12 +1072,12 @@ namespace System.Windows.Forms
 
             public HtmlElementShim(HtmlElement element)
             {
-                this.htmlElement = element;
+                htmlElement = element;
 
                 // snap our associated window so we know when to disconnect.
-                if (this.htmlElement != null)
+                if (htmlElement != null)
                 {
-                    HtmlDocument doc = this.htmlElement.Document;
+                    HtmlDocument doc = htmlElement.Document;
                     if (doc != null)
                     {
                         HtmlWindow window = doc.Window;
@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-                bool success = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).AttachEvent(eventName, proxy);
+                bool success = ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).AttachEvent(eventName, proxy);
                 Debug.Assert(success, "failed to add event");
             }
 
@@ -1121,9 +1121,9 @@ namespace System.Windows.Forms
             {
                 if (cookie == null || !cookie.Connected)
                 {
-                    for (int i = 0; i < dispInterfaceTypes.Length && this.cookie == null; i++)
+                    for (int i = 0; i < dispInterfaceTypes.Length && cookie == null; i++)
                     {
-                        this.cookie = new AxHost.ConnectionPointCookie(this.NativeHtmlElement,
+                        cookie = new AxHost.ConnectionPointCookie(NativeHtmlElement,
                                                                                   new HTMLElementEvents2(htmlElement),
                                                                                   dispInterfaceTypes[i],
                                                                                   /*throwException*/ false);
@@ -1141,17 +1141,17 @@ namespace System.Windows.Forms
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
                 if (proxy != null)
                 {
-                    ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).DetachEvent(eventName, proxy);
+                    ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).DetachEvent(eventName, proxy);
                 }
             }
 
 
             public override void DisconnectFromEvents()
             {
-                if (this.cookie != null)
+                if (cookie != null)
                 {
-                    this.cookie.Disconnect();
-                    this.cookie = null;
+                    cookie.Disconnect();
+                    cookie = null;
                 }
 
             }

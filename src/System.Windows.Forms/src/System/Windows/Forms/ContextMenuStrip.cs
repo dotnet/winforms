@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
             // copy over events
-            contextMenuStrip.Events.AddHandlers(this.Events);
+            contextMenuStrip.Events.AddHandlers(Events);
 
             contextMenuStrip.AutoClose = AutoClose;
             contextMenuStrip.AutoSize = AutoSize;

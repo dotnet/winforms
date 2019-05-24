@@ -187,7 +187,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 
-            this._class = className;
+            _class = className;
             this.part = part;
             this.state = state;
         }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 
-            this._class = className;
+            _class = className;
             this.part = part;
             this.state = state;
         }

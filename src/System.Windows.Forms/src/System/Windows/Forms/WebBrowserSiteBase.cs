@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(h));
             }
-            this.host = h;
+            host = h;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.host;
+                return host;
             }
         }
 
@@ -145,8 +145,8 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers)
         {
-            Debug.Assert(!this.Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
-            this.Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
+            Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
+            Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
 
             Message msg = new Message();
             msg.Msg = pMsg.message;
@@ -156,12 +156,12 @@ namespace System.Windows.Forms
 
             try
             {
-                bool f = ((Control)this.Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
+                bool f = ((Control)Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
                 return f ? NativeMethods.S_OK : NativeMethods.S_FALSE;
             }
             finally
             {
-                this.Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+                Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
             }
         }
 
@@ -191,28 +191,28 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)
         {
-            container = this.Host.GetParentContainer();
+            container = Host.GetParentContainer();
             return NativeMethods.S_OK;
         }
 
 
         int UnsafeNativeMethods.IOleClientSite.ShowObject()
         {
-            if (this.Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
+            if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
                 IntPtr hwnd;
-                if (NativeMethods.Succeeded(this.Host.AXInPlaceObject.GetWindow(out hwnd)))
+                if (NativeMethods.Succeeded(Host.AXInPlaceObject.GetWindow(out hwnd)))
                 {
-                    if (this.Host.GetHandleNoCreate() != hwnd)
+                    if (Host.GetHandleNoCreate() != hwnd)
                     {
                         if (hwnd != IntPtr.Zero)
                         {
-                            this.Host.AttachWindow(hwnd);
-                            this.OnActiveXRectChange(new NativeMethods.COMRECT(this.Host.Bounds));
+                            Host.AttachWindow(hwnd);
+                            OnActiveXRectChange(new NativeMethods.COMRECT(Host.Bounds));
                         }
                     }
                 }
-                else if (this.Host.AXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                else if (Host.AXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
                 {
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
@@ -258,15 +258,15 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
         {
-            this.Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
-            this.OnActiveXRectChange(new NativeMethods.COMRECT(this.Host.Bounds));
+            Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
+            OnActiveXRectChange(new NativeMethods.COMRECT(Host.Bounds));
             return NativeMethods.S_OK;
         }
 
         int UnsafeNativeMethods.IOleInPlaceSite.OnUIActivate()
         {
-            this.Host.ActiveXState = WebBrowserHelper.AXState.UIActive;
-            this.Host.GetParentContainer().OnUIActivate(this.Host);
+            Host.ActiveXState = WebBrowserHelper.AXState.UIActive;
+            Host.GetParentContainer().OnUIActivate(Host);
             return NativeMethods.S_OK;
         }
 
@@ -274,12 +274,12 @@ namespace System.Windows.Forms
                                              NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect, NativeMethods.tagOIFI lpFrameInfo)
         {
             ppDoc = null;
-            ppFrame = this.Host.GetParentContainer();
+            ppFrame = Host.GetParentContainer();
 
-            lprcPosRect.left = this.Host.Bounds.X;
-            lprcPosRect.top = this.Host.Bounds.Y;
-            lprcPosRect.right = this.Host.Bounds.Width + this.Host.Bounds.X;
-            lprcPosRect.bottom = this.Host.Bounds.Height + this.Host.Bounds.Y;
+            lprcPosRect.left = Host.Bounds.X;
+            lprcPosRect.top = Host.Bounds.Y;
+            lprcPosRect.right = Host.Bounds.Width + Host.Bounds.X;
+            lprcPosRect.bottom = Host.Bounds.Height + Host.Bounds.Y;
 
             lprcClipRect = WebBrowserHelper.GetClipRect();
             if (lpFrameInfo != null)
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                 lpFrameInfo.fMDIApp = false;
                 lpFrameInfo.hAccel = IntPtr.Zero;
                 lpFrameInfo.cAccelEntries = 0;
-                lpFrameInfo.hwndFrame = (this.Host.ParentInternal == null) ? IntPtr.Zero : this.Host.ParentInternal.Handle;
+                lpFrameInfo.hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
             }
             return NativeMethods.S_OK;
         }
@@ -300,23 +300,23 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable)
         {
-            this.Host.GetParentContainer().OnUIDeactivate(this.Host);
-            if (this.Host.ActiveXState > WebBrowserHelper.AXState.InPlaceActive)
+            Host.GetParentContainer().OnUIDeactivate(Host);
+            if (Host.ActiveXState > WebBrowserHelper.AXState.InPlaceActive)
             {
-                this.Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
+                Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
             }
             return NativeMethods.S_OK;
         }
 
         int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceDeactivate()
         {
-            if (this.Host.ActiveXState == WebBrowserHelper.AXState.UIActive)
+            if (Host.ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
                 ((UnsafeNativeMethods.IOleInPlaceSite)this).OnUIDeactivate(0);
             }
 
-            this.Host.GetParentContainer().OnInPlaceDeactivate(this.Host);
-            this.Host.ActiveXState = WebBrowserHelper.AXState.Running;
+            Host.GetParentContainer().OnInPlaceDeactivate(Host);
+            Host.ActiveXState = WebBrowserHelper.AXState.Running;
             return NativeMethods.S_OK;
         }
 
@@ -327,12 +327,12 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
         {
-            return this.Host.AXInPlaceObject.UIDeactivate();
+            return Host.AXInPlaceObject.UIDeactivate();
         }
 
         int UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect)
         {
-            return this.OnActiveXRectChange(lprcPosRect);
+            return OnActiveXRectChange(lprcPosRect);
         }
 
         //
@@ -356,10 +356,10 @@ namespace System.Windows.Forms
             // Some controls fire OnChanged() notifications when getting values of some properties.
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
             //
-            if (this.Host.NoComponentChangeEvents != 0)
+            if (Host.NoComponentChangeEvents != 0)
                 return;
 
-            this.Host.NoComponentChangeEvents++;
+            Host.NoComponentChangeEvents++;
             try
             {
                 OnPropertyChanged(dispid);
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                this.Host.NoComponentChangeEvents--;
+                Host.NoComponentChangeEvents--;
             }
         }
 
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                ISite site = this.Host.Site;
+                ISite site = Host.Site;
                 if (site != null)
                 {
                     IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
                     {
                         try
                         {
-                            changeService.OnComponentChanging(this.Host, null);
+                            changeService.OnComponentChanging(Host, null);
                         }
                         catch (CheckoutException coEx)
                         {
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
 
                         // Now notify the change service that the change was successful.
                         //
-                        changeService.OnComponentChanged(this.Host, null, null, null);
+                        changeService.OnComponentChanged(Host, null, null, null);
                     }
                 }
             }
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
         //
         internal WebBrowserBase GetAXHost()
         {
-            return this.Host;
+            return Host;
         }
 
         internal void StartEvents()
@@ -435,7 +435,7 @@ namespace System.Windows.Forms
             if (connectionPoint != null)
                 return;
 
-            object nativeObject = this.Host.activeXInstance;
+            object nativeObject = Host.activeXInstance;
             if (nativeObject != null)
             {
                 try
@@ -463,10 +463,10 @@ namespace System.Windows.Forms
 
         private int OnActiveXRectChange(NativeMethods.COMRECT lprcPosRect)
         {
-            this.Host.AXInPlaceObject.SetObjectRects(
+            Host.AXInPlaceObject.SetObjectRects(
                 NativeMethods.COMRECT.FromXYWH(0, 0, lprcPosRect.right - lprcPosRect.left, lprcPosRect.bottom - lprcPosRect.top),
                 WebBrowserHelper.GetClipRect());
-            this.Host.MakeDirty();
+            Host.MakeDirty();
             return NativeMethods.S_OK;
         }
     }

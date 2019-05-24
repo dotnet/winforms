@@ -149,7 +149,7 @@ namespace System.Windows.Forms
 
         internal void HideToolTip(IKeyboardToolTip currentTool)
         {
-            this.Hide(currentTool.GetOwnerWindow());
+            Hide(currentTool.GetOwnerWindow());
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace System.Windows.Forms
         internal string GetCaptionForTool(Control tool)
         {
             Debug.Assert(tool != null, "tool should not be null");
-            return ((TipInfo)this.tools[tool])?.Caption;
+            return ((TipInfo)tools[tool])?.Caption;
         }
 
         /// <summary>
@@ -657,13 +657,13 @@ namespace System.Windows.Forms
                     topLevelControl = baseVar;
                     if (baseVar != null)
                     {
-                        baseVar.HandleCreated += new EventHandler(this.TopLevelCreated);
-                        baseVar.HandleDestroyed += new EventHandler(this.TopLevelDestroyed);
+                        baseVar.HandleCreated += new EventHandler(TopLevelCreated);
+                        baseVar.HandleDestroyed += new EventHandler(TopLevelDestroyed);
                         if (baseVar.IsHandleCreated)
                         {
                             TopLevelCreated(baseVar, EventArgs.Empty);
                         }
-                        baseVar.ParentChanged += new EventHandler(this.OnTopLevelPropertyChanged);
+                        baseVar.ParentChanged += new EventHandler(OnTopLevelPropertyChanged);
                     }
                 }
                 else
@@ -771,9 +771,9 @@ namespace System.Windows.Forms
             topLevelControl = null;
 
             Control control = (Control)sender;
-            this.CreateRegion(control);
-            this.CheckNativeToolTip(control);
-            this.CheckCompositeControls(control);
+            CreateRegion(control);
+            CheckNativeToolTip(control);
+            CheckCompositeControls(control);
 
             KeyboardToolTipStateMachine.Instance.Hook(control, this);
         }
@@ -843,7 +843,7 @@ namespace System.Windows.Forms
         private void HandleDestroyed(object sender, EventArgs eventargs)
         {
             Control control = (Control)sender;
-            this.DestroyRegion(control);
+            DestroyRegion(control);
 
             KeyboardToolTipStateMachine.Instance.Unhook(control, this);
         }
@@ -901,11 +901,11 @@ namespace System.Windows.Forms
         private void ClearTopLevelControlEvents()
         {
 
-            if (this.topLevelControl != null)
+            if (topLevelControl != null)
             {
-                this.topLevelControl.ParentChanged -= new EventHandler(this.OnTopLevelPropertyChanged);
-                this.topLevelControl.HandleCreated -= new EventHandler(this.TopLevelCreated);
-                this.topLevelControl.HandleDestroyed -= new EventHandler(this.TopLevelDestroyed);
+                topLevelControl.ParentChanged -= new EventHandler(OnTopLevelPropertyChanged);
+                topLevelControl.HandleCreated -= new EventHandler(TopLevelCreated);
+                topLevelControl.HandleDestroyed -= new EventHandler(TopLevelDestroyed);
             }
         }
 
@@ -1081,8 +1081,8 @@ namespace System.Windows.Forms
             {
                 // Remove first to purge any duplicates...
                 //
-                ctl.MouseMove -= new MouseEventHandler(this.MouseMove);
-                ctl.MouseMove += new MouseEventHandler(this.MouseMove);
+                ctl.MouseMove -= new MouseEventHandler(MouseMove);
+                ctl.MouseMove += new MouseEventHandler(MouseMove);
             }
         }
 
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms
 
             if (created.ContainsKey(ctl))
             {
-                ctl.MouseMove -= new MouseEventHandler(this.MouseMove);
+                ctl.MouseMove -= new MouseEventHandler(MouseMove);
             }
         }
 
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms
             bool handlesCreated = ctl.IsHandleCreated
                                 && topLevelControl != null
                                 && topLevelControl.IsHandleCreated
-                                && !this.isDisposing;
+                                && !isDisposing;
 
             Form topForm = topLevelControl as Form;
             if (topForm == null || (topForm != null && !topForm.Modal))
@@ -1157,7 +1157,7 @@ namespace System.Windows.Forms
 
             if (disposing)
             {
-                this.isDisposing = true;
+                isDisposing = true;
                 try
                 {
                     ClearTopLevelControlEvents();
@@ -1176,12 +1176,12 @@ namespace System.Windows.Forms
                     Form baseFrom = TopLevelControl as Form;
                     if (baseFrom != null)
                     {
-                        baseFrom.Deactivate -= new EventHandler(this.BaseFormDeactivate);
+                        baseFrom.Deactivate -= new EventHandler(BaseFormDeactivate);
                     }
                 }
                 finally
                 {
-                    this.isDisposing = false;
+                    isDisposing = false;
                 }
             }
             base.Dispose(disposing);
@@ -1215,12 +1215,12 @@ namespace System.Windows.Forms
         /// </summary>
         private NativeMethods.TOOLINFO_TOOLTIP GetMinTOOLINFO(Control ctl)
         {
-            return this.GetMinToolInfoForHandle(ctl.Handle);
+            return GetMinToolInfoForHandle(ctl.Handle);
         }
 
         private NativeMethods.TOOLINFO_TOOLTIP GetMinToolInfoForTool(IWin32Window tool)
         {
-            return this.GetMinToolInfoForHandle(tool.Handle);
+            return GetMinToolInfoForHandle(tool.Handle);
         }
 
         private NativeMethods.TOOLINFO_TOOLTIP GetMinToolInfoForHandle(IntPtr handle)
@@ -1433,13 +1433,13 @@ namespace System.Windows.Forms
         private void OnTopLevelPropertyChanged(object s, EventArgs e)
         {
             ClearTopLevelControlEvents();
-            this.topLevelControl = null;
+            topLevelControl = null;
 
             // We must re-aquire this control.  If the existing top level control's handle
             // was never created, but the new parent has a handle, if we don't re-get
             // the top level control here we won't ever create the tooltip handle.
             //
-            this.topLevelControl = TopLevelControl;
+            topLevelControl = TopLevelControl;
         }
 
         /// <summary>
@@ -1475,8 +1475,8 @@ namespace System.Windows.Forms
                 {
                     DestroyRegion(regions[i]);
                 }
-                regions[i].HandleCreated -= new EventHandler(this.HandleCreated);
-                regions[i].HandleDestroyed -= new EventHandler(this.HandleDestroyed);
+                regions[i].HandleCreated -= new EventHandler(HandleCreated);
+                regions[i].HandleDestroyed -= new EventHandler(HandleDestroyed);
 
                 KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
             }
@@ -1485,7 +1485,7 @@ namespace System.Windows.Forms
             tools.Clear();
 
             ClearTopLevelControlEvents();
-            this.topLevelControl = null;
+            topLevelControl = null;
 
             KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
         }
@@ -1577,8 +1577,8 @@ namespace System.Windows.Forms
 
             if (!empty && !exists)
             {
-                control.HandleCreated += new EventHandler(this.HandleCreated);
-                control.HandleDestroyed += new EventHandler(this.HandleDestroyed);
+                control.HandleCreated += new EventHandler(HandleCreated);
+                control.HandleDestroyed += new EventHandler(HandleDestroyed);
 
                 if (control.IsHandleCreated)
                 {
@@ -1613,8 +1613,8 @@ namespace System.Windows.Forms
                 else if (empty && exists && !DesignMode)
                 {
 
-                    control.HandleCreated -= new EventHandler(this.HandleCreated);
-                    control.HandleDestroyed -= new EventHandler(this.HandleDestroyed);
+                    control.HandleCreated -= new EventHandler(HandleCreated);
+                    control.HandleDestroyed -= new EventHandler(HandleDestroyed);
 
                     if (control.IsHandleCreated)
                     {
@@ -1730,9 +1730,9 @@ namespace System.Windows.Forms
 
                     if (duration > 0)
                     {
-                        if (this.originalPopupDelay == 0)
+                        if (originalPopupDelay == 0)
                         {
-                            this.originalPopupDelay = AutoPopDelay;
+                            originalPopupDelay = AutoPopDelay;
                         }
                         AutoPopDelay = duration;
                     }
@@ -1898,13 +1898,13 @@ namespace System.Windows.Forms
             // At first, place the tooltip at the middle of the tool (default location)
             int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
             int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
-            this.SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
+            SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
             // Then look for a better ToolTip location
             Size bubbleSize;
-            if (this.TryGetBubbleSize(tool, toolRectangle, out bubbleSize))
+            if (TryGetBubbleSize(tool, toolRectangle, out bubbleSize))
             {
-                Point optimalPoint = this.GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
+                Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
                 // The optimal point should be used as a tracking position
                 pointX = optimalPoint.X;
@@ -1915,7 +1915,7 @@ namespace System.Windows.Forms
                 tipInfo.Position = new Point(pointX, pointY);
 
                 // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip
-                this.Reposition(optimalPoint, bubbleSize);
+                Reposition(optimalPoint, bubbleSize);
             }
 
             SetTrackPosition(pointX, pointY);
@@ -1925,7 +1925,7 @@ namespace System.Windows.Forms
         private bool TryGetBubbleSize(IKeyboardToolTip tool, Rectangle toolRectangle, out Size bubbleSize)
         {
             // Get bubble size to use it for optimal position calculation
-            IntPtr bubbleSizeInt = UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_GETBUBBLESIZE, 0, this.GetMinToolInfoForTool(tool.GetOwnerWindow()));
+            IntPtr bubbleSizeInt = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETBUBBLESIZE, 0, GetMinToolInfoForTool(tool.GetOwnerWindow()));
             if (bubbleSizeInt.ToInt32() != NativeMethods.S_FALSE)
             {
                 int width = NativeMethods.Util.LOWORD(bubbleSizeInt);
@@ -1987,7 +1987,7 @@ namespace System.Windows.Forms
 
             // Calculate area of possible locations within top level control rectangle
             long[] locationWithinTopControlAreas = new long[LOCATION_TOTAL];
-            Rectangle topContainerBounds = ((IKeyboardToolTip)this.TopLevelControl)?.GetNativeScreenRectangle() ?? Rectangle.Empty;
+            Rectangle topContainerBounds = ((IKeyboardToolTip)TopLevelControl)?.GetNativeScreenRectangle() ?? Rectangle.Empty;
             if (!topContainerBounds.IsEmpty)
             {
                 for (int i = 0; i < possibleLocations.Length; i++)
@@ -2009,7 +2009,7 @@ namespace System.Windows.Forms
             bool rtlEnabled = tool.HasRtlModeEnabled();
             for (int i = 1; i < possibleLocations.Length; i++)
             {
-                if (this.IsCompetingLocationBetter(leastClippedArea, leastWeight, biggestAreaWithinTopControl, locationIndex,
+                if (IsCompetingLocationBetter(leastClippedArea, leastWeight, biggestAreaWithinTopControl, locationIndex,
                     locationClippedAreas[i], locationWeights[i], locationWithinTopControlAreas[i], i,
                     rtlEnabled))
                 {
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms
             try
             {
                 trackPosition = true;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKPOSITION, 0, NativeMethods.Util.MAKELONG(pointX, pointY));
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_TRACKPOSITION, 0, NativeMethods.Util.MAKELONG(pointX, pointY));
             }
             finally
             {
@@ -2124,8 +2124,8 @@ namespace System.Windows.Forms
             if (GetHandleCreated())
             {
                 IntPtr hWnd = Control.GetSafeHandle(win);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetWinTOOLINFO(hWnd));
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_DELTOOL, 0, GetWinTOOLINFO(hWnd));
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetWinTOOLINFO(hWnd));
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetWinTOOLINFO(hWnd));
             }
             StopTimer();
 
@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms
                 Form baseFrom = tool.FindForm();
                 if (baseFrom != null)
                 {
-                    baseFrom.Deactivate -= new EventHandler(this.BaseFormDeactivate);
+                    baseFrom.Deactivate -= new EventHandler(BaseFormDeactivate);
                 }
             }
 
@@ -2215,8 +2215,8 @@ namespace System.Windows.Forms
                     tt.Position = position;
                     tools[tool] = tt;
 
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_SETTOOLINFO, 0, ti);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 1, ti);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTOOLINFO, 0, ti);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_TRACKACTIVATE, 1, ti);
                 }
                 finally
                 {
@@ -2258,8 +2258,8 @@ namespace System.Windows.Forms
                 try
                 {
                     toolInfo.lpszText = Marshal.StringToHGlobalAuto(text);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 1, toolInfo);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_TRACKACTIVATE, 1, toolInfo);
                 }
                 finally
                 {
@@ -2278,7 +2278,7 @@ namespace System.Windows.Forms
                 Form baseFrom = tool.FindForm();
                 if (baseFrom != null)
                 {
-                    baseFrom.Deactivate += new EventHandler(this.BaseFormDeactivate);
+                    baseFrom.Deactivate += new EventHandler(BaseFormDeactivate);
                 }
             }
 
@@ -2365,7 +2365,7 @@ namespace System.Windows.Forms
                 moveToLocation.Y = screen.WorkingArea.Bottom - tipSize.Height;
             }
 
-            SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle),
+            SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
             NativeMethods.HWND_TOPMOST,
             moveToLocation.X, moveToLocation.Y, tipSize.Width, tipSize.Height,
             NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOOWNERZORDER);
@@ -2547,7 +2547,7 @@ namespace System.Windows.Forms
                 if (e.Cancel)
                 {
                     cancelled = true;
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle),
+                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
                     NativeMethods.HWND_TOPMOST,
                     0, 0, 0, 0,
                     NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
@@ -2557,7 +2557,7 @@ namespace System.Windows.Forms
                 {
                     cancelled = false;
                     // Only width/height changes are respected, so set top,left to what we got earlier
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle),
+                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
                     NativeMethods.HWND_TOPMOST,
                     r.left, r.top, currentTooltipSize.Width, currentTooltipSize.Height,
                     NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
@@ -2738,8 +2738,8 @@ namespace System.Windows.Forms
                     tools.Remove(control);
                     owners.Remove(win.Handle);
 
-                    control.HandleCreated -= new EventHandler(this.HandleCreated);
-                    control.HandleDestroyed -= new EventHandler(this.HandleDestroyed);
+                    control.HandleCreated -= new EventHandler(HandleCreated);
+                    control.HandleDestroyed -= new EventHandler(HandleDestroyed);
                     created.Remove(control);
 
                     if (originalPopupDelay != 0)
@@ -2900,7 +2900,7 @@ namespace System.Windows.Forms
 
             public ToolTipTimer(IWin32Window owner) : base()
             {
-                this.host = owner;
+                host = owner;
             }
 
             public IWin32Window Host
@@ -2933,10 +2933,10 @@ namespace System.Windows.Forms
             public TipInfo(string caption, Type type)
             {
                 this.caption = caption;
-                this.TipType = type;
+                TipType = type;
                 if (type == Type.Auto)
                 {
-                    this.designerText = caption;
+                    designerText = caption;
                 }
             }
 
@@ -2944,11 +2944,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return ((this.TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? caption : designerText;
+                    return ((TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? caption : designerText;
                 }
                 set
                 {
-                    this.caption = value;
+                    caption = value;
                 }
             }
         }

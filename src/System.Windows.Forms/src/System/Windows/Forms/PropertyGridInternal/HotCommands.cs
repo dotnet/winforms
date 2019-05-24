@@ -32,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ]
         internal HotCommands(PropertyGrid owner) : base(owner)
         {
-            this.Text = "Command Pane";
+            Text = "Command Pane";
         }
 
         public virtual bool AllowVisible
@@ -43,13 +43,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                if (this.allowVisible != value)
+                if (allowVisible != value)
                 {
-                    this.allowVisible = value;
+                    allowVisible = value;
                     if (value && WouldBeVisible)
-                        this.Visible = true;
+                        Visible = true;
                     else
-                        this.Visible = false;
+                        Visible = false;
                 }
             }
         }
@@ -84,8 +84,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // use default LinkLabel colors for regular, active, and visited
                     label.DisabledLinkColor = SystemColors.ControlDark;
-                    label.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkClicked);
-                    this.Controls.Add(label);
+                    label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
+                    Controls.Add(label);
                 }
                 return label;
             }
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 for (int i = 0; i < this.verbs.Length; i++)
                 {
-                    this.verbs[i].CommandChanged -= new EventHandler(this.OnCommandChanged);
+                    this.verbs[i].CommandChanged -= new EventHandler(OnCommandChanged);
                 }
                 this.component = null;
                 this.verbs = null;
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 0; i < verbs.Length; i++)
                 {
-                    verbs[i].CommandChanged += new EventHandler(this.OnCommandChanged);
+                    verbs[i].CommandChanged += new EventHandler(OnCommandChanged);
                 }
 
                 if (allowVisible)

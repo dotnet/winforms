@@ -137,7 +137,7 @@ namespace System.Windows.Forms
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                     }
 
-                    using (LayoutTransaction.CreateTransactionIf(AutoSize, this.ParentInternal, this, PropertyNames.Appearance))
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {
                         appearance = value;
                         if (OwnerDraw)
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                 return base.GetPreferredSizeCore(proposedConstraints);
             }
 
-            Size textSize = TextRenderer.MeasureText(this.Text, this.Font);
+            Size textSize = TextRenderer.MeasureText(Text, Font);
             Size size = SizeFromClientSize(textSize);
             size.Width += flatSystemStylePaddingWidth;
             size.Height = DpiHelper.IsScalingRequirementMet ? Math.Max(size.Height + 5, flatSystemStyleMinimumHeight) : size.Height + 5; // ensure minimum height to avoid truncation of RadioButton circle or text

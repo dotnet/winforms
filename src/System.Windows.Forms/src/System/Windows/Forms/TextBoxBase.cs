@@ -317,7 +317,7 @@ namespace System.Windows.Forms
                 {
                     return base.BackColor;
                 }
-                else if (this.ReadOnly)
+                else if (ReadOnly)
                 {
                     return SystemColors.Control;
                 }
@@ -456,7 +456,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this);
                 Debug.Indent();
 
-                bool canEnable = !(this.ReadOnly || this.PasswordProtect) && base.CanEnableIme;
+                bool canEnable = !(ReadOnly || PasswordProtect) && base.CanEnableIme;
 
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + canEnable);
                 Debug.Unindent();
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms
             {
                 format |= TextFormatFlags.WordBreak;
             }
-            Size textSize = TextRenderer.MeasureText(this.Text, this.Font, proposedConstraints, format);
+            Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
             // We use this old computation as a lower bound to ensure backwards compatibility.
             textSize.Height = Math.Max(textSize.Height, FontHeight);
@@ -1028,7 +1028,7 @@ namespace System.Windows.Forms
                 // while the control does not have a handle. We need to return valid values.  We also need
                 // to keep the old cached values in case the Text is changed again making the cached values
                 // valid again.
-                AdjustSelectionStartAndEnd(this.selectionStart, this.selectionLength, out start, out end, -1);
+                AdjustSelectionStartAndEnd(selectionStart, selectionLength, out start, out end, -1);
                 length = end - start;
             }
             else
@@ -1404,7 +1404,7 @@ namespace System.Windows.Forms
             // If we're anchored to two opposite sides of the form, don't adjust the size because
             // we'll lose our anchored size by resetting to the requested width.
             //
-            if (returnIfAnchored && (this.Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
+            if (returnIfAnchored && (Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
             {
                 return;
             }
@@ -1474,9 +1474,9 @@ namespace System.Windows.Forms
                     // all the text will scroll to the top and the control will look empty when the
                     // form is restored. We work around this by selecting back whatever was originally
                     // selected when AppendText was called.
-                    if (this.Width == 0 || this.Height == 0)
+                    if (Width == 0 || Height == 0)
                     {
-                        this.Select(selStart, selLength);
+                        Select(selStart, selLength);
                     }
                 }
             }
@@ -1578,7 +1578,7 @@ namespace System.Windows.Forms
                             return false;
                         break;
                     case Keys.Back:
-                        if (!this.ReadOnly)
+                        if (!ReadOnly)
                             return true;
                         break;
                     case Keys.PageUp:
@@ -1623,7 +1623,7 @@ namespace System.Windows.Forms
             textBoxFlags[modified] = Modified;
             textBoxFlags[setSelectionOnHandleCreated] = true;
             // Update text selection cached values to be restored when recreating the handle.
-            GetSelectionStartAndLength(out this.selectionStart, out this.selectionLength);
+            GetSelectionStartAndLength(out selectionStart, out selectionLength);
             base.OnHandleDestroyed(e);
         }
 
@@ -1642,7 +1642,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "TextBoxBase.ProcessDialogKey [" + keyData.ToString() + "]");
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
 
-            if (keyCode == Keys.Tab && this.AcceptsTab && (keyData & Keys.Control) != 0)
+            if (keyCode == Keys.Tab && AcceptsTab && (keyData & Keys.Control) != 0)
             {
                 // When this control accepts Tabs, Ctrl-Tab is treated exactly like Tab.
                 keyData &= ~Keys.Control;
@@ -1716,19 +1716,19 @@ namespace System.Windows.Forms
             {
                 if (!ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
                 {
-                    if (!this.doubleClickFired)
+                    if (!doubleClickFired)
                     {
                         OnClick(mevent);
                         OnMouseClick(mevent);
                     }
                     else
                     {
-                        this.doubleClickFired = false;
+                        doubleClickFired = false;
                         OnDoubleClick(mevent);
                         OnMouseDoubleClick(mevent);
                     }
                 }
-                this.doubleClickFired = false;
+                doubleClickFired = false;
             }
             base.OnMouseUp(mevent);
         }
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual char GetCharFromPosition(Point pt)
         {
-            string t = this.Text;
+            string t = Text;
             int index = GetCharIndexFromPosition(pt);
             return (index < 0 || index >= t.Length) ? (char)0 : t[index];
         }
@@ -1793,7 +1793,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                string t = this.Text;
+                string t = Text;
                 // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
                 // is a newline.
                 //
@@ -1860,7 +1860,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                if (string.IsNullOrEmpty(this.WindowText))
+                if (string.IsNullOrEmpty(WindowText))
                 {
                     // If there is no text, then there is no place to go.
                     return;
@@ -1903,7 +1903,7 @@ namespace System.Windows.Forms
                                     int selStartLine = GetLineFromCharIndex(selStart);
 
                                     // 1. Scroll the RichTextBox all the way to the bottom
-                                    UnsafeNativeMethods.ITextRange textRange = textDocument.Range(this.WindowText.Length - 1, this.WindowText.Length - 1);
+                                    UnsafeNativeMethods.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
                                     textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                                     // 2. Get the first visible line.
@@ -1960,7 +1960,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectAll()
         {
-            this.SelectionLength = 0;
+            SelectionLength = 0;
         }
 
         /// <summary>
@@ -2020,8 +2020,8 @@ namespace System.Windows.Forms
             {
                 //otherwise, wait until handle is created to send this message.
                 //Store the indices until then...
-                this.selectionStart = start;
-                this.selectionLength = length;
+                selectionStart = start;
+                selectionLength = length;
                 textBoxFlags[setSelectionOnHandleCreated] = true;
             }
         }
@@ -2084,7 +2084,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    textLength = this.TextLength;
+                    textLength = TextLength;
                 }
 
                 if (start > textLength)
@@ -2125,7 +2125,7 @@ namespace System.Windows.Forms
             {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
                 int start, end;
-                AdjustSelectionStartAndEnd(this.selectionStart, this.selectionLength, out start, out end, -1);
+                AdjustSelectionStartAndEnd(selectionStart, selectionLength, out start, out end, -1);
                 SendMessage(Interop.EditMessages.EM_SETSEL, start, end);
             }
         }
@@ -2289,7 +2289,7 @@ namespace System.Windows.Forms
                 {
                     // Force update to the Modified property, which will trigger
                     // ModifiedChanged event handlers
-                    bool force = this.Modified;
+                    bool force = Modified;
                 }
             }
         }
@@ -2381,7 +2381,7 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 case Interop.WindowMessages.WM_LBUTTONDBLCLK:
-                    this.doubleClickFired = true;
+                    doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:

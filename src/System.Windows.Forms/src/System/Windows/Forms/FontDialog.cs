@@ -415,7 +415,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.showColor = value;
+                showColor = value;
             }
         }
 
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT();
             IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
             NativeMethods.LOGFONT lf = new NativeMethods.LOGFONT();
