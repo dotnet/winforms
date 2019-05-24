@@ -761,12 +761,12 @@ namespace System.Windows.Forms
 
         public static bool operator ==(Cursor left, Cursor right)
         {
-            if (object.ReferenceEquals(left, null) != object.ReferenceEquals(right, null))
+            if (left is null != right is null)
             {
                 return false;
             }
 
-            if (!object.ReferenceEquals(left, null))
+            if (!(left is null))
             {
                 return (left.handle == right.handle);
             }

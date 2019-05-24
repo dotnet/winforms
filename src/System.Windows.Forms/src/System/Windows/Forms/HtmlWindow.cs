@@ -579,13 +579,13 @@ namespace System.Windows.Forms
         public static bool operator ==(HtmlWindow left, HtmlWindow right)
         {
             //Not equal if only one's null.
-            if (object.ReferenceEquals(left, null) != object.ReferenceEquals(right, null))
+            if (left is null != right is null)
             {
                 return false;
             }
 
             //Equal if both are null.
-            if (object.ReferenceEquals(left, null))
+            if (left is null)
             {
                 return true;
             }
