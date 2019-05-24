@@ -337,8 +337,7 @@ namespace System.Windows.Forms
                         DestroyHandle();
                         originals = null;
                         nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Duplicate(new HandleRef(himl, himl.Handle)));
-                        int x, y;
-                        if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out x, out y))
+                        if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y))
                         {
                             imageSize = new Size(x, y);
                         }
@@ -606,8 +605,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    bool ownsBitmap = false;
-                    Bitmap bitmapValue = CreateBitmap(original, out ownsBitmap);
+                    Bitmap bitmapValue = CreateBitmap(original, out bool ownsBitmap);
                     AddToHandle(original, bitmapValue);
                     if (ownsBitmap)
                         bitmapValue.Dispose();
@@ -1444,8 +1442,7 @@ namespace System.Windows.Forms
 
                     if (owner.HandleCreated)
                     {
-                        bool ownsBitmap = false;
-                        Bitmap bitmapValue = owner.CreateBitmap(original, out ownsBitmap);
+                        Bitmap bitmapValue = owner.CreateBitmap(original, out bool ownsBitmap);
                         index = owner.AddToHandle(original, bitmapValue);
                         if (ownsBitmap)
                             bitmapValue.Dispose();

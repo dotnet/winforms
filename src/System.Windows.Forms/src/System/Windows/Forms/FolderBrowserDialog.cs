@@ -229,9 +229,8 @@ namespace System.Windows.Forms
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-            CoTaskMemSafeHandle listHandle;
 
-            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out listHandle);
+            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
             if (listHandle.IsInvalid)
             {
                 Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);

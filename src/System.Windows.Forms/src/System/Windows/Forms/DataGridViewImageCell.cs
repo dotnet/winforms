@@ -139,8 +139,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int imageLayout = Properties.GetInteger(PropImageCellLayout, out found);
+                int imageLayout = Properties.GetInteger(PropImageCellLayout, out bool found);
                 if (found)
                 {
                     return (DataGridViewImageCellLayout)imageLayout;
@@ -302,11 +301,8 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle imgBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -361,11 +357,8 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errBounds = PaintPrivate(graphics,
                 cellBounds,

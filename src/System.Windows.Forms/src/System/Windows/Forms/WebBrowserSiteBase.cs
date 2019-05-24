@@ -198,8 +198,7 @@ namespace System.Windows.Forms
         {
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
-                IntPtr hwnd;
-                if (NativeMethods.Succeeded(Host.AXInPlaceObject.GetWindow(out hwnd)))
+                if (NativeMethods.Succeeded(Host.AXInPlaceObject.GetWindow(out IntPtr hwnd)))
                 {
                     if (Host.GetHandleNoCreate() != hwnd)
                     {

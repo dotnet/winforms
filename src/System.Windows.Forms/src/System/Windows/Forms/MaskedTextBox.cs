@@ -1277,9 +1277,8 @@ namespace System.Windows.Forms
                 {
                     if (RejectInputOnFirstFailure)
                     {
-                        MaskedTextResultHint hint;
                         string oldText = TextOutput;
-                        if (maskedTextProvider.Set(value, out caretTestPos, out hint))
+                        if (maskedTextProvider.Set(value, out caretTestPos, out MaskedTextResultHint hint))
                         {
                             //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect )
                             if (TextOutput != oldText)
@@ -1663,12 +1662,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            int tempPos;
             int endPos = selectionLen > 0 ? startPosition + selectionLen - 1 : startPosition;
-            MaskedTextResultHint hint;
 
             string oldText = TextOutput;
-            if (maskedTextProvider.RemoveAt(startPosition, endPos, out tempPos, out hint))
+            if (maskedTextProvider.RemoveAt(startPosition, endPos, out int tempPos, out MaskedTextResultHint hint))
             {
                 //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect) // Text was changed.
                 if (TextOutput != oldText)
@@ -1915,8 +1912,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-            int selStart, selLength;
-            base.GetSelectionStartAndLength(out selStart, out selLength);
+            base.GetSelectionStartAndLength(out int selStart, out int selLength);
 
             if (selLength == 0)
             {
@@ -2034,10 +2030,8 @@ namespace System.Windows.Forms
             {
                 if (!ReadOnly)
                 {
-                    int selectionLen;
-                    int startPosition;
 
-                    base.GetSelectionStartAndLength(out startPosition, out selectionLen);
+                    base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
                     switch (e.Modifiers)
                     {
@@ -2135,15 +2129,12 @@ namespace System.Windows.Forms
             {
                 // At this point the character needs to be processed ...
 
-                MaskedTextResultHint hint;
 
-                int selectionStart;
-                int selectionLen;
 
-                base.GetSelectionStartAndLength(out selectionStart, out selectionLen);
+                base.GetSelectionStartAndLength(out int selectionStart, out int selectionLen);
 
                 string oldText = TextOutput;
-                if (PlaceChar(e.KeyChar, selectionStart, selectionLen, IsOverwriteMode, out hint))
+                if (PlaceChar(e.KeyChar, selectionStart, selectionLen, IsOverwriteMode, out MaskedTextResultHint hint))
                 {
                     //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect )
                     if (TextOutput != oldText)
@@ -2444,8 +2435,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-            int selStart, selLength;
-            base.GetSelectionStartAndLength(out selStart, out selLength);
+            base.GetSelectionStartAndLength(out int selStart, out int selLength);
 
             if (string.IsNullOrEmpty(text))
             {
@@ -2902,8 +2892,7 @@ namespace System.Windows.Forms
 
             if (!ReadOnly)
             {
-                int selStart, selLength;
-                base.GetSelectionStartAndLength(out selStart, out selLength);
+                base.GetSelectionStartAndLength(out int selStart, out int selLength);
                 Delete(Keys.Delete, selStart, selLength);
                 return true;
             }
@@ -3012,8 +3001,7 @@ namespace System.Windows.Forms
 
             // Position the composition window in a valid place.
 
-            int startPosition, selectionLen;
-            base.GetSelectionStartAndLength(out startPosition, out selectionLen);
+            base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
             int startEditPos = maskedTextProvider.FindEditPositionFrom(startPosition, forward);
 

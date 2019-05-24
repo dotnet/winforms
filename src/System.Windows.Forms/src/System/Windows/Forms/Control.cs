@@ -771,8 +771,7 @@ namespace System.Windows.Forms
 
             get
             {
-                bool found;
-                int role = Properties.GetInteger(PropAccessibleRole, out found);
+                int role = Properties.GetInteger(PropAccessibleRole, out bool found);
                 if (found)
                 {
                     return (AccessibleRole)role;
@@ -934,8 +933,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool contains;
-                AmbientProperties props = (AmbientProperties)Properties.GetObject(PropAmbientPropertiesService, out contains);
+                AmbientProperties props = (AmbientProperties)Properties.GetObject(PropAmbientPropertiesService, out bool contains);
                 if (!contains)
                 {
                     if (Site != null)
@@ -1587,8 +1585,7 @@ namespace System.Windows.Forms
 
                 // check if we're caching text.
                 //
-                bool found;
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out found);
+                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out bool found);
 
                 return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
             }
@@ -1605,8 +1602,7 @@ namespace System.Windows.Forms
 
                 // otherwise, get the state and update the cache if necessary.
                 //
-                bool found;
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out found);
+                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out bool found);
 
                 if (value)
                 {
@@ -2110,8 +2106,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    int pid;
-                    return SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out pid);
+                    return SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int pid);
                 }
                 else
                 {
@@ -2798,8 +2793,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int fontHeight = Properties.GetInteger(PropFontHeight, out found);
+                int fontHeight = Properties.GetInteger(PropFontHeight, out bool found);
                 if (found && fontHeight != -1)
                 {
                     return fontHeight;
@@ -3279,8 +3273,7 @@ namespace System.Windows.Forms
                         hwnd = new HandleRef(marshalingControl, marshalingControl.Handle);
                     }
 
-                    int pid;
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(hwnd, out pid);
+                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(hwnd, out int pid);
                     int currentThread = SafeNativeMethods.GetCurrentThreadId();
                     return (hwndThread != currentThread);
                 }
@@ -3966,8 +3959,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out found);
+                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -4577,8 +4569,7 @@ namespace System.Windows.Forms
             {
                 if (Properties.ContainsInteger(PropUseCompatibleTextRendering))
                 {
-                    bool found;
-                    int value = Properties.GetInteger(PropUseCompatibleTextRendering, out found);
+                    int value = Properties.GetInteger(PropUseCompatibleTextRendering, out bool found);
                     if (found)
                     {
                         return value == 1;
@@ -6347,9 +6338,9 @@ namespace System.Windows.Forms
 
                 if (!asyncResult.IsCompleted)
                 {
-                    int pid; // ignored
+                    // ignored
                     Control marshaler = FindMarshalingControl();
-                    if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(marshaler, marshaler.Handle), out pid) == SafeNativeMethods.GetCurrentThreadId())
+                    if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(marshaler, marshaler.Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
                     {
                         marshaler.InvokeMarshaledCallbacks();
                     }
@@ -8048,8 +8039,8 @@ namespace System.Windows.Forms
             // It is important that syncSameThread always be false for asynchronous calls.
             //
             bool syncSameThread = false;
-            int pid; // ignored
-            if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out pid) == SafeNativeMethods.GetCurrentThreadId())
+            // ignored
+            if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
             {
                 if (synchronous)
                     syncSameThread = true;
@@ -12632,8 +12623,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            bool found;
-            object cursor = Properties.GetObject(PropCursor, out found);
+            object cursor = Properties.GetObject(PropCursor, out bool found);
             return (found && cursor != null);
         }
 
@@ -12662,8 +12652,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            bool found;
-            object font = Properties.GetObject(PropFont, out found);
+            object font = Properties.GetObject(PropFont, out bool found);
             return (found && font != null);
         }
 
@@ -12673,8 +12662,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            bool found;
-            int rtl = Properties.GetInteger(PropRightToLeft, out found);
+            int rtl = Properties.GetInteger(PropRightToLeft, out bool found);
             return (found && rtl != (int)RightToLeft.Inherit);
         }
 
@@ -16860,8 +16848,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStripControlHost value;
-                toolStripControlHostReference.TryGetTarget(out value);
+                toolStripControlHostReference.TryGetTarget(out ToolStripControlHost value);
                 return value;
             }
             set
@@ -17140,9 +17127,8 @@ namespace System.Windows.Forms
                         if (Assembly.GetEntryAssembly() == null)
                         {
                             // Now check for IHTMLDocument2
-                            UnsafeNativeMethods.IOleContainer container;
 
-                            if (NativeMethods.Succeeded(clientSite.GetContainer(out container)) && container is NativeMethods.IHTMLDocument)
+                            if (NativeMethods.Succeeded(clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)) && container is NativeMethods.IHTMLDocument)
                             {
                                 isIE = true;
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
@@ -17793,8 +17779,6 @@ namespace System.Windows.Forms
                     //
                     hwndParent = inPlaceSite.GetWindow();
 
-                    UnsafeNativeMethods.IOleInPlaceFrame pFrame;
-                    UnsafeNativeMethods.IOleInPlaceUIWindow pWindow;
                     NativeMethods.COMRECT posRect = new NativeMethods.COMRECT();
                     NativeMethods.COMRECT clipRect = new NativeMethods.COMRECT();
 
@@ -17810,7 +17794,7 @@ namespace System.Windows.Forms
                         inPlaceFrame = null;
                     }
 
-                    inPlaceSite.GetWindowContext(out pFrame, out pWindow, posRect, clipRect, inPlaceFrameInfo);
+                    inPlaceSite.GetWindowContext(out UnsafeNativeMethods.IOleInPlaceFrame pFrame, out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow, posRect, clipRect, inPlaceFrameInfo);
 
                     SetObjectRects(posRect, clipRect);
 
@@ -18409,7 +18393,6 @@ namespace System.Windows.Forms
 
                 // Now use the rest of the goo that we got passed in.
                 //
-                int status;
 
                 pQaControl.cbSize = Marshal.SizeOf<UnsafeNativeMethods.tagQACONTROL>();
 
@@ -18420,7 +18403,7 @@ namespace System.Windows.Forms
                     SetAdvise(NativeMethods.DVASPECT_CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
                 }
 
-                ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out status);
+                ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out int status);
                 pQaControl.dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -18600,8 +18583,7 @@ namespace System.Windows.Forms
                     /// </summary>
                     private static IntPtr InternalQueryInterface(IntPtr pUnk, ref Guid iid)
                     {
-                        IntPtr ppv;
-                        int hresult = Marshal.QueryInterface(pUnk, ref iid, out ppv);
+                        int hresult = Marshal.QueryInterface(pUnk, ref iid, out IntPtr ppv);
                         if (hresult != 0 || ppv == IntPtr.Zero)
                         {
                             throw new InvalidCastException(SR.AxInterfaceNotSupported);
@@ -19692,8 +19674,7 @@ namespace System.Windows.Forms
                 if (service == typeof(HtmlDocument))
                 {
 
-                    UnsafeNativeMethods.IOleContainer iOlecontainer;
-                    int hr = clientSite.GetContainer(out iOlecontainer);
+                    int hr = clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer iOlecontainer);
 
                     if (NativeMethods.Succeeded(hr)
                             && (iOlecontainer is UnsafeNativeMethods.IHTMLDocument))
@@ -19792,9 +19773,8 @@ namespace System.Windows.Forms
 
                 UnsafeNativeMethods.IFont oleFont = UnsafeNativeMethods.OleCreateFontIndirect(fontDesc, ref iid);
                 IntPtr pFont = Marshal.GetIUnknownForObject(oleFont);
-                IntPtr pIFont;
 
-                int hr = Marshal.QueryInterface(pFont, ref iid, out pIFont);
+                int hr = Marshal.QueryInterface(pFont, ref iid, out IntPtr pIFont);
 
                 Marshal.Release(pFont);
 
@@ -20792,8 +20772,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    UnsafeNativeMethods.IRawElementProviderSimple provider;
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
                     return provider;
                 }
             }

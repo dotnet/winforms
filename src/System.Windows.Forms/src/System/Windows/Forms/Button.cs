@@ -355,8 +355,7 @@ namespace System.Windows.Forms
         {
             if (CanSelect)
             {
-                bool validatedControlAllowsFocusChange;
-                bool validate = ValidateActiveControl(out validatedControlAllowsFocusChange);
+                bool validate = ValidateActiveControl(out bool validatedControlAllowsFocusChange);
                 if (!ValidationCancelled && (validate || validatedControlAllowsFocusChange))
                 {
                     //Paint in raised state...

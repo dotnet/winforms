@@ -261,9 +261,8 @@ namespace System.Windows.Forms.Layout
             // if the table layout is nested, this becomes pretty nasty, as we dont cache row, column
             // assignments in preferred size.  
             // GPS(0,1) GPS(1,0) should return same as GPS(0,0)- if that's already cached return it.
-            bool isCacheValid = false;
             float oldWidth = -1f;
-            Size prefSize = containerInfo.GetCachedPreferredSize(proposedConstraints, out isCacheValid);
+            Size prefSize = containerInfo.GetCachedPreferredSize(proposedConstraints, out bool isCacheValid);
             if (isCacheValid)
             {
                 return prefSize;

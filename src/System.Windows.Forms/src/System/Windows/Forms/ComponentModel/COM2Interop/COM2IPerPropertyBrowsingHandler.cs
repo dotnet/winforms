@@ -41,8 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private Guid GetPropertyPageGuid(NativeMethods.IPerPropertyBrowsing target, int dispid)
         {
             // check for a property page
-            Guid guid;
-            int hr = target.MapPropertyToPage(dispid, out guid);
+            int hr = target.MapPropertyToPage(dispid, out Guid guid);
             if (hr == NativeMethods.S_OK)
             {
                 return guid;

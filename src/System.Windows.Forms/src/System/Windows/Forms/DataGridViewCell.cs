@@ -2745,8 +2745,7 @@ namespace System.Windows.Forms
         ]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags)
         {
-            bool widthTruncated;
-            return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out widthTruncated);
+            return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out bool widthTruncated);
         }
 
         [
@@ -4567,8 +4566,7 @@ namespace System.Windows.Forms
 
         internal static bool TextFitsInBounds(Graphics graphics, string text, Font font, Size maxBounds, TextFormatFlags flags)
         {
-            bool widthTruncated;
-            int requiredHeight = DataGridViewCell.MeasureTextHeight(graphics, text, font, maxBounds.Width, flags, out widthTruncated);
+            int requiredHeight = DataGridViewCell.MeasureTextHeight(graphics, text, font, maxBounds.Width, flags, out bool widthTruncated);
             return requiredHeight <= maxBounds.Height && !widthTruncated;
         }
 

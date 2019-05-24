@@ -122,8 +122,7 @@ namespace System.Windows.Forms
 
         public override void EndCurrentEdit()
         {
-            bool success;
-            PullData(out success);
+            PullData(out bool success);
 
             if (success)
             {

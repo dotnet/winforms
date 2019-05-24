@@ -1123,8 +1123,7 @@ namespace System.Windows.Forms
             Debug.Assert(!DataGridView.InDisplayIndexAdjustments);
 
             DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)items[index];
-            Point newCurrentCell;
-            DataGridView.OnRemovingColumn(dataGridViewColumn, out newCurrentCell, force);
+            DataGridView.OnRemovingColumn(dataGridViewColumn, out Point newCurrentCell, force);
             InvalidateCachedColumnsOrder();
             items.RemoveAt(index);
             dataGridViewColumn.DataGridViewInternal = null;

@@ -501,8 +501,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int drawMode = Properties.GetInteger(PropDrawMode, out found);
+                int drawMode = Properties.GetInteger(PropDrawMode, out bool found);
                 if (found)
                 {
                     return (DrawMode)drawMode;
@@ -537,8 +536,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out found);
+                int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
 
                 if (found)
                 {
@@ -581,8 +579,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int dropDownHeight = Properties.GetInteger(PropDropDownHeight, out found);
+                int dropDownHeight = Properties.GetInteger(PropDropDownHeight, out bool found);
                 if (found)
                 {
                     return dropDownHeight;
@@ -764,8 +761,7 @@ namespace System.Windows.Forms
                     !IsHandleCreated)
                 {
 
-                    bool found;
-                    int itemHeight = Properties.GetInteger(PropItemHeight, out found);
+                    int itemHeight = Properties.GetInteger(PropItemHeight, out bool found);
                     if (found)
                     {
                         return itemHeight;
@@ -1325,8 +1321,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int style = Properties.GetInteger(PropStyle, out found);
+                int style = Properties.GetInteger(PropStyle, out bool found);
                 if (found)
                 {
                     return (ComboBoxStyle)style;
@@ -2592,8 +2587,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            bool found;
-            int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out found);
+            int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
             if (found)
             {
                 SendMessage(NativeMethods.CB_SETDROPPEDWIDTH, dropDownWidth, 0);
@@ -5514,8 +5508,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    UnsafeNativeMethods.IRawElementProviderSimple provider;
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out provider);
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
@@ -5747,8 +5740,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    UnsafeNativeMethods.IRawElementProviderSimple provider;
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out provider);
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
@@ -6008,12 +6000,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    int left;
-                    int top;
-                    int width;
-                    int height;
                     var systemIAccessible = GetSystemIAccessibleInternal();
-                    systemIAccessible.accLocation(out left, out top, out width, out height, COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
+                    systemIAccessible.accLocation(out int left, out int top, out int width, out int height, COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
                     return new Rectangle(left, top, width, height);
                 }
             }

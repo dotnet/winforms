@@ -814,9 +814,8 @@ namespace System.Windows.Forms
         /// </summary>
         private static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
-            int processId;
             int thisPID = SafeNativeMethods.GetCurrentProcessId();
-            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out processId);
+            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int processId);
             if (processId == thisPID && SafeNativeMethods.IsWindowVisible(new HandleRef(null, handle)))
             {
 
@@ -898,7 +897,6 @@ namespace System.Windows.Forms
         public static bool FilterMessage(ref Message message)
         {
 
-            bool modified;
 
             // Create copy of MSG structure
             NativeMethods.MSG msg = new NativeMethods.MSG
@@ -909,7 +907,7 @@ namespace System.Windows.Forms
                 lParam = message.LParam
             };
 
-            bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out modified);
+            bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out bool modified);
             if (modified)
             {
                 message.HWnd = msg.hwnd;
@@ -1245,8 +1243,7 @@ namespace System.Windows.Forms
         private static ThreadContext GetContextForHandle(HandleRef handle)
         {
 
-            int pid;
-            int id = SafeNativeMethods.GetWindowThreadProcessId(handle, out pid);
+            int id = SafeNativeMethods.GetWindowThreadProcessId(handle, out int pid);
             ThreadContext cxt = ThreadContext.FromId(id);
             Debug.Assert(cxt != null, "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
             return cxt;
@@ -2522,8 +2519,7 @@ namespace System.Windows.Forms
                                     grfcadvf = NativeMethods.MSOCM.msocadvfModal
                                 };
 
-                                IntPtr localComponentID;
-                                bool result = msocm.FRegisterComponent(this, info, out localComponentID);
+                                bool result = msocm.FRegisterComponent(this, info, out IntPtr localComponentID);
                                 componentID = unchecked((int)(long)localComponentID);
                                 Debug.Assert(componentID != INVALID_ID, "Our ID sentinel was returned as a valid ID");
 
@@ -2869,8 +2865,7 @@ namespace System.Windows.Forms
                     // and do not call Dispose.  Otherwise we would destroy
                     // controls that are living on the parking window.
                     //
-                    int pid;
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(parkingWindows[0], parkingWindows[0].Handle), out pid);
+                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(parkingWindows[0], parkingWindows[0].Handle), out int pid);
                     int currentThread = SafeNativeMethods.GetCurrentThreadId();
 
                     for (int i = 0; i < parkingWindows.Count; i++)
@@ -3703,8 +3698,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal bool PreTranslateMessage(ref NativeMethods.MSG msg)
             {
-                bool modified = false;
-                if (ProcessFilters(ref msg, out modified))
+                if (ProcessFilters(ref msg, out bool modified))
                 {
                     return true;
                 }
@@ -4237,8 +4231,8 @@ namespace System.Windows.Forms
                         //This is important for scenarios where apps leak controls until after the
                         //messagepump is gone and then decide to clean them up.  We should clean
                         //up the parkingwindow in this case and a postmessage won't do it.
-                        int lpdwProcessId;  //unused
-                        int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, HandleInternal), out lpdwProcessId);
+                        //unused
+                        int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, HandleInternal), out int lpdwProcessId);
                         Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
 
                         //We only do this if the ThreadContext tells us that we are currently

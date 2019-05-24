@@ -1801,8 +1801,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Validate(bool checkAutoValidate)
         {
-            bool validatedControlAllowsFocusChange;
-            return ValidateInternal(checkAutoValidate, out validatedControlAllowsFocusChange);
+            return ValidateInternal(checkAutoValidate, out bool validatedControlAllowsFocusChange);
         }
 
         internal bool ValidateInternal(bool checkAutoValidate, out bool validatedControlAllowsFocusChange)

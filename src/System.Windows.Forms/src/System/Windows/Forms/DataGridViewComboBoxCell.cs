@@ -295,8 +295,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int displayStyle = Properties.GetInteger(PropComboBoxCellDisplayStyle, out found);
+                int displayStyle = Properties.GetInteger(PropComboBoxCellDisplayStyle, out bool found);
                 if (found)
                 {
                     return (DataGridViewComboBoxDisplayStyle)displayStyle;
@@ -345,8 +344,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int displayStyleForCurrentCellOnly = Properties.GetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, out found);
+                int displayStyleForCurrentCellOnly = Properties.GetInteger(PropComboBoxCellDisplayStyleForCurrentCellOnly, out bool found);
                 if (found)
                 {
                     return displayStyleForCurrentCellOnly == 0 ? false : true;
@@ -423,8 +421,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int dropDownWidth = Properties.GetInteger(PropComboBoxCellDropDownWidth, out found);
+                int dropDownWidth = Properties.GetInteger(PropComboBoxCellDropDownWidth, out bool found);
                 return found ? dropDownWidth : 1;
             }
             set
@@ -470,8 +467,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int flatStyle = Properties.GetInteger(PropComboBoxCellFlatStyle, out found);
+                int flatStyle = Properties.GetInteger(PropComboBoxCellFlatStyle, out bool found);
                 if (found)
                 {
                     return (FlatStyle)flatStyle;
@@ -535,8 +531,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int maxDropDownItems = Properties.GetInteger(PropComboBoxCellMaxDropDownItems, out found);
+                int maxDropDownItems = Properties.GetInteger(PropComboBoxCellMaxDropDownItems, out bool found);
                 if (found)
                 {
                     return maxDropDownItems;
@@ -943,13 +938,9 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetEditedFormattedValue(value, rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
-            Rectangle dropDownButtonRect;
             Rectangle contentBounds = PaintPrivate(graphics,
                 cellBounds,
                 cellBounds,
@@ -959,7 +950,7 @@ namespace System.Windows.Forms
                 null /*errorText*/,             // contentBounds is independent of errorText
                 cellStyle,
                 dgvabsEffective,
-                out dropDownButtonRect,         // not used
+                out Rectangle dropDownButtonRect,         // not used
                 DataGridViewPaintParts.ContentForeground,
                 true  /*computeContentBounds*/,
                 false /*computeErrorIconBounds*/,
@@ -1050,13 +1041,9 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetEditedFormattedValue(value, rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
-            Rectangle dropDownButtonRect;
             Rectangle errorIconBounds = PaintPrivate(graphics,
                 cellBounds,
                 cellBounds,
@@ -1066,7 +1053,7 @@ namespace System.Windows.Forms
                 GetErrorText(rowIndex),
                 cellStyle,
                 dgvabsEffective,
-                out dropDownButtonRect,         // not used
+                out Rectangle dropDownButtonRect,         // not used
                 DataGridViewPaintParts.ContentForeground,
                 false /*computeContentBounds*/,
                 true  /*computeErrorBounds*/,
@@ -1144,8 +1131,7 @@ namespace System.Windows.Forms
             if ((DataManager != null && (ValueMemberProperty != null || DisplayMemberProperty != null)) ||
                 !string.IsNullOrEmpty(ValueMember) || !string.IsNullOrEmpty(DisplayMember))
             {
-                object displayValue;
-                if (!LookupDisplayValue(rowIndex, value, out displayValue))
+                if (!LookupDisplayValue(rowIndex, value, out object displayValue))
                 {
                     if (value == System.DBNull.Value)
                     {
@@ -2020,7 +2006,6 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            Rectangle dropDownButtonRect;
             PaintPrivate(graphics,
                 clipBounds,
                 cellBounds,
@@ -2030,7 +2015,7 @@ namespace System.Windows.Forms
                 errorText,
                 cellStyle,
                 advancedBorderStyle,
-                out dropDownButtonRect,     // not used
+                out Rectangle dropDownButtonRect,     // not used
                 paintParts,
                 false /*computeContentBounds*/,
                 false /*computeErrorIconBounds*/,

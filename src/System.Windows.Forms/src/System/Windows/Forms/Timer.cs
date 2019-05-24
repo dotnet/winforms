@@ -243,8 +243,7 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    int pid;
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out pid);
+                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out int pid);
                     return hwndThread != SafeNativeMethods.GetCurrentThreadId();
                 }
 

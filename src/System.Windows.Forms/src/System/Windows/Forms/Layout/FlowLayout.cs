@@ -124,11 +124,10 @@ namespace System.Windows.Forms.Layout
 
             for (int i = 0; i < container.Children.Count;)
             {
-                int breakIndex;
                 Size rowSize = Size.Empty;
 
                 Rectangle measureBounds = new Rectangle(displayRect.X, displayRect.Y, displayRect.Width, displayRect.Height - layoutSize.Height);
-                rowSize = MeasureRow(containerProxy, elementProxy, i, measureBounds, out breakIndex);
+                rowSize = MeasureRow(containerProxy, elementProxy, i, measureBounds, out int breakIndex);
 
 
                 // if we are not wrapping contents, then the breakIndex (as set in MeasureRow)
@@ -161,8 +160,7 @@ namespace System.Windows.Forms.Layout
         // for an explaination of the elementProxy parameter.
         private void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
-            int dummy;
-            Size outSize = xLayoutRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out dummy, /* measureOnly = */ false);
+            Size outSize = xLayoutRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
             Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
         }
 

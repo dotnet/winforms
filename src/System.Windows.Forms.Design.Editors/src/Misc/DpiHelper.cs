@@ -240,8 +240,7 @@ namespace System.Windows.Forms
         internal static bool IsExpectedConfigValue(string configurationSettingName, bool expectedValue)
         {
             string value = ConfigurationOptions.GetConfigSettingValue(configurationSettingName);
-            bool valueAsBool;
-            if (!bool.TryParse(value, out valueAsBool))
+            if (!bool.TryParse(value, out bool valueAsBool))
             {
                 // neither 'true' nor 'false' - implies 'false'
                 valueAsBool = false;

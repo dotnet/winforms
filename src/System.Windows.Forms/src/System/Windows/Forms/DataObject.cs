@@ -1650,8 +1650,7 @@ namespace System.Windows.Forms
             {
                 object value = null;
 
-                bool isSerializedObject;
-                Stream stream = ReadByteStreamFromHandle(handle, out isSerializedObject);
+                Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
 
                 if (isSerializedObject)
                 {
@@ -1758,8 +1757,7 @@ namespace System.Windows.Forms
             //=------------------------------------------------------------------------=
             public virtual object GetData(string format, bool autoConvert)
             {
-                bool done = false;
-                object baseVar = GetDataFromBoundOleDataObject(format, out done);
+                object baseVar = GetDataFromBoundOleDataObject(format, out bool done);
                 object original = baseVar;
 
                 if (!done && autoConvert && (baseVar == null || baseVar is MemoryStream))

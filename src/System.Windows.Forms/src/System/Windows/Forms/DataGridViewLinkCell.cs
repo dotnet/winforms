@@ -131,8 +131,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int linkBehavior = Properties.GetInteger(PropLinkCellLinkBehavior, out found);
+                int linkBehavior = Properties.GetInteger(PropLinkCellLinkBehavior, out bool found);
                 if (found)
                 {
                     return (LinkBehavior)linkBehavior;
@@ -242,8 +241,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int linkState = Properties.GetInteger(PropLinkCellLinkState, out found);
+                int linkState = Properties.GetInteger(PropLinkCellLinkState, out bool found);
                 if (found)
                 {
                     return (LinkState)linkState;
@@ -302,8 +300,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int trackVisitedState = Properties.GetInteger(PropLinkCellTrackVisitedState, out found);
+                int trackVisitedState = Properties.GetInteger(PropLinkCellTrackVisitedState, out bool found);
                 if (found)
                 {
                     return trackVisitedState == 0 ? false : true;
@@ -346,8 +343,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int useColumnTextForLinkValue = Properties.GetInteger(PropLinkCellUseColumnTextForLinkValue, out found);
+                int useColumnTextForLinkValue = Properties.GetInteger(PropLinkCellUseColumnTextForLinkValue, out bool found);
                 if (found)
                 {
                     return useColumnTextForLinkValue == 0 ? false : true;
@@ -544,11 +540,8 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle linkBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -603,11 +596,8 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errorIconBounds = PaintPrivate(graphics,
                 cellBounds,

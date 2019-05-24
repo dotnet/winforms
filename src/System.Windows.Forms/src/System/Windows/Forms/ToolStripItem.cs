@@ -316,8 +316,7 @@ namespace System.Windows.Forms
 
             get
             {
-                bool found;
-                int role = Properties.GetInteger(PropAccessibleRole, out found);
+                int role = Properties.GetInteger(PropAccessibleRole, out bool found);
                 if (found)
                 {
                     return (AccessibleRole)role;
@@ -1583,8 +1582,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int action = Properties.GetInteger(PropMergeAction, out found);
+                int action = Properties.GetInteger(PropMergeAction, out bool found);
                 if (found)
                 {
                     return (MergeAction)action;
@@ -1619,8 +1617,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int index = Properties.GetInteger(PropMergeIndex, out found);
+                int index = Properties.GetInteger(PropMergeIndex, out bool found);
                 if (found)
                 {
                     return index;
@@ -2069,8 +2066,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out found);
+                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -3501,8 +3497,7 @@ namespace System.Windows.Forms
             if (Owner != null)
             {
                 // check if we need to fire OnRightToLeftChanged
-                bool found = false;
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out found);
+                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -3875,8 +3870,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            bool found;
-            object font = Properties.GetObject(PropFont, out found);
+            object font = Properties.GetObject(PropFont, out bool found);
             return (found && font != null);
         }
 
@@ -3934,8 +3928,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            bool found = false;
-            int rightToLeft = Properties.GetInteger(PropRightToLeft, out found);
+            int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
             if (!found)
             {
                 return false;

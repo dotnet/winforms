@@ -160,8 +160,7 @@ namespace System.Windows.Forms.Layout
             string attributeValue = GetAttributeValue(node, attribute);
             if (!string.IsNullOrEmpty(attributeValue))
             {
-                int result;
-                if (int.TryParse(attributeValue, out result))
+                if (int.TryParse(attributeValue, out int result))
                 {
                     return result;
                 }
@@ -250,8 +249,7 @@ namespace System.Windows.Forms.Layout
                             nextIndex++;
                         }
                         string floatString = floatStringBuilder.ToString();
-                        float width;
-                        if (!float.TryParse(floatString, NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out width))
+                        if (!float.TryParse(floatString, NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out float width))
                         {
                             width = 0F;
                         }

@@ -429,8 +429,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = false;
-                object checkState = Properties.GetInteger(PropCheckState, out found);
+                object checkState = Properties.GetInteger(PropCheckState, out bool found);
                 return (found) ? (CheckState)checkState : CheckState.Unchecked;
             }
 
@@ -511,8 +510,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = false;
-                object shortcutKeys = Properties.GetInteger(PropShortcutKeys, out found);
+                object shortcutKeys = Properties.GetInteger(PropShortcutKeys, out bool found);
                 return (found) ? (Keys)shortcutKeys : Keys.None;
             }
             set

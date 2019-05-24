@@ -297,11 +297,8 @@ namespace System.Windows.Forms
             // we mimic a lot of the painting code
 
             // get the borders
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle contentBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -352,11 +349,8 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);

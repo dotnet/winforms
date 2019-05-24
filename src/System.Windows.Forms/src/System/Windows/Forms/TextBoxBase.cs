@@ -1125,8 +1125,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int selStart, selLength;
-                GetSelectionStartAndLength(out selStart, out selLength);
+                GetSelectionStartAndLength(out int selStart, out int selLength);
                 return Text.Substring(selStart, selLength);
             }
             set
@@ -1188,9 +1187,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                int start, length;
 
-                GetSelectionStartAndLength(out start, out length);
+                GetSelectionStartAndLength(out int start, out int length);
 
                 return length;
             }
@@ -1202,8 +1200,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionLength), value));
                 }
 
-                int selStart, selLength;
-                GetSelectionStartAndLength(out selStart, out selLength);
+                GetSelectionStartAndLength(out int selStart, out int selLength);
 
                 if (value != selLength)
                 {
@@ -1229,9 +1226,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                int selStart, selLength;
 
-                GetSelectionStartAndLength(out selStart, out selLength);
+                GetSelectionStartAndLength(out int selStart, out int selLength);
 
                 return selStart;
             }
@@ -1456,9 +1452,8 @@ namespace System.Windows.Forms
         {
             if (text.Length > 0)
             {
-                int selStart, selLength;
 
-                GetSelectionStartAndLength(out selStart, out selLength);
+                GetSelectionStartAndLength(out int selStart, out int selLength);
 
                 try
                 {
@@ -1889,7 +1884,6 @@ namespace System.Windows.Forms
 
                                 if (textDocument != null)
                                 {
-                                    int selStart, selLength;
 
                                     // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
                                     // much text as possible.
@@ -1899,7 +1893,7 @@ namespace System.Windows.Forms
                                     // 3. If the first visible line is smaller than the start of the selection, then we are done:
                                     //      The selection fits inside the RichTextBox display rectangle.
                                     // 4. Otherwise, scroll the selection to the top of the RichTextBox.
-                                    GetSelectionStartAndLength(out selStart, out selLength);
+                                    GetSelectionStartAndLength(out int selStart, out int selLength);
                                     int selStartLine = GetLineFromCharIndex(selStart);
 
                                     // 1. Scroll the RichTextBox all the way to the bottom
@@ -2009,8 +2003,7 @@ namespace System.Windows.Forms
             //if our handle is created - send message...
             if (IsHandleCreated)
             {
-                int s, e;
-                AdjustSelectionStartAndEnd(start, length, out s, out e, textLen);
+                AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
                 SendMessage(Interop.EditMessages.EM_SETSEL, s, e);
                 // 
@@ -2124,8 +2117,7 @@ namespace System.Windows.Forms
             if (textBoxFlags[setSelectionOnHandleCreated])
             {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
-                int start, end;
-                AdjustSelectionStartAndEnd(selectionStart, selectionLength, out start, out end, -1);
+                AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, -1);
                 SendMessage(Interop.EditMessages.EM_SETSEL, start, end);
             }
         }

@@ -45,8 +45,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int buttonState = Properties.GetInteger(PropButtonCellState, out found);
+                int buttonState = Properties.GetInteger(PropButtonCellState, out bool found);
                 if (found)
                 {
                     return (ButtonState)buttonState;
@@ -81,8 +80,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int flatStyle = Properties.GetInteger(PropButtonCellFlatStyle, out found);
+                int flatStyle = Properties.GetInteger(PropButtonCellFlatStyle, out bool found);
                 if (found)
                 {
                     return (FlatStyle)flatStyle;
@@ -130,8 +128,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int useColumnTextForButtonValue = Properties.GetInteger(PropButtonCellUseColumnTextForButtonValue, out found);
+                int useColumnTextForButtonValue = Properties.GetInteger(PropButtonCellUseColumnTextForButtonValue, out bool found);
                 if (found)
                 {
                     return useColumnTextForButtonValue == 0 ? false : true;
@@ -208,11 +205,8 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle contentBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -265,11 +259,8 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errorIconBounds = PaintPrivate(graphics,
                 cellBounds,

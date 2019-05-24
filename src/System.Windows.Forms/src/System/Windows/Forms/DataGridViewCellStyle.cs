@@ -84,8 +84,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int alignment = Properties.GetInteger(PropAlignment, out found);
+                int alignment = Properties.GetInteger(PropAlignment, out bool found);
                 if (found)
                 {
                     return (DataGridViewContentAlignment)alignment;
@@ -530,8 +529,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int wrap = Properties.GetInteger(PropWrapMode, out found);
+                int wrap = Properties.GetInteger(PropWrapMode, out bool found);
                 if (found)
                 {
                     return (DataGridViewTriState)wrap;
@@ -749,8 +747,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeBackColor()
         {
-            bool found;
-            Properties.GetColor(PropBackColor, out found);
+            Properties.GetColor(PropBackColor, out bool found);
             return found;
         }
 
@@ -761,8 +758,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeForeColor()
         {
-            bool found;
-            Properties.GetColor(PropForeColor, out found);
+            Properties.GetColor(PropForeColor, out bool found);
             return found;
         }
 
@@ -778,15 +774,13 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeSelectionBackColor()
         {
-            bool found;
-            Properties.GetObject(PropSelectionBackColor, out found);
+            Properties.GetObject(PropSelectionBackColor, out bool found);
             return found;
         }
 
         private bool ShouldSerializeSelectionForeColor()
         {
-            bool found;
-            Properties.GetColor(PropSelectionForeColor, out found);
+            Properties.GetColor(PropSelectionForeColor, out bool found);
             return found;
         }
 

@@ -472,8 +472,7 @@ namespace System.Windows.Forms
                     //
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
-                        IntPtr hwndInPlaceObject;
-                        if (NativeMethods.Succeeded(AXInPlaceObject.GetWindow(out hwndInPlaceObject)))
+                        if (NativeMethods.Succeeded(AXInPlaceObject.GetWindow(out IntPtr hwndInPlaceObject)))
                         {
                             Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject));
                         }
@@ -1017,8 +1016,7 @@ namespace System.Windows.Forms
             {
                 //
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
-                int bits = 0;
-                int hr = axOleObject.GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out bits);
+                int hr = axOleObject.GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out int bits);
                 if (NativeMethods.Succeeded(hr) && ((bits & NativeMethods.ActiveX.OLEMISC_SETCLIENTSITEFIRST) != 0))
                 {
                     //

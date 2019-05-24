@@ -155,8 +155,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                IKeyboardToolTip tool;
-                if (lastFocusedTool.TryGetTarget(out tool))
+                if (lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool))
                 {
                     return tool;
                 }
@@ -382,9 +381,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    WeakReference<ToolTip> toolTipReference;
                     ToolTip toolTip = null;
-                    if (table.TryGetValue(tool, out toolTipReference))
+                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
                     {
                         if (!toolTipReference.TryGetTarget(out toolTip))
                         {
@@ -397,8 +395,7 @@ namespace System.Windows.Forms
 
                 set
                 {
-                    WeakReference<ToolTip> toolTipReference;
-                    if (table.TryGetValue(tool, out toolTipReference))
+                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
                     {
                         toolTipReference.SetTarget(value);
                     }
@@ -411,11 +408,9 @@ namespace System.Windows.Forms
 
             public void Remove(IKeyboardToolTip tool, ToolTip toolTip)
             {
-                WeakReference<ToolTip> toolTipReference;
-                ToolTip existingToolTip;
-                if (table.TryGetValue(tool, out toolTipReference))
+                if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
                 {
-                    if (toolTipReference.TryGetTarget(out existingToolTip))
+                    if (toolTipReference.TryGetTarget(out ToolTip existingToolTip))
                     {
                         if (existingToolTip == toolTip)
                         {

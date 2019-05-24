@@ -97,8 +97,7 @@ namespace System.Windows.Forms.Design
                 IntPtr hWndOwner = owner == null ? owner.Handle : UnsafeNativeMethods.GetActiveWindow();
 
                 // Get the IDL for the specific startLocation
-                CoTaskMemSafeHandle listHandle;
-                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out listHandle);
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out CoTaskMemSafeHandle listHandle);
                 if (listHandle.IsInvalid)
                 {
                     return DialogResult.Cancel;

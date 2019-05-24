@@ -171,21 +171,19 @@ namespace System.Windows.Forms
                 // when control finally reaches us.
                 if (UnsafeNativeMethods.IsWindow(new HandleRef(null, handle)))
                 {
-                    int lpdwProcessId;  //unused
-                    int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out lpdwProcessId);
+                    //unused
+                    int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
                     IntPtr threadHandle = (ctx == null ? IntPtr.Zero : ctx.GetHandle());
 
                     if (threadHandle != IntPtr.Zero)
                     {
-                        int exitCode = 0;
-                        SafeNativeMethods.GetExitCodeThread(new HandleRef(null, threadHandle), out exitCode);
+                        SafeNativeMethods.GetExitCodeThread(new HandleRef(null, threadHandle), out int exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && exitCode == NativeMethods.STATUS_PENDING)
                         {
-                            IntPtr result;
                             if (UnsafeNativeMethods.SendMessageTimeout(new HandleRef(null, handle),
                                 NativeMethods.WM_UIUNSUBCLASS, IntPtr.Zero, IntPtr.Zero,
-                                UnsafeNativeMethods.SMTO_ABORTIFHUNG, 100, out result) == IntPtr.Zero)
+                                UnsafeNativeMethods.SMTO_ABORTIFHUNG, 100, out IntPtr result) == IntPtr.Zero)
                             {
 
                                 //Debug.Fail("unable to ping HWND:" + handle.ToString() + " during finalization");
@@ -382,11 +380,9 @@ namespace System.Windows.Forms
                 // ...same for the application
                 anyHandleCreatedInApp = true;
 
-                uint seed;
-                uint incr;
                 // Assume we only have one thread writing concurrently.  Modify
                 // buckets to contain new data, as long as we insert in the right order.
-                uint hashcode = InitHash(handle, hashBuckets.Length, out seed, out incr);
+                uint hashcode = InitHash(handle, hashBuckets.Length, out uint seed, out uint incr);
 
                 int ntry = 0;
                 int emptySlotNumber = -1; // We use the empty slot number to cache the first empty slot. We chose to reuse slots
@@ -1048,10 +1044,8 @@ namespace System.Windows.Forms
 
             // Take a snapshot of buckets, in case another thread does a resize
             HandleBucket[] buckets = hashBuckets;
-            uint seed;
-            uint incr;
             int ntry = 0;
-            uint hashcode = InitHash(handle, buckets.Length, out seed, out incr);
+            uint hashcode = InitHash(handle, buckets.Length, out uint seed, out uint incr);
 
             HandleBucket b;
             do
@@ -1077,8 +1071,7 @@ namespace System.Windows.Forms
 
         internal IntPtr GetHandleFromID(short id)
         {
-            IntPtr handle;
-            if (NativeWindow.hashForIdHandle == null || !NativeWindow.hashForIdHandle.TryGetValue(id, out handle))
+            if (NativeWindow.hashForIdHandle == null || !NativeWindow.hashForIdHandle.TryGetValue(id, out IntPtr handle))
             {
                 handle = IntPtr.Zero;
             }
@@ -1260,10 +1253,8 @@ namespace System.Windows.Forms
             lock (internalSyncObject)
             {
 
-                uint seed;
-                uint incr;
                 // Assuming only one concurrent writer, write directly into buckets.
-                uint hashcode = InitHash(handle, hashBuckets.Length, out seed, out incr);
+                uint hashcode = InitHash(handle, hashBuckets.Length, out uint seed, out uint incr);
                 int ntry = 0;
                 NativeWindow prevWindow = window.PreviousWindow;
                 HandleBucket b;

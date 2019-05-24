@@ -166,8 +166,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeDomSerializer.Trace("Property is marked as Visibility.Content.  Recursing.");
 
-            bool validValue;
-            object propertyValue = GetPropertyValue(manager, property, value, out validValue);
+            object propertyValue = GetPropertyValue(manager, property, value, out bool validValue);
 
             // For persist contents objects, we don't just serialize the properties on the object; we
             // serialize everything.
@@ -310,8 +309,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (extender != null && extended != null)
                 {
                     CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, "Set" + property.Name);
-                    bool validValue;
-                    object propValue = GetPropertyValue(manager, property, value, out validValue);
+                    object propValue = GetPropertyValue(manager, property, value, out bool validValue);
                     CodeExpression serializedPropertyValue = null;
 
                     // Serialize the value of this property into a code expression.  If we can't get one,
@@ -399,8 +397,7 @@ namespace System.ComponentModel.Design.Serialization
                         // Serialize the value of this property into a code expression.  If we can't get one,
                         // then we won't serialize the property.
                         //
-                        bool validValue;
-                        object propValue = GetPropertyValue(manager, property, value, out validValue);
+                        object propValue = GetPropertyValue(manager, property, value, out bool validValue);
 
                         if (validValue)
                         {

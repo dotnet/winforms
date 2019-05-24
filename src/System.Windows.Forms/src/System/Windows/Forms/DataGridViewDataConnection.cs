@@ -305,9 +305,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                PropertyDescriptor sortField = null;
-                SortOrder sortOrder;
-                GetSortingInformationFromBackend(out sortField, out sortOrder);
+                GetSortingInformationFromBackend(out PropertyDescriptor sortField, out SortOrder sortOrder);
 
                 // If we are not bound to a sorted IBindingList then set the SortGlyphDirection to SortOrder.None
                 // on each dataBound DataGridViewColumn.
@@ -403,10 +401,8 @@ namespace System.Windows.Forms
                     return SortOrder.None;
                 }
 
-                PropertyDescriptor sortProperty;
-                SortOrder sortOrder;
 
-                GetSortingInformationFromBackend(out sortProperty, out sortOrder);
+                GetSortingInformationFromBackend(out PropertyDescriptor sortProperty, out SortOrder sortOrder);
 
                 if (sortOrder == SortOrder.None)
                 {

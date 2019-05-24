@@ -176,15 +176,12 @@ namespace System
                     return false;
                 }
 
-                IntPtr processToken;
-                Assert.True(OpenProcessToken(GetCurrentProcess(), TOKEN_READ, out processToken));
+                Assert.True(OpenProcessToken(GetCurrentProcess(), TOKEN_READ, out IntPtr processToken));
 
                 try
                 {
-                    uint tokenInfo;
-                    uint returnLength;
                     Assert.True(GetTokenInformation(
-                        processToken, TokenElevation, out tokenInfo, sizeof(uint), out returnLength));
+                        processToken, TokenElevation, out uint tokenInfo, sizeof(uint), out uint returnLength));
 
                     s_isWindowsElevated = tokenInfo == 0 ? 0 : 1;
                 }

@@ -129,8 +129,7 @@ namespace System.Windows.Forms
             try
             {
                 Thread.MemoryBarrier();
-                uint filterIndexTemp;
-                dialog.GetFileTypeIndex(out filterIndexTemp);
+                dialog.GetFileTypeIndex(out uint filterIndexTemp);
                 FilterIndex = unchecked((int)filterIndexTemp);
                 _fileNames = ProcessVistaFiles(dialog);
                 if (ProcessFileNames())
@@ -280,8 +279,7 @@ namespace System.Windows.Forms
 
         private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
         {
-            string filename;
-            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out filename);
+            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out string filename);
             return filename;
         }
 

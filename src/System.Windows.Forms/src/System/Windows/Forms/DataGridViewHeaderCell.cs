@@ -37,8 +37,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int buttonState = Properties.GetInteger(PropButtonState, out found);
+                int buttonState = Properties.GetInteger(PropButtonState, out bool found);
                 if (found)
                 {
                     return (ButtonState)buttonState;

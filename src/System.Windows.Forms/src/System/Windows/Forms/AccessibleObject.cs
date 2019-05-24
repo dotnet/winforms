@@ -1983,8 +1983,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    object retObject = null;
-                    if (!SysNavigate((int)navdir, NativeMethods.CHILDID_SELF, out retObject))
+                    if (!SysNavigate((int)navdir, NativeMethods.CHILDID_SELF, out object retObject))
                         retObject = systemIAccessible.accNavigate((int)navdir, NativeMethods.CHILDID_SELF);
                     return WrapIAccessible(retObject);
                 }
@@ -2122,8 +2121,7 @@ namespace System.Windows.Forms
             }
 
             // Perform any supported navigation operation (fall back on system for unsupported navigation ops)
-            AccessibleObject newObject;
-            if (!GetSysChild((AccessibleNavigation)navDir, out newObject))
+            if (!GetSysChild((AccessibleNavigation)navDir, out AccessibleObject newObject))
             {
                 return false;
             }

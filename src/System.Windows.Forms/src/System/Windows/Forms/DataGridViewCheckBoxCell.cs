@@ -190,8 +190,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int buttonState = Properties.GetInteger(PropButtonCellState, out found);
+                int buttonState = Properties.GetInteger(PropButtonCellState, out bool found);
                 if (found)
                 {
                     return (ButtonState)buttonState;
@@ -263,8 +262,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int flatStyle = Properties.GetInteger(PropFlatStyle, out found);
+                int flatStyle = Properties.GetInteger(PropFlatStyle, out bool found);
                 if (found)
                 {
                     return (FlatStyle)flatStyle;
@@ -518,11 +516,8 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle checkBoxBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -585,11 +580,8 @@ namespace System.Windows.Forms
             }
 
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errorIconBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -777,11 +769,8 @@ namespace System.Windows.Forms
             }
 
             // We should consider the border size when calculating the preferred size.
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
             Rectangle borderWidths = BorderWidths(dgvabsEffective);
             preferredSize.Width += borderWidths.X;
             preferredSize.Height += borderWidths.Y;

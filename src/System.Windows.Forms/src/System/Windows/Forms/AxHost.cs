@@ -340,8 +340,7 @@ namespace System.Windows.Forms
         private void RealizeStyles()
         {
             SetStyle(ControlStyles.UserPaint, false);
-            int bits = 0;
-            int hr = GetOleObject().GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out bits);
+            int hr = GetOleObject().GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out int bits);
             if (!NativeMethods.Failed(hr))
             {
                 miscStatusBits = bits;
@@ -2675,8 +2674,7 @@ namespace System.Windows.Forms
                             return rval;
                     }
 
-                    string name = null;
-                    int hr = icp.GetCategoryName(cat, CultureInfo.CurrentCulture.LCID, out name);
+                    int hr = icp.GetCategoryName(cat, CultureInfo.CurrentCulture.LCID, out string name);
                     if (hr == NativeMethods.S_OK && name != null)
                     {
                         rval = new CategoryAttribute(name);
@@ -3592,8 +3590,7 @@ namespace System.Windows.Forms
                     if (GetOcState() >= OC_INPLACE)
                     {
                         UnsafeNativeMethods.IOleInPlaceObject ipo = GetInPlaceObject();
-                        IntPtr hwnd;
-                        if (NativeMethods.Succeeded(ipo.GetWindow(out hwnd)))
+                        if (NativeMethods.Succeeded(ipo.GetWindow(out IntPtr hwnd)))
                         {
                             Application.ParkHandle(new HandleRef(ipo, hwnd));
                         }
@@ -4384,8 +4381,7 @@ namespace System.Windows.Forms
                 if (host.GetOcState() < OC_INPLACE)
                     return NativeMethods.S_OK;
 
-                IntPtr hwnd;
-                if (NativeMethods.Succeeded(host.GetInPlaceObject().GetWindow(out hwnd)))
+                if (NativeMethods.Succeeded(host.GetInPlaceObject().GetWindow(out IntPtr hwnd)))
                 {
                     if (host.GetHandleNoCreate() != hwnd)
                     {
@@ -7563,8 +7559,7 @@ namespace System.Windows.Forms
                     NativeMethods.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
                     if (ippb == null)
                         return Guid.Empty;
-                    Guid rval;
-                    if (NativeMethods.Succeeded(ippb.MapPropertyToPage(dispid, out rval)))
+                    if (NativeMethods.Succeeded(ippb.MapPropertyToPage(dispid, out Guid rval)))
                     {
                         return rval;
                     }

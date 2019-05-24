@@ -107,8 +107,7 @@ namespace System.Windows.Forms.Layout
         ///     Instead the Element sets the Margin in its ctor.
         internal static Padding GetMargin(IArrangedElement element)
         {
-            bool found;
-            Padding padding = element.Properties.GetPadding(_marginProperty, out found);
+            Padding padding = element.Properties.GetPadding(_marginProperty, out bool found);
             if (found)
             {
                 return padding;
@@ -120,8 +119,7 @@ namespace System.Windows.Forms.Layout
         ///     Returns the maximum size for an element
         internal static Size GetMaximumSize(IArrangedElement element, Size defaultMaximumSize)
         {
-            bool found;
-            Size size = element.Properties.GetSize(_maximumSizeProperty, out found);
+            Size size = element.Properties.GetSize(_maximumSizeProperty, out bool found);
             if (found)
             {
                 return size;
@@ -134,8 +132,7 @@ namespace System.Windows.Forms.Layout
         ///     Returns the minimum size for an element
         internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize)
         {
-            bool found;
-            Size size = element.Properties.GetSize(_minimumSizeProperty, out found);
+            Size size = element.Properties.GetSize(_minimumSizeProperty, out bool found);
             if (found)
             {
                 return size;
@@ -152,8 +149,7 @@ namespace System.Windows.Forms.Layout
         ///        layout by modifying what the control reports for preferred size.
         internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
         {
-            bool found;
-            Padding padding = element.Properties.GetPadding(_paddingProperty, out found);
+            Padding padding = element.Properties.GetPadding(_paddingProperty, out bool found);
             if (found)
             {
                 return padding;
@@ -165,8 +161,7 @@ namespace System.Windows.Forms.Layout
         ///     Returns the last size manually set into the element.  See UpdateSpecifiedBounds.
         internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
         {
-            bool found;
-            Rectangle rectangle = element.Properties.GetRectangle(_specifiedBoundsProperty, out found);
+            Rectangle rectangle = element.Properties.GetRectangle(_specifiedBoundsProperty, out bool found);
             if (found && rectangle != LayoutUtils.MaxRectangle)
             {
                 return rectangle;
@@ -383,8 +378,7 @@ namespace System.Windows.Forms.Layout
         ///     for a constraining value of LayoutUtils.MaxValue (or Size.Empty too).
         internal static Size xGetPreferredSizeCache(IArrangedElement element)
         {
-            bool found;
-            Size size = element.Properties.GetSize(_preferredSizeCacheProperty, out found);
+            Size size = element.Properties.GetSize(_preferredSizeCacheProperty, out bool found);
             if (found && (size != LayoutUtils.InvalidSize))
             {
                 return size;
@@ -685,8 +679,7 @@ namespace System.Windows.Forms.Layout
         ///     of how it lays out. Example is TLP in RTL and LTR.
         internal static Size GetLayoutBounds(IArrangedElement element)
         {
-            bool found;
-            Size size = element.Properties.GetSize(_layoutBoundsProperty, out found);
+            Size size = element.Properties.GetSize(_layoutBoundsProperty, out bool found);
             if (found)
             {
                 return size;
@@ -716,8 +709,7 @@ namespace System.Windows.Forms.Layout
         ///     Returns whether we have layout bounds stored for this element.
         internal static bool HasLayoutBounds(IArrangedElement element)
         {
-            bool found;
-            element.Properties.GetSize(_layoutBoundsProperty, out found);
+            element.Properties.GetSize(_layoutBoundsProperty, out bool found);
             return found;
         }
 

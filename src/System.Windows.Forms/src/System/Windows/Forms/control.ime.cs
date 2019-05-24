@@ -71,8 +71,7 @@ namespace System.Windows.Forms
 
                 // Get the ImeMode from the property store
                 //
-                bool found;
-                ImeMode cachedImeMode = (ImeMode)Properties.GetInteger(PropImeMode, out found);
+                ImeMode cachedImeMode = (ImeMode)Properties.GetInteger(PropImeMode, out bool found);
                 if (!found)
                 {
                     cachedImeMode = DefaultImeMode;
@@ -178,8 +177,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_DisableImeModeChangedCount()");
                 Debug.Indent();
 
-                bool dummy;
-                int val = (int)Properties.GetInteger(PropDisableImeModeChangedCount, out dummy);
+                int val = (int)Properties.GetInteger(PropDisableImeModeChangedCount, out bool dummy);
 
                 Debug.Assert(val >= 0, "Counter underflow.");
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value: " + val);
@@ -381,8 +379,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_LastCanEnableIme()");
                 Debug.Indent();
 
-                bool valueFound;
-                int val = (int)Properties.GetInteger(PropLastCanEnableIme, out valueFound);
+                int val = (int)Properties.GetInteger(PropLastCanEnableIme, out bool valueFound);
 
                 if (valueFound)
                 {
@@ -697,8 +694,7 @@ namespace System.Windows.Forms
         {
             // This method is for designer support.  If the ImeMode has not been changed or it is the same as the
             // default value it should not be serialized.
-            bool found;
-            int imeMode = Properties.GetInteger(PropImeMode, out found);
+            int imeMode = Properties.GetInteger(PropImeMode, out bool found);
 
             return (found && imeMode != (int)DefaultImeMode);
         }

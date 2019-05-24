@@ -243,11 +243,8 @@ namespace System.Windows.Forms
             // we mimic a lot of the painting code
 
             // get the borders
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle contentBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -935,8 +932,7 @@ namespace System.Windows.Forms
                         2 * sortGlyphHorizontalMargin;
                     if (width > 0)
                     {
-                        bool widthTruncated;
-                        int preferredHeight = DataGridViewCell.GetPreferredTextHeight(g, DataGridView.RightToLeftInternal, formattedValueStr, cellStyle, width, out widthTruncated);
+                        int preferredHeight = DataGridViewCell.GetPreferredTextHeight(g, DataGridView.RightToLeftInternal, formattedValueStr, cellStyle, width, out bool widthTruncated);
                         if (preferredHeight <= valBounds.Height && !widthTruncated)
                         {
                             displaySortGlyph = (SortGlyphDirection != SortOrder.None);

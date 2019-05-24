@@ -304,8 +304,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override object GetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
-            bool temp;
-            return GetValue((Array)component, out temp);
+            return GetValue((Array)component, out bool temp);
         }
 
         public object GetValue(Array components, out bool allEqual)

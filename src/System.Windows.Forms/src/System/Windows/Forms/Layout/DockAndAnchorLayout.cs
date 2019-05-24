@@ -523,8 +523,8 @@ namespace System.Windows.Forms.Layout
 
         internal override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
         {
-            Size garbage;     // PreferredSize is garbage if we are not measuring.
-            return xLayout(container, /* measureOnly = */ false, out garbage);
+            // PreferredSize is garbage if we are not measuring.
+            return xLayout(container, /* measureOnly = */ false, out Size garbage);
         }
 
         // Note: PreferredSize is only computed if measureOnly = true.
@@ -944,9 +944,8 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(!HasCachedBounds(container),
                 "Do not call this method with an active cached bounds list.");
 
-            Size prefSize;
 
-            xLayout(container, /* measureOnly = */ true, out prefSize);
+            xLayout(container, /* measureOnly = */ true, out Size prefSize);
             /*            container.Bounds = prefSize;
                         xLayout(container, false, out prefSize);
 

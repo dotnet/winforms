@@ -86,8 +86,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int maxInputLength = Properties.GetInteger(PropTextBoxCellMaxInputLength, out found);
+                int maxInputLength = Properties.GetInteger(PropTextBoxCellMaxInputLength, out bool found);
                 if (found)
                 {
                     return maxInputLength;
@@ -301,11 +300,8 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle textBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -357,11 +353,8 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errorBounds = PaintPrivate(graphics,
                 cellBounds,

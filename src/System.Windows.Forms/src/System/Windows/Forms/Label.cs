@@ -598,8 +598,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                LabelImageIndexer imageIndexer = Properties.GetObject(PropImageIndex, out found) as LabelImageIndexer;
+                LabelImageIndexer imageIndexer = Properties.GetObject(PropImageIndex, out bool found) as LabelImageIndexer;
 
                 // Demand create the ImageIndexer property
                 if ((imageIndexer == null) || (!found))
@@ -688,8 +687,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int imageAlign = Properties.GetInteger(PropImageAlign, out found);
+                int imageAlign = Properties.GetInteger(PropImageAlign, out bool found);
                 if (found)
                 {
                     return (ContentAlignment)imageAlign;
@@ -911,8 +909,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found;
-                int textAlign = Properties.GetInteger(PropTextAlign, out found);
+                int textAlign = Properties.GetInteger(PropTextAlign, out bool found);
                 if (found)
                 {
                     return (ContentAlignment)textAlign;

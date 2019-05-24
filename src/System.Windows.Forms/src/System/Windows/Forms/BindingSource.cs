@@ -916,8 +916,7 @@ namespace System.Windows.Forms
                 // Do what RelatedCurrencyManager does when the parent changes:
                 // 1. PullData from the controls into the back end.
                 // 2. Don't EndEdit the transaction.
-                bool success;
-                _currencyManager.PullData(out success);
+                _currencyManager.PullData(out bool success);
             }
             finally
             {

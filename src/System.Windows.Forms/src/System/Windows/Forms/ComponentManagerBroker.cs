@@ -193,8 +193,7 @@ namespace System.Windows.Forms
                     // for all component managers.  There is no managed way to get this domain, however,
                     // so we use ICorRuntimeHost.
                     UnsafeNativeMethods.ICorRuntimeHost host = (UnsafeNativeMethods.ICorRuntimeHost)RuntimeEnvironment.GetRuntimeInterfaceAsObject(typeof(UnsafeNativeMethods.CorRuntimeHost).GUID, typeof(UnsafeNativeMethods.ICorRuntimeHost).GUID);
-                    object domainObj;
-                    int hr = host.GetDefaultDomain(out domainObj);
+                    int hr = host.GetDefaultDomain(out object domainObj);
                     Debug.Assert(NativeMethods.Succeeded(hr), "ICorRuntimeHost failed to return the default domain.  The only way that should happen is if it hasn't been started yet, but if it hasn't been started how are we running managed code?");
                     AppDomain domain = domainObj as AppDomain;
 

@@ -7101,12 +7101,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    int left;
-                    int top;
-                    int width;
-                    int height;
                     var systemIAccessible = GetSystemIAccessibleInternal();
-                    systemIAccessible.accLocation(out left, out top, out width, out height, GetChildId());
+                    systemIAccessible.accLocation(out int left, out int top, out int width, out int height, GetChildId());
                     return new Rectangle(left, top, width, height);
                 }
             }
@@ -8264,8 +8260,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(thisProcessID != 0, "Didn't get our process id!");
 
                     // make sure the window is in our process
-                    int pid;
-                    SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWndAtPoint), out pid);
+                    SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWndAtPoint), out int pid);
 
                     // if this isn't our process, unhook the mouse.
                     if (pid != thisProcessID)

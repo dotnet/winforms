@@ -322,8 +322,7 @@ namespace System.ComponentModel.Design.Serialization
                             else
                             {
                                 // For compat reasons we ignore the isCompleteOld value here.  
-                                bool isCompleteOld;
-                                assignRhs = SerializeCreationExpression(manager, value, out isCompleteOld);
+                                assignRhs = SerializeCreationExpression(manager, value, out bool isCompleteOld);
                                 Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
                             }
 

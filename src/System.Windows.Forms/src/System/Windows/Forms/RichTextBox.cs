@@ -374,8 +374,7 @@ namespace System.Windows.Forms
                     if (versionInfo != null && !string.IsNullOrEmpty(versionInfo.ProductVersion))
                     {
                         //Note: this only allows for one digit version
-                        int parsedValue;
-                        if (int.TryParse(versionInfo.ProductVersion[0].ToString(), out parsedValue))
+                        if (int.TryParse(versionInfo.ProductVersion[0].ToString(), out int parsedValue))
                         {
                             richEditMajorVersion = parsedValue;
                         }
@@ -3369,9 +3368,8 @@ namespace System.Windows.Forms
                     IntPtr punk = Marshal.GetIUnknownForObject(oleCallback);
                     try
                     {
-                        IntPtr pRichEditOleCallback;
                         Guid iidRichEditOleCallback = typeof(UnsafeNativeMethods.IRichEditOleCallback).GUID;
-                        Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out pRichEditOleCallback);
+                        Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
                         try
                         {
                             UnsafeNativeMethods.SendCallbackMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETOLECALLBACK, IntPtr.Zero, pRichEditOleCallback);

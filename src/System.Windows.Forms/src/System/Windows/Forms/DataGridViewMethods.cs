@@ -401,8 +401,7 @@ namespace System.Windows.Forms
             {
                 preferredThickness = dataGridViewCell.GetPreferredSize(rowIndex).Height;
             }
-            int height, minimumHeight;
-            Rows.SharedRow(rowIndex).GetHeightInfo(rowIndex, out height, out minimumHeight);
+            Rows.SharedRow(rowIndex).GetHeightInfo(rowIndex, out int height, out int minimumHeight);
             if (preferredThickness < height)
             {
                 preferredThickness = height;
@@ -2283,8 +2282,7 @@ namespace System.Windows.Forms
                 // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
                 // Note: Even none-resizable row can programmatically be resized.
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
-                int height, minimumHeight;
-                dataGridViewRow.GetHeightInfo(rowIndex, out height, out minimumHeight);
+                dataGridViewRow.GetHeightInfo(rowIndex, out int height, out int minimumHeight);
                 int preferredThickness = dataGridViewRow.GetPreferredHeight(rowIndex, autoSizeRowMode, fixedWidth);
                 if (preferredThickness < minimumHeight)
                 {
@@ -3876,7 +3874,6 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    Exception exception;
                     object formattedValue;
 
                     if (editingControl != null)
@@ -3889,7 +3886,7 @@ namespace System.Windows.Forms
                         formattedValue = ((IDataGridViewEditingCell)CurrentCellInternal).GetEditingCellFormattedValue(context);
                     }
 
-                    if (!PushFormattedValue(ref dataGridViewCurrentCell, formattedValue, out exception))
+                    if (!PushFormattedValue(ref dataGridViewCurrentCell, formattedValue, out Exception exception))
                     {
                         if (ptCurrentCell.X == -1)
                         {
@@ -6050,8 +6047,7 @@ namespace System.Windows.Forms
                     Invalidate(Rectangle.Union(layout.TopLeftHeader, layout.ColumnHeaders));
                 }
 
-                int previousColumnIndex;
-                if (ColumnRelocationTarget(e, hti, out previousColumnIndex))
+                if (ColumnRelocationTarget(e, hti, out int previousColumnIndex))
                 {
                     if (previousColumnIndex == -1)
                     {
@@ -6292,8 +6288,7 @@ namespace System.Windows.Forms
                 }
 
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(trackRow);
-                int height, minimumHeight;
-                dataGridViewRow.GetHeightInfo(trackRow, out height, out minimumHeight);
+                dataGridViewRow.GetHeightInfo(trackRow, out int height, out int minimumHeight);
                 int y = Math.Min(e.Y + mouseBarOffset, layout.Data.Bottom - 1);
                 int delta = y - (GetRowYFromIndex(trackRow) + height) + 1;
                 if (trackRowAnchor != y && delta != 0)
@@ -7419,8 +7414,7 @@ namespace System.Windows.Forms
                         }
                         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
-                            System.IO.MemoryStream utf8Stream = null;
-                            GetClipboardContentForHtml(sbContent, out utf8Stream);
+                            GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
                             dataObject.SetData(format, false /*autoConvert*/, utf8Stream);
                         }
                         else
@@ -7691,8 +7685,7 @@ namespace System.Windows.Forms
                         }
                         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
-                            System.IO.MemoryStream utf8Stream = null;
-                            GetClipboardContentForHtml(sbContent, out utf8Stream);
+                            GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
                             dataObject.SetData(format, false /*autoConvert*/, utf8Stream);
                         }
                         else
@@ -8134,8 +8127,7 @@ namespace System.Windows.Forms
                         }
                         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
-                            System.IO.MemoryStream utf8Stream = null;
-                            GetClipboardContentForHtml(sbContent, out utf8Stream);
+                            GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
                             dataObject.SetData(format, false /*autoConvert*/, utf8Stream);
                         }
                         else
@@ -9372,8 +9364,8 @@ namespace System.Windows.Forms
             // check for column resize / insertion
             if (layout.ColumnHeaders.Contains(x, y))
             {
-                int xColumnLeftEdge; // this is actually the right edge in RTL mode
-                hti.col = GetColumnIndexFromX(x, out xColumnLeftEdge);
+                // this is actually the right edge in RTL mode
+                hti.col = GetColumnIndexFromX(x, out int xColumnLeftEdge);
                 if (hti.col < 0)
                 {
                     return HitTestInfo.Nowhere;
@@ -9473,8 +9465,7 @@ namespace System.Windows.Forms
             // check for row resize
             if (layout.RowHeaders.Contains(x, y))
             {
-                int yRowTopEdge;
-                hti.row = GetRowIndexFromY(y, out yRowTopEdge);
+                hti.row = GetRowIndexFromY(y, out int yRowTopEdge);
                 if (hti.row < 0)
                 {
                     return HitTestInfo.Nowhere;
@@ -9549,9 +9540,8 @@ namespace System.Windows.Forms
 
             if (layout.Data.Contains(x, y))
             {
-                int xColumnLeftEdge, yRowTopEdge;
-                hti.col = GetColumnIndexFromX(x, out xColumnLeftEdge);
-                hti.row = GetRowIndexFromY(y, out yRowTopEdge);
+                hti.col = GetColumnIndexFromX(x, out int xColumnLeftEdge);
+                hti.row = GetRowIndexFromY(y, out int yRowTopEdge);
                 if (hti.col < 0 || hti.row < 0)
                 {
                     return HitTestInfo.Nowhere;
@@ -9718,8 +9708,8 @@ namespace System.Windows.Forms
 
             Point ptMouse = PointToClient(Control.MousePosition);
             HitTestInfo hti = HitTest(ptMouse.X, ptMouse.Y);
-            int xOffset, yOffset, mouseX = ptMouse.X, mouseY = ptMouse.Y;
-            if (GetOutOfBoundCorrectedHitTestInfo(ref hti, ref mouseX, ref mouseY, out xOffset, out yOffset))
+            int mouseX = ptMouse.X, mouseY = ptMouse.Y;
+            if (GetOutOfBoundCorrectedHitTestInfo(ref hti, ref mouseX, ref mouseY, out int xOffset, out int yOffset))
             {
                 if (xOffset != 0)
                 {
@@ -16529,8 +16519,8 @@ namespace System.Windows.Forms
                 dataGridViewOper[DATAGRIDVIEWOPER_trackRowSelect] ||
                 dataGridViewOper[DATAGRIDVIEWOPER_trackCellSelect])
             {
-                int xOffset, yOffset, mouseX = e.X, mouseY = e.Y;
-                if (GetOutOfBoundCorrectedHitTestInfo(ref hti, ref mouseX, ref mouseY, out xOffset, out yOffset))
+                int mouseX = e.X, mouseY = e.Y;
+                if (GetOutOfBoundCorrectedHitTestInfo(ref hti, ref mouseX, ref mouseY, out int xOffset, out int yOffset))
                 {
                     if (xOffset == 0)
                     {
@@ -20448,8 +20438,7 @@ namespace System.Windows.Forms
 
         protected bool ProcessDownKey(Keys keyData)
         {
-            bool moved;
-            return ProcessDownKeyInternal(keyData, out moved);
+            return ProcessDownKeyInternal(keyData, out bool moved);
         }
 
         private bool ProcessDownKeyInternal(Keys keyData, out bool moved)
@@ -25720,8 +25709,7 @@ namespace System.Windows.Forms
                     rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible))
                 {
                     DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
-                    int height, minimumHeight;
-                    dataGridViewRow.GetHeightInfo(rowIndex, out height, out minimumHeight);
+                    dataGridViewRow.GetHeightInfo(rowIndex, out int height, out int minimumHeight);
                     if (height != dataGridViewRow.CachedThickness &&
                         !OnRowHeightInfoPushed(rowIndex, dataGridViewRow.CachedThickness, minimumHeight))
                     {
@@ -29406,9 +29394,9 @@ namespace System.Windows.Forms
 
             Point ptMouse = PointToClient(Control.MousePosition);
             HitTestInfo hti = HitTest(ptMouse.X, ptMouse.Y);
-            int xOffset, yOffset, mouseX = ptMouse.X, mouseY = ptMouse.Y;
+            int mouseX = ptMouse.X, mouseY = ptMouse.Y;
 
-            if (GetOutOfBoundCorrectedHitTestInfo(ref hti, ref mouseX, ref mouseY, out xOffset, out yOffset))
+            if (GetOutOfBoundCorrectedHitTestInfo(ref hti, ref mouseX, ref mouseY, out int xOffset, out int yOffset))
             {
                 if (yOffset != 0)
                 {

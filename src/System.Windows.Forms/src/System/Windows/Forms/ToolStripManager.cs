@@ -1029,8 +1029,7 @@ namespace System.Windows.Forms
                             SafeNativeMethods.ShowCaret(NativeMethods.NullHandleRef);
                         }
 
-                        IKeyboardToolTip tool;
-                        if (lastFocusedTool.TryGetTarget(out tool) && tool != null)
+                        if (lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool != null)
                         {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                         }

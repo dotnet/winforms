@@ -1028,8 +1028,7 @@ namespace System.Windows.Forms
 
         private void SetToolInfo(Control ctl, string caption)
         {
-            bool allocatedString;
-            NativeMethods.TOOLINFO_TOOLTIP tool = GetTOOLINFO(ctl, caption, out allocatedString);
+            NativeMethods.TOOLINFO_TOOLTIP tool = GetTOOLINFO(ctl, caption, out bool allocatedString);
             try
             {
                 int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, tool);
@@ -1599,8 +1598,7 @@ namespace System.Windows.Forms
 
                 if (exists && !empty && handlesCreated && !DesignMode)
                 {
-                    bool allocatedString;
-                    NativeMethods.TOOLINFO_TOOLTIP toolInfo = GetTOOLINFO(control, info.Caption, out allocatedString);
+                    NativeMethods.TOOLINFO_TOOLTIP toolInfo = GetTOOLINFO(control, info.Caption, out bool allocatedString);
                     try
                     {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTOOLINFO,
@@ -1909,8 +1907,7 @@ namespace System.Windows.Forms
             SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
             // Then look for a better ToolTip location
-            Size bubbleSize;
-            if (TryGetBubbleSize(tool, toolRectangle, out bubbleSize))
+            if (TryGetBubbleSize(tool, toolRectangle, out Size bubbleSize))
             {
                 Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
