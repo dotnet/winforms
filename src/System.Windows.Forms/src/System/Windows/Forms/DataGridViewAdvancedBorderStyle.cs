@@ -320,12 +320,14 @@ namespace System.Windows.Forms
 
         object ICloneable.Clone()
         {
-            DataGridViewAdvancedBorderStyle dgvabs = new DataGridViewAdvancedBorderStyle(owner, banned1, banned2, banned3);
-            dgvabs.all = all;
-            dgvabs.top = top;
-            dgvabs.right = right;
-            dgvabs.bottom = bottom;
-            dgvabs.left = left;
+            DataGridViewAdvancedBorderStyle dgvabs = new DataGridViewAdvancedBorderStyle(owner, banned1, banned2, banned3)
+            {
+                all = all,
+                top = top,
+                right = right,
+                bottom = bottom,
+                left = left
+            };
             return dgvabs;
         }
     }

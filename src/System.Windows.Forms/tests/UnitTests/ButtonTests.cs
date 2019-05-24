@@ -30,9 +30,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoSizeModeGetSetData))]
         public void Button_AutoSizeModeGetSet(AutoSizeMode expected)
         {
-            var button = new Button();
-
-            button.AutoSizeMode = expected;
+            var button = new Button
+            {
+                AutoSizeMode = expected
+            };
 
             Assert.Equal(expected, button.AutoSizeMode);
         }
@@ -106,9 +107,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DialogResultGetSetData))]
         public void Button_DialogResultGetSet(DialogResult expected)
         {
-            var button = new Button();
-
-            button.DialogResult = expected;
+            var button = new Button
+            {
+                DialogResult = expected
+            };
 
             Assert.Equal(expected, button.DialogResult);
         }
@@ -162,8 +164,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Button_ToStringTest()
         {
-            var button = new Button();
-            button.Text = "Hello World!";
+            var button = new Button
+            {
+                Text = "Hello World!"
+            };
             var expected = "System.Windows.Forms.Button, Text: " + button.Text;
 
             var actual = button.ToString();
@@ -177,41 +181,49 @@ namespace System.Windows.Forms.Tests
             var data = new TheoryData<Button, Size, Size>();
 
             // first code path is FlatStyle != FlatStyle.System, AutoSizeMode = GrowAndShrink
-            var b1 = new Button();
-            b1.FlatStyle = FlatStyle.Flat;
-            b1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            var b1 = new Button
+            {
+                FlatStyle = FlatStyle.Flat,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
             var proposed1 = new Size(5, 5);
             var expected1 = new Size(8, 8);
             data.Add(b1, proposed1, expected1);
 
             // second code path is FlatStyle != FlatStyle.System, AutoSizeMode != GrowAndShrink
-            var b2 = new Button();
-            b2.FlatStyle = FlatStyle.Flat;
-            b2.AutoSizeMode = AutoSizeMode.GrowOnly;
+            var b2 = new Button
+            {
+                FlatStyle = FlatStyle.Flat,
+                AutoSizeMode = AutoSizeMode.GrowOnly
+            };
             var proposed2 = new Size(5, 5);
             var expected2 = new Size(75, 23);
             data.Add(b2, proposed2, expected2);
 
             // third code path is FlatStyle == FlatStyle.System, button systemSize.Width is invalid
             // and AutoSizeMode = GrowAndShrink
-            var b3 = new Button();
-            // text and font need to be set since the code measures the size of the text
-            b3.Text = "Hello World!";
-            b3.Font = new Drawing.Font(Drawing.FontFamily.GenericMonospace, 1.5f);
-            b3.FlatStyle = FlatStyle.System;
-            b3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            var b3 = new Button
+            {
+                // text and font need to be set since the code measures the size of the text
+                Text = "Hello World!",
+                Font = new Drawing.Font(Drawing.FontFamily.GenericMonospace, 1.5f),
+                FlatStyle = FlatStyle.System,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
             var proposed3 = new Size(100, 200);
             var expected3 = new Size(28, 12);
             data.Add(b3, proposed3, expected3);
 
             // fourth code path is FlatStyle == FlatStyle.System, button systemSize.Width is valid
             // and AutoSizeMode != GrowAndShrink
-            var b4 = new Button();
-            // text and font need to be set since the code measures the size of the text
-            b4.Text = "Hello World!";
-            b4.Font = new Drawing.Font(Drawing.FontFamily.GenericMonospace, 1.5f);
-            b4.FlatStyle = FlatStyle.System;
-            b4.AutoSizeMode = AutoSizeMode.GrowOnly;
+            var b4 = new Button
+            {
+                // text and font need to be set since the code measures the size of the text
+                Text = "Hello World!",
+                Font = new Drawing.Font(Drawing.FontFamily.GenericMonospace, 1.5f),
+                FlatStyle = FlatStyle.System,
+                AutoSizeMode = AutoSizeMode.GrowOnly
+            };
             var proposed4 = new Size(100, 200);
             // call getPreferredSizeCore once so the systemSize gets set
             b4.GetPreferredSizeCore(proposed4);

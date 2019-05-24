@@ -439,8 +439,10 @@ namespace System.Windows.Forms
 
                 case HelpNavigator.Find:
                     {
-                        NativeMethods.HH_FTS_QUERY ftsQuery = new NativeMethods.HH_FTS_QUERY();
-                        ftsQuery.pszSearchQuery = param;
+                        NativeMethods.HH_FTS_QUERY ftsQuery = new NativeMethods.HH_FTS_QUERY
+                        {
+                            pszSearchQuery = param
+                        };
                         htmlParam = ftsQuery;
                         return HH_DISPLAY_SEARCH;
                     }
@@ -460,10 +462,12 @@ namespace System.Windows.Forms
                 case HelpNavigator.KeywordIndex:
                 case HelpNavigator.AssociateIndex:
                     {
-                        NativeMethods.HH_AKLINK alink = new NativeMethods.HH_AKLINK();
-                        alink.pszKeywords = param;
-                        alink.fIndexOnFail = true;
-                        alink.fReserved = false;
+                        NativeMethods.HH_AKLINK alink = new NativeMethods.HH_AKLINK
+                        {
+                            pszKeywords = param,
+                            fIndexOnFail = true,
+                            fReserved = false
+                        };
                         htmlParam = alink;
                         return (command == HelpNavigator.KeywordIndex) ? HH_KEYWORD_LOOKUP : HH_ALINK_LOOKUP;
                     }

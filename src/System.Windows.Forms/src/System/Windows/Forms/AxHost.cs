@@ -1320,9 +1320,11 @@ namespace System.Windows.Forms
 
         private void HiMetric2Pixel(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
         {
-            NativeMethods._POINTL phm = new NativeMethods._POINTL();
-            phm.x = sz.cx;
-            phm.y = sz.cy;
+            NativeMethods._POINTL phm = new NativeMethods._POINTL
+            {
+                x = sz.cx,
+                y = sz.cy
+            };
             NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
             ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
             szout.cx = (int)pcont.x;
@@ -1331,9 +1333,11 @@ namespace System.Windows.Forms
 
         private void Pixel2hiMetric(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
         {
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
-            pcont.x = (float)sz.cx;
-            pcont.y = (float)sz.cy;
+            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF
+            {
+                x = (float)sz.cx,
+                y = (float)sz.cy
+            };
             NativeMethods._POINTL phm = new NativeMethods._POINTL();
             ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
             szout.cx = phm.x;
@@ -1365,9 +1369,11 @@ namespace System.Windows.Forms
         private Size SetExtent(int width, int height)
         {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "setting extent to " + width.ToString(CultureInfo.InvariantCulture) + " " + height.ToString(CultureInfo.InvariantCulture));
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
-            sz.cx = width;
-            sz.cy = height;
+            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL
+            {
+                cx = width,
+                cy = height
+            };
             bool resetExtents = !IsUserMode();
             try
             {
@@ -1971,11 +1977,13 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                NativeMethods.MSG win32Message = new NativeMethods.MSG();
-                win32Message.message = msg.Msg;
-                win32Message.wParam = msg.WParam;
-                win32Message.lParam = msg.LParam;
-                win32Message.hwnd = msg.HWnd;
+                NativeMethods.MSG win32Message = new NativeMethods.MSG
+                {
+                    message = msg.Msg,
+                    wParam = msg.WParam,
+                    lParam = msg.LParam,
+                    hwnd = msg.HWnd
+                };
 
                 axState[siteProcessedInputKey] = false;
                 try
@@ -2049,15 +2057,17 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
-                    NativeMethods.MSG msg = new NativeMethods.MSG();
-                    // Sadly, we don't have a message so we must fake one ourselves...
-                    // A bit of ugliness here (a bit?  more like a bucket...)
-                    // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
-                    msg.hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                    msg.message = Interop.WindowMessages.WM_SYSKEYDOWN;
-                    msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
-                    msg.lParam = (IntPtr)0x20180001;
-                    msg.time = SafeNativeMethods.GetTickCount();
+                    NativeMethods.MSG msg = new NativeMethods.MSG
+                    {
+                        // Sadly, we don't have a message so we must fake one ourselves...
+                        // A bit of ugliness here (a bit?  more like a bucket...)
+                        // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
+                        hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
+                        message = Interop.WindowMessages.WM_SYSKEYDOWN,
+                        wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                        lParam = (IntPtr)0x20180001,
+                        time = SafeNativeMethods.GetTickCount()
+                    };
                     NativeMethods.POINT p = new NativeMethods.POINT();
                     UnsafeNativeMethods.GetCursorPos(p);
                     msg.pt_x = p.x;
@@ -3377,12 +3387,14 @@ namespace System.Windows.Forms
             try
             {
                 IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
-                NativeMethods.OCPFIPARAMS opcparams = new NativeMethods.OCPFIPARAMS();
-                opcparams.hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                opcparams.lpszCaption = Name;
-                opcparams.ppUnk = (IntPtr)(long)&pUnk;
-                opcparams.uuid = (IntPtr)(long)&guid;
-                opcparams.dispidInitial = dispid;
+                NativeMethods.OCPFIPARAMS opcparams = new NativeMethods.OCPFIPARAMS
+                {
+                    hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
+                    lpszCaption = Name,
+                    ppUnk = (IntPtr)(long)&pUnk,
+                    uuid = (IntPtr)(long)&guid,
+                    dispidInitial = dispid
+                };
                 UnsafeNativeMethods.OleCreatePropertyFrameIndirect(opcparams);
             }
             catch (Exception t)
@@ -4292,11 +4304,13 @@ namespace System.Windows.Forms
                 Debug.Assert(!host.GetAxState(AxHost.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
                 host.SetAxState(AxHost.siteProcessedInputKey, true);
 
-                Message msg = new Message();
-                msg.Msg = pMsg.message;
-                msg.WParam = pMsg.wParam;
-                msg.LParam = pMsg.lParam;
-                msg.HWnd = pMsg.hwnd;
+                Message msg = new Message
+                {
+                    Msg = pMsg.message,
+                    WParam = pMsg.wParam,
+                    LParam = pMsg.lParam,
+                    HWnd = pMsg.hwnd
+                };
 
                 try
                 {
@@ -5111,9 +5125,11 @@ namespace System.Windows.Forms
                 case NativeMethods.Ole.PICTYPE_ICON:
                     return (Image)(Icon.FromHandle(handle)).Clone();
                 case NativeMethods.Ole.PICTYPE_METAFILE:
-                    WmfPlaceableFileHeader header = new WmfPlaceableFileHeader();
-                    header.BboxRight = (short)width;
-                    header.BboxBottom = (short)height;
+                    WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
+                    {
+                        BboxRight = (short)width,
+                        BboxBottom = (short)height
+                    };
                     return (Image)(new Metafile(handle, header, false)).Clone();
                 case NativeMethods.Ole.PICTYPE_ENHMETAFILE:
                     return (Image)(new Metafile(handle, false)).Clone();
@@ -5145,9 +5161,11 @@ namespace System.Windows.Forms
 
             if (fdesc == null)
             {
-                fdesc = new NativeMethods.FONTDESC();
-                fdesc.lpstrName = font.Name;
-                fdesc.cySize = (long)(font.SizeInPoints * 10000);
+                fdesc = new NativeMethods.FONTDESC
+                {
+                    lpstrName = font.Name,
+                    cySize = (long)(font.SizeInPoints * 10000)
+                };
                 NativeMethods.LOGFONT logfont = new NativeMethods.LOGFONT();
                 font.ToLogFont(logfont);
                 fdesc.sWeight = (short)logfont.lfWeight;

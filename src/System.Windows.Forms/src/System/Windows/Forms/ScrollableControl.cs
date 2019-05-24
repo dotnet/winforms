@@ -1064,8 +1064,10 @@ namespace System.Windows.Forms
         }
         private int ScrollThumbPosition(int fnBar)
         {
-            NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-            si.fMask = NativeMethods.SIF_TRACKPOS;
+            NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+            {
+                fMask = NativeMethods.SIF_TRACKPOS
+            };
             SafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), fnBar, si);
             return si.nTrackPos;
         }

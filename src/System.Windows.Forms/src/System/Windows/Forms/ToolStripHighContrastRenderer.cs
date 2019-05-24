@@ -130,11 +130,13 @@ namespace System.Windows.Forms
             // color for highlighted text or menu text, depending on whether
             // the menu item is selected.
             ColorMap[] checkColorMap = new ColorMap[1];
-            checkColorMap[0] = new ColorMap();
-            checkColorMap[0].OldColor = checkColor;
+            checkColorMap[0] = new ColorMap
+            {
+                OldColor = checkColor,
 
-            checkColorMap[0].NewColor = ((e.Item.Selected || e.Item.Pressed) && e.Item.Enabled) ?
-                SystemColors.HighlightText : SystemColors.MenuText;
+                NewColor = ((e.Item.Selected || e.Item.Pressed) && e.Item.Enabled) ?
+                SystemColors.HighlightText : SystemColors.MenuText
+            };
 
             // If we already have an image attributes associated with the event,
             // just add the color map. Otherwise, create a new one.

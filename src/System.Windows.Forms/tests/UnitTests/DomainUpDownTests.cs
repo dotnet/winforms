@@ -110,8 +110,10 @@ namespace System.Windows.Forms.Tests
 
         private DomainUpDown GetNewDomainUpDown(bool sorted = false)
         {
-            var domainUpDown = new DomainUpDown();
-            domainUpDown.Sorted = sorted;
+            var domainUpDown = new DomainUpDown
+            {
+                Sorted = sorted
+            };
             DomainUpDown.DomainUpDownItemCollection items = domainUpDown.Items;
             Assert.NotNull(items);
             items.Add("foo1");

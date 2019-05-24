@@ -92,8 +92,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private ToolStripMenuItem CreateEnumValueItem(string propertyName, string name, object value)
         {
-            ToolStripMenuItem item = new ToolStripMenuItem(name);
-            item.Tag = new EnumValueDescription(propertyName, value);
+            ToolStripMenuItem item = new ToolStripMenuItem(name)
+            {
+                Tag = new EnumValueDescription(propertyName, value)
+            };
             item.Click += new EventHandler(OnEnumValueChanged);
             return item;
         }
@@ -116,10 +118,12 @@ namespace System.Windows.Forms.Design
             ToolStripItem selectedItem = currentItem;
             if (!(selectedItem is ToolStripControlHost) && !(selectedItem is ToolStripSeparator))
             {
-                imageToolStripMenuItem = new ToolStripMenuItem();
-                imageToolStripMenuItem.Text = SR.ToolStripItemContextMenuSetImage;
-                imageToolStripMenuItem.Image = new Bitmap(typeof(ToolStripMenuItem), "image.bmp");
-                imageToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+                imageToolStripMenuItem = new ToolStripMenuItem
+                {
+                    Text = SR.ToolStripItemContextMenuSetImage,
+                    Image = new Bitmap(typeof(ToolStripMenuItem), "image.bmp"),
+                    ImageTransparentColor = Color.Magenta
+                };
                 //Add event Handlers
                 imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
                 enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
@@ -203,8 +207,10 @@ namespace System.Windows.Forms.Design
                     if (_designerHost.GetDesigner(currentItem) is ToolStripItemDesigner itemDesigner)
                     {
                         verbManager = new CollectionEditVerbManager(string.Format(SR.ToolStripDropDownItemCollectionEditorVerb), itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
-                        editItemsToolStripMenuItem = new ToolStripMenuItem();
-                        editItemsToolStripMenuItem.Text = SR.ToolStripDropDownItemCollectionEditorVerb;
+                        editItemsToolStripMenuItem = new ToolStripMenuItem
+                        {
+                            Text = SR.ToolStripDropDownItemCollectionEditorVerb
+                        };
                         editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
                         editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist.bmp").ToBitmap();
                         editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;

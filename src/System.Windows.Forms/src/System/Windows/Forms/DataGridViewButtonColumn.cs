@@ -25,8 +25,10 @@ namespace System.Windows.Forms
         public DataGridViewButtonColumn()
             : base(new DataGridViewButtonCell())
         {
-            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-            defaultCellStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleCenter;
+            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+            {
+                AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
+            };
             DefaultCellStyle = defaultCellStyle;
         }
 

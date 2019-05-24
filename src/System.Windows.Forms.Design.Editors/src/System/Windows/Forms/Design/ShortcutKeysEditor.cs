@@ -32,8 +32,10 @@ namespace System.Windows.Forms.Design
                 {
                     if (shortcutKeysUI == null)
                     {
-                        shortcutKeysUI = new ShortcutKeysUI(this);
-                        shortcutKeysUI.BackColor = SystemColors.Control;
+                        shortcutKeysUI = new ShortcutKeysUI(this)
+                        {
+                            BackColor = SystemColors.Control
+                        };
                     }
 
                     shortcutKeysUI.Start(edSvc, value);

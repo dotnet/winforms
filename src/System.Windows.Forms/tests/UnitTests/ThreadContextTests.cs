@@ -39,8 +39,10 @@ namespace System.Windows.Forms.Tests
                        .Returns((MessageCallback)((ref Message m) => m.Msg == filterId));
 
             threadContext.AddMessageFilter(mockContext.Object);
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            msg.message = TestMessageId1;
+            NativeMethods.MSG msg = new NativeMethods.MSG
+            {
+                message = TestMessageId1
+            };
             bool result = threadContext.PreTranslateMessage(ref msg);
             Assert.False(result);
             mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
@@ -58,8 +60,10 @@ namespace System.Windows.Forms.Tests
                        .Returns((MessageCallback)((ref Message m) => m.Msg == filterId));
 
             threadContext.AddMessageFilter(mockContext.Object);
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            msg.message = filterId;
+            NativeMethods.MSG msg = new NativeMethods.MSG
+            {
+                message = filterId
+            };
             bool result = threadContext.PreTranslateMessage(ref msg);
             Assert.True(result);
             mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
@@ -84,8 +88,10 @@ namespace System.Windows.Forms.Tests
             threadContext.AddMessageFilter(mockContext3.Object);
 
 
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            msg.message = TestMessageId1;
+            NativeMethods.MSG msg = new NativeMethods.MSG
+            {
+                message = TestMessageId1
+            };
             bool result = threadContext.PreTranslateMessage(ref msg);
             Assert.False(result);
 
@@ -93,16 +99,20 @@ namespace System.Windows.Forms.Tests
             mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
 
 
-            msg = new NativeMethods.MSG();
-            msg.message = TestMessageId2;
+            msg = new NativeMethods.MSG
+            {
+                message = TestMessageId2
+            };
             result = threadContext.PreTranslateMessage(ref msg);
             Assert.True(result);
 
             mockContext2.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(2));
             mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
 
-            msg = new NativeMethods.MSG();
-            msg.message = TestMessageId3;
+            msg = new NativeMethods.MSG
+            {
+                message = TestMessageId3
+            };
             result = threadContext.PreTranslateMessage(ref msg);
             Assert.True(result);
 

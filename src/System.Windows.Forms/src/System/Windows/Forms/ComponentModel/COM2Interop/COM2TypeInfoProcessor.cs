@@ -42,8 +42,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 if (moduleBuilder == null)
                 {
-                    AssemblyName assemblyName = new AssemblyName();
-                    assemblyName.Name = "COM2InteropEmit";
+                    AssemblyName assemblyName = new AssemblyName
+                    {
+                        Name = "COM2InteropEmit"
+                    };
                     AssemblyBuilder aBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
                     moduleBuilder = aBuilder.DefineDynamicModule("COM2Interop.Emit");
                 }
@@ -577,8 +579,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (pi == null)
             {
-                pi = new PropInfo();
-                pi.Index = propInfoList.Count;
+                pi = new PropInfo
+                {
+                    Index = propInfoList.Count
+                };
                 propInfoList[pPropName] = pi;
                 pi.Name = pPropName;
                 pi.DispId = dispid;

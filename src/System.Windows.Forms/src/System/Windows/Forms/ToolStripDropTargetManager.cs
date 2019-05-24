@@ -325,8 +325,10 @@ namespace System.Windows.Forms
                 lastDropTarget = newTarget;
                 if (newTarget != null)
                 {
-                    DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect);
-                    dragEnterArgs.Effect = DragDropEffects.None;
+                    DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect)
+                    {
+                        Effect = DragDropEffects.None
+                    };
 
                     // tell the next drag target you've entered
                     OnDragEnter(dragEnterArgs);

@@ -820,8 +820,10 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_BAR_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally

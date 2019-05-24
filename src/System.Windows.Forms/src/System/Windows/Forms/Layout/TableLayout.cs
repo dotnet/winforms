@@ -1592,13 +1592,15 @@ namespace System.Windows.Forms.Layout
 #if DEBUG
             public LayoutInfo Clone()
             {
-                LayoutInfo clone = new LayoutInfo(_element);
-                clone.RowStart = RowStart;
-                clone.ColumnStart = ColumnStart;
-                clone.RowSpan = RowSpan;
-                clone.ColumnSpan = ColumnSpan;
-                clone.RowPosition = RowPosition;
-                clone.ColumnPosition = ColumnPosition;
+                LayoutInfo clone = new LayoutInfo(_element)
+                {
+                    RowStart = RowStart,
+                    ColumnStart = ColumnStart,
+                    RowSpan = RowSpan,
+                    ColumnSpan = ColumnSpan,
+                    RowPosition = RowPosition,
+                    ColumnPosition = ColumnPosition
+                };
                 return clone;
             }
 

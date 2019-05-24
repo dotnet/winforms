@@ -47,12 +47,14 @@ namespace System.Windows.Forms
                 // Create the tool tip handle on demand.
                 if (activate && toolTip == null)
                 {
-                    toolTip = new ToolTip();
-                    toolTip.ShowAlways = true;
-                    toolTip.InitialDelay = 0;
-                    toolTip.UseFading = false;
-                    toolTip.UseAnimation = false;
-                    toolTip.AutoPopDelay = 0;
+                    toolTip = new ToolTip
+                    {
+                        ShowAlways = true,
+                        InitialDelay = 0,
+                        UseFading = false,
+                        UseAnimation = false,
+                        AutoPopDelay = 0
+                    };
                 }
 
                 if (activate)

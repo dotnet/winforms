@@ -30,8 +30,10 @@ namespace System.Windows.Forms
         public DataGridViewImageColumn(bool valuesAreIcons)
             : base(new DataGridViewImageCell(valuesAreIcons))
         {
-            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-            defaultCellStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleCenter;
+            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+            {
+                AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
+            };
             if (valuesAreIcons)
             {
                 defaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;

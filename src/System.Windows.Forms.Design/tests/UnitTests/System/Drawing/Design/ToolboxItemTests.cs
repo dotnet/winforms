@@ -1209,16 +1209,22 @@ namespace System.Drawing.Design.Tests
                 yield return new object[] { null, new AssemblyName(typeof(ToolboxItemTests).Assembly.FullName), "NoSuchType", false, null };
                 yield return new object[] { null, null, string.Empty, false, null };
 
-                var validNameWithCodeBase = new AssemblyName(typeof(int).Assembly.FullName);
-                validNameWithCodeBase.CodeBase = "System.Windows.Forms.Design.Tests.dll";
+                var validNameWithCodeBase = new AssemblyName(typeof(int).Assembly.FullName)
+                {
+                    CodeBase = "System.Windows.Forms.Design.Tests.dll"
+                };
                 yield return new object[] { null, validNameWithCodeBase, "System.Drawing.Design.Tests.ToolboxItemTests", false, null };
 
-                var invalidNameWithCodeBase = new AssemblyName("NoSuchAssembly");
-                invalidNameWithCodeBase.CodeBase = "System.Windows.Forms.Design.Tests.dll";
+                var invalidNameWithCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "System.Windows.Forms.Design.Tests.dll"
+                };
                 yield return new object[] { null, invalidNameWithCodeBase, "System.Drawing.Design.Tests.ToolboxItemTests", false, typeof(ToolboxItemTests) };
 
-                var invalidNameWithInvalidCodeBase = new AssemblyName("NoSuchAssembly");
-                invalidNameWithInvalidCodeBase.CodeBase = "AlsoNoSuchAssembly";
+                var invalidNameWithInvalidCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "AlsoNoSuchAssembly"
+                };
                 yield return new object[] { null, invalidNameWithInvalidCodeBase, "System.Drawing.Design.Tests.ToolboxItemTests", false, null };
 
                 AssemblyLoadContext.Default.Resolving += (context, name) =>
@@ -1237,12 +1243,16 @@ namespace System.Drawing.Design.Tests
                 yield return new object[] { null, new AssemblyName("ThrowBadImageFormatException"), "System.Int32", false, typeof(int) };
                 yield return new object[] { null, new AssemblyName("ThrowIOException"), "System.Int32", false, typeof(int) };
 
-                var badImageFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly");
-                badImageFormatExceptionCodeBase.CodeBase = "ThrowBadImageFormatException";
+                var badImageFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "ThrowBadImageFormatException"
+                };
                 yield return new object[] { null, badImageFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
 
-                var ioFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly");
-                ioFormatExceptionCodeBase.CodeBase = "ThrowIOException";
+                var ioFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "ThrowIOException"
+                };
                 yield return new object[] { null, ioFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
             }
 

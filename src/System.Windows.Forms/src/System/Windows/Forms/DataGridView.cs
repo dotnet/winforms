@@ -480,13 +480,15 @@ namespace System.Windows.Forms
 
             clipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText;
 
-            layout = new LayoutData();
-            layout.TopLeftHeader = Rectangle.Empty;
-            layout.ColumnHeaders = Rectangle.Empty;
-            layout.RowHeaders = Rectangle.Empty;
-            layout.ColumnHeadersVisible = true;
-            layout.RowHeadersVisible = true;
-            layout.ClientRectangle = ClientRectangle;
+            layout = new LayoutData
+            {
+                TopLeftHeader = Rectangle.Empty,
+                ColumnHeaders = Rectangle.Empty,
+                RowHeaders = Rectangle.Empty,
+                ColumnHeadersVisible = true,
+                RowHeadersVisible = true,
+                ClientRectangle = ClientRectangle
+            };
 
             scrollBars = ScrollBars.Both;
 
@@ -616,19 +618,23 @@ namespace System.Windows.Forms
                     {
                         case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                         case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                            dgvabs = new DataGridViewAdvancedBorderStyle();
-                            dgvabs.LeftInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
-                            dgvabs.RightInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.OutsetDouble : DataGridViewAdvancedCellBorderStyle.Outset;
-                            dgvabs.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
-                            dgvabs.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                            dgvabs = new DataGridViewAdvancedBorderStyle
+                            {
+                                LeftInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble,
+                                RightInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.OutsetDouble : DataGridViewAdvancedCellBorderStyle.Outset,
+                                TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble,
+                                BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset
+                            };
                             break;
 
                         case DataGridViewAdvancedCellBorderStyle.InsetDouble:
-                            dgvabs = new DataGridViewAdvancedBorderStyle();
-                            dgvabs.LeftInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
-                            dgvabs.RightInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.InsetDouble : DataGridViewAdvancedCellBorderStyle.Inset;
-                            dgvabs.TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
-                            dgvabs.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
+                            dgvabs = new DataGridViewAdvancedBorderStyle
+                            {
+                                LeftInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble,
+                                RightInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.InsetDouble : DataGridViewAdvancedCellBorderStyle.Inset,
+                                TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble,
+                                BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset
+                            };
                             break;
 
                         case DataGridViewAdvancedCellBorderStyle.NotSet:
@@ -1799,14 +1805,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
-                defaultStyle.BackColor = DefaultHeadersBackBrush.Color;
-                defaultStyle.ForeColor = DefaultForeBrush.Color;
-                defaultStyle.SelectionBackColor = DefaultSelectionBackBrush.Color;
-                defaultStyle.SelectionForeColor = DefaultSelectionForeBrush.Color;
-                defaultStyle.Font = base.Font;
-                defaultStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
-                defaultStyle.WrapModeInternal = DataGridViewTriState.True;
+                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle
+                {
+                    BackColor = DefaultHeadersBackBrush.Color,
+                    ForeColor = DefaultForeBrush.Color,
+                    SelectionBackColor = DefaultSelectionBackBrush.Color,
+                    SelectionForeColor = DefaultSelectionForeBrush.Color,
+                    Font = base.Font,
+                    AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
+                    WrapModeInternal = DataGridViewTriState.True
+                };
                 defaultStyle.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
 
                 dataGridViewState1[DATAGRIDVIEWSTATE1_ambientColumnHeadersFont] = true;
@@ -2319,8 +2327,10 @@ namespace System.Windows.Forms
                     defaultCellStyle.Alignment == DataGridViewContentAlignment.NotSet ||
                     defaultCellStyle.WrapMode == DataGridViewTriState.NotSet)
                 {
-                    DataGridViewCellStyle defaultCellStyleTmp = new DataGridViewCellStyle(defaultCellStyle);
-                    defaultCellStyleTmp.Scope = DataGridViewCellStyleScopes.None;
+                    DataGridViewCellStyle defaultCellStyleTmp = new DataGridViewCellStyle(defaultCellStyle)
+                    {
+                        Scope = DataGridViewCellStyleScopes.None
+                    };
                     if (defaultCellStyle.BackColor == Color.Empty)
                     {
                         defaultCellStyleTmp.BackColor = DefaultBackBrush.Color;
@@ -2381,14 +2391,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-                defaultCellStyle.BackColor = DefaultBackBrush.Color;
-                defaultCellStyle.ForeColor = base.ForeColor;
-                defaultCellStyle.SelectionBackColor = DefaultSelectionBackBrush.Color;
-                defaultCellStyle.SelectionForeColor = DefaultSelectionForeBrush.Color;
-                defaultCellStyle.Font = base.Font;
-                defaultCellStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
-                defaultCellStyle.WrapModeInternal = DataGridViewTriState.False;
+                DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = DefaultBackBrush.Color,
+                    ForeColor = base.ForeColor,
+                    SelectionBackColor = DefaultSelectionBackBrush.Color,
+                    SelectionForeColor = DefaultSelectionForeBrush.Color,
+                    Font = base.Font,
+                    AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
+                    WrapModeInternal = DataGridViewTriState.False
+                };
                 defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
 
                 dataGridViewState1[DATAGRIDVIEWSTATE1_ambientFont] = true;
@@ -2436,14 +2448,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
-                defaultStyle.BackColor = DefaultHeadersBackBrush.Color;
-                defaultStyle.ForeColor = DefaultForeBrush.Color;
-                defaultStyle.SelectionBackColor = DefaultSelectionBackBrush.Color;
-                defaultStyle.SelectionForeColor = DefaultSelectionForeBrush.Color;
-                defaultStyle.Font = base.Font;
-                defaultStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
-                defaultStyle.WrapModeInternal = DataGridViewTriState.True;
+                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle
+                {
+                    BackColor = DefaultHeadersBackBrush.Color,
+                    ForeColor = DefaultForeBrush.Color,
+                    SelectionBackColor = DefaultSelectionBackBrush.Color,
+                    SelectionForeColor = DefaultSelectionForeBrush.Color,
+                    Font = base.Font,
+                    AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
+                    WrapModeInternal = DataGridViewTriState.True
+                };
                 defaultStyle.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
 
                 dataGridViewState1[DATAGRIDVIEWSTATE1_ambientRowHeadersFont] = true;
@@ -2629,8 +2643,10 @@ namespace System.Windows.Forms
             {
                 if (editingPanel == null)
                 {
-                    editingPanel = new DataGridViewEditingPanel(this);
-                    editingPanel.AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName);
+                    editingPanel = new DataGridViewEditingPanel(this)
+                    {
+                        AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName)
+                    };
                 }
                 return editingPanel;
             }
@@ -2737,8 +2753,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                Point ptFirstDisplayedCellAddress = new Point(-1, -1);
-                ptFirstDisplayedCellAddress.Y = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                Point ptFirstDisplayedCellAddress = new Point(-1, -1)
+                {
+                    Y = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+                };
                 if (ptFirstDisplayedCellAddress.Y == -1)
                 {
                     Debug.Assert(displayedBandsInfo.NumTotallyDisplayedFrozenRows == 0);

@@ -346,8 +346,10 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                     }
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()));
-                    ex.HelpLink = SR.SerializationManagerNoMatchingCtor;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
+                    {
+                        HelpLink = SR.SerializationManagerNoMatchingCtor
+                    };
                     throw ex;
                 }
 
@@ -715,8 +717,10 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (instancesByName != null && instancesByName.ContainsKey(name))
                 {
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name));
-                    ex.HelpLink = SR.SerializationManagerDuplicateComponentDecl;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name))
+                    {
+                        HelpLink = SR.SerializationManagerDuplicateComponentDecl
+                    };
                     throw ex;
                 }
             }

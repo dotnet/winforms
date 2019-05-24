@@ -337,10 +337,12 @@ namespace System.Windows.Forms
                 grayPattern[i] = (short)(0x5555 << (i & 1));
             IntPtr hBitmap = SafeNativeMethods.CreateBitmap(8, 8, 1, 1, grayPattern);
 
-            NativeMethods.LOGBRUSH lb = new NativeMethods.LOGBRUSH();
-            lb.lbColor = ColorTranslator.ToWin32(Color.Black);
-            lb.lbStyle = NativeMethods.BS_PATTERN;
-            lb.lbHatch = hBitmap;
+            NativeMethods.LOGBRUSH lb = new NativeMethods.LOGBRUSH
+            {
+                lbColor = ColorTranslator.ToWin32(Color.Black),
+                lbStyle = NativeMethods.BS_PATTERN,
+                lbHatch = hBitmap
+            };
             IntPtr brush = SafeNativeMethods.CreateBrushIndirect(lb);
 
             SafeNativeMethods.DeleteObject(new HandleRef(null, hBitmap));
@@ -721,8 +723,10 @@ namespace System.Windows.Forms
                     // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(topColor);
-                    pen.DashStyle = DashStyle.Dot;
+                    pen = new Pen(topColor)
+                    {
+                        DashStyle = DashStyle.Dot
+                    };
                     for (int i = 0; i < topWidth; i++)
                     {
                         graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
@@ -730,8 +734,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(topColor);
-                    pen.DashStyle = DashStyle.Dash;
+                    pen = new Pen(topColor)
+                    {
+                        DashStyle = DashStyle.Dash
+                    };
                     for (int i = 0; i < topWidth; i++)
                     {
                         graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
@@ -739,8 +745,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(topColor);
-                    pen.DashStyle = DashStyle.Solid;
+                    pen = new Pen(topColor)
+                    {
+                        DashStyle = DashStyle.Solid
+                    };
                     for (int i = 0; i < topWidth; i++)
                     {
                         graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
@@ -752,8 +760,10 @@ namespace System.Windows.Forms
                         float inc = InfinityToOne(1.0f / (float)(topWidth - 1));
                         for (int i = 0; i < topWidth; i++)
                         {
-                            pen = new Pen(topHLSColor.Darker(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(topHLSColor.Darker(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
                             pen.Dispose();
                         }
@@ -765,8 +775,10 @@ namespace System.Windows.Forms
 
                         for (int i = 0; i < topWidth; i++)
                         {
-                            pen = new Pen(topHLSColor.Lighter(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(topHLSColor.Lighter(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
                             pen.Dispose();
                         }
@@ -784,8 +796,10 @@ namespace System.Windows.Forms
                     // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(leftColor);
-                    pen.DashStyle = DashStyle.Dot;
+                    pen = new Pen(leftColor)
+                    {
+                        DashStyle = DashStyle.Dot
+                    };
                     for (int i = 0; i < leftWidth; i++)
                     {
                         graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
@@ -793,8 +807,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(leftColor);
-                    pen.DashStyle = DashStyle.Dash;
+                    pen = new Pen(leftColor)
+                    {
+                        DashStyle = DashStyle.Dash
+                    };
                     for (int i = 0; i < leftWidth; i++)
                     {
                         graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
@@ -802,8 +818,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(leftColor);
-                    pen.DashStyle = DashStyle.Solid;
+                    pen = new Pen(leftColor)
+                    {
+                        DashStyle = DashStyle.Solid
+                    };
                     for (int i = 0; i < leftWidth; i++)
                     {
                         graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
@@ -815,8 +833,10 @@ namespace System.Windows.Forms
                         float inc = InfinityToOne(1.0f / (float)(leftWidth - 1));
                         for (int i = 0; i < leftWidth; i++)
                         {
-                            pen = new Pen(leftHLSColor.Darker(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(leftHLSColor.Darker(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                             pen.Dispose();
                         }
@@ -827,8 +847,10 @@ namespace System.Windows.Forms
                         float inc = InfinityToOne(1.0f / (float)(leftWidth - 1));
                         for (int i = 0; i < leftWidth; i++)
                         {
-                            pen = new Pen(leftHLSColor.Lighter(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(leftHLSColor.Lighter(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                             pen.Dispose();
                         }
@@ -846,8 +868,10 @@ namespace System.Windows.Forms
                     // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(bottomColor);
-                    pen.DashStyle = DashStyle.Dot;
+                    pen = new Pen(bottomColor)
+                    {
+                        DashStyle = DashStyle.Dot
+                    };
                     for (int i = 0; i < bottomWidth; i++)
                     {
                         graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
@@ -855,8 +879,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(bottomColor);
-                    pen.DashStyle = DashStyle.Dash;
+                    pen = new Pen(bottomColor)
+                    {
+                        DashStyle = DashStyle.Dash
+                    };
                     for (int i = 0; i < bottomWidth; i++)
                     {
                         graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
@@ -864,8 +890,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(bottomColor);
-                    pen.DashStyle = DashStyle.Solid;
+                    pen = new Pen(bottomColor)
+                    {
+                        DashStyle = DashStyle.Solid
+                    };
                     for (int i = 0; i < bottomWidth; i++)
                     {
                         graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
@@ -877,8 +905,10 @@ namespace System.Windows.Forms
                         float inc = InfinityToOne(1.0f / (float)(bottomWidth - 1));
                         for (int i = 0; i < bottomWidth; i++)
                         {
-                            pen = new Pen(bottomHLSColor.Lighter(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(bottomHLSColor.Lighter(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
                             pen.Dispose();
                         }
@@ -890,8 +920,10 @@ namespace System.Windows.Forms
 
                         for (int i = 0; i < bottomWidth; i++)
                         {
-                            pen = new Pen(bottomHLSColor.Darker(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(bottomHLSColor.Darker(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
                             pen.Dispose();
                         }
@@ -909,8 +941,10 @@ namespace System.Windows.Forms
                     // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(rightColor);
-                    pen.DashStyle = DashStyle.Dot;
+                    pen = new Pen(rightColor)
+                    {
+                        DashStyle = DashStyle.Dot
+                    };
                     for (int i = 0; i < rightWidth; i++)
                     {
                         graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
@@ -918,8 +952,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(rightColor);
-                    pen.DashStyle = DashStyle.Dash;
+                    pen = new Pen(rightColor)
+                    {
+                        DashStyle = DashStyle.Dash
+                    };
                     for (int i = 0; i < rightWidth; i++)
                     {
                         graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
@@ -927,8 +963,10 @@ namespace System.Windows.Forms
                     pen.Dispose();
                     break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(rightColor);
-                    pen.DashStyle = DashStyle.Solid;
+                    pen = new Pen(rightColor)
+                    {
+                        DashStyle = DashStyle.Solid
+                    };
                     for (int i = 0; i < rightWidth; i++)
                     {
                         graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
@@ -940,8 +978,10 @@ namespace System.Windows.Forms
                         float inc = InfinityToOne(1.0f / (float)(rightWidth - 1));
                         for (int i = 0; i < rightWidth; i++)
                         {
-                            pen = new Pen(rightHLSColor.Lighter(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(rightHLSColor.Lighter(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
                             pen.Dispose();
                         }
@@ -953,8 +993,10 @@ namespace System.Windows.Forms
 
                         for (int i = 0; i < rightWidth; i++)
                         {
-                            pen = new Pen(rightHLSColor.Darker(1.0f - ((float)i) * inc));
-                            pen.DashStyle = DashStyle.Solid;
+                            pen = new Pen(rightHLSColor.Darker(1.0f - ((float)i) * inc))
+                            {
+                                DashStyle = DashStyle.Solid
+                            };
                             graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
                             pen.Dispose();
                         }
@@ -1492,12 +1534,16 @@ namespace System.Windows.Forms
                     {
                         // Replace black/white with foreColor/backColor.
                         ImageAttributes attrs = new ImageAttributes();
-                        ColorMap cm1 = new ColorMap();
-                        cm1.OldColor = Color.Black;
-                        cm1.NewColor = foreColor;
-                        ColorMap cm2 = new ColorMap();
-                        cm2.OldColor = Color.White;
-                        cm2.NewColor = backColor;
+                        ColorMap cm1 = new ColorMap
+                        {
+                            OldColor = Color.Black,
+                            NewColor = foreColor
+                        };
+                        ColorMap cm2 = new ColorMap
+                        {
+                            OldColor = Color.White,
+                            NewColor = backColor
+                        };
                         attrs.SetRemapTable(new ColorMap[2] { cm1, cm2 }, ColorAdjustType.Bitmap);
                         graphics.DrawImage(bitmap, new Rectangle(x, y, width, height), 0, 0, width, height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
                     }
@@ -1653,9 +1699,11 @@ namespace System.Windows.Forms
         {
             ImageAttributes attrs = new ImageAttributes();
 
-            ColorMap cm = new ColorMap();
-            cm.OldColor = oldColor;
-            cm.NewColor = newColor;
+            ColorMap cm = new ColorMap
+            {
+                OldColor = oldColor,
+                NewColor = newColor
+            };
 
             attrs.SetRemapTable(new ColorMap[] { cm }, ColorAdjustType.Bitmap);
 
@@ -2799,22 +2847,23 @@ namespace System.Windows.Forms
             //                |  B   B   B   0   1 |
             //                |   r   g   b        |
 
-            ColorMatrix matrix = new ColorMatrix();
+            ColorMatrix matrix = new ColorMatrix
+            {
+                Matrix00 = -normBlackRed,
+                Matrix01 = -normBlackGreen,
+                Matrix02 = -normBlackBlue,
 
-            matrix.Matrix00 = -normBlackRed;
-            matrix.Matrix01 = -normBlackGreen;
-            matrix.Matrix02 = -normBlackBlue;
+                Matrix10 = normWhiteRed,
+                Matrix11 = normWhiteGreen,
+                Matrix12 = normWhiteBlue,
 
-            matrix.Matrix10 = normWhiteRed;
-            matrix.Matrix11 = normWhiteGreen;
-            matrix.Matrix12 = normWhiteBlue;
+                Matrix33 = 1.0f,
 
-            matrix.Matrix33 = 1.0f;
-
-            matrix.Matrix40 = normBlackRed;
-            matrix.Matrix41 = normBlackGreen;
-            matrix.Matrix42 = normBlackBlue;
-            matrix.Matrix44 = 1.0f;
+                Matrix40 = normBlackRed,
+                Matrix41 = normBlackGreen,
+                Matrix42 = normBlackBlue,
+                Matrix44 = 1.0f
+            };
 
             return matrix;
         }
@@ -2903,9 +2952,11 @@ namespace System.Windows.Forms
 
         internal static StringFormat StringFormatForAlignment(ContentAlignment align)
         {
-            StringFormat output = new StringFormat();
-            output.Alignment = TranslateAlignment(align);
-            output.LineAlignment = TranslateLineAlignment(align);
+            StringFormat output = new StringFormat
+            {
+                Alignment = TranslateAlignment(align),
+                LineAlignment = TranslateLineAlignment(align)
+            };
             return output;
         }
 

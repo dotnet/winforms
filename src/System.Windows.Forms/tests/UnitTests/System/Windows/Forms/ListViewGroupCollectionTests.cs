@@ -270,8 +270,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
 
@@ -289,8 +291,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
 
@@ -313,8 +317,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
 
@@ -334,8 +340,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
 

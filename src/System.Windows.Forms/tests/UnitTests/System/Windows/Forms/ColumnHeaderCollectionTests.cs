@@ -108,8 +108,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header1 = new ColumnHeader();
-            var header2 = new ColumnHeader();
-            header2.Name = "text";
+            var header2 = new ColumnHeader
+            {
+                Name = "text"
+            };
             collection.Add(header1);
             collection.Add(header2);
 
@@ -549,8 +551,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header1 = new ColumnHeader();
-            var header2 = new ColumnHeader();
-            header2.Name = "text";
+            var header2 = new ColumnHeader
+            {
+                Name = "text"
+            };
             collection.Add(header1);
             collection.Add(header2);
 
@@ -628,8 +632,10 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header1 = new ColumnHeader();
-            var header2 = new ColumnHeader();
-            header2.Name = "text";
+            var header2 = new ColumnHeader
+            {
+                Name = "text"
+            };
             collection.Add(header1);
             collection.Add(header2);
 

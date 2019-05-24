@@ -161,8 +161,10 @@ namespace System.Windows.Forms.Tests
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem1 = new ListViewItem.ListViewSubItem();
-            var subItem2 = new ListViewItem.ListViewSubItem();
-            subItem2.Name = "text";
+            var subItem2 = new ListViewItem.ListViewSubItem
+            {
+                Name = "text"
+            };
             collection.Add(subItem1);
             collection.Add(subItem2);
 
@@ -468,8 +470,10 @@ namespace System.Windows.Forms.Tests
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem1 = new ListViewItem.ListViewSubItem();
-            var subItem2 = new ListViewItem.ListViewSubItem();
-            subItem2.Name = "text";
+            var subItem2 = new ListViewItem.ListViewSubItem
+            {
+                Name = "text"
+            };
             collection.Add(subItem1);
             collection.Add(subItem2);
 
@@ -547,8 +551,10 @@ namespace System.Windows.Forms.Tests
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem1 = new ListViewItem.ListViewSubItem();
-            var subItem2 = new ListViewItem.ListViewSubItem();
-            subItem2.Name = "text";
+            var subItem2 = new ListViewItem.ListViewSubItem
+            {
+                Name = "text"
+            };
             collection.Add(subItem1);
             collection.Add(subItem2);
 

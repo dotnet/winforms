@@ -606,9 +606,11 @@ namespace System.Windows.Forms
             // Assume that this button is the same width as the parent's ButtonSize's Width
             int buttonWidth = Parent.ButtonSize.Width;
 
-            NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
-            button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
-            button.dwMask = NativeMethods.TBIF_SIZE;
+            NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO
+            {
+                cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
+                dwMask = NativeMethods.TBIF_SIZE
+            };
 
             int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
             if (buttonID != -1)
@@ -639,13 +641,14 @@ namespace System.Windows.Forms
         internal NativeMethods.TBBUTTON GetTBBUTTON(int commandId)
         {
 
-            NativeMethods.TBBUTTON button = new NativeMethods.TBBUTTON();
+            NativeMethods.TBBUTTON button = new NativeMethods.TBBUTTON
+            {
+                iBitmap = ImageIndexer.ActualIndex,
 
-            button.iBitmap = ImageIndexer.ActualIndex;
-
-            // set up the state of the button
-            //
-            button.fsState = 0;
+                // set up the state of the button
+                //
+                fsState = 0
+            };
             if (enabled)
                 button.fsState |= NativeMethods.TBSTATE_ENABLED;
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
@@ -688,10 +691,12 @@ namespace System.Windows.Forms
         internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId)
         {
 
-            NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
-            button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
-            button.dwMask = NativeMethods.TBIF_IMAGE
-                            | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE;
+            NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO
+            {
+                cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
+                dwMask = NativeMethods.TBIF_IMAGE
+                            | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE
+            };
 
             // Older platforms interpret null strings as empty, which forces the button to
             // leave space for text.

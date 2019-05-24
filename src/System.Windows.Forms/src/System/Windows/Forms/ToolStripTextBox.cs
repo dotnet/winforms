@@ -166,9 +166,11 @@ namespace System.Windows.Forms
 
         private static Control CreateControlInstance()
         {
-            TextBox textBox = new ToolStripTextBoxControl();
-            textBox.BorderStyle = BorderStyle.Fixed3D;
-            textBox.AutoSize = true;
+            TextBox textBox = new ToolStripTextBoxControl
+            {
+                BorderStyle = BorderStyle.Fixed3D,
+                AutoSize = true
+            };
             return textBox;
         }
 

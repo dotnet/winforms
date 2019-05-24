@@ -8004,12 +8004,13 @@ namespace System.Windows.Forms
                     if (!contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
                     {
 
-                        enableThemingActivationContext = new ACTCTX();
-
-                        enableThemingActivationContext.cbSize = Marshal.SizeOf<ACTCTX>();
-                        enableThemingActivationContext.lpSource = dllPath;
-                        enableThemingActivationContext.lpResourceName = (IntPtr)nativeResourceManifestID;
-                        enableThemingActivationContext.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
+                        enableThemingActivationContext = new ACTCTX
+                        {
+                            cbSize = Marshal.SizeOf<ACTCTX>(),
+                            lpSource = dllPath,
+                            lpResourceName = (IntPtr)nativeResourceManifestID,
+                            dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID
+                        };
 
                         hActCtx = CreateActCtx(ref enableThemingActivationContext);
                         contextCreationSucceeded = (hActCtx != new IntPtr(-1));

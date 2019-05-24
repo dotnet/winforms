@@ -2192,11 +2192,13 @@ namespace System.Windows.Forms
 
         private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useCheckButtonRole = false)
         {
-            ToolStripButton button = new ToolStripButton();
-            button.Text = toolTipText;
-            button.AutoToolTip = true;
-            button.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            button.ImageIndex = imageIndex;
+            ToolStripButton button = new ToolStripButton
+            {
+                Text = toolTipText,
+                AutoToolTip = true,
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
+                ImageIndex = imageIndex
+            };
             button.Click += eventHandler;
             button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 
@@ -2589,8 +2591,10 @@ namespace System.Windows.Forms
             if (imageList[LARGE_BUTTONS] == null)
             {
 
-                imageList[LARGE_BUTTONS] = new ImageList();
-                imageList[LARGE_BUTTONS].ImageSize = largeButtonSize;
+                imageList[LARGE_BUTTONS] = new ImageList
+                {
+                    ImageSize = largeButtonSize
+                };
 
                 if (DpiHelper.IsScalingRequired)
                 {
@@ -4719,8 +4723,10 @@ namespace System.Windows.Forms
             if (DrawFlatToolbar || SystemInformation.HighContrast)
             {
                 // use an office look and feel with system colors 
-                ProfessionalColorTable colorTable = new ProfessionalColorTable();
-                colorTable.UseSystemColors = true;
+                ProfessionalColorTable colorTable = new ProfessionalColorTable
+                {
+                    UseSystemColors = true
+                };
                 ToolStripRenderer = new ToolStripProfessionalRenderer(colorTable);
             }
             else
@@ -5083,9 +5089,11 @@ namespace System.Windows.Forms
             if (me.Y <= 1 || (size.Height - me.Y) <= 1)
             {
                 // convert the coordinates to
-                NativeMethods.POINT temp = new NativeMethods.POINT();
-                temp.x = me.X;
-                temp.y = me.Y;
+                NativeMethods.POINT temp = new NativeMethods.POINT
+                {
+                    x = me.X,
+                    y = me.Y
+                };
                 UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), temp, 1);
 
                 // forward the message

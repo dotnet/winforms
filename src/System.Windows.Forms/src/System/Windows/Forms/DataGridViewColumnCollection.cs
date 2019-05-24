@@ -218,9 +218,11 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(string columnName, string headerText)
         {
-            DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn.Name = columnName;
-            dataGridViewTextBoxColumn.HeaderText = headerText;
+            DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn
+            {
+                Name = columnName,
+                HeaderText = headerText
+            };
 
             return Add(dataGridViewTextBoxColumn);
         }

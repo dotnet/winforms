@@ -87,9 +87,11 @@ namespace System.Windows.Forms
             }
 
             upDownButtons = new UpDownButtons(this);
-            upDownEdit = new UpDownEdit(this);
-            upDownEdit.BorderStyle = BorderStyle.None;
-            upDownEdit.AutoSize = false;
+            upDownEdit = new UpDownEdit(this)
+            {
+                BorderStyle = BorderStyle.None,
+                AutoSize = false
+            };
             upDownEdit.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
             upDownEdit.KeyPress += new KeyPressEventHandler(OnTextBoxKeyPress);
             upDownEdit.TextChanged += new EventHandler(OnTextBoxTextChanged);

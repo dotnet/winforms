@@ -73,9 +73,10 @@ namespace System.ComponentModel.Design.Serialization
 
             if (typeDecl != null && rootCxt != null)
             {
-                CodeMemberField field = new CodeMemberField(typeof(IContainer), _containerName);
-
-                field.Attributes = MemberAttributes.Private;
+                CodeMemberField field = new CodeMemberField(typeof(IContainer), _containerName)
+                {
+                    Attributes = MemberAttributes.Private
+                };
                 typeDecl.Members.Add(field);
                 lhs = new CodeFieldReferenceExpression(rootCxt.Expression, _containerName);
             }

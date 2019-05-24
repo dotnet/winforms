@@ -21,16 +21,20 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void TextBox_PlaceholderText()
         {
-            var tb = new TextBox();
-            tb.PlaceholderText = "Enter your name";
+            var tb = new TextBox
+            {
+                PlaceholderText = "Enter your name"
+            };
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
 
         [Fact]
         public void TextBox_PlaceholderTextAlignments()
         {
-            var tb = new TextBox();
-            tb.PlaceholderText = "Enter your name";
+            var tb = new TextBox
+            {
+                PlaceholderText = "Enter your name"
+            };
 
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
@@ -47,9 +51,11 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void TextBox_PlaceholderTextAlignmentsInRightToLeft()
         {
-            var tb = new TextBox();
-            tb.PlaceholderText = "Enter your name";
-            tb.RightToLeft = RightToLeft.Yes;
+            var tb = new TextBox
+            {
+                PlaceholderText = "Enter your name",
+                RightToLeft = RightToLeft.Yes
+            };
 
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
@@ -65,8 +71,10 @@ namespace System.Windows.Forms.Tests
 
         private SubTextBoxBase CreateTextBoxForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
         {
-            var tb = new SubTextBoxBase();
-            tb.Text = text;
+            var tb = new SubTextBoxBase
+            {
+                Text = text
+            };
             tb.Focus();
             tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
             tb.SelectionLength = 0;

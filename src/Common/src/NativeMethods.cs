@@ -2817,21 +2817,25 @@ namespace System.Windows.Forms
 
             public static PICTDESC CreateBitmapPICTDESC(IntPtr hbitmap, IntPtr hpal)
             {
-                PICTDESC pictdesc = new PICTDESC();
-                pictdesc.cbSizeOfStruct = 16;
-                pictdesc.picType = Ole.PICTYPE_BITMAP;
-                pictdesc.union1 = hbitmap;
-                pictdesc.union2 = (int)(((long)hpal) & 0xffffffff);
-                pictdesc.union3 = (int)(((long)hpal) >> 32);
+                PICTDESC pictdesc = new PICTDESC
+                {
+                    cbSizeOfStruct = 16,
+                    picType = Ole.PICTYPE_BITMAP,
+                    union1 = hbitmap,
+                    union2 = (int)(((long)hpal) & 0xffffffff),
+                    union3 = (int)(((long)hpal) >> 32)
+                };
                 return pictdesc;
             }
 
             public static PICTDESC CreateIconPICTDESC(IntPtr hicon)
             {
-                PICTDESC pictdesc = new PICTDESC();
-                pictdesc.cbSizeOfStruct = 12;
-                pictdesc.picType = Ole.PICTYPE_ICON;
-                pictdesc.union1 = hicon;
+                PICTDESC pictdesc = new PICTDESC
+                {
+                    cbSizeOfStruct = 12,
+                    picType = Ole.PICTYPE_ICON,
+                    union1 = hicon
+                };
                 return pictdesc;
             }
         }
@@ -5360,9 +5364,11 @@ namespace System.Windows.Forms
 
             public tagIDLDESC Get_idldescType()
             {
-                tagIDLDESC id = new tagIDLDESC();
-                id.dwReserved = idldescType_dwReserved;
-                id.wIDLFlags = idldescType_wIDLFlags;
+                tagIDLDESC id = new tagIDLDESC
+                {
+                    dwReserved = idldescType_dwReserved,
+                    wIDLFlags = idldescType_wIDLFlags
+                };
                 return id;
             }
         }

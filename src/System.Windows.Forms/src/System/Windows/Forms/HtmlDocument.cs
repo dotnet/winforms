@@ -418,8 +418,10 @@ namespace System.Windows.Forms
         public object InvokeScript(string scriptName, object[] args)
         {
             object retVal = null;
-            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS();
-            dp.rgvarg = IntPtr.Zero;
+            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
+            {
+                rgvarg = IntPtr.Zero
+            };
             try
             {
                 UnsafeNativeMethods.IDispatch scriptObject = NativeHtmlDocument2.GetScript() as UnsafeNativeMethods.IDispatch;

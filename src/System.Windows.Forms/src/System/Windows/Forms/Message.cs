@@ -44,12 +44,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            var m = new Message();
-            m.HWnd = hWnd;
-            m.Msg = msg;
-            m.WParam = wparam;
-            m.LParam = lparam;
-            m.Result = IntPtr.Zero;
+            var m = new Message
+            {
+                HWnd = hWnd,
+                Msg = msg,
+                WParam = wparam,
+                LParam = lparam,
+                Result = IntPtr.Zero
+            };
 
 #if DEBUG
             if (s_allWinMessages.TraceVerbose)

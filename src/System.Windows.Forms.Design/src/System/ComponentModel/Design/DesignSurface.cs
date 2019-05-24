@@ -196,8 +196,10 @@ namespace System.ComponentModel.Design
                 }
 
                 // We are out of luck here.  Throw.
-                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology);
-                ex.HelpLink = SR.DesignSurfaceNoSupportedTechnology;
+                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
+                {
+                    HelpLink = SR.DesignSurfaceNoSupportedTechnology
+                };
                 throw ex;
             }
         }

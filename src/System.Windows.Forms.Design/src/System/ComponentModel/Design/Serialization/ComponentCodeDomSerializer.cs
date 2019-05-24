@@ -568,9 +568,10 @@ namespace System.ComponentModel.Design.Serialization
             CodeTypeReference type = new CodeTypeReference(typeof(IPersistComponentSettings));
             CodeCastExpression castExp = new CodeCastExpression(type, valueExpression);
             CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(castExp, "LoadComponentSettings");
-            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
-
-            methodInvoke.Method = method;
+            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+            {
+                Method = method
+            };
 
             CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
             statement.UserData["statement-ordering"] = "end";
@@ -588,9 +589,10 @@ namespace System.ComponentModel.Design.Serialization
             CodeTypeReference type = new CodeTypeReference(typeof(ISupportInitialize));
             CodeCastExpression castExp = new CodeCastExpression(type, valueExpression);
             CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(castExp, methodName);
-            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
-
-            methodInvoke.Method = method;
+            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+            {
+                Method = method
+            };
 
             CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
 

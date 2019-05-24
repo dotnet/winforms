@@ -1174,12 +1174,14 @@ namespace System.Windows.Forms
                     {
                         FORMATETC currentFormat = formats[i];
 
-                        FORMATETC temp = new FORMATETC();
-                        temp.cfFormat = currentFormat.cfFormat;
-                        temp.dwAspect = currentFormat.dwAspect;
-                        temp.ptd = currentFormat.ptd;
-                        temp.lindex = currentFormat.lindex;
-                        temp.tymed = currentFormat.tymed;
+                        FORMATETC temp = new FORMATETC
+                        {
+                            cfFormat = currentFormat.cfFormat,
+                            dwAspect = currentFormat.dwAspect,
+                            ptd = currentFormat.ptd,
+                            lindex = currentFormat.lindex,
+                            tymed = currentFormat.tymed
+                        };
                         this.formats.Add(temp);
                     }
                 }
@@ -1207,11 +1209,13 @@ namespace System.Windows.Forms
                     for (int i = 0; i < formats.Length; i++)
                     {
                         string format = formats[i];
-                        FORMATETC temp = new FORMATETC();
-                        temp.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-                        temp.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                        temp.ptd = IntPtr.Zero;
-                        temp.lindex = -1;
+                        FORMATETC temp = new FORMATETC
+                        {
+                            cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                            dwAspect = DVASPECT.DVASPECT_CONTENT,
+                            ptd = IntPtr.Zero,
+                            lindex = -1
+                        };
 
                         if (format.Equals(DataFormats.Bitmap))
                         {
@@ -1842,10 +1846,12 @@ namespace System.Windows.Forms
             private bool GetDataPresentInner(string format)
             {
                 Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
-                FORMATETC formatetc = new FORMATETC();
-                formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-                formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                formatetc.lindex = -1;
+                FORMATETC formatetc = new FORMATETC
+                {
+                    cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1
+                };
 
                 for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
                 {

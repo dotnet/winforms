@@ -34,14 +34,18 @@ namespace System.Windows.Forms
         {
             if (tipWindow == null || tipWindow.Handle == IntPtr.Zero)
             {
-                NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
+                NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                {
+                    dwICC = NativeMethods.ICC_TAB_CLASSES
+                };
                 icc.dwSize = Marshal.SizeOf(icc);
                 SafeNativeMethods.InitCommonControlsEx(icc);
-                CreateParams cparams = new CreateParams();
-                cparams.Parent = dataGrid.Handle;
-                cparams.ClassName = NativeMethods.TOOLTIPS_CLASS;
-                cparams.Style = NativeMethods.TTS_ALWAYSTIP;
+                CreateParams cparams = new CreateParams
+                {
+                    Parent = dataGrid.Handle,
+                    ClassName = NativeMethods.TOOLTIPS_CLASS,
+                    Style = NativeMethods.TTS_ALWAYSTIP
+                };
                 tipWindow = new NativeWindow();
                 tipWindow.CreateHandle(cparams);
 

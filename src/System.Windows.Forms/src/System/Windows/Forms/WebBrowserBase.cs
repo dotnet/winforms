@@ -270,11 +270,13 @@ namespace System.Windows.Forms
 
 
                 // Convert Message to NativeMethods.MSG
-                NativeMethods.MSG win32Message = new NativeMethods.MSG();
-                win32Message.message = msg.Msg;
-                win32Message.wParam = msg.WParam;
-                win32Message.lParam = msg.LParam;
-                win32Message.hwnd = msg.HWnd;
+                NativeMethods.MSG win32Message = new NativeMethods.MSG
+                {
+                    message = msg.Msg,
+                    wParam = msg.WParam,
+                    lParam = msg.LParam,
+                    hwnd = msg.HWnd
+                };
 
                 SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 try
@@ -362,12 +364,14 @@ namespace System.Windows.Forms
                         // Sadly, we don't have a message so we must fake one ourselves.
                         // The message we are faking is a WM_SYSKEYDOWN with the right
                         // alt key setting.
-                        NativeMethods.MSG msg = new NativeMethods.MSG();
-                        msg.hwnd = IntPtr.Zero;
-                        msg.message = Interop.WindowMessages.WM_SYSKEYDOWN;
-                        msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
-                        msg.lParam = (IntPtr)0x20180001;
-                        msg.time = SafeNativeMethods.GetTickCount();
+                        NativeMethods.MSG msg = new NativeMethods.MSG
+                        {
+                            hwnd = IntPtr.Zero,
+                            message = Interop.WindowMessages.WM_SYSKEYDOWN,
+                            wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                            lParam = (IntPtr)0x20180001,
+                            time = SafeNativeMethods.GetTickCount()
+                        };
                         NativeMethods.POINT p = new NativeMethods.POINT();
                         UnsafeNativeMethods.GetCursorPos(p);
                         msg.pt_x = p.x;
@@ -1235,9 +1239,11 @@ namespace System.Windows.Forms
 
         private Size SetExtent(int width, int height)
         {
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
-            sz.cx = width;
-            sz.cy = height;
+            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL
+            {
+                cx = width,
+                cy = height
+            };
             bool resetExtents = DesignMode;
             try
             {
@@ -1273,9 +1279,11 @@ namespace System.Windows.Forms
 
         private void HiMetric2Pixel(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
         {
-            NativeMethods._POINTL phm = new NativeMethods._POINTL();
-            phm.x = sz.cx;
-            phm.y = sz.cy;
+            NativeMethods._POINTL phm = new NativeMethods._POINTL
+            {
+                x = sz.cx,
+                y = sz.cy
+            };
             NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
             ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
             szout.cx = (int)pcont.x;
@@ -1284,9 +1292,11 @@ namespace System.Windows.Forms
 
         private void Pixel2hiMetric(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
         {
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
-            pcont.x = (float)sz.cx;
-            pcont.y = (float)sz.cy;
+            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF
+            {
+                x = (float)sz.cx,
+                y = (float)sz.cy
+            };
             NativeMethods._POINTL phm = new NativeMethods._POINTL();
             ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
             szout.cx = phm.x;

@@ -836,8 +836,10 @@ namespace System.Windows.Forms
 
                 if (dropDownOwnerWindow.Handle == IntPtr.Zero)
                 {
-                    CreateParams cp = new CreateParams();
-                    cp.ExStyle = NativeMethods.WS_EX_TOOLWINDOW;
+                    CreateParams cp = new CreateParams
+                    {
+                        ExStyle = NativeMethods.WS_EX_TOOLWINDOW
+                    };
                     dropDownOwnerWindow.CreateHandle(cp);
                 }
 
@@ -965,12 +967,14 @@ namespace System.Windows.Forms
             {
                 if (toolStripGrip == null)
                 {
-                    toolStripGrip = new ToolStripGrip();
-                    toolStripGrip.Overflow = ToolStripItemOverflow.Never;
-                    toolStripGrip.Visible = toolStripGripStyle == ToolStripGripStyle.Visible;
-                    toolStripGrip.AutoSize = false;
-                    toolStripGrip.ParentInternal = this;
-                    toolStripGrip.Margin = DefaultGripMargin;
+                    toolStripGrip = new ToolStripGrip
+                    {
+                        Overflow = ToolStripItemOverflow.Never,
+                        Visible = toolStripGripStyle == ToolStripGripStyle.Visible,
+                        AutoSize = false,
+                        ParentInternal = this,
+                        Margin = DefaultGripMargin
+                    };
                 }
                 return toolStripGrip;
             }
@@ -1620,10 +1624,12 @@ namespace System.Windows.Forms
             {
                 if (toolStripOverflowButton == null)
                 {
-                    toolStripOverflowButton = new ToolStripOverflowButton(this);
-                    toolStripOverflowButton.Overflow = ToolStripItemOverflow.Never;
-                    toolStripOverflowButton.ParentInternal = this;
-                    toolStripOverflowButton.Alignment = ToolStripItemAlignment.Right;
+                    toolStripOverflowButton = new ToolStripOverflowButton(this)
+                    {
+                        Overflow = ToolStripItemOverflow.Never,
+                        ParentInternal = this,
+                        Alignment = ToolStripItemAlignment.Right
+                    };
                     toolStripOverflowButton.Size = toolStripOverflowButton.GetPreferredSize(DisplayRectangle.Size - Padding.Size);
                 }
                 return toolStripOverflowButton;

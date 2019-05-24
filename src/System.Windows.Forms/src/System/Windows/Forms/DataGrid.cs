@@ -4737,11 +4737,13 @@ namespace System.Windows.Forms
             int cy = GetRowTop(row.RowNumber);
             if (cy > 0)
             {
-                Rectangle refresh = new Rectangle();
-                refresh.Y = cy;
-                refresh.X = layout.Inside.X;
-                refresh.Width = layout.Inside.Width;
-                refresh.Height = layout.Inside.Bottom - cy;
+                Rectangle refresh = new Rectangle
+                {
+                    Y = cy,
+                    X = layout.Inside.X,
+                    Width = layout.Inside.Width,
+                    Height = layout.Inside.Bottom - cy
+                };
                 Invalidate(refresh);
             }
         }
@@ -5633,10 +5635,12 @@ namespace System.Windows.Forms
 
             // Important since all of the visibility flags will move
             // to the new layout here.
-            LayoutData newLayout = new LayoutData(layout);
+            LayoutData newLayout = new LayoutData(layout)
+            {
 
-            // Inside
-            newLayout.Inside = ClientRectangle;
+                // Inside
+                Inside = ClientRectangle
+            };
             Rectangle inside = newLayout.Inside;
             int borderWidth = BorderWidth;
             inside.Inflate(-borderWidth, -borderWidth);
@@ -6055,20 +6059,22 @@ namespace System.Windows.Forms
         private LayoutData CreateInitialLayoutState()
         {
             Debug.WriteLineIf(CompModSwitches.DataGridLayout.TraceVerbose, "DataGridLayout: CreateInitialLayoutState");
-            LayoutData newLayout = new LayoutData();
-            newLayout.Inside = new Rectangle();
-            newLayout.TopLeftHeader = new Rectangle();
-            newLayout.ColumnHeaders = new Rectangle();
-            newLayout.RowHeaders = new Rectangle();
-            newLayout.Data = new Rectangle();
-            newLayout.Caption = new Rectangle();
-            newLayout.ParentRows = new Rectangle();
-            newLayout.ResizeBoxRect = new Rectangle();
-            newLayout.ColumnHeadersVisible = true;
-            newLayout.RowHeadersVisible = true;
-            newLayout.CaptionVisible = defaultCaptionVisible;
-            newLayout.ParentRowsVisible = defaultParentRowsVisible;
-            newLayout.ClientRectangle = ClientRectangle;
+            LayoutData newLayout = new LayoutData
+            {
+                Inside = new Rectangle(),
+                TopLeftHeader = new Rectangle(),
+                ColumnHeaders = new Rectangle(),
+                RowHeaders = new Rectangle(),
+                Data = new Rectangle(),
+                Caption = new Rectangle(),
+                ParentRows = new Rectangle(),
+                ResizeBoxRect = new Rectangle(),
+                ColumnHeadersVisible = true,
+                RowHeadersVisible = true,
+                CaptionVisible = defaultCaptionVisible,
+                ParentRowsVisible = defaultParentRowsVisible,
+                ClientRectangle = ClientRectangle
+            };
             return newLayout;
         }
 
@@ -6825,11 +6831,13 @@ namespace System.Windows.Forms
 
         internal Rectangle GetRowBounds(DataGridRow row)
         {
-            Rectangle rowBounds = new Rectangle();
-            rowBounds.Y = GetRowTop(row.RowNumber);
-            rowBounds.X = layout.Data.X;
-            rowBounds.Height = row.Height;
-            rowBounds.Width = layout.Data.Width;
+            Rectangle rowBounds = new Rectangle
+            {
+                Y = GetRowTop(row.RowNumber),
+                X = layout.Data.X,
+                Height = row.Height,
+                Width = layout.Data.Width
+            };
             return rowBounds;
         }
 
@@ -6991,10 +6999,12 @@ namespace System.Windows.Forms
             if (column < firstVisibleCol || column > firstVisibleCol + numVisibleCols - 1)
                 return;
 
-            Rectangle columnArea = new Rectangle();
-            columnArea.Height = layout.Data.Height;
-            columnArea.Width = gridColumns[column].Width;
-            columnArea.Y = layout.Data.Y;
+            Rectangle columnArea = new Rectangle
+            {
+                Height = layout.Data.Height,
+                Width = gridColumns[column].Width,
+                Y = layout.Data.Y
+            };
 
             int x = layout.Data.X - negOffset;
             int gridColumnsCount = gridColumns.Count;
@@ -7053,11 +7063,13 @@ namespace System.Windows.Forms
                 if (!layout.RowHeadersVisible)
                     return;
 
-                Rectangle invalid = new Rectangle();
-                invalid.Y = GetRowTop(rowNumber);
-                invalid.X = layout.RowHeaders.X;
-                invalid.Width = layout.RowHeaders.Width;
-                invalid.Height = DataGridRows[rowNumber].Height;
+                Rectangle invalid = new Rectangle
+                {
+                    Y = GetRowTop(rowNumber),
+                    X = layout.RowHeaders.X,
+                    Width = layout.RowHeaders.Width,
+                    Height = DataGridRows[rowNumber].Height
+                };
                 Invalidate(invalid);
             }
         }
@@ -7452,8 +7464,10 @@ namespace System.Windows.Forms
             // Preserve our current state
             // we need to do this after the EndCurrentEdit, otherwise the
             // DataGridState will get the listChanged event from the EndCurrentEdit
-            DataGridState dgs = new DataGridState(this);
-            dgs.LinkingRow = source;
+            DataGridState dgs = new DataGridState(this)
+            {
+                LinkingRow = source
+            };
 
             // we need to update the Position in the ListManager
             // ( the RelatedListManager uses only the position in the parentManager

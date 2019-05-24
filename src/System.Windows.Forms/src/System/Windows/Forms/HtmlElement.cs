@@ -449,8 +449,10 @@ namespace System.Windows.Forms
         public object InvokeMember(string methodName, params object[] parameter)
         {
             object retVal = null;
-            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS();
-            dp.rgvarg = IntPtr.Zero;
+            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
+            {
+                rgvarg = IntPtr.Zero
+            };
             try
             {
                 UnsafeNativeMethods.IDispatch scriptObject = NativeHtmlElement as UnsafeNativeMethods.IDispatch;

@@ -107,12 +107,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
+                NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                {
+                    dwICC = NativeMethods.ICC_TAB_CLASSES
+                };
                 SafeNativeMethods.InitCommonControlsEx(icc);
-                CreateParams cp = new CreateParams();
-                cp.Parent = IntPtr.Zero;
-                cp.ClassName = NativeMethods.TOOLTIPS_CLASS;
+                CreateParams cp = new CreateParams
+                {
+                    Parent = IntPtr.Zero,
+                    ClassName = NativeMethods.TOOLTIPS_CLASS
+                };
                 cp.Style |= (NativeMethods.TTS_ALWAYSTIP | NativeMethods.TTS_NOPREFIX);
                 cp.ExStyle = 0;
                 cp.Caption = ToolTip;
@@ -129,8 +133,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (toolInfos[index] == null)
             {
-                toolInfos[index] = new NativeMethods.TOOLINFO_T();
-                toolInfos[index].cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
+                toolInfos[index] = new NativeMethods.TOOLINFO_T
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>()
+                };
                 toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
             }
             toolInfos[index].lpszText = toolTipText;

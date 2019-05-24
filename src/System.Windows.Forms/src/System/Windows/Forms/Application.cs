@@ -901,11 +901,13 @@ namespace System.Windows.Forms
             bool modified;
 
             // Create copy of MSG structure
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            msg.hwnd = message.HWnd;
-            msg.message = message.Msg;
-            msg.wParam = message.WParam;
-            msg.lParam = message.LParam;
+            NativeMethods.MSG msg = new NativeMethods.MSG
+            {
+                hwnd = message.HWnd,
+                message = message.Msg,
+                wParam = message.WParam,
+                lParam = message.LParam
+            };
 
             bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out modified);
             if (modified)
@@ -1652,9 +1654,11 @@ namespace System.Windows.Forms
 
                 // Construct Hashtable entry for this component
                 //
-                ComponentHashtableEntry entry = new ComponentHashtableEntry();
-                entry.component = component;
-                entry.componentInfo = pcrinfo;
+                ComponentHashtableEntry entry = new ComponentHashtableEntry
+                {
+                    component = component,
+                    componentInfo = pcrinfo
+                };
                 OleComponents.Add(++cookieCounter, entry);
 
                 // Return the cookie
@@ -2510,11 +2514,13 @@ namespace System.Windows.Forms
                                 // Finally, if we got a compnent manager, register ourselves with it.
                                 //
                                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Registering MSO component with the component manager");
-                                NativeMethods.MSOCRINFOSTRUCT info = new NativeMethods.MSOCRINFOSTRUCT();
-                                info.cbSize = Marshal.SizeOf<NativeMethods.MSOCRINFOSTRUCT>();
-                                info.uIdleTimeInterval = 0;
-                                info.grfcrf = NativeMethods.MSOCM.msocrfPreTranslateAll | NativeMethods.MSOCM.msocrfNeedIdleTime;
-                                info.grfcadvf = NativeMethods.MSOCM.msocadvfModal;
+                                NativeMethods.MSOCRINFOSTRUCT info = new NativeMethods.MSOCRINFOSTRUCT
+                                {
+                                    cbSize = Marshal.SizeOf<NativeMethods.MSOCRINFOSTRUCT>(),
+                                    uIdleTimeInterval = 0,
+                                    grfcrf = NativeMethods.MSOCM.msocrfPreTranslateAll | NativeMethods.MSOCM.msocrfNeedIdleTime,
+                                    grfcadvf = NativeMethods.MSOCM.msocadvfModal
+                                };
 
                                 IntPtr localComponentID;
                                 bool result = msocm.FRegisterComponent(this, info, out localComponentID);

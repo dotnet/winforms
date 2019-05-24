@@ -867,8 +867,10 @@ namespace System.Windows.Forms
                                                             subItem.Text,
                                                             subItem.ForeColor,
                                                             subItem.BackColor,
-                                                            subItem.Font);
-                clonedSubItems[index].Tag = subItem.Tag;
+                                                            subItem.Font)
+                {
+                    Tag = subItem.Tag
+                };
             }
 
             Type clonedType = GetType();
@@ -1068,8 +1070,10 @@ namespace System.Windows.Forms
             if (listView != null && listView.IsHandleCreated && displayIndex != -1)
             {
                 // Get information from comctl control
-                var lvItem = new NativeMethods.LVITEM();
-                lvItem.mask = NativeMethods.LVIF_PARAM | NativeMethods.LVIF_STATE | NativeMethods.LVIF_GROUPID;
+                var lvItem = new NativeMethods.LVITEM
+                {
+                    mask = NativeMethods.LVIF_PARAM | NativeMethods.LVIF_STATE | NativeMethods.LVIF_GROUPID
+                };
 
                 if (checkSelection)
                 {
@@ -1327,10 +1331,12 @@ namespace System.Windows.Forms
             {
                 this.owner = owner;
                 this.text = text;
-                style = new SubItemStyle();
-                style.foreColor = foreColor;
-                style.backColor = backColor;
-                style.font = font;
+                style = new SubItemStyle
+                {
+                    foreColor = foreColor,
+                    backColor = backColor,
+                    font = font
+                };
             }
 
 

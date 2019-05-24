@@ -1167,9 +1167,11 @@ namespace System.Windows.Forms
 
                     if (activeToolStrip != null)
                     {
-                        NativeMethods.POINT pt = new NativeMethods.POINT();
-                        pt.x = x;
-                        pt.y = y;
+                        NativeMethods.POINT pt = new NativeMethods.POINT
+                        {
+                            x = x,
+                            y = y
+                        };
                         UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), pt, 1);
                         if (!activeToolStrip.ClientRectangle.Contains(pt.x, pt.y))
                         {
@@ -2277,8 +2279,10 @@ namespace System.Windows.Forms
                             case MergeAction.Replace:
                             case MergeAction.Remove:
                                 //Debug.WriteLine("remove");
-                                maction = new MergeHistoryItem(MergeAction.Insert);
-                                maction.TargetItem = item;
+                                maction = new MergeHistoryItem(MergeAction.Insert)
+                                {
+                                    TargetItem = item
+                                };
                                 int indexOfDestinationItem = destinationItems.IndexOf(item);
                                 destinationItems.RemoveAt(indexOfDestinationItem);
                                 maction.Index = indexOfDestinationItem;
@@ -2290,8 +2294,10 @@ namespace System.Windows.Forms
                                 {
                                     //Debug.WriteLine("replace");
                                     //ToolStripItem clonedItem = source.Clone();
-                                    maction = new MergeHistoryItem(MergeAction.Remove);
-                                    maction.PreviousIndexCollection = source.Owner.Items;
+                                    maction = new MergeHistoryItem(MergeAction.Remove)
+                                    {
+                                        PreviousIndexCollection = source.Owner.Items
+                                    };
                                     maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                                     maction.TargetItem = source;
                                     destinationItems.Insert(indexOfDestinationItem, source);
@@ -2307,8 +2313,10 @@ namespace System.Windows.Forms
                 case MergeAction.Insert:
                     if (source.MergeIndex > -1)
                     {
-                        maction = new MergeHistoryItem(MergeAction.Remove);
-                        maction.PreviousIndexCollection = source.Owner.Items;
+                        maction = new MergeHistoryItem(MergeAction.Remove)
+                        {
+                            PreviousIndexCollection = source.Owner.Items
+                        };
                         maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                         maction.TargetItem = source;
                         int insertIndex = Math.Min(destinationItems.Count, source.MergeIndex);
@@ -2320,8 +2328,10 @@ namespace System.Windows.Forms
                     }
                     break;
                 case MergeAction.Append:
-                    maction = new MergeHistoryItem(MergeAction.Remove);
-                    maction.PreviousIndexCollection = source.Owner.Items;
+                    maction = new MergeHistoryItem(MergeAction.Remove)
+                    {
+                        PreviousIndexCollection = source.Owner.Items
+                    };
                     maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                     maction.TargetItem = source;
                     int index = destinationItems.Add(source);

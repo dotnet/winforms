@@ -419,8 +419,10 @@ namespace System.Windows.Forms
             if (IsReadOnly() && isSelected && source.Position == rowNum)
             {
                 bounds.Inflate(-1, -1);
-                System.Drawing.Pen pen = new System.Drawing.Pen(selectionBrush);
-                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                System.Drawing.Pen pen = new System.Drawing.Pen(selectionBrush)
+                {
+                    DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                };
                 g.DrawRectangle(pen, bounds);
                 pen.Dispose();
                 // restore the bounds rectangle

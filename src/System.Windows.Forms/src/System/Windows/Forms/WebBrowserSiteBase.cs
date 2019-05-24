@@ -144,11 +144,13 @@ namespace System.Windows.Forms
             Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
             Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
 
-            Message msg = new Message();
-            msg.Msg = pMsg.message;
-            msg.WParam = pMsg.wParam;
-            msg.LParam = pMsg.lParam;
-            msg.HWnd = pMsg.hwnd;
+            Message msg = new Message
+            {
+                Msg = pMsg.message,
+                WParam = pMsg.wParam,
+                LParam = pMsg.lParam,
+                HWnd = pMsg.hwnd
+            };
 
             try
             {

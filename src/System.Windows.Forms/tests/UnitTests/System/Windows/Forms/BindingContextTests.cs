@@ -585,8 +585,10 @@ namespace System.Windows.Forms.Tests
         {
             var context = new BindingContext();
             var list = new List<int> { 1, 2, 3 };
-            var dataSource = new IListDataSource();
-            dataSource.Property = list;
+            var dataSource = new IListDataSource
+            {
+                Property = list
+            };
 
             CurrencyManager manager = Assert.IsAssignableFrom<CurrencyManager>(context[dataSource, "Property"]);
             Assert.Same(list, manager.List);
@@ -602,8 +604,10 @@ namespace System.Windows.Forms.Tests
         {
             var context = new BindingContext();
             var list = new List<int> { 1, 2, 3 };
-            var dataSource = new ObjectDataSource();
-            dataSource.Property = list;
+            var dataSource = new ObjectDataSource
+            {
+                Property = list
+            };
 
             PropertyManager manager = Assert.IsAssignableFrom<PropertyManager>(context[dataSource, "Property"]);
             Assert.Same(list, manager.Current);
@@ -618,8 +622,10 @@ namespace System.Windows.Forms.Tests
         {
             var context = new BindingContext();
             var list = new int[] { 1, 2, 3 };
-            var dataSource = new IListDataSource();
-            dataSource.Property = list;
+            var dataSource = new IListDataSource
+            {
+                Property = list
+            };
 
             CurrencyManager manager = Assert.IsAssignableFrom<CurrencyManager>(context[dataSource, "Property"]);
             Assert.Same(list, manager.List);

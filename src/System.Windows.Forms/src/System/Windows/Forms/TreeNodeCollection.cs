@@ -176,8 +176,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Add(string key, string text)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key
+            };
             Add(tn);
             return tn;
         }
@@ -187,9 +189,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Add(string key, string text, int imageIndex)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
-            tn.ImageIndex = imageIndex;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key,
+                ImageIndex = imageIndex
+            };
             Add(tn);
             return tn;
         }
@@ -199,9 +203,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Add(string key, string text, string imageKey)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
-            tn.ImageKey = imageKey;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key,
+                ImageKey = imageKey
+            };
             Add(tn);
             return tn;
         }
@@ -211,8 +217,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Add(string key, string text, int imageIndex, int selectedImageIndex)
         {
-            TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex);
-            tn.Name = key;
+            TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex)
+            {
+                Name = key
+            };
             Add(tn);
             return tn;
         }
@@ -222,10 +230,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Add(string key, string text, string imageKey, string selectedImageKey)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
-            tn.ImageKey = imageKey;
-            tn.SelectedImageKey = selectedImageKey;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key,
+                ImageKey = imageKey,
+                SelectedImageKey = selectedImageKey
+            };
             Add(tn);
             return tn;
         }
@@ -525,8 +535,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Insert(int index, string key, string text)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key
+            };
             Insert(index, tn);
             return tn;
         }
@@ -536,9 +548,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, int imageIndex)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
-            tn.ImageIndex = imageIndex;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key,
+                ImageIndex = imageIndex
+            };
             Insert(index, tn);
             return tn;
         }
@@ -548,9 +562,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, string imageKey)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
-            tn.ImageKey = imageKey;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key,
+                ImageKey = imageKey
+            };
             Insert(index, tn);
             return tn;
         }
@@ -560,8 +576,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, int imageIndex, int selectedImageIndex)
         {
-            TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex);
-            tn.Name = key;
+            TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex)
+            {
+                Name = key
+            };
             Insert(index, tn);
             return tn;
         }
@@ -571,10 +589,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, string imageKey, string selectedImageKey)
         {
-            TreeNode tn = new TreeNode(text);
-            tn.Name = key;
-            tn.ImageKey = imageKey;
-            tn.SelectedImageKey = selectedImageKey;
+            TreeNode tn = new TreeNode(text)
+            {
+                Name = key,
+                ImageKey = imageKey,
+                SelectedImageKey = selectedImageKey
+            };
             Insert(index, tn);
             return tn;
         }

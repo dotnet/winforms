@@ -1296,8 +1296,10 @@ namespace System.Windows.Forms
             object ax = activeXInstance;
             if (ax != null)
             {
-                webBrowserEvent = new WebBrowserEvent(this);
-                webBrowserEvent.AllowNavigation = AllowNavigation;
+                webBrowserEvent = new WebBrowserEvent(this)
+                {
+                    AllowNavigation = AllowNavigation
+                };
                 cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent,
                         typeof(UnsafeNativeMethods.DWebBrowserEvents2));
             }

@@ -644,8 +644,10 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_BAR_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -1430,8 +1432,10 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual StatusBarPanel Add(string text)
             {
-                StatusBarPanel panel = new StatusBarPanel();
-                panel.Text = text;
+                StatusBarPanel panel = new StatusBarPanel
+                {
+                    Text = text
+                };
                 Add(panel);
                 return panel;
             }
@@ -1760,12 +1764,16 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_TAB_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
-                    CreateParams cp = new CreateParams();
-                    cp.Parent = IntPtr.Zero;
-                    cp.ClassName = NativeMethods.TOOLTIPS_CLASS;
+                    CreateParams cp = new CreateParams
+                    {
+                        Parent = IntPtr.Zero,
+                        ClassName = NativeMethods.TOOLTIPS_CLASS
+                    };
                     cp.Style |= NativeMethods.TTS_ALWAYSTIP;
                     cp.ExStyle = 0;
                     cp.Caption = null;
@@ -1960,9 +1968,11 @@ namespace System.Windows.Forms
             /// </summary>
             private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool)
             {
-                NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T();
-                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
-                ti.hwnd = parent.Handle;
+                NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>(),
+                    hwnd = parent.Handle
+                };
                 if ((int)tool.id < 0)
                 {
                     AssignId(tool);

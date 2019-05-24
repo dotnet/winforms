@@ -58,9 +58,11 @@ namespace System.ComponentModel.Design.Serialization
 
             if (method == null)
             {
-                method = new CodeMemberMethod();
-                method.Name = _initMethodName;
-                method.Attributes = MemberAttributes.Private;
+                method = new CodeMemberMethod
+                {
+                    Name = _initMethodName,
+                    Attributes = MemberAttributes.Private
+                };
                 typeDecl.UserData[_initMethodKey] = method;
 
                 // Now create a ctor that calls this method.

@@ -992,26 +992,32 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
-                    CreateParams cparams = new CreateParams();
-                    cparams.Caption = string.Empty;
-                    cparams.Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD;
-                    cparams.ClassStyle = NativeMethods.CS_DBLCLKS;
-                    cparams.X = 0;
-                    cparams.Y = 0;
-                    cparams.Width = 0;
-                    cparams.Height = 0;
-                    cparams.Parent = parent.Handle;
+                    CreateParams cparams = new CreateParams
+                    {
+                        Caption = string.Empty,
+                        Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD,
+                        ClassStyle = NativeMethods.CS_DBLCLKS,
+                        X = 0,
+                        Y = 0,
+                        Width = 0,
+                        Height = 0,
+                        Parent = parent.Handle
+                    };
 
                     CreateHandle(cparams);
 
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_TAB_CLASSES
+                    };
                     icc.dwSize = Marshal.SizeOf(icc);
                     SafeNativeMethods.InitCommonControlsEx(icc);
-                    cparams = new CreateParams();
-                    cparams.Parent = Handle;
-                    cparams.ClassName = NativeMethods.TOOLTIPS_CLASS;
-                    cparams.Style = NativeMethods.TTS_ALWAYSTIP;
+                    cparams = new CreateParams
+                    {
+                        Parent = Handle,
+                        ClassName = NativeMethods.TOOLTIPS_CLASS,
+                        Style = NativeMethods.TTS_ALWAYSTIP
+                    };
                     tipWindow = new NativeWindow();
                     tipWindow.CreateHandle(cparams);
 

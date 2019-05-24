@@ -644,11 +644,13 @@ namespace System.Windows.Forms.Layout
 
                 Rectangle bounds = GetCachedBounds(element);
 
-                AnchorInfo oldAnchorInfo = new AnchorInfo();
-                oldAnchorInfo.Left = anchorInfo.Left;
-                oldAnchorInfo.Top = anchorInfo.Top;
-                oldAnchorInfo.Right = anchorInfo.Right;
-                oldAnchorInfo.Bottom = anchorInfo.Bottom;
+                AnchorInfo oldAnchorInfo = new AnchorInfo
+                {
+                    Left = anchorInfo.Left,
+                    Top = anchorInfo.Top,
+                    Right = anchorInfo.Right,
+                    Bottom = anchorInfo.Bottom
+                };
 
                 anchorInfo.Left = element.Bounds.Left;
                 anchorInfo.Top = element.Bounds.Top;

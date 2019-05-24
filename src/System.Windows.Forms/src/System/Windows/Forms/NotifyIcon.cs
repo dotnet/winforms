@@ -774,9 +774,11 @@ namespace System.Windows.Forms
 
                 window.LockReference(showIconInTray);
 
-                NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA();
-                data.uCallbackMessage = WM_TRAYMOUSEMESSAGE;
-                data.uFlags = NativeMethods.NIF_MESSAGE;
+                NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA
+                {
+                    uCallbackMessage = WM_TRAYMOUSEMESSAGE,
+                    uFlags = NativeMethods.NIF_MESSAGE
+                };
                 if (showIconInTray)
                 {
                     if (window.Handle == IntPtr.Zero)

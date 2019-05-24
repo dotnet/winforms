@@ -66,17 +66,19 @@ namespace System.Windows.Forms
 
         public object Clone()
         {
-            DataGridState dgs = new DataGridState();
-            dgs.DataGridRows = DataGridRows;
-            dgs.DataSource = DataSource;
-            dgs.DataMember = DataMember;
-            dgs.FirstVisibleRow = FirstVisibleRow;
-            dgs.FirstVisibleCol = FirstVisibleCol;
-            dgs.CurrentRow = CurrentRow;
-            dgs.CurrentCol = CurrentCol;
-            dgs.GridColumnStyles = GridColumnStyles;
-            dgs.ListManager = ListManager;
-            dgs.DataGrid = DataGrid;
+            DataGridState dgs = new DataGridState
+            {
+                DataGridRows = DataGridRows,
+                DataSource = DataSource,
+                DataMember = DataMember,
+                FirstVisibleRow = FirstVisibleRow,
+                FirstVisibleCol = FirstVisibleCol,
+                CurrentRow = CurrentRow,
+                CurrentCol = CurrentCol,
+                GridColumnStyles = GridColumnStyles,
+                ListManager = ListManager,
+                DataGrid = DataGrid
+            };
             return dgs;
         }
 

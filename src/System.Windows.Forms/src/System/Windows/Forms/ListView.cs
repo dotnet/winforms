@@ -435,9 +435,11 @@ namespace System.Windows.Forms
                     {
                         // Don't call SetBackgroundImage because SetBackgroundImage deletes the existing image
                         // We don't need to delete it and this causes BAD problems w/ the Win32 list view control.
-                        NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE();
-                        lvbkImage.xOffset = 0;
-                        lvbkImage.yOffset = 0;
+                        NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
+                        {
+                            xOffset = 0,
+                            yOffset = 0
+                        };
 
                         if (BackgroundImageTiled)
                             lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_TILE;
@@ -1774,8 +1776,10 @@ namespace System.Windows.Forms
                     {
                         // Get the default value from the ListView
                         //
-                        NativeMethods.LVTILEVIEWINFO tileViewInfo = new NativeMethods.LVTILEVIEWINFO();
-                        tileViewInfo.dwMask = NativeMethods.LVTVIM_TILESIZE;
+                        NativeMethods.LVTILEVIEWINFO tileViewInfo = new NativeMethods.LVTILEVIEWINFO
+                        {
+                            dwMask = NativeMethods.LVTVIM_TILESIZE
+                        };
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETTILEVIEWINFO, 0, tileViewInfo);
                         return new Size(tileViewInfo.sizeTile.cx, tileViewInfo.sizeTile.cy);
                     }
@@ -1801,10 +1805,12 @@ namespace System.Windows.Forms
                     tileSize = value;
                     if (IsHandleCreated)
                     {
-                        NativeMethods.LVTILEVIEWINFO tileViewInfo = new NativeMethods.LVTILEVIEWINFO();
-                        tileViewInfo.dwMask = NativeMethods.LVTVIM_TILESIZE;
-                        tileViewInfo.dwFlags = NativeMethods.LVTVIF_FIXEDSIZE;
-                        tileViewInfo.sizeTile = new NativeMethods.SIZE(tileSize.Width, tileSize.Height);
+                        NativeMethods.LVTILEVIEWINFO tileViewInfo = new NativeMethods.LVTILEVIEWINFO
+                        {
+                            dwMask = NativeMethods.LVTVIM_TILESIZE,
+                            dwFlags = NativeMethods.LVTVIF_FIXEDSIZE,
+                            sizeTile = new NativeMethods.SIZE(tileSize.Width, tileSize.Height)
+                        };
                         bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTILEVIEWINFO, 0, tileViewInfo);
                         Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
                         if (AutoArrange)
@@ -2520,8 +2526,10 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_LISTVIEW_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_LISTVIEW_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -3386,9 +3394,11 @@ namespace System.Windows.Forms
             ApplyUpdateCachedItems();
             if (IsHandleCreated && !ListViewHandleDestroyed)
             {
-                NativeMethods.LVFINDINFO info = new NativeMethods.LVFINDINFO();
-                info.lParam = (IntPtr)item.ID;
-                info.flags = NativeMethods.LVFI_PARAM;
+                NativeMethods.LVFINDINFO info = new NativeMethods.LVFINDINFO
+                {
+                    lParam = (IntPtr)item.ID,
+                    flags = NativeMethods.LVFI_PARAM
+                };
 
                 int displayIndex = -1;
 
@@ -3445,10 +3455,11 @@ namespace System.Windows.Forms
         /// </summary>
         public ListViewItem GetItemAt(int x, int y)
         {
-            NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
-
-            lvhi.pt_x = x;
-            lvhi.pt_y = y;
+            NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO
+            {
+                pt_x = x,
+                pt_y = y
+            };
 
             int displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_HITTEST, 0, lvhi);
 
@@ -3476,10 +3487,11 @@ namespace System.Windows.Forms
 
         internal void GetSubItemAt(int x, int y, out int iItem, out int iSubItem)
         {
-            NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
-
-            lvhi.pt_x = x;
-            lvhi.pt_y = y;
+            NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO
+            {
+                pt_x = x,
+                pt_y = y
+            };
 
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SUBITEMHITTEST, 0, lvhi);
 
@@ -3550,8 +3562,10 @@ namespace System.Windows.Forms
             }
 
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT();
-            itemrect.left = (int)portion;
+            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            {
+                left = (int)portion
+            };
             if (unchecked((int)(long)SendMessage(NativeMethods.LVM_GETITEMRECT, index, ref itemrect)) == 0)
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
@@ -3573,8 +3587,10 @@ namespace System.Windows.Forms
             }
 
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT();
-            itemrect.left = 0;
+            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            {
+                left = 0
+            };
             if (unchecked((int)(long)SendMessage(NativeMethods.LVM_GETITEMRECT, index, ref itemrect)) == 0)
                 return Rectangle.Empty;
 
@@ -3583,8 +3599,10 @@ namespace System.Windows.Forms
 
         private NativeMethods.LVGROUP GetLVGROUP(ListViewGroup group)
         {
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
-            lvgroup.mask = NativeMethods.LVGF_HEADER | NativeMethods.LVGF_GROUPID | NativeMethods.LVGF_ALIGN;
+            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP
+            {
+                mask = NativeMethods.LVGF_HEADER | NativeMethods.LVGF_GROUPID | NativeMethods.LVGF_ALIGN
+            };
 
             // Header
             //
@@ -3649,9 +3667,11 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT();
-            itemrect.left = (int)portion;
-            itemrect.top = subItemIndex;
+            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            {
+                left = (int)portion,
+                top = subItemIndex
+            };
             if (unchecked((int)(long)SendMessage(NativeMethods.LVM_GETSUBITEMRECT, itemIndex, ref itemrect)) == 0)
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
 
@@ -3676,9 +3696,11 @@ namespace System.Windows.Forms
                 return new ListViewHitTestInfo(null /*hitItem*/, null /*hitSubItem*/, ListViewHitTestLocations.None /*hitLocation*/);
             }
 
-            NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
-            lvhi.pt_x = x;
-            lvhi.pt_y = y;
+            NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO
+            {
+                pt_x = x,
+                pt_y = y
+            };
 
             int iItem;
 
@@ -3835,8 +3857,10 @@ namespace System.Windows.Forms
 
         private int InsertColumnNative(int index, ColumnHeader ch)
         {
-            NativeMethods.LVCOLUMN_T lvColumn = new NativeMethods.LVCOLUMN_T();
-            lvColumn.mask = NativeMethods.LVCF_FMT | NativeMethods.LVCF_TEXT | NativeMethods.LVCF_WIDTH;// | NativeMethods.LVCF_ORDER | NativeMethods.LVCF_IMAGE;
+            NativeMethods.LVCOLUMN_T lvColumn = new NativeMethods.LVCOLUMN_T
+            {
+                mask = NativeMethods.LVCF_FMT | NativeMethods.LVCF_TEXT | NativeMethods.LVCF_WIDTH// | NativeMethods.LVCF_ORDER | NativeMethods.LVCF_IMAGE;
+            };
 
             if (ch.OwnerListview != null && ch.ActualImageIndex_Internal != -1)
             {
@@ -3886,9 +3910,11 @@ namespace System.Windows.Forms
                 for (int i = 0; i < Items.Count; i++)
                 {
                     ListViewItem item = Items[i];
-                    NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
-                    lvItem.iItem = item.Index;
-                    lvItem.mask = NativeMethods.LVIF_GROUPID;
+                    NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
+                    {
+                        iItem = item.Index,
+                        mask = NativeMethods.LVIF_GROUPID
+                    };
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
                 }
@@ -4835,9 +4861,11 @@ namespace System.Windows.Forms
 
                     UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), prc);
 
-                    NativeMethods.HDLAYOUT hd = new NativeMethods.HDLAYOUT();
-                    hd.prc = prc;
-                    hd.pwpos = pwpos;
+                    NativeMethods.HDLAYOUT hd = new NativeMethods.HDLAYOUT
+                    {
+                        prc = prc,
+                        pwpos = pwpos
+                    };
 
                     // get the layout information
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, hdrHWND), NativeMethods.HDM_LAYOUT, 0, ref hd);
@@ -5033,9 +5061,11 @@ namespace System.Windows.Forms
             // needed for OleInitialize
             Application.OleRequired();
 
-            NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE();
-            lvbkImage.xOffset = 0;
-            lvbkImage.yOffset = 0;
+            NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
+            {
+                xOffset = 0,
+                yOffset = 0
+            };
 
             // first, is there an existing temporary file to delete, remember its name
             // so that we can delete it if the list control doesn't...
@@ -5117,8 +5147,10 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 Debug.Assert((mask & ~(NativeMethods.LVCF_FMT | NativeMethods.LVCF_TEXT | NativeMethods.LVCF_IMAGE)) == 0, "Unsupported mask in setColumnInfo");
-                NativeMethods.LVCOLUMN lvColumn = new NativeMethods.LVCOLUMN();
-                lvColumn.mask = mask;
+                NativeMethods.LVCOLUMN lvColumn = new NativeMethods.LVCOLUMN
+                {
+                    mask = mask
+                };
 
                 if ((mask & NativeMethods.LVCF_IMAGE) != 0 || (mask & NativeMethods.LVCF_FMT) != 0)
                 {
@@ -5322,10 +5354,12 @@ namespace System.Windows.Forms
             }
             if (IsHandleCreated)
             {
-                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
-                lvItem.mask = NativeMethods.LVIF_IMAGE;
-                lvItem.iItem = index;
-                lvItem.iImage = image;
+                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
+                {
+                    mask = NativeMethods.LVIF_IMAGE,
+                    iItem = index,
+                    iImage = image
+                };
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEM, 0, ref lvItem);
             }
         }
@@ -5338,10 +5372,12 @@ namespace System.Windows.Forms
             }
             if (IsHandleCreated)
             {
-                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
-                lvItem.mask = NativeMethods.LVIF_INDENT;
-                lvItem.iItem = index;
-                lvItem.iIndent = indentCount;
+                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
+                {
+                    mask = NativeMethods.LVIF_INDENT,
+                    iItem = index,
+                    iIndent = indentCount
+                };
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEM, 0, ref lvItem);
             }
         }
@@ -5355,9 +5391,11 @@ namespace System.Windows.Forms
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            pt.x = x;
-            pt.y = y;
+            NativeMethods.POINT pt = new NativeMethods.POINT
+            {
+                x = x,
+                y = y
+            };
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEMPOSITION32, index, pt);
         }
 
@@ -5371,10 +5409,12 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
-                lvItem.mask = NativeMethods.LVIF_STATE;
-                lvItem.state = state;
-                lvItem.stateMask = mask;
+                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
+                {
+                    mask = NativeMethods.LVIF_STATE,
+                    state = state,
+                    stateMask = mask
+                };
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEMSTATE, index, ref lvItem);
             }
         }
@@ -5644,10 +5684,12 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ComctlSupportsVisualStyles, "this function works only when ComCtl 6.0 and higher is loaded");
             Debug.Assert(viewStyle == View.Tile, "this function should be called only in Tile view");
-            NativeMethods.LVTILEVIEWINFO tileViewInfo = new NativeMethods.LVTILEVIEWINFO();
-            // the tile view info line count
-            tileViewInfo.dwMask = NativeMethods.LVTVIM_COLUMNS;
-            tileViewInfo.cLines = columnHeaders != null ? columnHeaders.Length : 0;
+            NativeMethods.LVTILEVIEWINFO tileViewInfo = new NativeMethods.LVTILEVIEWINFO
+            {
+                // the tile view info line count
+                dwMask = NativeMethods.LVTVIM_COLUMNS,
+                cLines = columnHeaders != null ? columnHeaders.Length : 0
+            };
 
             // the tile view info size
             tileViewInfo.dwMask |= NativeMethods.LVTVIM_TILESIZE;
@@ -5668,10 +5710,11 @@ namespace System.Windows.Forms
             {
                 Point pos = Cursor.Position;
                 pos = PointToClient(pos);
-                NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
-
-                lvhi.pt_x = pos.X;
-                lvhi.pt_y = pos.Y;
+                NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO
+                {
+                    pt_x = pos.X,
+                    pt_y = pos.Y
+                };
 
                 int displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_HITTEST, 0, lvhi);
                 if (displayIndex != -1 && (lvhi.flags & NativeMethods.LVHT_ONITEMSTATEICON) != 0)
@@ -5705,10 +5748,11 @@ namespace System.Windows.Forms
             {
                 Point pos = Cursor.Position;
                 pos = PointToClient(pos);
-                NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
-
-                lvhi.pt_x = pos.X;
-                lvhi.pt_y = pos.Y;
+                NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO
+                {
+                    pt_x = pos.X,
+                    pt_y = pos.Y
+                };
 
                 int displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_HITTEST, 0, lvhi);
                 if (displayIndex != -1 && (lvhi.flags & NativeMethods.LVHT_ONITEM) != 0)
@@ -8253,10 +8297,12 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual ColumnHeader Add(string text, int width, HorizontalAlignment textAlign)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = text;
-                columnHeader.Width = width;
-                columnHeader.TextAlign = textAlign;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Text = text,
+                    Width = width,
+                    TextAlign = textAlign
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
@@ -8269,8 +8315,10 @@ namespace System.Windows.Forms
 
             public virtual ColumnHeader Add(string text)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = text;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Text = text
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
@@ -8278,46 +8326,56 @@ namespace System.Windows.Forms
 
             public virtual ColumnHeader Add(string text, int width)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = text;
-                columnHeader.Width = width;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Text = text,
+                    Width = width
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
             public virtual ColumnHeader Add(string key, string text)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Name = key;
-                columnHeader.Text = text;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Name = key,
+                    Text = text
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
             public virtual ColumnHeader Add(string key, string text, int width)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Name = key;
-                columnHeader.Text = text;
-                columnHeader.Width = width;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Name = key,
+                    Text = text,
+                    Width = width
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
             public virtual ColumnHeader Add(string key, string text, int width, HorizontalAlignment textAlign, string imageKey)
             {
-                ColumnHeader columnHeader = new ColumnHeader(imageKey);
-                columnHeader.Name = key;
-                columnHeader.Text = text;
-                columnHeader.Width = width;
-                columnHeader.TextAlign = textAlign;
+                ColumnHeader columnHeader = new ColumnHeader(imageKey)
+                {
+                    Name = key,
+                    Text = text,
+                    Width = width,
+                    TextAlign = textAlign
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
             public virtual ColumnHeader Add(string key, string text, int width, HorizontalAlignment textAlign, int imageIndex)
             {
-                ColumnHeader columnHeader = new ColumnHeader(imageIndex);
-                columnHeader.Name = key;
-                columnHeader.Text = text;
-                columnHeader.Width = width;
-                columnHeader.TextAlign = textAlign;
+                ColumnHeader columnHeader = new ColumnHeader(imageIndex)
+                {
+                    Name = key,
+                    Text = text,
+                    Width = width,
+                    TextAlign = textAlign
+                };
                 return owner.InsertColumn(Count, columnHeader);
             }
 
@@ -8480,10 +8538,12 @@ namespace System.Windows.Forms
 
             public void Insert(int index, string text, int width, HorizontalAlignment textAlign)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = text;
-                columnHeader.Width = width;
-                columnHeader.TextAlign = textAlign;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Text = text,
+                    Width = width,
+                    TextAlign = textAlign
+                };
                 Insert(index, columnHeader);
             }
 
@@ -8491,53 +8551,65 @@ namespace System.Windows.Forms
 
             public void Insert(int index, string text)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = text;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Text = text
+                };
                 Insert(index, columnHeader);
             }
 
             public void Insert(int index, string text, int width)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = text;
-                columnHeader.Width = width;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Text = text,
+                    Width = width
+                };
                 Insert(index, columnHeader);
             }
 
             public void Insert(int index, string key, string text)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Name = key;
-                columnHeader.Text = text;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Name = key,
+                    Text = text
+                };
                 Insert(index, columnHeader);
             }
 
             public void Insert(int index, string key, string text, int width)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Name = key;
-                columnHeader.Text = text;
-                columnHeader.Width = width;
+                ColumnHeader columnHeader = new ColumnHeader
+                {
+                    Name = key,
+                    Text = text,
+                    Width = width
+                };
                 Insert(index, columnHeader);
             }
 
             public void Insert(int index, string key, string text, int width, HorizontalAlignment textAlign, string imageKey)
             {
-                ColumnHeader columnHeader = new ColumnHeader(imageKey);
-                columnHeader.Name = key;
-                columnHeader.Text = text;
-                columnHeader.Width = width;
-                columnHeader.TextAlign = textAlign;
+                ColumnHeader columnHeader = new ColumnHeader(imageKey)
+                {
+                    Name = key,
+                    Text = text,
+                    Width = width,
+                    TextAlign = textAlign
+                };
                 Insert(index, columnHeader);
             }
 
             public void Insert(int index, string key, string text, int width, HorizontalAlignment textAlign, int imageIndex)
             {
-                ColumnHeader columnHeader = new ColumnHeader(imageIndex);
-                columnHeader.Name = key;
-                columnHeader.Text = text;
-                columnHeader.Width = width;
-                columnHeader.TextAlign = textAlign;
+                ColumnHeader columnHeader = new ColumnHeader(imageIndex)
+                {
+                    Name = key,
+                    Text = text,
+                    Width = width,
+                    TextAlign = textAlign
+                };
                 Insert(index, columnHeader);
             }
 
@@ -8873,8 +8945,10 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual ListViewItem Add(string key, string text, string imageKey)
             {
-                ListViewItem li = new ListViewItem(text, imageKey);
-                li.Name = key;
+                ListViewItem li = new ListViewItem(text, imageKey)
+                {
+                    Name = key
+                };
                 Add(li);
                 return li;
             }
@@ -8886,8 +8960,10 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual ListViewItem Add(string key, string text, int imageIndex)
             {
-                ListViewItem li = new ListViewItem(text, imageIndex);
-                li.Name = key;
+                ListViewItem li = new ListViewItem(text, imageIndex)
+                {
+                    Name = key
+                };
                 Add(li);
                 return li;
             }
@@ -9126,15 +9202,19 @@ namespace System.Windows.Forms
 
             public virtual ListViewItem Insert(int index, string key, string text, string imageKey)
             {
-                ListViewItem li = new ListViewItem(text, imageKey);
-                li.Name = key;
+                ListViewItem li = new ListViewItem(text, imageKey)
+                {
+                    Name = key
+                };
                 return Insert(index, li);
             }
 
             public virtual ListViewItem Insert(int index, string key, string text, int imageIndex)
             {
-                ListViewItem li = new ListViewItem(text, imageIndex);
-                li.Name = key;
+                ListViewItem li = new ListViewItem(text, imageIndex)
+                {
+                    Name = key
+                };
                 return Insert(index, li);
             }
 
@@ -9383,9 +9463,11 @@ namespace System.Windows.Forms
                 if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                 {
                     // Obtain internal index of the item
-                    NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
-                    lvItem.mask = NativeMethods.LVIF_PARAM;
-                    lvItem.iItem = displayIndex;
+                    NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
+                    {
+                        mask = NativeMethods.LVIF_PARAM,
+                        iItem = displayIndex
+                    };
                     UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);
                     return (int)lvItem.lParam;
                 }

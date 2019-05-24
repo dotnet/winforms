@@ -2359,10 +2359,12 @@ namespace System.Windows.Forms
                     owner.FocusLink = null;
                 }
 
-                Link l = new Link(owner);
-                l.Start = start;
-                l.Length = length;
-                l.LinkData = linkData;
+                Link l = new Link(owner)
+                {
+                    Start = start,
+                    Length = length,
+                    LinkData = linkData
+                };
                 Add(l);
                 return l;
             }

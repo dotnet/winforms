@@ -1136,8 +1136,10 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_DATE_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_DATE_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -1767,15 +1769,17 @@ namespace System.Windows.Forms
         /// </summary>
         internal static NativeMethods.SYSTEMTIME DateTimeToSysTime(DateTime time)
         {
-            NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
-            sys.wYear = (short)time.Year;
-            sys.wMonth = (short)time.Month;
-            sys.wDayOfWeek = (short)time.DayOfWeek;
-            sys.wDay = (short)time.Day;
-            sys.wHour = (short)time.Hour;
-            sys.wMinute = (short)time.Minute;
-            sys.wSecond = (short)time.Second;
-            sys.wMilliseconds = 0;
+            NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+            {
+                wYear = (short)time.Year,
+                wMonth = (short)time.Month,
+                wDayOfWeek = (short)time.DayOfWeek,
+                wDay = (short)time.Day,
+                wHour = (short)time.Hour,
+                wMinute = (short)time.Minute,
+                wSecond = (short)time.Second,
+                wMilliseconds = 0
+            };
             return sys;
         }
 

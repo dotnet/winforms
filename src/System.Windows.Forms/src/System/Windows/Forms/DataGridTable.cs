@@ -852,8 +852,10 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.DGRelationShpRowLayout.TraceVerbose, "GetRelationshipRect grinding away");
                 Graphics g = DataGrid.CreateGraphicsInternal();
-                relationshipRect = new Rectangle();
-                relationshipRect.X = 0; //indentWidth;
+                relationshipRect = new Rectangle
+                {
+                    X = 0 //indentWidth;
+                };
                 // relationshipRect.Y = base.Height - BorderWidth;
 
                 // Determine the width of the widest relationship name

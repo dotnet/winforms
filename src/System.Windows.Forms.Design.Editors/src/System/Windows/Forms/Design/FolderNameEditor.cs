@@ -117,15 +117,17 @@ namespace System.Windows.Forms.Design
                     {
                         fixed (char* pDisplayName = displayName)
                         {
-                            var bi = new Interop.Shell32.BROWSEINFO();
-                            bi.pidlRoot = listHandle;
-                            bi.hwndOwner = hWndOwner;
-                            bi.pszDisplayName = pDisplayName;
-                            bi.lpszTitle = _descriptionText;
-                            bi.ulFlags = mergedOptions;
-                            bi.lpfn = null;
-                            bi.lParam = IntPtr.Zero;
-                            bi.iImage = 0;
+                            var bi = new Interop.Shell32.BROWSEINFO
+                            {
+                                pidlRoot = listHandle,
+                                hwndOwner = hWndOwner,
+                                pszDisplayName = pDisplayName,
+                                lpszTitle = _descriptionText,
+                                ulFlags = mergedOptions,
+                                lpfn = null,
+                                lParam = IntPtr.Zero,
+                                iImage = 0
+                            };
 
                             // Show the dialog.
                             using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))

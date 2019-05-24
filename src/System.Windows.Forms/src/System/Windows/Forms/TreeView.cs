@@ -1680,8 +1680,10 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_TREEVIEW_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_TREEVIEW_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -1808,9 +1810,11 @@ namespace System.Windows.Forms
         /// </summary>
         public TreeViewHitTestInfo HitTest(int x, int y)
         {
-            NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO();
-            tvhi.pt_x = x;
-            tvhi.pt_y = y;
+            NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
+            {
+                pt_x = x,
+                pt_y = y
+            };
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
             TreeNode node = (hnode == IntPtr.Zero ? null : NodeFromHandle(hnode));
             TreeViewHitTestLocations loc = (TreeViewHitTestLocations)tvhi.flags;
@@ -1856,10 +1860,11 @@ namespace System.Windows.Forms
         /// </summary>
         public TreeNode GetNodeAt(int x, int y)
         {
-            NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO();
-
-            tvhi.pt_x = x;
-            tvhi.pt_y = y;
+            NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
+            {
+                pt_x = x,
+                pt_y = y
+            };
 
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
 
@@ -2825,9 +2830,11 @@ namespace System.Windows.Forms
                         {
                             Rectangle bounds = node.RowBounds;
 
-                            NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                            si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
-                            si.fMask = NativeMethods.SIF_POS;
+                            NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+                            {
+                                cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
+                                fMask = NativeMethods.SIF_POS
+                            };
                             if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, si) != false)
                             {
 
@@ -3297,10 +3304,12 @@ namespace System.Windows.Forms
                         // Check for invalid node handle
                         if (item.hItem != IntPtr.Zero)
                         {
-                            NativeMethods.TV_ITEM item1 = new NativeMethods.TV_ITEM();
-                            item1.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
-                            item1.hItem = item.hItem;
-                            item1.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
+                            NativeMethods.TV_ITEM item1 = new NativeMethods.TV_ITEM
+                            {
+                                mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                                hItem = item.hItem,
+                                stateMask = NativeMethods.TVIS_STATEIMAGEMASK
+                            };
                             UnsafeNativeMethods.SendMessage(new HandleRef(null, Handle), NativeMethods.TVM_GETITEM, 0, ref item1);
 
                             TreeNode node = NodeFromHandle(item.hItem);
@@ -3363,9 +3372,11 @@ namespace System.Windows.Forms
                     }
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
-                    tvhip.pt_x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    tvhip.pt_y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO
+                    {
+                        pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
+                        pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
+                    };
                     hNodeMouseDown = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
 
                     // This gets around the TreeView behavior of temporarily moving the selection
@@ -3394,9 +3405,11 @@ namespace System.Windows.Forms
                     break;
                 case Interop.WindowMessages.WM_LBUTTONUP:
                 case Interop.WindowMessages.WM_RBUTTONUP:
-                    NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO();
-                    tvhi.pt_x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    tvhi.pt_y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
+                    {
+                        pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
+                        pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
+                    };
                     IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
                     //Important for CheckBoxes ... click needs to be fired ...
                     //
@@ -3469,9 +3482,11 @@ namespace System.Windows.Forms
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     //Cache the hit-tested node for verification when mouse up is fired
-                    NativeMethods.TV_HITTESTINFO tvhit = new NativeMethods.TV_HITTESTINFO();
-                    tvhit.pt_x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    tvhit.pt_y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    NativeMethods.TV_HITTESTINFO tvhit = new NativeMethods.TV_HITTESTINFO
+                    {
+                        pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
+                        pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
+                    };
                     hNodeMouseDown = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhit);
 
                     WmMouseDown(ref m, MouseButtons.Right, 1);

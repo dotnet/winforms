@@ -750,9 +750,11 @@ namespace System.ComponentModel.Design.Serialization
                             else
                             {
                                 //lets try it as a property:
-                                CodePropertyReferenceExpression propRef = new CodePropertyReferenceExpression();
-                                propRef.TargetObject = fieldReferenceEx.TargetObject;
-                                propRef.PropertyName = fieldReferenceEx.FieldName;
+                                CodePropertyReferenceExpression propRef = new CodePropertyReferenceExpression
+                                {
+                                    TargetObject = fieldReferenceEx.TargetObject,
+                                    PropertyName = fieldReferenceEx.FieldName
+                                };
                                 if (!DeserializePropertyAssignStatement(manager, statement, propRef, false))
                                 {
                                     TraceError("Object {0} does not have a field {1}", lhs.GetType().Name, fieldReferenceEx.FieldName);
@@ -1043,9 +1045,11 @@ namespace System.ComponentModel.Design.Serialization
                                 else
                                 {
                                     //lets try it as a property:
-                                    CodePropertyReferenceExpression propRef = new CodePropertyReferenceExpression();
-                                    propRef.TargetObject = fieldReferenceEx.TargetObject;
-                                    propRef.PropertyName = fieldReferenceEx.FieldName;
+                                    CodePropertyReferenceExpression propRef = new CodePropertyReferenceExpression
+                                    {
+                                        TargetObject = fieldReferenceEx.TargetObject,
+                                        PropertyName = fieldReferenceEx.FieldName
+                                    };
 
                                     result = DeserializePropertyReferenceExpression(manager, propRef, false);
                                     if (result == fieldReferenceEx)

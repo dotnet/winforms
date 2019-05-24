@@ -254,8 +254,10 @@ namespace System.Windows.Forms
 
                 if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image)
                 {
-                    ToolStripItemImageRenderEventArgs rea = new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle);
-                    rea.ShiftOnPress = true;
+                    ToolStripItemImageRenderEventArgs rea = new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle)
+                    {
+                        ShiftOnPress = true
+                    };
                     renderer.DrawItemImage(rea);
                 }
 

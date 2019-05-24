@@ -1620,8 +1620,10 @@ namespace System.Windows.Forms
                     }
                     if (wc == null)
                     {
-                        wc = new WindowClass(className, classStyle);
-                        wc.next = cache;
+                        wc = new WindowClass(className, classStyle)
+                        {
+                            next = cache
+                        };
                         cache = wc;
                     }
                     else

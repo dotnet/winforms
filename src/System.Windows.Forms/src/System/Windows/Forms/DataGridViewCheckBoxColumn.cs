@@ -25,8 +25,10 @@ namespace System.Windows.Forms
         public DataGridViewCheckBoxColumn(bool threeState)
             : base(new DataGridViewCheckBoxCell(threeState))
         {
-            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-            defaultCellStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleCenter;
+            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+            {
+                AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
+            };
             if (threeState)
             {
                 defaultCellStyle.NullValue = CheckState.Indeterminate;

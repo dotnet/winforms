@@ -211,8 +211,10 @@ namespace System.Resources
             }
 
             xmlTextWriter.WriteStartElement("root");
-            XmlTextReader reader = new XmlTextReader(new StringReader(ResourceSchema));
-            reader.WhitespaceHandling = WhitespaceHandling.None;
+            XmlTextReader reader = new XmlTextReader(new StringReader(ResourceSchema))
+            {
+                WhitespaceHandling = WhitespaceHandling.None
+            };
             xmlTextWriter.WriteNode(reader, true);
 
             xmlTextWriter.WriteStartElement(ResHeaderStr);

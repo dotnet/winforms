@@ -794,8 +794,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItem_Visible_Set_GetReturnsExpected()
         {
-            var menuItem = new MenuItem();
-            menuItem.Visible = false;
+            var menuItem = new MenuItem
+            {
+                Visible = false
+            };
             Assert.False(menuItem.Visible);
 
             menuItem.Visible = true;

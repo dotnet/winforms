@@ -45,8 +45,10 @@ namespace System.Experimental.Gdi
         {
             if (activeDeviceContexts == null)
             {
-                activeDeviceContexts = new ClientUtils.WeakRefCollection();
-                activeDeviceContexts.RefCheckThreshold = 20;
+                activeDeviceContexts = new ClientUtils.WeakRefCollection
+                {
+                    RefCheckThreshold = 20
+                };
             }
 
             if (!activeDeviceContexts.Contains(dc))

@@ -295,8 +295,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 #endif
 
-                    btnDropDown = new DropDownButton();
-                    btnDropDown.UseComboBoxTheme = true;
+                    btnDropDown = new DropDownButton
+                    {
+                        UseComboBoxTheme = true
+                    };
                     Bitmap bitmap = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
                     btnDropDown.Image = bitmap;
                     btnDropDown.BackColor = SystemColors.Control;
@@ -325,11 +327,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
 #endif
-                    btnDialog = new DropDownButton();
-                    btnDialog.BackColor = SystemColors.Control;
-                    btnDialog.ForeColor = SystemColors.ControlText;
-                    btnDialog.TabIndex = 3;
-                    btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
+                    btnDialog = new DropDownButton
+                    {
+                        BackColor = SystemColors.Control,
+                        ForeColor = SystemColors.ControlText,
+                        TabIndex = 3,
+                        Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT)
+                    };
                     btnDialog.Click += new EventHandler(OnBtnClick);
                     btnDialog.KeyDown += new KeyEventHandler(OnBtnKeyDown);
                     btnDialog.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
@@ -376,13 +380,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 #endif
 
-                    edit = new GridViewEdit(this);
-                    edit.BorderStyle = BorderStyle.None;
-                    edit.AutoSize = false;
-                    edit.TabStop = false;
-                    edit.AcceptsReturn = true;
-                    edit.BackColor = BackColor;
-                    edit.ForeColor = ForeColor;
+                    edit = new GridViewEdit(this)
+                    {
+                        BorderStyle = BorderStyle.None,
+                        AutoSize = false,
+                        TabStop = false,
+                        AcceptsReturn = true,
+                        BackColor = BackColor,
+                        ForeColor = ForeColor
+                    };
                     edit.KeyDown += new KeyEventHandler(OnEditKeyDown);
                     edit.KeyPress += new KeyPressEventHandler(OnEditKeyPress);
                     edit.GotFocus += new EventHandler(OnEditGotFocus);
@@ -421,8 +427,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 #endif
 
-                    listBox = new GridViewListBox(this);
-                    listBox.DrawMode = DrawMode.OwnerDrawFixed;
+                    listBox = new GridViewListBox(this)
+                    {
+                        DrawMode = DrawMode.OwnerDrawFixed
+                    };
                     //listBox.Click += new EventHandler(this.OnListClick);
                     listBox.MouseUp += new MouseEventHandler(OnListMouseUp);
                     listBox.DrawItem += new DrawItemEventHandler(OnListDrawItem);
@@ -848,9 +856,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
 #endif
-                    toolTip = new GridToolTip(new Control[] { this, Edit });
-                    toolTip.ToolTip = string.Empty;
-                    toolTip.Font = Font;
+                    toolTip = new GridToolTip(new Control[] { this, Edit })
+                    {
+                        ToolTip = string.Empty,
+                        Font = Font
+                    };
                 }
                 return toolTip;
             }
@@ -3971,8 +3981,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cPropsVisible = Math.Min(cPropsVisible, endRow + 1);
 
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing splitter");
-                    Pen splitterPen = new Pen(ownerGrid.LineColor, GetSplitterWidth());
-                    splitterPen.DashStyle = DashStyle.Solid;
+                    Pen splitterPen = new Pen(ownerGrid.LineColor, GetSplitterWidth())
+                    {
+                        DashStyle = DashStyle.Solid
+                    };
                     g.DrawLine(splitterPen, labelWidth, loc.Y, labelWidth, (cPropsVisible) * (RowHeight + 1) + loc.Y);
                     splitterPen.Dispose();
 
@@ -6796,8 +6808,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Draw the divider
                     int y = resizeUp ? (ResizeBarSize - 1) : (Height - ResizeBarSize);
-                    Pen pen = new Pen(SystemColors.ControlDark, 1);
-                    pen.DashStyle = DashStyle.Solid;
+                    Pen pen = new Pen(SystemColors.ControlDark, 1)
+                    {
+                        DashStyle = DashStyle.Solid
+                    };
                     pe.Graphics.DrawLine(pen, 0, y, Width, y);
                     pen.Dispose();
                 }

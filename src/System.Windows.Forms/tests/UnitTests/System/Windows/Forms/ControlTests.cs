@@ -214,9 +214,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TabIndexGetSetData))]
         public void Control_TabIndexGetSet(uint expected)
         {
-            var cont = new Control();
-
-            cont.TabIndex = (int)expected;
+            var cont = new Control
+            {
+                TabIndex = (int)expected
+            };
 
             Assert.Equal(expected, (uint)cont.TabIndex);
         }
@@ -231,9 +232,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TabStopGetSetData))]
         public void Control_TabStopGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.TabStop = expected;
+            var cont = new Control
+            {
+                TabStop = expected
+            };
 
             Assert.Equal(expected, cont.TabStop);
         }
@@ -248,9 +250,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TabStopInternalGetSetData))]
         public void Control_TabStopInternalGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.TabStopInternal = expected;
+            var cont = new Control
+            {
+                TabStopInternal = expected
+            };
 
             Assert.Equal(expected, cont.TabStopInternal);
         }
@@ -259,12 +262,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetChildControlsInTabOrder()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var ordered = new Control[]
             {
                 first,
@@ -288,12 +297,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetChildControlsInTabOrderHandlesOnly()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var unordered = new Control[]
             {
                 second,
@@ -311,12 +326,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetFirstChildControlInTabOrder()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -333,12 +354,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetFirstChildControlInTabOrderReverse()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -355,12 +382,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControl()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -377,12 +410,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControlReverse()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -399,12 +438,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControlNoNext()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -421,12 +466,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControlNoNextReverse()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -482,9 +533,10 @@ namespace System.Windows.Forms.Tests
         public void Control_ParentGetSet()
         {
             var parent = new Control();
-            var cont = new Control();
-
-            cont.Parent = parent;
+            var cont = new Control
+            {
+                Parent = parent
+            };
 
             Assert.NotNull(cont.Parent);
             Assert.Equal(parent, cont.Parent);
@@ -494,9 +546,10 @@ namespace System.Windows.Forms.Tests
         public void Control_ParentInternalGetSet()
         {
             var parent = new Control();
-            var cont = new Control();
-
-            cont.ParentInternal = parent;
+            var cont = new Control
+            {
+                ParentInternal = parent
+            };
 
             Assert.NotNull(cont.Parent);
             Assert.Equal(parent, cont.ParentInternal);
@@ -580,9 +633,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_AccessibleNameGetSet()
         {
-            var cont = new Control();
-
-            cont.AccessibleName = "Foo";
+            var cont = new Control
+            {
+                AccessibleName = "Foo"
+            };
 
             Assert.Equal("Foo", cont.AccessibleName);
         }
@@ -597,9 +651,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AccessibleRoleData))]
         public void Control_SetItemCheckState(AccessibleRole expected)
         {
-            var cont = new Control();
-
-            cont.AccessibleRole = expected;
+            var cont = new Control
+            {
+                AccessibleRole = expected
+            };
 
             Assert.Equal(expected, cont.AccessibleRole);
         }
@@ -630,9 +685,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(IsAccessibleGetSetData))]
         public void Control_IsAccessibleGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.IsAccessible = expected;
+            var cont = new Control
+            {
+                IsAccessible = expected
+            };
 
             Assert.Equal(expected, cont.IsAccessible);
         }
@@ -645,9 +701,10 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void Control_BackColorGetSet(Color expected)
         {
-            var cont = new Control();
-
-            cont.BackColor = expected;
+            var cont = new Control
+            {
+                BackColor = expected
+            };
 
             Assert.Equal(expected, cont.BackColor);
         }
@@ -669,9 +726,10 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void Control_ForeColorGetSet(Color expected)
         {
-            var cont = new Control();
-
-            cont.ForeColor = expected;
+            var cont = new Control
+            {
+                ForeColor = expected
+            };
 
             Assert.Equal(expected, cont.ForeColor);
         }
@@ -702,9 +760,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(BackgroundImageLayoutData))]
         public void Control_BackgroundImageLayoutGetSet(ImageLayout expected)
         {
-            var cont = new Control();
-
-            cont.BackgroundImageLayout = expected;
+            var cont = new Control
+            {
+                BackgroundImageLayout = expected
+            };
 
             Assert.Equal(expected, cont.BackgroundImageLayout);
         }
@@ -846,9 +905,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AnchorData))]
         public void Control_AnchorGetSet(AnchorStyles expected)
         {
-            var cont = new Control();
-
-            cont.Anchor = expected;
+            var cont = new Control
+            {
+                Anchor = expected
+            };
 
             Assert.Equal(expected, cont.Anchor);
         }
@@ -874,9 +934,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(HeightGetSetData))]
         public void Control_HeightGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Height = expected;
+            var cont = new Control
+            {
+                Height = expected
+            };
 
             Assert.Equal(expected, cont.Height);
         }
@@ -891,9 +952,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(LeftGetSetData))]
         public void Control_LeftGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Left = expected;
+            var cont = new Control
+            {
+                Left = expected
+            };
 
             Assert.Equal(expected, cont.Left);
         }
@@ -908,9 +970,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TopGetSetData))]
         public void Control_TopGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Top = expected;
+            var cont = new Control
+            {
+                Top = expected
+            };
 
             Assert.Equal(expected, cont.Top);
         }
@@ -1014,9 +1077,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(RightToLeft.No)]
         public void Control_RightToLeftTest(RightToLeft expected)
         {
-            var cont = new Control();
-
-            cont.RightToLeft = expected;
+            var cont = new Control
+            {
+                RightToLeft = expected
+            };
 
             Assert.Equal(expected, cont.RightToLeft);
         }
@@ -1025,8 +1089,10 @@ namespace System.Windows.Forms.Tests
         public void Control_RightToLeftInherit()
         {
             var parent = new Control();
-            var cont = new Control();
-            cont.Parent = parent;
+            var cont = new Control
+            {
+                Parent = parent
+            };
 
             parent.RightToLeft = RightToLeft.Yes;
             cont.RightToLeft = RightToLeft.Inherit;
@@ -1067,9 +1133,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(WidthGetSetData))]
         public void Control_WidthGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Width = expected;
+            var cont = new Control
+            {
+                Width = expected
+            };
 
             Assert.Equal(expected, cont.Width);
         }
@@ -1279,9 +1346,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(EnabledGetSetData))]
         public void Control_EnabledGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.Enabled = expected;
+            var cont = new Control
+            {
+                Enabled = expected
+            };
 
             Assert.Equal(expected, cont.Enabled);
         }
@@ -1296,9 +1364,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(VisibleGetSetData))]
         public void Control_VisibleGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.Visible = expected;
+            var cont = new Control
+            {
+                Visible = expected
+            };
 
             Assert.Equal(expected, cont.Visible);
         }
@@ -1327,8 +1396,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_Hide()
         {
-            var cont = new Control();
-            cont.Visible = true;
+            var cont = new Control
+            {
+                Visible = true
+            };
 
             cont.Hide();
 
@@ -1360,8 +1431,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(float.Epsilon)]
         public void Control_ScaleFont(float expected)
         {
-            var cont = new Control();
-            cont.Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f);
+            var cont = new Control
+            {
+                Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f)
+            };
 
             cont.ScaleFont(expected);
 
@@ -1461,9 +1534,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CaptureGetSetData))]
         public void Control_CaptureGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.Capture = expected;
+            var cont = new Control
+            {
+                Capture = expected
+            };
 
             Assert.Equal(expected, cont.Capture);
         }
@@ -1478,9 +1552,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CaptureInternalGetSetData))]
         public void Control_CaptureInternalGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.CaptureInternal = expected;
+            var cont = new Control
+            {
+                CaptureInternal = expected
+            };
 
             Assert.Equal(expected, cont.CaptureInternal);
         }
@@ -1501,8 +1576,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanProcessMnemonicNotEnabled()
         {
-            var cont = new Control();
-            cont.Enabled = false;
+            var cont = new Control
+            {
+                Enabled = false
+            };
 
             // act and assert
             Assert.False(cont.CanProcessMnemonic());
@@ -1511,8 +1588,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanProcessMnemonicNotVisible()
         {
-            var cont = new Control();
-            cont.Visible = false;
+            var cont = new Control
+            {
+                Visible = false
+            };
 
             // act and assert
             Assert.False(cont.CanProcessMnemonic());
@@ -1545,8 +1624,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanSelectCoreNotEnabled()
         {
-            var cont = new Control();
-            cont.Enabled = false;
+            var cont = new Control
+            {
+                Enabled = false
+            };
 
             // act and assert
             Assert.False(cont.CanSelectCore());
@@ -1555,10 +1636,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanSelectCoreParentNotEnabled()
         {
-            var cont = new Control();
-            cont.Enabled = true;
-            var parent = new Control();
-            parent.Enabled = false;
+            var cont = new Control
+            {
+                Enabled = true
+            };
+            var parent = new Control
+            {
+                Enabled = false
+            };
             cont.AssignParent(parent);
 
             // act and assert
@@ -1695,9 +1780,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(UseWaitCursorGetSetData))]
         public void Control_UseWaitCursorGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.UseWaitCursor = expected;
+            var cont = new Control
+            {
+                UseWaitCursor = expected
+            };
 
             Assert.Equal(expected, cont.UseWaitCursor);
         }
@@ -1709,9 +1795,10 @@ namespace System.Windows.Forms.Tests
         // SupportsUseCompatibleTextRendering is always false
         public void Control_UseCompatibleTextRenderingIntGetSet(bool given, bool expected)
         {
-            var cont = new Control();
-
-            cont.UseCompatibleTextRenderingInt = given;
+            var cont = new Control
+            {
+                UseCompatibleTextRenderingInt = given
+            };
 
             Assert.Equal(expected, cont.UseCompatibleTextRenderingInt);
         }
@@ -1737,9 +1824,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AllowDropData))]
         public void Control_AllowDropGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.AllowDrop = expected;
+            var cont = new Control
+            {
+                AllowDrop = expected
+            };
 
             Assert.Equal(expected, cont.AllowDrop);
         }
@@ -1849,9 +1937,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CausesValidationData))]
         public void Control_CausesValidationGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.CausesValidation = expected;
+            var cont = new Control
+            {
+                CausesValidation = expected
+            };
 
             Assert.Equal(expected, cont.CausesValidation);
         }
@@ -1861,9 +1950,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false)] // giving true cannot set to true
         public void Control_CacheTextInternalGetSet(bool given, bool expected)
         {
-            var cont = new Control();
-
-            cont.CacheTextInternal = given;
+            var cont = new Control
+            {
+                CacheTextInternal = given
+            };
 
             Assert.Equal(expected, cont.CacheTextInternal);
         }
@@ -1915,9 +2005,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ValidationCancelledGetSetData))]
         public void Control_ValidationCancelledGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.ValidationCancelled = expected;
+            var cont = new Control
+            {
+                ValidationCancelled = expected
+            };
 
             Assert.Equal(expected, cont.ValidationCancelled);
         }
@@ -1932,9 +2023,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(IsTopMdiWindowClosingGetSetData))]
         public void Control_IsTopMdiWindowClosingGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.IsTopMdiWindowClosing = expected;
+            var cont = new Control
+            {
+                IsTopMdiWindowClosing = expected
+            };
 
             Assert.Equal(expected, cont.IsTopMdiWindowClosing);
         }
@@ -1964,9 +2056,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DockGetSetData))]
         public void Control_DockGetSet(DockStyle expected)
         {
-            var cont = new Control();
-
-            cont.Dock = expected;
+            var cont = new Control
+            {
+                Dock = expected
+            };
 
             Assert.Equal(expected, cont.Dock);
         }

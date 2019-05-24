@@ -1945,8 +1945,10 @@ namespace System.Windows.Forms
                     {
                         if (currentActiveControl != null)
                         {
-                            CancelEventArgs ev = new CancelEventArgs();
-                            ev.Cancel = true;
+                            CancelEventArgs ev = new CancelEventArgs
+                            {
+                                Cancel = true
+                            };
                             currentActiveControl.NotifyValidationResult(currentValidatingControl, ev);
                             if (currentActiveControl is ContainerControl)
                             {

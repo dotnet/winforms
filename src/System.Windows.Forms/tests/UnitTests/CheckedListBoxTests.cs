@@ -28,9 +28,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CheckOnClickData))]
         public void CheckedListBox_CheckOnClick(bool expected)
         {
-            var box = new CheckedListBox();
-
-            box.CheckOnClick = expected;
+            var box = new CheckedListBox
+            {
+                CheckOnClick = expected
+            };
 
             Assert.Equal(expected, box.CheckOnClick);
         }
@@ -65,9 +66,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DisplayMemberData))]
         public void CheckedListBox_DisplayMember(string expected)
         {
-            var box = new CheckedListBox();
-
-            box.DisplayMember = expected;
+            var box = new CheckedListBox
+            {
+                DisplayMember = expected
+            };
 
             Assert.Equal(expected, box.DisplayMember);
         }
@@ -87,9 +89,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(SelectionMode.One)]
         public void CheckedListBox_SelectionModeGetSet(SelectionMode expected)
         {
-            var box = new CheckedListBox();
-
-            box.SelectionMode = expected;
+            var box = new CheckedListBox
+            {
+                SelectionMode = expected
+            };
 
             Assert.Equal(expected, box.SelectionMode);
         }
@@ -130,9 +133,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ThreeDCheckBoxesData))]
         public void CheckedListBox_ThreeDCheckBoxes(bool expected)
         {
-            var box = new CheckedListBox();
-
-            box.ThreeDCheckBoxes = expected;
+            var box = new CheckedListBox
+            {
+                ThreeDCheckBoxes = expected
+            };
 
             Assert.Equal(expected, box.ThreeDCheckBoxes);
         }
@@ -147,9 +151,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ValueMemberData))]
         public void CheckedListBox_ValueMember(string expected)
         {
-            var box = new CheckedListBox();
-
-            box.ValueMember = expected;
+            var box = new CheckedListBox
+            {
+                ValueMember = expected
+            };
 
             Assert.Equal(expected, box.ValueMember);
         }

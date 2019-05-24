@@ -470,8 +470,10 @@ namespace System.ComponentModel.Design.Tests
         public void GetComponentDesignerActions_Invoke_ReturnsExpected(ISite site, DesignerActionListCollection expected)
         {
             var service = new SubDesignerActionService(null);
-            var component = new Component();
-            component.Site = site;
+            var component = new Component
+            {
+                Site = site
+            };
 
             var actionListBuffer = new DesignerActionListCollection();
             service.GetComponentDesignerActions(component, actionListBuffer);
@@ -496,8 +498,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(DesignerCommandSet)))
                 .Returns(verbsMockDesignerCommandSet.Object);
             var service = new SubDesignerActionService(null);
-            var component = new Component();
-            component.Site = mockSite.Object;
+            var component = new Component
+            {
+                Site = mockSite.Object
+            };
 
             var actionListBuffer = new DesignerActionListCollection();
             service.GetComponentDesignerActions(component, actionListBuffer);
@@ -538,8 +542,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(DesignerCommandSet)))
                 .Returns(verbsMockDesignerCommandSet.Object);
             var service = new SubDesignerActionService(null);
-            var component = new Component();
-            component.Site = mockSite.Object;
+            var component = new Component
+            {
+                Site = mockSite.Object
+            };
 
             var actionListBuffer = new DesignerActionListCollection();
             service.GetComponentDesignerActions(component, actionListBuffer);
@@ -592,8 +598,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(DesignerCommandSet)))
                 .Returns(verbsMockDesignerCommandSet.Object);
             var service = new SubDesignerActionService(null);
-            var component = new Component();
-            component.Site = mockSite.Object;
+            var component = new Component
+            {
+                Site = mockSite.Object
+            };
 
             var actionListBuffer = new DesignerActionListCollection();
             service.GetComponentDesignerActions(component, actionListBuffer);

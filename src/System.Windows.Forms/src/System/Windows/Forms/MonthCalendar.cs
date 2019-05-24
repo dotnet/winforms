@@ -1344,8 +1344,10 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_DATE_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_DATE_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -1508,11 +1510,13 @@ namespace System.Windows.Forms
             SelectionRange range = new SelectionRange();
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_GETMONTHRANGE, flag, sa);
 
-            NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME();
-            st.wYear = sa.wYear1;
-            st.wMonth = sa.wMonth1;
-            st.wDayOfWeek = sa.wDayOfWeek1;
-            st.wDay = sa.wDay1;
+            NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME
+            {
+                wYear = sa.wYear1,
+                wMonth = sa.wMonth1,
+                wDayOfWeek = sa.wDayOfWeek1,
+                wDay = sa.wDay1
+            };
 
             range.Start = DateTimePicker.SysTimeToDateTime(st);
             st.wYear = sa.wYear2;
@@ -1550,10 +1554,12 @@ namespace System.Windows.Forms
         /// </summary>
         public HitTestInfo HitTest(int x, int y)
         {
-            NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO();
-            mchi.pt_x = x;
-            mchi.pt_y = y;
-            mchi.cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>();
+            NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO
+            {
+                pt_x = x,
+                pt_y = y,
+                cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>()
+            };
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_HITTEST, 0, mchi);
 
             // If the hit area has an associated valid date, get it
@@ -1561,15 +1567,17 @@ namespace System.Windows.Forms
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
-                sys.wYear = mchi.st_wYear;
-                sys.wMonth = mchi.st_wMonth;
-                sys.wDayOfWeek = mchi.st_wDayOfWeek;
-                sys.wDay = mchi.st_wDay;
-                sys.wHour = mchi.st_wHour;
-                sys.wMinute = mchi.st_wMinute;
-                sys.wSecond = mchi.st_wSecond;
-                sys.wMilliseconds = mchi.st_wMilliseconds;
+                NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+                {
+                    wYear = mchi.st_wYear,
+                    wMonth = mchi.st_wMonth,
+                    wDayOfWeek = mchi.st_wDayOfWeek,
+                    wDay = mchi.st_wDay,
+                    wHour = mchi.st_wHour,
+                    wMinute = mchi.st_wMinute,
+                    wSecond = mchi.st_wSecond,
+                    wMilliseconds = mchi.st_wMilliseconds
+                };
                 return new HitTestInfo(new Point(mchi.pt_x, mchi.pt_y), hitArea, DateTimePicker.SysTimeToDateTime(sys));
             }
             else

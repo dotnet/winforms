@@ -3817,8 +3817,10 @@ namespace System.Windows.Forms
                                                                                     ptCurrentCell.Y,
                                                                                     // null, 
                                                                                     // null, 
-                                                                                    context);
-                        dgvdee.Cancel = true;
+                                                                                    context)
+                        {
+                            Cancel = true
+                        };
                         return dgvdee;
                     }
 
@@ -3866,8 +3868,10 @@ namespace System.Windows.Forms
                             DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(null,
                                                                                                        ptCurrentCell.X,
                                                                                                        ptCurrentCell.Y,
-                                                                                                       context);
-                            dgvdee.Cancel = true;
+                                                                                                       context)
+                            {
+                                Cancel = true
+                            };
                             return dgvdee;
                         }
                     }
@@ -3896,8 +3900,10 @@ namespace System.Windows.Forms
                                                                                     ptCurrentCell.Y,
                                                                                     // dataGridViewCurrentCell.Value,
                                                                                     // formattedValue,
-                                                                                    context);
-                        dgvdee.Cancel = true;
+                                                                                    context)
+                        {
+                            Cancel = true
+                        };
                         OnDataErrorInternal(dgvdee);
                         return dgvdee;
                     }

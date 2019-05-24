@@ -226,15 +226,20 @@ namespace System.Windows.Forms.Design
             applyButton = new Button();
             helpButton = new Button();
 
-            selectorImageList = new ImageList();
-            selectorImageList.ImageSize = new Size(16, 16);
-            selector = new PageSelector();
-
-            selector.ImageList = selectorImageList;
+            selectorImageList = new ImageList
+            {
+                ImageSize = new Size(16, 16)
+            };
+            selector = new PageSelector
+            {
+                ImageList = selectorImageList
+            };
             selector.AfterSelect += new TreeViewEventHandler(OnSelChangeSelector);
 
-            Label grayStrip = new Label();
-            grayStrip.BackColor = SystemColors.ControlDark;
+            Label grayStrip = new Label
+            {
+                BackColor = SystemColors.ControlDark
+            };
 
             int selectorWidth = MIN_SELECTOR_WIDTH;
 

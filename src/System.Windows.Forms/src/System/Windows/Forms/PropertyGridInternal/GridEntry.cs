@@ -2194,8 +2194,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     using (Brush textBrush = new SolidBrush(textColor))
                     {
-                        StringFormat stringFormat = new StringFormat(StringFormatFlags.NoWrap);
-                        stringFormat.Trimming = StringTrimming.None;
+                        StringFormat stringFormat = new StringFormat(StringFormatFlags.NoWrap)
+                        {
+                            Trimming = StringTrimming.None
+                        };
                         g.DrawString(strLabel, font, textBrush, textRect, stringFormat);
                     }
                 }
@@ -2789,9 +2791,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                cacheItems = new CacheItems();
-                cacheItems.lastShouldSerialize = NotifyValue(NOTIFY_SHOULD_PERSIST);
-                cacheItems.useShouldSerialize = true;
+                cacheItems = new CacheItems
+                {
+                    lastShouldSerialize = NotifyValue(NOTIFY_SHOULD_PERSIST),
+                    useShouldSerialize = true
+                };
             }
             return cacheItems.lastShouldSerialize;
         }

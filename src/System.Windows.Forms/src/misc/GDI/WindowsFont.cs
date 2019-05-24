@@ -273,9 +273,11 @@ namespace System.Experimental.Gdi
             IntNativeMethods.LOGFONT lf = new IntNativeMethods.LOGFONT();
             IntUnsafeNativeMethods.GetObject(new HandleRef(null, hFont), lf);
 
-            WindowsFont wf = new WindowsFont(lf, /*createHandle*/ false);
-            wf.hFont = hFont;
-            wf.ownHandle = takeOwnership; // if true, hFont will be deleted on dispose.
+            WindowsFont wf = new WindowsFont(lf, /*createHandle*/ false)
+            {
+                hFont = hFont,
+                ownHandle = takeOwnership // if true, hFont will be deleted on dispose.
+            };
 
             return wf;
         }

@@ -1109,8 +1109,10 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_TAB_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -2421,34 +2423,42 @@ namespace System.Windows.Forms
 
             public void Add(string text)
             {
-                TabPage page = new TabPage();
-                page.Text = text;
+                TabPage page = new TabPage
+                {
+                    Text = text
+                };
                 Add(page);
             }
 
             public void Add(string key, string text)
             {
-                TabPage page = new TabPage();
-                page.Name = key;
-                page.Text = text;
+                TabPage page = new TabPage
+                {
+                    Name = key,
+                    Text = text
+                };
                 Add(page);
             }
 
             public void Add(string key, string text, int imageIndex)
             {
-                TabPage page = new TabPage();
-                page.Name = key;
-                page.Text = text;
-                page.ImageIndex = imageIndex;
+                TabPage page = new TabPage
+                {
+                    Name = key,
+                    Text = text,
+                    ImageIndex = imageIndex
+                };
                 Add(page);
             }
 
             public void Add(string key, string text, string imageKey)
             {
-                TabPage page = new TabPage();
-                page.Name = key;
-                page.Text = text;
-                page.ImageKey = imageKey;
+                TabPage page = new TabPage
+                {
+                    Name = key,
+                    Text = text,
+                    ImageKey = imageKey
+                };
                 Add(page);
             }
 
@@ -2606,24 +2616,30 @@ namespace System.Windows.Forms
 
             public void Insert(int index, string text)
             {
-                TabPage page = new TabPage();
-                page.Text = text;
+                TabPage page = new TabPage
+                {
+                    Text = text
+                };
                 Insert(index, page);
             }
 
             public void Insert(int index, string key, string text)
             {
-                TabPage page = new TabPage();
-                page.Name = key;
-                page.Text = text;
+                TabPage page = new TabPage
+                {
+                    Name = key,
+                    Text = text
+                };
                 Insert(index, page);
             }
 
             public void Insert(int index, string key, string text, int imageIndex)
             {
-                TabPage page = new TabPage();
-                page.Name = key;
-                page.Text = text;
+                TabPage page = new TabPage
+                {
+                    Name = key,
+                    Text = text
+                };
                 Insert(index, page);
                 // ImageKey and ImageIndex require parenting...
                 page.ImageIndex = imageIndex;
@@ -2631,9 +2647,11 @@ namespace System.Windows.Forms
 
             public void Insert(int index, string key, string text, string imageKey)
             {
-                TabPage page = new TabPage();
-                page.Name = key;
-                page.Text = text;
+                TabPage page = new TabPage
+                {
+                    Name = key,
+                    Text = text
+                };
                 Insert(index, page);
                 // ImageKey and ImageIndex require parenting...
                 page.ImageKey = imageKey;

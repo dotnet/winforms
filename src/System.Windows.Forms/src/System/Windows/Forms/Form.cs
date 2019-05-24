@@ -1906,8 +1906,10 @@ namespace System.Windows.Forms
                     return mainMenu;
 
                 // Create a menu that merges the two and save it for next time.
-                mergedMenu = new MainMenu();
-                mergedMenu.ownerForm = this;
+                mergedMenu = new MainMenu
+                {
+                    ownerForm = this
+                };
                 mergedMenu.MergeMenu(parentMenu);
                 mergedMenu.MergeMenu(mainMenu);
                 Properties.SetObject(PropMergedMenu, mergedMenu);
@@ -2434,8 +2436,10 @@ namespace System.Windows.Forms
 
                 if (ownerWindow.Handle == IntPtr.Zero)
                 {
-                    CreateParams cp = new CreateParams();
-                    cp.ExStyle = NativeMethods.WS_EX_TOOLWINDOW;
+                    CreateParams cp = new CreateParams
+                    {
+                        ExStyle = NativeMethods.WS_EX_TOOLWINDOW
+                    };
                     ownerWindow.CreateHandle(cp);
                 }
 
@@ -4968,11 +4972,13 @@ namespace System.Windows.Forms
 
             bool retValue = false;
 
-            NativeMethods.MSG win32Message = new NativeMethods.MSG();
-            win32Message.message = msg.Msg;
-            win32Message.wParam = msg.WParam;
-            win32Message.lParam = msg.LParam;
-            win32Message.hwnd = msg.HWnd;
+            NativeMethods.MSG win32Message = new NativeMethods.MSG
+            {
+                message = msg.Msg,
+                wParam = msg.WParam,
+                lParam = msg.LParam,
+                hwnd = msg.HWnd
+            };
 
             if (ctlClient != null && ctlClient.Handle != IntPtr.Zero &&
                 UnsafeNativeMethods.TranslateMDISysAccel(ctlClient.Handle, ref win32Message))
@@ -6221,8 +6227,10 @@ namespace System.Windows.Forms
 
                     if (dummyMenu == null)
                     {
-                        dummyMenu = new MainMenu();
-                        dummyMenu.ownerForm = this;
+                        dummyMenu = new MainMenu
+                        {
+                            ownerForm = this
+                        };
                         Properties.SetObject(PropDummyMenu, dummyMenu);
                     }
                     UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
@@ -6565,8 +6573,10 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 FormWindowState oldState = WindowState;
-                NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
-                wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
+                NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT
+                {
+                    length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>()
+                };
                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
 
                 switch (wp.showCmd)

@@ -81,11 +81,13 @@ namespace System.Windows.Forms
         ]
         public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault) : base(prop, isDefault)
         {
-            edit = new DataGridTextBox();
-            edit.BorderStyle = BorderStyle.None;
-            edit.Multiline = true;
-            edit.AcceptsReturn = true;
-            edit.Visible = false;
+            edit = new DataGridTextBox
+            {
+                BorderStyle = BorderStyle.None,
+                Multiline = true,
+                AcceptsReturn = true,
+                Visible = false
+            };
             Format = format;
         }
 

@@ -15,11 +15,12 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [InlineData(RightToLeft.Yes)]
         public void DataGridViewCellsAccessibleObject_Ctor_Default(RightToLeft rightToLeft)
         {
-            DataGridView dataGridView = new DataGridView();
-
-            dataGridView.RightToLeft = rightToLeft;
-            dataGridView.ColumnCount = 4;
-            dataGridView.Width = 85;
+            DataGridView dataGridView = new DataGridView
+            {
+                RightToLeft = rightToLeft,
+                ColumnCount = 4,
+                Width = 85
+            };
 
             dataGridView.Columns[0].Width = 40;
             dataGridView.Columns[1].Width = 40;

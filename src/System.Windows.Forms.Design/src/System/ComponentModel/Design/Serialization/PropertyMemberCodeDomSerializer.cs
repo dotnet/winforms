@@ -220,8 +220,10 @@ namespace System.ComponentModel.Design.Serialization
                             if (extender != null && extended != null)
                             {
                                 CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, "Get" + property.Name);
-                                CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
-                                methodInvoke.Method = methodRef;
+                                CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+                                {
+                                    Method = methodRef
+                                };
                                 methodInvoke.Parameters.Add(extended);
                                 propertyRef = methodInvoke;
                             }
@@ -342,9 +344,10 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (serializedPropertyValue != null)
                     {
-                        CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
-
-                        methodInvoke.Method = methodRef;
+                        CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+                        {
+                            Method = methodRef
+                        };
                         methodInvoke.Parameters.Add(extended);
                         methodInvoke.Parameters.Add(serializedPropertyValue);
                         statements.Add(methodInvoke);

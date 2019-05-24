@@ -351,9 +351,11 @@ namespace System.Windows.Forms.Design.Behavior
                 return Point.Empty;
             }
 
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            pt.x = c.Left;
-            pt.y = c.Top;
+            NativeMethods.POINT pt = new NativeMethods.POINT
+            {
+                x = c.Left,
+                y = c.Top
+            };
             NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, pt, 1);
             if (c.Parent.IsMirrored)
             {
@@ -367,9 +369,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            NativeMethods.POINT nativePoint = new NativeMethods.POINT();
-            nativePoint.x = pt.X;
-            nativePoint.y = pt.Y;
+            NativeMethods.POINT nativePoint = new NativeMethods.POINT
+            {
+                x = pt.X,
+                y = pt.Y
+            };
             NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, nativePoint, 1);
             return new Point(nativePoint.x, nativePoint.y);
         }
@@ -568,9 +572,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point ScreenToAdornerWindow(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT();
-            offset.x = p.X;
-            offset.y = p.Y;
+            NativeMethods.POINT offset = new NativeMethods.POINT
+            {
+                x = p.X,
+                y = p.Y
+            };
             NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, offset, 1);
             return new Point(offset.x, offset.y);
         }

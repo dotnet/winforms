@@ -863,9 +863,10 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal ColorData Calculate()
             {
-                ColorData colors = new ColorData(this);
-
-                colors.buttonFace = backColor;
+                ColorData colors = new ColorData(this)
+                {
+                    buttonFace = backColor
+                };
 
                 if (backColor == SystemColors.Control)
                 {
@@ -1043,13 +1044,14 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 get
                 {
-                    StringFormat format = new StringFormat();
-
-                    format.FormatFlags = gdipFormatFlags;
-                    format.Trimming = gdipTrimming;
-                    format.HotkeyPrefix = gdipHotkeyPrefix;
-                    format.Alignment = gdipAlignment;
-                    format.LineAlignment = gdipLineAlignment;
+                    StringFormat format = new StringFormat
+                    {
+                        FormatFlags = gdipFormatFlags,
+                        Trimming = gdipTrimming,
+                        HotkeyPrefix = gdipHotkeyPrefix,
+                        Alignment = gdipAlignment,
+                        LineAlignment = gdipLineAlignment
+                    };
 
                     if (disableWordWrapping)
                     {
@@ -1259,8 +1261,10 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal LayoutData Layout()
             {
-                LayoutData layout = new LayoutData(this);
-                layout.client = client;
+                LayoutData layout = new LayoutData(this)
+                {
+                    client = client
+                };
 
                 // subtract border size from layout area
                 int fullBorderSize = FullBorderSize;
@@ -1716,55 +1720,59 @@ namespace System.Windows.Forms.ButtonInternal
         // used by the DataGridViewButtonCell
         internal static LayoutOptions CommonLayout(Rectangle clientRectangle, Padding padding, bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
         {
-            LayoutOptions layout = new LayoutOptions();
-            layout.client = LayoutUtils.DeflateRect(clientRectangle, padding);
-            layout.padding = padding;
-            layout.growBorderBy1PxWhenDefault = true;
-            layout.isDefault = isDefault;
-            layout.borderSize = 2;
-            layout.paddingSize = 0;
-            layout.maxFocus = true;
-            layout.focusOddEvenFixup = false;
-            layout.font = font;
-            layout.text = text;
-            layout.imageSize = Size.Empty;
-            layout.checkSize = 0;
-            layout.checkPaddingSize = 0;
-            layout.checkAlign = ContentAlignment.TopLeft;
-            layout.imageAlign = ContentAlignment.MiddleCenter;
-            layout.textAlign = textAlign;
-            layout.hintTextUp = false;
-            layout.shadowedText = !enabled;
-            layout.layoutRTL = RightToLeft.Yes == rtl;
-            layout.textImageRelation = TextImageRelation.Overlay;
-            layout.useCompatibleTextRendering = false;
+            LayoutOptions layout = new LayoutOptions
+            {
+                client = LayoutUtils.DeflateRect(clientRectangle, padding),
+                padding = padding,
+                growBorderBy1PxWhenDefault = true,
+                isDefault = isDefault,
+                borderSize = 2,
+                paddingSize = 0,
+                maxFocus = true,
+                focusOddEvenFixup = false,
+                font = font,
+                text = text,
+                imageSize = Size.Empty,
+                checkSize = 0,
+                checkPaddingSize = 0,
+                checkAlign = ContentAlignment.TopLeft,
+                imageAlign = ContentAlignment.MiddleCenter,
+                textAlign = textAlign,
+                hintTextUp = false,
+                shadowedText = !enabled,
+                layoutRTL = RightToLeft.Yes == rtl,
+                textImageRelation = TextImageRelation.Overlay,
+                useCompatibleTextRendering = false
+            };
             return layout;
         }
 
         internal virtual LayoutOptions CommonLayout()
         {
-            LayoutOptions layout = new LayoutOptions();
-            layout.client = LayoutUtils.DeflateRect(Control.ClientRectangle, Control.Padding);
-            layout.padding = Control.Padding;
-            layout.growBorderBy1PxWhenDefault = true;
-            layout.isDefault = Control.IsDefault;
-            layout.borderSize = 2;
-            layout.paddingSize = 0;
-            layout.maxFocus = true;
-            layout.focusOddEvenFixup = false;
-            layout.font = Control.Font;
-            layout.text = Control.Text;
-            layout.imageSize = (Control.Image == null) ? Size.Empty : Control.Image.Size;
-            layout.checkSize = 0;
-            layout.checkPaddingSize = 0;
-            layout.checkAlign = ContentAlignment.TopLeft;
-            layout.imageAlign = Control.ImageAlign;
-            layout.textAlign = Control.TextAlign;
-            layout.hintTextUp = false;
-            layout.shadowedText = !Control.Enabled;
-            layout.layoutRTL = RightToLeft.Yes == Control.RightToLeft;
-            layout.textImageRelation = Control.TextImageRelation;
-            layout.useCompatibleTextRendering = Control.UseCompatibleTextRendering;
+            LayoutOptions layout = new LayoutOptions
+            {
+                client = LayoutUtils.DeflateRect(Control.ClientRectangle, Control.Padding),
+                padding = Control.Padding,
+                growBorderBy1PxWhenDefault = true,
+                isDefault = Control.IsDefault,
+                borderSize = 2,
+                paddingSize = 0,
+                maxFocus = true,
+                focusOddEvenFixup = false,
+                font = Control.Font,
+                text = Control.Text,
+                imageSize = (Control.Image == null) ? Size.Empty : Control.Image.Size,
+                checkSize = 0,
+                checkPaddingSize = 0,
+                checkAlign = ContentAlignment.TopLeft,
+                imageAlign = Control.ImageAlign,
+                textAlign = Control.TextAlign,
+                hintTextUp = false,
+                shadowedText = !Control.Enabled,
+                layoutRTL = RightToLeft.Yes == Control.RightToLeft,
+                textImageRelation = Control.TextImageRelation,
+                useCompatibleTextRendering = Control.UseCompatibleTextRendering
+            };
 
             if (Control.FlatStyle != FlatStyle.System)
             {
@@ -1787,15 +1795,19 @@ namespace System.Windows.Forms.ButtonInternal
         // used by the DataGridViewButtonCell
         static ColorOptions CommonRender(Graphics g, Color foreColor, Color backColor, bool enabled)
         {
-            ColorOptions colors = new ColorOptions(g, foreColor, backColor);
-            colors.enabled = enabled;
+            ColorOptions colors = new ColorOptions(g, foreColor, backColor)
+            {
+                enabled = enabled
+            };
             return colors;
         }
 
         ColorOptions CommonRender(Graphics g)
         {
-            ColorOptions colors = new ColorOptions(g, Control.ForeColor, Control.BackColor);
-            colors.enabled = Control.Enabled;
+            ColorOptions colors = new ColorOptions(g, Control.ForeColor, Control.BackColor)
+            {
+                enabled = Control.Enabled
+            };
             return colors;
         }
 

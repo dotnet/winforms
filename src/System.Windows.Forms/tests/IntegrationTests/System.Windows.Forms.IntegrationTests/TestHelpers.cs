@@ -40,8 +40,10 @@ namespace System.Windows.Forms.Func.Tests
                 throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
             }
 
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'));
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'))
+            };
             startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;	// required
             // ...
 
@@ -58,9 +60,10 @@ namespace System.Windows.Forms.Func.Tests
         /// <returns>The new Process</returns>
         public static Process StartProcess(ProcessStartInfo info)
         {
-            Process process = new Process();
-
-            process.StartInfo = info ?? throw new ArgumentException(nameof(info) + " must not be null.");
+            Process process = new Process
+            {
+                StartInfo = info ?? throw new ArgumentException(nameof(info) + " must not be null.")
+            };
             process.Start();
 
             Thread.Sleep(500);

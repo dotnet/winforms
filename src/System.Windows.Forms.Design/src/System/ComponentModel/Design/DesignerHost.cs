@@ -192,8 +192,10 @@ namespace System.ComponentModel.Design
             {
                 if (string.Equals(component.GetType().FullName, _rootComponentClassName, StringComparison.OrdinalIgnoreCase))
                 {
-                    Exception ex = new Exception(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName));
-                    ex.HelpLink = SR.DesignerHostCyclicAdd;
+                    Exception ex = new Exception(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
+                    {
+                        HelpLink = SR.DesignerHostCyclicAdd
+                    };
                     throw ex;
                 }
             }
@@ -297,8 +299,10 @@ namespace System.ComponentModel.Design
         {
             if (_loader != null && _loader != loader)
             {
-                Exception ex = new InvalidOperationException(SR.DesignerHostLoaderSpecified);
-                ex.HelpLink = SR.DesignerHostLoaderSpecified;
+                Exception ex = new InvalidOperationException(SR.DesignerHostLoaderSpecified)
+                {
+                    HelpLink = SR.DesignerHostLoaderSpecified
+                };
                 throw ex;
             }
 
@@ -1128,8 +1132,10 @@ namespace System.ComponentModel.Design
             InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
             if (ia != null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
             {
-                Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostCantDestroyInheritedComponent, name));
-                ex.HelpLink = SR.DesignerHostCantDestroyInheritedComponent;
+                Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostCantDestroyInheritedComponent, name))
+                {
+                    HelpLink = SR.DesignerHostCantDestroyInheritedComponent
+                };
                 throw ex;
             }
 
@@ -1202,8 +1208,10 @@ namespace System.ComponentModel.Design
             if (successful && _rootComponent == null)
             {
                 ArrayList errorList = new ArrayList();
-                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass);
-                ex.HelpLink = SR.DesignerHostNoBaseClass;
+                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                {
+                    HelpLink = SR.DesignerHostNoBaseClass
+                };
                 errorList.Add(ex);
                 errorCollection = errorList;
                 successful = false;
@@ -1853,8 +1861,10 @@ namespace System.ComponentModel.Design
                             // allow renames that are just case changes of the current name.
                             if (namedComponent != null && validateName)
                             {
-                                Exception ex = new Exception(string.Format(SR.DesignerHostDuplicateName, value));
-                                ex.HelpLink = SR.DesignerHostDuplicateName;
+                                Exception ex = new Exception(string.Format(SR.DesignerHostDuplicateName, value))
+                                {
+                                    HelpLink = SR.DesignerHostDuplicateName
+                                };
                                 throw ex;
                             }
                         }

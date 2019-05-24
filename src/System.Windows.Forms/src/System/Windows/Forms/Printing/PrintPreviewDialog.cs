@@ -1532,8 +1532,10 @@ namespace System.Windows.Forms
             }
 
             //Create the ToolStripControlHost
-            ToolStripControlHost pageCounterItem = new ToolStripControlHost(pageCounter);
-            pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            ToolStripControlHost pageCounterItem = new ToolStripControlHost(pageCounter)
+            {
+                Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+            };
 
             toolStrip1.Items.Add(pageCounterItem);
             toolStrip1.Items.Add(pageToolStripLabel);

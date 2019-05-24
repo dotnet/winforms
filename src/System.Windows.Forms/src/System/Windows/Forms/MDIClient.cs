@@ -244,8 +244,10 @@ namespace System.Windows.Forms
                     // the bottom left of the client area, normally they are anchored
                     // to the top right which just looks wierd!
                     //
-                    NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
-                    wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
+                    NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT
+                    {
+                        length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>()
+                    };
 
                     for (int i = 0; i < Controls.Count; i++)
                     {

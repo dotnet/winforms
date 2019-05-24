@@ -32,9 +32,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AppearanceGetSetData))]
         public void CheckBox_AutoSizeModeGetSet(Appearance expected)
         {
-            var box = new CheckBox();
-
-            box.Appearance = expected;
+            var box = new CheckBox
+            {
+                Appearance = expected
+            };
 
             Assert.Equal(expected, box.Appearance);
         }
@@ -65,9 +66,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoCheckData))]
         public void CheckBox_AutoCheck(bool expected)
         {
-            var box = new CheckBox();
-
-            box.AutoCheck = expected;
+            var box = new CheckBox
+            {
+                AutoCheck = expected
+            };
 
             Assert.Equal(expected, box.AutoCheck);
         }
@@ -82,10 +84,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ContentAlignmentGetSetData))]
         public void CheckBox_ContentAlignmentGetSet(ContentAlignment expected)
         {
-            var box = new CheckBox();
-
-            box.CheckAlign = expected;
-            box.TextAlign = expected;
+            var box = new CheckBox
+            {
+                CheckAlign = expected,
+                TextAlign = expected
+            };
 
             Assert.Equal(expected, box.CheckAlign);
             Assert.Equal(expected, box.TextAlign);
@@ -112,9 +115,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(false, CheckState.Unchecked)]
         public void CheckBox_CheckedGetSet(bool sent, CheckState expected)
         {
-            var box = new CheckBox();
-
-            box.Checked = sent;
+            var box = new CheckBox
+            {
+                Checked = sent
+            };
 
             Assert.Equal(expected, box.CheckState);
         }
@@ -129,9 +133,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CheckStateGetSetData))]
         public void CheckBox_CheckStateGetSet(CheckState expected)
         {
-            var box = new CheckBox();
-
-            box.CheckState = expected;
+            var box = new CheckBox
+            {
+                CheckState = expected
+            };
 
             Assert.Equal(expected, box.CheckState);
         }
@@ -162,9 +167,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ThreeStateData))]
         public void CheckBox_ThreeState(bool expected)
         {
-            var box = new CheckBox();
-
-            box.ThreeState = expected;
+            var box = new CheckBox
+            {
+                ThreeState = expected
+            };
 
             Assert.Equal(expected, box.ThreeState);
         }

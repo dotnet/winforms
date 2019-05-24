@@ -119,11 +119,12 @@ namespace System.Experimental.Gdi
             }
             else
             {
-                IntNativeMethods.LOGBRUSH lb = new IntNativeMethods.LOGBRUSH();
-
-                lb.lbColor = ColorTranslator.ToWin32(wndBrush.Color);
-                lb.lbStyle = IntNativeMethods.BS_SOLID;
-                lb.lbHatch = 0;
+                IntNativeMethods.LOGBRUSH lb = new IntNativeMethods.LOGBRUSH
+                {
+                    lbColor = ColorTranslator.ToWin32(wndBrush.Color),
+                    lbStyle = IntNativeMethods.BS_SOLID,
+                    lbHatch = 0
+                };
 
                 // Note: We currently don't support custom styles, that's why 0 and null for last two params.
                 nativeHandle = IntSafeNativeMethods.ExtCreatePen((int)style, width, lb, 0, null);

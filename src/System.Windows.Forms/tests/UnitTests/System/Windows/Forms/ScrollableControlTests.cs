@@ -381,8 +381,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ScrollableControl_ScaleCore_InvokeWithDockPadding_Success()
         {
-            var control = new ScrollableControl();
-            control.Padding = new Padding(1, 2, 3, 4);
+            var control = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
             Assert.Equal(1, control.DockPadding.Left);
             Assert.Equal(2, control.DockPadding.Top);
             Assert.Equal(3, control.DockPadding.Right);
@@ -412,8 +414,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ScrollableControl_ScaleControl_InvokeWithDockPadding_Success()
         {
-            var control = new ScrollableControl();
-            control.Padding = new Padding(1, 2, 3, 4);
+            var control = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
             Assert.Equal(1, control.DockPadding.Left);
             Assert.Equal(2, control.DockPadding.Top);
             Assert.Equal(3, control.DockPadding.Right);

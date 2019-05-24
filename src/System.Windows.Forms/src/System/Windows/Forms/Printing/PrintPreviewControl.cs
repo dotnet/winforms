@@ -369,9 +369,11 @@ namespace System.Windows.Forms
             {
                 case NativeMethods.SB_THUMBPOSITION:
                 case NativeMethods.SB_THUMBTRACK:
-                    NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                    si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
-                    si.fMask = NativeMethods.SIF_TRACKPOS;
+                    NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+                    {
+                        cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
+                        fMask = NativeMethods.SIF_TRACKPOS
+                    };
                     int direction = horizontal ? NativeMethods.SB_HORZ : NativeMethods.SB_VERT;
                     if (SafeNativeMethods.GetScrollInfo(new HandleRef(this, m.HWnd), direction, si))
                     {
@@ -473,8 +475,10 @@ namespace System.Windows.Forms
             {
 
                 PrintController oldController = document.PrintController;
-                PreviewPrintController previewController = new PreviewPrintController();
-                previewController.UseAntiAlias = UseAntiAlias;
+                PreviewPrintController previewController = new PreviewPrintController
+                {
+                    UseAntiAlias = UseAntiAlias
+                };
                 document.PrintController = new PrintControllerWithStatusDialog(previewController,
                                                                                string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
@@ -572,9 +576,11 @@ namespace System.Windows.Forms
                     if (pageInfo != null || exceptionPrinting)
                     {
                         // Calculate formats
-                        StringFormat format = new StringFormat();
-                        format.Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter);
-                        format.LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter);
+                        StringFormat format = new StringFormat
+                        {
+                            Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter),
+                            LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter)
+                        };
 
                         // Do actual drawing
                         SolidBrush brush = new SolidBrush(ForeColor);
@@ -815,11 +821,13 @@ namespace System.Windows.Forms
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            NativeMethods.SCROLLINFO info = new NativeMethods.SCROLLINFO();
-            info.fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE;
-            info.nMin = 0;
-            info.nMax = Math.Max(Height, virtualSize.Height) - 1;
-            info.nPage = Height;
+            NativeMethods.SCROLLINFO info = new NativeMethods.SCROLLINFO
+            {
+                fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE,
+                nMin = 0,
+                nMax = Math.Max(Height, virtualSize.Height) - 1,
+                nPage = Height
+            };
             UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_VERT, info, true);
 
             info.fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE;

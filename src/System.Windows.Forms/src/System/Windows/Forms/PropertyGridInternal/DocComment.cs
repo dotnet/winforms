@@ -41,12 +41,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal DocComment(PropertyGrid owner) : base(owner)
         {
             SuspendLayout();
-            m_labelTitle = new Label();
-            m_labelTitle.UseMnemonic = false;
-            m_labelTitle.Cursor = Cursors.Default;
-            m_labelDesc = new Label();
-            m_labelDesc.AutoEllipsis = true;
-            m_labelDesc.Cursor = Cursors.Default;
+            m_labelTitle = new Label
+            {
+                UseMnemonic = false,
+                Cursor = Cursors.Default
+            };
+            m_labelDesc = new Label
+            {
+                AutoEllipsis = true,
+                Cursor = Cursors.Default
+            };
 
             UpdateTextRenderingEngine();
 

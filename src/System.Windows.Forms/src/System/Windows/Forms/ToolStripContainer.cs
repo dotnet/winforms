@@ -44,8 +44,10 @@ namespace System.Windows.Forms
                 bottomPanel = new ToolStripPanel(this);
                 leftPanel = new ToolStripPanel(this);
                 rightPanel = new ToolStripPanel(this);
-                contentPanel = new ToolStripContentPanel();
-                contentPanel.Dock = DockStyle.Fill;
+                contentPanel = new ToolStripContentPanel
+                {
+                    Dock = DockStyle.Fill
+                };
                 topPanel.Dock = DockStyle.Top;
                 bottomPanel.Dock = DockStyle.Bottom;
                 rightPanel.Dock = DockStyle.Right;

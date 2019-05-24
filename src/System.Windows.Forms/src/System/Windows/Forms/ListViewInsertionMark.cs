@@ -124,9 +124,11 @@ namespace System.Windows.Forms
         ///
         public int NearestIndex(Point pt)
         {
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            point.x = pt.X;
-            point.y = pt.Y;
+            NativeMethods.POINT point = new NativeMethods.POINT
+            {
+                x = pt.X,
+                y = pt.Y
+            };
 
             NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
             UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_INSERTMARKHITTEST, point, lvInsertMark);
@@ -137,9 +139,11 @@ namespace System.Windows.Forms
         internal void UpdateListView()
         {
             Debug.Assert(listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
-            lvInsertMark.dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0;
-            lvInsertMark.iItem = index;
+            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK
+            {
+                dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0,
+                iItem = index
+            };
             UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_SETINSERTMARK, 0, lvInsertMark);
 
             if (!color.IsEmpty)

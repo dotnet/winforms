@@ -1223,8 +1223,10 @@ namespace System.Windows.Forms
                     // the defult one so we can get it; this would change the text displayed in the box (even for a short time)
                     // opening a sec hole.
 
-                    TextBox txtBox = new TextBox();
-                    txtBox.UseSystemPasswordChar = true; // this forces the creation of the control handle.
+                    TextBox txtBox = new TextBox
+                    {
+                        UseSystemPasswordChar = true // this forces the creation of the control handle.
+                    };
 
                     MaskedTextBox.systemPwdChar = txtBox.PasswordChar;
 

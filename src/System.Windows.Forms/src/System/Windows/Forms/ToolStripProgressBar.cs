@@ -289,8 +289,10 @@ namespace System.Windows.Forms
 
         private static Control CreateControlInstance()
         {
-            ProgressBar progressBar = new ToolStripProgressBarControl();
-            progressBar.Size = new Size(100, 15);
+            ProgressBar progressBar = new ToolStripProgressBarControl
+            {
+                Size = new Size(100, 15)
+            };
             return progressBar;
         }
 

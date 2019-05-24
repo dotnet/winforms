@@ -368,10 +368,12 @@ namespace System.Windows.Forms
                 if (tv == null || !tv.IsHandleCreated || tv.IsDisposed)
                     return;
 
-                NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
-                item.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
-                item.hItem = handle;
-                item.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
+                NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+                {
+                    mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                    hItem = handle,
+                    stateMask = NativeMethods.TVIS_STATEIMAGEMASK
+                };
                 item.state |= value ? CHECKED : UNCHECKED;
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
 
@@ -394,10 +396,12 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (handle != IntPtr.Zero)
                 {
-                    NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
-                    item.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
-                    item.hItem = handle;
-                    item.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
+                    NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+                    {
+                        mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                        hItem = handle,
+                        stateMask = NativeMethods.TVIS_STATEIMAGEMASK
+                    };
                     UnsafeNativeMethods.SendMessage(new HandleRef(null, TreeView.Handle), NativeMethods.TVM_GETITEM, 0, ref item);
                     Debug.Assert(!TreeView.CheckBoxes || ((item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         "isChecked on node '" + Name + "' did not match the state in TVM_GETITEM.");
@@ -1017,10 +1021,12 @@ namespace System.Windows.Forms
                 {
                     return 0;
                 }
-                NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
-                item.hItem = Handle;
-                item.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
-                item.stateMask = NativeMethods.TVIS_SELECTED | NativeMethods.TVIS_EXPANDED;
+                NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+                {
+                    hItem = Handle,
+                    mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                    stateMask = NativeMethods.TVIS_SELECTED | NativeMethods.TVIS_EXPANDED
+                };
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_GETITEM, 0, ref item);
                 return item.state;
             }
@@ -1846,9 +1852,11 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.InvalidCrossThreadControlCall);
                 }
 
-                NativeMethods.TV_INSERTSTRUCT tvis = new NativeMethods.TV_INSERTSTRUCT();
-                tvis.item_mask = insertMask;
-                tvis.hParent = parent.handle;
+                NativeMethods.TV_INSERTSTRUCT tvis = new NativeMethods.TV_INSERTSTRUCT
+                {
+                    item_mask = insertMask,
+                    hParent = parent.handle
+                };
                 TreeNode prev = PrevNode;
                 if (insertFirst || prev == null)
                 {
@@ -2017,11 +2025,13 @@ namespace System.Windows.Forms
         {
             Debug.Assert(tv.IsHandleCreated, "nonexistent handle");
 
-            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
-            item.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
-            item.hItem = handle;
-            item.stateMask = NativeMethods.TVIS_EXPANDEDONCE;
-            item.state = 0;
+            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+            {
+                mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                hItem = handle,
+                stateMask = NativeMethods.TVIS_EXPANDEDONCE,
+                state = 0
+            };
             UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
         }
 
@@ -2121,9 +2131,11 @@ namespace System.Windows.Forms
             TreeView tv = TreeView;
             Debug.Assert(tv != null, "TreeNode has handle but no TreeView");
 
-            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
-            item.mask = NativeMethods.TVIF_HANDLE | mask;
-            item.hItem = handle;
+            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+            {
+                mask = NativeMethods.TVIF_HANDLE | mask,
+                hItem = handle
+            };
             if ((mask & NativeMethods.TVIF_TEXT) != 0)
                 item.pszText = Marshal.StringToHGlobalAuto(text);
             if ((mask & NativeMethods.TVIF_IMAGE) != 0)
@@ -2163,11 +2175,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
-
-            item.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_IMAGE;
-            item.hItem = Handle;
-            item.iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex));
+            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+            {
+                mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_IMAGE,
+                hItem = Handle,
+                iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
+            };
             UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
         }
 

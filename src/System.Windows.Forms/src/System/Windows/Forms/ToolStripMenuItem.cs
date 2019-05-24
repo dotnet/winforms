@@ -764,11 +764,13 @@ namespace System.Windows.Forms
                 Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
                 return false;
             }
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-            info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
-            info.fMask = NativeMethods.MIIM_STATE;
-            info.fType = NativeMethods.MIIM_STATE;
-            info.wID = nativeMenuCommandID;
+            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            {
+                cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
+                fMask = NativeMethods.MIIM_STATE,
+                fType = NativeMethods.MIIM_STATE,
+                wID = nativeMenuCommandID
+            };
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
 
             return ((info.fState & NativeMethods.MFS_DISABLED) == 0);
@@ -786,11 +788,13 @@ namespace System.Windows.Forms
             string text = null;
 
             // fetch the string length
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-            info.fMask = NativeMethods.MIIM_STRING;
-            info.fType = NativeMethods.MIIM_STRING;
-            info.wID = nativeMenuCommandID;
-            info.dwTypeData = IntPtr.Zero;
+            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            {
+                fMask = NativeMethods.MIIM_STRING,
+                fType = NativeMethods.MIIM_STRING,
+                wID = nativeMenuCommandID,
+                dwTypeData = IntPtr.Zero
+            };
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
 
             if (info.cch > 0)
@@ -837,10 +841,12 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-            info.fMask = NativeMethods.MIIM_BITMAP;
-            info.fType = NativeMethods.MIIM_BITMAP;
-            info.wID = nativeMenuCommandID;
+            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            {
+                fMask = NativeMethods.MIIM_BITMAP,
+                fType = NativeMethods.MIIM_BITMAP,
+                wID = nativeMenuCommandID
+            };
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
 
             if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > NativeMethods.HBMMENU_POPUP_MINIMIZE)

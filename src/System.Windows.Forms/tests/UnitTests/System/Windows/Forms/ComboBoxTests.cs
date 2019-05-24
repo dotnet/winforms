@@ -846,8 +846,10 @@ namespace System.Windows.Forms.Tests
 
         private SubComboBox CreateControlForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
         {
-            var tb = new SubComboBox();
-            tb.Text = text;
+            var tb = new SubComboBox
+            {
+                Text = text
+            };
             tb.Focus();
             tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
             tb.SelectionLength = 0;

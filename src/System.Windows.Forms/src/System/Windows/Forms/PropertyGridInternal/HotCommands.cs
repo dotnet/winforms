@@ -78,12 +78,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (label == null)
                 {
-                    label = new LinkLabel();
-                    label.Dock = DockStyle.Fill;
-                    label.LinkBehavior = LinkBehavior.AlwaysUnderline;
+                    label = new LinkLabel
+                    {
+                        Dock = DockStyle.Fill,
+                        LinkBehavior = LinkBehavior.AlwaysUnderline,
 
-                    // use default LinkLabel colors for regular, active, and visited
-                    label.DisabledLinkColor = SystemColors.ControlDark;
+                        // use default LinkLabel colors for regular, active, and visited
+                        DisabledLinkColor = SystemColors.ControlDark
+                    };
                     label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
                     Controls.Add(label);
                 }

@@ -221,16 +221,20 @@ namespace System
 
         private static unsafe int GetWindowsMinorVersion()
         {
-            var osvi = new RTL_OSVERSIONINFOEX();
-            osvi.dwOSVersionInfoSize = (uint)sizeof(RTL_OSVERSIONINFOEX);
+            var osvi = new RTL_OSVERSIONINFOEX
+            {
+                dwOSVersionInfoSize = (uint)sizeof(RTL_OSVERSIONINFOEX)
+            };
             Assert.Equal(0, RtlGetVersion(ref osvi));
             return (int)osvi.dwMinorVersion;
         }
 
         private static unsafe int GetWindowsBuildNumber()
         {
-            var osvi = new RTL_OSVERSIONINFOEX();
-            osvi.dwOSVersionInfoSize = (uint)sizeof(RTL_OSVERSIONINFOEX);
+            var osvi = new RTL_OSVERSIONINFOEX
+            {
+                dwOSVersionInfoSize = (uint)sizeof(RTL_OSVERSIONINFOEX)
+            };
             Assert.Equal(0, RtlGetVersion(ref osvi));
             return (int)osvi.dwBuildNumber;
         }
@@ -284,8 +288,10 @@ namespace System
 
         private static unsafe int GetWindowsVersion()
         {
-            var osvi = new RTL_OSVERSIONINFOEX();
-            osvi.dwOSVersionInfoSize = (uint)sizeof(RTL_OSVERSIONINFOEX);
+            var osvi = new RTL_OSVERSIONINFOEX
+            {
+                dwOSVersionInfoSize = (uint)sizeof(RTL_OSVERSIONINFOEX)
+            };
             Assert.Equal(0, RtlGetVersion(ref osvi));
             return (int)osvi.dwMajorVersion;
         }

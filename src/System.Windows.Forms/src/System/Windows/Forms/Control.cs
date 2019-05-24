@@ -6598,10 +6598,12 @@ namespace System.Windows.Forms
             if (MaximumSize != Size.Empty || MinimumSize != Size.Empty)
             {
                 Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(MaximumSize);
-                Rectangle newBounds = new Rectangle(suggestedX, suggestedY, 0, 0);
+                Rectangle newBounds = new Rectangle(suggestedX, suggestedY, 0, 0)
+                {
 
-                // Clip the size to maximum and inflate it to minimum as necessary.
-                newBounds.Size = LayoutUtils.IntersectSizes(new Size(proposedWidth, proposedHeight), maximumSize);
+                    // Clip the size to maximum and inflate it to minimum as necessary.
+                    Size = LayoutUtils.IntersectSizes(new Size(proposedWidth, proposedHeight), maximumSize)
+                };
                 newBounds.Size = LayoutUtils.UnionSizes(newBounds.Size, MinimumSize);
 
                 return newBounds;
@@ -7299,9 +7301,11 @@ namespace System.Windows.Forms
 
                 if (trackMouseEvent == null)
                 {
-                    trackMouseEvent = new NativeMethods.TRACKMOUSEEVENT();
-                    trackMouseEvent.dwFlags = NativeMethods.TME_LEAVE | NativeMethods.TME_HOVER;
-                    trackMouseEvent.hwndTrack = Handle;
+                    trackMouseEvent = new NativeMethods.TRACKMOUSEEVENT
+                    {
+                        dwFlags = NativeMethods.TME_LEAVE | NativeMethods.TME_HOVER,
+                        hwndTrack = Handle
+                    };
                 }
 
                 SafeNativeMethods.TrackMouseEvent(trackMouseEvent);
@@ -9094,9 +9098,11 @@ namespace System.Windows.Forms
         {
             if (!(this is ScrollableControl) && !IsMirrored)
             {
-                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
-                si.fMask = NativeMethods.SIF_RANGE;
+                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
+                    fMask = NativeMethods.SIF_RANGE
+                };
                 if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, si) != false)
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
@@ -17236,9 +17242,11 @@ namespace System.Windows.Forms
                                 // Must translate message coordniates over to our HWND.  We first try
                                 //
                                 IntPtr hwndMap = msg.hwnd == IntPtr.Zero ? hwndParent : msg.hwnd;
-                                NativeMethods.POINT pt = new NativeMethods.POINT();
-                                pt.x = NativeMethods.Util.LOWORD(msg.lParam);
-                                pt.y = NativeMethods.Util.HIWORD(msg.lParam);
+                                NativeMethods.POINT pt = new NativeMethods.POINT
+                                {
+                                    x = NativeMethods.Util.LOWORD(msg.lParam),
+                                    y = NativeMethods.Util.HIWORD(msg.lParam)
+                                };
                                 UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hwndMap), new HandleRef(control, control.Handle), pt, 1);
 
                                 // check to see if this message should really go to a child
@@ -17570,8 +17578,10 @@ namespace System.Windows.Forms
 
                         try
                         {
-                            NativeMethods.ACCEL accel = new NativeMethods.ACCEL();
-                            accel.cmd = 0;
+                            NativeMethods.ACCEL accel = new NativeMethods.ACCEL
+                            {
+                                cmd = 0
+                            };
 
                             Debug.Indent();
 
@@ -17722,9 +17732,11 @@ namespace System.Windows.Forms
             /// </summary>
             private Point HiMetricToPixel(int x, int y)
             {
-                Point pt = new Point();
-                pt.X = (LogPixels.X * x + hiMetricPerInch / 2) / hiMetricPerInch;
-                pt.Y = (LogPixels.Y * y + hiMetricPerInch / 2) / hiMetricPerInch;
+                Point pt = new Point
+                {
+                    X = (LogPixels.X * x + hiMetricPerInch / 2) / hiMetricPerInch,
+                    Y = (LogPixels.Y * y + hiMetricPerInch / 2) / hiMetricPerInch
+                };
                 return pt;
             }
 
@@ -17771,8 +17783,10 @@ namespace System.Windows.Forms
                 if (!activeXState[inPlaceVisible])
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
-                    NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI();
-                    inPlaceFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
+                    NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI
+                    {
+                        cb = Marshal.SizeOf<NativeMethods.tagOIFI>()
+                    };
                     IntPtr hwndParent = IntPtr.Zero;
 
                     // We are entering a secure context here.
@@ -18118,10 +18132,12 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Exception converting property: " + errorString);
                                 if (pErrorLog != null)
                                 {
-                                    NativeMethods.tagEXCEPINFO err = new NativeMethods.tagEXCEPINFO();
-                                    err.bstrSource = control.GetType().FullName;
-                                    err.bstrDescription = errorString;
-                                    err.scode = errorCode;
+                                    NativeMethods.tagEXCEPINFO err = new NativeMethods.tagEXCEPINFO
+                                    {
+                                        bstrSource = control.GetType().FullName,
+                                        bstrDescription = errorString,
+                                        scode = errorCode
+                                    };
                                     pErrorLog.AddError(props[i].Name, err);
                                 }
                             }
@@ -18342,9 +18358,11 @@ namespace System.Windows.Forms
             /// </summary>
             private Point PixelToHiMetric(int x, int y)
             {
-                Point pt = new Point();
-                pt.X = (hiMetricPerInch * x + (LogPixels.X >> 1)) / LogPixels.X;
-                pt.Y = (hiMetricPerInch * y + (LogPixels.Y >> 1)) / LogPixels.Y;
+                Point pt = new Point
+                {
+                    X = (hiMetricPerInch * x + (LogPixels.X >> 1)) / LogPixels.X,
+                    Y = (hiMetricPerInch * y + (LogPixels.Y >> 1)) / LogPixels.Y
+                };
                 return pt;
             }
 
@@ -20139,19 +20157,21 @@ namespace System.Windows.Forms
                         return fSuccess;
                     }
 
-                    NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT();
-                    lpbmi.bmiHeader_biSize = Marshal.SizeOf<NativeMethods.BITMAPINFOHEADER>();
-                    lpbmi.bmiHeader_biWidth = bmp.bmWidth;
-                    lpbmi.bmiHeader_biHeight = bmp.bmHeight;
-                    lpbmi.bmiHeader_biPlanes = 1;
-                    lpbmi.bmiHeader_biBitCount = bmp.bmBitsPixel;
-                    lpbmi.bmiHeader_biCompression = NativeMethods.BI_RGB;
-                    lpbmi.bmiHeader_biSizeImage = 0;               //Not needed since using BI_RGB
-                    lpbmi.bmiHeader_biXPelsPerMeter = 0;
-                    lpbmi.bmiHeader_biYPelsPerMeter = 0;
-                    lpbmi.bmiHeader_biClrUsed = 0;
-                    lpbmi.bmiHeader_biClrImportant = 0;
-                    lpbmi.bmiColors = new byte[NativeMethods.BITMAPINFO_MAX_COLORSIZE * 4];
+                    NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT
+                    {
+                        bmiHeader_biSize = Marshal.SizeOf<NativeMethods.BITMAPINFOHEADER>(),
+                        bmiHeader_biWidth = bmp.bmWidth,
+                        bmiHeader_biHeight = bmp.bmHeight,
+                        bmiHeader_biPlanes = 1,
+                        bmiHeader_biBitCount = bmp.bmBitsPixel,
+                        bmiHeader_biCompression = NativeMethods.BI_RGB,
+                        bmiHeader_biSizeImage = 0,               //Not needed since using BI_RGB
+                        bmiHeader_biXPelsPerMeter = 0,
+                        bmiHeader_biYPelsPerMeter = 0,
+                        bmiHeader_biClrUsed = 0,
+                        bmiHeader_biClrImportant = 0,
+                        bmiColors = new byte[NativeMethods.BITMAPINFO_MAX_COLORSIZE * 4]
+                    };
 
                     //
                     // Include the palette for 256 color bitmaps

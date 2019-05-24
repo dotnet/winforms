@@ -155,8 +155,10 @@ namespace System.Windows.Forms
             {
                 if (downScrollButton == null)
                 {
-                    downScrollButton = new ToolStripScrollButton(false);
-                    downScrollButton.ParentInternal = this;
+                    downScrollButton = new ToolStripScrollButton(false)
+                    {
+                        ParentInternal = this
+                    };
                 }
                 return downScrollButton;
             }
@@ -288,8 +290,10 @@ namespace System.Windows.Forms
             {
                 if (upScrollButton == null)
                 {
-                    upScrollButton = new ToolStripScrollButton(true);
-                    upScrollButton.ParentInternal = this;
+                    upScrollButton = new ToolStripScrollButton(true)
+                    {
+                        ParentInternal = this
+                    };
                 }
                 return upScrollButton;
             }
@@ -318,10 +322,12 @@ namespace System.Windows.Forms
             for (int i = 0; i < count; i++)
             {
                 // peek at the i'th item.
-                NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-                info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
-                info.fMask = NativeMethods.MIIM_FTYPE;
-                info.fType = NativeMethods.MIIM_FTYPE;
+                NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
+                    fMask = NativeMethods.MIIM_FTYPE,
+                    fType = NativeMethods.MIIM_FTYPE
+                };
                 UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
 
                 if (info.fType == NativeMethods.MFT_SEPARATOR)
@@ -332,10 +338,12 @@ namespace System.Windows.Forms
                 else
                 {
                     // its a menu item... lets fish out the command id
-                    info = new NativeMethods.MENUITEMINFO_T_RW();
-                    info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
-                    info.fMask = NativeMethods.MIIM_ID;
-                    info.fType = NativeMethods.MIIM_ID;
+                    info = new NativeMethods.MENUITEMINFO_T_RW
+                    {
+                        cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
+                        fMask = NativeMethods.MIIM_ID,
+                        fType = NativeMethods.MIIM_ID
+                    };
                     UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
 
                     // create the managed object - toolstripmenu item knows how to grok hmenu for information.
@@ -343,10 +351,12 @@ namespace System.Windows.Forms
 
 
                     // if there is a submenu fetch it.
-                    info = new NativeMethods.MENUITEMINFO_T_RW();
-                    info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
-                    info.fMask = NativeMethods.MIIM_SUBMENU;
-                    info.fType = NativeMethods.MIIM_SUBMENU;
+                    info = new NativeMethods.MENUITEMINFO_T_RW
+                    {
+                        cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
+                        fMask = NativeMethods.MIIM_SUBMENU,
+                        fType = NativeMethods.MIIM_SUBMENU
+                    };
                     UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
 
                     if (info.hSubMenu != IntPtr.Zero)

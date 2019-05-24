@@ -464,12 +464,13 @@ namespace System.Drawing.Design
                 {
                     g.FillRectangle(brush, ClientRectangle);
                 }
-                Rectangle rect = new Rectangle();
-
-                rect.Width = cellSizeX;
-                rect.Height = cellSizeY;
-                rect.X = marginX;
-                rect.Y = marginY;
+                Rectangle rect = new Rectangle
+                {
+                    Width = cellSizeX,
+                    Height = cellSizeY,
+                    X = marginX,
+                    Y = marginY
+                };
                 bool drawSelected = false;
 
                 for (int y = 0; y < CELLS_DOWN; y++)
@@ -810,22 +811,26 @@ namespace System.Drawing.Design
                 tabControl.Dock = DockStyle.Fill;
                 tabControl.Resize += new EventHandler(OnTabControlResize);
 
-                lbSystem = new ColorEditorListBox();
-                lbSystem.DrawMode = DrawMode.OwnerDrawFixed;
-                lbSystem.BorderStyle = BorderStyle.FixedSingle;
-                lbSystem.IntegralHeight = false;
-                lbSystem.Sorted = false;
+                lbSystem = new ColorEditorListBox
+                {
+                    DrawMode = DrawMode.OwnerDrawFixed,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    IntegralHeight = false,
+                    Sorted = false
+                };
                 lbSystem.Click += new EventHandler(OnListClick);
                 lbSystem.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbSystem.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbSystem.Dock = DockStyle.Fill;
                 lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
-                lbCommon = new ColorEditorListBox();
-                lbCommon.DrawMode = DrawMode.OwnerDrawFixed;
-                lbCommon.BorderStyle = BorderStyle.FixedSingle;
-                lbCommon.IntegralHeight = false;
-                lbCommon.Sorted = false;
+                lbCommon = new ColorEditorListBox
+                {
+                    DrawMode = DrawMode.OwnerDrawFixed,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    IntegralHeight = false,
+                    Sorted = false
+                };
                 lbCommon.Click += new EventHandler(OnListClick);
                 lbCommon.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbCommon.KeyDown += new KeyEventHandler(this.OnListKeyDown);

@@ -297,10 +297,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Alignment_SetWithParent_GetReturnsExpected(ToolStripItemAlignment value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.Alignment = value;
+                Alignment = value
+            };
             Assert.Equal(value, item.Alignment);
 
             // Set same.
@@ -313,8 +315,10 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Alignment_SetWithCreatedParent_GetReturnsExpected(ToolStripItemAlignment value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
 
             item.Alignment = value;
@@ -353,10 +357,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_AllowDrop_SetWithParent_GetReturnsExpected(bool value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.AllowDrop = value;
+                AllowDrop = value
+            };
             Assert.Equal(value, item.AllowDrop);
 
             // Set same.
@@ -394,10 +400,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Anchor_SetWithParent_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.Anchor = value;
+                Anchor = value
+            };
             Assert.Equal(expected, item.Anchor);
 
             // Set same.
@@ -1496,12 +1504,16 @@ namespace System.Windows.Forms.Tests
             toolStripDropDown.Items.Add(toolStripDropDownItem);
             yield return new object[] { toolStripDropDownItem, true };
 
-            var toolStripParentItem = new SubToolStripItem();
-            toolStripParentItem.Parent = toolStrip;
+            var toolStripParentItem = new SubToolStripItem
+            {
+                Parent = toolStrip
+            };
             yield return new object[] { toolStripParentItem, false };
 
-            var toolStripDropDownParentItem = new SubToolStripItem();
-            toolStripDropDownParentItem.Parent = toolStripDropDown;
+            var toolStripDropDownParentItem = new SubToolStripItem
+            {
+                Parent = toolStripDropDown
+            };
             yield return new object[] { toolStripDropDownParentItem, true };
         }
 
@@ -1527,8 +1539,10 @@ namespace System.Windows.Forms.Tests
             var toolStripOverflow = new ToolStripOverflow(toolStripOverflowParent);
             yield return new object[] { toolStripOverflowParent, false };
 
-            var overflowingToolStrip = new ToolStrip();
-            overflowingToolStrip.Size = new Size(1, 2);
+            var overflowingToolStrip = new ToolStrip
+            {
+                Size = new Size(1, 2)
+            };
             var overflowingToolStripItem = new SubToolStripItem();
             overflowingToolStrip.Items.Add(overflowingToolStripItem);
             overflowingToolStrip.LayoutEngine.Layout(overflowingToolStrip, null);
@@ -1673,9 +1687,10 @@ namespace System.Windows.Forms.Tests
         {
             var owner = new ToolStrip();
             var otherOwner = new ToolStrip();
-            var item = new SubToolStripItem();
-
-            item.Owner = owner;
+            var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
             Assert.Same(owner, item.Owner);
             Assert.Same(item, Assert.Single(owner.Items));
 
@@ -1724,13 +1739,17 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { toolStripDropDownWithOwnerItemItem, toolStripDropDownWithOwnerItemOwnerItem };
 
             var toolStripParent = new ToolStrip();
-            var toolStripParentItem = new SubToolStripItem();
-            toolStripParentItem.Parent = toolStripParent;
+            var toolStripParentItem = new SubToolStripItem
+            {
+                Parent = toolStripParent
+            };
             yield return new object[] { toolStripParentItem, null };
 
             var toolStripDropDownParent = new ToolStripDropDown();
-            var toolStripDropDownParentItem = new SubToolStripItem();
-            toolStripDropDownParentItem.Parent = toolStripDropDownParent;
+            var toolStripDropDownParentItem = new SubToolStripItem
+            {
+                Parent = toolStripDropDownParent
+            };
             yield return new object[] { toolStripDropDownParentItem, null };
 
             var toolStripDropDownWithOwnerItemParentOwnerItem = new SubToolStripItem();
@@ -1738,8 +1757,10 @@ namespace System.Windows.Forms.Tests
             {
                 OwnerItem = toolStripDropDownWithOwnerItemParentOwnerItem
             };
-            var toolStripDropDownWithOwnerItemParentItem = new SubToolStripItem();
-            toolStripDropDownWithOwnerItemParentItem.Parent = toolStripDropDownWithOwnerItemParent;
+            var toolStripDropDownWithOwnerItemParentItem = new SubToolStripItem
+            {
+                Parent = toolStripDropDownWithOwnerItemParent
+            };
             yield return new object[] { toolStripDropDownWithOwnerItemParentItem, toolStripDropDownWithOwnerItemParentOwnerItem };
         }
 
@@ -1824,8 +1845,10 @@ namespace System.Windows.Forms.Tests
                 {
                     RightToLeft = rightToLeft
                 };
-                var toolStripParentItem = new SubToolStripItem();
-                toolStripParentItem.Parent = toolStripParent;
+                var toolStripParentItem = new SubToolStripItem
+                {
+                    Parent = toolStripParent
+                };
                 yield return new object[] { toolStripParentItem, expected };
             }
 
@@ -2141,8 +2164,10 @@ namespace System.Windows.Forms.Tests
             {
                 TextDirection = ToolStripTextDirection.Vertical90
             };
-            var toolStripParentItem = new SubToolStripItem();
-            toolStripParentItem.Parent = toolStripParent;
+            var toolStripParentItem = new SubToolStripItem
+            {
+                Parent = toolStripParent
+            };
             yield return new object[] { toolStripParentItem, ToolStripTextDirection.Vertical90 };
 
             var toolStripOwnerParentItem = new SubToolStripItem();
@@ -2355,10 +2380,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Visible_SetWithParent_GetReturnsExpected(bool value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.Visible = value;
+                Visible = value
+            };
             Assert.Equal(value, item.Visible);
 
             // Set same.

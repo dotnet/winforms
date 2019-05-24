@@ -339,11 +339,13 @@ namespace System.Windows.Forms
                 printerSettings.SetHdevnames(data.hDevNames);
             }
 
-            Margins newMargins = new Margins();
-            newMargins.Left = data.marginLeft;
-            newMargins.Top = data.marginTop;
-            newMargins.Right = data.marginRight;
-            newMargins.Bottom = data.marginBottom;
+            Margins newMargins = new Margins
+            {
+                Left = data.marginLeft,
+                Top = data.marginTop,
+                Right = data.marginRight,
+                Bottom = data.marginBottom
+            };
 
             PrinterUnit fromUnit = ((data.Flags & NativeMethods.PSD_INHUNDREDTHSOFMILLIMETERS) != 0)
                                    ? PrinterUnit.HundredthsOfAMillimeter

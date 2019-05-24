@@ -41,8 +41,10 @@ namespace System.Windows.Forms
             {
                 if (mergeItem == null)
                 {
-                    mergeItem = new ToolStripMenuItem();
-                    mergeItem.MergeAction = MergeAction.MatchOnly;
+                    mergeItem = new ToolStripMenuItem
+                    {
+                        MergeAction = MergeAction.MatchOnly
+                    };
                 }
 
                 if (mergeItem.Owner == null)
@@ -90,9 +92,11 @@ namespace System.Windows.Forms
 
                     if (includeSeparator)
                     {
-                        ToolStripSeparator separator = new ToolStripSeparator();
-                        separator.MergeAction = MergeAction.Append;
-                        separator.MergeIndex = -1;
+                        ToolStripSeparator separator = new ToolStripSeparator
+                        {
+                            MergeAction = MergeAction.Append,
+                            MergeIndex = -1
+                        };
                         mergeItem.DropDownItems.Add(separator);
                     }
 
@@ -117,10 +121,12 @@ namespace System.Windows.Forms
                             {                            // there's always room for activeMdiChild
                                 string text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
                                 text = (text == null) ? string.Empty : text;
-                                ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i]);
-                                windowListItem.Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text);
-                                windowListItem.MergeAction = MergeAction.Append;
-                                windowListItem.MergeIndex = accel;
+                                ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i])
+                                {
+                                    Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text),
+                                    MergeAction = MergeAction.Append,
+                                    MergeIndex = accel
+                                };
                                 windowListItem.Click += new EventHandler(OnWindowListItemClick);
                                 if (forms[i].Equals(activeMdiChild))
                                 {  // if this the active one, check it off.
@@ -138,8 +144,10 @@ namespace System.Windows.Forms
                     // show the More Windows... item if necessary.
                     if (visibleChildren > maxMenuForms)
                     {
-                        ToolStripMenuItem moreWindowsMenuItem = new ToolStripMenuItem();
-                        moreWindowsMenuItem.Text = SR.MDIMenuMoreWindows;
+                        ToolStripMenuItem moreWindowsMenuItem = new ToolStripMenuItem
+                        {
+                            Text = SR.MDIMenuMoreWindows
+                        };
                         Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "\tPopulateItems: Added " + moreWindowsMenuItem.Text);
                         moreWindowsMenuItem.Click += new EventHandler(OnMoreWindowsMenuItemClick);
                         moreWindowsMenuItem.MergeAction = MergeAction.Append;

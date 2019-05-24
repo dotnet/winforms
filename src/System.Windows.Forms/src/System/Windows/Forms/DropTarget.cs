@@ -62,9 +62,11 @@ namespace System.Windows.Forms
                                                       ref int pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter recieved");
-            NativeMethods.POINTL ptl = new NativeMethods.POINTL();
-            ptl.x = pt.x;
-            ptl.y = pt.y;
+            NativeMethods.POINTL ptl = new NativeMethods.POINTL
+            {
+                x = pt.x,
+                y = pt.y
+            };
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
             Debug.Assert(pDataObj != null, "OleDragEnter didn't give us a valid data object.");
             DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, ptl, pdwEffect);
@@ -84,9 +86,11 @@ namespace System.Windows.Forms
         int UnsafeNativeMethods.IOleDropTarget.OleDragOver(int grfKeyState, UnsafeNativeMethods.POINTSTRUCT pt, ref int pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver recieved");
-            NativeMethods.POINTL ptl = new NativeMethods.POINTL();
-            ptl.x = pt.x;
-            ptl.y = pt.y;
+            NativeMethods.POINTL ptl = new NativeMethods.POINTL
+            {
+                x = pt.x,
+                y = pt.y
+            };
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
             DragEventArgs drgevent = CreateDragEventArgs(null, grfKeyState, ptl, pdwEffect);
             owner.OnDragOver(drgevent);
@@ -103,9 +107,11 @@ namespace System.Windows.Forms
         int UnsafeNativeMethods.IOleDropTarget.OleDrop(object pDataObj, int grfKeyState, UnsafeNativeMethods.POINTSTRUCT pt, ref int pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop recieved");
-            NativeMethods.POINTL ptl = new NativeMethods.POINTL();
-            ptl.x = pt.x;
-            ptl.y = pt.y;
+            NativeMethods.POINTL ptl = new NativeMethods.POINTL
+            {
+                x = pt.x,
+                y = pt.y
+            };
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
             DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, ptl, pdwEffect);
 

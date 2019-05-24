@@ -272,9 +272,11 @@ namespace System.ComponentModel.Design.Serialization
                 ObjectData data = (ObjectData)_objects[value];
                 if (data == null)
                 {
-                    data = new ObjectData();
-                    data._name = GetObjectName(value);
-                    data._value = value;
+                    data = new ObjectData
+                    {
+                        _name = GetObjectName(value),
+                        _value = value
+                    };
 
                     _objects[value] = data;
                     _objectNames.Add(data._name);

@@ -852,8 +852,10 @@ namespace System.Windows.Forms
                 HorizontalAlignment selectionAlignment = HorizontalAlignment.Left;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETPARAFORMAT, 0, pf);
@@ -888,8 +890,10 @@ namespace System.Windows.Forms
                 }
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.dwMask = RichTextBoxConstants.PFM_ALIGNMENT;
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    dwMask = RichTextBoxConstants.PFM_ALIGNMENT
+                };
                 switch (value)
                 {
 
@@ -928,8 +932,10 @@ namespace System.Windows.Forms
                 RichTextBoxSelectionAttribute selectionBullet = RichTextBoxSelectionAttribute.None;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETPARAFORMAT, 0, pf);
@@ -954,8 +960,10 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.dwMask = RichTextBoxConstants.PFM_NUMBERING | RichTextBoxConstants.PFM_OFFSET;
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    dwMask = RichTextBoxConstants.PFM_NUMBERING | RichTextBoxConstants.PFM_OFFSET
+                };
 
                 if (!value)
                 {
@@ -1011,9 +1019,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(SelectionCharOffset), value, -2000, 2000));
 
                 ForceHandleCreate();
-                NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
-                cf.dwMask = RichTextBoxConstants.CFM_OFFSET;
-                cf.yOffset = Pixel2Twip(IntPtr.Zero, value, false);
+                NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA
+                {
+                    dwMask = RichTextBoxConstants.CFM_OFFSET,
+                    yOffset = Pixel2Twip(IntPtr.Zero, value, false)
+                };
 
                 // Set the format information
                 // SendMessage will force the handle to be created if it hasn't already. Normally,
@@ -1159,8 +1169,10 @@ namespace System.Windows.Forms
                 int selHangingIndent = 0;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETPARAFORMAT, 0, pf);
@@ -1175,9 +1187,11 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.dwMask = RichTextBoxConstants.PFM_OFFSET;
-                pf.dxOffset = Pixel2Twip(IntPtr.Zero, value, true);
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    dwMask = RichTextBoxConstants.PFM_OFFSET,
+                    dxOffset = Pixel2Twip(IntPtr.Zero, value, true)
+                };
 
                 // set the format for our current paragraph or selection
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETPARAFORMAT, 0, pf);
@@ -1202,8 +1216,10 @@ namespace System.Windows.Forms
                 int selIndent = 0;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETPARAFORMAT, 0, pf);
@@ -1218,9 +1234,11 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.dwMask = RichTextBoxConstants.PFM_STARTINDENT;
-                pf.dxStartIndent = Pixel2Twip(IntPtr.Zero, value, true);
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    dwMask = RichTextBoxConstants.PFM_STARTINDENT,
+                    dxStartIndent = Pixel2Twip(IntPtr.Zero, value, true)
+                };
 
                 // set the format for our current paragraph or selection
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETPARAFORMAT, 0, pf);
@@ -1331,8 +1349,10 @@ namespace System.Windows.Forms
 
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETPARAFORMAT, 0, pf);
@@ -1349,9 +1369,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionRightIndent), value, 0));
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.dwMask = RichTextBoxConstants.PFM_RIGHTINDENT;
-                pf.dxRightIndent = Pixel2Twip(IntPtr.Zero, value, true);
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    dwMask = RichTextBoxConstants.PFM_RIGHTINDENT,
+                    dxRightIndent = Pixel2Twip(IntPtr.Zero, value, true)
+                };
 
                 // set the format for our current paragraph or selection
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETPARAFORMAT, 0, pf);
@@ -1373,8 +1395,10 @@ namespace System.Windows.Forms
                 int[] selTabs = new int[0];
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETPARAFORMAT, 0, pf);
@@ -1396,8 +1420,10 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(SelectionTabs), SR.SelTabCountRange);
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
-                pf.rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS];
+                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                {
+                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                };
 
                 // get the format for our currently selected paragraph because
                 // we need to get the number of tabstops to copy
@@ -1986,12 +2012,14 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
 
             bool selectWord = true;
-            NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT();
-            ft.chrg = new NativeMethods.CHARRANGE();
+            NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT
+            {
+                chrg = new NativeMethods.CHARRANGE(),
 
-            // set up the default values for the FINDTEXT structure, that is
-            // the given string and the whole range of the text stream
-            ft.lpstrText = str ?? throw new ArgumentNullException(nameof(str));
+                // set up the default values for the FINDTEXT structure, that is
+                // the given string and the whole range of the text stream
+                lpstrText = str ?? throw new ArgumentNullException(nameof(str))
+            };
             if (end == -1)
             {
                 end = textLen;
@@ -2057,8 +2085,10 @@ namespace System.Windows.Forms
             if (position != -1 && selectWord)
             {
                 // Select the string found, this is done in ubyte units
-                NativeMethods.CHARRANGE chrg = new NativeMethods.CHARRANGE();
-                chrg.cpMin = position;
+                NativeMethods.CHARRANGE chrg = new NativeMethods.CHARRANGE
+                {
+                    cpMin = position
+                };
                 //Look for kashidas in the string.  A kashida is an arabic visual justification character 
                 //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C 
                 //represent Arabic characters and _ represents a kashida).  We should highlight the text
@@ -2152,11 +2182,14 @@ namespace System.Windows.Forms
 
             // Use the TEXTRANGE to move our text buffer forward
             // or backwards within the main text
-            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE(); // Characters we have slurped into memory in order to search
-            txrg.chrg = new NativeMethods.CHARRANGE();
-
-            txrg.chrg.cpMin = chrg.cpMin;
-            txrg.chrg.cpMax = chrg.cpMax;
+            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
+            {
+                chrg = new NativeMethods.CHARRANGE
+                {
+                    cpMin = chrg.cpMin,
+                    cpMax = chrg.cpMax
+                }
+            }; // Characters we have slurped into memory in order to search
             UnsafeNativeMethods.CharBuffer charBuffer;
             charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(CHAR_BUFFER_LEN + 1);
 
@@ -2906,9 +2939,10 @@ namespace System.Windows.Forms
             // check to see if the control has been created
             if (IsHandleCreated)
             {
-                NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
-
-                cf.dwMask = mask;
+                NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA
+                {
+                    dwMask = mask
+                };
 
                 switch (charFormat)
                 {
@@ -3427,8 +3461,10 @@ namespace System.Windows.Forms
         /// </summary>
         private string CharRangeToString(NativeMethods.CHARRANGE c)
         {
-            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE();
-            txrg.chrg = c;
+            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
+            {
+                chrg = c
+            };
             Debug.Assert((c.cpMax - c.cpMin) > 0, "CHARRANGE was null or negative - can't do it!");
 
             //Windows 

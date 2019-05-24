@@ -538,12 +538,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal NativeMethods.TCITEM_T GetTCITEM()
         {
-            NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T();
-
-            tcitem.mask = 0;
-            tcitem.pszText = null;
-            tcitem.cchTextMax = 0;
-            tcitem.lParam = IntPtr.Zero;
+            NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T
+            {
+                mask = 0,
+                pszText = null,
+                cchTextMax = 0,
+                lParam = IntPtr.Zero
+            };
 
             string text = Text;
 

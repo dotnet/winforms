@@ -1340,8 +1340,10 @@ namespace System.Windows.Forms
                 Debug.Assert((Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
-                ImageInfo imageInfo = new ImageInfo();
-                imageInfo.Name = key;
+                ImageInfo imageInfo = new ImageInfo
+                {
+                    Name = key
+                };
 
                 // Add the image to the IList
                 Original original = new Original(image, OriginalOptions.Default);
@@ -1357,8 +1359,10 @@ namespace System.Windows.Forms
                 Debug.Assert((Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
-                ImageInfo imageInfo = new ImageInfo();
-                imageInfo.Name = key;
+                ImageInfo imageInfo = new ImageInfo
+                {
+                    Name = key
+                };
 
                 // Add the image to the IList
                 Original original = new Original(icon, OriginalOptions.Default);

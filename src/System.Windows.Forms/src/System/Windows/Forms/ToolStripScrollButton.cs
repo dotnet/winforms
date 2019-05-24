@@ -39,9 +39,11 @@ namespace System.Windows.Forms
 
         private static Control CreateControlInstance(bool up)
         {
-            StickyLabel label = new StickyLabel();
-            label.ImageAlign = ContentAlignment.MiddleCenter;
-            label.Image = (up) ? UpImage : DownImage;
+            StickyLabel label = new StickyLabel
+            {
+                ImageAlign = ContentAlignment.MiddleCenter,
+                Image = (up) ? UpImage : DownImage
+            };
             return label;
         }
 

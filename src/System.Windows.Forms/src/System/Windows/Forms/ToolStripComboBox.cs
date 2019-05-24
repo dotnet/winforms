@@ -151,9 +151,11 @@ namespace System.Windows.Forms
 
         private static Control CreateControlInstance()
         {
-            ComboBox comboBox = new ToolStripComboBoxControl();
-            comboBox.FlatStyle = FlatStyle.Popup;
-            comboBox.Font = ToolStripManager.DefaultFont;
+            ComboBox comboBox = new ToolStripComboBoxControl
+            {
+                FlatStyle = FlatStyle.Popup,
+                Font = ToolStripManager.DefaultFont
+            };
             return comboBox;
         }
         [

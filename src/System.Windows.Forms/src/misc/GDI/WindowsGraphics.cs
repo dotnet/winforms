@@ -73,8 +73,10 @@ namespace System.Experimental.Gdi
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
-            WindowsGraphics wg = new WindowsGraphics(dc);
-            wg.disposeDc = true; // we create it, we dispose it.
+            WindowsGraphics wg = new WindowsGraphics(dc)
+            {
+                disposeDc = true // we create it, we dispose it.
+            };
 
             return wg;
         }
@@ -89,8 +91,10 @@ namespace System.Experimental.Gdi
         public static WindowsGraphics CreateMeasurementWindowsGraphics(IntPtr screenDC)
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(screenDC);
-            WindowsGraphics wg = new WindowsGraphics(dc);
-            wg.disposeDc = true; // we create it, we dispose it.
+            WindowsGraphics wg = new WindowsGraphics(dc)
+            {
+                disposeDc = true // we create it, we dispose it.
+            };
 
             return wg;
         }
@@ -98,8 +102,10 @@ namespace System.Experimental.Gdi
         public static WindowsGraphics FromHwnd(IntPtr hWnd)
         {
             DeviceContext dc = DeviceContext.FromHwnd(hWnd);
-            WindowsGraphics wg = new WindowsGraphics(dc);
-            wg.disposeDc = true; // we create it, we dispose it.
+            WindowsGraphics wg = new WindowsGraphics(dc)
+            {
+                disposeDc = true // we create it, we dispose it.
+            };
 
             return wg;
         }
@@ -111,8 +117,10 @@ namespace System.Experimental.Gdi
             Debug.Assert(hDc != IntPtr.Zero, "null hDc");
 
             DeviceContext dc = DeviceContext.FromHdc(hDc);
-            WindowsGraphics wg = new WindowsGraphics(dc);
-            wg.disposeDc = true; // we create it, we dispose it.
+            WindowsGraphics wg = new WindowsGraphics(dc)
+            {
+                disposeDc = true // we create it, we dispose it.
+            };
 
             return wg;
         }

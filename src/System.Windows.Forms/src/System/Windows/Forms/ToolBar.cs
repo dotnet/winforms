@@ -1060,8 +1060,10 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_BAR_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
                 finally
@@ -1155,9 +1157,11 @@ namespace System.Windows.Forms
                 for (int x = 0; x < buttonCount; x++)
                 {
 
-                    NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO();
-                    tbbi.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
-                    tbbi.cx = buttons[x].Width;
+                    NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO
+                    {
+                        cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
+                        cx = buttons[x].Width
+                    };
 
                     if (tbbi.cx > maxWidth)
                     {
