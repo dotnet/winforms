@@ -99,7 +99,10 @@ namespace System.Windows.Forms
             get
             {
                 if (appStarting == null)
+                {
                     appStarting = new Cursor(NativeMethods.IDC_APPSTARTING, 0);
+                }
+
                 return appStarting;
             }
         }
@@ -109,7 +112,10 @@ namespace System.Windows.Forms
             get
             {
                 if (arrow == null)
+                {
                     arrow = new Cursor(NativeMethods.IDC_ARROW, 0);
+                }
+
                 return arrow;
             }
         }
@@ -119,7 +125,10 @@ namespace System.Windows.Forms
             get
             {
                 if (cross == null)
+                {
                     cross = new Cursor(NativeMethods.IDC_CROSS, 0);
+                }
+
                 return cross;
             }
         }
@@ -129,7 +138,10 @@ namespace System.Windows.Forms
             get
             {
                 if (defaultCursor == null)
+                {
                     defaultCursor = new Cursor(NativeMethods.IDC_ARROW, 0);
+                }
+
                 return defaultCursor;
             }
         }
@@ -139,7 +151,10 @@ namespace System.Windows.Forms
             get
             {
                 if (iBeam == null)
+                {
                     iBeam = new Cursor(NativeMethods.IDC_IBEAM, 0);
+                }
+
                 return iBeam;
             }
         }
@@ -149,7 +164,10 @@ namespace System.Windows.Forms
             get
             {
                 if (no == null)
+                {
                     no = new Cursor(NativeMethods.IDC_NO, 0);
+                }
+
                 return no;
             }
         }
@@ -159,7 +177,10 @@ namespace System.Windows.Forms
             get
             {
                 if (sizeAll == null)
+                {
                     sizeAll = new Cursor(NativeMethods.IDC_SIZEALL, 0);
+                }
+
                 return sizeAll;
             }
         }
@@ -169,7 +190,10 @@ namespace System.Windows.Forms
             get
             {
                 if (sizeNESW == null)
+                {
                     sizeNESW = new Cursor(NativeMethods.IDC_SIZENESW, 0);
+                }
+
                 return sizeNESW;
             }
         }
@@ -179,7 +203,10 @@ namespace System.Windows.Forms
             get
             {
                 if (sizeNS == null)
+                {
                     sizeNS = new Cursor(NativeMethods.IDC_SIZENS, 0);
+                }
+
                 return sizeNS;
             }
         }
@@ -189,7 +216,10 @@ namespace System.Windows.Forms
             get
             {
                 if (sizeNWSE == null)
+                {
                     sizeNWSE = new Cursor(NativeMethods.IDC_SIZENWSE, 0);
+                }
+
                 return sizeNWSE;
             }
         }
@@ -199,7 +229,10 @@ namespace System.Windows.Forms
             get
             {
                 if (sizeWE == null)
+                {
                     sizeWE = new Cursor(NativeMethods.IDC_SIZEWE, 0);
+                }
+
                 return sizeWE;
             }
         }
@@ -209,7 +242,10 @@ namespace System.Windows.Forms
             get
             {
                 if (upArrow == null)
+                {
                     upArrow = new Cursor(NativeMethods.IDC_UPARROW, 0);
+                }
+
                 return upArrow;
             }
         }
@@ -219,7 +255,10 @@ namespace System.Windows.Forms
             get
             {
                 if (wait == null)
+                {
                     wait = new Cursor(NativeMethods.IDC_WAIT, 0);
+                }
+
                 return wait;
             }
         }
@@ -229,7 +268,10 @@ namespace System.Windows.Forms
             get
             {
                 if (help == null)
+                {
                     help = new Cursor(NativeMethods.IDC_HELP, 0);
+                }
+
                 return help;
             }
         }
@@ -239,7 +281,10 @@ namespace System.Windows.Forms
             get
             {
                 if (hSplit == null)
+                {
                     hSplit = new Cursor("hsplit.cur", 0);
+                }
+
                 return hSplit;
             }
         }
@@ -249,7 +294,10 @@ namespace System.Windows.Forms
             get
             {
                 if (vSplit == null)
+                {
                     vSplit = new Cursor("vsplit.cur", 0);
+                }
+
                 return vSplit;
             }
         }
@@ -259,7 +307,10 @@ namespace System.Windows.Forms
             get
             {
                 if (noMove2D == null)
+                {
                     noMove2D = new Cursor("nomove2d.cur", 0);
+                }
+
                 return noMove2D;
             }
         }
@@ -269,7 +320,10 @@ namespace System.Windows.Forms
             get
             {
                 if (noMoveHoriz == null)
+                {
                     noMoveHoriz = new Cursor("nomoveh.cur", 0);
+                }
+
                 return noMoveHoriz;
             }
         }
@@ -279,7 +333,10 @@ namespace System.Windows.Forms
             get
             {
                 if (noMoveVert == null)
+                {
                     noMoveVert = new Cursor("nomovev.cur", 0);
+                }
+
                 return noMoveVert;
             }
         }
@@ -289,7 +346,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panEast == null)
+                {
                     panEast = new Cursor("east.cur", 0);
+                }
+
                 return panEast;
             }
         }
@@ -299,7 +359,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panNE == null)
+                {
                     panNE = new Cursor("ne.cur", 0);
+                }
+
                 return panNE;
             }
         }
@@ -309,7 +372,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panNorth == null)
+                {
                     panNorth = new Cursor("north.cur", 0);
+                }
+
                 return panNorth;
             }
         }
@@ -319,7 +385,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panNW == null)
+                {
                     panNW = new Cursor("nw.cur", 0);
+                }
+
                 return panNW;
             }
         }
@@ -329,7 +398,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panSE == null)
+                {
                     panSE = new Cursor("se.cur", 0);
+                }
+
                 return panSE;
             }
         }
@@ -339,7 +411,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panSouth == null)
+                {
                     panSouth = new Cursor("south.cur", 0);
+                }
+
                 return panSouth;
             }
         }
@@ -349,7 +424,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panSW == null)
+                {
                     panSW = new Cursor("sw.cur", 0);
+                }
+
                 return panSW;
             }
         }
@@ -359,7 +437,10 @@ namespace System.Windows.Forms
             get
             {
                 if (panWest == null)
+                {
                     panWest = new Cursor("west.cur", 0);
+                }
+
                 return panWest;
             }
         }
@@ -369,7 +450,10 @@ namespace System.Windows.Forms
             get
             {
                 if (hand == null)
+                {
                     hand = new Cursor("hand.cur", 0);
+                }
+
                 return hand;
             }
         }

@@ -358,7 +358,9 @@ namespace System.Windows.Forms
                     }
                 }
                 else
+                {
                     cp.Style |= NativeMethods.SS_LEFT;
+                }
 
                 switch (BorderStyle)
                 {
@@ -371,7 +373,9 @@ namespace System.Windows.Forms
                 }
 
                 if (!UseMnemonic)
+                {
                     cp.Style |= NativeMethods.SS_NOPREFIX;
+                }
 
                 return cp;
             }
@@ -1764,9 +1768,14 @@ namespace System.Windows.Forms
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
+            {
                 requestedHeight = height;
+            }
+
             if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
+            {
                 requestedWidth = width;
+            }
 
             if (AutoSize && SelfSizing)
             {

@@ -261,7 +261,10 @@ namespace System.Windows.Forms
                 bool asString = destinationType == typeof(string);
                 bool asEnum = false;
                 if (!asString)
+                {
                     asEnum = destinationType == typeof(Enum[]);
+                }
+
                 if (asString || asEnum)
                 {
                     Keys key = (Keys)value;

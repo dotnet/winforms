@@ -1158,19 +1158,27 @@ namespace System.Windows.Forms
                 {
                     AmbientProperties ambient = AmbientPropertiesService;
                     if (ambient != null)
+                    {
                         c = ambient.BackColor;
+                    }
                 }
 
                 if (!c.IsEmpty && IsValidBackColor(c))
+                {
                     return c;
+                }
                 else
+                {
                     return DefaultBackColor;
+                }
             }
 
             set
             {
                 if (!value.Equals(Color.Empty) && !GetStyle(ControlStyles.SupportsTransparentBackColor) && value.A < 255)
+                {
                     throw new ArgumentException(SR.TransparentBackColorNotAllowed);
+                }
 
                 Color c = BackColor;
                 if (!value.IsEmpty || Properties.ContainsObject(PropBackColor))
@@ -1953,14 +1961,21 @@ namespace System.Windows.Forms
                 }
 
                 if ((state & STATE_TABSTOP) != 0)
+                {
                     cp.Style |= NativeMethods.WS_TABSTOP;
+                }
+
                 if ((state & STATE_VISIBLE) != 0)
+                {
                     cp.Style |= NativeMethods.WS_VISIBLE;
+                }
 
                 // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
                 // of a disabled parent will look enabled but not get mouse events
                 if (!Enabled)
+                {
                     cp.Style |= NativeMethods.WS_DISABLED;
+                }
 
                 // If we are being hosted as an Ax control, try to prevent the parking window
                 // from being created by pre-filling the window handle here.
@@ -2156,7 +2171,9 @@ namespace System.Windows.Forms
 
                 AmbientProperties ambient = AmbientPropertiesService;
                 if (ambient != null && ambient.Cursor != null)
+                {
                     return ambient.Cursor;
+                }
 
                 return localDefault;
             }
@@ -2183,7 +2200,9 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
                     if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                    {
                         SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                    }
                 }
 
                 if (!resolvedCursor.Equals(value))
@@ -2539,11 +2558,17 @@ namespace System.Windows.Forms
             {
                 // We are only enabled if our parent is enabled
                 if (!GetState(STATE_ENABLED))
+                {
                     return false;
+                }
                 else if (ParentInternal == null)
+                {
                     return true;
+                }
                 else
+                {
                     return ParentInternal.Enabled;
+                }
             }
 
             set
@@ -2867,13 +2892,19 @@ namespace System.Windows.Forms
                 {
                     AmbientProperties ambient = AmbientPropertiesService;
                     if (ambient != null)
+                    {
                         c = ambient.ForeColor;
+                    }
                 }
 
                 if (!c.IsEmpty)
+                {
                     return c;
+                }
                 else
+                {
                     return DefaultForeColor;
+                }
             }
 
             set
@@ -2900,9 +2931,13 @@ namespace System.Windows.Forms
         private Font GetParentFont()
         {
             if (ParentInternal != null && ParentInternal.CanAccessProperties)
+            {
                 return ParentInternal.Font;
+            }
             else
+            {
                 return null;
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -3518,11 +3553,20 @@ namespace System.Windows.Forms
                 // SECURITYNOTE : only let state of Shift-Control-Alt out...
                 //
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.ShiftKey) < 0)
+                {
                     modifiers |= Keys.Shift;
+                }
+
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.ControlKey) < 0)
+                {
                     modifiers |= Keys.Control;
+                }
+
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.Menu) < 0)
+                {
                     modifiers |= Keys.Alt;
+                }
+
                 return modifiers;
             }
         }
@@ -3539,15 +3583,30 @@ namespace System.Windows.Forms
                 // SECURITYNOTE : only let state of MouseButtons out...
                 //
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.LButton) < 0)
+                {
                     buttons |= MouseButtons.Left;
+                }
+
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.RButton) < 0)
+                {
                     buttons |= MouseButtons.Right;
+                }
+
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.MButton) < 0)
+                {
                     buttons |= MouseButtons.Middle;
+                }
+
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.XButton1) < 0)
+                {
                     buttons |= MouseButtons.XButton1;
+                }
+
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.XButton2) < 0)
+                {
                     buttons |= MouseButtons.XButton2;
+                }
+
                 return buttons;
             }
         }
@@ -3905,7 +3964,9 @@ namespace System.Windows.Forms
                 byte scaling = (byte)(requiredScaling & RequiredScalingMask);
                 requiredScaling = scaling;
                 if (value)
+                {
                     requiredScaling |= RequiredScalingEnabledMask;
+                }
             }
         }
 
@@ -4202,7 +4263,10 @@ namespace System.Windows.Forms
                 {
                     TabStopInternal = value;
                     if (IsHandleCreated)
+                    {
                         SetWindowStyle(NativeMethods.WS_TABSTOP, value);
+                    }
+
                     OnTabStopChanged(EventArgs.Empty);
                 }
             }
@@ -4807,7 +4871,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 if (!WindowText.Equals(value))
                 {
                     if (IsHandleCreated)
@@ -5585,7 +5652,9 @@ namespace System.Windows.Forms
 
             SetState(STATE_CHECKEDHOST, false);
             if (ParentInternal != null)
+            {
                 ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
+            }
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
@@ -5650,7 +5719,10 @@ namespace System.Windows.Forms
                 return;
             }
             if (updateCount == 0)
+            {
                 SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+            }
+
             updateCount++;
         }
 
@@ -5966,7 +6038,9 @@ namespace System.Windows.Forms
                 try
                 {
                     if (!IsHandleCreated)
+                    {
                         CreateHandle();
+                    }
 
                     // must snapshot this array because
                     // z-order updates from Windows may rearrange it!
@@ -5993,7 +6067,9 @@ namespace System.Windows.Forms
                 finally
                 {
                     if (!createdOK)
+                    {
                         state &= (~STATE_CREATED);
+                    }
                 }
                 OnCreateControl();
             }
@@ -6135,7 +6211,9 @@ namespace System.Windows.Forms
                     ResetBindings();
 
                     if (IsHandleCreated)
+                    {
                         DestroyHandle();
+                    }
 
                     if (parent != null)
                     {
@@ -6452,7 +6530,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EventHandleCreated];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -6464,7 +6544,9 @@ namespace System.Windows.Forms
         {
             KeyEventHandler handler = (KeyEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -6476,7 +6558,9 @@ namespace System.Windows.Forms
         {
             MouseEventHandler handler = (MouseEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -6778,11 +6862,17 @@ namespace System.Windows.Forms
         {
             // We are only visible if our parent is visible
             if (!GetState(STATE_VISIBLE))
+            {
                 return false;
+            }
             else if (ParentInternal == null)
+            {
                 return true;
+            }
             else
+            {
                 return ParentInternal.GetVisibleCore();
+            }
         }
 
         internal bool GetAnyDisposingInHierarchy()
@@ -6937,7 +7027,9 @@ namespace System.Windows.Forms
 
                 int delta = hx.newOrder - hy.newOrder;
                 if (delta == 0)
+                {
                     delta = hx.oldOrder - hy.oldOrder;
+                }
 
                 return delta;
             }
@@ -7792,7 +7884,10 @@ namespace System.Windows.Forms
             while (control != null)
             {
                 if (control == this)
+                {
                     return true;
+                }
+
                 control = control.ParentInternal;
             }
             return false;
@@ -7869,7 +7964,10 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
             if ((keyData & Keys.Alt) == Keys.Alt)
+            {
                 return false;
+            }
+
             int mask = NativeMethods.DLGC_WANTALLKEYS;
             switch (keyData & Keys.KeyCode)
             {
@@ -7932,10 +8030,16 @@ namespace System.Windows.Forms
                 for (; ; )
                 {
                     if (pos + 1 >= text.Length)
+                    {
                         break;
+                    }
+
                     pos = text.IndexOf('&', pos + 1) + 1;
                     if (pos <= 0 || pos >= text.Length)
+                    {
                         break;
+                    }
+
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
                     Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
@@ -8043,7 +8147,9 @@ namespace System.Windows.Forms
             if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
             {
                 if (synchronous)
+                {
                     syncSameThread = true;
+                }
             }
 
             // Store the compressed stack information from the thread that is calling the Invoke()
@@ -8918,7 +9024,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventClick];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8941,7 +9049,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             ControlEventHandler handler = (ControlEventHandler)Events[EventControlAdded];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -8953,7 +9063,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             ControlEventHandler handler = (ControlEventHandler)Events[EventControlRemoved];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9063,7 +9175,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventHandleCreated];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             if (IsHandleCreated)
             {
@@ -9127,7 +9241,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventHandleDestroyed];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             UpdateReflectParent(false);
 
@@ -9160,7 +9276,9 @@ namespace System.Windows.Forms
                 {
                     text = Text;
                     if (text != null && text.Length == 0)
+                    {
                         text = null;
+                    }
                 }
                 SetAcceptDrops(false);
             }
@@ -9187,7 +9305,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventDoubleClick];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9205,7 +9325,9 @@ namespace System.Windows.Forms
             Contract.Requires(drgevent != null);
             DragEventHandler handler = (DragEventHandler)Events[EventDragEnter];
             if (handler != null)
+            {
                 handler(this, drgevent);
+            }
         }
 
         /// <summary>
@@ -9218,7 +9340,9 @@ namespace System.Windows.Forms
             Contract.Requires(drgevent != null);
             DragEventHandler handler = (DragEventHandler)Events[EventDragOver];
             if (handler != null)
+            {
                 handler(this, drgevent);
+            }
         }
 
         /// <summary>
@@ -9231,7 +9355,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventDragLeave];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9244,7 +9370,9 @@ namespace System.Windows.Forms
             Contract.Requires(drgevent != null);
             DragEventHandler handler = (DragEventHandler)Events[EventDragDrop];
             if (handler != null)
+            {
                 handler(this, drgevent);
+            }
         }
 
         /// <summary>
@@ -9258,7 +9386,9 @@ namespace System.Windows.Forms
             Contract.Requires(gfbevent != null);
             GiveFeedbackEventHandler handler = (GiveFeedbackEventHandler)Events[EventGiveFeedback];
             if (handler != null)
+            {
                 handler(this, gfbevent);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9267,7 +9397,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventEnter];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9302,7 +9434,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventGotFocus];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9359,7 +9493,9 @@ namespace System.Windows.Forms
 
             InvalidateEventHandler handler = (InvalidateEventHandler)Events[EventInvalidated];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9371,7 +9507,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             KeyEventHandler handler = (KeyEventHandler)Events[EventKeyDown];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9383,7 +9521,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             KeyPressEventHandler handler = (KeyPressEventHandler)Events[EventKeyPress];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9395,7 +9535,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             KeyEventHandler handler = (KeyEventHandler)Events[EventKeyUp];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9416,7 +9558,9 @@ namespace System.Windows.Forms
             }
             LayoutEventHandler handler = (LayoutEventHandler)Events[EventLayout];
             if (handler != null)
+            {
                 handler(this, levent);
+            }
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
 
@@ -9457,7 +9601,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventLeave];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9484,7 +9630,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventLostFocus];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected virtual void OnMarginChanged(EventArgs e)
@@ -9492,7 +9640,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventMarginChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9504,7 +9654,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             MouseEventHandler handler = (MouseEventHandler)Events[EventMouseDoubleClick];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9516,7 +9668,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             MouseEventHandler handler = (MouseEventHandler)Events[EventMouseClick];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9528,7 +9682,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventMouseCaptureChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9540,7 +9696,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             MouseEventHandler handler = (MouseEventHandler)Events[EventMouseDown];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9552,7 +9710,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventMouseEnter];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9564,7 +9724,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventMouseLeave];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9612,7 +9774,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventMouseHover];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9624,7 +9788,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             MouseEventHandler handler = (MouseEventHandler)Events[EventMouseMove];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9636,7 +9802,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             MouseEventHandler handler = (MouseEventHandler)Events[EventMouseUp];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9648,7 +9816,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             MouseEventHandler handler = (MouseEventHandler)Events[EventMouseWheel];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9660,9 +9830,14 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventMove];
             if (handler != null)
+            {
                 handler(this, e);
+            }
+
             if (RenderTransparent)
+            {
                 Invalidate();
+            }
         }
 
         /// <summary>
@@ -9675,7 +9850,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             PaintEventHandler handler = (PaintEventHandler)Events[EventPaint];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected virtual void OnPaddingChanged(EventArgs e)
@@ -9687,7 +9864,9 @@ namespace System.Windows.Forms
             }
             EventHandler handler = (EventHandler)Events[EventPaddingChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9713,7 +9892,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (!RenderTransparent)
+            {
                 return;
+            }
 
             if (IsHandleCreated)
             {
@@ -9725,7 +9906,10 @@ namespace System.Windows.Forms
 
                 // if we don't intersect at all, do nothing
                 if (cliprect.IsEmpty)
+                {
                     return;
+                }
+
                 Invalidate(cliprect);
             }
         }
@@ -9741,7 +9925,9 @@ namespace System.Windows.Forms
             Contract.Requires(qcdevent != null);
             QueryContinueDragEventHandler handler = (QueryContinueDragEventHandler)Events[EventQueryContinueDrag];
             if (handler != null)
+            {
                 handler(this, qcdevent);
+            }
         }
 
         /// <summary>
@@ -9773,7 +9959,9 @@ namespace System.Windows.Forms
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
             EventHandler handler = (EventHandler)Events[EventResize];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9816,7 +10004,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             UICuesEventHandler handler = (UICuesEventHandler)Events[EventChangeUICues];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9829,7 +10019,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventStyleChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9855,7 +10047,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventSystemColorsChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9868,7 +10062,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             CancelEventHandler handler = (CancelEventHandler)Events[EventValidating];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -9880,7 +10076,9 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             EventHandler handler = (EventHandler)Events[EventValidated];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -10187,7 +10385,9 @@ namespace System.Windows.Forms
                 if (GetState(STATE_EXCEPTIONWHILEPAINTING))
                 {
                     if (layer == PaintLayerBackground)
+                    {
                         PaintException(e);
+                    }
                 }
                 else
                 {
@@ -10967,7 +11167,10 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
             if (parent != null && parent.ProcessKeyPreview(ref m))
+            {
                 return true;
+            }
+
             return ProcessKeyEventArgs(ref m);
         }
 
@@ -11116,7 +11319,9 @@ namespace System.Windows.Forms
         {
             DragEventHandler handler = (DragEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -11128,7 +11333,9 @@ namespace System.Windows.Forms
         {
             PaintEventHandler handler = (PaintEventHandler)Events[EventPaint];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         private void RemovePendingMessages(int msgMin, int msgMax)
@@ -11817,9 +12024,14 @@ namespace System.Windows.Forms
 
             // Clear off specified bits for 1.0 scaling factors
             if (dx == 1.0F)
+            {
                 specified &= ~(BoundsSpecified.X | BoundsSpecified.Width);
+            }
+
             if (dy == 1.0F)
+            {
                 specified &= ~(BoundsSpecified.Y | BoundsSpecified.Height);
+            }
 
             if (dx != 1.0F)
             {
@@ -11993,7 +12205,9 @@ namespace System.Windows.Forms
         private Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
             if (!Contains(ctl) || !nested && ctl.parent != this)
+            {
                 ctl = null;
+            }
 
             bool alreadyWrapped = false;
             Control start = ctl;
@@ -12003,7 +12217,10 @@ namespace System.Windows.Forms
                 if (ctl == null)
                 {
                     if (!wrap)
+                    {
                         break;
+                    }
+
                     if (alreadyWrapped)
                     {
                         return null; //prevent infinite wrapping.
@@ -12157,13 +12374,25 @@ namespace System.Windows.Forms
         public void SetBounds(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if ((specified & BoundsSpecified.X) == BoundsSpecified.None)
+            {
                 x = this.x;
+            }
+
             if ((specified & BoundsSpecified.Y) == BoundsSpecified.None)
+            {
                 y = this.y;
+            }
+
             if ((specified & BoundsSpecified.Width) == BoundsSpecified.None)
+            {
                 width = this.width;
+            }
+
             if ((specified & BoundsSpecified.Height) == BoundsSpecified.None)
+            {
                 height = this.height;
+            }
+
             if (this.x != x || this.y != y || this.width != width ||
                 this.height != height)
             {
@@ -12501,7 +12730,10 @@ namespace System.Windows.Forms
                         try
                         {
                             if (value)
+                            {
                                 CreateControl();
+                            }
+
                             SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle),
                                                            NativeMethods.NullHandleRef,
                                                            0, 0, 0, 0,
@@ -13082,7 +13314,10 @@ namespace System.Windows.Forms
         private void UpdateChildZOrder(Control ctl)
         {
             if (!IsHandleCreated || !ctl.IsHandleCreated || ctl.parent != this)
+            {
                 return;
+            }
+
             IntPtr prevHandle = (IntPtr)NativeMethods.HWND_TOP;
             for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
             {
@@ -13237,7 +13472,9 @@ namespace System.Windows.Forms
             if (IntPtr.Zero == m.LParam)
             {
                 if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam)))
+                {
                     return;
+                }
             }
             else
             {
@@ -13440,8 +13677,9 @@ namespace System.Windows.Forms
             }
 
             if (name == null)
+            {
                 name = string.Empty;
-
+            }
 
             MarshalStringToMessage(name, ref m);
         }
@@ -13597,7 +13835,9 @@ namespace System.Windows.Forms
             {
 
                 if (contextMenu.ProcessInitMenuPopup(m.WParam))
+                {
                     return;
+                }
             }
             DefWndProc(ref m);
         }
@@ -13772,7 +14012,10 @@ namespace System.Windows.Forms
         private void WmKeyChar(ref Message m)
         {
             if (ProcessKeyMessage(ref m))
+            {
                 return;
+            }
+
             DefWndProc(ref m);
         }
 
@@ -15128,9 +15371,14 @@ namespace System.Windows.Forms
                 try
                 {
                     if (sizeChanged)
+                    {
                         ccs.OnComponentChanged(this, sizeProperty, null, null);
+                    }
+
                     if (locationChanged)
+                    {
                         ccs.OnComponentChanged(this, locationProperty, null, null);
+                    }
                 }
                 catch (InvalidOperationException)
                 {
@@ -15351,7 +15599,10 @@ namespace System.Windows.Forms
             public virtual void Add(Control value)
             {
                 if (value == null)
+                {
                     return;
+                }
+
                 if (value.GetTopLevel())
                 {
                     throw new ArgumentException(SR.TopLevelControlAdd);
@@ -15770,7 +16021,9 @@ namespace System.Windows.Forms
                 try
                 {
                     while (Count != 0)
+                    {
                         RemoveAt(Count - 1);
+                    }
                 }
                 finally
                 {
@@ -17487,9 +17740,14 @@ namespace System.Windows.Forms
                     padvf[0] = 0;
 
                     if (activeXState[viewAdviseOnlyOnce])
+                    {
                         padvf[0] |= NativeMethods.ADVF_ONLYONCE;
+                    }
+
                     if (activeXState[viewAdvisePrimeFirst])
+                    {
                         padvf[0] |= NativeMethods.ADVF_PRIMEFIRST;
+                    }
                 }
 
                 if (pAdvSink != null)
@@ -17680,7 +17938,9 @@ namespace System.Windows.Forms
                 foreach (Control c in control.Controls)
                 {
                     if (c != null)
+                    {
                         GetMnemonicList(c, mnemonicList);
+                    }
                 }
             }
 
@@ -17843,7 +18103,9 @@ namespace System.Windows.Forms
                     // take the focus  [which is what UI Activation is all about !]
                     //
                     if (!control.ContainsFocus)
+                    {
                         control.Focus();
+                    }
 
                     // set ourselves up in the host.
                     //
@@ -19178,9 +19440,13 @@ namespace System.Windows.Forms
                     // intersect in that case.
                     //
                     if (!clipRect.IsEmpty)
+                    {
                         intersect = Rectangle.Intersect(posRect, clipRect);
+                    }
                     else
+                    {
                         intersect = posRect;
+                    }
 
                     if (!intersect.Equals(posRect))
                     {
@@ -19351,11 +19617,19 @@ namespace System.Windows.Forms
                     int keyState = 0;
 
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)
+                    {
                         keyState |= 1;
+                    }
+
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)
+                    {
                         keyState |= 2;
+                    }
+
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)
+                    {
                         keyState |= 4;
+                    }
 
                     hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
                 }
@@ -19613,7 +19887,9 @@ namespace System.Windows.Forms
                 int UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
                 {
                     if (!bag.Contains(pszPropName))
+                    {
                         return NativeMethods.E_INVALIDARG;
+                    }
 
                     pVar = bag[pszPropName];
                     return NativeMethods.S_OK;
@@ -20118,13 +20394,17 @@ namespace System.Windows.Forms
                 // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
                 HandleRef hNullBitmap = new HandleRef(this, SafeNativeMethods.CreateBitmap(1, 1, 1, 1, IntPtr.Zero));
                 if (hNullBitmap.Handle == IntPtr.Zero)
+                {
                     return fSuccess;
+                }
 
                 try
                 {
                     HandleRef hBitmap = new HandleRef(this, SafeNativeMethods.SelectObject(hdcSrc, hNullBitmap));
                     if (hBitmap.Handle == IntPtr.Zero)
+                    {
                         return fSuccess;
+                    }
 
                     //
                     // Restore original bitmap
@@ -20191,7 +20471,9 @@ namespace System.Windows.Forms
                     int diRet = SafeNativeMethods.GetDIBits(hdcSrc, hBitmap, 0, bmp.bmHeight, lpBits,
                             ref lpbmi, NativeMethods.DIB_RGB_COLORS);
                     if (diRet == 0)
+                    {
                         return fSuccess;
+                    }
 
                     //
                     // Set the destination coordiates depending on whether stretch-to-fit was chosen
@@ -20216,7 +20498,9 @@ namespace System.Windows.Forms
                             xDest, yDest, cxDest, cyDest, 0, 0, bmp.bmWidth, bmp.bmHeight,
                             lpBits, ref lpbmi, NativeMethods.DIB_RGB_COLORS, NativeMethods.SRCCOPY);
                     if (iRet == NativeMethods.GDI_ERROR)
+                    {
                         return fSuccess;
+                    }
 
                     fSuccess = true;
                 }
@@ -20280,7 +20564,9 @@ namespace System.Windows.Forms
             internal override int[] GetSysChildOrder()
             {
                 if (ownerControl.GetStyle(ControlStyles.ContainerControl))
+                {
                     return ownerControl.GetChildWindowsInTabOrder();
+                }
 
                 return base.GetSysChildOrder();
             }
@@ -20355,7 +20641,9 @@ namespace System.Windows.Forms
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, ownerControl);
                             if (index != -1)
+                            {
                                 --index;
+                            }
                         }
                         break;
 
@@ -20365,7 +20653,9 @@ namespace System.Windows.Forms
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, ownerControl);
                             if (index != -1)
+                            {
                                 ++index;
+                            }
                         }
                         break;
                 }
@@ -20373,12 +20663,16 @@ namespace System.Windows.Forms
                 // Unsupported navigation operation for this object, or unexpected error.
                 // Return false to force fall back on default system navigation behavior.
                 if (ctrls == null || ctrls.Length == 0)
+                {
                     return false;
+                }
 
                 // If ctrls[index] is a valid control, return its non-client accessible object.
                 // If index is invalid, return null pointer meaning "end of list reached".
                 if (index >= 0 && index < ctrls.Length)
+                {
                     accessibleObject = ctrls[index].NcAccessibilityObject;
+                }
 
                 // Return true to use the found accessible object and block default system behavior
                 return true;
@@ -20806,7 +21100,9 @@ namespace System.Windows.Forms
             {
 #if DEBUG
                 if (CompModSwitches.LifetimeTracing.Enabled)
+                {
                     stackOnCreate = new System.Diagnostics.StackTrace().ToString();
+                }
 #endif
                 handle = font.ToHfont();
                 Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
@@ -20838,7 +21134,9 @@ namespace System.Windows.Forms
                 {
 #if DEBUG
                     if (CompModSwitches.LifetimeTracing.Enabled)
+                    {
                         stackOnDispose = new System.Diagnostics.StackTrace().ToString();
+                    }
 #endif
                     SafeNativeMethods.DeleteObject(new HandleRef(this, handle));
                     handle = IntPtr.Zero;
@@ -20942,7 +21240,9 @@ namespace System.Windows.Forms
                 get
                 {
                     if (isCompleted && synchronous)
+                    {
                         return true;
+                    }
 
                     return false;
                 }

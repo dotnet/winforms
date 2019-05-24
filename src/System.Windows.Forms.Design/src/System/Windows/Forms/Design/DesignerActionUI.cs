@@ -97,7 +97,10 @@ namespace System.ComponentModel.Design
 
             _uiService = (IUIService)serviceProvider.GetService(typeof(IUIService));
             if (_uiService != null)
+            {
                 _mainParentWindow = _uiService.GetDialogOwnerWindow();
+            }
+
             _componentToGlyph = new Hashtable();
             _marshalingControl = new Control();
             _marshalingControl.CreateControl();
@@ -600,7 +603,9 @@ namespace System.ComponentModel.Design
                 Debug.Assert(_lastPanelComponent != null, "last panel component should not be null here... " +
                     "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
                 if (_lastPanelComponent == null)
+                {
                     return;
+                }
                 // if we're actually closing get the coordinate of the last message, the one causing us to close, is it within the glyph coordinate. if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH, that means that he actually wants to close it. The activation change is going to do that for us but we should NOT reopen right away because he clicked on the glyph... this code is here to prevent this...
                 Point point = DesignerUtils.LastCursorPoint;
                 if (_componentToGlyph[_lastPanelComponent] is DesignerActionGlyph currentGlyph)
@@ -888,7 +893,10 @@ namespace System.ComponentModel.Design
         public void SetDesignerActionPanel(DesignerActionPanel panel, Glyph relatedGlyph)
         {
             if (_panel != null && panel == (DesignerActionPanel)_panel.Control)
+            {
                 return;
+            }
+
             Debug.Assert(relatedGlyph != null, "related glyph cannot be null");
             _relatedGlyph = relatedGlyph;
             panel.SizeChanged += new EventHandler(PanelResized);

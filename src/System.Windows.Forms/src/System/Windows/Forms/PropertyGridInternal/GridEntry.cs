@@ -1595,7 +1595,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             if (parentPE != null)
+            {
                 return parentPE.FindPropertyValue(propertyName, propertyType);
+            }
 
             return null;
         }
@@ -1669,9 +1671,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
 
             if (valueString.IndexOf('\n') > 0 || valueString.IndexOf('\r') > 0)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
         /// <summary>
         /// Gets the owner of the current value.  This is usually the value of the
@@ -2059,17 +2065,25 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected Font GetFont(bool boldFont)
         {
             if (boldFont)
+            {
                 return GridEntryHost.GetBoldFont();
+            }
             else
+            {
                 return GridEntryHost.GetBaseFont();
+            }
         }
 
         protected IntPtr GetHfont(bool boldFont)
         {
             if (boldFont)
+            {
                 return GridEntryHost.GetBoldHfont();
+            }
             else
+            {
                 return GridEntryHost.GetBaseHfont();
+            }
         }
 
         /// <summary>
@@ -2095,11 +2109,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal virtual bool NonParentEquals(object obj)
         {
             if (obj == this)
+            {
                 return true;
+            }
+
             if (obj == null)
+            {
                 return false;
+            }
+
             if (!(obj is GridEntry))
+            {
                 return false;
+            }
+
             GridEntry pe = (GridEntry)obj;
 
             return pe.PropertyLabel.Equals(PropertyLabel) &&
@@ -2278,13 +2301,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // make sure we're in our bounds
                 outline = Rectangle.Intersect(r, outline);
                 if (outline.IsEmpty)
+                {
                     return;
+                }
 
                 VisualStyleElement element = null;
                 if (fExpanded)
+                {
                     element = VisualStyleElement.ExplorerTreeView.Glyph.Opened;
+                }
                 else
+                {
                     element = VisualStyleElement.ExplorerTreeView.Glyph.Closed;
+                }
 
                 // Invert color if it is not overriden by developer.
                 if (colorInversionNeededInHC)
@@ -2314,7 +2343,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // make sure we're in our bounds
                 outline = Rectangle.Intersect(r, outline);
                 if (outline.IsEmpty)
+                {
                     return;
+                }
 
                 // draw border area box
                 Brush b = GetBackgroundBrush(g);
@@ -2468,7 +2499,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // To check if text contains multiple lines
                 //
                 if (textWidth >= rect.Width || GetMultipleLines(strValue))
+                {
                     doToolTip = true;
+                }
 
                 if (Rectangle.Intersect(rect, clipRect).IsEmpty)
                 {
@@ -2698,7 +2731,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Delegate handler = GetEventHandler(EVENT_RECREATE_CHILDREN);
             if (handler != null)
+            {
                 ((GridEntryRecreateChildrenEventHandler)handler)(this, e);
+            }
         }
 
         /// <summary>
@@ -3018,7 +3053,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             lock (this)
             {
                 if (handler == null)
+                {
                     return;
+                }
+
                 for (EventEntry e = eventList; e != null; e = e.next)
                 {
                     if (e.key == key)
@@ -3035,7 +3073,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Delegate handler = GetEventHandler(key);
             if (handler != null)
+            {
                 ((EventHandler)handler)(this, e);
+            }
         }
 
         protected virtual Delegate GetEventHandler(object key)
@@ -3046,7 +3086,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 for (EventEntry e = eventList; e != null; e = e.next)
                 {
                     if (e.key == key)
+                    {
                         return e.handler;
+                    }
                 }
                 return null;
             }
@@ -3058,7 +3100,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             lock (this)
             {
                 if (handler == null)
+                {
                     return;
+                }
+
                 for (EventEntry e = eventList, prev = null; e != null; prev = e, e = e.next)
                 {
                     if (e.key == key)

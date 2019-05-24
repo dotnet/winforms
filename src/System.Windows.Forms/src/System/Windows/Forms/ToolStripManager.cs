@@ -237,9 +237,13 @@ namespace System.Windows.Forms
             lock (internalSyncObject)
             {
                 if (staticEventHandlers == null)
+                {
                     return null;
+                }
                 else
+                {
                     return (Delegate)staticEventHandlers[key];
+                }
             }
         }
 
@@ -1308,7 +1312,10 @@ namespace System.Windows.Forms
                 _toplevelToolStrip = null;
 
                 if (!_inputFilterQueue.Contains(toolStrip))
+                {
                     _inputFilterQueue.Add(toolStrip);
+                }
+
                 if (!InMenuMode && _inputFilterQueue.Count > 0)
                 {
                     Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.SetActiveToolStripCore] Setting " + WindowsFormsUtils.GetControlInformation(toolStrip.Handle) + " active.");

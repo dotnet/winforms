@@ -427,7 +427,10 @@ namespace System.Windows.Forms
 
                 case Interop.WindowMessages.WM_COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
+                    {
                         DefWndProc(ref m);
+                    }
+
                     break;
 
                 case Interop.WindowMessages.WM_HELP:
@@ -1330,7 +1333,9 @@ namespace System.Windows.Forms
             {
                 ContainerControl tempCC = control as ContainerControl;
                 if (tempCC != null)
+                {
                     cc = tempCC;
+                }
             }
 
             if (cc == null)

@@ -51,7 +51,10 @@ namespace System.ComponentModel.Design.Serialization
         public override SerializationStore LoadStore(Stream stream)
         {
             if (stream == null)
+            {
                 throw new ArgumentNullException(nameof(stream));
+            }
+
             return CodeDomSerializationStore.Load(stream);
         }
 
@@ -61,11 +64,20 @@ namespace System.ComponentModel.Design.Serialization
         public override void Serialize(SerializationStore store, object value)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddObject(value, false);
         }
 
@@ -75,11 +87,20 @@ namespace System.ComponentModel.Design.Serialization
         public override void SerializeAbsolute(SerializationStore store, object value)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddObject(value, true);
         }
 
@@ -89,13 +110,25 @@ namespace System.ComponentModel.Design.Serialization
         public override void SerializeMember(SerializationStore store, object owningObject, MemberDescriptor member)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (owningObject == null)
+            {
                 throw new ArgumentNullException(nameof(owningObject));
+            }
+
             if (member == null)
+            {
                 throw new ArgumentNullException(nameof(member));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddMember(owningObject, member, false);
         }
 
@@ -106,13 +139,25 @@ namespace System.ComponentModel.Design.Serialization
         public override void SerializeMemberAbsolute(SerializationStore store, object owningObject, MemberDescriptor member)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (owningObject == null)
+            {
                 throw new ArgumentNullException(nameof(owningObject));
+            }
+
             if (member == null)
+            {
                 throw new ArgumentNullException(nameof(member));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddMember(owningObject, member, true);
         }
 
@@ -122,9 +167,15 @@ namespace System.ComponentModel.Design.Serialization
         public override ICollection Deserialize(SerializationStore store)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             return cdStore.Deserialize(_provider);
         }
 
@@ -134,11 +185,20 @@ namespace System.ComponentModel.Design.Serialization
         public override ICollection Deserialize(SerializationStore store, IContainer container)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (container == null)
+            {
                 throw new ArgumentNullException(nameof(container));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             return cdStore.Deserialize(_provider, container);
         }
 
@@ -148,11 +208,20 @@ namespace System.ComponentModel.Design.Serialization
         public override void DeserializeTo(SerializationStore store, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
             if (store == null)
+            {
                 throw new ArgumentNullException(nameof(store));
+            }
+
             if (container == null)
+            {
                 throw new ArgumentNullException(nameof(container));
+            }
+
             if (!(store is CodeDomSerializationStore cdStore))
+            {
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.DeserializeTo(_provider, container, validateRecycledTypes, applyDefaults);
         }
 
@@ -268,7 +337,10 @@ namespace System.ComponentModel.Design.Serialization
             internal void AddMember(object value, MemberDescriptor member, bool absolute)
             {
                 if (_objectState != null)
+                {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
+                }
+
                 ObjectData data = (ObjectData)_objects[value];
                 if (data == null)
                 {
@@ -292,7 +364,10 @@ namespace System.ComponentModel.Design.Serialization
             internal void AddObject(object value, bool absolute)
             {
                 if (_objectState != null)
+                {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
+                }
+
                 ObjectData data = (ObjectData)_objects[value];
                 if (data == null)
                 {

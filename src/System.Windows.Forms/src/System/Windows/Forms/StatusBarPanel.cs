@@ -171,7 +171,9 @@ namespace System.Windows.Forms
                     borderStyle = value;
                     Realize();
                     if (Created)
+                    {
                         parent.Invalidate();
+                    }
                 }
             }
         }
@@ -539,7 +541,9 @@ namespace System.Windows.Forms
             set
             {
                 if (!initializing && value < minWidth)
+                {
                     throw new ArgumentOutOfRangeException(nameof(Width), SR.WidthGreaterThanMinWidth);
+                }
 
                 width = value;
                 UpdateSize();
@@ -594,12 +598,18 @@ namespace System.Windows.Forms
             if (newPanel)
             {
                 if (this.text == null)
+                {
                     text = string.Empty;
+                }
                 else
+                {
                     text = this.text;
+                }
             }
             else
+            {
                 text = Text;
+            }
 
             Graphics g = parent.CreateGraphicsInternal();
             Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
@@ -700,7 +710,9 @@ namespace System.Windows.Forms
                 int result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_SETTEXT, (IntPtr)wparam, sendText);
 
                 if (result == 0)
+                {
                     throw new InvalidOperationException(SR.UnableToSetPanelText);
+                }
 
                 if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {

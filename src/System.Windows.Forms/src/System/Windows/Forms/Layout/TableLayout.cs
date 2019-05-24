@@ -41,7 +41,10 @@ namespace System.Windows.Forms.Layout
             internal SorterObjectArray(object[] keys, IComparer comparer)
             {
                 if (comparer == null)
+                {
                     comparer = Comparer.Default;
+                }
+
                 this.keys = keys;
                 this.comparer = comparer;
             }
@@ -95,9 +98,14 @@ namespace System.Windows.Forms.Layout
                         try
                         {
                             while (comparer.Compare(keys[i], x) < 0)
+                            {
                                 i++;
+                            }
+
                             while (comparer.Compare(x, keys[j]) < 0)
+                            {
                                 j--;
+                            }
                         }
                         catch (IndexOutOfRangeException)
                         {
@@ -108,7 +116,10 @@ namespace System.Windows.Forms.Layout
                             throw new InvalidOperationException();
                         }
                         if (i > j)
+                        {
                             break;
+                        }
+
                         if (i < j)
                         {
                             object key = keys[i];
@@ -121,13 +132,19 @@ namespace System.Windows.Forms.Layout
                     if (j - left <= right - i)
                     {
                         if (left < j)
+                        {
                             QuickSort(left, j);
+                        }
+
                         left = i;
                     }
                     else
                     {
                         if (i < right)
+                        {
                             QuickSort(i, right);
+                        }
+
                         right = j;
                     }
                 } while (left < right);
@@ -137,7 +154,9 @@ namespace System.Windows.Forms.Layout
         private static void Sort(object[] array, IComparer comparer)
         {
             if (array == null)
+            {
                 throw new ArgumentNullException(nameof(array));
+            }
 
             if (array.Length > 1)
             {
@@ -719,7 +738,10 @@ namespace System.Windows.Forms.Layout
                     for (layoutInfo.ColumnStart = i + 1;
                         layoutInfo.ColumnStart < maxColumns && reservationGrid.IsReserved(layoutInfo.ColumnStart, rowOffset);
                         layoutInfo.ColumnStart++)
+                    {
                         ;
+                    }
+
                     return true;
                 }
             }
@@ -1607,7 +1629,9 @@ namespace System.Windows.Forms.Layout
             {
                 LayoutInfo other = obj as LayoutInfo;
                 if (other == null)
+                {
                     return false;
+                }
 
                 return other.RowStart == RowStart
                     && other.ColumnStart == ColumnStart

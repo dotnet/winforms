@@ -102,7 +102,10 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             if (g == null)
+            {
                 return 1.0F;
+            }
+
             return g.DpiX / 96;
         }
 

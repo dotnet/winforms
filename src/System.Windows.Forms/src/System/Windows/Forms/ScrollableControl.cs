@@ -831,7 +831,9 @@ namespace System.Windows.Forms
             // the padding has changed.
             EventHandler handler = (EventHandler)Events[Control.EventPaddingChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -1094,7 +1096,9 @@ namespace System.Windows.Forms
         {
             ScrollEventHandler handler = (ScrollEventHandler)Events[EVENT_SCROLL];
             if (handler != null)
+            {
                 handler(this, se);
+            }
         }
 
         private void ResetAutoScrollMargin()
@@ -1232,9 +1236,14 @@ namespace System.Windows.Forms
             int minY = ClientRectangle.Height - height;
 
             if (minX > 0)
+            {
                 minX = 0;
+            }
+
             if (minY > 0)
+            {
                 minY = 0;
+            }
 
             int x = displayRect.X;
             int y = displayRect.Y;

@@ -128,9 +128,13 @@ namespace System.Windows.Forms
             {
                 printDocument = value;
                 if (printDocument == null)
+                {
                     settings = new PrinterSettings();
+                }
                 else
+                {
                     settings = printDocument.PrinterSettings;
+                }
             }
         }
 
@@ -139,9 +143,13 @@ namespace System.Windows.Forms
             get
             {
                 if (Document == null)
+                {
                     return PrinterSettings.DefaultPageSettings;
+                }
                 else
+                {
                     return Document.DefaultPageSettings;
+                }
             }
         }
 
@@ -393,9 +401,13 @@ namespace System.Windows.Forms
             try
             {
                 if (PageSettings == null)
+                {
                     data.hDevMode = PrinterSettings.GetHdevmode();
+                }
                 else
+                {
                     data.hDevMode = PrinterSettings.GetHdevmode(PageSettings);
+                }
 
                 data.hDevNames = PrinterSettings.GetHdevnames();
             }
@@ -413,12 +425,20 @@ namespace System.Windows.Forms
                 {
                     if (PrinterSettings.FromPage < PrinterSettings.MinimumPage
                         || PrinterSettings.FromPage > PrinterSettings.MaximumPage)
+                    {
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
+                    }
+
                     if (PrinterSettings.ToPage < PrinterSettings.MinimumPage
                         || PrinterSettings.ToPage > PrinterSettings.MaximumPage)
+                    {
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "ToPage"));
+                    }
+
                     if (PrinterSettings.ToPage < PrinterSettings.FromPage)
+                    {
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
+                    }
 
                     data.nFromPage = (short)PrinterSettings.FromPage;
                     data.nToPage = (short)PrinterSettings.ToPage;
@@ -427,7 +447,9 @@ namespace System.Windows.Forms
                 }
 
                 if (!UnsafeNativeMethods.PrintDlg(data))
+                {
                     return false;
+                }
 
                 UpdatePrinterSettings(data.hDevMode, data.hDevNames, data.nCopies, data.Flags, settings, PageSettings);
 
@@ -471,9 +493,13 @@ namespace System.Windows.Forms
             try
             {
                 if (PageSettings == null)
+                {
                     data.hDevMode = PrinterSettings.GetHdevmode();
+                }
                 else
+                {
                     data.hDevMode = PrinterSettings.GetHdevmode(PageSettings);
+                }
 
                 data.hDevNames = PrinterSettings.GetHdevnames();
             }
@@ -491,12 +517,20 @@ namespace System.Windows.Forms
                 {
                     if (PrinterSettings.FromPage < PrinterSettings.MinimumPage
                         || PrinterSettings.FromPage > PrinterSettings.MaximumPage)
+                    {
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
+                    }
+
                     if (PrinterSettings.ToPage < PrinterSettings.MinimumPage
                         || PrinterSettings.ToPage > PrinterSettings.MaximumPage)
+                    {
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "ToPage"));
+                    }
+
                     if (PrinterSettings.ToPage < PrinterSettings.FromPage)
+                    {
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
+                    }
 
                     unsafe
                     {
@@ -553,11 +587,19 @@ namespace System.Windows.Forms
             finally
             {
                 if (data.hDevMode != IntPtr.Zero)
+                {
                     UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevMode));
+                }
+
                 if (data.hDevNames != IntPtr.Zero)
+                {
                     UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevNames));
+                }
+
                 if (data.pageRanges != IntPtr.Zero)
+                {
                     UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.pageRanges));
+                }
             }
         }
 
@@ -571,11 +613,15 @@ namespace System.Windows.Forms
             settings.SetHdevnames(hDevNames);
 
             if (pageSettings != null)
+            {
                 pageSettings.SetHdevmode(hDevMode);
+            }
 
             //Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
             if (settings.Copies == 1)
+            {
                 settings.Copies = copies;
+            }
 
             settings.PrintRange = (PrintRange)(flags & printRangeMask);
         }

@@ -542,7 +542,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             public void CopyTo(Array array, int index)
             {
                 if (items == null)
+                {
                     return;
+                }
 
                 Array.Copy(items, 0, array, index, items.Length);
             }

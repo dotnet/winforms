@@ -418,7 +418,9 @@ namespace System.Windows.Forms
                 cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
                 cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
                 if (!integralHeight)
+                {
                     cp.Style |= NativeMethods.CBS_NOINTEGRALHEIGHT;
+                }
 
                 switch (DropDownStyle)
                 {
@@ -679,7 +681,10 @@ namespace System.Windows.Forms
             get
             {
                 if (base.Focused)
+                {
                     return true;
+                }
+
                 IntPtr focus = UnsafeNativeMethods.GetFocus();
                 return focus != IntPtr.Zero && ((childEdit != null && focus == childEdit.Handle) || (childListBox != null && focus == childListBox.Handle));
             }
@@ -907,12 +912,17 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0)
+                {
                     value = 0;
+                }
+
                 if (MaxLength != value)
                 {
                     Properties.SetInteger(PropMaxLength, value);
                     if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.CB_LIMITTEXT, value, 0);
+                    }
                 }
             }
         }
@@ -1177,9 +1187,13 @@ namespace System.Windows.Forms
                 {
                     //
                     if (value != null)
+                    {
                         x = itemsCollection.IndexOf(value);
+                    }
                     else
+                    {
                         SelectedIndex = -1;
+                    }
                 }
 
                 if (x != -1)
@@ -1204,7 +1218,10 @@ namespace System.Windows.Forms
             get
             {
                 if (DropDownStyle == ComboBoxStyle.DropDownList)
+                {
                     return "";
+                }
+
                 return Text.Substring(SelectionStart, SelectionLength);
             }
             set
@@ -1396,7 +1413,9 @@ namespace System.Windows.Forms
             set
             {
                 if (DropDownStyle == ComboBoxStyle.DropDownList && !IsHandleCreated && !string.IsNullOrEmpty(value) && FindStringExact(value) == -1)
+                {
                     return;
+                }
 
                 base.Text = value;
                 object selectedItem = null;
@@ -1988,7 +2007,10 @@ namespace System.Windows.Forms
 
 
                     if (ContextMenu != null || ContextMenuStrip != null)
+                    {
                         CaptureInternal = true;
+                    }
+
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
                     //
@@ -2011,7 +2033,10 @@ namespace System.Windows.Forms
                     //set the mouse capture .. this is the Child Wndproc..
                     //
                     if (ContextMenu != null)
+                    {
                         CaptureInternal = false;
+                    }
+
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
                     //
@@ -2674,7 +2699,9 @@ namespace System.Windows.Forms
         {
             DrawItemEventHandler handler = (DrawItemEventHandler)Events[EVENT_DRAWITEM];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2686,7 +2713,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWN];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
@@ -2765,7 +2794,9 @@ namespace System.Windows.Forms
         {
             MeasureItemEventHandler handler = (MeasureItemEventHandler)Events[EVENT_MEASUREITEM];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2815,7 +2846,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_SELECTIONCHANGECOMMITTED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             // The user selects a list item or selects an item and then closes the list.
             // It indicates that the user's selection is to be processed but should not
@@ -2836,7 +2869,9 @@ namespace System.Windows.Forms
             base.OnSelectedIndexChanged(e);
             EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             if (dropDownWillBeClosed)
             {
@@ -2897,7 +2932,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_SELECTEDITEMCHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2907,7 +2944,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNSTYLE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2919,7 +2958,9 @@ namespace System.Windows.Forms
         {
             base.OnParentBackColorChanged(e);
             if (DropDownStyle == ComboBoxStyle.Simple)
+            {
                 Invalidate();
+            }
         }
 
         /// <summary>
@@ -3102,7 +3143,10 @@ namespace System.Windows.Forms
                 EndUpdate();
             }
             if (!Sorted && Created)
+            {
                 base.OnDataSourceChanged(e);
+            }
+
             RefreshItems();
         }
 
@@ -3123,7 +3167,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNCLOSED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             // Need to announce the focus on combo-box with new selected value on drop-down close.
             // If do not do this focus in Level 3 stays on list item of unvisible list.
@@ -3152,7 +3198,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_TEXTUPDATE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -4273,12 +4321,16 @@ namespace System.Windows.Forms
                 if (item1 == null)
                 {
                     if (item2 == null)
+                    {
                         return 0; //both null, then they are equal
+                    }
 
                     return -1; //item1 is null, but item2 is valid (greater)
                 }
                 if (item2 == null)
+                {
                     return 1; //item2 is null, so item 1 is greater
+                }
 
                 string itemName1 = comboBox.GetItemText(item1);
                 string itemName2 = comboBox.GetItemText(item2);

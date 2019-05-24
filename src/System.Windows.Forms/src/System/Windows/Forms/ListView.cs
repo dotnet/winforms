@@ -442,9 +442,13 @@ namespace System.Windows.Forms
                         };
 
                         if (BackgroundImageTiled)
+                        {
                             lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_TILE;
+                        }
                         else
+                        {
                             lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_NORMAL;
+                        }
 
                         lvbkImage.ulFlags |= NativeMethods.LVBKIF_SOURCE_URL;
                         lvbkImage.pszImage = backgroundImageFileName;
@@ -548,7 +552,9 @@ namespace System.Windows.Forms
 
                         // Comctl should handle auto-arrange for us, but doesn't
                         if (AutoArrange)
+                        {
                             ArrangeIcons(Alignment);
+                        }
                     }
                 }
                 else
@@ -744,7 +750,9 @@ namespace System.Windows.Forms
                 }
 
                 if (AutoArrange)
+                {
                     cp.Style |= NativeMethods.LVS_AUTOARRANGE;
+                }
 
                 switch (borderStyle)
                 {
@@ -767,16 +775,24 @@ namespace System.Windows.Forms
                 }
 
                 if (LabelEdit)
+                {
                     cp.Style |= NativeMethods.LVS_EDITLABELS;
+                }
 
                 if (!LabelWrap)
+                {
                     cp.Style |= NativeMethods.LVS_NOLABELWRAP;
+                }
 
                 if (!HideSelection)
+                {
                     cp.Style |= NativeMethods.LVS_SHOWSELALWAYS;
+                }
 
                 if (!MultiSelect)
+                {
                     cp.Style |= NativeMethods.LVS_SINGLESEL;
+                }
 
                 if (listItemSorter == null)
                 {
@@ -792,7 +808,9 @@ namespace System.Windows.Forms
                 }
 
                 if (VirtualMode)
+                {
                     cp.Style |= NativeMethods.LVS_OWNERDATA;
+                }
 
                 // We can do this 'cuz the viewStyle enums are the same values as the actual LVS styles
                 // this new check since the value for LV_VIEW_TILE == LVS_SINGLESEL; so dont OR that value since
@@ -880,7 +898,9 @@ namespace System.Windows.Forms
                 {
                     int displayIndex = unchecked((int)(long)SendMessage(NativeMethods.LVM_GETNEXTITEM, -1, NativeMethods.LVNI_FOCUSED));
                     if (displayIndex > -1)
+                    {
                         return Items[displayIndex];
+                    }
                 }
                 return null;
             }
@@ -1054,7 +1074,9 @@ namespace System.Windows.Forms
                         RecreateHandleInternal();
                     }
                     else
+                    {
                         UpdateStyles();
+                    }
                 }
             }
         }
@@ -1641,9 +1663,13 @@ namespace System.Windows.Forms
                     // If we're changing to No Sorting, no need to recreate the handle
                     // because none of the existing items need to be rearranged.
                     if (value == SortOrder.None)
+                    {
                         UpdateStyles();
+                    }
                     else
+                    {
                         RecreateHandleInternal();
+                    }
                 }
             }
         }
@@ -1682,7 +1708,9 @@ namespace System.Windows.Forms
                         }
 
                         if (IsHandleCreated)
+                        {
                             SendMessage(NativeMethods.LVM_SETIMAGELIST, NativeMethods.LVSIL_STATE, value == null ? IntPtr.Zero : value.Handle);
+                        }
                     }
                 }
                 else
@@ -1838,7 +1866,9 @@ namespace System.Windows.Forms
             get
             {
                 if (viewStyle == View.LargeIcon || viewStyle == View.SmallIcon || viewStyle == View.Tile)
+                {
                     throw new InvalidOperationException(SR.ListViewGetTopItem);
+                }
 
                 if (!IsHandleCreated)
                 {
@@ -1853,25 +1883,38 @@ namespace System.Windows.Forms
                 }
                 topIndex = unchecked((int)(long)SendMessage(NativeMethods.LVM_GETTOPINDEX, 0, 0));
                 if (topIndex >= 0 && topIndex < Items.Count)
+                {
                     return Items[topIndex];
+                }
 
                 return null;
             }
             set
             {
                 if (viewStyle == View.LargeIcon || viewStyle == View.SmallIcon || viewStyle == View.Tile)
+                {
                     throw new InvalidOperationException(SR.ListViewSetTopItem);
+                }
 
                 if (value == null)
+                {
                     return;
+                }
+
                 if (value.ListView != this)
+                {
                     return;
+                }
+
                 if (!IsHandleCreated)
                 {
                     CreateHandle();
                 }
                 if (value == TopItem)
+                {
                     return;
+                }
+
                 EnsureVisible(value.Index);
                 ListViewItem topItem = TopItem;
 
@@ -1887,9 +1930,14 @@ namespace System.Windows.Forms
                 }                                                   // 
 
                 if (value.Index == topItem.Index)
+                {
                     return;
+                }
+
                 if (Scrollable)
+                {
                     Scroll(topItem.Index, value.Index);
+                }
             }
         }
 
@@ -1980,9 +2028,15 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0)
+                {
                     throw new System.ArgumentException(string.Format(SR.ListViewVirtualListSizeInvalidArgument, "value", (value)));
+                }
+
                 if (value == virtualListSize)
+                {
                     return;
+                }
+
                 bool keepTopItem = IsHandleCreated && VirtualMode && View == View.Details && !DesignMode;
                 int topIndex = -1;
                 if (keepTopItem)
@@ -1993,7 +2047,9 @@ namespace System.Windows.Forms
                 virtualListSize = value;
 
                 if (IsHandleCreated && VirtualMode && !DesignMode)
+                {
                     SendMessage(NativeMethods.LVM_SETITEMCOUNT, virtualListSize, 0);
+                }
 
                 if (keepTopItem)
                 {
@@ -2024,10 +2080,14 @@ namespace System.Windows.Forms
             set
             {
                 if (value == VirtualMode)
+                {
                     return;
+                }
 
                 if (value && Items.Count > 0)
+                {
                     throw new InvalidOperationException(SR.ListViewVirtualListViewRequiresNoItems);
+                }
 
                 if (value && CheckedItems.Count > 0)
                 {
@@ -2277,7 +2337,9 @@ namespace System.Windows.Forms
         {
             // LVM_ARRANGE only work in SmallIcon view
             if (viewStyle != View.SmallIcon)
+            {
                 return;
+            }
 
             switch ((int)value)
             {
@@ -2541,7 +2603,9 @@ namespace System.Windows.Forms
 
             // image location
             if (BackgroundImage != null)
+            {
                 SetBackgroundImage();
+            }
         }
 
         //
@@ -2995,11 +3059,19 @@ namespace System.Windows.Forms
                 }
 #endif // DEBUG
                 if (sender == imageListSmall)
+                {
                     SmallImageList = null;
+                }
+
                 if (sender == imageListLarge)
+                {
                     LargeImageList = null;
+                }
+
                 if (sender == imageListState)
+                {
                     StateImageList = null;
+                }
             }
             finally
             {
@@ -3141,7 +3213,9 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             if (IsHandleCreated)
+            {
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_ENSUREVISIBLE, index, 0);
+            }
         }
 
         /// <summary>
@@ -3243,7 +3317,10 @@ namespace System.Windows.Forms
             }
 
             if (!IsHandleCreated)
+            {
                 CreateHandle();
+            }
+
             if (VirtualMode)
             {
                 SearchForVirtualItemEventArgs sviEvent = new SearchForVirtualItemEventArgs(isTextSearch, isPrefixSearch, includeSubItemsInSearch, text, pt, dir, startIndex);
@@ -3424,7 +3501,10 @@ namespace System.Windows.Forms
                 foreach (object o in listItemsArray)
                 {
                     if (o == item)
+                    {
                         return index;
+                    }
+
                     index++;
                 }
                 return -1;
@@ -3438,12 +3518,16 @@ namespace System.Windows.Forms
         internal int GetColumnIndex(ColumnHeader ch)
         {
             if (columnHeaders == null)
+            {
                 return -1;
+            }
 
             for (int i = 0; i < columnHeaders.Length; i++)
             {
                 if (columnHeaders[i] == ch)
+                {
                     return i;
+                }
             }
 
             return -1;
@@ -3465,7 +3549,9 @@ namespace System.Windows.Forms
 
             ListViewItem li = null;
             if (displayIndex >= 0 && ((lvhi.flags & NativeMethods.LVHT_ONITEM) != 0))
+            {
                 li = Items[displayIndex];
+            }
 
             return li;
         }
@@ -3567,7 +3653,9 @@ namespace System.Windows.Forms
                 left = (int)portion
             };
             if (unchecked((int)(long)SendMessage(NativeMethods.LVM_GETITEMRECT, index, ref itemrect)) == 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
@@ -3579,7 +3667,9 @@ namespace System.Windows.Forms
         private Rectangle GetItemRectOrEmpty(int index)
         {
             if (index < 0 || index >= Items.Count)
+            {
                 return Rectangle.Empty;
+            }
 
             if (View == View.Details && Columns.Count == 0)
             {
@@ -3592,7 +3682,9 @@ namespace System.Windows.Forms
                 left = 0
             };
             if (unchecked((int)(long)SendMessage(NativeMethods.LVM_GETITEMRECT, index, ref itemrect)) == 0)
+            {
                 return Rectangle.Empty;
+            }
 
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
@@ -3673,7 +3765,9 @@ namespace System.Windows.Forms
                 top = subItemIndex
             };
             if (unchecked((int)(long)SendMessage(NativeMethods.LVM_GETSUBITEMRECT, itemIndex, ref itemrect)) == 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
+            }
 
             Rectangle result = Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
 
@@ -3754,7 +3848,9 @@ namespace System.Windows.Forms
 
                 IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
                 if (hwndHdr != IntPtr.Zero)
+                {
                     SafeNativeMethods.InvalidateRect(new HandleRef(this, hwndHdr), null, true);
+                }
             }
         }
 
@@ -3771,10 +3867,14 @@ namespace System.Windows.Forms
         internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems)
         {
             if (ch == null)
+            {
                 throw new ArgumentNullException(nameof(ch));
-            if (ch.OwnerListview != null)
-                throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), "ch");
+            }
 
+            if (ch.OwnerListview != null)
+            {
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), "ch");
+            }
 
             int idx;
             // in Tile view the ColumnHeaders collection is used for the Tile Information
@@ -3791,7 +3891,9 @@ namespace System.Windows.Forms
             // First column must be left aligned
 
             if (-1 == idx)
+            {
                 throw new InvalidOperationException(SR.ListViewAddColumnFailed);
+            }
 
             // Add the column to our internal array
             int columnCount = (columnHeaders == null ? 0 : columnHeaders.Length);
@@ -3799,11 +3901,16 @@ namespace System.Windows.Forms
             {
                 ColumnHeader[] newHeaders = new ColumnHeader[columnCount + 1];
                 if (columnCount > 0)
+                {
                     System.Array.Copy(columnHeaders, 0, newHeaders, 0, columnCount);
+                }
+
                 columnHeaders = newHeaders;
             }
             else
+            {
                 columnHeaders = new ColumnHeader[1];
+            }
 
             if (idx < columnCount)
             {
@@ -3850,7 +3957,9 @@ namespace System.Windows.Forms
                 RecreateHandleInternal();
             }
             else if (IsHandleCreated && refreshSubItems)
+            {
                 RealizeAllSubItems();
+            }
 
             return ch;
         }
@@ -4220,7 +4329,10 @@ namespace System.Windows.Forms
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
+            {
                 return false;
+            }
+
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.PageUp:
@@ -4232,7 +4344,9 @@ namespace System.Windows.Forms
 
             bool isInputKey = base.IsInputKey(keyData);
             if (isInputKey)
+            {
                 return true;
+            }
 
             if (listViewState[LISTVIEWSTATE_inLabelEdit])
             {
@@ -4298,7 +4412,9 @@ namespace System.Windows.Forms
         protected virtual void OnAfterLabelEdit(LabelEditEventArgs e)
         {
             if (onAfterLabelEdit != null)
+            {
                 onAfterLabelEdit(this, e);
+            }
         }
 
         protected override void OnBackgroundImageChanged(EventArgs e)
@@ -4367,7 +4483,9 @@ namespace System.Windows.Forms
         protected virtual void OnBeforeLabelEdit(LabelEditEventArgs e)
         {
             if (onBeforeLabelEdit != null)
+            {
                 onBeforeLabelEdit(this, e);
+            }
         }
 
         /// <summary>
@@ -4376,7 +4494,9 @@ namespace System.Windows.Forms
         {
             CacheVirtualItemsEventHandler handler = (CacheVirtualItemsEventHandler)Events[EVENT_CACHEVIRTUALITEMS];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4385,7 +4505,9 @@ namespace System.Windows.Forms
         protected virtual void OnColumnClick(ColumnClickEventArgs e)
         {
             if (onColumnClick != null)
+            {
                 onColumnClick(this, e);
+            }
         }
 
         /// <summary>
@@ -4395,7 +4517,9 @@ namespace System.Windows.Forms
         {
             ColumnReorderedEventHandler handler = (ColumnReorderedEventHandler)Events[EVENT_COLUMNREORDERED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4683,7 +4807,9 @@ namespace System.Windows.Forms
         protected virtual void OnItemActivate(EventArgs e)
         {
             if (onItemActivate != null)
+            {
                 onItemActivate(this, e);
+            }
         }
 
         /// <summary>
@@ -4710,7 +4836,9 @@ namespace System.Windows.Forms
         protected virtual void OnItemDrag(ItemDragEventArgs e)
         {
             if (onItemDrag != null)
+            {
                 onItemDrag(this, e);
+            }
         }
 
         /// <summary>
@@ -4719,7 +4847,9 @@ namespace System.Windows.Forms
         protected virtual void OnItemMouseHover(ListViewItemMouseHoverEventArgs e)
         {
             if (onItemMouseHover != null)
+            {
                 onItemMouseHover(this, e);
+            }
         }
 
         /// <summary>
@@ -4729,7 +4859,9 @@ namespace System.Windows.Forms
         {
             ListViewItemSelectionChangedEventHandler eh = (ListViewItemSelectionChangedEventHandler)Events[EVENT_ITEMSELECTIONCHANGED];
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected override void OnParentChanged(EventArgs e)
@@ -4763,7 +4895,9 @@ namespace System.Windows.Forms
         {
             RetrieveVirtualItemEventHandler handler = (RetrieveVirtualItemEventHandler)Events[EVENT_RETRIEVEVIRTUALITEM];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -4795,7 +4929,9 @@ namespace System.Windows.Forms
         {
             SearchForVirtualItemEventHandler handler = (SearchForVirtualItemEventHandler)Events[EVENT_SEARCHFORVIRTUALITEM];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4809,7 +4945,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected override void OnSystemColorsChanged(EventArgs e)
@@ -4830,7 +4968,9 @@ namespace System.Windows.Forms
         {
             ListViewVirtualItemsSelectionRangeChangedEventHandler eh = (ListViewVirtualItemsSelectionRangeChangedEventHandler)Events[EVENT_VIRTUALITEMSSELECTIONRANGECHANGED];
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         private unsafe void PositionHeader()
@@ -4927,14 +5067,19 @@ namespace System.Windows.Forms
             }
             c = ForeColor;
             if (c != SystemColors.WindowText)
+            {
                 SendMessage(NativeMethods.LVM_SETTEXTCOLOR, 0, ColorTranslator.ToWin32(c));
-
+            }
 
             if (null != imageListLarge)
+            {
                 SendMessage(NativeMethods.LVM_SETIMAGELIST, NativeMethods.LVSIL_NORMAL, imageListLarge.Handle);
+            }
 
             if (null != imageListSmall)
+            {
                 SendMessage(NativeMethods.LVM_SETIMAGELIST, NativeMethods.LVSIL_SMALL, imageListSmall.Handle);
+            }
 
             if (null != imageListState)
             {
@@ -5087,10 +5232,13 @@ namespace System.Windows.Forms
                 lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
                 lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_URL;
                 if (BackgroundImageTiled)
+                {
                     lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_TILE;
+                }
                 else
+                {
                     lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_NORMAL;
-
+                }
             }
             else
             {
@@ -5182,7 +5330,9 @@ namespace System.Windows.Forms
                 }
 
                 if (0 == retval)
+                {
                     throw new InvalidOperationException(SR.ListViewColumnInfoSet);
+                }
                 // When running on AMD64 the list view does not invalidate the column header.
                 // So we do it ourselves.
                 InvalidateColumnHeaders();
@@ -5385,9 +5535,14 @@ namespace System.Windows.Forms
         internal void SetItemPosition(int index, int x, int y)
         {
             if (VirtualMode)
+            {
                 return;
+            }
+
             if (index < 0 || index >= itemCount)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
@@ -5617,28 +5772,44 @@ namespace System.Windows.Forms
                 }
 
                 if (AllowColumnReorder)
+                {
                     exStyle |= NativeMethods.LVS_EX_HEADERDRAGDROP;
+                }
 
                 if (CheckBoxes)
+                {
                     exStyle |= NativeMethods.LVS_EX_CHECKBOXES;
+                }
 
                 if (DoubleBuffered)
+                {
                     exStyle |= NativeMethods.LVS_EX_DOUBLEBUFFER;
+                }
 
                 if (FullRowSelect)
+                {
                     exStyle |= NativeMethods.LVS_EX_FULLROWSELECT;
+                }
 
                 if (GridLines)
+                {
                     exStyle |= NativeMethods.LVS_EX_GRIDLINES;
+                }
 
                 if (HoverSelection)
+                {
                     exStyle |= NativeMethods.LVS_EX_TRACKSELECT;
+                }
 
                 if (HotTracking)
+                {
                     exStyle |= NativeMethods.LVS_EX_UNDERLINEHOT;
+                }
 
                 if (ShowItemToolTips)
+                {
                     exStyle |= NativeMethods.LVS_EX_INFOTIP;
+                }
 
                 SendMessage(NativeMethods.LVM_SETEXTENDEDLISTVIEWSTYLE, exMask, exStyle);
                 Invalidate();
@@ -6252,7 +6423,10 @@ namespace System.Windows.Forms
                         // from msdn:
                         //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
                         if (!e.CancelEdit && nmlvdp.item.pszText != null)
+                        {
                             Items[nmlvdp.item.iItem].Text = nmlvdp.item.pszText;
+                        }
+
                         break;
                     }
 
@@ -6728,7 +6902,10 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     else
+                    {
                         OnMouseHover(EventArgs.Empty);
+                    }
+
                     break;
                 case Interop.WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
@@ -7443,7 +7620,9 @@ namespace System.Windows.Forms
                                 displayIndex = fidx;
                             }
                             else
+                            {
                                 throw new InvalidOperationException(SR.SelectedNotEqualActual);
+                            }
                         }
                     }
                     else
@@ -7744,7 +7923,9 @@ namespace System.Windows.Forms
                                 displayIndex = fidx;
                             }
                             else
+                            {
                                 throw new InvalidOperationException(SR.SelectedNotEqualActual);
+                            }
                         }
 
                         return lvitems;
@@ -8136,7 +8317,10 @@ namespace System.Windows.Forms
                 get
                 {
                     if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
                     return owner.columnHeaders[index];
                 }
             }
@@ -8622,7 +8806,9 @@ namespace System.Windows.Forms
             public virtual void RemoveAt(int index)
             {
                 if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
 
                 int w = owner.columnHeaders[index].Width; // Update width before detaching from ListView
 
@@ -8632,7 +8818,9 @@ namespace System.Windows.Forms
                     int retval = unchecked((int)(long)owner.SendMessage(NativeMethods.LVM_DELETECOLUMN, index, 0));
 
                     if (0 == retval)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
                 }
 
                 // we need to update the display indices
@@ -8658,14 +8846,22 @@ namespace System.Windows.Forms
                 int columnCount = owner.columnHeaders.Length;
                 Debug.Assert(columnCount >= 1, "Column mismatch");
                 if (columnCount == 1)
+                {
                     owner.columnHeaders = null;
+                }
                 else
                 {
                     ColumnHeader[] newHeaders = new ColumnHeader[--columnCount];
                     if (index > 0)
+                    {
                         System.Array.Copy(owner.columnHeaders, 0, newHeaders, 0, index);
+                    }
+
                     if (index < columnCount)
+                    {
                         System.Array.Copy(owner.columnHeaders, index + 1, newHeaders, index, columnCount - index);
+                    }
+
                     owner.columnHeaders = newHeaders;
                 }
 
@@ -9326,7 +9522,9 @@ namespace System.Windows.Forms
                     else
                     {
                         if (displayIndex < 0 || displayIndex >= owner.itemCount)
+                        {
                             throw new ArgumentOutOfRangeException(nameof(displayIndex), displayIndex, string.Format(SR.InvalidArgument, nameof(displayIndex), displayIndex));
+                        }
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                         {
@@ -9348,7 +9546,9 @@ namespace System.Windows.Forms
                     }
 
                     if (displayIndex < 0 || displayIndex >= owner.itemCount)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(displayIndex), displayIndex, string.Format(SR.InvalidArgument, nameof(displayIndex), displayIndex));
+                    }
 
                     if (owner.ExpectingMouseUp)
                     {
@@ -9666,7 +9866,9 @@ namespace System.Windows.Forms
                 }
 
                 if (index < 0 || index >= owner.itemCount)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
 
                 Debug.Assert(!owner.FlipViewToLargeIconAndSmallIcon || Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
@@ -9686,7 +9888,9 @@ namespace System.Windows.Forms
                     int retval = unchecked((int)(long)owner.SendMessage(NativeMethods.LVM_DELETEITEM, index, 0));
 
                     if (0 == retval)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
                 }
                 else
                 {

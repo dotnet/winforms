@@ -68,16 +68,23 @@ namespace System.Windows.Forms
             // Shift-Space should not cause the grid to 
             // be put in edit mode
             if (e.KeyChar == ' ' && (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
                 return;
+            }
 
             // if the edit box is in ReadOnly mode, then do not tell the DataGrid about the 
             // edit
             if (ReadOnly)
+            {
                 return;
+            }
 
             // Ctrl-* should not put the grid in edit mode
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control && ((Control.ModifierKeys & Keys.Alt) == 0))
+            {
                 return;
+            }
+
             IsInEditOrNavigateMode = false;
 
             // let the DataGrid know about the edit
@@ -96,14 +103,20 @@ namespace System.Windows.Forms
                 // for those keys, eat the WM_CHAR part of the KeyMessage
                 //
                 if (m.Msg == Interop.WindowMessages.WM_CHAR)
+                {
                     return true;
+                }
+
                 return ProcessKeyPreview(ref m);
             }
 
             if (m.Msg == Interop.WindowMessages.WM_CHAR)
             {
                 if (key == Keys.LineFeed)           // eat the LineFeed we get when the user presses Ctrl-Enter in a gridTextBox
+                {
                     return true;
+                }
+
                 return ProcessKeyEventArgs(ref m);
             }
 
@@ -111,7 +124,9 @@ namespace System.Windows.Forms
             // we only want to process the WM_KEYUP message ( the same way the grid was doing when the grid was getting all
             // the keys )
             if (m.Msg == Interop.WindowMessages.WM_KEYUP)
+            {
                 return true;
+            }
 
             Keys keyData = key & Keys.KeyCode;
 
@@ -124,7 +139,10 @@ namespace System.Windows.Forms
                     // else, process the KeyEvent
                     //
                     if (SelectionStart + SelectionLength == Text.Length)
+                    {
                         return ProcessKeyPreview(ref m);
+                    }
+
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Left:
                     // if the end of the selection is at the begining of the string
@@ -134,7 +152,10 @@ namespace System.Windows.Forms
                     // 
                     if (SelectionStart + SelectionLength == 0 ||
                         (IsInEditOrNavigateMode && SelectionLength == Text.Length))
+                    {
                         return ProcessKeyPreview(ref m);
+                    }
+
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Down:
                     // if the end of the selection is on the last line of the text then 
@@ -143,7 +164,10 @@ namespace System.Windows.Forms
                     //
                     int end = SelectionStart + SelectionLength;
                     if (Text.IndexOf("\r\n", end) == -1)
+                    {
                         return ProcessKeyPreview(ref m);
+                    }
+
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Up:
                     // if the end of the selection is on the first line of the text then 
@@ -151,14 +175,22 @@ namespace System.Windows.Forms
                     // else, process the KeyEvent
                     //
                     if (Text.IndexOf("\r\n") < 0 || SelectionStart + SelectionLength < Text.IndexOf("\r\n"))
+                    {
                         return ProcessKeyPreview(ref m);
+                    }
+
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Home:
                 case Keys.End:
                     if (SelectionLength == Text.Length)
+                    {
                         return ProcessKeyPreview(ref m);
+                    }
                     else
+                    {
                         return ProcessKeyEventArgs(ref m);
+                    }
+
                 case Keys.Prior:
                 case Keys.Next:
                 case Keys.Oemplus:
@@ -180,7 +212,9 @@ namespace System.Windows.Forms
                     {
                         // when we get a SHIFT-SPACEBAR message, disregard the WM_CHAR part of the message
                         if (m.Msg == Interop.WindowMessages.WM_CHAR)
+                        {
                             return true;
+                        }
 
                         // if the user pressed the SHIFT key at the same time with 
                         // the space key, send the key message to the DataGrid
@@ -192,7 +226,9 @@ namespace System.Windows.Forms
                     {
                         // when we get a Control-A message, disregard the WM_CHAR part of the message
                         if (m.Msg == Interop.WindowMessages.WM_CHAR)
+                        {
                             return true;
+                        }
 
                         // if the user pressed the Control key at the same time with 
                         // the space key, send the key message to the DataGrid
@@ -212,7 +248,9 @@ namespace System.Windows.Forms
                         // if the dataGrid used the key, then we aren't gonne
                         // use it anymore, else we are
                         if (ProcessKeyPreview(ref m))
+                        {
                             return true;
+                        }
                         else
                         {
                             // the edit control will use the 
@@ -224,14 +262,22 @@ namespace System.Windows.Forms
                         }
                     }
                     else
+                    {
                         return ProcessKeyEventArgs(ref m);
+                    }
+
                 case Keys.Tab:
                     // the TextBox gets the Control-Tab messages,
                     // not the parent
                     if ((ModifierKeys & Keys.Control) == Keys.Control)
+                    {
                         return ProcessKeyPreview(ref m);
+                    }
                     else
+                    {
                         return ProcessKeyEventArgs(ref m);
+                    }
+
                 default:
                     return ProcessKeyEventArgs(ref m);
             }
@@ -247,7 +293,9 @@ namespace System.Windows.Forms
             {
                 isInEditOrNavigateMode = value;
                 if (value)
+                {
                     SelectAll();
+                }
             }
         }
     }

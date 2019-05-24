@@ -253,7 +253,10 @@ namespace System.Windows.Forms
             get
             {
                 if (imageCollection == null)
+                {
                     imageCollection = new ImageCollection(this);
+                }
+
                 return imageCollection;
             }
         }
@@ -319,7 +322,9 @@ namespace System.Windows.Forms
             get
             {
                 if (Images.Empty)
+                {
                     return null;
+                }
 
                 // No need for us to create the handle, because any serious attempts to use the
                 // ImageListStreamer will do it for us.
@@ -458,7 +463,9 @@ namespace System.Windows.Forms
             Color transparent = transparentColor;
             ownsBitmap = false;
             if ((original.options & OriginalOptions.CustomTransparentColor) != 0)
+            {
                 transparent = original.customTransparentColor;
+            }
 
             Bitmap bitmap;
             if (original.image is Bitmap)
@@ -484,7 +491,10 @@ namespace System.Windows.Forms
                 bitmap = (Bitmap)bitmap.Clone();
                 bitmap.MakeTransparent(transparent);
                 if (ownsBitmap)
+                {
                     source.Dispose();
+                }
+
                 ownsBitmap = true;
             }
 
@@ -493,16 +503,24 @@ namespace System.Windows.Forms
             {
                 // strip width must be a positive multiple of image list width
                 if (size.Width == 0 || (size.Width % imageSize.Width) != 0)
+                {
                     throw new ArgumentException(SR.ImageListStripBadWidth, "original");
+                }
+
                 if (size.Height != imageSize.Height)
+                {
                     throw new ArgumentException(SR.ImageListImageTooShort, "original");
+                }
             }
             else if (!size.Equals(ImageSize))
             {
                 Bitmap source = bitmap;
                 bitmap = new Bitmap(source, ImageSize);
                 if (ownsBitmap)
+                {
                     source.Dispose();
+                }
+
                 ownsBitmap = true;
             }
             return bitmap;
@@ -516,7 +534,10 @@ namespace System.Windows.Forms
                 Debug.Assert(HandleCreated, "Calling AddIconToHandle when there is no handle");
                 int index = SafeNativeMethods.ImageList_ReplaceIcon(new HandleRef(this, Handle), -1, new HandleRef(icon, icon.Handle));
                 if (index == -1)
+                {
                     throw new InvalidOperationException(SR.ImageListAddFailed);
+                }
+
                 return index;
             }
             finally
@@ -540,7 +561,10 @@ namespace System.Windows.Forms
             SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
 
             if (index == -1)
+            {
                 throw new InvalidOperationException(SR.ImageListAddFailed);
+            }
+
             return index;
         }
 
@@ -590,7 +614,10 @@ namespace System.Windows.Forms
             }
 
             if (Handle == IntPtr.Zero)
+            {
                 throw new InvalidOperationException(SR.ImageListCreateFailed);
+            }
+
             SafeNativeMethods.ImageList_SetBkColor(new HandleRef(this, Handle), NativeMethods.CLR_NONE);
 
             Debug.Assert(originals != null, "Handle not yet created, yet original images are gone");
@@ -608,7 +635,9 @@ namespace System.Windows.Forms
                     Bitmap bitmapValue = CreateBitmap(original, out bool ownsBitmap);
                     AddToHandle(original, bitmapValue);
                     if (ownsBitmap)
+                    {
                         bitmapValue.Dispose();
+                    }
                 }
             }
             originals = null;
@@ -673,7 +702,10 @@ namespace System.Windows.Forms
         public void Draw(Graphics g, int x, int y, int width, int height, int index)
         {
             if (index < 0 || index >= Images.Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
+
             IntPtr dc = g.GetHdc();
             try
             {
@@ -753,7 +785,9 @@ namespace System.Windows.Forms
         private Bitmap GetBitmap(int index)
         {
             if (index < 0 || index >= Images.Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             Bitmap result = null;
 
@@ -944,13 +978,19 @@ namespace System.Windows.Forms
         private void PerformRecreateHandle(string reason)
         {
             if (!HandleCreated)
+            {
                 return;
+            }
 
             if (originals == null || Images.Empty)
+            {
                 originals = new ArrayList(); // spoof it into thinking this is the first CreateHandle
+            }
 
             if (originals == null)
+            {
                 throw new InvalidOperationException(string.Format(SR.ImageListCantRecreate, reason));
+            }
 
             DestroyHandle();
             CreateHandle();
@@ -1134,7 +1174,9 @@ namespace System.Windows.Forms
             internal void ResetKeys()
             {
                 if (imageInfoCollection != null)
+                {
                     imageInfoCollection.Clear();
+                }
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -1227,13 +1269,18 @@ namespace System.Windows.Forms
                 get
                 {
                     if (index < 0 || index >= Count)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
                     return owner.GetBitmap(index);
                 }
                 set
                 {
                     if (index < 0 || index >= Count)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
 
                     if (value == null)
                     {
@@ -1241,7 +1288,9 @@ namespace System.Windows.Forms
                     }
 
                     if (!(value is Bitmap))
+                    {
                         throw new ArgumentException(SR.ImageListBitmap);
+                    }
 
                     AssertInvariant();
                     Bitmap bitmap = (Bitmap)value;
@@ -1266,8 +1315,9 @@ namespace System.Windows.Forms
                         SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
 
                         if (!ok)
+                        {
                             throw new InvalidOperationException(SR.ImageListReplaceFailed);
-
+                        }
                     }
                     finally
                     {
@@ -1445,7 +1495,9 @@ namespace System.Windows.Forms
                         Bitmap bitmapValue = owner.CreateBitmap(original, out bool ownsBitmap);
                         index = owner.AddToHandle(original, bitmapValue);
                         if (ownsBitmap)
+                        {
                             bitmapValue.Dispose();
+                        }
                     }
                 }
                 else if (original.image is Icon)
@@ -1478,12 +1530,17 @@ namespace System.Windows.Forms
                 else
                 {
                     if (imageInfo == null)
+                    {
                         imageInfo = new ImageInfo();
+                    }
+
                     imageInfoCollection.Add(imageInfo);
                 }
 
                 if (!owner.inAddRange)
+                {
                     owner.OnChangeHandle(EventArgs.Empty);
+                }
 
                 return index;
             }
@@ -1518,9 +1575,14 @@ namespace System.Windows.Forms
                 // strip width must be a positive multiple of image list width
                 //
                 if (value.Width == 0 || (value.Width % owner.ImageSize.Width) != 0)
+                {
                     throw new ArgumentException(SR.ImageListStripBadWidth, "value");
+                }
+
                 if (value.Height != owner.ImageSize.Height)
+                {
                     throw new ArgumentException(SR.ImageListImageTooShort, "value");
+                }
 
                 int nImages = value.Width / owner.ImageSize.Width;
 
@@ -1536,12 +1598,16 @@ namespace System.Windows.Forms
             {
                 AssertInvariant();
                 if (owner.originals != null)
+                {
                     owner.originals.Clear();
+                }
 
                 imageInfoCollection.Clear();
 
                 if (owner.HandleCreated)
+                {
                     SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), -1);
+                }
 
                 owner.OnChangeHandle(EventArgs.Empty);
             }
@@ -1660,7 +1726,9 @@ namespace System.Windows.Forms
                 AssertInvariant();
                 Image[] images = new Image[Count];
                 for (int i = 0; i < images.Length; ++i)
+                {
                     images[i] = owner.GetBitmap(i);
+                }
 
                 return images.GetEnumerator();
             }
@@ -1683,7 +1751,9 @@ namespace System.Windows.Forms
             public void RemoveAt(int index)
             {
                 if (index < 0 || index >= Count)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
 
                 AssertInvariant();
                 bool ok = SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), index);

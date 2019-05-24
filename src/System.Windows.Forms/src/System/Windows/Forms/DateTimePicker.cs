@@ -530,7 +530,9 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         if (format == DateTimePickerFormat.Custom)
+                        {
                             SendMessage(NativeMethods.DTM_SETFORMAT, 0, customFormat);
+                        }
                     }
                 }
             }
@@ -885,7 +887,9 @@ namespace System.Windows.Forms
             get
             {
                 if (prefHeightCache > -1)
+                {
                     return (int)prefHeightCache;
+                }
 
                 // Base the preferred height on the current font
                 int height = FontHeight;
@@ -1028,9 +1032,13 @@ namespace System.Windows.Forms
             {
                 //checkbox clicked, no value set - no value set state should never occur, but just in case
                 if (!userHasSetValue && validTime)
+                {
                     return creationTime;
+                }
                 else
+                {
                     return value;
+                }
             }
             set
             {
@@ -1219,7 +1227,10 @@ namespace System.Windows.Forms
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
+            {
                 return false;
+            }
+
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.PageUp:
@@ -1238,7 +1249,9 @@ namespace System.Windows.Forms
         protected virtual void OnCloseUp(EventArgs eventargs)
         {
             if (onCloseUp != null)
+            {
                 onCloseUp(this, eventargs);
+            }
         }
 
         /// <summary>
@@ -1498,7 +1511,9 @@ namespace System.Windows.Forms
         private void SetStyleBit(bool flag, int bit)
         {
             if (((style & bit) != 0) == flag)
+            {
                 return;
+            }
 
             if (flag)
             {

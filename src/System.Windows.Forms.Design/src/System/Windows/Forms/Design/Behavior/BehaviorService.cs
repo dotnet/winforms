@@ -220,7 +220,9 @@ namespace System.Windows.Forms.Design.Behavior
 
             MenuCommandHandler menuCommandHandler = null;
             if (_serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService)
+            {
                 menuCommandHandler = menuCommandService as MenuCommandHandler;
+            }
 
             if (menuCommandHandler != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {

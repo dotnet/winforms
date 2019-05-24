@@ -463,7 +463,10 @@ namespace System.ComponentModel.Design.Serialization
         {
 #if DEBUG
             if (traceScope == null)
+            {
                 traceScope = new Stack();
+            }
+
             Trace(name);
             traceScope.Push(name);
 #endif
@@ -474,7 +477,9 @@ namespace System.ComponentModel.Design.Serialization
         internal static void TraceIf(bool condition, string message, params object[] values)
         {
             if (condition)
+            {
                 Trace(message, values);
+            }
         }
 
         [Conditional("DEBUG")]
@@ -486,7 +491,10 @@ namespace System.ComponentModel.Design.Serialization
                 int oldIndent = Debug.IndentLevel;
 
                 if (traceScope != null)
+                {
                     indent = traceScope.Count;
+                }
+
                 try
                 {
                     Debug.IndentLevel = indent;
@@ -504,7 +512,9 @@ namespace System.ComponentModel.Design.Serialization
             public void Dispose()
             {
                 if (traceScope != null)
+                {
                     traceScope.Pop();
+                }
             }
         }
 
@@ -2299,9 +2309,14 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool hasExpression = false;
             if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
 
             // Is the expression part of a prior SetExpression call?
             if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) != null && (!honorPreset || !table.ContainsPresetExpression(value)))
@@ -2322,9 +2337,14 @@ namespace System.ComponentModel.Design.Serialization
         {
             isComplete = false;
             if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
@@ -2556,13 +2576,24 @@ namespace System.ComponentModel.Design.Serialization
         protected void SerializeEvent(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, EventDescriptor descriptor)
         {
             if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
+            }
+
             if (statements == null)
+            {
                 throw new ArgumentNullException(nameof(statements));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (descriptor == null)
+            {
                 throw new ArgumentNullException(nameof(descriptor));
+            }
 
             using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeEvent)))
             {
@@ -2725,13 +2756,24 @@ namespace System.ComponentModel.Design.Serialization
         protected void SerializeProperty(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, PropertyDescriptor propertyToSerialize)
         {
             if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (propertyToSerialize == null)
+            {
                 throw new ArgumentNullException(nameof(propertyToSerialize));
+            }
+
             if (statements == null)
+            {
                 throw new ArgumentNullException(nameof(statements));
+            }
 
             Trace("CodeDomSerializerBase::" + nameof(SerializeProperty) + " {0}", propertyToSerialize.Name);
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
@@ -3072,11 +3114,19 @@ namespace System.ComponentModel.Design.Serialization
         protected void SetExpression(IDesignerSerializationManager manager, object value, CodeExpression expression, bool isPreset)
         {
             if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
+            }
+
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (expression == null)
+            {
                 throw new ArgumentNullException(nameof(expression));
+            }
 
             ExpressionTable table = (ExpressionTable)manager.Context[typeof(ExpressionTable)];
             if (table == null)

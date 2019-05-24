@@ -1984,7 +1984,10 @@ namespace System.Windows.Forms
                 try
                 {
                     if (!SysNavigate((int)navdir, NativeMethods.CHILDID_SELF, out object retObject))
+                    {
                         retObject = systemIAccessible.accNavigate((int)navdir, NativeMethods.CHILDID_SELF);
+                    }
+
                     return WrapIAccessible(retObject);
                 }
                 catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
@@ -2581,7 +2584,10 @@ namespace System.Windows.Forms
                 for (i = 0; i < n && currentChild < newOrder.Length; ++i)
                 {
                     if (!GotoItem(owner.systemIEnumVariant, newOrder[currentChild], GetAddressOfVariantAtIndex(rgvar, i)))
+                    {
                         break;
+                    }
+
                     ++currentChild;
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding sys child " + currentChild + " of " + newOrder.Length);
                 }

@@ -86,7 +86,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                                                             e.ToString()), e);
                     }
                     else
+                    {
                         throw; // rethrow the same exception
+                    }
                 }
 
                 if (newObject != null)

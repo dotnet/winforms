@@ -92,11 +92,18 @@ namespace System.Windows.Forms
             set
             {
                 if (expanded == value)
+                {
                     return;
+                }
+
                 if (expanded)
+                {
                     Collapse();
+                }
                 else
+                {
                     Expand();
+                }
             }
         }
 
@@ -192,17 +199,25 @@ namespace System.Windows.Forms
             {
                 int height = base.Height;
                 if (expanded)
+                {
                     return height + GetRelationshipRect().Height;
+                }
                 else
+                {
                     return height;
+                }
             }
             set
             {
                 // we should use the RelationshipRect only when the row is expanded
                 if (expanded)
+                {
                     base.Height = value - GetRelationshipRect().Height;
+                }
                 else
+                {
                     base.Height = value;
+                }
             }
         }
 
@@ -237,7 +252,9 @@ namespace System.Windows.Forms
                 return GetRelationshipRect();
             }
             else
+            {
                 return Rectangle.Empty;
+            }
         }
 
         private Rectangle GetRelationshipRect()
@@ -303,7 +320,10 @@ namespace System.Windows.Forms
         private bool PointOverPlusMinusGlyph(int x, int y, Rectangle rowHeaders, bool alignToRight)
         {
             if (dgTable == null || dgTable.DataGrid == null || !dgTable.DataGrid.AllowNavigation)
+            {
                 return false;
+            }
+
             Rectangle insideRowHeaders = rowHeaders;
             if (!DataGrid.FlatMode)
             {
@@ -342,7 +362,9 @@ namespace System.Windows.Forms
             }
 
             if (!expanded)
+            {
                 return base.OnMouseDown(x, y, rowHeaders, alignToRight);
+            }
 
             // hit test for relationships
             Rectangle relRect = GetRelationshipRectWithMirroring();
@@ -366,7 +388,9 @@ namespace System.Windows.Forms
         public override bool OnMouseMove(int x, int y, Rectangle rowHeaders, bool alignToRight)
         {
             if (!expanded)
+            {
                 return false;
+            }
 
             Rectangle relRect = GetRelationshipRectWithMirroring();
 
@@ -385,7 +409,9 @@ namespace System.Windows.Forms
         public override void OnMouseLeft(Rectangle rowHeaders, bool alignToRight)
         {
             if (!expanded)
+            {
                 return;
+            }
 
             Rectangle relRect = GetRelationshipRect();
             relRect.X += rowHeaders.X + dgTable.RowHeaderWidth;
@@ -401,7 +427,9 @@ namespace System.Windows.Forms
         public override void OnMouseLeft()
         {
             if (!expanded)
+            {
                 return;
+            }
 
             if (FocusedRelation != -1)
             {
@@ -418,17 +446,27 @@ namespace System.Windows.Forms
         {
             // ignore the shift key if it is not paired w/ the TAB key
             if ((keyData & Keys.Modifiers) == Keys.Shift && (keyData & Keys.KeyCode) != Keys.Tab)
+            {
                 return false;
+            }
 
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.F5:
                     if (dgTable == null || dgTable.DataGrid == null || !dgTable.DataGrid.AllowNavigation)
+                    {
                         return false;
+                    }
+
                     if (expanded)
+                    {
                         Collapse();
+                    }
                     else
+                    {
                         Expand();
+                    }
+
                     FocusedRelation = -1;
                     return true;
 
@@ -436,9 +474,14 @@ namespace System.Windows.Forms
                 //
                 case Keys.NumLock:
                     if (FocusedRelation != -1)
+                    {
                         return false;
+                    }
                     else
+                    {
                         return base.OnKeyPress(keyData);
+                    }
+
                 case Keys.Enter:
                     if (FocusedRelation != -1)
                     {
@@ -451,7 +494,9 @@ namespace System.Windows.Forms
                         return true;
                     }
                     else
+                    {
                         return false;
+                    }
 
                 case Keys.Tab:
                     return false;
@@ -468,7 +513,9 @@ namespace System.Windows.Forms
         {
             // we only invalidate stuff if the row is expanded.
             if (FocusedRelation == -1 || !expanded)
+            {
                 return;
+            }
 
             FocusedRelation = -1;
             Rectangle relRect = GetRelationshipRect();
@@ -495,11 +542,15 @@ namespace System.Windows.Forms
             // if there are no relationships, this row can't do anything with the 
             // key
             if (dgTable.RelationsList.Count == 0 || dgTable.DataGrid == null || !dgTable.DataGrid.AllowNavigation)
+            {
                 return false;
+            }
 
             // expand the relationship box
             if (!expanded)
+            {
                 Expand();
+            }
 
             if ((keyData & Keys.Shift) == Keys.Shift)
             {
@@ -521,11 +572,16 @@ namespace System.Windows.Forms
                 InvalidateRowRect(relRect);
 
                 if (FocusedRelation == -1)
+                {
                     // is the first time that the user focuses on this
                     // set of relationships
                     FocusedRelation = dgTable.RelationsList.Count - 1;
+                }
                 else
+                {
                     FocusedRelation--;
+                }
+
                 return true;
             }
             else
@@ -568,7 +624,10 @@ namespace System.Windows.Forms
                                   bool alignToRight)
         {
             if (CompModSwitches.DGRelationShpRowPaint.TraceVerbose)
+            {
                 Debug.WriteLine("Painting row " + RowNumber.ToString(CultureInfo.InvariantCulture) + " with bounds " + bounds.ToString());
+            }
+
             int bWidth = dgTable.BorderWidth;
 
             // paint the data cells
@@ -579,7 +638,9 @@ namespace System.Windows.Forms
 
             dataBounds.Offset(0, bWidth);       // use bWidth, not 1
             if (bWidth > 0)
+            {
                 PaintBottomBorder(g, dataBounds, dataWidth, bWidth, alignToRight);
+            }
 
             if (expanded && dgTable.RelationsList.Count > 0)
             {
@@ -592,7 +653,9 @@ namespace System.Windows.Forms
                                firstVisibleColumn, numVisibleColumns, alignToRight);
                 relationBounds.Height += 1;
                 if (bWidth > 0)
+                {
                     PaintBottomBorder(g, relationBounds, dataWidthOffsetted, bWidth, alignToRight);
+                }
             }
 
             return dataWidth;
@@ -609,7 +672,9 @@ namespace System.Windows.Forms
             Rectangle bounds = cellBounds;
             object errInfo = DataGrid.ListManager[number];
             if (errInfo is IDataErrorInfo)
+            {
                 errString = ((IDataErrorInfo)errInfo)[column.PropertyDescriptor.Name];
+            }
 
             if (!string.IsNullOrEmpty(errString))
             {
@@ -621,9 +686,14 @@ namespace System.Windows.Forms
                 }
                 // paint the errors correctly when RTL = true
                 if (alignToRight)
+                {
                     bounds.Width -= errRect.Width + xOffset;
+                }
                 else
+                {
                     bounds.X += errRect.Width + xOffset;
+                }
+
                 DataGrid.ToolTipProvider.AddToolTip(errString, (IntPtr)(DataGrid.ToolTipId++), errRect);
             }
 
@@ -644,9 +714,13 @@ namespace System.Windows.Forms
             }
 
             if (dgTable.IsDefault)
+            {
                 PaintHeaderInside(g, insideBounds, DataGrid.HeaderBackBrush, alignToRight, isDirty);
+            }
             else
+            {
                 PaintHeaderInside(g, insideBounds, dgTable.HeaderBackBrush, alignToRight, isDirty);
+            }
         }
 
         public void PaintHeaderInside(Graphics g, Rectangle bounds, Brush backBr, bool alignToRight, bool isDirty)
@@ -658,7 +732,9 @@ namespace System.Windows.Forms
                                                    bounds, alignToRight);
 
             if (!alignToRight)
+            {
                 Debug.Assert(bounds.X == rowHeaderBoundsX, "what's up doc?");
+            }
 
             Rectangle rowHeaderBounds = new Rectangle(rowHeaderBoundsX,
                                                       bounds.Y,
@@ -671,7 +747,9 @@ namespace System.Windows.Forms
             int expandoBoxX = MirrorRectangle(bounds.X + rowHeaderBounds.Width, expandoBoxWidth, bounds, alignToRight);
 
             if (!alignToRight)
+            {
                 Debug.Assert(rowHeaderBounds.Right == expandoBoxX, "what's up doc?");
+            }
 
             Rectangle expandoBox = new Rectangle(expandoBoxX,
                                                  bounds.Y,
@@ -730,9 +808,14 @@ namespace System.Windows.Forms
             {
                 int bWidth;
                 if (dgTable.IsDefault)
+                {
                     bWidth = DataGrid.GridLineWidth;
+                }
                 else
+                {
                     bWidth = dgTable.GridLineWidth;
+                }
+
                 g.FillRectangle(DataGrid.BackgroundBrush,
                                 alignToRight ? bounds.X : bounds.X + paintedWidth,
                                 bounds.Y,
@@ -746,9 +829,14 @@ namespace System.Windows.Forms
                     // if the user changed the gridLineColor on the dataGrid
                     // from the defaultValue, then use that value;
                     if (dgTable.IsDefault)
+                    {
                         br = DataGrid.GridLineBrush;
+                    }
                     else
+                    {
                         br = dgTable.GridLineBrush;
+                    }
+
                     g.FillRectangle(br,
                                     alignToRight ? bounds.Right - bWidth - paintedWidth : bounds.X + paintedWidth - bWidth,
                                     bounds.Y,
@@ -771,7 +859,9 @@ namespace System.Windows.Forms
             for (int r = 0; r < dgTable.RelationsList.Count; ++r)
             {
                 if (cy > bounds.Height)
+                {
                     break;
+                }
 
                 Brush textBrush = dgTable.IsDefault ? DataGrid.LinkBrush : dgTable.LinkBrush;
 
@@ -806,17 +896,24 @@ namespace System.Windows.Forms
         private void PaintPlusMinusGlyph(Graphics g, Rectangle bounds, Brush backBr, bool alignToRight)
         {
             if (CompModSwitches.DGRelationShpRowPaint.TraceVerbose)
+            {
                 Debug.WriteLine("PlusMinusGlyph painting in bounds    -> " + bounds.ToString());
+            }
+
             Rectangle outline = GetOutlineRect(bounds.X, bounds.Y);
 
             outline = Rectangle.Intersect(bounds, outline);
             if (outline.IsEmpty)
+            {
                 return;
+            }
 
             g.FillRectangle(backBr, bounds);
 
             if (CompModSwitches.DGRelationShpRowPaint.TraceVerbose)
+            {
                 Debug.WriteLine("Painting PlusMinusGlyph with outline -> " + outline.ToString());
+            }
             // draw the +/- box
             Pen drawPen = dgTable.IsDefault ? DataGrid.HeaderForePen : dgTable.HeaderForePen;
             g.DrawRectangle(drawPen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
@@ -856,12 +953,18 @@ namespace System.Windows.Forms
             while (cy < relRect.Bottom)
             {
                 if (cy > y)
+                {
                     break;
+                }
+
                 cy += relationshipHeight;
                 relation++;
             }
             if (relation >= dgTable.RelationsList.Count)
+            {
                 return -1;
+            }
+
             return relation;
         }
 
@@ -870,10 +973,13 @@ namespace System.Windows.Forms
         private int MirrorRelationshipRectangle(Rectangle relRect, Rectangle rowHeader, bool alignToRight)
         {
             if (alignToRight)
+            {
                 return rowHeader.X - relRect.Width;
+            }
             else
+            {
                 return relRect.X;
-
+            }
         }
 
         // given the X and Width of a rectangle R1 contained in rect, 
@@ -881,9 +987,13 @@ namespace System.Windows.Forms
         private int MirrorRectangle(int x, int width, Rectangle rect, bool alignToRight)
         {
             if (alignToRight)
+            {
                 return rect.Right + rect.X - width - x;
+            }
             else
+            {
                 return x;
+            }
         }
 
         [ComVisible(true)]
@@ -1001,7 +1111,10 @@ namespace System.Windows.Forms
                     bounds.Height = owner.Expanded ? owner.dgTable.RelationshipHeight : 0;      // when the row is collapsed the height of the relationship object should be 0
                     // GetRelationshipRectWithMirroring will use the row headers width
                     if (!owner.Expanded)
+                    {
                         bounds.X += rowBounds.X;
+                    }
+
                     bounds.Y += rowBounds.Y;
 
                     return owner.DataGrid.RectangleToScreen(bounds);

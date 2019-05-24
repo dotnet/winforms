@@ -156,7 +156,9 @@ namespace System.Windows.Forms
                     return ms.ToArray();
                 }
                 else
+                {
                     return new byte[0];
+                }
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

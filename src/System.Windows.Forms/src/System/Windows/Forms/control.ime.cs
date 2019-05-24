@@ -673,7 +673,9 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside OnImeModeChanged(), this = " + this);
             EventHandler handler = (EventHandler)Events[EventImeModeChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -805,7 +807,10 @@ namespace System.Windows.Forms
             // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange 
             // before listening to WmImeNotifys.
             if ((inputLanguageTable == ImeModeConversion.ChineseTable) && !lastLanguageChinese)
+            {
                 IgnoreWmImeNotify = true;
+            }
+
             lastLanguageChinese = (inputLanguageTable == ImeModeConversion.ChineseTable);
 
             if (ImeSupported && inputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)

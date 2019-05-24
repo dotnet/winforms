@@ -112,7 +112,9 @@ namespace System
             get
             {
                 if (s_isInAppContainer != -1)
+                {
                     return s_isInAppContainer == 1;
+                }
 
                 if (!IsWindows || IsWindows7)
                 {
@@ -168,7 +170,9 @@ namespace System
             get
             {
                 if (s_isWindowsElevated != -1)
+                {
                     return s_isWindowsElevated == 1;
+                }
 
                 if (!IsWindows || IsInAppContainer)
                 {

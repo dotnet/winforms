@@ -50,7 +50,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
+                }
 
                 if (borderSize != value)
                 {

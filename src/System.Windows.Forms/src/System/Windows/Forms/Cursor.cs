@@ -748,9 +748,13 @@ namespace System.Windows.Forms
             string s = null;
 
             if (!ownHandle)
+            {
                 s = TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this);
+            }
             else
+            {
                 s = base.ToString();
+            }
 
             return "[Cursor: " + s + "]";
         }

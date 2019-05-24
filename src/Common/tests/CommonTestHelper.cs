@@ -21,7 +21,10 @@ namespace WinForms.Common.Tests
         {
             var data = new TheoryData<T>();
             foreach (T item in Enum.GetValues(typeof(T)))
+            {
                 data.Add(item);
+            }
+
             return data;
         }
 

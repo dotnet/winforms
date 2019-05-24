@@ -16,7 +16,9 @@ namespace System.Windows.Forms
         public static PropertyDescriptor GetImageListProperty(PropertyDescriptor currentComponent, ref object instance)
         {
             if (instance is object[]) //multiple selection is not supported by this class
+            {
                 return null;
+            }
 
             PropertyDescriptor imageListProp = null;
             object parentInstance = instance;

@@ -148,15 +148,19 @@ namespace System.Windows.Forms
         private Rectangle GetCheckBoxBounds(Rectangle bounds, bool alignToRight)
         {
             if (alignToRight)
+            {
                 return new Rectangle(bounds.X + ((bounds.Width - idealCheckSize) / 2),
                                      bounds.Y + ((bounds.Height - idealCheckSize) / 2),
                                      bounds.Width < idealCheckSize ? bounds.Width : idealCheckSize,
                                      idealCheckSize);
+            }
             else
+            {
                 return new Rectangle(Math.Max(0, bounds.X + ((bounds.Width - idealCheckSize) / 2)),
                                      Math.Max(0, bounds.Y + ((bounds.Height - idealCheckSize) / 2)),
                                      bounds.Width < idealCheckSize ? bounds.Width : idealCheckSize,
                                      idealCheckSize);
+            }
         }
 
         /// <summary>
@@ -184,7 +188,9 @@ namespace System.Windows.Forms
             {
                 ret = ret || DataGridTableStyle.ReadOnly;
                 if (DataGridTableStyle.DataGrid != null)
+                {
                     ret = ret || DataGridTableStyle.DataGrid.ReadOnly;
+                }
             }
             return ret;
         }
@@ -263,7 +269,9 @@ namespace System.Windows.Forms
             // always invalidate
             Invalidate();
             if (!isEditing)
+            {
                 return true;
+            }
 
             SetColumnValueAtRow(dataSource, rowNum, currentValue);
             isEditing = false;
@@ -289,7 +297,9 @@ namespace System.Windows.Forms
             //
             DataGrid grid = DataGridTableStyle.DataGrid;
             if (!grid.Focused)
+            {
                 grid.Focus();
+            }
 
             if (!readOnly && !IsReadOnly())
             {
@@ -342,19 +352,25 @@ namespace System.Windows.Forms
         {
             EventHandler eh = Events[EventTrueValue] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         private void OnFalseValueChanged(EventArgs e)
         {
             EventHandler eh = Events[EventFalseValue] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         private void OnAllowNullChanged(EventArgs e)
         {
             EventHandler eh = Events[EventAllowNull] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         /// <summary>
@@ -403,7 +419,10 @@ namespace System.Windows.Forms
                 g.FillRectangle(selectionBrush, bounds);
             }
             else
+            {
                 g.FillRectangle(backBrush, bounds);
+            }
+
             g.Clip = r;
 
             if (checkedState == ButtonState.Inactive)
@@ -475,7 +494,10 @@ namespace System.Windows.Forms
             // do not throw an exception when the column is marked as readOnly or
             // does not allowNull
             if (!AllowNull || IsReadOnly())
+            {
                 return;
+            }
+
             if (currentValue != Convert.DBNull)
             {
                 currentValue = Convert.DBNull;

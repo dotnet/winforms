@@ -195,7 +195,10 @@ namespace System.Windows.Forms
             }
 
             if (cGrp != 0)
+            {
                 fStartNewChar = true;
+            }
+
             return fStartNewChar;
         }
 
@@ -249,7 +252,9 @@ namespace System.Windows.Forms
                                                  new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)),
                                                  0);
                 if (hhook == IntPtr.Zero)
+                {
                     throw new System.Security.SecurityException(SR.SendKeysHookFailed);
+                }
             }
         }
 
@@ -294,12 +299,18 @@ namespace System.Windows.Forms
                     string value = System.Configuration.ConfigurationManager.AppSettings.Get("SendKeys");
 
                     if (string.IsNullOrEmpty(value))
+                    {
                         return;
+                    }
 
                     if (value.Equals("JournalHook", StringComparison.OrdinalIgnoreCase))
+                    {
                         sendMethod = SendMethodTypes.JournalHook;
+                    }
                     else if (value.Equals("SendInput", StringComparison.OrdinalIgnoreCase))
+                    {
                         sendMethod = SendMethodTypes.SendInput;
+                    }
                 }
                 catch { } // ignore any exceptions to keep existing SendKeys behavior
             }
@@ -358,8 +369,12 @@ namespace System.Windows.Forms
         private static int MatchKeyword(string keyword)
         {
             for (int i = 0; i < keywords.Length; i++)
+            {
                 if (string.Equals(keywords[i].keyword, keyword, StringComparison.OrdinalIgnoreCase))
+                {
                     return keywords[i].vk;
+                }
+            }
 
             return -1;
         }
@@ -535,7 +550,9 @@ namespace System.Windows.Forms
 
                     case '+':
                         if (haveKeys[HAVESHIFT] != 0)
+                        {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
+                        }
 
                         AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
                         fStartNewChar = false;
@@ -544,7 +561,9 @@ namespace System.Windows.Forms
 
                     case '^':
                         if (haveKeys[HAVECTRL] != 0)
+                        {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
+                        }
 
                         AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
                         fStartNewChar = false;
@@ -553,7 +572,9 @@ namespace System.Windows.Forms
 
                     case '%':
                         if (haveKeys[HAVEALT] != 0)
+                        {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
+                        }
 
                         AddEvent(new SKEvent((haveKeys[HAVECTRL] != 0) ? Interop.WindowMessages.WM_KEYDOWN : Interop.WindowMessages.WM_SYSKEYDOWN,
                                              (int)Keys.Menu, fStartNewChar, hwnd));
@@ -568,23 +589,40 @@ namespace System.Windows.Forms
                         //
                         cGrp++;
                         if (cGrp > 3)
+                        {
                             throw new ArgumentException(SR.SendKeysNestingError);
+                        }
 
                         if (haveKeys[HAVESHIFT] == UNKNOWN_GROUPING)
+                        {
                             haveKeys[HAVESHIFT] = cGrp;
+                        }
+
                         if (haveKeys[HAVECTRL] == UNKNOWN_GROUPING)
+                        {
                             haveKeys[HAVECTRL] = cGrp;
+                        }
+
                         if (haveKeys[HAVEALT] == UNKNOWN_GROUPING)
+                        {
                             haveKeys[HAVEALT] = cGrp;
+                        }
+
                         break;
 
                     case ')':
                         if (cGrp < 1)
+                        {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
+                        }
+
                         CancelMods(haveKeys, cGrp, hwnd);
                         cGrp--;
                         if (cGrp == 0)
+                        {
                             fStartNewChar = true;
+                        }
+
                         break;
 
                     case '~':
@@ -604,7 +642,9 @@ namespace System.Windows.Forms
             }
 
             if (cGrp != 0)
+            {
                 throw new ArgumentException(SR.SendKeysGroupDelimError);
+            }
 
             CancelMods(haveKeys, UNKNOWN_GROUPING, hwnd);
         }
@@ -915,7 +955,9 @@ namespace System.Windows.Forms
         {
 
             if (keys == null || keys.Length == 0)
+            {
                 return;
+            }
 
             // If we're not going to wait, make sure there is a pump.
             //
@@ -939,7 +981,9 @@ namespace System.Windows.Forms
             // if there weren't any events posted as a result, we're done!
             //
             if (events == null)
+            {
                 return;
+            }
 
             LoadSendMethodFromConfig();
 
@@ -1161,7 +1205,10 @@ namespace System.Windows.Forms
 
                     default:
                         if (code < 0)
+                        {
                             UnsafeNativeMethods.CallNextHookEx(new HandleRef(null, SendKeys.hhook), code, wparam, lparam);
+                        }
+
                         break;
                 }
 

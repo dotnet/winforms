@@ -371,22 +371,45 @@ namespace System.Windows.Forms
                 }
 
                 if (!Scrollable)
+                {
                     cp.Style |= NativeMethods.LVS_NOSCROLL;
+                }
 
                 if (!HideSelection)
+                {
                     cp.Style |= NativeMethods.TVS_SHOWSELALWAYS;
+                }
+
                 if (LabelEdit)
+                {
                     cp.Style |= NativeMethods.TVS_EDITLABELS;
+                }
+
                 if (ShowLines)
+                {
                     cp.Style |= NativeMethods.TVS_HASLINES;
+                }
+
                 if (ShowPlusMinus)
+                {
                     cp.Style |= NativeMethods.TVS_HASBUTTONS;
+                }
+
                 if (ShowRootLines)
+                {
                     cp.Style |= NativeMethods.TVS_LINESATROOT;
+                }
+
                 if (HotTracking)
+                {
                     cp.Style |= NativeMethods.TVS_TRACKSELECT;
+                }
+
                 if (FullRowSelect)
+                {
                     cp.Style |= NativeMethods.TVS_FULLROWSELECT;
+                }
+
                 if (setOddHeight)
                 {
                     cp.Style |= NativeMethods.TVS_NONEVENHEIGHT;
@@ -403,7 +426,9 @@ namespace System.Windows.Forms
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (CheckBoxes && IsHandleCreated)
+                {
                     cp.Style |= NativeMethods.TVS_CHECKBOXES;
+                }
 
                 // Don't call IsMirrored from CreateParams. That will lead to some nasty problems, since
                 // IsMirrored ends up calling CreateParams - you dig!
@@ -477,7 +502,9 @@ namespace System.Windows.Forms
             {
                 base.ForeColor = value;
                 if (IsHandleCreated)
+                {
                     SendMessage(NativeMethods.TVM_SETTEXTCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
+                }
             }
         }
 
@@ -1233,7 +1260,10 @@ namespace System.Windows.Forms
                     Debug.Assert(selectedNode == null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
                     IntPtr hItem = SendMessage(NativeMethods.TVM_GETNEXTITEM, NativeMethods.TVGN_CARET, 0);
                     if (hItem == IntPtr.Zero)
+                    {
                         return null;
+                    }
+
                     return NodeFromHandle(hItem);
                 }
                 else if (selectedNode != null && selectedNode.TreeView == this)
@@ -1313,7 +1343,9 @@ namespace System.Windows.Forms
                 {
                     treeViewState[TREEVIEWSTATE_showNodeToolTips] = value;
                     if (ShowNodeToolTips)
+                    {
                         RecreateHandle();
+                    }
                 }
             }
         }
@@ -1508,7 +1540,9 @@ namespace System.Windows.Forms
             get
             {
                 if (IsHandleCreated)
+                {
                     return unchecked((int)(long)SendMessage(NativeMethods.TVM_GETVISIBLECOUNT, 0, 0));
+                }
 
                 return 0;
             }
@@ -1776,9 +1810,13 @@ namespace System.Windows.Forms
                 {
                     SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
                     if (delayed)
+                    {
                         UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                    }
                     else
+                    {
                         SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                    }
                 }
             }
         }
@@ -2006,7 +2044,9 @@ namespace System.Windows.Forms
         protected virtual void OnDrawNode(DrawTreeNodeEventArgs e)
         {
             if (onDrawNode != null)
+            {
                 onDrawNode(this, e);
+            }
         }
 
         /// <summary>
@@ -2047,11 +2087,16 @@ namespace System.Windows.Forms
             Color c;
             c = BackColor;
             if (c != SystemColors.Window)
+            {
                 SendMessage(NativeMethods.TVM_SETBKCOLOR, 0, ColorTranslator.ToWin32(c));
+            }
+
             c = ForeColor;
 
             if (c != SystemColors.WindowText)
+            {
                 SendMessage(NativeMethods.TVM_SETTEXTCOLOR, 0, ColorTranslator.ToWin32(c));
+            }
 
             /// put the linecolor into the native control only if Set ...
             if (lineColor != Color.Empty)
@@ -2060,7 +2105,9 @@ namespace System.Windows.Forms
             }
 
             if (imageList != null)
+            {
                 SendMessage(NativeMethods.TVM_SETIMAGELIST, 0, imageList.Handle);
+            }
 
             if (stateImageList != null)
             {
@@ -2238,7 +2285,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onBeforeLabelEdit != null)
+            {
                 onBeforeLabelEdit(this, e);
+            }
         }
 
         /// <summary>
@@ -2248,7 +2297,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onAfterLabelEdit != null)
+            {
                 onAfterLabelEdit(this, e);
+            }
         }
 
         /// <summary>
@@ -2258,7 +2309,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onBeforeCheck != null)
+            {
                 onBeforeCheck(this, e);
+            }
         }
 
         /// <summary>
@@ -2268,7 +2321,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onAfterCheck != null)
+            {
                 onAfterCheck(this, e);
+            }
         }
 
         /// <summary>
@@ -2278,7 +2333,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onBeforeCollapse != null)
+            {
                 onBeforeCollapse(this, e);
+            }
         }
 
         /// <summary>
@@ -2288,7 +2345,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onAfterCollapse != null)
+            {
                 onAfterCollapse(this, e);
+            }
         }
 
         /// <summary>
@@ -2298,7 +2357,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onBeforeExpand != null)
+            {
                 onBeforeExpand(this, e);
+            }
         }
 
         /// <summary>
@@ -2308,7 +2369,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onAfterExpand != null)
+            {
                 onAfterExpand(this, e);
+            }
         }
 
         /// <summary>
@@ -2318,7 +2381,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onItemDrag != null)
+            {
                 onItemDrag(this, e);
+            }
         }
 
         /// <summary>
@@ -2328,7 +2393,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onNodeMouseHover != null)
+            {
                 onNodeMouseHover(this, e);
+            }
         }
 
         /// <summary>
@@ -2338,7 +2405,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onBeforeSelect != null)
+            {
                 onBeforeSelect(this, e);
+            }
         }
 
         /// <summary>
@@ -2348,7 +2417,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onAfterSelect != null)
+            {
                 onAfterSelect(this, e);
+            }
         }
 
         /// <summary>
@@ -2358,7 +2429,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onNodeMouseClick != null)
+            {
                 onNodeMouseClick(this, e);
+            }
         }
 
         /// <summary>
@@ -2368,7 +2441,9 @@ namespace System.Windows.Forms
         {
             Contract.Requires(e != null);
             if (onNodeMouseDoubleClick != null)
+            {
                 onNodeMouseDoubleClick(this, e);
+            }
         }
 
         /// <summary>
@@ -2378,7 +2453,9 @@ namespace System.Windows.Forms
         {
             base.OnKeyDown(e);
             if (e.Handled)
+            {
                 return;
+            }
             // if it's a space, send the check notifications and toggle the checkbox if we're not
             // cancelled.
             if (CheckBoxes && (e.KeyData & Keys.KeyCode) == Keys.Space)
@@ -2405,7 +2482,9 @@ namespace System.Windows.Forms
         {
             base.OnKeyUp(e);
             if (e.Handled)
+            {
                 return;
+            }
             // eat the space key
             if ((e.KeyData & Keys.KeyCode) == Keys.Space)
             {
@@ -2421,10 +2500,14 @@ namespace System.Windows.Forms
         {
             base.OnKeyPress(e);
             if (e.Handled)
+            {
                 return;
+            }
             // eat the space key
             if (e.KeyChar == ' ')
+            {
                 e.Handled = true;
+            }
         }
 
 
@@ -2537,7 +2620,9 @@ namespace System.Windows.Forms
             {
                 s += ", Nodes.Count: " + Nodes.Count.ToString(CultureInfo.CurrentCulture);
                 if (Nodes.Count > 0)
+                {
                     s += ", Nodes[0]: " + Nodes[0].ToString();
+                }
             }
             return s;
         }
@@ -2667,7 +2752,9 @@ namespace System.Windows.Forms
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
                 if (unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_GETITEMRECT, 1, ref rc)) != 0)
+                {
                     SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rc, true);
+                }
             }
         }
 
@@ -2684,7 +2771,10 @@ namespace System.Windows.Forms
             NodeLabelEditEventArgs e = new NodeLabelEditEventArgs(editingNode);
             OnBeforeLabelEdit(e);
             if (!e.CancelEdit)
+            {
                 editNode = editingNode;
+            }
+
             return (IntPtr)(e.CancelEdit ? 1 : 0);
         }
 
@@ -2706,7 +2796,9 @@ namespace System.Windows.Forms
             {
                 node.text = newText;
                 if (Scrollable)
+                {
                     ForceScrollbarUpdate(true);
+                }
             }
             return (IntPtr)(e.CancelEdit ? 0 : 1);
         }
@@ -2998,7 +3090,9 @@ namespace System.Windows.Forms
         {
             OwnerDrawPropertyBag retval = new OwnerDrawPropertyBag();
             if (node == null || node.propBag == null)
+            {
                 return retval;
+            }
 
             // we only change colors if we're displaying things normally
             if ((state & (NativeMethods.CDIS_SELECTED | NativeMethods.CDIS_GRAYED | NativeMethods.CDIS_HOT | NativeMethods.CDIS_DISABLED)) == 0)
@@ -3443,7 +3537,10 @@ namespace System.Windows.Forms
                         }
                     }
                     if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
+                    {
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                    }
+
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = false;
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     CaptureInternal = false;

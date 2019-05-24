@@ -181,7 +181,9 @@ namespace System.Windows.Forms
                         for (int i = 0; i < imageKeys.Count; i++)
                         {
                             if ((imageKeys[i] != null) && (imageKeys[i].Length != 0))
+                            {
                                 values[i] = imageKeys[i];
+                            }
                         }
 
                         return new StandardValuesCollection(values);

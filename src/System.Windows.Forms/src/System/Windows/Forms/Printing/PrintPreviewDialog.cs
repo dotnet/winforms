@@ -1583,7 +1583,9 @@ namespace System.Windows.Forms
             // so the user has a chance to catch the exception instead of letting go to
             // the windows forms exception dialog.
             if (Document != null && !Document.PrinterSettings.IsValid)
+            {
                 throw new InvalidPrinterException(Document.PrinterSettings);
+            }
 
             base.CreateHandle();
         }

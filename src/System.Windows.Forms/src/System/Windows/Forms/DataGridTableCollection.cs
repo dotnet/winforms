@@ -146,14 +146,19 @@ namespace System.Windows.Forms
             get
             {
                 if (tableName == null)
+                {
                     throw new ArgumentNullException(nameof(tableName));
+                }
+
                 int itemCount = items.Count;
                 for (int i = 0; i < itemCount; ++i)
                 {
                     DataGridTableStyle table = (DataGridTableStyle)items[i];
                     // NOTE: case-insensitive
                     if (string.Equals(table.MappingName, tableName, StringComparison.OrdinalIgnoreCase))
+                    {
                         return table;
+                    }
                 }
                 return null;
             }
@@ -162,10 +167,17 @@ namespace System.Windows.Forms
         internal void CheckForMappingNameDuplicates(DataGridTableStyle table)
         {
             if (string.IsNullOrEmpty(table.MappingName))
+            {
                 return;
+            }
+
             for (int i = 0; i < items.Count; i++)
+            {
                 if (((DataGridTableStyle)items[i]).MappingName.Equals(table.MappingName) && table != items[i])
+                {
                     throw new ArgumentException(SR.DataGridTableStyleDuplicateMappingName, "table");
+                }
+            }
         }
 
         /// <summary>
@@ -176,10 +188,15 @@ namespace System.Windows.Forms
             // set the rowHeaderWidth on the newly added table to at least the minimum value
             // on its owner
             if (owner != null && owner.MinimumRowHeaderWidth() > table.RowHeaderWidth)
+            {
                 table.RowHeaderWidth = owner.MinimumRowHeaderWidth();
+            }
 
             if (table.DataGrid != owner && table.DataGrid != null)
+            {
                 throw new ArgumentException(SR.DataGridTableStyleCollectionAddedParentedTableStyle, "table");
+            }
+
             table.DataGrid = owner;
             CheckForMappingNameDuplicates(table);
             table.MappingNameChanged += new EventHandler(TableStyleMappingNameChanged);
@@ -248,7 +265,9 @@ namespace System.Windows.Forms
                 DataGridTableStyle table = (DataGridTableStyle)items[i];
                 // NOTE: case-insensitive
                 if (string.Compare(table.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -269,7 +288,9 @@ namespace System.Windows.Forms
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
             if (onCollectionChanged != null)
+            {
                 onCollectionChanged(this, e);
+            }
 
             DataGrid grid = owner;
             if (grid != null)
@@ -294,15 +315,22 @@ namespace System.Windows.Forms
             int tableIndex = -1;
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i)
+            {
                 if (items[i] == table)
                 {
                     tableIndex = i;
                     break;
                 }
+            }
+
             if (tableIndex == -1)
+            {
                 throw new ArgumentException(SR.DataGridTableCollectionMissingTable, "table");
+            }
             else
+            {
                 RemoveAt(tableIndex);
+            }
         }
 
         public void RemoveAt(int index)

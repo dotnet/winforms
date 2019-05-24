@@ -388,9 +388,13 @@ namespace System.Windows.Forms
             do
             {
                 if (complete)
+                {
                     found = Items[index].ToString().Equals(text);
+                }
                 else
+                {
                     found = Items[index].ToString().ToUpper(CultureInfo.InvariantCulture).StartsWith(text);
+                }
 
                 if (found)
                 {
@@ -512,7 +516,9 @@ namespace System.Windows.Forms
         private void SortDomainItems()
         {
             if (inSort)
+            {
                 return;
+            }
 
             inSort = true;
             try
@@ -758,7 +764,10 @@ namespace System.Windows.Forms
             public int Compare(object p, object q)
             {
                 if (p == q)
+                {
                     return 0;
+                }
+
                 if (p == null || q == null)
                 {
                     return 0;

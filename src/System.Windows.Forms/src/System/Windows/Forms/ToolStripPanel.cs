@@ -672,8 +672,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventRendererChanged];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
 
         /// <summary>

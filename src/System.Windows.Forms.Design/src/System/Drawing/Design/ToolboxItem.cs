@@ -312,7 +312,9 @@ namespace System.Drawing.Design
         protected void CheckUnlocked()
         {
             if (Locked)
+            {
                 throw new InvalidOperationException(SR.ToolboxItemLocked);
+            }
         }
 
         /// <summary>
@@ -523,26 +525,34 @@ namespace System.Drawing.Design
             {
                 case "AssemblyName":
                     if (value is AssemblyName valueName)
+                    {
                         value = valueName.Clone();
+                    }
 
                     break;
 
                 case "DisplayName":
                 case "TypeName":
                     if (value == null)
+                    {
                         value = string.Empty;
+                    }
 
                     break;
 
                 case "Filter":
                     if (value == null)
+                    {
                         value = Array.Empty<ToolboxItemFilterAttribute>();
+                    }
 
                     break;
 
                 case "IsTransient":
                     if (value == null)
+                    {
                         value = false;
+                    }
 
                     break;
             }
@@ -782,7 +792,9 @@ namespace System.Drawing.Design
         {
             Debug.Assert(type != null);
             if (policiedAssemblyName == null)
+            {
                 return null;
+            }
 
             //if looking for myself, just return it. (not a reference)	
             if (type.Assembly.FullName == policiedAssemblyName.FullName)
@@ -794,14 +806,18 @@ namespace System.Drawing.Design
             foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
             {
                 if (name.FullName == policiedAssemblyName.FullName)
+                {
                     return name;
+                }
             }
 
             //next search for a partial match -- we just compare the Name portions (ignore version and publickey)	
             foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
             {
                 if (name.Name == policiedAssemblyName.Name)
+                {
                     return name;
+                }
             }
 
             //finally, the most expensive -- its possible that retargeting policy is on an assembly whose name changes	
@@ -928,7 +944,9 @@ namespace System.Drawing.Design
                 case "TypeName":
                     ValidatePropertyType(propertyName, value, typeof(string), true);
                     if (value == null)
+                    {
                         value = string.Empty;
+                    }
 
                     break;
 

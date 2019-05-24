@@ -232,7 +232,10 @@ namespace System.Windows.Forms
                     isChecked = value;
 
                     if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.BM_SETCHECK, value ? 1 : 0, 0);
+                    }
+
                     Invalidate();
                     Update();
                     PerformAutoUpdates(false);
@@ -461,7 +464,9 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             EventHandler handler = (EventHandler)Events[EVENT_CHECKEDCHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>

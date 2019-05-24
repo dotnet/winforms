@@ -107,9 +107,13 @@ namespace System.ComponentModel.Design
         protected internal bool EqualsToValue(object value)
         {
             if (value == currValue)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         protected virtual void FillTreeWithData(Selector selector, ITypeDescriptorContext context, IServiceProvider provider)
@@ -266,7 +270,9 @@ namespace System.ComponentModel.Design
 
                 int len = treeNodes.Length;
                 if (len == 0)
+                {
                     return false;
+                }
 
                 for (int i = 0; i < len; i++)
                 {

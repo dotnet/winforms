@@ -148,7 +148,10 @@ namespace System.Windows.Forms
 
                     alignment = value;
                     if (alignment == TabAlignment.Left || alignment == TabAlignment.Right)
+                    {
                         Multiline = true;
+                    }
+
                     RecreateHandle();
                 }
             }
@@ -327,9 +330,15 @@ namespace System.Windows.Forms
                 // set up window styles
                 //
                 if (Multiline == true)
+                {
                     cp.Style |= NativeMethods.TCS_MULTILINE;
+                }
+
                 if (drawMode == TabDrawMode.OwnerDrawFixed)
+                {
                     cp.Style |= NativeMethods.TCS_OWNERDRAWFIXED;
+                }
+
                 if (ShowToolTips && !DesignMode)
                 {
                     cp.Style |= NativeMethods.TCS_TOOLTIPS;
@@ -337,11 +346,15 @@ namespace System.Windows.Forms
 
                 if (alignment == TabAlignment.Bottom ||
                     alignment == TabAlignment.Right)
+                {
                     cp.Style |= NativeMethods.TCS_BOTTOM;
+                }
 
                 if (alignment == TabAlignment.Left ||
                     alignment == TabAlignment.Right)
+                {
                     cp.Style |= NativeMethods.TCS_VERTICAL | NativeMethods.TCS_MULTILINE;
+                }
 
                 if (tabControlState[TABCONTROLSTATE_hotTrack])
                 {
@@ -349,12 +362,16 @@ namespace System.Windows.Forms
                 }
 
                 if (appearance == TabAppearance.Normal)
+                {
                     cp.Style |= NativeMethods.TCS_TABS;
+                }
                 else
                 {
                     cp.Style |= NativeMethods.TCS_BUTTONS;
                     if (appearance == TabAppearance.FlatButtons && alignment == TabAlignment.Top)
+                    {
                         cp.Style |= NativeMethods.TCS_FLATBUTTONS;
+                    }
                 }
 
                 switch (sizeMode)
@@ -397,7 +414,9 @@ namespace System.Windows.Forms
                 // Null out cachedDisplayRect whenever we do anything to change it...
                 //
                 if (!cachedDisplayRect.IsEmpty)
+                {
                     return cachedDisplayRect;
+                }
 
                 Rectangle bounds = Bounds;
                 NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(bounds.X, bounds.Y, bounds.Width, bounds.Height);
@@ -526,7 +545,9 @@ namespace System.Windows.Forms
                     imageList = value;
                     IntPtr handle = (value != null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.TCM_SETIMAGELIST, IntPtr.Zero, handle);
+                    }
 
                     // Update the image list in the tab pages.
                     foreach (TabPage tabPage in TabPages)
@@ -634,7 +655,10 @@ namespace System.Windows.Forms
                 {
                     tabControlState[TABCONTROLSTATE_multiline] = value;
                     if (Multiline == false && (alignment == TabAlignment.Left || alignment == TabAlignment.Right))
+                    {
                         alignment = TabAlignment.Top;
+                    }
+
                     RecreateHandle();
                 }
             }
@@ -880,7 +904,9 @@ namespace System.Windows.Forms
             set
             {
                 if (sizeMode == value)
+                {
                     return;
+                }
 
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabSizeMode.Normal, (int)TabSizeMode.Fixed))
@@ -1237,7 +1263,10 @@ namespace System.Windows.Forms
         {
             TabPage[] result = new TabPage[tabPageCount];
             if (tabPageCount > 0)
+            {
                 Array.Copy(tabPages, 0, result, 0, tabPageCount);
+            }
+
             return result;
         }
 
@@ -1248,7 +1277,10 @@ namespace System.Windows.Forms
         {
             object[] result = (object[])Array.CreateInstance(baseType, tabPageCount);
             if (tabPageCount > 0)
+            {
                 Array.Copy(tabPages, 0, result, 0, tabPageCount);
+            }
+
             return result;
         }
 
@@ -1272,7 +1304,9 @@ namespace System.Windows.Forms
             // normally, we would not want to create the handle for this, but since
             // it is dependent on the actual physical display, we simply must.
             if (!IsHandleCreated)
+            {
                 CreateHandle();
+            }
 
             SendMessage(NativeMethods.TCM_GETITEMRECT, index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
@@ -1288,7 +1322,9 @@ namespace System.Windows.Forms
         private void ImageListRecreateHandle(object sender, EventArgs e)
         {
             if (IsHandleCreated)
+            {
                 SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, ImageList.Handle);
+            }
         }
 
         /// <summary>
@@ -1326,10 +1362,14 @@ namespace System.Windows.Forms
         {
 
             if (index < 0 || ((tabPages != null) && index > tabPageCount))
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            if (tabPage == null)
-                throw new ArgumentNullException(nameof(tabPage));
+            }
 
+            if (tabPage == null)
+            {
+                throw new ArgumentNullException(nameof(tabPage));
+            }
 
             int retIndex;
             if (IsHandleCreated)
@@ -1337,7 +1377,9 @@ namespace System.Windows.Forms
                 NativeMethods.TCITEM_T tcitem = tabPage.GetTCITEM();
                 retIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, index, tcitem);
                 if (retIndex >= 0)
+                {
                     Insert(retIndex, tabPage);
+                }
             }
 
         }
@@ -1348,7 +1390,10 @@ namespace System.Windows.Forms
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
+            {
                 return false;
+            }
+
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.PageUp:
@@ -1457,7 +1502,9 @@ namespace System.Windows.Forms
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
             if (onDrawItem != null)
+            {
                 onDrawItem(this, e);
+            }
         }
 
         /// <summary>
@@ -1588,8 +1635,9 @@ namespace System.Windows.Forms
             UpdateTabSelection(tabControlState[TABCONTROLSTATE_UISelection]);
             tabControlState[TABCONTROLSTATE_UISelection] = false;
             if (onSelectedIndexChanged != null)
+            {
                 onSelectedIndexChanged(this, e);
-
+            }
         }
 
 
@@ -1602,7 +1650,9 @@ namespace System.Windows.Forms
         {
             TabControlCancelEventHandler handler = (TabControlCancelEventHandler)Events[EVENT_SELECTING];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -1614,7 +1664,9 @@ namespace System.Windows.Forms
         {
             TabControlEventHandler handler = (TabControlEventHandler)Events[EVENT_SELECTED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             // Raise the enter event for this tab.
             if (SelectedTab != null)
@@ -1633,9 +1685,9 @@ namespace System.Windows.Forms
         {
             TabControlCancelEventHandler handler = (TabControlCancelEventHandler)Events[EVENT_DESELECTING];
             if (handler != null)
+            {
                 handler(this, e);
-
-
+            }
         }
 
         /// <summary>
@@ -1647,7 +1699,9 @@ namespace System.Windows.Forms
         {
             TabControlEventHandler handler = (TabControlEventHandler)Events[EVENT_DESELECTED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
 
             // Raise the Leave event for this tab.
             if (SelectedTab != null)
@@ -1662,7 +1716,10 @@ namespace System.Windows.Forms
         protected override bool ProcessKeyPreview(ref Message m)
         {
             if (ProcessKeyEventArgs(ref m))
+            {
                 return true;
+            }
+
             return base.ProcessKeyPreview(ref m);
         }
 
@@ -1745,7 +1802,10 @@ namespace System.Windows.Forms
         internal void RemoveTabPage(int index)
         {
             if (index < 0 || index >= tabPageCount)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
+
             tabPageCount--;
             if (index < tabPageCount)
             {
@@ -1795,9 +1855,14 @@ namespace System.Windows.Forms
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem)
         {
             if (index < 0 || index >= tabPageCount)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
+
             if (IsHandleCreated)
+            {
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETITEM, index, tcitem);
+            }
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
@@ -1879,9 +1944,13 @@ namespace System.Windows.Forms
                 {
                     int count = TabCount;
                     if (forward)
+                    {
                         sel = (sel + 1) % count;
+                    }
                     else
+                    {
                         sel = (sel + count - 1) % count;
+                    }
 
 
                     // this is special casing..
@@ -1940,7 +2009,9 @@ namespace System.Windows.Forms
             {
                 s += ", TabPages.Count: " + TabPages.Count.ToString(CultureInfo.CurrentCulture);
                 if (TabPages.Count > 0)
+                {
                     s += ", TabPages[0]: " + TabPages[0].ToString();
+                }
             }
             return s;
         }
@@ -2080,9 +2151,13 @@ namespace System.Windows.Forms
 
             string tipText = GetToolTipText(GetTabPage(commandID));
             if (!string.IsNullOrEmpty(tipText))
+            {
                 ttt.lpszText = tipText;
+            }
             else
+            {
                 ttt.lpszText = controlTipText;
+            }
 
             ttt.hinst = IntPtr.Zero;
 
@@ -2483,7 +2558,9 @@ namespace System.Windows.Forms
 
                 //check for the page not to be null
                 if (page == null)
+                {
                     throw new ArgumentNullException(nameof(page));
+                }
                 //end check
 
                 return IndexOf(page) != -1;
@@ -2516,7 +2593,9 @@ namespace System.Windows.Forms
 
                 //check for the page not to be null
                 if (page == null)
+                {
                     throw new ArgumentNullException(nameof(page));
+                }
                 //end check
 
                 for (int index = 0; index < Count; ++index)
@@ -2701,7 +2780,9 @@ namespace System.Windows.Forms
 
                 //check for the value not to be null
                 if (value == null)
+                {
                     throw new ArgumentNullException(nameof(value));
+                }
                 //end check
                 owner.Controls.Remove(value);
             }

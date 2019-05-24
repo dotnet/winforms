@@ -207,9 +207,14 @@ namespace System.Windows.Forms.Layout
             {
                 // the size is actually zero, set the width and heights appropriately.
                 if (right < left)
+                {
                     right = left;
+                }
+
                 if (bottom < top)
+                {
                     bottom = top;
+                }
             }
             else
             {
@@ -558,11 +563,19 @@ namespace System.Windows.Forms.Layout
                 if (CommonProperties.GetNeedsDockAndAnchorLayout(element))
                 {
                     if (!dock && CommonProperties.GetNeedsDockLayout(element))
+                    {
                         dock = true;
+                    }
+
                     if (!anchor && CommonProperties.GetNeedsAnchorLayout(element))
+                    {
                         anchor = true;
+                    }
+
                     if (!autoSize && CommonProperties.xGetAutoSizedAndAnchored(element))
+                    {
                         autoSize = true;
+                    }
                 }
             }
 
@@ -573,7 +586,10 @@ namespace System.Windows.Forms.Layout
             Size preferredSizeForAnchoring = Size.Empty;
 
             if (dock)
+            {
                 preferredSizeForDocking = LayoutDockedControls(container, measureOnly);
+            }
+
             if (anchor && !measureOnly)
             {
                 // in the case of anchor, where we currently are defines the preferred size,
@@ -582,7 +598,9 @@ namespace System.Windows.Forms.Layout
             }
 
             if (autoSize)
+            {
                 LayoutAutoSizedControls(container);
+            }
 
             if (!measureOnly)
             {

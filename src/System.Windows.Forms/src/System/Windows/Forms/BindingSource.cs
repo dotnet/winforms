@@ -1150,7 +1150,9 @@ namespace System.Windows.Forms
                     // GetListFromEnumerable returns null if there are no elements
                     // Don't consider it a list of enumerables in this case
                     if (bindingList != null)
+                    {
                         _listExtractedFromEnumerable = true;
+                    }
                 }
                 // If it's not an IList, IListSource or IEnumerable
                 if (bindingList == null)

@@ -162,7 +162,9 @@ namespace System.Drawing.Design
                 staticColors = new Color[CELLS - CELLS_CUSTOM];
 
                 for (int i = 0; i < staticCells.Length; i++)
+                {
                     staticColors[i] = ColorTranslator.FromOle(staticCells[i]);
+                }
 
                 CustomColors = customColors;
             }
@@ -238,7 +240,10 @@ namespace System.Drawing.Design
             private Color GetColorFromCell(int index)
             {
                 if (index < CELLS - CELLS_CUSTOM)
+                {
                     return staticColors[index];
+                }
+
                 return CustomColors[index - CELLS + CELLS_CUSTOM];
             }
 
@@ -971,9 +976,14 @@ namespace System.Drawing.Design
                     {
                         int count = tabControl.TabPages.Count;
                         if (forward)
+                        {
                             sel = (sel + 1) % count;
+                        }
                         else
+                        {
                             sel = (sel + count - 1) % count;
+                        }
+
                         tabControl.SelectedTab = tabControl.TabPages[sel];
 
                         return true;

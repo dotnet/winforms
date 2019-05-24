@@ -777,7 +777,9 @@ namespace System.ComponentModel.Design
 
                 _designers.Clear();
                 while (Components.Count > 0)
+                {
                     Remove(Components[0]);
+                }
             }
             finally
             {

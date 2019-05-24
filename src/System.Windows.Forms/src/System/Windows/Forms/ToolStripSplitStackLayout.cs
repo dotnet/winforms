@@ -196,7 +196,9 @@ namespace System.Windows.Forms
                         OverflowRequired = true;
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
+                        {
                             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to always overflow: {0} ", item));
+                        }
 #endif
                     }
 

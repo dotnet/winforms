@@ -609,7 +609,9 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.GetCursorPos(p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                        {
                             SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                        }
                     }
                 }
             }
@@ -1470,8 +1472,9 @@ namespace System.Windows.Forms
         {
             SplitterCancelEventHandler handler = (SplitterCancelEventHandler)Events[EVENT_MOVING];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
 
         /// <summary>
@@ -1483,7 +1486,9 @@ namespace System.Windows.Forms
         {
             SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2084,7 +2089,10 @@ namespace System.Windows.Forms
                                       bool nested, bool wrap)
         {
             if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
+            {
                 ctl = null;
+            }
+
             Control start = ctl;
             SplitterPanel firstPanel = null;
             do
@@ -2181,7 +2189,10 @@ namespace System.Windows.Forms
         {
 
             if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
+            {
                 ctl = null;
+            }
+
             Control start = ctl;
             do
             {
@@ -2229,7 +2240,9 @@ namespace System.Windows.Forms
                         callBaseVersion = true;
                     }
                     else
+                    {
                         nextActiveControl = panel2;
+                    }
                 }
             }
             return false;
@@ -2591,7 +2604,10 @@ namespace System.Windows.Forms
                 {
                     case Keys.Tab:
                         if (ProcessTabKey((keyData & Keys.Shift) == Keys.None))
+                        {
                             return true;
+                        }
+
                         break;
                     case Keys.Left:
                     case Keys.Right:
@@ -2601,10 +2617,15 @@ namespace System.Windows.Forms
                         {
                             if (ProcessArrowKey(keyCode == Keys.Right ||
                                             keyCode == Keys.Down))
+                            {
                                 return true;
+                            }
                         }
                         else
+                        {
                             return false;
+                        }
+
                         break;
 
                 }
@@ -2768,7 +2789,9 @@ namespace System.Windows.Forms
                     if (!owner.DesignMode)
                     {
                         if (IsReadOnly)
+                        {
                             throw new NotSupportedException(SR.ReadonlyControlsCollection);
+                        }
                     }
                 }
                 base.Remove(value);

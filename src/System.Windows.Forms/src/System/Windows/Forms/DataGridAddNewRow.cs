@@ -62,7 +62,9 @@ namespace System.Windows.Forms
         public override void OnRowLeave()
         {
             if (DataBound)
+            {
                 DataBound = false;
+            }
         }
 
         // the addNewRow has nothing to do with losing focus
@@ -96,15 +98,23 @@ namespace System.Windows.Forms
             Rectangle dataBounds = bounds;
             DataGridLineStyle gridStyle;
             if (dgTable.IsDefault)
+            {
                 gridStyle = DataGrid.GridLineStyle;
+            }
             else
+            {
                 gridStyle = dgTable.GridLineStyle;
+            }
+
             int bWidth = DataGrid == null ? 0 : gridStyle == DataGridLineStyle.Solid ? 1 : 0;
             dataBounds.Height -= bWidth;
             int cx = base.PaintData(g, dataBounds, firstVisibleColumn, columnCount, alignToRight);
 
             if (bWidth > 0)
+            {
                 PaintBottomBorder(g, bounds, cx, bWidth, alignToRight);
+            }
+
             return cx;
         }
 

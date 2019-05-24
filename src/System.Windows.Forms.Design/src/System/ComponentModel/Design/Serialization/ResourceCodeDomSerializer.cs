@@ -684,7 +684,9 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Assert(name != null, "name is null");
                 // If there is no parent culture, treat that as being different from the parent's resource, which results in the "normal" code path for the caller.
                 if (ReadCulture.Equals(CultureInfo.InvariantCulture))
+                {
                     return CompareValue.Different;
+                }
 
                 CultureInfo culture = ReadCulture;
                 for (; ; )
@@ -703,9 +705,13 @@ namespace System.ComponentModel.Design.Serialization
                         else if (parentValue != null)
                         {
                             if (parentValue.Equals(value))
+                            {
                                 return CompareValue.Same;
+                            }
                             else
+                            {
                                 return CompareValue.Different;
+                            }
                         }
                         else
                         {

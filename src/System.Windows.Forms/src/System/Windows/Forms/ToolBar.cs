@@ -378,7 +378,9 @@ namespace System.Windows.Forms
             {
 
                 if (value.Width < 0 || value.Height < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ButtonSize), value));
+                }
 
                 if (buttonSize != value)
                 {
@@ -410,11 +412,19 @@ namespace System.Windows.Forms
                 // | NativeMethods.WS_CHILD was commented out since setTopLevel should be able to work.
 
                 if (!Divider)
+                {
                     cp.Style |= NativeMethods.CCS_NODIVIDER;
+                }
+
                 if (Wrappable)
+                {
                     cp.Style |= NativeMethods.TBSTYLE_WRAPPABLE;
+                }
+
                 if (ShowToolTips && !DesignMode)
+                {
                     cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
+                }
 
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
                 cp.Style &= (~NativeMethods.WS_BORDER);
@@ -641,7 +651,9 @@ namespace System.Windows.Forms
                     }
 
                     if (IsHandleCreated)
+                    {
                         RecreateHandle();
+                    }
                 }
             }
         }
@@ -752,7 +764,9 @@ namespace System.Windows.Forms
                 }
 
                 if (Divider)
+                {
                     height += 2;
+                }
 
                 height += 4;
 
@@ -782,7 +796,9 @@ namespace System.Windows.Forms
                     // don't have it, have to recompute
                     //
                     if (!IsHandleCreated || buttons == null)
+                    {
                         maxWidth = ButtonSize.Width;
+                    }
                     else
                     {
 
@@ -792,7 +808,9 @@ namespace System.Windows.Forms
                         {
                             SendMessage(NativeMethods.TB_GETRECT, 0, ref rect);
                             if ((rect.right - rect.left) > maxWidth)
+                            {
                                 maxWidth = rect.right - rect.left;
+                            }
                         }
                     }
                 }
@@ -949,7 +967,10 @@ namespace System.Windows.Forms
                 }
 
                 if (textAlign == value)
+                {
                     return;
+                }
+
                 textAlign = value;
                 RecreateHandle();
             }
@@ -1177,7 +1198,9 @@ namespace System.Windows.Forms
         private void ImageListRecreateHandle(object sender, EventArgs e)
         {
             if (IsHandleCreated)
+            {
                 RecreateHandle();
+            }
         }
 
         /// <summary>
@@ -1199,7 +1222,9 @@ namespace System.Windows.Forms
             }
 
             if (index < buttonCount)
+            {
                 System.Array.Copy(buttons, index, buttons, index + 1, buttonCount - index);
+            }
 
             buttons[index] = button;
             buttonCount++;
@@ -1212,9 +1237,14 @@ namespace System.Windows.Forms
         {
 
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
@@ -1234,7 +1264,10 @@ namespace System.Windows.Forms
         private int InternalAddButton(ToolBarButton button)
         {
             if (button == null)
+            {
                 throw new ArgumentNullException(nameof(button));
+            }
+
             int index = buttonCount;
             Insert(index, button);
             return index;
@@ -1290,7 +1323,9 @@ namespace System.Windows.Forms
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
         {
             if (onButtonClick != null)
+            {
                 onButtonClick(this, e);
+            }
         }
 
         /// <summary>
@@ -1300,7 +1335,9 @@ namespace System.Windows.Forms
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
         {
             if (onButtonDropDown != null)
+            {
                 onButtonDropDown(this, e);
+            }
         }
 
         /// <summary>
@@ -1321,12 +1358,16 @@ namespace System.Windows.Forms
             // set up some extra goo
             //
             if (DropDownArrows)
+            {
                 SendMessage(NativeMethods.TB_SETEXTENDEDSTYLE, 0, NativeMethods.TBSTYLE_EX_DRAWDDARROWS);
+            }
 
             // if we have an imagelist, add it in now.
             //
             if (imageList != null)
+            {
                 SendMessage(NativeMethods.TB_SETIMAGELIST, 0, imageList.Handle);
+            }
 
             RealizeButtons();
 
@@ -1355,7 +1396,9 @@ namespace System.Windows.Forms
         {
             base.OnResize(e);
             if (Wrappable)
+            {
                 AdjustSize(Dock);
+            }
         }
 
         /// <summary>
@@ -1460,7 +1503,9 @@ namespace System.Windows.Forms
             buttonCount--;
 
             if (index < buttonCount)
+            {
                 System.Array.Copy(buttons, index + 1, buttons, index, buttonCount - index);
+            }
 
             buttons[buttonCount] = null;
         }
@@ -1496,9 +1541,14 @@ namespace System.Windows.Forms
             if (Dock == DockStyle.Left || Dock == DockStyle.Right)
             {
                 if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
+                {
                     requestedSize = width;
+                }
+
                 if (AutoSize)
+                {
                     width = PreferredWidth;
+                }
 
                 if (width != originalWidth && Dock == DockStyle.Right)
                 {
@@ -1510,9 +1560,14 @@ namespace System.Windows.Forms
             else
             {
                 if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
+                {
                     requestedSize = height;
+                }
+
                 if (AutoSize)
+                {
                     height = PreferredHeight;
+                }
 
                 if (height != originalHeight && Dock == DockStyle.Bottom)
                 {
@@ -1551,7 +1606,10 @@ namespace System.Windows.Forms
             string s = base.ToString();
             s += ", Buttons.Count: " + buttonCount.ToString(CultureInfo.CurrentCulture);
             if (buttonCount > 0)
+            {
                 s += ", Buttons[0]: " + buttons[0].ToString();
+            }
+
             return s;
         }
 
@@ -1578,7 +1636,9 @@ namespace System.Windows.Forms
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
             if (tbb == null)
+            {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
+            }
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
@@ -1627,9 +1687,13 @@ namespace System.Windows.Forms
             ToolBarButton tbb = (ToolBarButton)buttons[commandID];
 
             if (tbb != null && tbb.ToolTipText != null)
+            {
                 ttt.lpszText = tbb.ToolTipText;
+            }
             else
+            {
                 ttt.lpszText = null;
+            }
 
             ttt.hinst = IntPtr.Zero;
 
@@ -1651,23 +1715,41 @@ namespace System.Windows.Forms
             // Should we set the hot item?
             NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
             if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_LEAVING == (nmTbHotItem.dwFlags & NativeMethods.HICF_LEAVING))
+            {
                 hotItem = -1;
+            }
             else if (NativeMethods.HICF_MOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_MOUSE))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_ARROWKEYS == (nmTbHotItem.dwFlags & NativeMethods.HICF_ARROWKEYS))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_ACCELERATOR == (nmTbHotItem.dwFlags & NativeMethods.HICF_ACCELERATOR))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_DUPACCEL == (nmTbHotItem.dwFlags & NativeMethods.HICF_DUPACCEL))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_RESELECT == (nmTbHotItem.dwFlags & NativeMethods.HICF_RESELECT))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_LMOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_LMOUSE))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_TOGGLEDROPDOWN == (nmTbHotItem.dwFlags & NativeMethods.HICF_TOGGLEDROPDOWN))
+            {
                 hotItem = nmTbHotItem.idNew;
+            }
         }
 
 
@@ -1825,7 +1907,10 @@ namespace System.Windows.Forms
                 get
                 {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
                     return owner.buttons[index];
                 }
                 set
@@ -2148,7 +2233,9 @@ namespace System.Windows.Forms
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                }
 
                 if (owner.IsHandleCreated)
                 {

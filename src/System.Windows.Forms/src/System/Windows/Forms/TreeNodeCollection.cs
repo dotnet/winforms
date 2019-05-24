@@ -64,7 +64,10 @@ namespace System.Windows.Forms
             set
             {
                 if (index < 0 || index >= owner.childCount)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
+
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
@@ -249,7 +252,10 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(nodes));
             }
             if (nodes.Length == 0)
+            {
                 return;
+            }
+
             TreeView tv = owner.TreeView;
             if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
@@ -338,7 +344,9 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(node));
             }
             if (node.handle != IntPtr.Zero)
+            {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
+            }
 
             // Check for ParentingCycle
             owner.CheckParentingCycle(node);
@@ -367,7 +375,9 @@ namespace System.Windows.Forms
             node.Realize(false);
 
             if (tv != null && node == tv.selectedNode)
+            {
                 tv.SelectedNode = node; // communicate this to the handle
+            }
 
             if (tv != null && tv.TreeViewNodeSorter != null)
             {
@@ -486,7 +496,9 @@ namespace System.Windows.Forms
         public virtual void Insert(int index, TreeNode node)
         {
             if (node.handle != IntPtr.Zero)
+            {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
+            }
 
             // Check for ParentingCycle
             owner.CheckParentingCycle(node);
@@ -500,9 +512,15 @@ namespace System.Windows.Forms
             }
 
             if (index < 0)
+            {
                 index = 0;
+            }
+
             if (index > owner.childCount)
+            {
                 index = owner.childCount;
+            }
+
             owner.InsertNodeAt(index, node);
         }
 

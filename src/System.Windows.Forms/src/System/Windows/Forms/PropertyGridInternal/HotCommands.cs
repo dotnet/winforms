@@ -47,9 +47,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     allowVisible = value;
                     if (value && WouldBeVisible)
+                    {
                         Visible = true;
+                    }
                     else
+                    {
                         Visible = false;
+                    }
                 }
             }
         }

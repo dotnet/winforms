@@ -226,7 +226,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EventCheckedChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -237,7 +239,9 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
             EventHandler handler = (EventHandler)Events[EventCheckStateChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>

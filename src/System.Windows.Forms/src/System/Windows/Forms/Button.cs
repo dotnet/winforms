@@ -270,7 +270,9 @@ namespace System.Windows.Forms
         {
             Form form = FindForm();
             if (form != null)
+            {
                 form.DialogResult = dialogResult;
+            }
 
 
             // accessibility stuff

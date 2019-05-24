@@ -135,9 +135,15 @@ namespace System.Windows.Forms.Layout
         public static Size ConvertZeroToUnbounded(Size size)
         {
             if (size.Width == 0)
+            {
                 size.Width = int.MaxValue;
+            }
+
             if (size.Height == 0)
+            {
                 size.Height = int.MaxValue;
+            }
+
             return size;
         }
 

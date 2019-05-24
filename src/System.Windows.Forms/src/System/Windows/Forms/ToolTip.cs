@@ -2539,7 +2539,9 @@ namespace System.Windows.Forms
                     // Get the text display rectangle
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADJUSTRECT, 1, ref r);
                     if (r.Size.Height > currentTooltipSize.Height)
+                    {
                         currentTooltipSize.Height = r.Size.Height;
+                    }
                 }
 
                 // Set the max possible size of the tooltip to the size we received.

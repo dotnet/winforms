@@ -302,7 +302,9 @@ namespace System.Windows.Forms
 
                 // Call to update the control only if the bullet is set.
                 if (IsHandleCreated && SelectionBullet)
+                {
                     SelectionBullet = true;
+                }
             }
         }
 
@@ -391,14 +393,18 @@ namespace System.Windows.Forms
                         // RichEd infers word wrap from the absence of horizontal scroll bars
                         cp.Style |= NativeMethods.WS_HSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
+                        {
                             cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
+                        }
                     }
 
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_VERT) != 0)
                     {
                         cp.Style |= NativeMethods.WS_VSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
+                        {
                             cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
+                        }
                     }
                 }
 
@@ -671,7 +677,10 @@ namespace System.Windows.Forms
             get
             {
                 if (!CanRedo)
+                {
                     return "";
+                }
+
                 int n;
                 n = unchecked((int)(long)SendMessage(Interop.EditMessages.EM_GETREDONAME, 0, 0));
                 return GetEditorActionName(n);
@@ -717,7 +726,10 @@ namespace System.Windows.Forms
                 if (rightMargin != value)
                 {
                     if (value < 0)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RightMargin), value, 0));
+                    }
+
                     rightMargin = value;
 
                     if (value == 0)
@@ -775,10 +787,14 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
 
                 if (value.Equals(Rtf))
+                {
                     return;
+                }
 
                 ForceHandleCreate();
                 textRtf = value;
@@ -1015,7 +1031,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value > 2000 || value < -2000)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(SelectionCharOffset), value, -2000, 2000));
+                }
 
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA
@@ -1053,7 +1071,9 @@ namespace System.Windows.Forms
                 NativeMethods.CHARFORMATA cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0)
+                {
                     selColor = ColorTranslator.FromOle(cf.crTextColor);
+                }
 
                 return selColor;
             }
@@ -1178,7 +1198,9 @@ namespace System.Windows.Forms
 
                 // check if alignment has been set yet
                 if ((RichTextBoxConstants.PFM_OFFSET & pf.dwMask) != 0)
+                {
                     selHangingIndent = pf.dxOffset;
+                }
 
                 return Twip2Pixel(IntPtr.Zero, selHangingIndent, true);
             }
@@ -1225,7 +1247,9 @@ namespace System.Windows.Forms
 
                 // check if alignment has been set yet
                 if ((RichTextBoxConstants.PFM_STARTINDENT & pf.dwMask) != 0)
+                {
                     selIndent = pf.dxStartIndent;
+                }
 
                 return Twip2Pixel(IntPtr.Zero, selIndent, true);
             }
@@ -1324,7 +1348,10 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 StreamIn(value, RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_RTF);
             }
         }
@@ -1358,14 +1385,18 @@ namespace System.Windows.Forms
 
                 // check if alignment has been set yet
                 if ((RichTextBoxConstants.PFM_RIGHTINDENT & pf.dwMask) != 0)
+                {
                     selRightIndent = pf.dxRightIndent;
+                }
 
                 return Twip2Pixel(IntPtr.Zero, selRightIndent, true);
             }
             set
             {
                 if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionRightIndent), value, 0));
+                }
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
@@ -1407,7 +1438,9 @@ namespace System.Windows.Forms
                 {
                     selTabs = new int[pf.cTabCount];
                     for (int x = 0; x < pf.cTabCount; x++)
+                    {
                         selTabs[x] = Twip2Pixel(IntPtr.Zero, pf.rgxTabs[x], true);
+                    }
                 }
 
                 return selTabs;
@@ -1416,7 +1449,9 @@ namespace System.Windows.Forms
             {
                 // Verify the argument, and throw an error if is bad
                 if (value != null && value.Length > RichTextBoxConstants.MAX_TAB_STOPS)
+                {
                     throw new ArgumentOutOfRangeException(nameof(SelectionTabs), SR.SelTabCountRange);
+                }
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
@@ -1431,7 +1466,9 @@ namespace System.Windows.Forms
                 pf.cTabCount = (short)((value == null) ? 0 : value.Length);
                 pf.dwMask = RichTextBoxConstants.PFM_TABSTOPS;
                 for (int x = 0; x < pf.cTabCount; x++)
+                {
                     pf.rgxTabs[x] = Pixel2Twip(IntPtr.Zero, value[x], true);
+                }
 
                 // set the format for our current paragraph or selection
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETPARAFORMAT, 0, pf);
@@ -1633,7 +1670,10 @@ namespace System.Windows.Forms
             get
             {
                 if (!CanUndo)
+                {
                     return "";
+                }
+
                 int n;
                 n = unchecked((int)(long)SendMessage(Interop.EditMessages.EM_GETUNDONAME, 0, 0));
                 return GetEditorActionName(n);
@@ -1693,7 +1733,9 @@ namespace System.Windows.Forms
                     return zoomMultiplier;
                 }
                 else
+                {
                     return zoomMultiplier;
+                }
             }
 
             set
@@ -1945,7 +1987,9 @@ namespace System.Windows.Forms
                                 Marshal.Copy(bytes, 0, buf, transferred);
                                 // set up number of bytes transferred
                                 if (transferred < 0)
+                                {
                                     transferred = 0;
+                                }
                             }
                             else
                             {
@@ -2006,9 +2050,14 @@ namespace System.Windows.Forms
 
             int textLen = TextLength;
             if (start < 0 || start > textLen)
+            {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
+            }
+
             if (end < -1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
+            }
 
             bool selectWord = true;
             NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT
@@ -2062,11 +2111,20 @@ namespace System.Windows.Forms
             // set up the options for the search
             int findOptions = 0;
             if ((options & RichTextBoxFinds.WholeWord) == RichTextBoxFinds.WholeWord)
+            {
                 findOptions |= RichTextBoxConstants.FR_WHOLEWORD;
+            }
+
             if ((options & RichTextBoxFinds.MatchCase) == RichTextBoxFinds.MatchCase)
+            {
                 findOptions |= RichTextBoxConstants.FR_MATCHCASE;
+            }
+
             if ((options & RichTextBoxFinds.NoHighlight) == RichTextBoxFinds.NoHighlight)
+            {
                 selectWord = false;
+            }
+
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
             {
                 // The default for RichEdit 2.0 is to search in reverse
@@ -2155,15 +2213,25 @@ namespace System.Windows.Forms
             int textLength = TextLength;
 
             if (characterSet == null)
+            {
                 throw new ArgumentNullException(nameof(characterSet));
+            }
+
             if (start < 0 || start > textLength)
+            {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLength));
+            }
+
             if (end < start && end != -1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.InvalidLowBoundArgumentEx, nameof(end), end, nameof(start)));
+            }
 
             // Don't do anything if we get nothing to look for
             if (characterSet.Length == 0)
+            {
                 return -1;
+            }
 
             int textLen = Interop.User32.GetWindowTextLengthW(new HandleRef(this, Handle));
             if (start == end)
@@ -2194,7 +2262,9 @@ namespace System.Windows.Forms
 
             txrg.lpstrText = charBuffer.AllocCoTaskMem();
             if (txrg.lpstrText == IntPtr.Zero)
+            {
                 throw new OutOfMemoryException();
+            }
 
             try
             {
@@ -2223,11 +2293,15 @@ namespace System.Windows.Forms
                         // We need to keep our request within the
                         // lower bound of zero
                         if (txrg.chrg.cpMin < 0)
+                        {
                             txrg.chrg.cpMin = 0;
+                        }
                     }
 
                     if (end != -1)
+                    {
                         txrg.chrg.cpMax = Math.Min(txrg.chrg.cpMax, end);
+                    }
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
@@ -2285,7 +2359,9 @@ namespace System.Windows.Forms
             {
                 // release the resources we got for our GETTEXTRANGE operation.
                 if (txrg.lpstrText != IntPtr.Zero)
+                {
                     Marshal.FreeCoTaskMem(txrg.lpstrText);
+                }
             }
 
             int index = (forward) ? chrg.cpMax : chrg.cpMin;
@@ -2344,9 +2420,13 @@ namespace System.Windows.Forms
                 NativeMethods.CHARFORMATA cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & mask) != 0)
+                {
                     // if the text has the desired effect
                     if ((cf.dwEffects & effect) != 0)
+                    {
                         charFormat = RichTextBoxSelectionAttribute.All;
+                    }
+                }
             }
 
             return charFormat;
@@ -2381,13 +2461,24 @@ namespace System.Windows.Forms
 
             FontStyle style = FontStyle.Regular;
             if ((cf.dwMask & RichTextBoxConstants.CFM_BOLD) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_BOLD) != 0)
+            {
                 style |= FontStyle.Bold;
+            }
+
             if ((cf.dwMask & RichTextBoxConstants.CFM_ITALIC) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_ITALIC) != 0)
+            {
                 style |= FontStyle.Italic;
+            }
+
             if ((cf.dwMask & RichTextBoxConstants.CFM_STRIKEOUT) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_STRIKEOUT) != 0)
+            {
                 style |= FontStyle.Strikeout;
+            }
+
             if ((cf.dwMask & RichTextBoxConstants.CFM_UNDERLINE) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_UNDERLINE) != 0)
+            {
                 style |= FontStyle.Underline;
+            }
 
             try
             {
@@ -2428,7 +2519,9 @@ namespace System.Windows.Forms
 
             // Loop through the given character set and compare for a match
             for (int i = 0; !match && i < charSetLen; i++)
+            {
                 match = c == charSet[i];
+            }
 
             return negate ? !match : match;
         }
@@ -2604,7 +2697,9 @@ namespace System.Windows.Forms
         {
             ContentsResizedEventHandler handler = (ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -2712,7 +2807,9 @@ namespace System.Windows.Forms
             {
                 textRtf = Rtf;
                 if (textRtf.Length == 0)
+                {
                     textRtf = null;
+                }
             }
 
             oleCallback = null;
@@ -2727,7 +2824,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_HSCROLL];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2738,7 +2837,9 @@ namespace System.Windows.Forms
         {
             LinkClickedEventHandler handler = (LinkClickedEventHandler)Events[EVENT_LINKACTIVATE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -2749,7 +2850,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_IMECHANGE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2761,7 +2864,9 @@ namespace System.Windows.Forms
             ProtectedError = true;
             EventHandler handler = (EventHandler)Events[EVENT_PROTECTED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2772,7 +2877,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_SELCHANGE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2783,7 +2890,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_VSCROLL];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -2981,19 +3090,33 @@ namespace System.Windows.Forms
 
             int dwEffects = 0;
             if (value.Bold)
+            {
                 dwEffects |= RichTextBoxConstants.CFE_BOLD;
+            }
+
             if (value.Italic)
+            {
                 dwEffects |= RichTextBoxConstants.CFE_ITALIC;
+            }
+
             if (value.Strikeout)
+            {
                 dwEffects |= RichTextBoxConstants.CFE_STRIKEOUT;
+            }
+
             if (value.Underline)
+            {
                 dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
+            }
 
             bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
 
             NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
             for (int i = 0; i < bytesFaceName.Length; i++)
+            {
                 cfW.szFaceName[i] = bytesFaceName[i];
+            }
+
             cfW.dwMask = dwMask;
             cfW.dwEffects = dwEffects;
             cfW.yHeight = (int)(value.SizeInPoints * 20);
@@ -3014,11 +3137,16 @@ namespace System.Windows.Forms
                 release = true;
             }
             if (hDC == IntPtr.Zero)
+            {
                 return;
+            }
+
             logPixelsX = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSX);
             logPixelsY = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSY);
             if (release)
+            {
                 UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
+            }
         }
 
         private static int Pixel2Twip(IntPtr hDC, int v, bool xDirection)
@@ -3105,7 +3233,9 @@ namespace System.Windows.Forms
                     editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
                     string str = Encoding.Default.GetString(bytes);
                     if (!SZ_RTF_TAG.Equals(str))
+                    {
                         throw new ArgumentException(SR.InvalidFileFormat);
+                    }
 
                     // put us back at the start of the file
                     editStream.Position = streamStart;
@@ -3161,10 +3291,14 @@ namespace System.Windows.Forms
                 // text then return protect event was fired so no
                 // exception is required for the the error
                 if (GetProtectedError())
+                {
                     return;
+                }
 
                 if (es.dwError != 0)
+                {
                     throw new InvalidOperationException(SR.LoadTextError);
+                }
 
                 // set the modify tag on the control
                 SendMessage(Interop.EditMessages.EM_SETMODIFY, -1, 0);
@@ -3268,7 +3402,9 @@ namespace System.Windows.Forms
 
                 // check to make sure things went well
                 if (es.dwError != 0)
+                {
                     throw new InvalidOperationException(SR.SaveTextError);
+                }
             }
             finally
             {
@@ -3476,14 +3612,18 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.CharBuffer charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(characters);
             IntPtr unmanagedBuffer = charBuffer.AllocCoTaskMem();
             if (unmanagedBuffer == IntPtr.Zero)
+            {
                 throw new OutOfMemoryException(SR.OutOfMemory);
+            }
 
             txrg.lpstrText = unmanagedBuffer;
             int len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETTEXTRANGE, 0, txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
+            {
                 Marshal.FreeCoTaskMem(unmanagedBuffer);
+            }
 
             string result = charBuffer.GetString();
             return result;
@@ -3625,7 +3765,10 @@ namespace System.Windows.Forms
                                     // Don't allow STREAMIN to replace protected selection
                                     //
                                     if ((unchecked((int)(long)enprotected.wParam) & RichTextBoxConstants.SFF_SELECTION) != 0)
+                                    {
                                         break;
+                                    }
+
                                     m.Result = IntPtr.Zero;
                                     return;
 
@@ -4087,8 +4230,9 @@ namespace System.Windows.Forms
                             lastEffect = (DragDropEffects.All | DragDropEffects.None);
                         }
                         else
+                        {
                             lastEffect = DragDropEffects.None;
-
+                        }
                     }
                     else
                     {
@@ -4140,7 +4284,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
                 ContextMenu cm = owner.ContextMenu;
                 if (cm == null || owner.ShortcutsEnabled == false)
+                {
                     hmenu = IntPtr.Zero;
+                }
                 else
                 {
                     cm.sourceControl = owner;
@@ -4168,9 +4314,13 @@ namespace System.Windows.Forms
                             menu.handle = IntPtr.Zero;
                             menu.created = false;
                             if (menu == cm)
+                            {
                                 break;
+                            }
                             else
+                            {
                                 menu = ((MenuItem)menu).Parent;
+                            }
                         }
                     }
 

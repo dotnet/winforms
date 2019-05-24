@@ -66,7 +66,10 @@ namespace System.Windows.Forms
             get
             {
                 if (handle == IntPtr.Zero)
+                {
                     handle = CreateMenuHandle();
+                }
+
                 CreateMenuItems();
                 return handle;
             }
@@ -112,12 +115,17 @@ namespace System.Windows.Forms
                 {
                     MenuItem item = items[i];
                     if (item.MdiList)
+                    {
                         return item;
+                    }
+
                     if (item.IsParent)
                     {
                         item = item.MdiListItem;
                         if (item != null)
+                        {
                             return item;
+                        }
                     }
                 }
                 return null;
@@ -245,7 +253,9 @@ namespace System.Windows.Forms
                 int count = menuSrc.MenuItems.Count;
                 newItems = new MenuItem[count];
                 for (int i = 0; i < count; i++)
+                {
                     newItems[i] = menuSrc.MenuItems[i].CloneMenu();
+                }
             }
             MenuItems.Clear();
             if (newItems != null)
@@ -342,16 +352,24 @@ namespace System.Windows.Forms
                 {
                     case FindHandle:
                         if (item.handle == value)
+                        {
                             return item;
+                        }
+
                         break;
                     case FindShortcut:
                         if (item.Shortcut == (Shortcut)(int)value)
+                        {
                             return item;
+                        }
+
                         break;
                 }
                 item = item.FindMenuItem(type, value);
                 if (item != null)
+                {
                     return item;
+                }
             }
             return null;
         }
@@ -366,9 +384,13 @@ namespace System.Windows.Forms
             {
                 iT = (iMin + iLim) / 2;
                 if (items[iT].MergeOrder <= mergeOrder)
+                {
                     iMin = iT + 1;
+                }
                 else
+                {
                     iLim = iT;
+                }
             }
             return iMin;
         }
@@ -434,7 +456,10 @@ namespace System.Windows.Forms
             for (menuT = this; !(menuT is ContextMenu);)
             {
                 if (!(menuT is MenuItem))
+                {
                     return null;
+                }
+
                 menuT = ((MenuItem)menuT).Parent;
             }
             return (ContextMenu)menuT;
@@ -454,7 +479,10 @@ namespace System.Windows.Forms
             for (menuT = this; !(menuT is MainMenu);)
             {
                 if (!(menuT is MenuItem))
+                {
                     return null;
+                }
+
                 menuT = ((MenuItem)menuT).Parent;
             }
             return (MainMenu)menuT;
@@ -506,7 +534,9 @@ namespace System.Windows.Forms
             }
 
             if (firstMatch < 0)
+            {
                 return IntPtr.Zero;
+            }
 
             int action = multipleMatches ? NativeMethods.MNC_SELECT : NativeMethods.MNC_EXECUTE;
             return (IntPtr)NativeMethods.Util.MAKELONG(firstMatch, action);
@@ -634,7 +664,9 @@ namespace System.Windows.Forms
                 {
                     MenuItem mi = items[i];
                     if (mi != null && mi.Selected)
+                    {
                         return i;
+                    }
                 }
                 return -1;
             }
@@ -660,7 +692,9 @@ namespace System.Windows.Forms
             Menu menu = (m.LParam == handle) ? this : FindMenuItem(FindHandle, m.LParam);
 
             if (menu == null)
+            {
                 return;
+            }
 
             char menuKey = char.ToUpper((char)NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
 
@@ -682,7 +716,9 @@ namespace System.Windows.Forms
 
             // Next, search for match among owner-draw items with no access keys (looking at first char of item text)
             if (result == IntPtr.Zero)
+            {
                 result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemNoMnemonic));
+            }
 
             return result;
         }
@@ -723,7 +759,10 @@ namespace System.Windows.Forms
                 get
                 {
                     if (index < 0 || index >= owner.ItemCount)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
                     return owner.items[index];
                 }
                 // set not supported
@@ -880,9 +919,13 @@ namespace System.Windows.Forms
                                 throw new ArgumentException(string.Format(SR.MenuItemAlreadyExists, item.Text), "item");
                             }
                             if (parent.Parent is MenuItem)
+                            {
                                 parent = (MenuItem)parent.Parent;
+                            }
                             else
+                            {
                                 break;
+                            }
                         }
                     }
 
@@ -907,7 +950,10 @@ namespace System.Windows.Forms
                 {
                     MenuItem[] newItems = new MenuItem[owner.ItemCount < 2 ? 4 : owner.ItemCount * 2];
                     if (owner.ItemCount > 0)
+                    {
                         System.Array.Copy(owner.items, 0, newItems, 0, owner.ItemCount);
+                    }
+
                     owner.items = newItems;
                 }
                 System.Array.Copy(owner.items, index, owner.items, index + 1, owner.ItemCount - index);

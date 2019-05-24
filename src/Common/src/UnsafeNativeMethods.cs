@@ -6568,10 +6568,16 @@ namespace System.Windows.Forms
             {
                 int i = offset;
                 while (i < buffer.Length && buffer[i] != 0)
+                {
                     i++;
+                }
+
                 string result = new string(buffer, offset, i - offset);
                 if (i < buffer.Length)
+                {
                     i++;
+                }
+
                 offset = i;
                 return result;
             }
@@ -6588,7 +6594,9 @@ namespace System.Windows.Forms
                 s.CopyTo(0, buffer, offset, count);
                 offset += count;
                 if (offset < buffer.Length)
+                {
                     buffer[offset++] = (char)0;
+                }
             }
         }
 
@@ -6609,10 +6617,14 @@ namespace System.Windows.Forms
             private void ActualizeVirtualPosition()
             {
                 if (virtualPosition == -1)
+                {
                     return;
+                }
 
                 if (virtualPosition > dataStream.Length)
+                {
                     dataStream.SetLength(virtualPosition);
+                }
 
                 dataStream.Position = virtualPosition;
 
@@ -6637,7 +6649,10 @@ namespace System.Windows.Forms
                 int bufsize = 4096; // one page
                 IntPtr buffer = Marshal.AllocHGlobal(bufsize);
                 if (buffer == IntPtr.Zero)
+                {
                     throw new OutOfMemoryException();
+                }
+
                 long written = 0;
                 try
                 {
@@ -6645,10 +6660,16 @@ namespace System.Windows.Forms
                     {
                         int toRead = bufsize;
                         if (written + toRead > cb)
+                        {
                             toRead = (int)(cb - written);
+                        }
+
                         int read = Read(buffer, toRead);
                         if (read == 0)
+                        {
                             break;
+                        }
+
                         if (pstm.Write(buffer, read) != read)
                         {
                             throw EFail("Wrote an incorrect number of bytes");

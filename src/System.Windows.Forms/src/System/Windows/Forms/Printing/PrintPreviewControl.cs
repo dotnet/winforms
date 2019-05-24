@@ -356,7 +356,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value <= 0)
+                {
                     throw new ArgumentException(SR.PrintPreviewControlZoomNegative);
+                }
+
                 autoZoom = false;
                 zoom = value;
                 InvalidateLayout();
@@ -470,7 +473,9 @@ namespace System.Windows.Forms
             int oldStart = StartPage;
 
             if (document == null)
+            {
                 pageInfo = new PreviewPageInfo[0];
+            }
             else
             {
 
@@ -609,7 +614,9 @@ namespace System.Windows.Forms
                 else
                 {
                     if (!layoutOk)
+                    {
                         ComputeLayout();
+                    }
 
                     Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
 
@@ -800,9 +807,14 @@ namespace System.Windows.Forms
             position.X = Math.Min(position.X, virtualSize.Width - Width);
             position.Y = Math.Min(position.Y, virtualSize.Height - Height);
             if (position.X < 0)
+            {
                 position.X = 0;
+            }
+
             if (position.Y < 0)
+            {
                 position.Y = 0;
+            }
 
             Rectangle rect = ClientRectangle;
             NativeMethods.RECT scroll = NativeMethods.RECT.FromXYWH(rect.X, rect.Y, rect.Width, rect.Height);
@@ -919,11 +931,17 @@ namespace System.Windows.Forms
                     break;
                 case Keys.Home:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
+                    {
                         StartPage = 0;
+                    }
+
                     break;
                 case Keys.End:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
+                    {
                         StartPage = pageInfo.Length;
+                    }
+
                     break;
 
                 case Keys.Up:

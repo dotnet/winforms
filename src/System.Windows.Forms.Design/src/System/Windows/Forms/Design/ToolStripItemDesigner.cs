@@ -690,7 +690,10 @@ namespace System.Windows.Forms.Design
                 if (site != null && Component is ToolStripDropDownItem)
                 {
                     if (defaultValues == null)
+                    {
                         defaultValues = new Hashtable();
+                    }
+
                     defaultValues["Text"] = site.Name;
                     IComponent component = Component;
                     PropertyDescriptor pd = TypeDescriptor.GetProperties(ToolStripItem)["Text"];

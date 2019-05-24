@@ -176,7 +176,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = new Margins(0, 0, 0, 0);
+                }
+
                 minMargins = value;
             }
         }
@@ -269,22 +272,44 @@ namespace System.Windows.Forms
             flags |= NativeMethods.PSD_ENABLEPAGESETUPHOOK;
 
             if (!allowMargins)
+            {
                 flags |= NativeMethods.PSD_DISABLEMARGINS;
+            }
+
             if (!allowOrientation)
+            {
                 flags |= NativeMethods.PSD_DISABLEORIENTATION;
+            }
+
             if (!allowPaper)
+            {
                 flags |= NativeMethods.PSD_DISABLEPAPER;
+            }
+
             if (!allowPrinter || printerSettings == null)
+            {
                 flags |= NativeMethods.PSD_DISABLEPRINTER;
+            }
 
             if (showHelp)
+            {
                 flags |= NativeMethods.PSD_SHOWHELP;
+            }
+
             if (!showNetwork)
+            {
                 flags |= NativeMethods.PSD_NONETWORKBUTTON;
+            }
+
             if (minMargins != null)
+            {
                 flags |= NativeMethods.PSD_MINMARGINS;
+            }
+
             if (pageSettings.Margins != null)
+            {
                 flags |= NativeMethods.PSD_MARGINS;
+            }
 
             // 
             return flags;
@@ -362,7 +387,9 @@ namespace System.Windows.Forms
 
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             if (pageSettings == null)
+            {
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
+            }
 
             NativeMethods.PAGESETUPDLG data = new NativeMethods.PAGESETUPDLG();
             data.lStructSize = Marshal.SizeOf(data);

@@ -303,7 +303,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 if (value != null && !value.Equals(text))
                 {
                     if (value != null && value.Length > 63)
@@ -536,7 +539,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_CLICK];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -547,7 +552,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_DOUBLECLICK];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -559,7 +566,9 @@ namespace System.Windows.Forms
         {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSECLICK];
             if (handler != null)
+            {
                 handler(this, mea);
+            }
         }
 
         /// <summary>
@@ -570,7 +579,9 @@ namespace System.Windows.Forms
         {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEDOUBLECLICK];
             if (handler != null)
+            {
                 handler(this, mea);
+            }
         }
 
         /// <summary>
@@ -585,7 +596,9 @@ namespace System.Windows.Forms
         {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEDOWN];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -599,7 +612,9 @@ namespace System.Windows.Forms
         {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEMOVE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -612,7 +627,9 @@ namespace System.Windows.Forms
         {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEUP];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -921,7 +938,9 @@ namespace System.Windows.Forms
                     if (IntPtr.Zero == msg.LParam)
                     {
                         if (Command.DispatchID((int)msg.WParam & 0xFFFF))
+                        {
                             return;
+                        }
                     }
                     else
                     {

@@ -111,7 +111,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     object owner = GetValueOwner();
                     if (owner == null)
+                    {
                         return null; //null exception protection.
+                    }
 
                     HelpKeywordAttribute helpAttribute = (HelpKeywordAttribute)propertyInfo.Attributes[typeof(HelpKeywordAttribute)];
 
@@ -1360,7 +1362,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         string message = except.Message;
                         if (message == null || message.Length == 0)
+                        {
                             message = except.ToString();
+                        }
 
                         RTLAwareMessageBox.Show(null, message, SR.PropertyGridExceptionInfo,
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);

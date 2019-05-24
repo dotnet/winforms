@@ -280,15 +280,21 @@ namespace System.Windows.Forms
         private bool FocusInside()
         {
             if (!IsHandleCreated)
+            {
                 return false;
+            }
 
             IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
             if (hwndFocus == IntPtr.Zero)
+            {
                 return false;
+            }
 
             IntPtr hwnd = Handle;
             if (hwnd == hwndFocus || SafeNativeMethods.IsChild(new HandleRef(this, hwnd), new HandleRef(null, hwndFocus)))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -314,7 +320,9 @@ namespace System.Windows.Forms
             // that it's just another name for OnControlCreated.
             EventHandler handler = (EventHandler)Events[EVENT_LOAD];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -333,7 +341,10 @@ namespace System.Windows.Forms
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (!FocusInside())
+            {
                 Focus();
+            }
+
             base.OnMouseDown(e);
         }
 
@@ -342,7 +353,9 @@ namespace System.Windows.Forms
             if (!HostedInWin32DialogManager)
             {
                 if (ActiveControl == null)
+                {
                     SelectNextControl(null, true, true, true, false);
+                }
             }
             if (!ValidationCancelled)
             {

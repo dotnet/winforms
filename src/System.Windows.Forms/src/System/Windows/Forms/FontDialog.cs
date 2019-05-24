@@ -235,13 +235,20 @@ namespace System.Windows.Forms
             {
                 Font result = font;
                 if (result == null)
+                {
                     result = Control.DefaultFont;
+                }
 
                 float actualSize = result.SizeInPoints;
                 if (minSize != defaultMinSize && actualSize < MinSize)
+                {
                     result = new Font(result.FontFamily, MinSize, result.Style, GraphicsUnit.Point);
+                }
+
                 if (maxSize != defaultMaxSize && actualSize > MaxSize)
+                {
                     result = new Font(result.FontFamily, MaxSize, result.Style, GraphicsUnit.Point);
+                }
 
                 return result;
             }
@@ -548,7 +555,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EventApply];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -642,8 +651,9 @@ namespace System.Windows.Forms
                 }
                 Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
                 if (!SafeNativeMethods.ChooseFont(cf))
+                {
                     return false;
-
+                }
 
                 NativeMethods.LOGFONT lfReturned = Marshal.PtrToStructure<NativeMethods.LOGFONT>(logFontPtr);
 
@@ -659,7 +669,9 @@ namespace System.Windows.Forms
             finally
             {
                 if (logFontPtr != IntPtr.Zero)
+                {
                     Marshal.FreeCoTaskMem(logFontPtr);
+                }
             }
         }
 

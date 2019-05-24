@@ -666,8 +666,10 @@ namespace System.Windows.Forms.ButtonInternal
             try
             {
                 if (!Control.Enabled)
+                {
                     // need to specify width and height
                     ControlPaint.DrawImageDisabled(graphics, image, imageBounds, Control.BackColor, true /* unscaled image*/);
+                }
                 else
                 {
                     graphics.DrawImage(image, imageBounds.X, imageBounds.Y, image.Width, image.Height);

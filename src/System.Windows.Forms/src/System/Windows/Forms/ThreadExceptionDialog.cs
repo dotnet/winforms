@@ -247,9 +247,14 @@ namespace System.Windows.Forms
             g.Dispose();
 
             if (textSize.Width < scaledMaxTextWidth)
+            {
                 textSize.Width = scaledMaxTextWidth;
+            }
+
             if (textSize.Height > scaledMaxHeight)
+            {
                 textSize.Height = scaledMaxHeight;
+            }
 
             int width = textSize.Width + scaledPaddingWidth;
             int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
@@ -404,7 +409,10 @@ namespace System.Windows.Forms
         {
             int delta = details.Height + scaledHeightPadding;
             if (detailsVisible)
+            {
                 delta = -delta;
+            }
+
             Height = Height + delta;
             detailsVisible = !detailsVisible;
             details.Visible = detailsVisible;
@@ -414,10 +422,16 @@ namespace System.Windows.Forms
         private static string Trim(string s)
         {
             if (s == null)
+            {
                 return s;
+            }
+
             int i = s.Length;
             while (i > 0 && s[i - 1] == '.')
+            {
                 i--;
+            }
+
             return s.Substring(0, i);
         }
     }

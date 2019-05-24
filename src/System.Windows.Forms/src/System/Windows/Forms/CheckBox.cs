@@ -552,7 +552,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EVENT_CHECKEDCHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -567,7 +569,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EVENT_CHECKSTATECHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>

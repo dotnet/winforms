@@ -105,7 +105,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows BackColor"));
+                }
+
                 if (value != backBrush.Color)
                 {
                     backBrush = new SolidBrush(value);
@@ -245,7 +248,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows ForeColor"));
+                }
+
                 if (value != foreBrush.Color)
                 {
                     foreBrush = new SolidBrush(value);
@@ -303,7 +309,9 @@ namespace System.Windows.Forms
         internal void CheckNull(object value, string propName)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(propName));
+            }
         }
 
         internal void Dispose()
@@ -351,7 +359,9 @@ namespace System.Windows.Forms
         internal void Invalidate()
         {
             if (dataGrid != null)
+            {
                 dataGrid.InvalidateParentRows();
+            }
         }
 
         internal void InvalidateRect(Rectangle rect)
@@ -367,7 +377,9 @@ namespace System.Windows.Forms
         internal void OnLayout()
         {
             if (parentsCount == rowHeights.Count)
+            {
                 return;
+            }
 
             int height = 0;
             if (totalHeight == 0)
@@ -415,9 +427,14 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(parentsCount == rowHeights.Count - 1, "we do layout only for push/popTop");
                 if (parentsCount == 0)
+                {
                     totalHeight = 0;
+                }
                 else
+                {
                     totalHeight -= (int)rowHeights[rowHeights.Count - 1];
+                }
+
                 rowHeights.RemoveAt(rowHeights.Count - 1);
             }
         }
@@ -495,18 +512,26 @@ namespace System.Windows.Forms
                 downRightArrow = true;
 
                 if (alignToRight)
+                {
                     LeftArrowClick(cellCount);
+                }
                 else
+                {
                     RightArrowClick(cellCount);
+                }
             }
             else if (layout.leftArrow.Contains(x, y))
             {
                 downLeftArrow = true;
 
                 if (alignToRight)
+                {
                     RightArrowClick(cellCount);
+                }
                 else
+                {
                     LeftArrowClick(cellCount);
+                }
             }
             else
             {
@@ -796,10 +821,15 @@ namespace System.Windows.Forms
             {
                 rowBounds.Height = (int)rowHeights[row];
                 if (rowBounds.Y > bounds.Bottom)
+                {
                     break;
+                }
+
                 int paintedWidth = PaintRow(g, rowBounds, row, dataGrid.Font, alignToRight, tableNameBoxWidth, colsNameWidths, colsDataWidths);
                 if (row == parentsCount - 1)
+                {
                     break;
+                }
 
                 // draw the grid line below
                 g.DrawLine(gridLinePen, rowBounds.X, rowBounds.Bottom,
@@ -831,14 +861,20 @@ namespace System.Windows.Forms
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
+            {
                 rightArrow = GetBitmap("DataGridParentRows.RightArrow");
+            }
+
             return rightArrow;
         }
 
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
+            {
                 leftArrow = GetBitmap("DataGridParentRows.LeftArrow");
+            }
+
             return leftArrow;
         }
 
@@ -970,7 +1006,9 @@ namespace System.Windows.Forms
             }
 
             if (paintedWidth >= bounds.Width)
+            {
                 return bounds.Width;        // we painted everything
+            }
 
             rowBounds.Width -= paintedWidth;
             rowBounds.X += alignToRight ? 0 : paintedWidth;
@@ -998,7 +1036,9 @@ namespace System.Windows.Forms
             for (int i = 0; i < cols.Count; i++)
             {
                 if (cx >= bounds.Width)
+                {
                     break;
+                }
 
                 // paint the column name, if we have to
                 if (dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.ColumnName ||
@@ -1022,7 +1062,9 @@ namespace System.Windows.Forms
                 }
 
                 if (cx >= bounds.Width)
+                {
                     break;
+                }
 
                 if (skippedCells < horizOffset)
                 {
@@ -1080,13 +1122,17 @@ namespace System.Windows.Forms
         {
             Font textFont = font;
             if (bold)
+            {
                 try
                 {
                     textFont = new Font(font, FontStyle.Bold);
                 }
                 catch { }
+            }
             else
+            {
                 textFont = font;
+            }
 
             // right now, we paint the entire box, cause it will be used anyway
             g.FillRectangle(BackBrush, textBounds);
@@ -1114,9 +1160,13 @@ namespace System.Windows.Forms
         {
             Debug.Assert(containedRect.X >= surroundingRect.X && containedRect.Right <= surroundingRect.Right, "containedRect is not contained in surroundingRect");
             if (alignToRight)
+            {
                 return surroundingRect.Right - containedRect.Right + surroundingRect.X;
+            }
             else
+            {
                 return containedRect.X;
+            }
         }
 
         private class Layout

@@ -1122,7 +1122,9 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (trans != null)
+                {
                     trans.Commit();
+                }
                 // Reset the selection.  This will re-display our selection.
                 Visible = _savedVisible;
                 ((ISelectionUIService)this).SyncSelection();
@@ -1143,7 +1145,9 @@ namespace System.Windows.Forms.Design
         {
             object[] selection = null;
             if (components == null)
+            {
                 return new object[0];
+            }
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
@@ -1439,7 +1443,10 @@ namespace System.Windows.Forms.Design
                 // If we're not visible, then there's nothing to do...
                 //
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
+                {
                     return;
+                }
+
                 bool fActive = false;
                 if (_selUIsvc._selSvc != null)
                 {
@@ -1561,12 +1568,21 @@ namespace System.Windows.Forms.Design
                 {
                     // Something on the left side.
                     if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
+                    {
                         return 0; // top left
+                    }
+
                     if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
+                    {
                         return 5; // bottom left
+                    }
+
                     if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
                         && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
+                    {
                         return 3; // middle left
+                    }
+
                     return -1; // unknown hit
                 }
 
@@ -1575,10 +1591,16 @@ namespace System.Windows.Forms.Design
                     // something on the top
                     Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left top check");
                     if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
+                    {
                         return 2; // top right
+                    }
+
                     if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2
                         && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
+                    {
                         return 1; // top middle
+                    }
+
                     return -1; // unknown hit
                 }
 
@@ -1587,10 +1609,16 @@ namespace System.Windows.Forms.Design
                     // something on the right side
                     Debug.Assert(!(pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y), "Should be handled by top right check");
                     if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
+                    {
                         return 7; // bottom right
+                    }
+
                     if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
                         && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
+                    {
                         return 4; // middle right
+                    }
+
                     return -1; // unknown hit
                 }
 
@@ -1602,7 +1630,10 @@ namespace System.Windows.Forms.Design
                     Debug.Assert(!(pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width), "Should be handled by right bottom check");
 
                     if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2 && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
+                    {
                         return 6; // bottom middle
+                    }
+
                     return -1; // unknown hit
                 }
                 return -1; // unknown hit
@@ -1775,9 +1806,15 @@ namespace System.Windows.Forms.Design
                 bool sizeChanged = false;
                 // Short circuit common cases
                 if (_handler == null)
+                {
                     return false;
+                }
+
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
+                {
                     return false;
+                }
+
                 _innerRect = _handler.GetComponentBounds(_component);
                 if (!_innerRect.IsEmpty)
                 {
@@ -1786,7 +1823,10 @@ namespace System.Windows.Forms.Design
                     if (_outerRect.IsEmpty || !_outerRect.Equals(rcOuterNew))
                     {
                         if (!_outerRect.IsEmpty)
+                        {
                             Invalidate();
+                        }
+
                         _outerRect = rcOuterNew;
                         Invalidate();
                         if (_region != null)
@@ -1851,7 +1891,10 @@ namespace System.Windows.Forms.Design
             {
                 // If we're not visible, then there's nothing to do...
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
+                {
                     return;
+                }
+
                 Rectangle glyphBounds = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
                 ControlPaint.DrawContainerGrabHandle(gr, glyphBounds);
             }

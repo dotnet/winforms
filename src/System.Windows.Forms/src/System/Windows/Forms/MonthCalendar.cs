@@ -221,7 +221,9 @@ namespace System.Windows.Forms
 
                 annualArrayOfDates.Clear();
                 for (int i = 0; i < MONTHS_IN_YEAR; ++i)
+                {
                     monthsOfYear[i] = 0;
+                }
 
                 if (value != null && value.Length > 0)
                 {
@@ -361,7 +363,9 @@ namespace System.Windows.Forms
             set
             {
                 if (!dimensions.Equals(value))
+                {
                     SetCalendarDimensions(value.Width, value.Height);
+                }
             }
         }
 
@@ -379,11 +383,19 @@ namespace System.Windows.Forms
                 cp.ClassName = NativeMethods.WC_MONTHCAL;
                 cp.Style |= NativeMethods.MCS_MULTISELECT | NativeMethods.MCS_DAYSTATE;
                 if (!showToday)
+                {
                     cp.Style |= NativeMethods.MCS_NOTODAY;
+                }
+
                 if (!showTodayCircle)
+                {
                     cp.Style |= NativeMethods.MCS_NOTODAYCIRCLE;
+                }
+
                 if (showWeekNumbers)
+                {
                     cp.Style |= NativeMethods.MCS_WEEKNUMBERS;
+                }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
@@ -574,7 +586,9 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         if (unchecked((int)(long)SendMessage(NativeMethods.MCM_SETMAXSELCOUNT, value, 0)) == 0)
+                        {
                             throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
+                        }
                     }
                     maxSelectionCount = value;
                 }
@@ -991,7 +1005,9 @@ namespace System.Windows.Forms
                 {
 
                     if (unchecked((int)(long)SendMessage(NativeMethods.MCM_GETMINREQRECT, 0, ref rect)) == 0)
+                    {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
+                    }
 
                     return new Size(rect.right, rect.bottom);
                 }
@@ -1056,7 +1072,10 @@ namespace System.Windows.Forms
             get
             {
                 if (todayDateSet)
+                {
                     return todayDate;
+                }
+
                 if (IsHandleCreated)
                 {
                     NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME();
@@ -1065,7 +1084,9 @@ namespace System.Windows.Forms
                     return DateTimePicker.SysTimeToDateTime(st).Date;
                 }
                 else
+                {
                     return Now.Date;
+                }
             }
             set
             {
@@ -1324,7 +1345,9 @@ namespace System.Windows.Forms
             //now we figure out which monthly and annual dates to bold
             --startMonth;
             for (int i = 0; i < months; ++i, ++startMonth)
+            {
                 e.DaysToBold[i] |= monthsOfYear[startMonth % MONTHS_IN_YEAR] | datesToBoldMonthly;
+            }
         }
 
         /// <summary>
@@ -1389,9 +1412,13 @@ namespace System.Windows.Forms
         public SelectionRange GetDisplayRange(bool visible)
         {
             if (visible)
+            {
                 return GetMonthRange(NativeMethods.GMR_VISIBLE);
+            }
             else
+            {
                 return GetMonthRange(NativeMethods.GMR_DAYSTATE);
+            }
         }
 
         /// <summary>
@@ -1601,7 +1628,10 @@ namespace System.Windows.Forms
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
+            {
                 return false;
+            }
+
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.PageUp:
@@ -1738,7 +1768,9 @@ namespace System.Windows.Forms
         {
             annualArrayOfDates.Clear();
             for (int i = 0; i < MONTHS_IN_YEAR; ++i)
+            {
                 monthsOfYear[i] = 0;
+            }
         }
 
 
@@ -1966,13 +1998,19 @@ namespace System.Windows.Forms
             if (width != oldBounds.Width)
             {
                 if (width > max.Width)
+                {
                     width = max.Width;
+                }
+
                 width = GetPreferredWidth(width, updateRowsAndColumns);
             }
             if (height != oldBounds.Height)
             {
                 if (height > max.Height)
+                {
                     height = max.Height;
+                }
+
                 height = GetPreferredHeight(height, updateRowsAndColumns);
             }
             base.SetBoundsCore(x, y, width, height, specified);
@@ -2039,7 +2077,9 @@ namespace System.Windows.Forms
                 sa.wDay2 = sys.wDay;
 
                 if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETRANGE, flag, sa) == 0)
+                {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
+                }
             }
         }
 
@@ -2339,9 +2379,13 @@ namespace System.Windows.Forms
 
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
+            {
                 SetSelRange(minDate, minDate);
+            }
             else if (start.Ticks > maxDate.Ticks || end.Ticks > maxDate.Ticks)
+            {
                 SetSelRange(maxDate, maxDate);
+            }
             //end subhag
             OnDateChanged(new DateRangeEventArgs(start, end));
         }
@@ -2394,9 +2438,13 @@ namespace System.Windows.Forms
 
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
+            {
                 SetSelRange(minDate, minDate);
+            }
             else if (start.Ticks > maxDate.Ticks || end.Ticks > maxDate.Ticks)
+            {
                 SetSelRange(maxDate, maxDate);
+            }
 
             //end subhag
             OnDateSelected(new DateRangeEventArgs(start, end));

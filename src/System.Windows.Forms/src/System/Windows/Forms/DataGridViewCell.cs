@@ -4965,9 +4965,13 @@ namespace System.Windows.Forms
                 }
 
                 if ((cellRight - cellLeft) >= 0)
+                {
                     cellRect.Width = cellRight - cellLeft;
+                }
                 else
+                {
                     cellRect.Width = 0;
+                }
 
                 return cellRect;
             }

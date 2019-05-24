@@ -61,7 +61,9 @@ namespace System.Windows.Forms
                         {
                             var frameworkName = new FrameworkName(targetFrameworkName);
                             if (string.Equals(frameworkName.Identifier, ".NETFramework"))
+                            {
                                 netFrameworkVersion = frameworkName.Version;
+                            }
                         }
                     }
                     catch (Exception e)

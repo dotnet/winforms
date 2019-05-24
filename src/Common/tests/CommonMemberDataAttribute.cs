@@ -24,11 +24,15 @@ namespace WinForms.Common.Tests
         protected override object[] ConvertDataItem(MethodInfo testMethod, object item)
         {
             if (item == null)
+            {
                 return null;
+            }
 
             var array = item as object[];
             if (array == null)
+            {
                 throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[]");
+            }
 
             return array;
         }

@@ -509,7 +509,9 @@ namespace System.Windows.Forms
                     if (!owner.DesignMode)
                     {
                         if (IsReadOnly)
+                        {
                             throw new NotSupportedException(SR.ReadonlyControlsCollection);
+                        }
                     }
                 }
                 base.Remove(value);

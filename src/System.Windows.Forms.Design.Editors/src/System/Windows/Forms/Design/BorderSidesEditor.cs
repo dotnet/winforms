@@ -30,12 +30,18 @@ namespace System.Windows.Forms.Design
                 if (edSvc != null)
                 {
                     if (borderSidesEditorUI == null)
+                    {
                         borderSidesEditorUI = new BorderSidesEditorUI(this);
+                    }
+
                     borderSidesEditorUI.Start(edSvc, value);
                     edSvc.DropDownControl(borderSidesEditorUI);
 
                     if (borderSidesEditorUI.Value != null)
+                    {
                         value = borderSidesEditorUI.Value;
+                    }
+
                     borderSidesEditorUI.End();
                 }
             }
@@ -231,7 +237,9 @@ namespace System.Windows.Forms.Design
                 else // this is turned off....
                 {
                     if (allCheckBox.Checked)
+                    {
                         allCheckBox.Checked = false;
+                    }
                 }
 
                 UpdateCurrentValue();
@@ -250,7 +258,9 @@ namespace System.Windows.Forms.Design
                 else // this is turned off....
                 {
                     if (allCheckBox.Checked)
+                    {
                         allCheckBox.Checked = false;
+                    }
                 }
 
                 UpdateCurrentValue();
@@ -269,7 +279,9 @@ namespace System.Windows.Forms.Design
                 else // this is turned off....
                 {
                     if (allCheckBox.Checked)
+                    {
                         allCheckBox.Checked = false;
+                    }
                 }
 
                 UpdateCurrentValue();
@@ -288,7 +300,9 @@ namespace System.Windows.Forms.Design
                 else // this is turned off....
                 {
                     if (allCheckBox.Checked)
+                    {
                         allCheckBox.Checked = false;
+                    }
                 }
 
                 UpdateCurrentValue();
@@ -336,7 +350,9 @@ namespace System.Windows.Forms.Design
             private void noneCheckBoxClicked(object sender, EventArgs e)
             {
                 if (noneChecked)
+                {
                     noneCheckBox.Checked = true;
+                }
             }
 
             /// <summary>
@@ -345,7 +361,9 @@ namespace System.Windows.Forms.Design
             private void allCheckBoxClicked(object sender, EventArgs e)
             {
                 if (allChecked)
+                {
                     allCheckBox.Checked = true;
+                }
             }
 
             /// <summary>
@@ -414,7 +432,9 @@ namespace System.Windows.Forms.Design
             private void UpdateCurrentValue()
             {
                 if (!updateCurrentValue)
+                {
                     return;
+                }
 
                 ToolStripStatusLabelBorderSides valueSide = ToolStripStatusLabelBorderSides.None;
                 if (allCheckBox.Checked)
@@ -427,15 +447,29 @@ namespace System.Windows.Forms.Design
                 }
 
                 if (noneCheckBox.Checked)
+                {
                     valueSide |= ToolStripStatusLabelBorderSides.None;
+                }
+
                 if (topCheckBox.Checked)
+                {
                     valueSide |= ToolStripStatusLabelBorderSides.Top;
+                }
+
                 if (bottomCheckBox.Checked)
+                {
                     valueSide |= ToolStripStatusLabelBorderSides.Bottom;
+                }
+
                 if (leftCheckBox.Checked)
+                {
                     valueSide |= ToolStripStatusLabelBorderSides.Left;
+                }
+
                 if (rightCheckBox.Checked)
+                {
                     valueSide |= ToolStripStatusLabelBorderSides.Right;
+                }
 
                 if (valueSide == ToolStripStatusLabelBorderSides.None)
                 {

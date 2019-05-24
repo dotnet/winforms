@@ -1941,7 +1941,9 @@ namespace System.Windows.Forms
                 // so try to get the one off of the component's site.
                 IDesignerHost host = null;
                 if (component != null && component is IComponent && ((IComponent)component).Site != null)
+                {
                     host = (IDesignerHost)((IComponent)component).Site.GetService(typeof(IDesignerHost));
+                }
 
                 try
                 {
@@ -2157,7 +2159,9 @@ namespace System.Windows.Forms
                 Bitmap bitmap = tab.Bitmap;
 
                 if (bitmap == null)
+                {
                     throw new ArgumentException(string.Format(SR.PropertyGridNoBitmap, tab.GetType().FullName));
+                }
 
                 Size size = bitmap.Size;
                 if (size.Width != 16 || size.Height != 16)
@@ -2169,7 +2173,9 @@ namespace System.Windows.Forms
 
                 string name = tab.TabName;
                 if (name == null || name.Length == 0)
+                {
                     throw new ArgumentException(string.Format(SR.PropertyGridTabName, tab.GetType().FullName));
+                }
 
                 // we're good to go!
             }
@@ -2388,7 +2394,9 @@ namespace System.Windows.Forms
         private void DividerDraw(int y)
         {
             if (y == -1)
+            {
                 return;
+            }
 
             Rectangle rectangle = gridView.Bounds;
             rectangle.Y = y - cyDivider;
@@ -2452,7 +2460,10 @@ namespace System.Windows.Forms
         {
             int high = gridView.Location.Y + MIN_GRID_HEIGHT;
             if (target == doccomment && hotcommands.Visible)
+            {
                 high += hotcommands.Size.Height + 2;
+            }
+
             return high;
         }
 
@@ -3434,7 +3445,9 @@ namespace System.Windows.Forms
         protected override void OnMouseUp(MouseEventArgs me)
         {
             if (dividerMoveY == -1)
+            {
                 return;
+            }
 
             Cursor = null;
 
@@ -3505,7 +3518,9 @@ namespace System.Windows.Forms
         {
             ComponentRenameEventHandler handler = (ComponentRenameEventHandler)Events[EventComComponentNameChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -3576,7 +3591,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EventPropertySortChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         // Seems safe - just fires an event
@@ -3585,7 +3602,9 @@ namespace System.Windows.Forms
         {
             PropertyTabChangedEventHandler handler = (PropertyTabChangedEventHandler)Events[EventPropertyTabChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         // Seems safe - just fires an event
@@ -3594,7 +3613,9 @@ namespace System.Windows.Forms
         {
             PropertyValueChangedEventHandler handler = (PropertyValueChangedEventHandler)Events[EventPropertyValueChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         internal void OnPropertyValueSet(GridItem changedItem, object oldValue)
@@ -4321,7 +4342,9 @@ namespace System.Windows.Forms
             {
                 int index = -1;
                 if (components != null)
+                {
                     index = Array.IndexOf(components, component);
+                }
 
                 if (index >= 0)
                 {

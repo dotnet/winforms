@@ -508,9 +508,15 @@ namespace System.Windows.Forms
                 cp.ClassName = "EDIT";
                 cp.Style |= NativeMethods.ES_AUTOHSCROLL | NativeMethods.ES_AUTOVSCROLL;
                 if (!textBoxFlags[hideSelection])
+                {
                     cp.Style |= NativeMethods.ES_NOHIDESEL;
+                }
+
                 if (textBoxFlags[readOnly])
+                {
                     cp.Style |= NativeMethods.ES_READONLY;
+                }
+
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
                 cp.Style &= (~NativeMethods.WS_BORDER);
 
@@ -527,7 +533,9 @@ namespace System.Windows.Forms
                 {
                     cp.Style |= NativeMethods.ES_MULTILINE;
                     if (textBoxFlags[wordWrap])
+                    {
                         cp.Style &= ~NativeMethods.ES_AUTOHSCROLL;
+                    }
                 }
 
                 return cp;
@@ -709,7 +717,9 @@ namespace System.Windows.Forms
                     {
                         char c = text[lineEnd];
                         if (c == '\r' || c == '\n')
+                        {
                             break;
+                        }
                     }
 
                     string line = text.Substring(lineStart, lineEnd - lineStart);
@@ -717,16 +727,23 @@ namespace System.Windows.Forms
 
                     // Treat "\r", "\r\n", and "\n" as new lines
                     if (lineEnd < text.Length && text[lineEnd] == '\r')
+                    {
                         lineEnd++;
+                    }
+
                     if (lineEnd < text.Length && text[lineEnd] == '\n')
+                    {
                         lineEnd++;
+                    }
 
                     lineStart = lineEnd;
                 }
 
                 // Corner case -- last character in Text is a new line; need to add blank line to list
                 if (text.Length > 0 && (text[text.Length - 1] == '\r' || text[text.Length - 1] == '\n'))
+                {
                     list.Add("");
+                }
 
                 return (string[])list.ToArray(typeof(string));
             }
@@ -1304,7 +1321,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 if (!WindowText.Equals(value))
                 {
                     textBoxFlags[codeUpdateText] = true;
@@ -1570,11 +1590,17 @@ namespace System.Windows.Forms
                         return Multiline && textBoxFlags[acceptsTab] && ((keyData & Keys.Control) == 0);
                     case Keys.Escape:
                         if (Multiline)
+                        {
                             return false;
+                        }
+
                         break;
                     case Keys.Back:
                         if (!ReadOnly)
+                        {
                             return true;
+                        }
+
                         break;
                     case Keys.PageUp:
                     case Keys.PageDown:
@@ -1819,7 +1845,9 @@ namespace System.Windows.Forms
         public virtual Point GetPositionFromCharIndex(int index)
         {
             if (index < 0 || index >= Text.Length)
+            {
                 return Point.Empty;
+            }
 
             int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_POSFROMCHAR, index, 0);
             return new Point(NativeMethods.Util.SignedLOWORD(i), NativeMethods.Util.SignedHIWORD(i));
@@ -2037,10 +2065,14 @@ namespace System.Windows.Forms
         {
 
             if (!integralHeightAdjust && height != Height)
+            {
                 requestedHeight = height;
+            }
 
             if (textBoxFlags[autoSize] && !textBoxFlags[multiline])
+            {
                 height = PreferredHeight;
+            }
 
             base.SetBoundsCore(x, y, width, height, specified);
         }
@@ -2229,7 +2261,10 @@ namespace System.Windows.Forms
 
             string txt = Text;
             if (txt.Length > 40)
+            {
                 txt = txt.Substring(0, 40) + "...";
+            }
+
             return s + ", Text: " + txt.ToString();
         }
 

@@ -258,7 +258,9 @@ namespace System.Windows.Forms.Design
 
                     selector.Nodes.Add(new TreeNode(title, n, n));
                     if (titleWidth > selectorWidth)
+                    {
                         selectorWidth = titleWidth;
+                    }
                 }
             }
             selectorWidth += SELECTOR_PADDING;
@@ -404,9 +406,14 @@ namespace System.Windows.Forms.Design
 
                 Size pageSize = page.Size;
                 if (pageSize.Width > maxSize.Width)
+                {
                     maxSize.Width = pageSize.Width;
+                }
+
                 if (pageSize.Height > maxSize.Height)
+                {
                     maxSize.Height = pageSize.Height;
+                }
             }
 
             // and set them all to an ideal size
@@ -434,12 +441,17 @@ namespace System.Windows.Forms.Design
                          "Invalid page selected");
 
             if (newPage == activePage)
+            {
                 return;
+            }
 
             if (activePage != -1)
             {
                 if (pageSites[activePage].AutoCommit)
+                {
                     ApplyChanges(false);
+                }
+
                 pageSites[activePage].Active = false;
             }
 
@@ -455,7 +467,9 @@ namespace System.Windows.Forms.Design
         public override bool PreProcessMessage(ref Message msg)
         {
             if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
+            {
                 return true;
+            }
 
             return base.PreProcessMessage(ref msg);
         }
@@ -640,7 +654,10 @@ namespace System.Windows.Forms.Design
             public void SetDirty()
             {
                 if (isActive)
+                {
                     Dirty = true;
+                }
+
                 form.SetDirty();
             }
         }
@@ -729,7 +746,9 @@ namespace System.Windows.Forms.Design
                 // Select the font of the dialog, so we don't get the underlined font
                 // when the item is being tracked
                 if ((state & STATE_HOT) != 0)
+                {
                     hfontOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(Parent, ((Control)Parent).FontHandle));
+                }
 
                 // Fill the background
                 if (((state & STATE_SELECTED) != 0) && (hbrushDither != IntPtr.Zero))
@@ -790,7 +809,9 @@ namespace System.Windows.Forms.Design
                 }
 
                 if (hfontOld != IntPtr.Zero)
+                {
                     SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, hfontOld));
+                }
             }
 
             protected override void OnHandleCreated(EventArgs e)
@@ -828,9 +849,14 @@ namespace System.Windows.Forms.Design
 
                                 if (((itemState & NativeMethods.CDIS_HOT) != 0) ||
                                    ((itemState & NativeMethods.CDIS_FOCUS) != 0))
+                                {
                                     state |= STATE_HOT;
+                                }
+
                                 if ((itemState & NativeMethods.CDIS_SELECTED) != 0)
+                                {
                                     state |= STATE_SELECTED;
+                                }
 
                                 DrawTreeItem(itemNode.Text, itemNode.ImageIndex,
                                          nmtvcd.nmcd.hdc, nmtvcd.nmcd.rc,

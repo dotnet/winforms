@@ -2675,7 +2675,9 @@ namespace System.Windows.Forms.Design
                         {
                             IComponentChangeService changeSvc = (IComponentChangeService)primaryItem.Site.GetService(typeof(IComponentChangeService));
                             if (changeSvc != null)
+                            {
                                 changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                            }
                             // If we are copying, then we want to make a copy of the components we are dragging
                             if (copy)
                             {
@@ -2762,7 +2764,10 @@ namespace System.Windows.Forms.Design
                         finally
                         {
                             if (changeParent != null)
+                            {
                                 changeParent.Commit();
+                            }
+
                             changeParent = null;
                         }
                     }

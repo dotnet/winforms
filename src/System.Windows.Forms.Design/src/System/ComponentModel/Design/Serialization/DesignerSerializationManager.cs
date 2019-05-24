@@ -881,9 +881,14 @@ namespace System.ComponentModel.Design.Serialization
         {
             CheckSession();
             if (instance == null)
+            {
                 throw new ArgumentNullException(nameof(instance));
+            }
+
             if (name == null)
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             if (instancesByName == null)
             {

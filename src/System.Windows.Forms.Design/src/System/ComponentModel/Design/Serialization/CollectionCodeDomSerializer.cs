@@ -309,13 +309,24 @@ namespace System.ComponentModel.Design.Serialization
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
             if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
+            }
+
             if (targetType == null)
+            {
                 throw new ArgumentNullException(nameof(targetType));
+            }
+
             if (originalCollection == null)
+            {
                 throw new ArgumentNullException(nameof(originalCollection));
+            }
+
             if (valuesToSerialize == null)
+            {
                 throw new ArgumentNullException(nameof(valuesToSerialize));
+            }
 
             object result = null;
             bool serialized = false;
@@ -519,9 +530,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {
@@ -607,9 +622,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {

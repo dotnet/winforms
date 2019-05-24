@@ -204,7 +204,9 @@ namespace System.Windows.Forms
                 if (ImageIndexer.Index != value)
                 {
                     if (value < -1)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
+                    }
 
                     ImageIndexer.Index = value;
                     UpdateButton(false);
@@ -298,13 +300,19 @@ namespace System.Windows.Forms
             get
             {
                 if (parent == null || !parent.IsHandleCreated)
+                {
                     return partialPush;
+                }
                 else
                 {
                     if ((int)parent.SendMessage(NativeMethods.TB_ISBUTTONINDETERMINATE, FindButtonIndex(), 0) != 0)
+                    {
                         partialPush = true;
+                    }
                     else
+                    {
                         partialPush = false;
+                    }
 
                     return partialPush;
                 }
@@ -331,7 +339,9 @@ namespace System.Windows.Forms
             get
             {
                 if (parent == null || !parent.IsHandleCreated)
+                {
                     return pushed;
+                }
                 else
                 {
                     return GetPushedState();
@@ -388,7 +398,10 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarButtonStyle));
                 }
                 if (style == value)
+                {
                     return;
+                }
+
                 style = value;
                 UpdateButton(true);
             }
@@ -533,16 +546,24 @@ namespace System.Windows.Forms
                                 if (parent.TextAlign == ToolBarTextAlign.Right)
                                 {
                                     if (textSize.Width == 0)
+                                    {
                                         width = imageSize.Width + edge.Width * 4;
+                                    }
                                     else
+                                    {
                                         width = imageSize.Width + textSize.Width + edge.Width * 6;
+                                    }
                                 }
                                 else
                                 {
                                     if (imageSize.Width > textSize.Width)
+                                    {
                                         width = imageSize.Width + edge.Width * 4;
+                                    }
                                     else
+                                    {
                                         width = textSize.Width + edge.Width * 4;
+                                    }
                                 }
                                 if (style == ToolBarButtonStyle.DropDownButton && parent.DropDownArrows)
                                 {
@@ -550,7 +571,9 @@ namespace System.Windows.Forms
                                 }
                             }
                             else
+                            {
                                 width = parent.ButtonSize.Width;
+                            }
                         }
                     }
                 }
@@ -650,13 +673,24 @@ namespace System.Windows.Forms
                 fsState = 0
             };
             if (enabled)
+            {
                 button.fsState |= NativeMethods.TBSTATE_ENABLED;
+            }
+
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
+            {
                 button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+            }
+
             if (pushed)
+            {
                 button.fsState |= NativeMethods.TBSTATE_CHECKED;
+            }
+
             if (!visible)
+            {
                 button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+            }
 
             // set the button style
             //
@@ -719,13 +753,24 @@ namespace System.Windows.Forms
             //
             button.fsState = 0;
             if (enabled)
+            {
                 button.fsState |= NativeMethods.TBSTATE_ENABLED;
+            }
+
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
+            {
                 button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+            }
+
             if (pushed)
+            {
                 button.fsState |= NativeMethods.TBSTATE_CHECKED;
+            }
+
             if (!visible)
+            {
                 button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+            }
 
             // set the button style
             //
@@ -848,7 +893,9 @@ namespace System.Windows.Forms
             {
                 int index = FindButtonIndex();
                 if (index != -1)
+                {
                     parent.InternalSetButton(index, this, recreate, updateText);
+                }
             }
         }
     }

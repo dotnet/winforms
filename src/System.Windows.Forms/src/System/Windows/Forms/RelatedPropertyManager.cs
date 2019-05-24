@@ -35,7 +35,9 @@ namespace System.Windows.Forms
             this.dataField = dataField;
             fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
             if (fieldInfo == null)
+            {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
+            }
             // this.finalType = fieldInfo.PropertyType;
             parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
             Refresh();

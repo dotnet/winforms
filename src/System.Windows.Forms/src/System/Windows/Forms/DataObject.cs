@@ -1695,7 +1695,10 @@ namespace System.Windows.Forms
                     {
                         int charlen = UnsafeNativeMethods.DragQueryFileLongPath(new HandleRef(null, hdrop), i, sb);
                         if (0 == charlen)
+                        {
                             continue;
+                        }
+
                         string s = sb.ToString(0, charlen);
                         string fullPath = Path.GetFullPath(s);
                         files[i] = s;

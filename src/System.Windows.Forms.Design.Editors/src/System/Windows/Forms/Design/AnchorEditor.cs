@@ -33,7 +33,10 @@ namespace System.Windows.Forms.Design
             if (edSvc != null)
             {
                 if (anchorUI == null)
+                {
                     anchorUI = new AnchorUI(this);
+                }
+
                 anchorUI.Start(edSvc, value);
                 edSvc.DropDownControl(anchorUI);
                 value = anchorUI.Value;
@@ -92,13 +95,25 @@ namespace System.Windows.Forms.Design
             {
                 AnchorStyles baseVar = 0;
                 if (left.GetSolid())
+                {
                     baseVar |= AnchorStyles.Left;
+                }
+
                 if (top.GetSolid())
+                {
                     baseVar |= AnchorStyles.Top;
+                }
+
                 if (bottom.GetSolid())
+                {
                     baseVar |= AnchorStyles.Bottom;
+                }
+
                 if (right.GetSolid())
+                {
                     baseVar |= AnchorStyles.Right;
+                }
+
                 return baseVar;
             }
 
@@ -195,7 +210,10 @@ namespace System.Windows.Forms.Design
             private void Teardown(bool saveAnchor)
             {
                 if (!saveAnchor)
+                {
                     Value = oldAnchor;
+                }
+
                 edSvc.CloseDropDown();
             }
 
@@ -330,6 +348,7 @@ namespace System.Windows.Forms.Design
                     if ((keyData & Keys.KeyCode) == Keys.Tab && (keyData & (Keys.Alt | Keys.Control)) == 0)
                     {
                         for (int i = 0; i < picker.tabOrder.Length; i++)
+                        {
                             if (picker.tabOrder[i] == this)
                             {
                                 i += (keyData & Keys.Shift) == 0 ? 1 : -1;
@@ -337,6 +356,7 @@ namespace System.Windows.Forms.Design
                                 picker.tabOrder[i].Focus();
                                 break;
                             }
+                        }
 
                         return true;
                     }
@@ -367,7 +387,9 @@ namespace System.Windows.Forms.Design
                             AccessibleStates state = base.State;
 
                             if (((SpringControl)Owner).GetSolid())
+                            {
                                 state |= AccessibleStates.Selected;
+                            }
 
                             return state;
                         }

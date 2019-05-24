@@ -1394,7 +1394,9 @@ namespace System.Windows.Forms
             }
             ToolStripDropDownClosedEventHandler handler = (ToolStripDropDownClosedEventHandler)Events[EventClosed];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         // 
@@ -1404,7 +1406,9 @@ namespace System.Windows.Forms
         {
             ToolStripDropDownClosingEventHandler handler = (ToolStripDropDownClosingEventHandler)Events[EventClosing];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
         /// <summary>
         /// When our handle is being created, suspend the deactivation
@@ -1455,7 +1459,9 @@ namespace System.Windows.Forms
         {
             CancelEventHandler handler = (CancelEventHandler)Events[EventOpening];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -1475,7 +1481,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventOpened];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected override void OnVisibleChanged(System.EventArgs e)

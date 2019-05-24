@@ -170,7 +170,10 @@ namespace System.Windows.Forms
                 if (!backBrush.Color.Equals(value))
                 {
                     if (value.IsEmpty)
+                    {
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Caption BackColor"));
+                    }
+
                     backBrush = new SolidBrush(value);
                     Invalidate();
                 }
@@ -197,9 +200,13 @@ namespace System.Windows.Forms
                 // did not set the CaptionFont
                 //
                 if (textFont == null)
+                {
                     return dataGridFont;
+                }
                 else
+                {
                     return textFont;
+                }
             }
             set
             {
@@ -266,9 +273,14 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     text = string.Empty;
+                }
                 else
+                {
                     text = value;
+                }
+
                 Invalidate();
             }
         }
@@ -295,7 +307,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Caption ForeColor"));
+                }
+
                 foreBrush = new SolidBrush(value);
                 colorMap[0].NewColor = ForeColor;
                 Invalidate();
@@ -352,7 +367,10 @@ namespace System.Windows.Forms
             lock (this)
             {
                 if (handler == null)
+                {
                     return;
+                }
+
                 for (EventEntry e = eventList; e != null; e = e.next)
                 {
                     if (e.key == key)
@@ -393,13 +411,17 @@ namespace System.Windows.Forms
         private void Invalidate()
         {
             if (dataGrid != null)
+            {
                 dataGrid.InvalidateCaption();
+            }
         }
 
         private void InvalidateCaptionRect(Rectangle r)
         {
             if (dataGrid != null)
+            {
                 dataGrid.InvalidateCaptionRect(r);
+            }
         }
 
         private void InvalidateLocation(CaptionLocation loc)
@@ -426,7 +448,9 @@ namespace System.Windows.Forms
             {
                 EventHandler handler = (EventHandler)Events[EVENT_BACKWARDCLICKED];
                 if (handler != null)
+                {
                     handler(this, e);
+                }
             }
         }
 
@@ -434,7 +458,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_CAPTIONCLICKED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected void OnDownClicked(EventArgs e)
@@ -443,7 +469,9 @@ namespace System.Windows.Forms
             {
                 EventHandler handler = (EventHandler)Events[EVENT_DOWNCLICKED];
                 if (handler != null)
+                {
                     handler(this, e);
+                }
             }
         }
 
@@ -465,13 +493,19 @@ namespace System.Windows.Forms
             if (alignRight)
             {
                 if (leftButtonBitmap_bidi == null)
+                {
                     leftButtonBitmap_bidi = GetBitmap("DataGridCaption.backarrow_bidi");
+                }
+
                 return leftButtonBitmap_bidi;
             }
             else
             {
                 if (leftButtonBitmap == null)
+                {
                     leftButtonBitmap = GetBitmap("DataGridCaption.backarrow");
+                }
+
                 return leftButtonBitmap;
             }
         }
@@ -479,7 +513,10 @@ namespace System.Windows.Forms
         private Bitmap GetDetailsBmp()
         {
             if (magnifyingGlassBitmap == null)
+            {
                 magnifyingGlassBitmap = GetBitmap("DataGridCaption.Details");
+            }
+
             return magnifyingGlassBitmap;
         }
 
@@ -491,7 +528,9 @@ namespace System.Windows.Forms
                 for (EventEntry e = eventList; e != null; e = e.next)
                 {
                     if (e.key == key)
+                    {
                         return e.handler;
+                    }
                 }
                 return null;
             }
@@ -647,7 +686,9 @@ namespace System.Windows.Forms
             Rectangle textBounds = bounds;
 
             if (textBounds.Width <= 0 || textBounds.Height <= 0)
+            {
                 return;
+            }
 
             if (textBorderVisible)
             {
@@ -692,17 +733,23 @@ namespace System.Windows.Forms
             if (!backButtonRect.IsEmpty)
             {
                 if (backButtonRect.Contains(x, y))
+                {
                     return CaptionLocation.BackButton;
+                }
             }
             if (!downButtonRect.IsEmpty)
             {
                 if (downButtonRect.Contains(x, y))
+                {
                     return CaptionLocation.DownButton;
+                }
             }
             if (!textRect.IsEmpty)
             {
                 if (textRect.Contains(x, y))
+                {
                     return CaptionLocation.Text;
+                }
             }
             return CaptionLocation.Nowhere;
         }
@@ -805,7 +852,9 @@ namespace System.Windows.Forms
         {
             Delegate handler = GetEventHandler(key);
             if (handler != null)
+            {
                 ((EventHandler)handler)(this, e);
+            }
         }
 
         protected virtual void RemoveEventHandler(object key, Delegate handler)
@@ -814,7 +863,10 @@ namespace System.Windows.Forms
             lock (this)
             {
                 if (handler == null)
+                {
                     return;
+                }
+
                 for (EventEntry e = eventList, prev = null; e != null; prev = e, e = e.next)
                 {
                     if (e.key == key)

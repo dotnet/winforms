@@ -395,7 +395,9 @@ namespace System.Windows.Forms
                     int bucketNumber = (int)(seed % (uint)hashBuckets.Length);
 
                     if (emptySlotNumber == -1 && (hashBuckets[bucketNumber].handle == new IntPtr(-1)) && (hashBuckets[bucketNumber].hash_coll < 0))
+                    {
                         emptySlotNumber = bucketNumber;
+                    }
 
                     //We need to check if the collision bit is set because we have the possibility where the first
                     //item in the hash-chain has been deleted.
@@ -717,9 +719,14 @@ namespace System.Windows.Forms
             finally
             {
                 if (msg == Interop.WindowMessages.WM_NCDESTROY)
+                {
                     ReleaseHandle(false);
+                }
+
                 if (msg == NativeMethods.WM_UIUNSUBCLASS)
+                {
                     ReleaseHandle(true);
+                }
             }
 
             return m.Result;
@@ -838,9 +845,14 @@ namespace System.Windows.Forms
             finally
             {
                 if (msg == Interop.WindowMessages.WM_NCDESTROY)
+                {
                     ReleaseHandle(false);
+                }
+
                 if (msg == NativeMethods.WM_UIUNSUBCLASS)
+                {
                     ReleaseHandle(true);
+                }
             }
 
             return m.Result;
@@ -1000,7 +1012,9 @@ namespace System.Windows.Forms
             {
                 int size = primes[i];
                 if (size >= minSize)
+                {
                     return size;
+                }
             }
             //outside of our predefined table. 
             //compute the hard way. 
@@ -1020,7 +1034,9 @@ namespace System.Windows.Forms
                         }
                     }
                     if (prime)
+                    {
                         return j;
+                    }
                 }
                 else
                 {
@@ -1599,7 +1615,9 @@ namespace System.Windows.Forms
                     {
                         while (wc != null && (wc.className != null ||
                                               wc.classStyle != classStyle))
+                        {
                             wc = wc.next;
+                        }
                     }
                     else
                     {

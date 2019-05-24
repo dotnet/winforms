@@ -767,9 +767,13 @@ namespace System.Windows.Forms
                 try
                 {
                     if (orientation == Orientation.Horizontal)
+                    {
                         Height = autoSize ? PreferredDimension : saveDim;
+                    }
                     else
+                    {
                         Width = autoSize ? PreferredDimension : saveDim;
+                    }
                 }
                 finally
                 {
@@ -875,7 +879,10 @@ namespace System.Windows.Forms
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
+            {
                 return false;
+            }
+
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.PageUp:
@@ -931,7 +938,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_SCROLL];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -1009,7 +1018,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -1046,12 +1057,16 @@ namespace System.Windows.Forms
                 if (orientation == Orientation.Horizontal)
                 {
                     if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
+                    {
                         height = PreferredDimension;
+                    }
                 }
                 else
                 {
                     if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
+                    {
                         width = PreferredDimension;
+                    }
                 }
             }
             //}

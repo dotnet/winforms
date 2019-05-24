@@ -370,7 +370,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0)
+                {
                     value = 0;
+                }
+
                 minExtra = value;
             }
         }
@@ -395,7 +398,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0)
+                {
                     value = 0;
+                }
+
                 minSize = value;
             }
         }
@@ -415,7 +421,10 @@ namespace System.Windows.Forms
             get
             {
                 if (splitSize == -1)
+                {
                     splitSize = CalcSplitSize();
+                }
+
                 return splitSize;
             }
             set
@@ -426,9 +435,14 @@ namespace System.Windows.Forms
                 // this is not an else-if to handle the maxSize < minSize case...
                 // ie. we give minSize priority over maxSize...
                 if (value > maxSize)
+                {
                     value = maxSize;
+                }
+
                 if (value < minSize)
+                {
                     value = minSize;
+                }
 
                 // if (value == splitSize) return;  -- do we need this check?
 
@@ -605,22 +619,34 @@ namespace System.Windows.Forms
             {
                 case DockStyle.Top:
                     if (r.Height < minWeight)
+                    {
                         r.Height = minWeight;
+                    }
+
                     r.Y = bounds.Y + splitSize;
                     break;
                 case DockStyle.Bottom:
                     if (r.Height < minWeight)
+                    {
                         r.Height = minWeight;
+                    }
+
                     r.Y = bounds.Y + bounds.Height - splitSize - r.Height;
                     break;
                 case DockStyle.Left:
                     if (r.Width < minWeight)
+                    {
                         r.Width = minWeight;
+                    }
+
                     r.X = bounds.X + splitSize;
                     break;
                 case DockStyle.Right:
                     if (r.Width < minWeight)
+                    {
                         r.Width = minWeight;
+                    }
+
                     r.X = bounds.X + bounds.Width - splitSize - r.Width;
                     break;
             }
@@ -634,7 +660,10 @@ namespace System.Windows.Forms
         {
             Control target = FindTarget();
             if (target == null)
+            {
                 return -1;
+            }
+
             Rectangle r = target.Bounds;
             switch (Dock)
             {
@@ -751,7 +780,10 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             if (parent == null)
+            {
                 return null;
+            }
+
             Control.ControlCollection children = parent.Controls;
             int count = children.Count;
             DockStyle dock = Dock;
@@ -764,19 +796,31 @@ namespace System.Windows.Forms
                     {
                         case DockStyle.Top:
                             if (target.Bottom == Top)
+                            {
                                 return (Control)target;
+                            }
+
                             break;
                         case DockStyle.Bottom:
                             if (target.Top == Bottom)
+                            {
                                 return (Control)target;
+                            }
+
                             break;
                         case DockStyle.Left:
                             if (target.Right == Left)
+                            {
                                 return (Control)target;
+                            }
+
                             break;
                         case DockStyle.Right:
                             if (target.Left == Right)
+                            {
                                 return (Control)target;
+                            }
+
                             break;
                     }
                 }
@@ -880,7 +924,10 @@ namespace System.Windows.Forms
         {
             SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVING];
             if (handler != null)
+            {
                 handler(this, sevent);
+            }
+
             if (splitTarget != null)
             {
                 SplitMove(sevent.SplitX, sevent.SplitY);
@@ -896,7 +943,10 @@ namespace System.Windows.Forms
         {
             SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVED];
             if (handler != null)
+            {
                 handler(this, sevent);
+            }
+
             if (splitTarget != null)
             {
                 SplitMove(sevent.SplitX, sevent.SplitY);

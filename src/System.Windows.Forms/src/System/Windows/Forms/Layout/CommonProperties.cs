@@ -305,13 +305,24 @@ namespace System.Windows.Forms.Layout
                 // if any of them are changed and specified cache the new value.
 
                 if (!xChangedButNotSpecified)
+                {
                     originalBounds.X = x;
+                }
+
                 if (!yChangedButNotSpecified)
+                {
                     originalBounds.Y = y;
+                }
+
                 if (!wChangedButNotSpecified)
+                {
                     originalBounds.Width = width;
+                }
+
                 if (!hChangedButNotSpecified)
+                {
                     originalBounds.Height = height;
+                }
 
                 element.Properties.SetRectangle(_specifiedBoundsProperty, originalBounds);
 

@@ -175,7 +175,9 @@ namespace System.Windows.Forms
         {
             base.ItemsChanged(change);
             if (form != null)
+            {
                 form.MenuChanged(change, this);
+            }
         }
 
         /// <summary>
@@ -183,7 +185,9 @@ namespace System.Windows.Forms
         internal virtual void ItemsChanged(int change, Menu menu)
         {
             if (form != null)
+            {
                 form.MenuChanged(change, menu);
+            }
         }
 
         /// <summary>

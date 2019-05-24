@@ -329,11 +329,19 @@ namespace System.Windows.Forms
 
                 cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.LBS_NOTIFY | NativeMethods.LBS_HASSTRINGS;
                 if (scrollAlwaysVisible)
+                {
                     cp.Style |= NativeMethods.LBS_DISABLENOSCROLL;
+                }
+
                 if (!integralHeight)
+                {
                     cp.Style |= NativeMethods.LBS_NOINTEGRALHEIGHT;
+                }
+
                 if (useTabStops)
+                {
                     cp.Style |= NativeMethods.LBS_USETABSTOPS;
+                }
 
                 switch (borderStyle)
                 {
@@ -1380,13 +1388,17 @@ namespace System.Windows.Forms
         private void CheckIndex(int index)
         {
             if (index < 0 || index >= Items.Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+            }
         }
 
         private void CheckNoDataSource()
         {
             if (DataSource != null)
+            {
                 throw new ArgumentException(SR.DataSourceLocksItems);
+            }
         }
 
         protected virtual ObjectCollection CreateItemCollection()
@@ -1493,16 +1505,23 @@ namespace System.Windows.Forms
             // no items.
             //
             if (index < 0 || (index > 0 && index >= itemCount))
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             if (drawMode != DrawMode.OwnerDrawVariable)
+            {
                 index = 0;
+            }
 
             if (IsHandleCreated)
             {
                 int h = unchecked((int)(long)SendMessage(NativeMethods.LB_GETITEMHEIGHT, index, 0));
                 if (h == -1)
+                {
                     throw new Win32Exception();
+                }
+
                 return h;
             }
 
@@ -1733,7 +1752,10 @@ namespace System.Windows.Forms
                 case SelectionMode.One:
                     int index = unchecked((int)(long)SendMessage(NativeMethods.LB_GETCURSEL, 0, 0));
                     if (index >= 0)
+                    {
                         result = new int[] { index };
+                    }
+
                     break;
 
                 case SelectionMode.MultiSimple:
@@ -1981,7 +2003,9 @@ namespace System.Windows.Forms
             RefreshItems();
 
             if (SelectionMode != SelectionMode.None && DataManager != null)
+            {
                 SelectedIndex = DataManager.Position;
+            }
         }
 
         /// <summary>
@@ -2132,7 +2156,10 @@ namespace System.Windows.Forms
 
 
             if (!integralHeightAdjust && height != Height)
+            {
                 requestedHeight = height;
+            }
+
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
@@ -2192,10 +2219,14 @@ namespace System.Windows.Forms
         {
             int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
             if (index < 0 || index >= itemCount)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             if (selectionMode == SelectionMode.None)
+            {
                 throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
+            }
 
             SelectedItems.SetSelected(index, value);
             if (IsHandleCreated)
@@ -2961,12 +2992,16 @@ namespace System.Windows.Forms
                 if (item1 == null)
                 {
                     if (item2 == null)
+                    {
                         return 0; //both null, then they are equal
+                    }
 
                     return -1; //item1 is null, but item2 is valid (greater)
                 }
                 if (item2 == null)
+                {
                     return 1; //item2 is null, so item 1 is greater
+                }
 
                 if (item1 is Entry)
                 {
@@ -3030,7 +3065,9 @@ namespace System.Windows.Forms
                 bool IEnumerator.MoveNext()
                 {
                     if (version != items.version)
+                    {
                         throw new InvalidOperationException(SR.ListEnumVersionMismatch);
+                    }
 
                     while (true)
                     {
@@ -3066,7 +3103,10 @@ namespace System.Windows.Forms
                 void IEnumerator.Reset()
                 {
                     if (version != items.version)
+                    {
                         throw new InvalidOperationException(SR.ListEnumVersionMismatch);
+                    }
+
                     current = -1;
                 }
 
@@ -3228,7 +3268,9 @@ namespace System.Windows.Forms
                         }
                     }
                     else
+                    {
                         index = 0;
+                    }
 
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
                     InnerArray.Insert(index, item);

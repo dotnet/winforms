@@ -24,9 +24,13 @@ namespace System
             string sa = a as string;
             string sb = b as string;
             if (sa != null && sb != null)
+            {
                 return m_compareInfo.Compare(sa, sb);
+            }
             else
+            {
                 return Comparer.Default.Compare(a, b);
+            }
         }
     }
 }

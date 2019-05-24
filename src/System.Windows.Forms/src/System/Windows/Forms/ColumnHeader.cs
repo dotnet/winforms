@@ -194,7 +194,10 @@ namespace System.Windows.Forms
             get
             {
                 if (listview != null)
+                {
                     return listview.GetColumnIndex(this);
+                }
+
                 return -1;
             }
         }
@@ -459,7 +462,9 @@ namespace System.Windows.Forms
             {
                 width = value;
                 if (listview != null)
+                {
                     listview.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
+                }
             }
         }
 

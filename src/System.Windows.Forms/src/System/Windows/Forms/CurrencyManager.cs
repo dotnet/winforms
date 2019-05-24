@@ -95,7 +95,10 @@ namespace System.Windows.Forms
                     return ((IBindingList)list).AllowNew;
                 }
                 if (list == null)
+                {
                     return false;
+                }
+
                 return !list.IsReadOnly && !list.IsFixedSize;
             }
         }
@@ -113,7 +116,10 @@ namespace System.Windows.Forms
                     return ((IBindingList)list).AllowEdit;
                 }
                 if (list == null)
+                {
                     return false;
+                }
+
                 return !list.IsReadOnly;
             }
         }
@@ -130,7 +136,10 @@ namespace System.Windows.Forms
                     return ((IBindingList)list).AllowRemove;
                 }
                 if (list == null)
+                {
                     return false;
+                }
+
                 return !list.IsReadOnly && !list.IsFixedSize;
             }
         }
@@ -143,9 +152,13 @@ namespace System.Windows.Forms
             get
             {
                 if (list == null)
+                {
                     return 0;
+                }
                 else
+                {
                     return list.Count;
+                }
             }
         }
 
@@ -209,9 +222,14 @@ namespace System.Windows.Forms
                     list = (IList)tempList;
                     WireEvents(list);
                     if (list.Count > 0)
+                    {
                         listposition = 0;
+                    }
                     else
+                    {
                         listposition = -1;
+                    }
+
                     OnItemChanged(resetEvent);
                     OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1, -1));
                     UpdateIsBinding();
@@ -277,13 +295,20 @@ namespace System.Windows.Forms
             set
             {
                 if (listposition == -1)
+                {
                     return;
+                }
 
                 if (value < 0)
+                {
                     value = 0;
+                }
+
                 int count = list.Count;
                 if (value >= count)
+                {
                     value = count - 1;
+                }
 
                 ChangeRecordState(value, listposition != value, true, true, false);       // true for endCurrentEdit
                                                                                           // true for firingPositionChange notification
@@ -436,7 +461,9 @@ namespace System.Windows.Forms
         private bool CurrencyManager_PushData()
         {
             if (pullingData)
+            {
                 return false;
+            }
 
             int initialPosition = listposition;
             if (lastGoodKnownRow == -1)
@@ -590,7 +617,9 @@ namespace System.Windows.Forms
         internal int Find(PropertyDescriptor property, object key, bool keepIndex)
         {
             if (key == null)
+            {
                 throw new ArgumentNullException(nameof(key));
+            }
 
             if (property != null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
             {
@@ -719,7 +748,9 @@ namespace System.Windows.Forms
                 if (e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorAdded ||
                     e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorDeleted ||
                     e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorChanged)
+                {
                     OnMetaDataChanged(EventArgs.Empty);
+                }
 
                 // 
 
@@ -736,9 +767,14 @@ namespace System.Windows.Forms
                     case System.ComponentModel.ListChangedType.Reset:
                         Debug.WriteLineIf(CompModSwitches.DataCursor.TraceVerbose, "System.ComponentModel.ListChangedType.Reset Position: " + Position + " Count: " + list.Count);
                         if (listposition == -1 && list.Count > 0)
+                        {
                             ChangeRecordState(0, true, false, true, false);     // last false: we don't pull the data from the control when DM changes
+                        }
                         else
+                        {
                             ChangeRecordState(Math.Min(listposition, list.Count - 1), true, false, true, false);
+                        }
+
                         UpdateIsBinding(/*raiseItemChangedEvent:*/ false);
                         OnItemChanged(resetEvent);
                         break;
@@ -755,7 +791,10 @@ namespace System.Windows.Forms
                             // when we get the itemAdded, and the position was at the end
                             // of the list, do the right thing and notify the positionChanged after refreshing the list
                             if (listposition == list.Count - 1)
+                            {
                                 OnPositionChanged(EventArgs.Empty);
+                            }
+
                             break;
                         }
                         else if (dbe.NewIndex == listposition && listposition == list.Count - 1 && listposition != -1)
@@ -838,9 +877,13 @@ namespace System.Windows.Forms
                         // In Everett, metadata changes did not alter current list position. In Whidbey, this behavior
                         // preserved - except that we will now force the position to stay in valid range if necessary.
                         if (listposition == -1 && list.Count > 0)
+                        {
                             ChangeRecordState(0, true, false, true, false);
+                        }
                         else if (listposition > list.Count - 1)
+                        {
                             ChangeRecordState(list.Count - 1, true, false, true, false);
+                        }
 
                         // fire the MetaDataChanged event
                         OnMetaDataChanged(EventArgs.Empty);
@@ -878,7 +921,10 @@ namespace System.Windows.Forms
                 int curLastGoodKnownRow = lastGoodKnownRow;
                 bool positionChanged = false;
                 if (!suspendPushDataInCurrentChanged)
+                {
                     positionChanged = CurrencyManager_PushData();
+                }
+
                 if (Count > 0)
                 {
                     object item = list[Position];
@@ -927,12 +973,17 @@ namespace System.Windows.Forms
             // We should not push the data when we suspend the changeEvents.
             // but we should still fire the OnItemChanged event that we get when processing the EndCurrentEdit method.
             if ((e.Index == listposition || (e.Index == -1 && Position < Count)) && !inChangeRecordState)
+            {
                 positionChanged = CurrencyManager_PushData();
+            }
+
             Debug.WriteLineIf(CompModSwitches.DataView.TraceVerbose, "OnItemChanged(" + e.Index.ToString(CultureInfo.InvariantCulture) + ") " + e.ToString());
             try
             {
                 if (onItemChanged != null)
+                {
                     onItemChanged(this, e);
+                }
             }
             catch (Exception ex)
             {
@@ -940,21 +991,27 @@ namespace System.Windows.Forms
             }
 
             if (positionChanged)
+            {
                 OnPositionChanged(EventArgs.Empty);
+            }
             // onItemChangedCalled = true;
         }
 
         private void OnListChanged(ListChangedEventArgs e)
         {
             if (onListChanged != null)
+            {
                 onListChanged(this, e);
+            }
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
         internal protected void OnMetaDataChanged(EventArgs e)
         {
             if (onMetaDataChangedHandler != null)
+            {
                 onMetaDataChangedHandler(this, e);
+            }
         }
 
         /// <summary>
@@ -966,7 +1023,9 @@ namespace System.Windows.Forms
             try
             {
                 if (onPositionChangedHandler != null)
+                {
                     onPositionChangedHandler(this, e);
+                }
             }
             catch (Exception ex)
             {
@@ -1060,6 +1119,7 @@ namespace System.Windows.Forms
         {
             bool newBound = list != null && list.Count > 0 && shouldBind && listposition != -1;
             if (list != null)
+            {
                 if (bound != newBound)
                 {
                     // we will call end edit when moving from bound state to unbounded state
@@ -1079,6 +1139,7 @@ namespace System.Windows.Forms
                         OnItemChanged(resetEvent);
                     }
                 }
+            }
         }
 
         private void UpdateLastGoodKnownRow(System.ComponentModel.ListChangedEventArgs e)
@@ -1087,22 +1148,34 @@ namespace System.Windows.Forms
             {
                 case System.ComponentModel.ListChangedType.ItemDeleted:
                     if (e.NewIndex == lastGoodKnownRow)
+                    {
                         lastGoodKnownRow = -1;
+                    }
+
                     break;
                 case System.ComponentModel.ListChangedType.Reset:
                     lastGoodKnownRow = -1;
                     break;
                 case System.ComponentModel.ListChangedType.ItemAdded:
                     if (e.NewIndex <= lastGoodKnownRow && lastGoodKnownRow < List.Count - 1)
+                    {
                         lastGoodKnownRow++;
+                    }
+
                     break;
                 case System.ComponentModel.ListChangedType.ItemMoved:
                     if (e.OldIndex == lastGoodKnownRow)
+                    {
                         lastGoodKnownRow = e.NewIndex;
+                    }
+
                     break;
                 case System.ComponentModel.ListChangedType.ItemChanged:
                     if (e.NewIndex == lastGoodKnownRow)
+                    {
                         lastGoodKnownRow = -1;
+                    }
+
                     break;
             }
         }

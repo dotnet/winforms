@@ -1103,9 +1103,13 @@ namespace System.Windows.Forms
         {
             // Modify the value
             if (e.ButtonID == (int)ButtonID.Up)
+            {
                 UpButton();
+            }
             else if (e.ButtonID == (int)ButtonID.Down)
+            {
                 DownButton();
+            }
         }
 
         /// <summary>
@@ -1833,7 +1837,9 @@ namespace System.Windows.Forms
             protected virtual void OnUpDown(UpDownEventArgs upevent)
             {
                 if (upDownEventHandler != null)
+                {
                     upDownEventHandler(this, upevent);
+                }
             }
 
             /// <summary>

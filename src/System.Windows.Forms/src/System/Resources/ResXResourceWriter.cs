@@ -443,7 +443,9 @@ namespace System.Resources
         private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment)
         {
             if (hasBeenSaved)
+            {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
+            }
 
             string alias = null;
             if (!string.IsNullOrEmpty(type) && elementName == DataStr)
@@ -612,7 +614,10 @@ namespace System.Resources
         {
             int indexStart = typeName.IndexOf(',');
             if (indexStart == -1)
+            {
                 return null;
+            }
+
             return typeName.Substring(indexStart + 2);
         }
 
@@ -655,7 +660,9 @@ namespace System.Resources
         public void Generate()
         {
             if (hasBeenSaved)
+            {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
+            }
 
             hasBeenSaved = true;
             Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "writing XML");

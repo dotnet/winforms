@@ -379,7 +379,9 @@ namespace System.Windows.Forms
             // that it's just another name for OnControlCreated.
             EventHandler handler = (EventHandler)Events[EventLoad];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -419,8 +421,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventRendererChanged];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
 
         private void ResetRenderMode()

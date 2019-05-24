@@ -114,7 +114,9 @@ namespace System.Windows.Forms
             {
                 base.Site = value;
                 if (value == null)
+                {
                     return;
+                }
 
                 IDesignerHost host = value.GetService(typeof(IDesignerHost)) as IDesignerHost;
                 if (host != null)
@@ -215,12 +217,16 @@ namespace System.Windows.Forms
                 if (parentControl != value)
                 {
                     if (parentControl != null)
+                    {
                         parentControl.BindingContextChanged -= propChangedEvent;
+                    }
 
                     parentControl = value;
 
                     if (parentControl != null)
+                    {
                         parentControl.BindingContextChanged += propChangedEvent;
+                    }
 
                     Set_ErrorManager(DataSource, DataMember, true);
                 }
@@ -289,7 +295,10 @@ namespace System.Windows.Forms
         private void Set_ErrorManager(object newDataSource, string newDataMember, bool force)
         {
             if (inSetErrorManager)
+            {
                 return;
+            }
+
             inSetErrorManager = true;
             try
             {
@@ -336,7 +345,9 @@ namespace System.Windows.Forms
                     // see if there are errors at the current
                     // item in the list, w/o waiting for the position to change
                     if (errorManager != null)
+                    {
                         UpdateBinding();
+                    }
                 }
             }
             finally
@@ -403,7 +414,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 Set_ErrorManager(DataSource, value, false);
             }
         }
@@ -556,7 +570,9 @@ namespace System.Windows.Forms
                 string outputError = string.Empty;
 
                 if (controlError.Contains(dataBinding.Control))
+                {
                     outputError = (string)controlError[dataBinding.Control];
+                }
 
                 // Utilize the error string without including the field name.
                 if (string.IsNullOrEmpty(outputError))
@@ -603,7 +619,9 @@ namespace System.Windows.Forms
                 blinkRate = value;
                 // If we set the blinkRate = 0 then set BlinkStyle = NeverBlink
                 if (blinkRate == 0)
+                {
                     BlinkStyle = ErrorBlinkStyle.NeverBlink;
+                }
             }
         }
 
@@ -651,7 +669,9 @@ namespace System.Windows.Forms
                 ErrorWindow[] array = new ErrorWindow[windows.Values.Count];
                 windows.Values.CopyTo(array, 0);
                 for (int i = 0; i < array.Length; i++)
+                {
                     array[i].Update(false /*timerCaused*/);
+                }
             }
         }
 
@@ -665,7 +685,10 @@ namespace System.Windows.Forms
             get
             {
                 if (region == null)
+                {
                     region = new IconRegion(Icon);
+                }
+
                 return region;
             }
         }
@@ -792,7 +815,10 @@ namespace System.Windows.Forms
         private ControlItem EnsureControlItem(Control control)
         {
             if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
+            }
+
             ControlItem item = (ControlItem)items[control];
             if (item == null)
             {
@@ -1260,9 +1286,13 @@ namespace System.Windows.Forms
                     ControlItem item = (ControlItem)items[i];
                     Rectangle iconBounds = item.GetIconBounds(size);
                     if (windowBounds.IsEmpty)
+                    {
                         windowBounds = iconBounds;
+                    }
                     else
+                    {
                         windowBounds = Rectangle.Union(windowBounds, iconBounds);
+                    }
                 }
 
                 Region windowRegion = new Region(new Rectangle(0, 0, 0, 0));
@@ -1859,7 +1889,9 @@ namespace System.Windows.Forms
                         finally
                         {
                             if (mask != IntPtr.Zero)
+                            {
                                 SafeNativeMethods.DeleteObject(new HandleRef(null, mask));
+                            }
                         }
                     }
 

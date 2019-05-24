@@ -457,7 +457,9 @@ namespace System.Windows.Forms
 
                         // 
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                        {
                             SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                        }
                     }
                 }
             }

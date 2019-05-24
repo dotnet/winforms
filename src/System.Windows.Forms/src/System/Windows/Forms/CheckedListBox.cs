@@ -497,7 +497,10 @@ namespace System.Windows.Forms
         {
 
             if (index < 0 || index >= Items.Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
+
             return CheckedItems.GetCheckedState(index);
         }
 
@@ -543,7 +546,9 @@ namespace System.Windows.Forms
             // make sure we have a valid index, otherwise we're going to
             // fail ahead...
             if (index < 0 || index >= Items.Count)
+            {
                 return;
+            }
 
             // Send an accessibility notification
             //
@@ -762,7 +767,9 @@ namespace System.Windows.Forms
                             float[] tabStops = new float[15];
                             float tabOffset = -(idealCheckSize + (scaledListItemStartPosition * 2));
                             for (int i = 1; i < tabStops.Length; i++)
+                            {
                                 tabStops[i] = tabDistance;
+                            }
 
                             //(
                             if (Math.Abs(tabOffset) < tabDistance)
@@ -920,7 +927,9 @@ namespace System.Windows.Forms
         protected virtual void OnItemCheck(ItemCheckEventArgs ice)
         {
             if (onItemCheck != null)
+            {
                 onItemCheck(this, ice);
+            }
         }
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)

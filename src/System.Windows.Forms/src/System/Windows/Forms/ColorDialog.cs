@@ -147,9 +147,14 @@ namespace System.Windows.Forms
             {
                 int length = value == null ? 0 : Math.Min(value.Length, 16);
                 if (length > 0)
+                {
                     Array.Copy(value, 0, customColors, 0, length);
+                }
+
                 for (int i = length; i < 16; i++)
+                {
                     customColors[i] = 0x00FFFFFF;
+                }
             }
         }
 
@@ -293,14 +298,23 @@ namespace System.Windows.Forms
                 int flags = Options | (NativeMethods.CC_RGBINIT | NativeMethods.CC_ENABLEHOOK);
                 // Our docs say AllowFullOpen takes precedence over FullOpen; ChooseColor implements the opposite
                 if (!AllowFullOpen)
+                {
                     flags &= ~NativeMethods.CC_FULLOPEN;
+                }
+
                 cc.Flags = flags;
 
                 cc.lpfnHook = hookProcPtr;
                 if (!SafeNativeMethods.ChooseColor(cc))
+                {
                     return false;
+                }
+
                 if (cc.rgbResult != ColorTranslator.ToWin32(color))
+                {
                     color = ColorTranslator.FromOle(cc.rgbResult);
+                }
+
                 Marshal.Copy(custColorPtr, customColors, 0, 16);
                 return true;
             }

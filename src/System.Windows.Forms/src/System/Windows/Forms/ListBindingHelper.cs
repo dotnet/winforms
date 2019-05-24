@@ -698,7 +698,9 @@ namespace System.Windows.Forms
                     listEnumerator.Reset();
 
                     if (listEnumerator.MoveNext())
+                    {
                         instance = listEnumerator.Current;
+                    }
 
                     // after we are done w/ the enumerator, reset it
                     listEnumerator.Reset();

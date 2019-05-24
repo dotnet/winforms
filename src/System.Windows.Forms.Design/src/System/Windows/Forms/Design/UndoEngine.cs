@@ -662,7 +662,9 @@ namespace System.ComponentModel.Design
                     // do nothing
                 }
                 else
+                {
                     AddEvent(new AddRemoveUndoEvent(UndoEngine, e.Component, true));
+                }
 
                 if (_ignoreAddingList != null)
                 {

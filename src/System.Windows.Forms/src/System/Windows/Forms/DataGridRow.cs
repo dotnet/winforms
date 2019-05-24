@@ -64,9 +64,14 @@ namespace System.Windows.Forms
         public DataGridRow(DataGrid dataGrid, DataGridTableStyle dgTable, int rowNumber)
         {
             if (dataGrid == null || dgTable.DataGrid == null)
+            {
                 throw new ArgumentNullException(nameof(dataGrid));
+            }
+
             if (rowNumber < 0)
+            {
                 throw new ArgumentException(SR.DataGridRowRowNumber, "rowNumber");
+            }
             // this.dataGrid = dataGrid;
             number = rowNumber;
 
@@ -114,7 +119,9 @@ namespace System.Windows.Forms
                     {
                         // if (columns[i].Visible && columns[i].PropertyDescriptor != null)
                         if (columns[i].PropertyDescriptor != null)
+                        {
                             h = Math.Max(h, columns[i].GetMinimumHeight());
+                        }
                     }
                 }
             }
@@ -250,8 +257,12 @@ namespace System.Windows.Forms
             if (columns != null)
             {
                 for (int i = firstVisibleCol; i < col; i++)
+                {
                     if (columns[i].PropertyDescriptor != null)
+                    {
                         cx += columns[i].Width;
+                    }
+                }
 
                 int borderWidth = dgTable.GridLineWidth;
                 cellBounds = new Rectangle(cx,
@@ -277,7 +288,10 @@ namespace System.Windows.Forms
         protected Bitmap GetStarBitmap()
         {
             if (starBmp == null)
+            {
                 starBmp = GetBitmap("DataGridRow.star");
+            }
+
             return starBmp;
         }
 
@@ -288,7 +302,10 @@ namespace System.Windows.Forms
         protected Bitmap GetPencilBitmap()
         {
             if (pencilBmp == null)
+            {
                 pencilBmp = GetBitmap("DataGridRow.pencil");
+            }
+
             return pencilBmp;
         }
 
@@ -298,21 +315,30 @@ namespace System.Windows.Forms
         protected Bitmap GetErrorBitmap()
         {
             if (errorBmp == null)
+            {
                 errorBmp = GetBitmap("DataGridRow.error");
+            }
+
             return errorBmp;
         }
 
         protected Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
+            {
                 leftArrow = GetBitmap("DataGridRow.left");
+            }
+
             return leftArrow;
         }
 
         protected Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
+            {
                 rightArrow = GetBitmap("DataGridRow.right");
+            }
+
             return rightArrow;
         }
 
@@ -493,18 +519,26 @@ namespace System.Windows.Forms
             for (int col = firstVisibleColumn; col < nCols; ++col)
             {
                 if (cx > bounds.Width)
+                {
                     break;
+                }
 
                 // if (!columns[col].Visible || columns[col].PropertyDescriptor == null)
                 if (columns[col].PropertyDescriptor == null || columns[col].Width <= 0)
+                {
                     continue;
+                }
 
                 cellBounds.Width = columns[col].Width - bWidth;
 
                 if (alignToRight)
+                {
                     cellBounds.X = bounds.Right - cx - cellBounds.Width;
+                }
                 else
+                {
                     cellBounds.X = bounds.X + cx;
+                }
 
                 // Paint the data with the the DataGridColumn
                 Brush backBr = BackBrushForDataPaint(ref current, columns[col], col);
@@ -636,11 +670,15 @@ namespace System.Windows.Forms
             //
             object errorInfo = DataGrid.ListManager[number];
             if (!(errorInfo is IDataErrorInfo))
+            {
                 return;
+            }
 
             string errString = ((IDataErrorInfo)errorInfo).Error;
             if (errString == null)
+            {
                 errString = string.Empty;
+            }
 
             if (tooltip != errString)
             {
@@ -653,7 +691,9 @@ namespace System.Windows.Forms
             }
 
             if (string.IsNullOrEmpty(errString))
+            {
                 return;
+            }
 
             // we now have an error string: paint the errorIcon and add the tooltip
             Rectangle errRect;

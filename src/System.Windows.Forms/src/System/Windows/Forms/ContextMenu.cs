@@ -215,10 +215,14 @@ namespace System.Windows.Forms
         private void Show(Control control, Point pos, int flags)
         {
             if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
+            }
 
             if (!control.IsHandleCreated || !control.Visible)
+            {
                 throw new ArgumentException(SR.ContextMenuInvalidParent, "control");
+            }
 
             sourceControl = control;
 

@@ -718,7 +718,9 @@ namespace System.Windows.Forms
                 // particularly if the parent is an MDIClient.
                 Color c = RawBackColor; // inheritedProperties.BackColor
                 if (!c.IsEmpty)
+                {
                     return c;
+                }
 
                 return DefaultBackColor;
             }
@@ -1330,7 +1332,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value == IsMdiContainer)
+                {
                     return;
+                }
 
                 if (value)
                 {
@@ -1891,19 +1895,28 @@ namespace System.Windows.Forms
             {
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent == null)
+                {
                     return null;
+                }
 
                 MainMenu mergedMenu = (MainMenu)Properties.GetObject(PropMergedMenu);
                 if (mergedMenu != null)
+                {
                     return mergedMenu;
+                }
 
                 MainMenu parentMenu = formMdiParent.Menu;
                 MainMenu mainMenu = Menu;
 
                 if (mainMenu == null)
+                {
                     return parentMenu;
+                }
+
                 if (parentMenu == null)
+                {
                     return mainMenu;
+                }
 
                 // Create a menu that merges the two and save it for next time.
                 mergedMenu = new MainMenu
@@ -2083,7 +2096,9 @@ namespace System.Windows.Forms
             {
                 Form ownerOld = OwnerInternal;
                 if (ownerOld == value)
+                {
                     return;
+                }
 
                 if (value != null && !TopLevel)
                 {
@@ -2983,7 +2998,9 @@ namespace System.Windows.Forms
         public void AddOwnedForm(Form ownedForm)
         {
             if (ownedForm == null)
+            {
                 return;
+            }
 
             if (ownedForm.OwnerInternal != this)
             {
@@ -3182,7 +3199,9 @@ namespace System.Windows.Forms
 
                 // We save a significant amount of time by bailing early if there's no work to be done
                 if (baseVar.Equals(newVar))
+                {
                     return;
+                }
 
                 float percY = AdjustScale(((float)newVar.Height) / ((float)baseVar.Height));
                 float percX = AdjustScale(((float)newVar.Width) / ((float)baseVar.Width));
@@ -3383,7 +3402,9 @@ namespace System.Windows.Forms
         {
 
             if (GetState(STATE_CREATINGHANDLE))
+            {
                 throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Close"));
+            }
 
             if (IsHandleCreated)
             {
@@ -3521,7 +3542,9 @@ namespace System.Windows.Forms
 
                 // avoid extra SetMenu calls for perf
                 if (Menu != null || !TopLevel || IsMdiContainer)
+                {
                     UpdateMenuHandles();
+                }
 
                 // In order for a window not to have a taskbar entry, it must
                 // be owned.
@@ -3548,7 +3571,9 @@ namespace System.Windows.Forms
             finally
             {
                 if (form != null)
+                {
                     form.ResumeUpdateMenuHandles();
+                }
 
                 // We need to reset the styles in case Windows tries to set us up
                 // with "correct" styles
@@ -3643,13 +3668,24 @@ namespace System.Windows.Forms
                 CalledCreateControl = false;
 
                 if (Properties.ContainsObject(PropAcceptButton))
+                {
                     Properties.SetObject(PropAcceptButton, null);
+                }
+
                 if (Properties.ContainsObject(PropCancelButton))
+                {
                     Properties.SetObject(PropCancelButton, null);
+                }
+
                 if (Properties.ContainsObject(PropDefaultButton))
+                {
                     Properties.SetObject(PropDefaultButton, null);
+                }
+
                 if (Properties.ContainsObject(PropActiveMdiChild))
+                {
                     Properties.SetObject(PropActiveMdiChild, null);
+                }
 
                 if (MdiWindowListStrip != null)
                 {
@@ -4132,15 +4168,23 @@ namespace System.Windows.Forms
 
                     p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
                     if (p.X < screenRect.X)
+                    {
                         p.X = screenRect.X;
+                    }
                     else if (p.X + s.Width > screenRect.X + screenRect.Width)
+                    {
                         p.X = screenRect.X + screenRect.Width - s.Width;
+                    }
 
                     p.Y = (ownerRect.top + ownerRect.bottom - s.Height) / 2;
                     if (p.Y < screenRect.Y)
+                    {
                         p.Y = screenRect.Y;
+                    }
                     else if (p.Y + s.Height > screenRect.Y + screenRect.Height)
+                    {
                         p.Y = screenRect.Y + screenRect.Height - s.Height;
+                    }
 
                     Location = p;
                 }
@@ -4242,7 +4286,10 @@ namespace System.Windows.Forms
                     if (ctlClient == null || !ctlClient.IsHandleCreated)
                     {
                         if (menu == Menu && change == Windows.Forms.Menu.CHANGE_ITEMS)
+                        {
                             UpdateMenuHandles();
+                        }
+
                         break;
                     }
 
@@ -4292,7 +4339,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_ACTIVATED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4342,7 +4391,9 @@ namespace System.Windows.Forms
         {
             CancelEventHandler handler = (CancelEventHandler)Events[EVENT_CLOSING];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4353,7 +4404,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_CLOSED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -4365,7 +4418,9 @@ namespace System.Windows.Forms
         {
             FormClosingEventHandler handler = (FormClosingEventHandler)Events[EVENT_FORMCLOSING];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4379,7 +4434,9 @@ namespace System.Windows.Forms
 
             FormClosedEventHandler handler = (FormClosedEventHandler)Events[EVENT_FORMCLOSED];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4406,7 +4463,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_DEACTIVATE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4653,7 +4712,9 @@ namespace System.Windows.Forms
         {
             InputLanguageChangedEventHandler handler = (InputLanguageChangedEventHandler)Events[EVENT_INPUTLANGCHANGE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4665,7 +4726,9 @@ namespace System.Windows.Forms
         {
             InputLanguageChangingEventHandler handler = (InputLanguageChangingEventHandler)Events[EVENT_INPUTLANGCHANGEREQUEST];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4714,7 +4777,9 @@ namespace System.Windows.Forms
             UpdateToolStrip();
             EventHandler handler = (EventHandler)Events[EVENT_MDI_CHILD_ACTIVATE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4735,7 +4800,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_MENUCOMPLETE];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4921,7 +4988,9 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EVENT_SHOWN];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4932,7 +5001,9 @@ namespace System.Windows.Forms
             // If there is no control box, there should only be a title bar if text != "".
             int newTextEmpty = Text.Length == 0 ? 1 : 0;
             if (!ControlBox && formState[FormStateIsTextEmpty] != newTextEmpty)
+            {
                 RecreateHandle();
+            }
 
             formState[FormStateIsTextEmpty] = newTextEmpty;
         }
@@ -4962,11 +5033,15 @@ namespace System.Windows.Forms
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (base.ProcessCmdKey(ref msg, keyData))
+            {
                 return true;
+            }
 
             MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
             if (curMenu != null && curMenu.ProcessCmdKey(ref msg, keyData))
+            {
                 return true;
+            }
 
             // Process MDI accelerator keys.
 
@@ -5082,14 +5157,19 @@ namespace System.Windows.Forms
         protected override bool ProcessKeyPreview(ref Message m)
         {
             if (formState[FormStateKeyPreview] != 0 && ProcessKeyEventArgs(ref m))
+            {
                 return true;
+            }
+
             return base.ProcessKeyPreview(ref m);
         }
 
         protected override bool ProcessTabKey(bool forward)
         {
             if (SelectNextControl(ActiveControl, forward, true, true, true))
+            {
                 return true;
+            }
 
             // I've added a special case for UserControls because they shouldn't cycle back to the
             // beginning if they don't have a parent form, such as when they're on an ActiveXBridge.
@@ -5272,7 +5352,9 @@ namespace System.Windows.Forms
         public void RemoveOwnedForm(Form ownedForm)
         {
             if (ownedForm == null)
+            {
                 return;
+            }
 
             if (ownedForm.OwnerInternal != null)
             {
@@ -5626,10 +5708,15 @@ namespace System.Windows.Forms
             if (defaultButton != button)
             {
                 if (defaultButton != null)
+                {
                     defaultButton.NotifyDefault(false);
+                }
+
                 Properties.SetObject(PropDefaultButton, button);
                 if (button != null)
+                {
                     button.NotifyDefault(true);
+                }
             }
         }
 
@@ -5651,12 +5738,16 @@ namespace System.Windows.Forms
                 if (VScroll != hadVScroll)
                 {
                     if (VScroll)
+                    {
                         x += SystemInformation.VerticalScrollBarWidth;
+                    }
                 }
                 if (HScroll != hadHScroll)
                 {
                     if (HScroll)
+                    {
                         y += SystemInformation.HorizontalScrollBarHeight;
+                    }
                 }
                 if (x != ClientSize.Width || y != ClientSize.Height)
                 {
@@ -5876,7 +5967,10 @@ namespace System.Windows.Forms
                     // 
 
                     if (!UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndActive)))
+                    {
                         hWndActive = hWndOwner;
+                    }
+
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndActive)) && SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWndActive)))
                     {
                         UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, hWndActive));
@@ -6481,7 +6575,9 @@ namespace System.Windows.Forms
             {
                 EventHandler handler = (EventHandler)Events[EVENT_RESIZEBEGIN];
                 if (handler != null)
+                {
                     handler(this, e);
+                }
             }
         }
 
@@ -6496,7 +6592,9 @@ namespace System.Windows.Forms
             {
                 EventHandler handler = (EventHandler)Events[EVENT_RESIZEEND];
                 if (handler != null)
+                {
                     handler(this, e);
+                }
             }
         }
 
@@ -7000,7 +7098,9 @@ namespace System.Windows.Forms
                 //curMenu.UpdateRtl((RightToLeft == RightToLeft.Yes));
 
                 if (curMenu.ProcessInitMenuPopup(m.WParam))
+                {
                     return;
+                }
             }
             base.WndProc(ref m);
         }

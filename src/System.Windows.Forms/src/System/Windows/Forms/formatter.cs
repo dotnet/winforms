@@ -538,8 +538,9 @@ namespace System.Windows.Forms
         private static Type NullableUnwrap(Type type)
         {
             if (type == stringType) // ...performance optimization for the most common case
+            {
                 return stringType;
-
+            }
 
             Type underlyingType = Nullable.GetUnderlyingType(type);
             return underlyingType ?? type;

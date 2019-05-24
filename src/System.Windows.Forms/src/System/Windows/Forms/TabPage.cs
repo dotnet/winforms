@@ -472,7 +472,9 @@ namespace System.Windows.Forms
                 }
 
                 if (value == toolTipText)
+                {
                     return;
+                }
 
                 toolTipText = value;
                 UpdateParent();

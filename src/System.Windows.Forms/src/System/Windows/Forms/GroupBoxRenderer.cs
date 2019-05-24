@@ -105,9 +105,13 @@ namespace System.Windows.Forms
         public static void DrawGroupBox(Graphics g, Rectangle bounds, GroupBoxState state)
         {
             if (RenderWithVisualStyles)
+            {
                 DrawThemedGroupBoxNoText(g, bounds, state);
+            }
             else
+            {
                 DrawUnthemedGroupBoxNoText(g, bounds, state);
+            }
         }
 
         /// <summary>
@@ -138,9 +142,13 @@ namespace System.Windows.Forms
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, TextFormatFlags flags, GroupBoxState state)
         {
             if (RenderWithVisualStyles)
+            {
                 DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
+            }
             else
+            {
                 DrawUnthemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
+            }
         }
 
         /// <summary>
@@ -151,9 +159,13 @@ namespace System.Windows.Forms
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state)
         {
             if (RenderWithVisualStyles)
+            {
                 DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, textColor, flags, state);
+            }
             else
+            {
                 DrawUnthemedGroupBoxWithText(g, bounds, groupBoxText, font, textColor, flags, state);
+            }
         }
 
         /// <summary>
@@ -292,7 +304,9 @@ namespace System.Windows.Forms
 
             // Pad text area to stop background from touching text
             if (textBounds.Width > 0)
+            {
                 textBounds.Inflate(2, 0);
+            }
 
             Pen light = new Pen(SystemColors.ControlLight);
             Pen dark = new Pen(SystemColors.ControlDark);

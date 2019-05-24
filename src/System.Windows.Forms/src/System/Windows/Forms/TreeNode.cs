@@ -252,7 +252,10 @@ namespace System.Windows.Forms
             get
             {
                 if (propBag == null)
+                {
                     return Color.Empty;
+                }
+
                 return propBag.BackColor;
             }
             set
@@ -269,17 +272,25 @@ namespace System.Windows.Forms
                         RemovePropBagIfEmpty();
                     }
                     if (!oldbk.IsEmpty)
+                    {
                         InvalidateHostTree();
+                    }
+
                     return;
                 }
 
                 // Not the default, so if necessary create a new propBag, and fill it with the backcolor
 
                 if (propBag == null)
+                {
                     propBag = new OwnerDrawPropertyBag();
+                }
+
                 propBag.BackColor = value;
                 if (!value.Equals(oldbk))
+                {
                     InvalidateHostTree();
+                }
             }
         }
 
@@ -362,11 +373,15 @@ namespace System.Windows.Forms
             {
                 CheckedStateInternal = value;
                 if (handle == IntPtr.Zero)
+                {
                     return;
+                }
 
                 TreeView tv = TreeView;
                 if (tv == null || !tv.IsHandleCreated || tv.IsDisposed)
+                {
                     return;
+                }
 
                 NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
                 {
@@ -477,7 +492,10 @@ namespace System.Windows.Forms
             get
             {
                 if (childCount == 0)
+                {
                     return null;
+                }
+
                 return children[0];
             }
         }
@@ -509,7 +527,10 @@ namespace System.Windows.Forms
             get
             {
                 if (propBag == null)
+                {
                     return Color.Empty;
+                }
+
                 return propBag.ForeColor;
             }
             set
@@ -525,17 +546,25 @@ namespace System.Windows.Forms
                         RemovePropBagIfEmpty();
                     }
                     if (!oldfc.IsEmpty)
+                    {
                         InvalidateHostTree();
+                    }
+
                     return;
                 }
 
                 // Not the default, so if necessary create a new propBag, and fill it with the new forecolor
 
                 if (propBag == null)
+                {
                     propBag = new OwnerDrawPropertyBag();
+                }
+
                 propBag.ForeColor = value;
                 if (!value.Equals(oldfc))
+                {
                     InvalidateHostTree();
+                }
             }
         }
 
@@ -557,7 +586,9 @@ namespace System.Windows.Forms
                     return path.ToString();
                 }
                 else
+                {
                     throw new InvalidOperationException(SR.TreeNodeNoParent);
+                }
             }
         }
 
@@ -651,7 +682,9 @@ namespace System.Windows.Forms
                 TreeView tv = TreeView;
 
                 if (tv != null)
+                {
                     return tv.editNode == this;
+                }
 
                 return false;
             }
@@ -682,7 +715,10 @@ namespace System.Windows.Forms
             get
             {
                 if (handle == IntPtr.Zero)
+                {
                     return false;
+                }
+
                 return (State & NativeMethods.TVIS_SELECTED) != 0;
             }
         }
@@ -696,7 +732,10 @@ namespace System.Windows.Forms
             get
             {
                 if (handle == IntPtr.Zero)
+                {
                     return false;
+                }
+
                 TreeView tv = TreeView;
                 if (tv.IsDisposed)
                 {
@@ -726,7 +765,10 @@ namespace System.Windows.Forms
             get
             {
                 if (childCount == 0)
+                {
                     return null;
+                }
+
                 return children[childCount - 1];
             }
         }
@@ -824,7 +866,10 @@ namespace System.Windows.Forms
             get
             {
                 if (propBag == null)
+                {
                     return null;
+                }
+
                 return propBag.Font;
             }
             set
@@ -840,17 +885,25 @@ namespace System.Windows.Forms
                         RemovePropBagIfEmpty();
                     }
                     if (oldfont != null)
+                    {
                         InvalidateHostTree();
+                    }
+
                     return;
                 }
 
                 // Not the default, so if necessary create a new propBag, and fill it with the font
 
                 if (propBag == null)
+                {
                     propBag = new OwnerDrawPropertyBag();
+                }
+
                 propBag.Font = value;
                 if (!value.Equals(oldfont))
+                {
                     InvalidateHostTree();
+                }
             }
         }
 
@@ -1014,7 +1067,9 @@ namespace System.Windows.Forms
             get
             {
                 if (handle == IntPtr.Zero)
+                {
                     return 0;
+                }
 
                 TreeView tv = TreeView;
                 if (tv == null || tv.IsDisposed)
@@ -1190,7 +1245,10 @@ namespace System.Windows.Forms
             get
             {
                 if (treeView == null)
+                {
                     treeView = FindTreeView();
+                }
+
                 return treeView;
             }
         }
@@ -1213,7 +1271,9 @@ namespace System.Windows.Forms
 
                     // Optimize for the case where they're already sorted
                     if (compare.Compare(children[childCount - 1].Text, nodeText) <= 0)
+                    {
                         index = childCount;
+                    }
                     else
                     {
                         // Insert at appropriate sorted spot
@@ -1221,9 +1281,13 @@ namespace System.Windows.Forms
                         {
                             iT = (iMin + iLim) / 2;
                             if (compare.Compare(children[iT].Text, nodeText) <= 0)
+                            {
                                 iMin = iT + 1;
+                            }
                             else
+                            {
                                 iLim = iT;
+                            }
                         }
                         index = iMin;
                     }
@@ -1236,9 +1300,13 @@ namespace System.Windows.Forms
                     {
                         iT = (iMin + iLim) / 2;
                         if (sorter.Compare(children[iT] /*previous*/, node/*current*/) <= 0)
+                        {
                             iMin = iT + 1;
+                        }
                         else
+                        {
                             iLim = iT;
+                        }
                     }
                     index = iMin;
                 }
@@ -1273,14 +1341,19 @@ namespace System.Windows.Forms
                         for (int j = 0; j < childCount; j++)
                         {
                             if (children[j] == null)
+                            {
                                 continue;
+                            }
+
                             if (min == -1)
                             {
                                 min = j;
                                 continue;
                             }
                             if (compare.Compare(children[j].Text, children[min].Text) <= 0)
+                            {
                                 min = j;
+                            }
                         }
 
                         Debug.Assert(min != -1, "Bad sorting");
@@ -1300,14 +1373,19 @@ namespace System.Windows.Forms
                         for (int j = 0; j < childCount; j++)
                         {
                             if (children[j] == null)
+                            {
                                 continue;
+                            }
+
                             if (min == -1)
                             {
                                 min = j;
                                 continue;
                             }
                             if (sorter.Compare(children[j] /*previous*/, children[min] /*current*/) <= 0)
+                            {
                                 min = j;
+                            }
                         }
 
                         Debug.Assert(min != -1, "Bad sorting");
@@ -1333,9 +1411,15 @@ namespace System.Windows.Forms
             {
                 TreeView tv = TreeView;
                 if (tv.LabelEdit == false)
+                {
                     throw new InvalidOperationException(SR.TreeNodeBeginEditFailed);
+                }
+
                 if (!tv.Focused)
+                {
                     tv.Focus();
+                }
+
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, 0, handle);
             }
         }
@@ -1441,7 +1525,9 @@ namespace System.Windows.Forms
             {
                 node.children = new TreeNode[childCount];
                 for (int i = 0; i < childCount; i++)
+                {
                     node.Nodes.Add((TreeNode)children[i].Clone());
+                }
             }
 
             // Clone properties
@@ -1494,7 +1580,10 @@ namespace System.Windows.Forms
             }
 
             if (setSelection)
+            {
                 tv.SelectedNode = this;
+            }
+
             tv.Invalidate();
             collapseOnRealization = false;
 
@@ -1757,7 +1846,10 @@ namespace System.Windows.Forms
         {
             TreeNode node = this;
             while (node.parent != null)
+            {
                 node = node.parent;
+            }
+
             return node.treeView;
         }
 
@@ -1770,7 +1862,10 @@ namespace System.Windows.Forms
             {
                 parent.GetFullPath(path, pathSeparator);
                 if (parent.parent != null)
+                {
                     path.Append(pathSeparator);
+                }
+
                 path.Append(text);
             }
         }
@@ -1784,7 +1879,9 @@ namespace System.Windows.Forms
             if (includeSubTrees)
             {
                 for (int i = 0; i < childCount; i++)
+                {
                     total += children[i].GetNodeCount(true);
+                }
             }
             return total;
         }
@@ -1823,7 +1920,9 @@ namespace System.Windows.Forms
             node.Realize(false);
 
             if (TreeView != null && node == TreeView.selectedNode)
+            {
                 TreeView.SelectedNode = node; // communicate this to the handle
+            }
         }
 
         /// <summary>
@@ -1832,7 +1931,9 @@ namespace System.Windows.Forms
         private void InvalidateHostTree()
         {
             if (treeView != null && treeView.IsHandleCreated)
+            {
                 treeView.Invalidate();
+            }
         }
 
         /// <summary>
@@ -1842,7 +1943,9 @@ namespace System.Windows.Forms
             // Debug.assert(handle == 0, "Node already realized");
             TreeView tv = TreeView;
             if (tv == null || !tv.IsHandleCreated || tv.IsDisposed)
+            {
                 return;
+            }
 
             if (parent != null)
             { // Never realize the virtual root
@@ -1891,9 +1994,14 @@ namespace System.Windows.Forms
 
 
                 if (tvis.item_iImage >= 0)
+                {
                     tvis.item_mask |= NativeMethods.TVIF_IMAGE;
+                }
+
                 if (tvis.item_iSelectedImage >= 0)
+                {
                     tvis.item_mask |= NativeMethods.TVIF_SELECTEDIMAGE;
+                }
 
                 // If you are editing when you add a new node, then the edit control
                 // gets placed in the wrong place. You must restore the edit mode
@@ -1939,7 +2047,9 @@ namespace System.Windows.Forms
             }
 
             for (int i = childCount - 1; i >= 0; i--)
+            {
                 children[i].Realize(true);
+            }
 
             // If node expansion was requested before the handle was created,
             // we can expand it now.
@@ -1975,7 +2085,9 @@ namespace System.Windows.Forms
             // 
 
             for (int i = 0; i < childCount; i++)
+            {
                 children[i].Remove(false);
+            }
             // children = null;
             // unlink ourself
             if (notify && parent != null)
@@ -2002,7 +2114,10 @@ namespace System.Windows.Forms
             if (handle != IntPtr.Zero)
             {
                 if (notify && tv.IsHandleCreated)
+                {
                     UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_DELETEITEM, 0, handle);
+                }
+
                 treeView.nodeTable.Remove(handle);
                 handle = IntPtr.Zero;
             }
@@ -2015,9 +2130,15 @@ namespace System.Windows.Forms
         private void RemovePropBagIfEmpty()
         {
             if (propBag == null)
+            {
                 return;
+            }
+
             if (propBag.IsEmpty())
+            {
                 propBag = null;
+            }
+
             return;
         }
 
@@ -2127,7 +2248,10 @@ namespace System.Windows.Forms
         private void UpdateNode(int mask)
         {
             if (handle == IntPtr.Zero)
+            {
                 return;
+            }
+
             TreeView tv = TreeView;
             Debug.Assert(tv != null, "TreeNode has handle but no TreeView");
 
@@ -2137,11 +2261,20 @@ namespace System.Windows.Forms
                 hItem = handle
             };
             if ((mask & NativeMethods.TVIF_TEXT) != 0)
+            {
                 item.pszText = Marshal.StringToHGlobalAuto(text);
+            }
+
             if ((mask & NativeMethods.TVIF_IMAGE) != 0)
+            {
                 item.iImage = (ImageIndexer.ActualIndex == -1) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
+            }
+
             if ((mask & NativeMethods.TVIF_SELECTEDIMAGE) != 0)
+            {
                 item.iSelectedImage = (SelectedImageIndexer.ActualIndex == -1) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
+            }
+
             if ((mask & NativeMethods.TVIF_STATE) != 0)
             {
                 item.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
@@ -2163,7 +2296,9 @@ namespace System.Windows.Forms
             {
                 Marshal.FreeHGlobal(item.pszText);
                 if (tv.Scrollable)
+                {
                     tv.ForceScrollbarUpdate(false);
+                }
             }
         }
 

@@ -105,7 +105,9 @@ namespace System.Windows.Forms
                     {
                         object item = items[i];
                         if (item != null)
+                        {
                             keys[i] = item.ToString();
+                        }
                     }
                 }
             }
@@ -121,9 +123,13 @@ namespace System.Windows.Forms
         internal static int ArrayLength(object[] array)
         {
             if (array == null)
+            {
                 return 0;
+            }
             else
+            {
                 return array.Length;
+            }
         }
 
         /// <summary>
@@ -168,9 +174,15 @@ namespace System.Windows.Forms
         private static int Compare(int lcid, string s1, string s2, int options)
         {
             if (s1 == null)
+            {
                 return s2 == null ? 0 : -1;
+            }
+
             if (s2 == null)
+            {
                 return 1;
+            }
+
             return string.Compare(s1, s2, false, CultureInfo.CurrentCulture);
         }
 
@@ -198,11 +210,20 @@ namespace System.Windows.Forms
                 do
                 {
                     while (CompareKeys(keys[i], s) < 0)
+                    {
                         i++;
+                    }
+
                     while (CompareKeys(s, keys[j]) < 0)
+                    {
                         j--;
+                    }
+
                     if (i > j)
+                    {
                         break;
+                    }
+
                     if (i < j)
                     {
                         string key = keys[i];
@@ -221,13 +242,19 @@ namespace System.Windows.Forms
                 if (j - left <= right - i)
                 {
                     if (left < j)
+                    {
                         QuickSort(left, j);
+                    }
+
                     left = i;
                 }
                 else
                 {
                     if (i < right)
+                    {
                         QuickSort(i, right);
+                    }
+
                     right = j;
                 }
             } while (left < right);
@@ -381,9 +408,12 @@ namespace System.Windows.Forms
             //
             if ((items == null)
                 || ((keys != null) && (keys.Length != items.Length)))
+            {
                 throw new ArgumentException(string.Format(SR.ArraysNotSameSize,
                                                                    "keys",
                                                                    "items"));
+            }
+
             if (count > 1)
             {
                 StringSorter sorter = new StringSorter(culture, keys, items, options);

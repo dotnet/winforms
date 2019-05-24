@@ -687,7 +687,9 @@ namespace System.Windows.Forms
 #if DEBUG
             // Things really get ugly if you try to pop up an assert dialog here
             if (activeControl != null && !Contains(activeControl))
+            {
                 Debug.WriteLine("ActiveControl is not a child of this ContainerControl");
+            }
 #endif
 
             if (activeControl != null && activeControl.Visible)
@@ -1043,9 +1045,14 @@ namespace System.Windows.Forms
                     SizeF excluded = SizeF.Empty;
 
                     if (includedBounds)
+                    {
                         included = AutoScaleFactor;
+                    }
+
                     if (excludedBounds)
+                    {
                         excluded = AutoScaleFactor;
+                    }
 
                     Scale(included, excluded, this);
                     autoScaleDimensions = CurrentAutoScaleDimensions;
@@ -1180,9 +1187,14 @@ namespace System.Windows.Forms
                             ISite parentSite = ParentInternal.Site;
 
                             if (site != null)
+                            {
                                 dt = site.DesignMode;
+                            }
+
                             if (parentSite != null)
+                            {
                                 parentDt = parentSite.DesignMode;
+                            }
 
                             if (dt && !parentDt)
                             {
@@ -1233,7 +1245,10 @@ namespace System.Windows.Forms
             //
             ContainerControl parent = GetContainerControl() as ContainerControl;
             if (parent != null && charCode != ' ' && ProcessMnemonic(charCode))
+            {
                 return true;
+            }
+
             return base.ProcessDialogChar(charCode);
         }
 
@@ -1258,7 +1273,10 @@ namespace System.Windows.Forms
                 {
                     case Keys.Tab:
                         if (ProcessTabKey((keyData & Keys.Shift) == Keys.None))
+                        {
                             return true;
+                        }
+
                         break;
                     case Keys.Left:
                     case Keys.Right:
@@ -1266,7 +1284,10 @@ namespace System.Windows.Forms
                     case Keys.Down:
                         if (ProcessArrowKey(keyCode == Keys.Right ||
                                             keyCode == Keys.Down))
+                        {
                             return true;
+                        }
+
                         break;
                 }
             }
@@ -1395,7 +1416,10 @@ namespace System.Windows.Forms
         protected virtual bool ProcessTabKey(bool forward)
         {
             if (SelectNextControl(activeControl, forward, true, true, false))
+            {
                 return true;
+            }
+
             return false;
         }
 
@@ -1558,7 +1582,10 @@ namespace System.Windows.Forms
                     {
                         Control parent = nextControlDown.ParentInternal;
                         if (parent == this || parent == pathControl)
+                        {
                             break;
+                        }
+
                         nextControlDown = nextControlDown.ParentInternal;
                     }
 
@@ -1882,17 +1909,30 @@ namespace System.Windows.Forms
         private bool ValidateThroughAncestor(Control ancestorControl, bool preventFocusChangeOnError)
         {
             if (ancestorControl == null)
+            {
                 ancestorControl = this;
+            }
+
             if (state[stateValidating])
+            {
                 return false;
+            }
+
             if (unvalidatedControl == null)
+            {
                 unvalidatedControl = focusedControl;
+            }
             //return true for a Container Control with no controls to validate....
             //
             if (unvalidatedControl == null)
+            {
                 return true;
+            }
+
             if (!ancestorControl.IsDescendant(unvalidatedControl))
+            {
                 return false;
+            }
 
             state[stateValidating] = true;
             bool cancel = false;

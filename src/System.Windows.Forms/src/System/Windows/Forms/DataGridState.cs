@@ -149,13 +149,17 @@ namespace System.Windows.Forms
             }
 
             if (DataGrid != null)
+            {
                 DataGrid.ParentRowsDataChanged();
+            }
         }
 
         private void DataSource_MetaDataChanged(object sender, EventArgs e)
         {
             if (DataGrid != null)
+            {
                 DataGrid.ParentRowsDataChanged();
+            }
         }
 
 

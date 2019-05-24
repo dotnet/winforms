@@ -33,7 +33,10 @@ namespace System.Windows.Forms
         int UnsafeNativeMethods.IOleContainer.ParseDisplayName(object pbc, string pszDisplayName, int[] pchEaten, object[] ppmkOut)
         {
             if (ppmkOut != null)
+            {
                 ppmkOut[0] = null;
+            }
+
             return NativeMethods.E_NOTIMPL;
         }
 
@@ -231,7 +234,10 @@ namespace System.Windows.Forms
         {
             ISite site = parent.Site;
             if (site != null && site.DesignMode)
+            {
                 return site.Container;
+            }
+
             return null;
         }
 
@@ -287,7 +293,9 @@ namespace System.Windows.Forms
         private void GetAllChildren(Control ctl)
         {
             if (ctl == null)
+            {
                 return;
+            }
 
             if (components == null)
             {
@@ -295,7 +303,9 @@ namespace System.Windows.Forms
             }
 
             if (ctl != parent && !components.Contains(ctl))
+            {
                 components.Add(ctl, ctl);
+            }
 
             foreach (Control c in ctl.Controls)
             {
@@ -345,7 +355,9 @@ namespace System.Windows.Forms
         internal void AddControl(Control ctl)
         {
             if (containerCache.Contains(ctl))
+            {
                 throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
+            }
 
             containerCache.Add(ctl, ctl);
 
@@ -404,7 +416,9 @@ namespace System.Windows.Forms
             // site. This causes the assert below to fire.
             //
             if (siteUIActive == site)
+            {
                 return;
+            }
 
             if (siteUIActive != null && siteUIActive != site)
             {

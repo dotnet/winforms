@@ -61,21 +61,36 @@ namespace System.Windows.Forms
                     int icmdLim = cmds.Length;
 
                     if (icmdTry >= icmdLim)
+                    {
                         icmdTry = 0;
+                    }
 
                     // First look for an empty slot (starting at icmdTry).
                     for (icmd = icmdTry; icmd < icmdLim; icmd++)
+                    {
                         if (null == cmds[icmd])
+                        {
                             goto FindSlotComplete;
+                        }
+                    }
+
                     for (icmd = 0; icmd < icmdTry; icmd++)
+                    {
                         if (null == cmds[icmd])
+                        {
                             goto FindSlotComplete;
+                        }
+                    }
 
                     // All slots have Command objects in them. Look for a command
                     // with a null referent.
                     for (icmd = 0; icmd < icmdLim; icmd++)
+                    {
                         if (null == cmds[icmd].Target)
+                        {
                             goto FindSlotComplete;
+                        }
+                    }
 
                     // Grow the array.
                     icmd = cmds.Length;
@@ -88,7 +103,9 @@ namespace System.Windows.Forms
                         for (icmd = 0; icmd < icmdLim; icmd++)
                         {
                             if (null == cmds[icmd] || null == cmds[icmd].Target)
+                            {
                                 goto FindSlotComplete;
+                            }
                         }
                         throw new ArgumentException(SR.CommandIdNotAllocated);
                     }
@@ -114,7 +131,10 @@ namespace System.Windows.Forms
         {
             Command cmd = GetCommandFromID(id);
             if (null == cmd)
+            {
                 return false;
+            }
+
             return cmd.Invoke();
         }
 
@@ -126,7 +146,10 @@ namespace System.Windows.Forms
                 {
                     cmd.Target = null;
                     if (cmds[cmd.id - idMin] == cmd)
+                    {
                         cmds[cmd.id - idMin] = null;
+                    }
+
                     cmd.id = 0;
                 }
             }
@@ -135,7 +158,9 @@ namespace System.Windows.Forms
         public virtual void Dispose()
         {
             if (id >= idMin)
+            {
                 Dispose(this);
+            }
         }
 
         public static Command GetCommandFromID(int id)
@@ -143,10 +168,16 @@ namespace System.Windows.Forms
             lock (internalSyncObject)
             {
                 if (null == cmds)
+                {
                     return null;
+                }
+
                 int i = id - idMin;
                 if (i < 0 || i >= cmds.Length)
+                {
                     return null;
+                }
+
                 return cmds[i];
             }
         }
@@ -155,8 +186,9 @@ namespace System.Windows.Forms
         {
             object target = Target;
             if (!(target is ICommandExecutor))
+            {
                 return false;
-            ((ICommandExecutor)target).Execute();
+            } ((ICommandExecutor)target).Execute();
             return true;
         }
     }

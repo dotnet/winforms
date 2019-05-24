@@ -45,7 +45,10 @@ namespace System.Windows.Forms
             Point[] points = BuildTrianglePoints(dir, bounds);
 
             if (opaque)
+            {
                 g.FillPolygon(backBr, points);
+            }
+
             g.DrawLine(backPen1, points[0], points[1]);
             g.DrawLine(backPen2, points[1], points[2]);
             g.DrawLine(backPen3, points[2], points[0]);
@@ -58,12 +61,18 @@ namespace System.Windows.Forms
 
             int updnWidth = (int)(bounds.Width * TRI_WIDTH_RATIO);
             if (updnWidth % 2 == 1)
+            {
                 updnWidth++;
+            }
+
             int updnHeight = (int)Math.Ceiling((updnWidth / 2) * TRI_HEIGHT_RATIO);
 
             int lrWidth = (int)(bounds.Height * TRI_WIDTH_RATIO);
             if (lrWidth % 2 == 0)
+            {
                 lrWidth++;
+            }
+
             int lrHeight = (int)Math.Ceiling((lrWidth / 2) * TRI_HEIGHT_RATIO);
 
             switch (dir)

@@ -354,7 +354,9 @@ namespace System.Windows.Forms
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
             //
             if (Host.NoComponentChangeEvents != 0)
+            {
                 return;
+            }
 
             Host.NoComponentChangeEvents++;
             try
@@ -430,7 +432,9 @@ namespace System.Windows.Forms
         internal void StartEvents()
         {
             if (connectionPoint != null)
+            {
                 return;
+            }
 
             object nativeObject = Host.activeXInstance;
             if (nativeObject != null)

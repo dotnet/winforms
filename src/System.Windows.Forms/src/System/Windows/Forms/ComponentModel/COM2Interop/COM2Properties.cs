@@ -113,7 +113,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 dbgObjClass = "(null)";
             }
             if (DbgCom2PropertiesSwitch.TraceVerbose)
+            {
                 Debug.WriteLine("Creating Com2Properties for object " + dbgObjName + ", class=" + dbgObjClass);
+            }
 #endif
 
             // set up our variables
@@ -193,7 +195,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
 #if DEBUG
                     if (DbgCom2PropertiesSwitch.TraceVerbose)
+                    {
                         Debug.WriteLine("CheckValid called on dead object!");
+                    }
 #endif
                     return null;
                 }
@@ -238,7 +242,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
+                {
                     Debug.WriteLine("Returning prop array for object " + dbgObjName + ", class=" + dbgObjClass);
+                }
 #endif
                 return props;
             }
@@ -303,7 +309,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
 #if DEBUG
                         if (DbgCom2PropertiesSwitch.TraceVerbose)
+                        {
                             Debug.WriteLine("Adding browsing handler type " + handler.Interface.Name + " to object " + dbgObjName + ", class=" + dbgObjClass);
+                        }
 #endif
                         // allow the handler to attach itself to the appropriate properties
                         //
@@ -322,7 +330,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
 #if DEBUG
             if (DbgCom2PropertiesSwitch.TraceVerbose)
+            {
                 Debug.WriteLine("Disposing property manager for " + dbgObjName + ", class=" + dbgObjClass);
+            }
 #endif
 
             if (props != null)
@@ -553,7 +563,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 //
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
+                {
                     Debug.WriteLine("Disposing reference to object " + dbgObjName + ", class=" + dbgObjClass + " (weakRef " + (weakObjRef == null ? "null" : "dead") + ")");
+                }
 #endif
 
                 Dispose();

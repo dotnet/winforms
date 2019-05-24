@@ -163,7 +163,10 @@ namespace System.Windows.Forms
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
+                {
                     throw new ArgumentException(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed);
+                }
+
                 if (value.IsEmpty)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
@@ -241,7 +244,10 @@ namespace System.Windows.Forms
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
+                {
                     throw new ArgumentException(SR.DataGridTableStyleTransparentBackColorNotAllowed);
+                }
+
                 if (value.IsEmpty)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
@@ -276,7 +282,9 @@ namespace System.Windows.Forms
             {
                 DataGrid dataGrid = DataGrid;
                 if (dataGrid == null)
+                {
                     return 0;
+                }
                 // if the user set the GridLineStyle property on the dataGrid.
                 // then use the value of that property
                 DataGridLineStyle gridStyle;
@@ -293,7 +301,9 @@ namespace System.Windows.Forms
                 }
 
                 if (gridStyle == DataGridLineStyle.None)
+                {
                     return 0;
+                }
 
                 return gridLineWidth;
             }
@@ -476,7 +486,10 @@ namespace System.Windows.Forms
                 if (gridLineBrush.Color != value)
                 {
                     if (value.IsEmpty)
+                    {
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "GridLineColor"));
+                    }
+
                     gridLineBrush = new SolidBrush(value);
 
                     // Invalidate(layout.Data);
@@ -577,9 +590,15 @@ namespace System.Windows.Forms
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
+                {
                     throw new ArgumentException(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed);
+                }
+
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderBackColor"));
+                }
+
                 if (!value.Equals(headerBackBrush.Color))
                 {
                     headerBackBrush = new SolidBrush(value);
@@ -698,7 +717,10 @@ namespace System.Windows.Forms
                 }
 
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderForeColor"));
+                }
+
                 if (!value.Equals(headerForePen.Color))
                 {
                     headerForePen = new Pen(value);
@@ -769,7 +791,10 @@ namespace System.Windows.Forms
                 }
 
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "LinkColor"));
+                }
+
                 if (!linkBrush.Color.Equals(value))
                 {
                     linkBrush = new SolidBrush(value);
@@ -793,7 +818,9 @@ namespace System.Windows.Forms
         public void ResetLinkColor()
         {
             if (ShouldSerializeLinkColor())
+            {
                 LinkColor = DefaultLinkBrush.Color;
+            }
         }
 
         internal Brush LinkBrush
@@ -865,7 +892,9 @@ namespace System.Windows.Forms
                     int rwidth = (int)Math.Ceiling(g.MeasureString(((string)RelationsList[r]), DataGrid.LinkFont).Width)
 ;
                     if (rwidth > longestRelationship)
+                    {
                         longestRelationship = rwidth;
+                    }
                 }
 
                 g.Dispose();
@@ -875,7 +904,9 @@ namespace System.Windows.Forms
                 relationshipRect.Height = BorderWidth + relationshipHeight * RelationsList.Count;
                 relationshipRect.Height += 2; // relationship border
                 if (RelationsList.Count > 0)
+                {
                     relationshipRect.Height += 2 * relationshipSpacing;
+                }
             }
             return relationshipRect;
         }
@@ -922,7 +953,10 @@ namespace System.Windows.Forms
                 }
 
                 if (value < 0)
+                {
                     throw new ArgumentException(SR.DataGridColumnWidth, "PreferredColumnWidth");
+                }
+
                 if (preferredColumnWidth != value)
                 {
                     preferredColumnWidth = value;
@@ -966,7 +1000,10 @@ namespace System.Windows.Forms
                 }
 
                 if (value < 0)
+                {
                     throw new ArgumentException(SR.DataGridRowRowHeight);
+                }
+
                 prefferedRowHeight = value;
 
                 /*
@@ -1088,7 +1125,10 @@ namespace System.Windows.Forms
             set
             {
                 if (DataGrid != null)
+                {
                     value = Math.Max(DataGrid.MinimumRowHeaderWidth(), value);
+                }
+
                 if (rowHeaderWidth != value)
                 {
                     rowHeaderWidth = value;
@@ -1128,9 +1168,15 @@ namespace System.Windows.Forms
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
+                {
                     throw new ArgumentException(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed);
+                }
+
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionBackColor"));
+                }
+
                 if (!value.Equals(selectionBackBrush.Color))
                 {
                     selectionBackBrush = new SolidBrush(value);
@@ -1172,7 +1218,9 @@ namespace System.Windows.Forms
         public void ResetSelectionBackColor()
         {
             if (ShouldSerializeSelectionBackColor())
+            {
                 SelectionBackColor = DefaultSelectionBackBrush.Color;
+            }
         }
 
         [
@@ -1194,7 +1242,10 @@ namespace System.Windows.Forms
                 }
 
                 if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionForeColor"));
+                }
+
                 if (!value.Equals(selectionForeBrush.Color))
                 {
                     selectionForeBrush = new SolidBrush(value);
@@ -1220,7 +1271,9 @@ namespace System.Windows.Forms
         public void ResetSelectionForeColor()
         {
             if (ShouldSerializeSelectionForeColor())
+            {
                 SelectionForeColor = DefaultSelectionForeBrush.Color;
+            }
         }
 
         // will need this function from the dataGrid
@@ -1228,7 +1281,9 @@ namespace System.Windows.Forms
         private void InvalidateInside()
         {
             if (DataGrid != null)
+            {
                 DataGrid.InvalidateInside();
+            }
         }
 
         [
@@ -1273,7 +1328,10 @@ namespace System.Windows.Forms
             Debug.Assert(!IsDefault, "the grid can set the relations only on a table that was manually added by the user");
             int propCount = propCollection.Count;
             if (relationsList.Count > 0)
+            {
                 relationsList.Clear();
+            }
+
             for (int i = 0; i < propCount; i++)
             {
                 PropertyDescriptor prop = propCollection[i];
@@ -1295,7 +1353,9 @@ namespace System.Windows.Forms
 
             // we need to clear the relations list
             if (relationsList.Count > 0)
+            {
                 relationsList.Clear();
+            }
 
             Debug.Assert(propCollection != null, "propCollection is null: how that happened?");
             int propCount = propCollection.Count;
@@ -1305,7 +1365,10 @@ namespace System.Windows.Forms
                 Debug.Assert(prop != null, "prop is null: how that happened?");
                 // do not take into account the properties that are browsable.
                 if (!prop.IsBrowsable)
+                {
                     continue;
+                }
+
                 if (PropertyDescriptorIsARelation(prop))
                 {
                     // relation
@@ -1316,7 +1379,9 @@ namespace System.Windows.Forms
                     // column
                     DataGridColumnStyle col = CreateGridColumn(prop, isDefaultTableStyle);
                     if (isDefaultTableStyle)
+                    {
                         gridColumns.AddDefaultColumn(col);
+                    }
                     else
                     {
                         col.MappingName = prop.Name;
@@ -1346,12 +1411,17 @@ namespace System.Windows.Forms
             Type dataType = prop.PropertyType;
 
             if (dataType.Equals(typeof(bool)))
+            {
                 ret = new DataGridBoolColumn(prop, isDefault);
+            }
             else if (dataType.Equals(typeof(string)))
+            {
                 ret = new DataGridTextBoxColumn(prop, isDefault);
+            }
             else if (dataType.Equals(typeof(DateTime)))
+            {
                 ret = new DataGridTextBoxColumn(prop, "d", isDefault);
-
+            }
             else if (dataType.Equals(typeof(short)) ||
                      dataType.Equals(typeof(int)) ||
                      dataType.Equals(typeof(long)) ||
@@ -1398,9 +1468,15 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 if (value.Equals(mappingName))
+                {
                     return;
+                }
+
                 string originalMappingName = MappingName;
                 mappingName = value;
 
@@ -1408,7 +1484,9 @@ namespace System.Windows.Forms
                 try
                 {
                     if (DataGrid != null)
+                    {
                         DataGrid.TableStyles.CheckForMappingNameDuplicates(this);
+                    }
                 }
                 catch
                 {
@@ -1462,15 +1540,22 @@ namespace System.Windows.Forms
         internal void SetInternalDataGrid(DataGrid dG, bool force)
         {
             if (dataGrid != null && dataGrid.Equals(dG) && !force)
+            {
                 return;
+            }
             else
             {
                 dataGrid = dG;
                 if (dG != null && dG.Initializing)
+                {
                     return;
+                }
+
                 int nCols = gridColumns.Count;
                 for (int i = 0; i < nCols; i++)
+                {
                     gridColumns[i].SetDataGridInternalInColumn(dG);
+                }
             }
         }
 
@@ -1528,9 +1613,13 @@ namespace System.Windows.Forms
         {
             DataGrid grid = DataGrid;
             if (grid == null)
+            {
                 return false;
+            }
             else
+            {
                 return grid.BeginEdit(gridColumn, rowNumber);
+            }
         }
 
         /// <summary>
@@ -1541,16 +1630,22 @@ namespace System.Windows.Forms
         {
             DataGrid grid = DataGrid;
             if (grid == null)
+            {
                 return false;
+            }
             else
+            {
                 return grid.EndEdit(gridColumn, rowNumber, shouldAbort);
+            }
         }
 
         internal void InvalidateColumn(DataGridColumnStyle column)
         {
             int index = GridColumnStyles.IndexOf(column);
             if (index >= 0 && DataGrid != null)
+            {
                 DataGrid.InvalidateColumn(index);
+            }
         }
 
 
@@ -1565,12 +1660,16 @@ namespace System.Windows.Forms
                 if (e.Action == CollectionChangeAction.Add)
                 {
                     if (col != null)
+                    {
                         col.SetDataGridInternalInColumn(grid);
+                    }
                 }
                 else if (e.Action == CollectionChangeAction.Remove)
                 {
                     if (col != null)
+                    {
                         col.SetDataGridInternalInColumn(null);
+                    }
                 }
                 else
                 {
@@ -1579,12 +1678,18 @@ namespace System.Windows.Forms
                     // if we get a column in this collectionChangeEventArgs it means
                     // that the propertyDescriptor in that column changed.
                     if (e.Element != null)
+                    {
                         for (int i = 0; i < gridColumns.Count; i++)
+                        {
                             gridColumns[i].SetDataGridInternalInColumn(null);
+                        }
+                    }
                 }
 
                 if (grid != null)
+                {
                     grid.OnColumnCollectionChanged(this, e);
+                }
             }
             finally
             {
@@ -1607,126 +1712,166 @@ namespace System.Windows.Forms
         {
             EventHandler eh = Events[EventReadOnly] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected virtual void OnMappingNameChanged(EventArgs e)
         {
             EventHandler eh = Events[EventMappingName] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected virtual void OnAlternatingBackColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventAlternatingBackColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected virtual void OnForeColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventBackColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected virtual void OnBackColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventForeColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected virtual void OnAllowSortingChanged(EventArgs e)
         {
             EventHandler eh = Events[EventAllowSorting] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnGridLineColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventGridLineColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnGridLineStyleChanged(EventArgs e)
         {
             EventHandler eh = Events[EventGridLineStyle] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnHeaderBackColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventHeaderBackColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnHeaderFontChanged(EventArgs e)
         {
             EventHandler eh = Events[EventHeaderFont] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnHeaderForeColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventHeaderForeColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnLinkColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventLinkColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnLinkHoverColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventLinkHoverColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnPreferredRowHeightChanged(EventArgs e)
         {
             EventHandler eh = Events[EventPreferredRowHeight] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnPreferredColumnWidthChanged(EventArgs e)
         {
             EventHandler eh = Events[EventPreferredColumnWidth] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnColumnHeadersVisibleChanged(EventArgs e)
         {
             EventHandler eh = Events[EventColumnHeadersVisible] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnRowHeadersVisibleChanged(EventArgs e)
         {
             EventHandler eh = Events[EventRowHeadersVisible] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnRowHeaderWidthChanged(EventArgs e)
         {
             EventHandler eh = Events[EventRowHeaderWidth] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnSelectionForeColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventSelectionForeColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
         protected virtual void OnSelectionBackColorChanged(EventArgs e)
         {
             EventHandler eh = Events[EventSelectionBackColor] as EventHandler;
             if (eh != null)
+            {
                 eh(this, e);
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -1737,7 +1882,9 @@ namespace System.Windows.Forms
                 if (cols != null)
                 {
                     for (int i = 0; i < cols.Count; i++)
+                    {
                         cols[i].Dispose();
+                    }
                 }
             }
             base.Dispose(disposing);

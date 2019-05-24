@@ -204,7 +204,10 @@ namespace System.Windows.Forms
                 listposition = (Count > 0 ? 0 : -1);
             }
             if (oldlistposition != listposition)
+            {
                 OnPositionChanged(EventArgs.Empty);
+            }
+
             OnCurrentChanged(EventArgs.Empty);
             OnCurrentItemChanged(EventArgs.Empty);
         }

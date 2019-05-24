@@ -499,8 +499,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventButtonClick];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
 
         /// <summary>
@@ -516,7 +517,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventButtonDoubleClick];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 

@@ -564,7 +564,9 @@ namespace System.Windows.Forms
             {
                 Color c = RawBackColor; // inheritedProperties.BackColor
                 if (!c.IsEmpty)
+                {
                     return c;
+                }
 
                 Control p = ParentInternal;
                 if (p != null)
@@ -3300,7 +3302,9 @@ namespace System.Windows.Forms
         {
             GiveFeedbackEventHandler handler = (GiveFeedbackEventHandler)Events[EventGiveFeedback];
             if (handler != null)
+            {
                 handler(this, giveFeedbackEvent);
+            }
         }
 
         internal virtual void OnImageScalingSizeChanged(EventArgs e)
@@ -3626,51 +3630,67 @@ namespace System.Windows.Forms
         {
             CancelEventHandler handler = (CancelEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         internal void RaiseDragEvent(object key, DragEventArgs e)
         {
             DragEventHandler handler = (DragEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
         internal void RaiseEvent(object key, EventArgs e)
         {
             EventHandler handler = (EventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
         internal void RaiseKeyEvent(object key, KeyEventArgs e)
         {
             KeyEventHandler handler = (KeyEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
         internal void RaiseKeyPressEvent(object key, KeyPressEventArgs e)
         {
             KeyPressEventHandler handler = (KeyPressEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
         internal void RaiseMouseEvent(object key, MouseEventArgs e)
         {
             MouseEventHandler handler = (MouseEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
         internal void RaisePaintEvent(object key, PaintEventArgs e)
         {
             PaintEventHandler handler = (PaintEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
         {
             QueryContinueDragEventHandler handler = (QueryContinueDragEventHandler)Events[key];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         private void ResetToolTipText()

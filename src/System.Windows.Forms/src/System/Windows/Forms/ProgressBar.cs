@@ -167,7 +167,10 @@ namespace System.Windows.Forms
                     }
                     style = value;
                     if (IsHandleCreated)
+                    {
                         RecreateHandle();
+                    }
+
                     if (style == ProgressBarStyle.Marquee)
                     {
                         StartMarquee();
@@ -388,15 +391,21 @@ namespace System.Windows.Forms
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Maximum), value, 0));
+                    }
 
                     if (minimum > value)
+                    {
                         minimum = value;
+                    }
 
                     maximum = value;
 
                     if (this.value > maximum)
+                    {
                         this.value = maximum;
+                    }
 
                     if (IsHandleCreated)
                     {
@@ -432,14 +441,21 @@ namespace System.Windows.Forms
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
+                    }
+
                     if (maximum < value)
+                    {
                         maximum = value;
+                    }
 
                     minimum = value;
 
                     if (this.value < minimum)
+                    {
                         this.value = minimum;
+                    }
 
                     if (IsHandleCreated)
                     {
@@ -551,7 +567,9 @@ namespace System.Windows.Forms
             {
                 step = value;
                 if (IsHandleCreated)
+                {
                     SendMessage(NativeMethods.PBM_SETSTEP, step, 0);
+                }
             }
         }
 
@@ -621,7 +639,10 @@ namespace System.Windows.Forms
                 if (this.value != value)
                 {
                     if ((value < minimum) || (value > maximum))
+                    {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, "'minimum'", "'maximum'"));
+                    }
+
                     this.value = value;
                     UpdatePos();
                 }
@@ -843,7 +864,9 @@ namespace System.Windows.Forms
         private void UpdatePos()
         {
             if (IsHandleCreated)
+            {
                 SendMessage(NativeMethods.PBM_SETPOS, value, 0);
+            }
         }
 
         //Note: ProgressBar doesn't work like other controls as far as setting ForeColor/

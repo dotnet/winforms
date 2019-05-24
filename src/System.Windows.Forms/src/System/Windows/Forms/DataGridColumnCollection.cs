@@ -193,7 +193,9 @@ namespace System.Windows.Forms
                     DataGridColumnStyle column = (DataGridColumnStyle)items[i];
                     // NOTE: case-insensitive
                     if (string.Equals(column.MappingName, columnName, StringComparison.OrdinalIgnoreCase))
+                    {
                         return column;
+                    }
                 }
                 return null;
             }
@@ -207,7 +209,9 @@ namespace System.Windows.Forms
                 DataGridColumnStyle column = (DataGridColumnStyle)items[i];
                 // NOTE: case-insensitive
                 if (string.Equals(column.MappingName, mappingName, StringComparison.OrdinalIgnoreCase))
+                {
                     return column;
+                }
             }
             return null;
         }
@@ -229,7 +233,9 @@ namespace System.Windows.Forms
                 {
                     DataGridColumnStyle column = (DataGridColumnStyle)items[i];
                     if (propertyDesciptor.Equals(column.PropertyDescriptor))
+                    {
                         return column;
+                    }
                 }
                 return null;
             }
@@ -250,10 +256,17 @@ namespace System.Windows.Forms
         internal void CheckForMappingNameDuplicates(DataGridColumnStyle column)
         {
             if (string.IsNullOrEmpty(column.MappingName))
+            {
                 return;
+            }
+
             for (int i = 0; i < items.Count; i++)
+            {
                 if (((DataGridColumnStyle)items[i]).MappingName.Equals(column.MappingName) && column != items[i])
+                {
                     throw new ArgumentException(SR.DataGridColumnStyleDuplicateMappingName, "column");
+                }
+            }
         }
 
         private void ColumnStyleMappingNameChanged(object sender, EventArgs pcea)
@@ -282,7 +295,9 @@ namespace System.Windows.Forms
             // columns which are not the default should have a default
             // width of DataGrid.PreferredColumnWidth
             if (DataGridTableStyle != null && column.Width == -1)
+            {
                 column._width = DataGridTableStyle.PreferredColumnWidth;
+            }
 #if false
             column.AddOnPropertyChanged(owner.OnColumnChanged);
 #endif
@@ -382,7 +397,9 @@ namespace System.Windows.Forms
                 DataGridColumnStyle column = (DataGridColumnStyle)e.Current;
                 // NOTE: case-insensitive
                 if (string.Compare(column.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -497,7 +514,9 @@ namespace System.Windows.Forms
             {
                 DataGridColumnStyle column = (DataGridColumnStyle)items[i];
                 if (element == column)
+                {
                     return i;
+                }
             }
             return -1;
         }
@@ -508,7 +527,9 @@ namespace System.Windows.Forms
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
             if (onCollectionChanged != null)
+            {
                 onCollectionChanged(this, e);
+            }
 
             DataGrid grid = owner.DataGrid;
             if (grid != null)
@@ -530,15 +551,22 @@ namespace System.Windows.Forms
             int columnIndex = -1;
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i)
+            {
                 if (items[i] == column)
                 {
                     columnIndex = i;
                     break;
                 }
+            }
+
             if (columnIndex == -1)
+            {
                 throw new InvalidOperationException(SR.DataGridColumnCollectionMissing);
+            }
             else
+            {
                 RemoveAt(columnIndex);
+            }
         }
 
         /// <summary>

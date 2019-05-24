@@ -390,7 +390,9 @@ namespace System.ComponentModel.Design
                     catch (CheckoutException cxe)
                     {
                         if (cxe == CheckoutException.Canceled)
+                        {
                             return;
+                        }
 
                         throw cxe;
                     }

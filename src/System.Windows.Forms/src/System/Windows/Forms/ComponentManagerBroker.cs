@@ -278,9 +278,15 @@ namespace System.Windows.Forms
             get
             {
                 if (_trackingComponent != null)
+                {
                     return _trackingComponent;
+                }
+
                 if (_activeComponent != null)
+                {
                     return _activeComponent;
+                }
+
                 return null;
             }
         }
@@ -496,7 +502,10 @@ namespace System.Windows.Forms
         {
             int dwLocalComponentID = unchecked((int)(long)dwComponentID);
             if (_original == null)
+            {
                 return false;
+            }
+
             if (_components == null || dwLocalComponentID <= 0 || !_components.ContainsKey(dwLocalComponentID))
             {
                 return false;
@@ -536,7 +545,9 @@ namespace System.Windows.Forms
         bool UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration(IntPtr dwComponentID, NativeMethods.MSOCRINFOSTRUCT info)
         {
             if (_original == null)
+            {
                 return false;
+            }
             // We assume that all winforms domains use the same registration.
             return _original.FUpdateComponentRegistration(_componentId, info);
         }
@@ -546,7 +557,9 @@ namespace System.Windows.Forms
 
             int dwLocalComponentID = unchecked((int)(long)dwComponentID);
             if (_original == null)
+            {
                 return false;
+            }
             // Activation requres us to store the currently active component.  We will send data to it
             if (_components == null || dwLocalComponentID <= 0 || !_components.ContainsKey(dwLocalComponentID))
             {
@@ -600,7 +613,10 @@ namespace System.Windows.Forms
         void UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState(IntPtr dwComponentID, int uStateID, int uContext, int cpicmExclude, int rgpicmExclude, int dwReserved)
         {
             if (_original == null)
+            {
                 return;
+            }
+
             if (uContext == NativeMethods.MSOCM.msoccontextAll || uContext == NativeMethods.MSOCM.msoccontextMine)
             {
                 if (_components != null)
@@ -618,7 +634,10 @@ namespace System.Windows.Forms
         bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState(IntPtr dwComponentID, int uStateID, int uContext, int cpicmExclude, int rgpicmExclude)
         {
             if (_original == null)
+            {
                 return false;
+            }
+
             if (uContext == NativeMethods.MSOCM.msoccontextAll || uContext == NativeMethods.MSOCM.msoccontextMine)
             {
                 if (_components != null)
@@ -636,21 +655,30 @@ namespace System.Windows.Forms
         bool UnsafeNativeMethods.IMsoComponentManager.FInState(int uStateID, IntPtr pvoid)
         {
             if (_original == null)
+            {
                 return false;
+            }
+
             return _original.FInState(uStateID, pvoid);
         }
 
         bool UnsafeNativeMethods.IMsoComponentManager.FContinueIdle()
         {
             if (_original == null)
+            {
                 return false;
+            }
+
             return _original.FContinueIdle();
         }
 
         bool UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, int reason, int pvLoopData)
         {
             if (_original == null)
+            {
                 return false;
+            }
+
             return _original.FPushMessageLoop(_componentId, reason, pvLoopData);
         }
 
@@ -671,7 +699,10 @@ namespace System.Windows.Forms
         bool UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent(int dwgac, UnsafeNativeMethods.IMsoComponent[] ppic, NativeMethods.MSOCRINFOSTRUCT info, int dwReserved)
         {
             if (_original == null)
+            {
                 return false;
+            }
+
             if (_original.FGetActiveComponent(dwgac, ppic, info, dwReserved))
             {
                 // We got a component.  See if it's our proxy, and if it is, 

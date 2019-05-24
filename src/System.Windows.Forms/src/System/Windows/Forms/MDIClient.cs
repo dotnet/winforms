@@ -60,7 +60,10 @@ namespace System.Windows.Forms
             {
                 Image result = base.BackgroundImage;
                 if (result == null && ParentInternal != null)
+                {
                     result = ParentInternal.BackgroundImage;
+                }
+
                 return result;
             }
 
@@ -159,7 +162,9 @@ namespace System.Windows.Forms
         public void LayoutMdi(MdiLayout value)
         {
             if (Handle == IntPtr.Zero)
+            {
                 return;
+            }
 
             switch (value)
             {
@@ -309,10 +314,14 @@ namespace System.Windows.Forms
                 try
                 {
                     if (rgn1 == IntPtr.Zero || rgn2 == IntPtr.Zero)
+                    {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
+                    }
 
                     if (SafeNativeMethods.CombineRgn(new HandleRef(null, rgn1), new HandleRef(null, rgn1), new HandleRef(null, rgn2), NativeMethods.RGN_DIFF) == 0)
+                    {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
+                    }
 
                     if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(null, rgn1), true) == 0)
                     {

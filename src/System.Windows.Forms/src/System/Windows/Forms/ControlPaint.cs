@@ -256,11 +256,15 @@ namespace System.Windows.Forms
 
             int monochromeStride = width / 8;
             if ((width % 8) != 0) // wanted division to round up, not down
+            {
                 monochromeStride++;
+            }
             // must be multiple of two -- i.e., bitmap 
             // scanlines must fall on double-byte boundaries
             if ((monochromeStride % 2) != 0)
+            {
                 monochromeStride++;
+            }
 
             byte[] bits = new byte[monochromeStride * height];
             BitmapData data = bitmap.LockBits(new Rectangle(0, 0, width, height),
@@ -334,7 +338,10 @@ namespace System.Windows.Forms
         {
             short[] grayPattern = new short[8];
             for (int i = 0; i < 8; i++)
+            {
                 grayPattern[i] = (short)(0x5555 << (i & 1));
+            }
+
             IntPtr hBitmap = SafeNativeMethods.CreateBitmap(8, 8, 1, 1, grayPattern);
 
             NativeMethods.LOGBRUSH lb = new NativeMethods.LOGBRUSH
@@ -1657,8 +1664,12 @@ namespace System.Windows.Forms
 
                 // draw the dots
                 for (int x = 0; x < width; x += pixelsBetweenDots.Width)
+                {
                     for (int y = 0; y < height; y += pixelsBetweenDots.Height)
+                    {
                         bitmap.SetPixel(x, y, foreColor);
+                    }
+                }
 
                 gridBrush = new TextureBrush(bitmap);
                 bitmap.Dispose();
@@ -2900,11 +2911,18 @@ namespace System.Windows.Forms
         {
             StringAlignment result;
             if ((align & anyRight) != 0)
+            {
                 result = StringAlignment.Far;
+            }
             else if ((align & anyCenter) != 0)
+            {
                 result = StringAlignment.Center;
+            }
             else
+            {
                 result = StringAlignment.Near;
+            }
+
             return result;
         }
 
@@ -2912,11 +2930,18 @@ namespace System.Windows.Forms
         {
             TextFormatFlags result;
             if ((align & anyBottom) != 0)
+            {
                 result = TextFormatFlags.Bottom;
+            }
             else if ((align & anyMiddle) != 0)
+            {
                 result = TextFormatFlags.VerticalCenter;
+            }
             else
+            {
                 result = TextFormatFlags.Top;
+            }
+
             return result;
         }
 
@@ -2942,11 +2967,18 @@ namespace System.Windows.Forms
         {
             TextFormatFlags result;
             if ((align & anyRight) != 0)
+            {
                 result = TextFormatFlags.Right;
+            }
             else if ((align & anyCenter) != 0)
+            {
                 result = TextFormatFlags.HorizontalCenter;
+            }
             else
+            {
                 result = TextFormatFlags.Left;
+            }
+
             return result;
         }
 
@@ -3100,26 +3132,41 @@ namespace System.Windows.Forms
                 {                           /* chromatic case */
                     /* saturation */
                     if (luminosity <= (HLSMax / 2))
+                    {
                         saturation = (int)(((dif * (int)HLSMax) + (sum / 2)) / sum);
+                    }
                     else
+                    {
                         saturation = (int)((int)((dif * (int)HLSMax) + (int)((2 * RGBMax - sum) / 2))
                                             / (2 * RGBMax - sum));
+                    }
                     /* hue */
                     Rdelta = (int)((((max - r) * (int)(HLSMax / 6)) + (dif / 2)) / dif);
                     Gdelta = (int)((((max - g) * (int)(HLSMax / 6)) + (dif / 2)) / dif);
                     Bdelta = (int)((((max - b) * (int)(HLSMax / 6)) + (dif / 2)) / dif);
 
                     if ((int)r == max)
+                    {
                         hue = Bdelta - Gdelta;
+                    }
                     else if ((int)g == max)
+                    {
                         hue = (HLSMax / 3) + Rdelta - Bdelta;
+                    }
                     else /* B == cMax */
+                    {
                         hue = ((2 * HLSMax) / 3) + Gdelta - Rdelta;
+                    }
 
                     if (hue < 0)
+                    {
                         hue += HLSMax;
+                    }
+
                     if (hue > HLSMax)
+                    {
                         hue -= HLSMax;
+                    }
                 }
             }
 
@@ -3292,7 +3339,9 @@ namespace System.Windows.Forms
             private int NewLuma(int luminosity, int n, bool scale)
             {
                 if (n == 0)
+                {
                     return luminosity;
+                }
 
                 if (scale)
                 {
@@ -3310,9 +3359,14 @@ namespace System.Windows.Forms
                 newLum += (int)((long)n * Range / 1000);
 
                 if (newLum < 0)
+                {
                     newLum = 0;
+                }
+
                 if (newLum > HLSMax)
+                {
                     newLum = HLSMax;
+                }
 
                 return newLum;
             }
@@ -3336,9 +3390,14 @@ namespace System.Windows.Forms
                 {                         /* chromatic case */
                     /* set up magic numbers */
                     if (luminosity <= (HLSMax / 2))
+                    {
                         magic2 = (int)((luminosity * ((int)HLSMax + saturation) + (HLSMax / 2)) / HLSMax);
+                    }
                     else
+                    {
                         magic2 = luminosity + saturation - (int)(((luminosity * saturation) + (int)(HLSMax / 2)) / HLSMax);
+                    }
+
                     magic1 = 2 * luminosity - magic2;
 
                     /* get RGB, change units from HLSMax to RGBMax */
@@ -3357,21 +3416,34 @@ namespace System.Windows.Forms
 
                 /* The following is redundant for WORD (unsigned int) */
                 if (hue < 0)
+                {
                     hue += HLSMax;
+                }
 
                 if (hue > HLSMax)
+                {
                     hue -= HLSMax;
+                }
 
                 /* return r,g, or b value from this tridrant */
                 if (hue < (HLSMax / 6))
+                {
                     return (n1 + (((n2 - n1) * hue + (HLSMax / 12)) / (HLSMax / 6)));
-                if (hue < (HLSMax / 2))
-                    return (n2);
-                if (hue < ((HLSMax * 2) / 3))
-                    return (n1 + (((n2 - n1) * (((HLSMax * 2) / 3) - hue) + (HLSMax / 12)) / (HLSMax / 6)));
-                else
-                    return (n1);
+                }
 
+                if (hue < (HLSMax / 2))
+                {
+                    return (n2);
+                }
+
+                if (hue < ((HLSMax * 2) / 3))
+                {
+                    return (n1 + (((n2 - n1) * (((HLSMax * 2) / 3) - hue) + (HLSMax / 12)) / (HLSMax / 6)));
+                }
+                else
+                {
+                    return (n1);
+                }
             }
         }
     }

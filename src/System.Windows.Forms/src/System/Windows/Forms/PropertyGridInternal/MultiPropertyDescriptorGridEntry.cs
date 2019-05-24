@@ -114,8 +114,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 RecreateChildren();
                 if (Expanded)
+                {
                     GridEntryHost.Refresh(false);
-
+                }
             }
         }
 

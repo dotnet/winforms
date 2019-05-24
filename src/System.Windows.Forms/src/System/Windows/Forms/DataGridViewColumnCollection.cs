@@ -1202,16 +1202,24 @@ namespace System.Windows.Forms
         private bool VerifyColumnOrderCache()
         {
             if (itemsSorted == null)
+            {
                 return false;
+            }
+
             if (itemsSorted.Count != items.Count)
+            {
                 return false;
+            }
 
             int index = 0;
             while (index < itemsSorted.Count - 1)
             {
                 if (((DataGridViewColumn)itemsSorted[index + 1]).DisplayIndex !=
                     ((DataGridViewColumn)itemsSorted[index]).DisplayIndex + 1)
+                {
                     return false;
+                }
+
                 index++;
             }
             return true;

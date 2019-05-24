@@ -592,7 +592,9 @@ namespace System.Windows.Forms
             // has to be re-laidout.
             //
             if (!IsHandleCreated)
+            {
                 return;
+            }
 
             StatusBarPanel panel = null;
             int length = panels.Count;
@@ -781,7 +783,9 @@ namespace System.Windows.Forms
         {
             StatusBarPanelClickEventHandler handler = (StatusBarPanelClickEventHandler)Events[EVENT_PANELCLICK];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -924,7 +928,9 @@ namespace System.Windows.Forms
                     springNum++;
                 }
                 else
+                {
                     barPanelWidth += panel.Width;
+                }
             }
 
 
@@ -943,14 +949,19 @@ namespace System.Windows.Forms
 
                     int widthOfSpringPanel = (leftoverWidth) / springPanelsLeft;
                     if (leftoverWidth == copyOfLeftoverWidth)
+                    {
                         break;
+                    }
+
                     copyOfLeftoverWidth = leftoverWidth;
 
                     for (int i = 0; i < springNum; i++)
                     {
                         panel = pArray[i];
                         if (panel == null)
+                        {
                             continue;
+                        }
 
                         if (widthOfSpringPanel < panel.MinWidth)
                         {
@@ -991,7 +1002,9 @@ namespace System.Windows.Forms
         {
             StatusBarDrawItemEventHandler handler = (StatusBarDrawItemEventHandler)Events[EVENT_SBDRAWITEM];
             if (handler != null)
+            {
                 handler(this, sbdievent);
+            }
         }
 
         /// <summary>
@@ -1019,7 +1032,9 @@ namespace System.Windows.Forms
             {
                 s += ", Panels.Count: " + Panels.Count.ToString(CultureInfo.CurrentCulture);
                 if (Panels.Count > 0)
+                {
                     s += ", Panels[0]: " + Panels[0].ToString();
+                }
             }
             return s;
         }
@@ -1084,7 +1099,9 @@ namespace System.Windows.Forms
 
             int length = panels.Count;
             if (dis.itemID < 0 || dis.itemID >= length)
+            {
                 Debug.Fail("OwnerDraw item out of range");
+            }
 
             StatusBarPanel panel = (StatusBarPanel)
                                    panels[dis.itemID];
@@ -1301,7 +1318,9 @@ namespace System.Windows.Forms
                 {
 
                     if (value == null)
+                    {
                         throw new ArgumentNullException(nameof(StatusBarPanel));
+                    }
 
                     owner.layoutDirty = true;
 
@@ -1313,7 +1332,9 @@ namespace System.Windows.Forms
                     int length = owner.panels.Count;
 
                     if (index < 0 || index >= length)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
 
                     StatusBarPanel oldPanel = (StatusBarPanel)owner.panels[index];
                     oldPanel.ParentInternal = null;
@@ -1572,18 +1593,25 @@ namespace System.Windows.Forms
 
                 //check for the value not to be null
                 if (value == null)
+                {
                     throw new ArgumentNullException(nameof(value));
+                }
                 //end check
 
 
                 owner.layoutDirty = true;
                 if (value.Parent != owner && value.Parent != null)
+                {
                     throw new ArgumentException(SR.ObjectHasParent, "value");
+                }
 
                 int length = owner.panels.Count;
 
                 if (index < 0 || index > length)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
+
                 value.ParentInternal = owner;
 
                 switch (value.AutoSize)
@@ -1644,7 +1672,9 @@ namespace System.Windows.Forms
 
                 //check for the value not to be null
                 if (value == null)
+                {
                     throw new ArgumentNullException(nameof(StatusBarPanel));
+                }
                 //end check
 
                 if (value.Parent != owner)
@@ -1672,7 +1702,9 @@ namespace System.Windows.Forms
             {
                 int length = Count;
                 if (index < 0 || index >= length)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
 
                 // clear any tooltip
                 //

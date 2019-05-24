@@ -17,9 +17,13 @@ namespace System.Windows.Forms
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof(string) || sourceType == typeof(int))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
@@ -30,9 +34,13 @@ namespace System.Windows.Forms
                 {
                     int pulica = (int)value;
                     if (pulica == -1)
+                    {
                         return "AutoColumnResize (-1)";
+                    }
                     else
+                    {
                         return pulica.ToString(CultureInfo.CurrentCulture);
+                    }
                 }
                 else
                 {
@@ -40,7 +48,9 @@ namespace System.Windows.Forms
                 }
             }
             else
+            {
                 return base.ConvertTo(context, culture, value, destinationType);
+            }
         }
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
@@ -49,9 +59,13 @@ namespace System.Windows.Forms
             {
                 string text = value.ToString();
                 if (text.Equals("AutoColumnResize (-1)"))
+                {
                     return -1;
+                }
                 else
+                {
                     return int.Parse(text, CultureInfo.CurrentCulture);
+                }
             }
             else if (value.GetType() == typeof(int))
             {

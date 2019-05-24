@@ -493,13 +493,17 @@ namespace System.Windows.Forms
             {
                 BindingContext bc = (BindingContext)Properties.GetObject(PropBindingContext);
                 if (bc != null)
+                {
                     return bc;
+                }
 
                 // try the parent
                 //
                 Control p = ParentInternal;
                 if (p != null && p.CanAccessProperties)
+                {
                     return p.BindingContext;
+                }
 
                 // we don't have a binding context
                 return null;
@@ -2479,7 +2483,9 @@ namespace System.Windows.Forms
         {
 
             if (DisplayedItems.Count <= 0)
+            {
                 return null;
+            }
 
             if (start == null)
             {
@@ -3622,7 +3628,9 @@ namespace System.Windows.Forms
             UpdateToolTip(null); // supress the tooltip.
             EventHandler handler = (EventHandler)Events[EventBeginDrag];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected virtual void OnEndDrag(EventArgs e)
@@ -3634,8 +3642,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventEndDrag];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
 
 
@@ -3651,8 +3660,9 @@ namespace System.Windows.Forms
 
             EventHandler handler = (EventHandler)Events[EventRendererChanged];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
         /// <summary>
         /// Summary of OnEnabledChanged.
@@ -3756,7 +3766,9 @@ namespace System.Windows.Forms
 
             ToolStripItemEventHandler handler = (ToolStripItemEventHandler)Events[EventItemAdded];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -3766,8 +3778,9 @@ namespace System.Windows.Forms
         {
             ToolStripItemClickedEventHandler handler = (ToolStripItemClickedEventHandler)Events[EventItemClicked];
             if (handler != null)
+            {
                 handler(this, e);
-
+            }
         }
 
         protected internal virtual void OnItemRemoved(ToolStripItemEventArgs e)
@@ -3778,7 +3791,9 @@ namespace System.Windows.Forms
 
             ToolStripItemEventHandler handler = (ToolStripItemEventHandler)Events[EventItemRemoved];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
 
@@ -3835,14 +3850,18 @@ namespace System.Windows.Forms
         {
             EventHandler handler = (EventHandler)Events[EventLayoutCompleted];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected virtual void OnLayoutStyleChanged(EventArgs e)
         {
             EventHandler handler = (EventHandler)Events[EventLayoutStyleChanged];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected override void OnLostFocus(EventArgs e)
@@ -3867,7 +3886,9 @@ namespace System.Windows.Forms
         {
             ToolStripLocationCancelEventHandler handler = (ToolStripLocationCancelEventHandler)Events[EventLocationChanging];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>
@@ -4287,9 +4308,9 @@ namespace System.Windows.Forms
 
             PaintEventHandler handler = (PaintEventHandler)Events[EventPaintGrip];
             if (handler != null)
+            {
                 handler(this, e);
-
-
+            }
         }
 
         protected override void OnScroll(ScrollEventArgs se)
@@ -5335,7 +5356,9 @@ namespace System.Windows.Forms
             public override AccessibleObject GetChild(int index)
             {
                 if ((owner == null) || (owner.Items == null))
+                {
                     return null;
+                }
 
                 if (index == 0 && owner.Grip.Visible)
                 {
@@ -5409,7 +5432,9 @@ namespace System.Windows.Forms
             public override int GetChildCount()
             {
                 if ((owner == null) || (owner.Items == null))
+                {
                     return -1;
+                }
 
                 int count = 0;
                 for (int i = 0; i < owner.Items.Count; i++)

@@ -233,7 +233,9 @@ namespace System.Windows.Forms
             }
 
             if (handle == IntPtr.Zero || !WriteImageList(handle, stream))
+            {
                 throw new InvalidOperationException(SR.ImageListStreamerSaveFailed);
+            }
 
             si.AddValue("Data", Compress(stream.ToArray()));
         }

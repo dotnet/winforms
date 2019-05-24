@@ -548,13 +548,24 @@ namespace System.Windows.Forms
             if (!DesignMode)
             {
                 if (MoveFirstItem != null)
+                {
                     moveFirstItem.Enabled = (position > 1);
+                }
+
                 if (MovePreviousItem != null)
+                {
                     movePreviousItem.Enabled = (position > 1);
+                }
+
                 if (MoveNextItem != null)
+                {
                     moveNextItem.Enabled = (position < count);
+                }
+
                 if (MoveLastItem != null)
+                {
                     moveLastItem.Enabled = (position < count);
+                }
 
                 if (AddNewItem != null)
                 {
@@ -573,9 +584,14 @@ namespace System.Windows.Forms
                 }
 
                 if (PositionItem != null)
+                {
                     positionItem.Enabled = (position > 0 && count > 0);
+                }
+
                 if (CountItem != null)
+                {
                     countItem.Enabled = (count > 0);
+                }
             }
 
             // Update current position indicator

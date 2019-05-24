@@ -117,7 +117,9 @@ namespace System.Windows.Forms
         internal override bool KeyPress(int rowNum, Keys keyData)
         {
             if (edit.IsInEditOrNavigateMode)
+            {
                 return base.KeyPress(rowNum, keyData);
+            }
 
             // if the edit box is editing, then
             // pass this keystroke to the edit box
@@ -196,7 +198,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 if (format == null || !format.Equals(value))
                 {
                     format = value;
@@ -207,7 +212,9 @@ namespace System.Windows.Forms
                     if (format.Length == 0)
                     {
                         if (typeConverter != null && !typeConverter.CanConvertFrom(typeof(string)))
+                        {
                             ReadOnly = true;
+                        }
                     }
 
                     Invalidate();
@@ -225,7 +232,9 @@ namespace System.Windows.Forms
             set
             {
                 if (formatInfo == null || !formatInfo.Equals(value))
+                {
                     formatInfo = value;
+                }
             }
         }
 
@@ -242,7 +251,9 @@ namespace System.Windows.Forms
                 if (!value && (format == null || format.Length == 0))
                 {
                     if (typeConverter != null && !typeConverter.CanConvertFrom(typeof(string)))
+                    {
                         return;
+                    }
                 }
                 base.ReadOnly = value;
             }
@@ -305,8 +316,9 @@ namespace System.Windows.Forms
         {
             edit.Text = GetText(GetColumnValueAtRow(source, rowNum));
             if (!edit.ReadOnly && displayText != null)
+            {
                 edit.Text = displayText;
-
+            }
         }
 
         /// <summary>
@@ -383,24 +395,32 @@ namespace System.Windows.Forms
         protected internal override void EnterNullValue()
         {
             if (ReadOnly)
+            {
                 return;
+            }
 
             // if the edit box is not visible, then
             // do not put the edit text in it
             if (!edit.Visible)
+            {
                 return;
+            }
 
             // if we are editing, then we should be able to enter alt-0 in a cell.
             //
             if (!edit.IsInEditOrNavigateMode)
+            {
                 return;
+            }
 
             edit.Text = NullText;
             // edit.Visible = true;
             edit.IsInEditOrNavigateMode = false;
             // tell the dataGrid that there is an edit:
             if (DataGridTableStyle != null && DataGridTableStyle.DataGrid != null)
+            {
                 DataGridTableStyle.DataGrid.ColumnStartedEditing(edit.Bounds);
+            }
         }
 
         /// <summary>
@@ -415,7 +435,9 @@ namespace System.Windows.Forms
             edit.Bounds = Rectangle.Empty;
 
             if (edit.IsInEditOrNavigateMode)
+            {
                 return true;
+            }
 
             try
             {
@@ -435,7 +457,9 @@ namespace System.Windows.Forms
                         edit.Text = ((IFormattable)value).ToString(format, formatInfo);
                     }
                     else
+                    {
                         edit.Text = value.ToString();
+                    }
                 }
                 else if (typeConverter != null && typeConverter.CanConvertFrom(typeof(string)))
                 {
@@ -521,7 +545,9 @@ namespace System.Windows.Forms
             // because the navigation code in the DataGridTextBox::ProcessKeyMessage
             // uses the SelectedText property 
             if (displayText == null)
+            {
                 edit.SelectAll();
+            }
             else
             {
                 int end = edit.Text.Length;
@@ -529,7 +555,9 @@ namespace System.Windows.Forms
             }
 
             if (edit.Visible)
+            {
                 DataGridTableStyle.DataGrid.Invalidate(originalBounds);
+            }
         }
 
         internal override string GetDisplayText(object value)
@@ -540,7 +568,9 @@ namespace System.Windows.Forms
         private string GetText(object value)
         {
             if (value is System.DBNull)
+            {
                 return NullText;
+            }
             else if (format != null && format.Length != 0 && (value is IFormattable))
             {
                 try
@@ -556,7 +586,9 @@ namespace System.Windows.Forms
             {
                 // use the typeConverter:
                 if (typeConverter != null && typeConverter.CanConvertTo(typeof(string)))
+                {
                     return (string)typeConverter.ConvertTo(value, typeof(string));
+                }
             }
             return (value != null ? value.ToString() : "");
         }

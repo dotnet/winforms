@@ -307,7 +307,9 @@ namespace System.ComponentModel.Design
             {
                 string value = Text;
                 if (value == null)
+                {
                     return;
+                }
 
                 int[] surrogates = StringInfo.ParseCombiningCharacters(value);
                 if (surrogates.Length != value.Length)
@@ -374,7 +376,9 @@ namespace System.ComponentModel.Design
                         }
                     }
                     else
+                    {
                         return "";
+                    }
                 }
                 set
                 {
@@ -583,7 +587,9 @@ namespace System.ComponentModel.Design
                 };
                 ContextMenu cm = tb.ContextMenu;
                 if (cm == null || _owner.ShortcutsEnabled == false)
+                {
                     hmenu = IntPtr.Zero;
+                }
                 else
                 {
                     hmenu = cm.Handle;

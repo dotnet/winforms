@@ -1017,7 +1017,10 @@ namespace System.Windows.Forms
         private IntPtr GetHandleNoCreate()
         {
             if (IsHandleCreated)
+            {
                 return Handle;
+            }
+
             return IntPtr.Zero;
         }
 
@@ -1042,7 +1045,10 @@ namespace System.Windows.Forms
         private void AddSelectionHandler()
         {
             if (axState[addedSelectionHandler])
+            {
                 return;
+            }
+
             ISelectionService iss = GetSelectionService();
             if (iss != null)
             {
@@ -1073,7 +1079,10 @@ namespace System.Windows.Forms
         private bool RemoveSelectionHandler()
         {
             if (!axState[addedSelectionHandler])
+            {
                 return false;
+            }
+
             ISelectionService iss = GetSelectionService();
             if (iss != null)
             {
@@ -1130,9 +1139,14 @@ namespace System.Windows.Forms
                 base.Site = value;
                 bool newuMode = IsUserMode();
                 if (!newuMode)
+                {
                     GetOcxCreate();
+                }
+
                 if (reAddHandler)
+                {
                     AddSelectionHandler();
+                }
 
                 SyncRenameNotification(value != null);
 
@@ -1146,7 +1160,9 @@ namespace System.Windows.Forms
                     TransitionUpTo(OC_INPLACE);
                     ContainerControl f = ContainingControl;
                     if (f != null && f.Visible && Visible)
+                    {
                         MakeVisibleWithShow();
+                    }
                 }
 
                 if (olduMode != newuMode && !IsHandleCreated && !axState[disposed])
@@ -1194,7 +1210,10 @@ namespace System.Windows.Forms
         private void OnNewSelection(object sender, EventArgs e)
         {
             if (IsUserMode())
+            {
                 return;
+            }
+
             ISelectionService iss = GetSelectionService();
             // What we care about:
             // if we are uiactive and we lose selection, then we need to uideactivate ourselves...
@@ -1307,7 +1326,10 @@ namespace System.Windows.Forms
             {
                 IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
                 if (hDC == IntPtr.Zero)
+                {
                     return NativeMethods.E_FAIL;
+                }
+
                 logPixelsX = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSX);
                 logPixelsY = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSY);
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "log pixels are: " + logPixelsX.ToString(CultureInfo.InvariantCulture) + " " + logPixelsY.ToString(CultureInfo.InvariantCulture));
@@ -1420,7 +1442,10 @@ namespace System.Windows.Forms
         private void SetObjectRects(Rectangle bounds)
         {
             if (GetOcState() < OC_INPLACE)
+            {
                 return;
+            }
+
             GetInPlaceObject().SetObjectRects(FillInRect(new NativeMethods.COMRECT(), bounds), GetClipRect(new NativeMethods.COMRECT()));
         }
 
@@ -1434,7 +1459,9 @@ namespace System.Windows.Forms
             // IOleObject will "give a Catastrophic error" in SetObjectRects( ).
 
             if (GetAxState(AxHost.handlePosRectChanged))
+            {
                 return;
+            }
 
             axState[handlePosRectChanged] = true;
 
@@ -1496,11 +1523,17 @@ namespace System.Windows.Forms
         private bool CheckSubclassing()
         {
             if (!IsHandleCreated || wndprocAddr == IntPtr.Zero)
+            {
                 return true;
+            }
+
             IntPtr handle = Handle;
             IntPtr currentWndproc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
             if (currentWndproc == wndprocAddr)
+            {
                 return true;
+            }
+
             if (unchecked((int)(long)SendMessage(REGMSG_MSG, 0, 0)) == REGMSG_RETVAL)
             {
                 wndprocAddr = currentWndproc;
@@ -1795,7 +1828,9 @@ namespace System.Windows.Forms
                 }
             }
             if (IsHandleCreated)
+            {
                 return;
+            }
 
             if (ParentInternal != null)
             {    // ==> we are in a valid state
@@ -1861,7 +1896,9 @@ namespace System.Windows.Forms
                 {
                     SetState(STATE_VISIBLE, value);
                     if (Visible != oldVisible)
+                    {
                         OnVisibleChanged(EventArgs.Empty);
+                    }
                 }
             }
         }
@@ -2133,7 +2170,9 @@ namespace System.Windows.Forms
                 axState[ocxStateSet] = true;
 
                 if (value == null)
+                {
                     return;
+                }
 
                 if (storageType != STG_UNKNOWN && storageType != value.type)
                 {
@@ -2142,7 +2181,9 @@ namespace System.Windows.Forms
                 }
 
                 if (ocxState == value)
+                {
                     return;
+                }
 
                 ocxState = value;
 
@@ -2203,7 +2244,10 @@ namespace System.Windows.Forms
                         case STG_STORAGE:
                             Debug.Assert(oldOcxState != null, "we got to have an old state which holds out scribble storage...");
                             if (oldOcxState != null)
+                            {
                                 return oldOcxState.RefreshStorage(iPersistStorage);
+                            }
+
                             return null;
                         default:
                             Debug.Fail("unknown storage type.");
@@ -2327,7 +2371,10 @@ namespace System.Windows.Forms
         private bool IsDirty()
         {
             if (GetOcState() < OC_RUNNING)
+            {
                 return false;
+            }
+
             Debug.Assert(storageType != STG_UNKNOWN, "if we are loaded, out storage type must be set!");
 
             if (axState[valueChanged])
@@ -2338,7 +2385,9 @@ namespace System.Windows.Forms
 
 #if DEBUG
             if (AxAlwaysSaveSwitch.Enabled)
+            {
                 return true;
+            }
 #endif
             int hr = NativeMethods.E_FAIL;
             switch (storageType)
@@ -2432,7 +2481,10 @@ namespace System.Windows.Forms
                 case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
                     string rval = GetParentContainer().GetNameForControl(this);
                     if (rval == null)
+                    {
                         rval = string.Empty;
+                    }
+
                     return rval;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for localeid");
@@ -2443,11 +2495,19 @@ namespace System.Windows.Forms
                     while (ctl != null)
                     {
                         if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.No)
+                        {
                             return false;
+                        }
+
                         if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Yes)
+                        {
                             return true;
+                        }
+
                         if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Inherit)
+                        {
                             ctl = ctl.Parent;
+                        }
                     }
                     return null;
                 default:
@@ -2556,7 +2616,10 @@ namespace System.Windows.Forms
             catch (COMException e)
             {
                 if (e.ErrorCode == E_NOINTERFACE.ErrorCode)
+                {
                     return null;
+                }
+
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to get the license key: " + e.ToString());
                 axState[needLicenseKey] = false;
             }
@@ -2652,7 +2715,10 @@ namespace System.Windows.Forms
         {
             NativeMethods.ICategorizeProperties icp = GetCategorizeProperties();
             if (icp == null)
+            {
                 return null;
+            }
+
             CategoryAttribute rval = null;
             int propcat = 0;
             try
@@ -2671,7 +2737,9 @@ namespace System.Windows.Forms
                     {
                         rval = (CategoryAttribute)objectDefinedCategoryNames[key];
                         if (rval != null)
+                        {
                             return rval;
+                        }
                     }
 
                     int hr = icp.GetCategoryName(cat, CultureInfo.CurrentCulture.LCID, out string name);
@@ -2722,7 +2790,10 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "invoking EditMode for " + ToString());
             Debug.Assert((flags & AxFlags.PreventEditMode) == 0, "edit mode should have been disabled");
             if (editMode != EDITM_NONE)
+            {
                 return;
+            }
+
             AddSelectionHandler();
             editMode = EDITM_HOST;
             SetSelectionStyle(2);
@@ -2810,13 +2881,19 @@ namespace System.Windows.Forms
         object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
         {
             if (editorBaseType != typeof(ComponentEditor))
+            {
                 return null;
+            }
 
             if (editor != null)
+            {
                 return editor;
+            }
 
             if (editor == null && HasPropertyPages())
+            {
                 editor = new AxComponentEditor();
+            }
 
             return editor;
         }
@@ -2902,7 +2979,9 @@ namespace System.Windows.Forms
             ArrayList retProps = new ArrayList();
 
             if (properties == null)
+            {
                 properties = new Hashtable();
+            }
 
             if (propertyInfos == null)
             {
@@ -2911,7 +2990,9 @@ namespace System.Windows.Forms
                 PropertyInfo[] propInfos = GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
                 foreach (PropertyInfo propInfo in propInfos)
+                {
                     propertyInfos.Add(propInfo.Name, propInfo);
+                }
             }
 
             PropertyDescriptorCollection baseProps = TypeDescriptor.GetProperties(this, null, true);
@@ -2933,7 +3014,9 @@ namespace System.Windows.Forms
 
                     // We do not support "write-only" properties that some activex controls support.
                     if (propInfo != null && !propInfo.CanRead)
+                    {
                         continue;
+                    }
 
                     if (!properties.ContainsKey(propName))
                     {
@@ -3009,7 +3092,9 @@ namespace System.Windows.Forms
                         if (removeList != null)
                         {
                             foreach (object prop in removeList)
+                            {
                                 retProps.Remove(prop);
+                            }
                         }
                     }
                 }
@@ -3348,14 +3433,20 @@ namespace System.Windows.Forms
         private bool CanShowPropertyPages()
         {
             if (GetOcState() < OC_RUNNING)
+            {
                 return false;
+            }
+
             return (GetOcx() is NativeMethods.ISpecifyPropertyPages);
         }
 
         public bool HasPropertyPages()
         {
             if (!CanShowPropertyPages())
+            {
                 return false;
+            }
+
             NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages)GetOcx();
             try
             {
@@ -3364,7 +3455,9 @@ namespace System.Windows.Forms
                 {
                     ispp.GetPages(uuids);
                     if (uuids.cElems > 0)
+                    {
                         return true;
+                    }
                 }
                 finally
                 {
@@ -3407,11 +3500,15 @@ namespace System.Windows.Forms
         {
             ISite isite = Site;
             if (isite == null)
+            {
                 return;
+            }
 
             IComponentChangeService ccs = (IComponentChangeService)isite.GetService(typeof(IComponentChangeService));
             if (ccs == null)
+            {
                 return;
+            }
 
             ccs.OnComponentChanging(this, null);
 
@@ -3421,9 +3518,15 @@ namespace System.Windows.Forms
         public void ShowPropertyPages()
         {
             if (ParentInternal == null)
+            {
                 return;
+            }
+
             if (!ParentInternal.IsHandleCreated)
+            {
                 return;
+            }
+
             ShowPropertyPages(ParentInternal);
         }
 
@@ -3432,14 +3535,19 @@ namespace System.Windows.Forms
             try
             {
                 if (!CanShowPropertyPages())
+                {
                     return;
+                }
+
                 NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages)GetOcx();
                 NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
                 try
                 {
                     ispp.GetPages(uuids);
                     if (uuids.cElems <= 0)
+                    {
                         return;
+                    }
                 }
                 catch
                 {
@@ -3450,13 +3558,17 @@ namespace System.Windows.Forms
 
                 IDesignerHost host = null;
                 if (Site != null)
+                {
                     host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
+                }
 
                 DesignerTransaction trans = null;
                 try
                 {
                     if (host != null)
+                    {
                         trans = host.CreateTransaction(SR.AXEditProperties);
+                    }
 
                     string name = null;
                     object o = GetOcx();
@@ -3466,13 +3578,19 @@ namespace System.Windows.Forms
                 finally
                 {
                     if (oleSite != null)
+                    {
                         ((UnsafeNativeMethods.IPropertyNotifySink)oleSite).OnChanged(NativeMethods.MEMBERID_NIL);
+                    }
 
                     if (trans != null)
+                    {
                         trans.Commit();
+                    }
 
                     if (uuids.pElems != IntPtr.Zero)
+                    {
                         Marshal.FreeCoTaskMem(uuids.pElems);
+                    }
                 }
             }
             catch (Exception t)
@@ -3615,13 +3733,17 @@ namespace System.Windows.Forms
 
                 case Interop.WindowMessages.WM_KEYUP:
                     if (axState[processingKeyUp])
+                    {
                         break;
+                    }
 
                     axState[processingKeyUp] = true;
                     try
                     {
                         if (PreProcessControlMessage(ref m) != PreProcessControlState.MessageProcessed)
+                        {
                             DefWndProc(ref m);
+                        }
                     }
                     finally
                     {
@@ -3722,7 +3844,9 @@ namespace System.Windows.Forms
 
             // Choose the setBounds unless it is smaller than the default bounds.
             if (setExtent.Width < ocxExtent.Width || setExtent.Height < ocxExtent.Height)
+            {
                 Bounds = new Rectangle(location.X, location.Y, ocxExtent.Width, ocxExtent.Height);
+            }
             else
             {
                 Size newSize = SetExtent(setExtent.Width, setExtent.Height);
@@ -4064,7 +4188,9 @@ namespace System.Windows.Forms
             internal void StartEvents()
             {
                 if (connectionPoint != null)
+                {
                     return;
+                }
 
                 object nativeObject = host.GetOcx();
 
@@ -4110,7 +4236,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject");
 
                 if (rval == null || riid.Equals(Guid.Empty))
+                {
                     return NativeMethods.E_INVALIDARG;
+                }
 
                 if (riid.Equals(ivbformat_Guid))
                 {
@@ -4207,7 +4335,9 @@ namespace System.Windows.Forms
                     int dispid = int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
                     object ambient = host.GetAmbientProperty(dispid);
                     if (ambient != null)
+                    {
                         return ambient;
+                    }
                 }
 
                 throw E_FAIL;
@@ -4240,7 +4370,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetExtendedControl " + host.ToString());
                 ppDisp = host.GetParentContainer().GetProxyForControl(host);
                 if (ppDisp == null)
+                {
                     return NativeMethods.E_NOTIMPL;
+                }
 
                 return NativeMethods.S_OK;
             }
@@ -4249,7 +4381,9 @@ namespace System.Windows.Forms
             {
                 int hr = SetupLogPixels(false);
                 if (NativeMethods.Failed(hr))
+                {
                     return hr;
+                }
 
                 if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER) != 0)
                 {
@@ -4379,7 +4513,9 @@ namespace System.Windows.Forms
                     host.TransitionUpTo(OC_INPLACE);
                 }
                 if (host.GetOcState() < OC_INPLACE)
+                {
                     return NativeMethods.S_OK;
+                }
 
                 if (NativeMethods.Succeeded(host.GetInPlaceObject().GetWindow(out IntPtr hwnd)))
                 {
@@ -4537,7 +4673,9 @@ namespace System.Windows.Forms
                 //
                 bool useRect = true;
                 if (AxHost.windowsMediaPlayer_Clsid.Equals(host.clsid))
+                {
                     useRect = host.GetAxState(AxHost.handlePosRectChanged);
+                }
 
                 if (useRect)
                 {
@@ -4560,7 +4698,9 @@ namespace System.Windows.Forms
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
                 //
                 if (host.NoComponentChangeEvents != 0)
+                {
                     return;
+                }
 
                 host.NoComponentChangeEvents++;
                 try
@@ -4654,7 +4794,10 @@ namespace System.Windows.Forms
         private bool QuickActivate()
         {
             if (!(instance is UnsafeNativeMethods.IQuickActivate))
+            {
                 return false;
+            }
+
             UnsafeNativeMethods.IQuickActivate iqa = (UnsafeNativeMethods.IQuickActivate)instance;
 
             UnsafeNativeMethods.tagQACONTAINER qaContainer = new UnsafeNativeMethods.tagQACONTAINER();
@@ -4739,7 +4882,10 @@ namespace System.Windows.Forms
         internal override bool CanSelectCore()
         {
             if (!GetControlEnabled() || axState[rejectSelection])
+            {
                 return false;
+            }
+
             return base.CanSelectCore();
         }
 
@@ -4958,7 +5104,9 @@ namespace System.Windows.Forms
 
 #if DEBUG
                 if (iOleInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, GetType().FullName + " Can also be a Windowless control.");
+                }
 #endif //DEBUG
             }
             return iOleInPlaceObject;
@@ -5037,7 +5185,10 @@ namespace System.Windows.Forms
         protected static object GetIPictureFromPicture(Image image)
         {
             if (image == null)
+            {
                 return null;
+            }
+
             object pictdesc = GetPICTDESCFromPicture(image);
             return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
         }
@@ -5049,7 +5200,10 @@ namespace System.Windows.Forms
         protected static object GetIPictureFromCursor(Cursor cursor)
         {
             if (cursor == null)
+            {
                 return null;
+            }
+
             NativeMethods.PICTDESCicon pictdesc = new NativeMethods.PICTDESCicon(Icon.FromHandle(cursor.Handle));
             return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
         }
@@ -5061,7 +5215,10 @@ namespace System.Windows.Forms
         protected static object GetIPictureDispFromPicture(Image image)
         {
             if (image == null)
+            {
                 return null;
+            }
+
             object pictdesc = GetPICTDESCFromPicture(image);
             return UnsafeNativeMethods.OleCreateIPictureDispIndirect(pictdesc, ref ipictureDisp_Guid, true);
         }
@@ -5073,7 +5230,10 @@ namespace System.Windows.Forms
         protected static Image GetPictureFromIPicture(object picture)
         {
             if (picture == null)
+            {
                 return null;
+            }
+
             IntPtr hPal = IntPtr.Zero;
             UnsafeNativeMethods.IPicture pict = (UnsafeNativeMethods.IPicture)picture;
             int type = pict.GetPictureType();
@@ -5097,7 +5257,10 @@ namespace System.Windows.Forms
         protected static Image GetPictureFromIPictureDisp(object picture)
         {
             if (picture == null)
+            {
                 return null;
+            }
+
             IntPtr hPal = IntPtr.Zero;
             UnsafeNativeMethods.IPictureDisp pict = (UnsafeNativeMethods.IPictureDisp)picture;
             int type = pict.PictureType;
@@ -5203,10 +5366,14 @@ namespace System.Windows.Forms
         protected static object GetIFontFromFont(Font font)
         {
             if (font == null)
+            {
                 return null;
+            }
 
             if (font.Unit != GraphicsUnit.Point)
+            {
                 throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
+            }
 
             try
             {
@@ -5227,7 +5394,9 @@ namespace System.Windows.Forms
         protected static Font GetFontFromIFont(object font)
         {
             if (font == null)
+            {
                 return null;
+            }
 
             UnsafeNativeMethods.IFont oleFont = (UnsafeNativeMethods.IFont)font;
             try
@@ -5235,7 +5404,9 @@ namespace System.Windows.Forms
                 Font f = Font.FromHfont(oleFont.GetHFont());
 
                 if (f.Unit != GraphicsUnit.Point)
+                {
                     f = new Font(f.Name, f.SizeInPoints, f.Style, GraphicsUnit.Point, f.GdiCharSet, f.GdiVerticalFont);
+                }
 
                 return f;
             }
@@ -5254,10 +5425,14 @@ namespace System.Windows.Forms
         protected static object GetIFontDispFromFont(Font font)
         {
             if (font == null)
+            {
                 return null;
+            }
 
             if (font.Unit != GraphicsUnit.Point)
+            {
                 throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
+            }
 
             SafeNativeMethods.IFontDisp rval = SafeNativeMethods.OleCreateIFontDispIndirect(GetFONTDESCFromFont(font), ref ifontDisp_Guid);
             return rval;
@@ -5287,19 +5462,29 @@ namespace System.Windows.Forms
             try
             {
                 if (oleFont.Bold)
+                {
                     style |= FontStyle.Bold;
+                }
 
                 if (oleFont.Italic)
+                {
                     style |= FontStyle.Italic;
+                }
 
                 if (oleFont.Underline)
+                {
                     style |= FontStyle.Underline;
+                }
 
                 if (oleFont.Strikethrough)
+                {
                     style |= FontStyle.Strikeout;
+                }
 
                 if ((int)oleFont.Weight >= 700) // bold
+                {
                     style |= FontStyle.Bold;
+                }
 
                 f = new Font(oleFont.Name, (float)oleFont.Size / (float)10000, style, GraphicsUnit.Point, (byte)oleFont.Charset);
                 return f;
@@ -5436,11 +5621,15 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Format");
                 if (result == null)
+                {
                     return NativeMethods.E_INVALIDARG;
+                }
 
                 result[0] = 0;
                 if (lpBuffer == IntPtr.Zero || cpBuffer < 2)
+                {
                     return NativeMethods.E_INVALIDARG;
+                }
 
                 IntPtr pbstr = IntPtr.Zero;
                 int hr = UnsafeNativeMethods.VarFormat(ref var, new HandleRef(null, pszFormat), firstD, firstW, 32 /* VAR_FORMAT_NOSUBSTITUTE */, ref pbstr);
@@ -5493,7 +5682,9 @@ namespace System.Windows.Forms
             unsafe int UnsafeNativeMethods.IEnumUnknown.Next(int celt, IntPtr rgelt, IntPtr pceltFetched)
             {
                 if (pceltFetched != IntPtr.Zero)
+                {
                     Marshal.WriteInt32(pceltFetched, 0, 0);
+                }
 
                 if (celt < 0)
                 {
@@ -5519,7 +5710,9 @@ namespace System.Windows.Forms
                 }
 
                 if (pceltFetched != IntPtr.Zero)
+                {
                     Marshal.WriteInt32(pceltFetched, 0, fetched);
+                }
 
                 if (fetched != celt)
                 {
@@ -5578,7 +5771,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in constructor.  Parent created : " + parent.Created.ToString());
                 this.parent = parent;
                 if (parent.Created)
+                {
                     FormCreated();
+                }
             }
 
             // IReflect methods:
@@ -5711,7 +5906,9 @@ namespace System.Windows.Forms
                 lock (this)
                 {
                     if (containerCache.Contains(ctl))
+                    {
                         throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
+                    }
 
                     containerCache.Add(ctl, ctl);
 
@@ -5855,9 +6052,15 @@ namespace System.Windows.Forms
                     {
                         l = new ArrayList();
                         if (last == -1 && ctls != null)
+                        {
                             last = ctls.Length;
+                        }
+
                         if (ctl != null)
+                        {
                             MaybeAdd(l, ctl, selected, dwOleContF, false);
+                        }
+
                         for (int i = first; i < last; i++)
                         {
                             MaybeAdd(l, ctls[i], selected, dwOleContF, false);
@@ -5885,12 +6088,17 @@ namespace System.Windows.Forms
             private void MaybeAdd(ArrayList l, Control ctl, bool selected, int dwOleContF, bool ignoreBelong)
             {
                 if (!ignoreBelong && ctl != parent && !GetControlBelongs(ctl))
+                {
                     return;
+                }
+
                 if (selected)
                 {
                     ISelectionService iss = GetSelectionService(ctl);
                     if (iss == null || !iss.GetComponentSelected(this))
+                    {
                         return;
+                    }
                 }
                 AxHost hostctl = ctl as AxHost;
                 if (hostctl != null && (dwOleContF & NativeMethods.ActiveX.OLECONTF_EMBEDDINGS) != 0)
@@ -5901,7 +6109,9 @@ namespace System.Windows.Forms
                 {
                     object item = GetProxyForControl(ctl);
                     if (item != null)
+                    {
                         l.Add(item);
+                    }
                 }
             }
 
@@ -5952,7 +6162,9 @@ namespace System.Windows.Forms
             private void GetAllChildren(Control ctl)
             {
                 if (ctl == null)
+                {
                     return;
+                }
 
                 if (components == null)
                 {
@@ -5960,7 +6172,9 @@ namespace System.Windows.Forms
                 }
 
                 if (ctl != parent && !components.Contains(ctl))
+                {
                     components.Add(ctl, ctl);
+                }
 
                 foreach (Control c in ctl.Controls)
                 {
@@ -5992,7 +6206,10 @@ namespace System.Windows.Forms
             {
                 ISite site = parent.Site;
                 if (site != null && site.DesignMode)
+                {
                     return site.Container;
+                }
+
                 return null;
             }
 
@@ -6046,7 +6263,10 @@ namespace System.Windows.Forms
                 if (axctl != null)
                 {
                     if (axctl.container != null)
+                    {
                         return axctl.container;
+                    }
+
                     ContainerControl f = axctl.ContainingControl;
                     if (f != null)
                     {
@@ -6150,7 +6370,9 @@ namespace System.Windows.Forms
             {
 #if DEBUG
                 if (siteUIActive != null)
+                {
                     Debug.Assert(siteUIActive == site, "deactivating when not active...");
+                }
 #endif // DEBUG
 
                 siteUIActive = null;
@@ -6175,7 +6397,9 @@ namespace System.Windows.Forms
                 // site. This causes the assert below to fire.
                 //
                 if (siteUIActive == site)
+                {
                     return;
+                }
 
                 if (siteUIActive != null && siteUIActive != site)
                 {
@@ -6207,7 +6431,10 @@ namespace System.Windows.Forms
             {
                 Hashtable components = GetComponents();
                 if (components == null)
+                {
                     return;
+                }
+
                 Control[] ctls = new Control[components.Keys.Count];
                 components.Keys.CopyTo(ctls, 0);
                 if (ctls != null)
@@ -6251,7 +6478,10 @@ namespace System.Windows.Forms
             internal void FormCreated()
             {
                 if (formAlreadyCreated)
+                {
                     return;
+                }
+
                 formAlreadyCreated = true;
                 ArrayList l = new ArrayList();
                 ListAxControls(l, false);
@@ -6274,7 +6504,10 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut != null)
+                {
                     ppmkOut[0] = null;
+                }
+
                 return NativeMethods.E_NOTIMPL;
             }
 
@@ -6341,7 +6574,10 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(ctlInEditMode == null || ctlInEditMode == ctl, "who is exiting edit mode?");
                 if (ctlInEditMode == null || ctlInEditMode != ctl)
+                {
                     return;
+                }
+
                 ctlInEditMode = null;
             }
 
@@ -6483,7 +6719,9 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetOleObject for proxy");
                     if (!riid.Equals(ioleobject_Guid))
+                    {
                         throw E_INVALIDARG;
+                    }
 
                     Control ctl = GetP();
                     if (ctl != null && ctl is AxHost)
@@ -6498,7 +6736,9 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject for proxy");
                     if (rval == null || riid.Equals(Guid.Empty))
+                    {
                         return NativeMethods.E_INVALIDARG;
+                    }
 
                     if (riid.Equals(ivbformat_Guid))
                     {
@@ -6958,7 +7198,9 @@ namespace System.Windows.Forms
                         return ms.ToArray();
                     }
                     else
+                    {
                         return new byte[0];
+                    }
                 }
 
                 return base.ConvertTo(context, culture, value, destinationType);
@@ -7165,7 +7407,10 @@ namespace System.Windows.Forms
             internal UnsafeNativeMethods.IStorage GetStorage()
             {
                 if (storage == null)
+                {
                     CreateStorage();
+                }
+
                 return storage;
             }
 
@@ -7175,7 +7420,10 @@ namespace System.Windows.Forms
                 {
                     Debug.Assert(buffer != null, "gotta have the buffer already...");
                     if (buffer == null)
+                    {
                         return null;
+                    }
+
                     ms = new MemoryStream(buffer);
                 }
                 else
@@ -7205,7 +7453,9 @@ namespace System.Windows.Forms
 
                 length = br.ReadInt32();
                 if (length > 0)
+                {
                     buffer = br.ReadBytes(length);
+                }
             }
 
             private void InitializeBufferFromStream(Stream ids)
@@ -7214,7 +7464,9 @@ namespace System.Windows.Forms
 
                 length = br.ReadInt32();
                 if (length > 0)
+                {
                     buffer = br.ReadBytes(length);
+                }
             }
 
             internal State RefreshStorage(UnsafeNativeMethods.IPersistStorage iPersistStorage)
@@ -7222,7 +7474,10 @@ namespace System.Windows.Forms
                 Debug.Assert(storage != null, "how can we not have a storage object?");
                 Debug.Assert(iLockBytes != null, "how can we have a storage w/o ILockBytes?");
                 if (storage == null || iLockBytes == null)
+                {
                     return null;
+                }
+
                 iPersistStorage.Save(storage, true);
                 storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
@@ -7342,7 +7597,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Reading property " + pszPropName + " from OCXState propertybag.");
 
                 if (!bag.Contains(pszPropName))
+                {
                     return NativeMethods.E_INVALIDARG;
+                }
 
                 pVar = bag[pszPropName];
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\tValue=" + ((pVar == null) ? "<null>" : pVar.ToString()));
@@ -7558,7 +7815,10 @@ namespace System.Windows.Forms
                 {
                     NativeMethods.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
                     if (ippb == null)
+                    {
                         return Guid.Empty;
+                    }
+
                     if (NativeMethods.Succeeded(ippb.MapPropertyToPage(dispid, out Guid rval)))
                     {
                         return rval;
@@ -7670,7 +7930,9 @@ namespace System.Windows.Forms
             internal void UpdateAttributes()
             {
                 if (updateAttrs.Count == 0)
+                {
                     return;
+                }
 
                 ArrayList attributes = new ArrayList(AttributeArray);
                 foreach (Attribute attr in updateAttrs)

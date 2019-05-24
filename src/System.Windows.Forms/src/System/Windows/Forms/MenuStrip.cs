@@ -220,7 +220,9 @@ namespace System.Windows.Forms
             }
             EventHandler handler = (EventHandler)Events[EventMenuActivate];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         protected virtual void OnMenuDeactivate(EventArgs e)
@@ -231,7 +233,9 @@ namespace System.Windows.Forms
             }
             EventHandler handler = (EventHandler)Events[EventMenuDeactivate];
             if (handler != null)
+            {
                 handler(this, e);
+            }
         }
 
         /// <summary>

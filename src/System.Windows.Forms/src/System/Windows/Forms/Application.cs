@@ -648,7 +648,10 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     value = string.Empty;
+                }
+
                 safeTopLevelCaptionSuffix = value;
             }
         }
@@ -1283,7 +1286,9 @@ namespace System.Windows.Forms
             {
                 Delegate exit = eventHandlers[EVENT_APPLICATIONEXIT];
                 if (exit != null)
+                {
                     ((EventHandler)exit)(null, EventArgs.Empty);
+                }
             }
         }
 
@@ -3120,7 +3125,10 @@ namespace System.Windows.Forms
             internal CultureInfo GetCulture()
             {
                 if (culture == null || culture.LCID != SafeNativeMethods.GetThreadLocale())
+                {
                     culture = new CultureInfo(SafeNativeMethods.GetThreadLocale());
+                }
+
                 return culture;
             }
 
@@ -3251,7 +3259,9 @@ namespace System.Windows.Forms
             internal void OnThreadException(Exception t)
             {
                 if (GetState(STATE_INTHREADEXCEPTION))
+                {
                     return;
+                }
 
                 SetState(STATE_INTHREADEXCEPTION, true);
                 try
@@ -4358,7 +4368,9 @@ namespace System.Windows.Forms
                     {
                         Control c = Control.FromHandle(hWnd);
                         if (c == null)
+                        {
                             add = false;
+                        }
                     }
 
                     if (add)
@@ -4415,7 +4427,9 @@ namespace System.Windows.Forms
                     IntPtr hWnd = windows[i];
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    {
                         SafeNativeMethods.EnableWindow(new HandleRef(null, hWnd), state);
+                    }
                 }
 
                 // OpenFileDialog is not returning the focus the way other dialogs do.
