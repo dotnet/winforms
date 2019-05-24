@@ -697,7 +697,7 @@ namespace System.ComponentModel.Design.Serialization
                     bool contains = (rs == null) ? false : rs.ContainsKey(name);
                     if (contains)
                     {
-                        object parentValue = (rs != null) ? rs[name] : null;
+                        object parentValue = rs?[name];
                         if (parentValue == value)
                         {
                             return CompareValue.Same;

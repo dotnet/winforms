@@ -4031,12 +4031,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 #if DEBUG
                 GridEntry debugIPEStart = GetGridEntryFromRow(startRow);
                 GridEntry debugIPEEnd = GetGridEntryFromRow(endRow);
-                string startName = debugIPEStart == null ? null : debugIPEStart.PropertyLabel;
+                string startName = debugIPEStart?.PropertyLabel;
                 if (startName == null)
                 {
                     startName = "(null)";
                 }
-                string endName = debugIPEEnd == null ? null : debugIPEEnd.PropertyLabel;
+                string endName = debugIPEEnd?.PropertyLabel;
                 if (endName == null)
                 {
                     endName = "(null)";

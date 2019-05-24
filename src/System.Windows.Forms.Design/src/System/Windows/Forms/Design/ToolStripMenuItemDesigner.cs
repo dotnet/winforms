@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms.Design
         internal override ToolStrip GetMainToolStrip()
         {
             ToolStripDropDown topmost = GetFirstDropDown(MenuItem);
-            ToolStripItem topMostItem = (topmost == null) ? null : topmost.OwnerItem;
+            ToolStripItem topMostItem = topmost?.OwnerItem;
             if (topMostItem != null)
             {
                 return topMostItem.Owner;

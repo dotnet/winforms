@@ -6879,12 +6879,12 @@ namespace System.Windows.Forms
         // protected and virtual because the SimpleDropdownDataGrid will override this
         protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop, bool isDefault)
         {
-            return myGridTable == null ? null : myGridTable.CreateGridColumn(prop, isDefault);
+            return myGridTable?.CreateGridColumn(prop, isDefault);
         }
 
         protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop)
         {
-            return myGridTable == null ? null : myGridTable.CreateGridColumn(prop);
+            return myGridTable?.CreateGridColumn(prop);
         }
 
 

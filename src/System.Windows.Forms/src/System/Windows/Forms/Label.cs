@@ -1899,7 +1899,7 @@ namespace System.Windows.Forms
 
         public override ImageList ImageList
         {
-            get { return (owner == null) ? null : owner.ImageList; }
+            get { return owner?.ImageList; }
 
             set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
         }

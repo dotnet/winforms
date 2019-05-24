@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design.Serialization
                     TypeConverter enumConverter = new EnumConverter(value.GetType());
                     foreach (Enum term in values)
                     {
-                        string termString = (enumConverter != null) ? enumConverter.ConvertToString(term) : null;
+                        string termString = enumConverter?.ConvertToString(term);
                         CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
                         if (newExpression != null)

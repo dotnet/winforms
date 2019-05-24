@@ -116,7 +116,7 @@ namespace System.Windows.Forms
                 cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.WS_HSCROLL;
                 cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
                 cp.Param = new NativeMethods.CLIENTCREATESTRUCT(IntPtr.Zero, 1);
-                ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
+                ISite site = ParentInternal?.Site;
                 if (site != null && site.DesignMode)
                 {
                     cp.Style |= NativeMethods.WS_DISABLED;
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
-            ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
+            ISite site = ParentInternal?.Site;
             if (site != null && site.DesignMode && Handle != IntPtr.Zero)
             {
                 SetWindowRgn();
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
+            ISite site = ParentInternal?.Site;
             if (IsHandleCreated && (site == null || !site.DesignMode))
             {
                 Rectangle oldBounds = Bounds;

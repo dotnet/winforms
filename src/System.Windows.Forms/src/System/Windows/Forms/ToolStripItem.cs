@@ -2047,7 +2047,7 @@ namespace System.Windows.Forms
                 {
                     return Owner.Renderer;
                 }
-                return (ParentInternal != null) ? ParentInternal.Renderer : null;
+                return ParentInternal?.Renderer;
 
             }
         }
@@ -4906,7 +4906,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (ownerItem != null) ? ownerItem.ParentInternal : null;
+                return ownerItem?.ParentInternal;
             }
         }
 

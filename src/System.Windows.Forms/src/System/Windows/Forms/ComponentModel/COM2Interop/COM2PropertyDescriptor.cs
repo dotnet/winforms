@@ -854,7 +854,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             GetNameItemEvent nie = new GetNameItemEvent(defaultValue);
             OnGetDisplayValue(nie);
 
-            string str = (nie.Name == null ? null : nie.Name.ToString());
+            string str = (nie.Name?.ToString());
             return str;
         }
 

@@ -50,7 +50,7 @@ namespace System.Experimental.Gdi {
         {
             get
             {
-                return (cachedMeasurementDCInfo == null) ? null : cachedMeasurementDCInfo.LastUsedFont;
+                return cachedMeasurementDCInfo?.LastUsedFont;
             }
             set
             {

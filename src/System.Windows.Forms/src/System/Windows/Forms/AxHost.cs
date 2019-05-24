@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms
         private void MakeVisibleWithShow()
         {
             ContainerControl f = ContainingControl;
-            Control ctl = f == null ? null : f.ActiveControl;
+            Control ctl = f?.ActiveControl;
             try
             {
                 DoVerb(OLEIVERB_SHOW);
@@ -4752,7 +4752,7 @@ namespace System.Windows.Forms
 
                             // Now notify the change service that the change was successful.
                             //
-                            changeService.OnComponentChanged(host, prop, null, ((prop != null) ? prop.GetValue(host) : null));
+                            changeService.OnComponentChanged(host, prop, null, (prop?.GetValue(host)));
                         }
                     }
                 }

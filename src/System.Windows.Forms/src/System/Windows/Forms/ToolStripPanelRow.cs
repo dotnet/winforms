@@ -2446,7 +2446,7 @@ namespace System.Windows.Forms
                 if (index < Count && index >= 0)
                 {
                     cell = (ToolStripPanelCell)(InnerList[index]);
-                    control = (cell != null) ? cell.Control : null;
+                    control = cell?.Control;
                 }
                 return control;
 
@@ -2631,7 +2631,7 @@ namespace System.Windows.Forms
                     {
                         ToolStripPanelCell cell = arrayListEnumerator.Current as ToolStripPanelCell;
                         Debug.Assert(cell != null, "Expected ToolStripPanel cells only!!!" + arrayListEnumerator.Current.GetType().ToString());
-                        return (cell == null) ? null : cell.Control;
+                        return cell?.Control;
                     }
                 }
 
