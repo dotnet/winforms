@@ -261,7 +261,7 @@ namespace System.Resources
                 if (fileRef == null)
                 {
                     fileRef =
-                        String.IsNullOrEmpty(fileRefTextEncoding)
+                        string.IsNullOrEmpty(fileRefTextEncoding)
                             ? new ResXFileRef(FileRefFullPath, FileRefType)
                             : new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
                 }
