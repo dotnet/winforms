@@ -66,7 +66,7 @@ internal static partial class Interop
                 }
 
                 // Try giving the API a larger buffer
-                length = length * 2;
+                length *= 2;
                 if (length > Kernel32.MAX_UNICODESTRING_LEN)
                 {
                     length = Kernel32.MAX_UNICODESTRING_LEN;

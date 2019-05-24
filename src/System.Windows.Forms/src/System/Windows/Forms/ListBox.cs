@@ -2711,7 +2711,7 @@ namespace System.Windows.Forms
             public static int CreateMask()
             {
                 int mask = lastMask;
-                lastMask = lastMask << 1;
+                lastMask <<= 1;
                 Debug.Assert(lastMask > mask, "We have overflowed our state mask.");
                 return mask;
             }

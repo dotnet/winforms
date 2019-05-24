@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (axState[fOwnWindow] && IsUserMode())
                 {
-                    cp.Style = cp.Style & (~NativeMethods.WS_VISIBLE);
+                    cp.Style &= (~NativeMethods.WS_VISIBLE);
                 }
                 return cp;
             }
@@ -5968,7 +5968,7 @@ namespace System.Windows.Forms
                     // Note that visual basic actually ignores the next/prev flags... we will not
                     bool onlyNext = (dwWhich & NativeMethods.ActiveX.GC_WCH_FONLYNEXT) != 0;
                     bool onlyPrev = (dwWhich & NativeMethods.ActiveX.GC_WCH_FONLYPREV) != 0;
-                    dwWhich = dwWhich & ~(NativeMethods.ActiveX.GC_WCH_FSELECTED | NativeMethods.ActiveX.GC_WCH_FREVERSEDIR |
+                    dwWhich &= ~(NativeMethods.ActiveX.GC_WCH_FSELECTED | NativeMethods.ActiveX.GC_WCH_FREVERSEDIR |
                                           NativeMethods.ActiveX.GC_WCH_FONLYNEXT | NativeMethods.ActiveX.GC_WCH_FONLYPREV);
                     if (onlyNext && onlyPrev)
                     {
@@ -7434,7 +7434,7 @@ namespace System.Windows.Forms
                 for (int skipUnits = br.ReadInt32(); skipUnits > 0; skipUnits--)
                 {
                     int len = br.ReadInt32();
-                    ids.Position = ids.Position + len;
+                    ids.Position += len;
                 }
 
                 length = br.ReadInt32();

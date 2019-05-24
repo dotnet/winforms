@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                 delta = -delta;
             }
 
-            Height = Height + delta;
+            Height += delta;
             detailsVisible = !detailsVisible;
             details.Visible = detailsVisible;
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;

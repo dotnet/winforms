@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Layout
 
             // iterate through T,B,L,R
             // bitwise or      B,T,R,L as appropriate
-            for (int i = 1; i <= (int)AnchorStyles.Right; i = i << 1)
+            for (int i = 1; i <= (int)AnchorStyles.Right; i <<= 1)
             {
                 switch (anchor & (AnchorStyles)i)
                 {

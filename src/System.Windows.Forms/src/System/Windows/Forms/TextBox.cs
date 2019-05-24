@@ -940,15 +940,15 @@ namespace System.Windows.Forms
                 switch (TextAlign)
                 {
                     case HorizontalAlignment.Center:
-                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        flags |= TextFormatFlags.HorizontalCenter;
                         rectangle.Offset(0, 1);
                         break;
                     case HorizontalAlignment.Left:
-                        flags = flags | TextFormatFlags.Right;
+                        flags |= TextFormatFlags.Right;
                         rectangle.Offset(1, 1);
                         break;
                     case HorizontalAlignment.Right:
-                        flags = flags | TextFormatFlags.Left;
+                        flags |= TextFormatFlags.Left;
                         rectangle.Offset(0, 1);
                         break;
                 }
@@ -959,15 +959,15 @@ namespace System.Windows.Forms
                 switch (TextAlign)
                 {
                     case HorizontalAlignment.Center:
-                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        flags |= TextFormatFlags.HorizontalCenter;
                         rectangle.Offset(0, 1);
                         break;
                     case HorizontalAlignment.Left:
-                        flags = flags | TextFormatFlags.Left;
+                        flags |= TextFormatFlags.Left;
                         rectangle.Offset(1, 1);
                         break;
                     case HorizontalAlignment.Right:
-                        flags = flags | TextFormatFlags.Right;
+                        flags |= TextFormatFlags.Right;
                         rectangle.Offset(0, 1);
                         break;
                 }

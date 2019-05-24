@@ -274,7 +274,7 @@ namespace System.Windows.Forms
             uint newmask = 0;
             foreach (int iVal in Enum.GetValues(t))
             {
-                newmask = newmask | (uint)iVal;
+                newmask |= (uint)iVal;
             }
             System.Diagnostics.Debug.Assert(newmask == mask, "Mask not valid in IsEnumValid!");
         }
@@ -457,8 +457,8 @@ namespace System.Windows.Forms
                     // We need to copy from the back forward to prevent overwrite if source and
                     // destination lists are the same, so we need to flip the source/dest indices
                     // to point at the end of the spans to be copied.
-                    sourceIndex = sourceIndex + length;
-                    destinationIndex = destinationIndex + length;
+                    sourceIndex += length;
+                    destinationIndex += length;
                     for (; length > 0; length--)
                     {
                         destinationList.InnerList[--destinationIndex] = sourceList.InnerList[--sourceIndex];

@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void AddRange(Glyph[] value)
         {
-            for (int i = 0; i < value.Length; i = i + 1)
+            for (int i = 0; i < value.Length; i += 1)
             {
                 Add(value[i]);
             }
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void AddRange(GlyphCollection value)
         {
-            for (int i = 0; i < value.Count; i = i + 1)
+            for (int i = 0; i < value.Count; i += 1)
             {
                 Add(value[i]);
             }

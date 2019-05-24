@@ -5429,7 +5429,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            rightArea.Width = rightArea.Width - left;
+                            rightArea.Width -= left;
                         }
 
                         Invalidate(rightArea);
@@ -8884,7 +8884,7 @@ namespace System.Windows.Forms
                         return true;
                     }
                     ResetSelection();
-                    CurrentRow = CurrentRow - 1;
+                    CurrentRow -= 1;
                     Edit();
                     Debug.Assert(ListManager.Position == CurrentCell.RowNumber || listManager.Count == 0, "current row out of ssync with DataSource");
                     break;
@@ -8980,7 +8980,7 @@ namespace System.Windows.Forms
                     }
                     ResetSelection();
                     Edit();
-                    CurrentRow = CurrentRow + 1;
+                    CurrentRow += 1;
                     Debug.Assert(ListManager.Position == CurrentCell.RowNumber || listManager.Count == 0, "current row out of ssync with DataSource");
                     break;
                 case Keys.OemMinus:
@@ -9119,7 +9119,7 @@ namespace System.Windows.Forms
 
                     if (currentCol == firstColumnMarkedVisible && currentRow != 0)
                     {
-                        CurrentRow = CurrentRow - 1;
+                        CurrentRow -= 1;
                         int newCol = MoveLeftRight(myGridTable.GridColumnStyles, myGridTable.GridColumnStyles.Count, false);
                         Debug.Assert(newCol != -1, "there should be at least a visible column, right?");
                         CurrentColumn = newCol;
@@ -9136,7 +9136,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 // go to the previous row:
-                                CurrentRow = CurrentRow - 1;
+                                CurrentRow -= 1;
                                 CurrentColumn = lastColumnMarkedVisible;
                             }
                         }
@@ -9158,7 +9158,7 @@ namespace System.Windows.Forms
 
                     if (currentCol == lastColumnMarkedVisible && currentRow != DataGridRowsLength - 1)
                     {
-                        CurrentRow = CurrentRow + 1;
+                        CurrentRow += 1;
                         // navigate to the first visible column
                         CurrentColumn = firstColumnMarkedVisible;
                     }
@@ -9594,7 +9594,7 @@ namespace System.Windows.Forms
                         CurrentColumn = firstColumnMarkedVisible;
                     }
 
-                    CurrentRow = CurrentRow + 1;
+                    CurrentRow += 1;
                 }
                 else
                 {

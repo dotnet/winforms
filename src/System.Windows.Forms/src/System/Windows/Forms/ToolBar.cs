@@ -748,7 +748,7 @@ namespace System.Windows.Forms
                 //
                 if (Wrappable && IsHandleCreated)
                 {
-                    height = height * unchecked((int)(long)SendMessage(NativeMethods.TB_GETROWS, 0, 0));
+                    height *= unchecked((int)(long)SendMessage(NativeMethods.TB_GETROWS, 0, 0));
                 }
 
                 height = (height > 0) ? height : 1;

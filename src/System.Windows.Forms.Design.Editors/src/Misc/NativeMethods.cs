@@ -3962,8 +3962,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)((n >> 16) & 0xffff);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }
@@ -3972,8 +3972,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)(n & 0xFFFF);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }

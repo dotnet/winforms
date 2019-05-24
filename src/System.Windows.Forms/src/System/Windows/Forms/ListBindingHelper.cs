@@ -381,7 +381,7 @@ namespace System.Windows.Forms
             //            GetListItemProperties(PDForOrders.PropertyType)  // this returns the shape of Orders not Array
             //        If there are more listAccessors, then we'll call
             //            GetListItemProperties(PDForOrders.PropertyType, listAccessors, startIndex++)
-            startIndex = startIndex + 1;
+            startIndex += 1;
 
             if (startIndex >= listAccessors.Length)
             {

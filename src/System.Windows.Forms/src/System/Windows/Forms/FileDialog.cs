@@ -447,7 +447,7 @@ namespace System.Windows.Forms
 
             if (directory[directory.Length - 1] != '\\')
             {
-                directory = directory + "\\";
+                directory += "\\";
             }
             ArrayList names = new ArrayList();
             do

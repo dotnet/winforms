@@ -245,11 +245,11 @@ namespace System.Experimental.Gdi
             // Adjust unbounded rect to avoid overflow since Rectangle ctr does not do param validation.
             if (bounds.Width == MaxSize.Width)
             {
-                bounds.Width = bounds.Width - bounds.X;
+                bounds.Width -= bounds.X;
             }
             if (bounds.Height == MaxSize.Height)
             {
-                bounds.Height = bounds.Height - bounds.Y;
+                bounds.Height -= bounds.Y;
             }
 
             IntNativeMethods.RECT rect = new IntNativeMethods.RECT(bounds);
