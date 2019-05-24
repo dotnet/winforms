@@ -97,7 +97,10 @@ namespace System.ComponentModel.Design
 
             _uiService = (IUIService)serviceProvider.GetService(typeof(IUIService));
             if (_uiService != null)
+            {
                 _mainParentWindow = _uiService.GetDialogOwnerWindow();
+            }
+
             _componentToGlyph = new Hashtable();
             _marshalingControl = new Control();
             _marshalingControl.CreateControl();
@@ -315,7 +318,7 @@ namespace System.ComponentModel.Design
             DesignerActionGlyph glyph = GetDesignerActionGlyph(comp);
             if (glyph != null)
             {
-                VerifyGlyphIsInAdorner(glyph); 
+                VerifyGlyphIsInAdorner(glyph);
                 // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...                   
                 RecreatePanel(glyph); // recreate the DAP itself
                 UpdateDAPLocation(comp, glyph); // reposition the thing
@@ -419,11 +422,10 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnInvokedDesignerActionChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
-            IComponent relatedComponent = e.RelatedObject as IComponent;
             DesignerActionGlyph g = null;
             if (e.ChangeType == DesignerActionListsChangedType.ActionListsAdded)
             {
-                if (relatedComponent == null)
+                if (!(e.RelatedObject is IComponent relatedComponent))
                 {
                     Debug.Fail("How can we add a DesignerAction glyphs when it's related object is not  an IComponent?");
                     return;
@@ -450,7 +452,7 @@ namespace System.ComponentModel.Design
             else if (g != null)
             {
                 // we need to recreate the panel here, since it's content has changed...
-                RecreatePanel(relatedComponent);
+                RecreatePanel(e.RelatedObject as IComponent);
             }
         }
 
@@ -600,7 +602,9 @@ namespace System.ComponentModel.Design
                 Debug.Assert(_lastPanelComponent != null, "last panel component should not be null here... " +
                     "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
                 if (_lastPanelComponent == null)
+                {
                     return;
+                }
                 // if we're actually closing get the coordinate of the last message, the one causing us to close, is it within the glyph coordinate. if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH, that means that he actually wants to close it. The activation change is going to do that for us but we should NOT reopen right away because he clicked on the glyph... this code is here to prevent this...
                 Point point = DesignerUtils.LastCursorPoint;
                 if (_componentToGlyph[_lastPanelComponent] is DesignerActionGlyph currentGlyph)
@@ -706,7 +710,7 @@ namespace System.ComponentModel.Design
             // check that the panel will have at least it's parent glyph visible on the adorner window
             if (_behaviorService != null &&
                 _behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
-            {               
+            {
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
@@ -888,7 +892,10 @@ namespace System.ComponentModel.Design
         public void SetDesignerActionPanel(DesignerActionPanel panel, Glyph relatedGlyph)
         {
             if (_panel != null && panel == (DesignerActionPanel)_panel.Control)
+            {
                 return;
+            }
+
             Debug.Assert(relatedGlyph != null, "related glyph cannot be null");
             _relatedGlyph = relatedGlyph;
             panel.SizeChanged += new EventHandler(PanelResized);
@@ -951,11 +958,12 @@ namespace System.ComponentModel.Design
         {
             Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[WindowOwnsWindow] Testing if " + hWndOwner.ToString("x") + " is a owned by " + hWndDescendant.ToString("x") + "... ");
 #if DEBUG
-            if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
+            if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
+            {
                 Debug.WriteLine("\t\tOWNER: " + GetControlInformation(hWndOwner));
                 Debug.WriteLine("\t\tOWNEE: " + GetControlInformation(hWndDescendant));
                 IntPtr claimedOwnerHwnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWndDescendant), NativeMethods.GWL_HWNDPARENT);
-                Debug.WriteLine("OWNEE's CLAIMED OWNER: "+ GetControlInformation(claimedOwnerHwnd));
+                Debug.WriteLine("OWNEE's CLAIMED OWNER: " + GetControlInformation(claimedOwnerHwnd));
             }
 #endif
             if (hWndDescendant == hWndOwner)
@@ -989,20 +997,24 @@ namespace System.ComponentModel.Design
                 return "Handle is IntPtr.Zero";
             }
 #if DEBUG
-	     if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
+            if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
+            {
                 return string.Empty;
-             }
+            }
 
-             string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
-             string typeOfControl = "Unknown";
-             string nameOfControl = string.Empty;
-             Control c = Control.FromHandle(hwnd);
-             if (c != null) {
+            string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
+            string typeOfControl = "Unknown";
+            string nameOfControl = string.Empty;
+            Control c = Control.FromHandle(hwnd);
+            if (c != null)
+            {
                 typeOfControl = c.GetType().Name;
-                if (!string.IsNullOrEmpty(c.Name)) {
+                if (!string.IsNullOrEmpty(c.Name))
+                {
                     nameOfControl += c.Name;
                 }
-                else {
+                else
+                {
                     nameOfControl += "Unknown";
                     // some extra debug info for toolstripdropdowns...
                     if (c is ToolStripDropDown dd)
@@ -1013,8 +1025,8 @@ namespace System.ComponentModel.Design
                         }
                     }
                 }
-             }
-             return windowText + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
+            }
+            return windowText + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
 #else
             return string.Empty;
 #endif

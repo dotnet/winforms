@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel {
+namespace System.ComponentModel
+{
 
     using System;
     using System.Collections;
@@ -14,10 +15,10 @@ namespace System.ComponentModel {
     /// </summary>
     internal sealed class WeakHashtable : Hashtable
     {
-        private static IEqualityComparer _comparer = new WeakKeyComparer();
+        private static readonly IEqualityComparer _comparer = new WeakKeyComparer();
 
-        private long     _lastGlobalMem;
-        private int      _lastHashCount;
+        private long _lastGlobalMem;
+        private int _lastHashCount;
 
         internal WeakHashtable() : base(_comparer)
         {
@@ -93,10 +94,9 @@ namespace System.ComponentModel {
                 // for dead references.
                 //
                 ArrayList cleanupList = null;
-                foreach(object o in Keys)
+                foreach (object o in Keys)
                 {
-                    WeakReference wr = o as WeakReference;
-                    if (wr != null && !wr.IsAlive)
+                    if (o is WeakReference wr && !wr.IsAlive)
                     {
                         if (cleanupList == null)
                         {
@@ -109,13 +109,13 @@ namespace System.ComponentModel {
 
                 if (cleanupList != null)
                 {
-                    foreach(object o in cleanupList)
+                    foreach (object o in cleanupList)
                     {
                         Remove(o);
                     }
                 }
             }
-        
+
             _lastGlobalMem = globalMem;
             _lastHashCount = hashCount;
         }
@@ -130,10 +130,7 @@ namespace System.ComponentModel {
                 }
                 if (y != null && x.GetHashCode() == y.GetHashCode())
                 {
-                    WeakReference wX = x as WeakReference;
-                    WeakReference wY = y as WeakReference;
-
-                    if (wX != null)
+                    if (x is WeakReference wX)
                     {
                         if (!wX.IsAlive)
                         {
@@ -142,7 +139,7 @@ namespace System.ComponentModel {
                         x = wX.Target;
                     }
 
-                    if (wY != null)
+                    if (y is WeakReference wY)
                     {
                         if (!wY.IsAlive)
                         {
@@ -157,7 +154,7 @@ namespace System.ComponentModel {
                 return false;
             }
 
-            int IEqualityComparer.GetHashCode (object obj)
+            int IEqualityComparer.GetHashCode(object obj)
             {
                 return obj.GetHashCode();
             }
@@ -173,7 +170,7 @@ namespace System.ComponentModel {
         /// </summary>
         private sealed class EqualityWeakReference : WeakReference
         {
-            private int _hashCode;
+            private readonly int _hashCode;
             internal EqualityWeakReference(object o) : base(o)
             {
                 _hashCode = o.GetHashCode();

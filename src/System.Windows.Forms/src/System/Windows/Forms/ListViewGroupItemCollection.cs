@@ -72,7 +72,7 @@ namespace System.Windows.Forms
 
         public void Clear()
         {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 MoveToGroup(this[i], null);
             }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         {
             CheckListViewItem(item);
 
-            MoveToGroup(item, this._group);
+            MoveToGroup(item, _group);
             Items.Insert(index, item);
             return item;
         }

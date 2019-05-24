@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         private IBindableComponent _control;
         private BindingManagerBase _bindingManagerBase;
 
-        private BindToObject _bindToObject = null;
+        private readonly BindToObject _bindToObject = null;
 
         private PropertyDescriptor _propInfo;
         private PropertyDescriptor _propIsNullInfo;
@@ -161,8 +161,7 @@ namespace System.Windows.Forms
                 // We are essentially doing to the listManager what we were doing to the
                 // BindToObject: bind only when the control is created and it has a BindingContext
                 BindingContext.UpdateBinding((_control != null && IsComponentCreated(_control) ? _control.BindingContext : null), this);
-                Form form = value as Form;
-                if (form != null)
+                if (value is Form form)
                 {
                     form.Load += new EventHandler(FormLoaded);
                 }
@@ -525,7 +524,7 @@ namespace System.Windows.Forms
             {
                 return DataSourceNullValue;
             }
-             
+
             return _propInfo.GetValue(_control) ?? DataSourceNullValue;
         }
 
@@ -750,7 +749,7 @@ namespace System.Windows.Forms
         /// method, which in turn calls PullData. PullData is also called by the binding manager when pulling data
         /// from all bounds properties in one go.
         /// </summary>
-        internal bool PullData() =>  PullData(reformat: true, force: false);
+        internal bool PullData() => PullData(reformat: true, force: false);
 
         internal bool PullData(bool reformat) => PullData(reformat, force: false);
 
@@ -1235,7 +1234,7 @@ namespace System.Windows.Forms
                         }
                         return type;
                     }
-                    
+
                     return _fieldInfo?.PropertyType;
                 }
             }

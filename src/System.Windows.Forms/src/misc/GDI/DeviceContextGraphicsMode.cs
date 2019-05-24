@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextGraphicsMode
-    {   
+    {
         /*
         Sets the graphics mode that is compatible with 16-bit Windows. This is the default mode. 
         If this value is specified, the application can only modify the world-to-device transform 
@@ -36,7 +36,7 @@ namespace System.Experimental.Gdi
         /// specified  device context. In this mode all graphics, including text output, fully
         /// conform to the world-to-device transformation specified in the device context. 
         /// </summary>
-        Advanced   = 2,
+        Advanced = 2,
 
         /*
         Resets the current world transformation by using the identity matrix. If this mode is specified, 

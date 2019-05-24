@@ -18,46 +18,46 @@ namespace System.Windows.Forms
         /// <summary>
         /// An unavailable object.
         /// </summary>
-        Unavailable =     0x1,
+        Unavailable = 0x1,
 
         /// <summary>
         /// A selected object.
         /// </summary>
-        Selected =        0x2,
+        Selected = 0x2,
 
         /// <summary>
         /// An object with the keyboard focus.
         /// </summary>
-        Focused =         0x4,
+        Focused = 0x4,
 
         /// <summary>
         /// A pressed object.
         /// </summary>
-        Pressed =         0x8,
+        Pressed = 0x8,
 
         /// <summary>
         /// An object with a selected check box.
         /// </summary>
-        Checked =    0x10,
+        Checked = 0x10,
 
         /// <summary>
         /// A three-state check box or toolbar button whose state is indeterminate.
         /// The check box is neither checked nor unchecked and it is in the third
         /// or mixed state.
         /// </summary>
-        Mixed =      0x20,
+        Mixed = 0x20,
 
         /// <summary>
         /// A three-state check box or toolbar button whose state is indeterminate.
         /// The check box is neither checked nor unchecked and it is in the third
         /// or mixed state.
         /// </summary>
-        Indeterminate =      Mixed,
+        Indeterminate = Mixed,
 
         /// <summary>
         /// A read-only object.
         /// </summary>
-        ReadOnly =   0x40,
+        ReadOnly = 0x40,
 
         /// <summary>
         /// The object is hot-tracked by the mouse, meaning its appearance is
@@ -68,35 +68,35 @@ namespace System.Windows.Forms
         /// <summary>
         /// The default button or menu item.
         /// </summary>
-        Default =    0x100,
+        Default = 0x100,
 
         /// <summary>
         /// Children of the object that are items in an outline or tree structure
         /// are displayed.
         /// </summary>
-        Expanded =   0x200,
+        Expanded = 0x200,
 
         /// <summary>
         /// Children of the object that are items in an outline or tree structure
         /// are hidden.
         /// </summary>
-        Collapsed =  0x400,
+        Collapsed = 0x400,
 
         /// <summary>
         /// A control that cannot accept input in its current condition.
         /// </summary>
-        Busy =       0x800,
+        Busy = 0x800,
 
         /// <summary>
         /// The object is not fixed to the boundary of its parent object, and
         /// does not move automatically along with the parent.
         /// </summary>
-        Floating =   0x1000,
+        Floating = 0x1000,
 
         /// <summary>
         /// An object with scrolling or moving text or graphics.
         /// </summary>
-        Marqueed =   0x2000,
+        Marqueed = 0x2000,
 
         /// <summary>
         /// The object has a rapidly or constantly changing appearance. Graphics
@@ -105,28 +105,28 @@ namespace System.Windows.Forms
         /// This state should not be used to indicate that the object's location
         /// is changing.
         /// </summary>
-        Animated =   0x4000,
+        Animated = 0x4000,
 
         /// <summary>
         /// An object that is currently invisible.
         /// </summary>
-        Invisible =  0x8000,
+        Invisible = 0x8000,
 
         /// <summary>
         /// No on-screen representation. A sound or alert object would have this
         /// state, or a hidden window that is never made visible.
         /// </summary>
-        Offscreen =  0x10000,
+        Offscreen = 0x10000,
 
         /// <summary>
         /// A sizable object.
         /// </summary>
-        Sizeable =   0x20000,
+        Sizeable = 0x20000,
 
         /// <summary>
         /// A movable object.
         /// </summary>
-        Moveable =   0x40000,
+        Moveable = 0x40000,
 
         /// <summary>
         /// The object or child can use text-to-speech (TTS) to describe itself. A
@@ -134,12 +134,12 @@ namespace System.Windows.Forms
         /// object with this state has the focus because the object will
         /// automatically announce information about itself.
         /// </summary>
-        SelfVoicing =        0x80000,
+        SelfVoicing = 0x80000,
 
         /// <summary>
         /// The object is on the active window and can receive keyboard focus.
         /// </summary>
-        Focusable =  0x100000,
+        Focusable = 0x100000,
 
         /// <summary>
         /// An object that can accept selection.
@@ -149,17 +149,17 @@ namespace System.Windows.Forms
         /// <summary>
         /// A linked object that has not been previously selected.
         /// </summary>
-        Linked =     0x400000,
+        Linked = 0x400000,
 
         /// <summary>
         /// A linked object that has previously been selected.
         /// </summary>
-        Traversed =  0x800000,
+        Traversed = 0x800000,
 
         /// <summary>
         /// An object that accepts multiple selected items.
         /// </summary>
-        MultiSelectable =    0x1000000,
+        MultiSelectable = 0x1000000,
 
         /// <summary>
         /// Alters the selection so that all objects between the selection anchor,
@@ -177,12 +177,12 @@ namespace System.Windows.Forms
         /// the SHIFT key and clicking an unselected object.
         /// This flag may not be combined with <see cref='AccessibleSelection.TakeSelection'/>.
         /// </summary>
-        ExtSelectable =      0x2000000,
+        ExtSelectable = 0x2000000,
 
         /// <summary>
         /// Low-priority information that may not be important to the user.
         /// </summary>
-        AlertLow =  0x4000000,
+        AlertLow = 0x4000000,
 
         /// <summary>
         /// Important information that does not need to be conveyed to the user
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
         /// user's work. The user could then query the alert information at their
         /// leisure.
         /// </summary>
-        AlertMedium =       0x8000000,
+        AlertMedium = 0x8000000,
 
         /// <summary>
         /// Important information that should be conveyed to the user immediately.
@@ -210,14 +210,14 @@ namespace System.Windows.Forms
         /// <summary>
         /// A password-protected edit control.
         /// </summary>
-        Protected =  0x20000000,
+        Protected = 0x20000000,
 
         /// <summary>
         /// Object displays a pop-up menu or window when invoked.
         /// </summary>
-        HasPopup =  0x40000000,
+        HasPopup = 0x40000000,
 
         [Obsolete("This enumeration value has been deprecated. There is no replacement. http://go.microsoft.com/fwlink/?linkid=14202")]
-        Valid =      0x3fffffff,
+        Valid = 0x3fffffff,
     }
 }

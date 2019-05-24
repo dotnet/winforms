@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         // We need to store a table of all created menuitems, so that other objects
         // such as ContainerControl can get a reference to a particular menuitem,
         // given a unique ID.
-        private static Hashtable s_allCreatedMenuItems = new Hashtable();
+        private static readonly Hashtable s_allCreatedMenuItems = new Hashtable();
         private const uint FirstUniqueID = 0xC0000000;
         private static long s_nextUniqueID = FirstUniqueID;
         private uint _uniqueID = 0;
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
         private string _debugText;
-        private int _creationNumber;
+        private readonly int _creationNumber;
         private static int CreateCount;
 #endif
 
@@ -388,9 +388,11 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                var info = new NativeMethods.MENUITEMINFO_T();
-                info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
-                info.fMask = NativeMethods.MIIM_STATE;
+                var info = new NativeMethods.MENUITEMINFO_T
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
+                    fMask = NativeMethods.MIIM_STATE
+                };
                 UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 
                 return (info.fState & StateHiLite) != 0;
@@ -412,9 +414,11 @@ namespace System.Windows.Forms
 
                 int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
                 int id = MenuID;
-                NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
-                info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
-                info.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_SUBMENU;
+                NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
+                    fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_SUBMENU
+                };
 
                 for (int i = 0; i < count; i++)
                 {
@@ -763,10 +767,12 @@ namespace System.Windows.Forms
                 }
 
 #if DEBUG
-                NativeMethods.MENUITEMINFO_T infoVerify = new NativeMethods.MENUITEMINFO_T();
-                infoVerify.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
-                infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                                   NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
+                NativeMethods.MENUITEMINFO_T infoVerify = new NativeMethods.MENUITEMINFO_T
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
+                    fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
+                                   NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE
+                };
                 UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
 #endif
             }
@@ -774,10 +780,12 @@ namespace System.Windows.Forms
 
         private NativeMethods.MENUITEMINFO_T CreateMenuItemInfo()
         {
-            var info = new NativeMethods.MENUITEMINFO_T();
-            info.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                         NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA;
-            info.fType = _data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw);
+            var info = new NativeMethods.MENUITEMINFO_T
+            {
+                fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
+                         NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA,
+                fType = _data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw)
+            };
 
             // Top level menu items shouldn't have barbreak or break bits set on them.
             bool isTopLevel = Parent == GetMainMenu();
@@ -1138,7 +1146,7 @@ namespace System.Windows.Forms
                                     windowItem.Checked = true;
                                     activeFormAdded = true;
                                 }
-        
+
                                 windowItem.Text = string.Format(CultureInfo.CurrentUICulture, "&{0} {1}", accel, forms[i].Text);
                                 accel++;
                                 formsAddedToMenu++;
@@ -1204,9 +1212,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnClick(e);
             }
-            else if (_data._onClick != null)
+            else
             {
-                _data._onClick(this, e);
+                _data._onClick?.Invoke(this, e);
             }
         }
 
@@ -1221,9 +1229,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnDrawItem(e);
             }
-            else if (_data._onDrawItem != null)
+            else
             {
-                _data._onDrawItem(this, e);
+                _data._onDrawItem?.Invoke(this, e);
             }
         }
 
@@ -1238,9 +1246,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnMeasureItem(e);
             }
-            else if (_data._onMeasureItem != null)
+            else
             {
-                _data._onMeasureItem(this, e);
+                _data._onMeasureItem?.Invoke(this, e);
             }
         }
 
@@ -1269,9 +1277,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnPopup(e);
             }
-            else if (_data._onPopup != null)
+            else
             {
-                _data._onPopup(this, e);
+                _data._onPopup?.Invoke(this, e);
             }
 
             // Update any subitem states that got changed in the event
@@ -1301,9 +1309,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnSelect(e);
             }
-            else if (_data._onSelect != null)
+            else
             {
-                _data._onSelect(this, e);
+                _data._onSelect?.Invoke(this, e);
             }
         }
 
@@ -1348,7 +1356,8 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            string menuItemText = _data?._caption ?? string.Empty;;
+            string menuItemText = _data?._caption ?? string.Empty;
+            ;
             return s + ", Text: " + menuItemText;
         }
 
@@ -1359,10 +1368,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            var info = new NativeMethods.MENUITEMINFO_T();
-            info.fMask = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU;
-            info.dwTypeData = new string('\0', Text.Length + 2);
-            info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+            var info = new NativeMethods.MENUITEMINFO_T
+            {
+                fMask = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU,
+                dwTypeData = new string('\0', Text.Length + 2),
+                cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>()
+            };
             info.cch = info.dwTypeData.Length - 1;
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             if (setRightToLeftBit)
@@ -1389,10 +1400,12 @@ namespace System.Windows.Forms
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
                 UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 #if DEBUG
-                var infoVerify = new NativeMethods.MENUITEMINFO_T();
-                infoVerify.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
-                infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                                   NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
+                var infoVerify = new NativeMethods.MENUITEMINFO_T
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
+                    fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
+                                   NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE
+                };
                 UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
 #endif
 
@@ -1768,7 +1781,7 @@ namespace System.Windows.Forms
 
         private class MdiListMoreWindowsData : MdiListUserData
         {
-            private MenuItem _parent;
+            private readonly MenuItem _parent;
 
             public MdiListMoreWindowsData(MenuItem parent)
             {

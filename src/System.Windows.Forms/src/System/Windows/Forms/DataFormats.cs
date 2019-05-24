@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         private static Format[] s_formatList;
         private static int s_formatCount = 0;
 
-        private static object s_internalSyncObject = new object();
+        private static readonly object s_internalSyncObject = new object();
 
         /// <summary>
         /// Gets a <see cref='System.Windows.Forms.DataFormats.Format'/> with the Windows
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                 Name = name;
                 Id = id;
             }
-            
+
             /// <summary>
             /// Specifies the name of this format.
             /// </summary>

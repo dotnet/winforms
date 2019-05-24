@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         // Support for property change event hooking on list items
         private object _currentItemHookedForItemChange = null;
         private object _lastCurrentItem = null;
-        private EventHandler _listItemPropertyChangedHandler;
+        private readonly EventHandler _listItemPropertyChangedHandler;
 
         // State data
         private int _addNewPos = -1;
@@ -315,14 +315,11 @@ namespace System.Windows.Forms
             {
                 ListSortDescriptionCollection sortsColln = null;
 
-                IBindingListView iblv = List as IBindingListView;
-                IBindingList ibl = List as IBindingList;
-
-                if (iblv != null && iblv.SupportsAdvancedSorting)
+                if (List is IBindingListView iblv && iblv.SupportsAdvancedSorting)
                 {
                     sortsColln = iblv.SortDescriptions;
                 }
-                else if (ibl != null && ibl.SupportsSorting && ibl.IsSorted)
+                else if (List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
                 {
                     ListSortDescription[] sortsArray = new ListSortDescription[1];
                     sortsArray[0] = new ListSortDescription(ibl.SortProperty, ibl.SortDirection);
@@ -916,8 +913,7 @@ namespace System.Windows.Forms
                 // Do what RelatedCurrencyManager does when the parent changes:
                 // 1. PullData from the controls into the back end.
                 // 2. Don't EndEdit the transaction.
-                bool success;
-                _currencyManager.PullData(out success);
+                _currencyManager.PullData(out bool success);
             }
             finally
             {
@@ -1151,7 +1147,9 @@ namespace System.Windows.Forms
                     // GetListFromEnumerable returns null if there are no elements
                     // Don't consider it a list of enumerables in this case
                     if (bindingList != null)
+                    {
                         _listExtractedFromEnumerable = true;
+                    }
                 }
                 // If it's not an IList, IListSource or IEnumerable
                 if (bindingList == null)
@@ -1200,8 +1198,7 @@ namespace System.Windows.Forms
             UnhookItemChangedEventsForOldCurrent();
 
             // Bind to the new list
-            IList listInternal = ListBindingHelper.GetList(list) as IList;
-            if (listInternal == null)
+            if (!(ListBindingHelper.GetList(list) is IList listInternal))
             {
                 listInternal = list;
             }

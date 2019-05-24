@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
@@ -11,88 +12,107 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Globalization;
-    
+
     /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
     /// </summary>
     [ListBindable(false)]
-    public class GridTableStylesCollection : BaseCollection ,IList {
+    public class GridTableStylesCollection : BaseCollection, IList
+    {
         CollectionChangeEventHandler onCollectionChanged;
-        ArrayList        items = new ArrayList();
-        DataGrid         owner  = null;
+        readonly ArrayList items = new ArrayList();
+        readonly DataGrid owner = null;
 
-        int IList.Add(object value) {
-            return this.Add((DataGridTableStyle) value);            
+        int IList.Add(object value)
+        {
+            return Add((DataGridTableStyle)value);
         }
 
-        void IList.Clear() {
-            this.Clear();
+        void IList.Clear()
+        {
+            Clear();
         }
 
-        bool IList.Contains(object value) {
+        bool IList.Contains(object value)
+        {
             return items.Contains(value);
         }
 
-        int IList.IndexOf(object value) {
+        int IList.IndexOf(object value)
+        {
             return items.IndexOf(value);
         }
 
-        void IList.Insert(int index, object value) {
+        void IList.Insert(int index, object value)
+        {
             throw new NotSupportedException();
         }
 
-        void IList.Remove(object value) {
-            this.Remove((DataGridTableStyle)value);
+        void IList.Remove(object value)
+        {
+            Remove((DataGridTableStyle)value);
         }
 
-        void IList.RemoveAt(int index) {
-            this.RemoveAt(index);
+        void IList.RemoveAt(int index)
+        {
+            RemoveAt(index);
         }
 
-        bool IList.IsFixedSize {
-            get {return false;}
+        bool IList.IsFixedSize
+        {
+            get { return false; }
         }
 
-        bool IList.IsReadOnly {
-            get {return false;}
+        bool IList.IsReadOnly
+        {
+            get { return false; }
         }
 
-        object IList.this[int index] {
+        object IList.this[int index]
+        {
             get { return items[index]; }
             set { throw new NotSupportedException(); }
         }
 
-        void ICollection.CopyTo(Array array, int index) {
-            this.items.CopyTo(array, index);
+        void ICollection.CopyTo(Array array, int index)
+        {
+            items.CopyTo(array, index);
         }
 
-        int ICollection.Count {
-            get {return this.items.Count;}
+        int ICollection.Count
+        {
+            get { return items.Count; }
         }
 
-        bool ICollection.IsSynchronized {
-            get {return false;}
+        bool ICollection.IsSynchronized
+        {
+            get { return false; }
         }
 
-        object ICollection.SyncRoot {
-            get {return this;}
+        object ICollection.SyncRoot
+        {
+            get { return this; }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return items.GetEnumerator();
         }
 
-        internal GridTableStylesCollection(DataGrid grid) {
+        internal GridTableStylesCollection(DataGrid grid)
+        {
             owner = grid;
         }
 
-        protected override ArrayList List {
-            get {
+        protected override ArrayList List
+        {
+            get
+            {
                 return items;
             }
         }
-        
+
         /* implemented in BaseCollection
         /// <summary>
         ///      Retrieves the number of GridTables in the collection.
@@ -110,8 +130,10 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Retrieves the DataGridTable with the specified index.
         /// </summary>
-        public DataGridTableStyle this[int index] {
-            get {
+        public DataGridTableStyle this[int index]
+        {
+            get
+            {
                 return (DataGridTableStyle)items[index];
             }
         }
@@ -119,58 +141,84 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Retrieves the DataGridTable with the name provided.
         /// </summary>
-        public DataGridTableStyle this[string tableName] {
-            get {
+        public DataGridTableStyle this[string tableName]
+        {
+            get
+            {
                 if (tableName == null)
+                {
                     throw new ArgumentNullException(nameof(tableName));
+                }
+
                 int itemCount = items.Count;
-                for (int i = 0; i < itemCount; ++i) {
+                for (int i = 0; i < itemCount; ++i)
+                {
                     DataGridTableStyle table = (DataGridTableStyle)items[i];
                     // NOTE: case-insensitive
                     if (string.Equals(table.MappingName, tableName, StringComparison.OrdinalIgnoreCase))
+                    {
                         return table;
+                    }
                 }
                 return null;
             }
         }
 
-        internal void CheckForMappingNameDuplicates(DataGridTableStyle table) {
+        internal void CheckForMappingNameDuplicates(DataGridTableStyle table)
+        {
             if (string.IsNullOrEmpty(table.MappingName))
+            {
                 return;
+            }
+
             for (int i = 0; i < items.Count; i++)
-                if ( ((DataGridTableStyle)items[i]).MappingName.Equals(table.MappingName) && table != items[i])
+            {
+                if (((DataGridTableStyle)items[i]).MappingName.Equals(table.MappingName) && table != items[i])
+                {
                     throw new ArgumentException(SR.DataGridTableStyleDuplicateMappingName, "table");
+                }
+            }
         }
 
         /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridTableStyle'/> to this collection.</para>
         /// </summary>
-        public virtual int Add(DataGridTableStyle table) {
+        public virtual int Add(DataGridTableStyle table)
+        {
             // set the rowHeaderWidth on the newly added table to at least the minimum value
             // on its owner
-            if (this.owner != null && this.owner.MinimumRowHeaderWidth() > table.RowHeaderWidth)
-                table.RowHeaderWidth = this.owner.MinimumRowHeaderWidth();
+            if (owner != null && owner.MinimumRowHeaderWidth() > table.RowHeaderWidth)
+            {
+                table.RowHeaderWidth = owner.MinimumRowHeaderWidth();
+            }
 
             if (table.DataGrid != owner && table.DataGrid != null)
+            {
                 throw new ArgumentException(SR.DataGridTableStyleCollectionAddedParentedTableStyle, "table");
+            }
+
             table.DataGrid = owner;
             CheckForMappingNameDuplicates(table);
             table.MappingNameChanged += new EventHandler(TableStyleMappingNameChanged);
             int index = items.Add(table);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, table));
-            
+
             return index;
         }
-        
-        private void TableStyleMappingNameChanged(object sender, EventArgs pcea) {
+
+        private void TableStyleMappingNameChanged(object sender, EventArgs pcea)
+        {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
-        
-        public virtual void AddRange(DataGridTableStyle[] tables) {
-            if (tables == null) {
+
+        public virtual void AddRange(DataGridTableStyle[] tables)
+        {
+            if (tables == null)
+            {
                 throw new ArgumentNullException(nameof(tables));
             }
-            foreach(DataGridTableStyle table in tables) {
+            foreach (DataGridTableStyle table in tables)
+            {
                 table.DataGrid = owner;
                 table.MappingNameChanged += new EventHandler(TableStyleMappingNameChanged);
                 items.Add(table);
@@ -178,13 +226,16 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        public event CollectionChangeEventHandler CollectionChanged {
+        public event CollectionChangeEventHandler CollectionChanged
+        {
             add => onCollectionChanged += value;
             remove => onCollectionChanged -= value;
         }
-        
-        public void Clear() {
-            for (int i = 0; i < items.Count; i++) {
+
+        public void Clear()
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
                 DataGridTableStyle element = (DataGridTableStyle)items[i];
                 element.MappingNameChanged -= new EventHandler(TableStyleMappingNameChanged);
             }
@@ -196,7 +247,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Checks to see if a DataGridTableStyle is contained in this collection.
         /// </summary>
-        public bool Contains(DataGridTableStyle table) {
+        public bool Contains(DataGridTableStyle table)
+        {
             int index = items.IndexOf(table);
             return index != -1;
         }
@@ -205,13 +257,17 @@ namespace System.Windows.Forms {
         /// <para>Checks to see if a <see cref='System.Windows.Forms.DataGridTableStyle'/> with the given name
         ///    is contained in this collection.</para>
         /// </summary>
-        public bool Contains(string name) {
+        public bool Contains(string name)
+        {
             int itemCount = items.Count;
-            for (int i = 0; i < itemCount; ++i) {
+            for (int i = 0; i < itemCount; ++i)
+            {
                 DataGridTableStyle table = (DataGridTableStyle)items[i];
                 // NOTE: case-insensitive
                 if (string.Compare(table.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -229,12 +285,13 @@ namespace System.Windows.Forms {
         }
         */
 
-        protected void OnCollectionChanged(CollectionChangeEventArgs e) {
-            if (onCollectionChanged != null)
-                onCollectionChanged(this, e);
+        protected void OnCollectionChanged(CollectionChangeEventArgs e)
+        {
+            onCollectionChanged?.Invoke(this, e);
 
             DataGrid grid = owner;
-            if (grid != null) {
+            if (grid != null)
+            {
                 /* FOR DEMO: Microsoft: TableStylesCollection::OnCollectionChanged: set the datagridtble
                 DataView dataView = ((DataView) grid.DataSource);
                 if (dataView != null) {
@@ -250,21 +307,31 @@ namespace System.Windows.Forms {
             }
         }
 
-        public void Remove(DataGridTableStyle table) {
+        public void Remove(DataGridTableStyle table)
+        {
             int tableIndex = -1;
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i)
-                if (items[i] == table) {
+            {
+                if (items[i] == table)
+                {
                     tableIndex = i;
                     break;
                 }
+            }
+
             if (tableIndex == -1)
+            {
                 throw new ArgumentException(SR.DataGridTableCollectionMissingTable, "table");
+            }
             else
+            {
                 RemoveAt(tableIndex);
+            }
         }
 
-        public void RemoveAt(int index) {
+        public void RemoveAt(int index)
+        {
             DataGridTableStyle element = (DataGridTableStyle)items[index];
             element.MappingNameChanged -= new EventHandler(TableStyleMappingNameChanged);
             items.RemoveAt(index);

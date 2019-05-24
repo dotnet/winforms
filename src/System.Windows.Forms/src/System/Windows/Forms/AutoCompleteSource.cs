@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// This option is equivalent to HistoryList | RecentlyUsedList.
         /// </summary>
-        AllUrl =  HistoryList | RecentlyUsedList,
+        AllUrl = HistoryList | RecentlyUsedList,
 
         /// <summary>
         /// This option is equivalent to FILESYSTEM | AllUrl. This is the default

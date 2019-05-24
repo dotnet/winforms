@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         /// Miscellaneous state information.
         /// </summary>
         public TreeNodeStates State { get; }
-        
+
         /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
         /// NOTE: In OwnerDrawText mode, setting this to true is same as calling DrawText.

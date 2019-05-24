@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            var font1 = SystemFonts.MenuFont;
+            Font font1 = SystemFonts.MenuFont;
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -386,7 +386,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var font2 = SystemFonts.DialogFont;
+            Font font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -846,8 +846,10 @@ namespace System.Windows.Forms.Tests
 
         private SubComboBox CreateControlForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
         {
-            var tb = new SubComboBox();
-            tb.Text = text;
+            var tb = new SubComboBox
+            {
+                Text = text
+            };
             tb.Focus();
             tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
             tb.SelectionLength = 0;

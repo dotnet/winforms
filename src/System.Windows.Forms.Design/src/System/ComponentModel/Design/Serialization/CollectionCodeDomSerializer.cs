@@ -25,7 +25,7 @@ namespace System.ComponentModel.Design.Serialization
         internal new static CollectionCodeDomSerializer Default
         {
             get
-            {      
+            {
                 if (s_defaultSerializer == null)
                 {
                     s_defaultSerializer = new CollectionCodeDomSerializer();
@@ -308,10 +308,25 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
-            if (originalCollection == null) throw new ArgumentNullException(nameof(originalCollection));
-            if (valuesToSerialize == null) throw new ArgumentNullException(nameof(valuesToSerialize));
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (targetType == null)
+            {
+                throw new ArgumentNullException(nameof(targetType));
+            }
+
+            if (originalCollection == null)
+            {
+                throw new ArgumentNullException(nameof(originalCollection));
+            }
+
+            if (valuesToSerialize == null)
+            {
+                throw new ArgumentNullException(nameof(valuesToSerialize));
+            }
 
             object result = null;
             bool serialized = false;
@@ -515,9 +530,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {
@@ -603,9 +622,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {

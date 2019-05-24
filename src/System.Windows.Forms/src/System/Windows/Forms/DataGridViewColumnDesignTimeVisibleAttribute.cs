@@ -2,22 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-using System.Diagnostics.CodeAnalysis;
+namespace System.Windows.Forms
+{
+    using System.Diagnostics.CodeAnalysis;
 
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class DataGridViewColumnDesignTimeVisibleAttribute: Attribute {
-        private bool visible;
+    public sealed class DataGridViewColumnDesignTimeVisibleAttribute : Attribute
+    {
+        private readonly bool visible;
 
-        public DataGridViewColumnDesignTimeVisibleAttribute (bool visible) {
+        public DataGridViewColumnDesignTimeVisibleAttribute(bool visible)
+        {
             this.visible = visible;
         }
-        
-        public DataGridViewColumnDesignTimeVisibleAttribute () {
+
+        public DataGridViewColumnDesignTimeVisibleAttribute()
+        {
         }
 
-        public bool Visible {
-            get {
+        public bool Visible
+        {
+            get
+            {
                 return visible;
             }
         }
@@ -39,22 +45,25 @@ using System.Diagnostics.CodeAnalysis;
                                                                                                         // actually immutable.
         ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute Default = Yes;
-        
-        public override bool Equals(object obj) {
-            if (obj == this) {
+
+        public override bool Equals(object obj)
+        {
+            if (obj == this)
+            {
                 return true;
             }
 
-            DataGridViewColumnDesignTimeVisibleAttribute other = obj as DataGridViewColumnDesignTimeVisibleAttribute;
-            return other != null && other.Visible == visible;
+            return obj is DataGridViewColumnDesignTimeVisibleAttribute other && other.Visible == visible;
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return typeof(DataGridViewColumnDesignTimeVisibleAttribute).GetHashCode() ^ (visible ? -1 : 0);
         }
-        
-        public override bool IsDefaultAttribute() {
-            return (this.Visible == Default.Visible);
+
+        public override bool IsDefaultAttribute()
+        {
+            return (Visible == Default.Visible);
         }
     }
 }

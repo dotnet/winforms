@@ -17,11 +17,11 @@ namespace System.Windows.Forms
     [TypeConverter("System.Windows.Forms.Design.ControlBindingsConverter, " + AssemblyRef.SystemDesign)]
     public class ControlBindingsCollection : BindingsCollection
     {
-        private IBindableComponent _control;
+        private readonly IBindableComponent _control;
 
         public ControlBindingsCollection(IBindableComponent control)
         {
-            this._control = control;
+            _control = control;
         }
 
         public IBindableComponent BindableComponent => _control;

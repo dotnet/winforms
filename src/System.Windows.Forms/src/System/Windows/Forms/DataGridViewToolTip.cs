@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     {
         private class DataGridViewToolTip
         {
-            DataGridView dataGridView = null;
+            readonly DataGridView dataGridView = null;
             ToolTip toolTip = null;
             private bool toolTipActivated = false;
 
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.toolTipActivated;
+                    return toolTipActivated;
                 }
             }
 
@@ -33,48 +33,50 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.toolTip;
+                    return toolTip;
                 }
             }
 
             public void Activate(bool activate)
             {
-                if (this.dataGridView.DesignMode)
+                if (dataGridView.DesignMode)
                 {
                     return;
                 }
 
                 // Create the tool tip handle on demand.
-                if (activate && this.toolTip == null)
+                if (activate && toolTip == null)
                 {
-                    this.toolTip = new ToolTip();
-                    this.toolTip.ShowAlways = true;
-                    this.toolTip.InitialDelay = 0;
-                    this.toolTip.UseFading = false;
-                    this.toolTip.UseAnimation = false;
-                    this.toolTip.AutoPopDelay = 0;
+                    toolTip = new ToolTip
+                    {
+                        ShowAlways = true,
+                        InitialDelay = 0,
+                        UseFading = false,
+                        UseAnimation = false,
+                        AutoPopDelay = 0
+                    };
                 }
 
                 if (activate)
                 {
-                    this.toolTip.Active = true;
-                    this.toolTip.Show(this.dataGridView.ToolTipPrivate, this.dataGridView);
+                    toolTip.Active = true;
+                    toolTip.Show(dataGridView.ToolTipPrivate, dataGridView);
                 }
-                else if (this.toolTip != null)
+                else if (toolTip != null)
                 {
-                    this.toolTip.Hide(this.dataGridView);
-                    this.toolTip.Active = false;
+                    toolTip.Hide(dataGridView);
+                    toolTip.Active = false;
                 }
 
-                this.toolTipActivated = activate;
+                toolTipActivated = activate;
             }
 
             public void Dispose()
             {
-                if (this.toolTip != null)
+                if (toolTip != null)
                 {
-                    this.toolTip.Dispose();
-                    this.toolTip = null;
+                    toolTip.Dispose();
+                    toolTip = null;
                 }
             }
         }

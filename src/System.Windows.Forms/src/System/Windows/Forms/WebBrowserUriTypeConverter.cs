@@ -5,9 +5,9 @@
 using System;
 using System.ComponentModel;
 
-namespace System.Windows.Forms 
+namespace System.Windows.Forms
 {
-    class WebBrowserUriTypeConverter : UriTypeConverter 
+    class WebBrowserUriTypeConverter : UriTypeConverter
     {
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
@@ -16,17 +16,17 @@ namespace System.Windows.Forms
             Uri uri = base.ConvertFrom(context, culture, value) as Uri;
             if (uri != null && !string.IsNullOrEmpty(uri.OriginalString) && !uri.IsAbsoluteUri)
             {
-                try 
+                try
                 {
                     uri = new Uri("http://" + uri.OriginalString.Trim());
                 }
-                catch (UriFormatException) 
+                catch (UriFormatException)
                 {
                     //We can't throw "http://" on the front: just return the original (relative) Uri,
                     //which will throw an exception with reasonable text later.
                 }
             }
             return uri;
-        } 
+        }
     }
 }

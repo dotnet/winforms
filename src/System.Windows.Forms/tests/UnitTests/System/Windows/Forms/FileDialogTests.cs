@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Tests
             private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog) => null;
 
             public new void OnFileOk(CancelEventArgs e) => base.OnFileOk(e);
-            
+
             public new bool RunDialog(IntPtr hWndOwner) => base.RunDialog(hWndOwner);
         }
 

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class UndoUnitTests: UndoEngine
+    public class UndoUnitTests : UndoEngine
     {
         public UndoUnitTests() : base(GetServiceProvider())
         {

@@ -197,7 +197,9 @@ namespace System.Windows.Forms.Design
                 {
                     EnsureMenuEditorService(value);
                     if (menuEditorService != null)
+                    {
                         menuEditorService.SetMenu(value);
+                    }
                 }
 
                 if (_heightDelta == 0)
@@ -320,7 +322,10 @@ namespace System.Windows.Forms.Design
                 Size newVar = new Size((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
                 // We save a significant amount of time by bailing early if there's no work to be done
                 if (baseVar.Equals(newVar))
+                {
                     return;
+                }
+
                 float percY = ((float)newVar.Height) / ((float)baseVar.Height);
                 float percX = ((float)newVar.Width) / ((float)baseVar.Width);
                 try

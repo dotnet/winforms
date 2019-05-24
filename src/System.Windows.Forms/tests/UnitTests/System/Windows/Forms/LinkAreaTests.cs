@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
                 Start = value
             };
             Assert.Equal(value, area.Start);
-            
+
             // Set same.
             area.Start = value;
             Assert.Equal(value, area.Start);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
                 Length = value
             };
             Assert.Equal(value, area.Length);
-            
+
             // Set same.
             area.Length = value;
             Assert.Equal(value, area.Length);

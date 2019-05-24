@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     {
         public FormClosedEventArgs(CloseReason closeReason)
         {
-            CloseReason = closeReason;                                           
+            CloseReason = closeReason;
         }
 
         /// <summary>

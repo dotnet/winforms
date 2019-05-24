@@ -641,7 +641,7 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var header = new ColumnHeader();
             listView.Columns.Add(header);
-            
+
             Assert.Equal(60, header.Width);
         }
 
@@ -652,7 +652,7 @@ namespace System.Windows.Forms.Tests
             var header = new ColumnHeader();
             listView.Columns.Add(header);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
-            
+
             Assert.Equal(60, header.Width);
         }
 
@@ -666,7 +666,7 @@ namespace System.Windows.Forms.Tests
             var header = new ColumnHeader();
             listView.Columns.Add(header);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
-            
+
             Assert.Equal(header.Width, header.Width);
         }
 
@@ -829,7 +829,7 @@ namespace System.Windows.Forms.Tests
             header.Dispose();
             Assert.Empty(listView.Columns);
         }
-        
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ColumnHeader_ToString_Invoke_ReturnsExpected(string value)

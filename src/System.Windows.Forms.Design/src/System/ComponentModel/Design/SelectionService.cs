@@ -448,7 +448,10 @@ namespace System.ComponentModel.Design
                             foreach (object comp in components)
                             {
                                 if (comp == null)
+                                {
                                     throw new ArgumentNullException(nameof(components));
+                                }
+
                                 if (object.ReferenceEquals(comp, item))
                                 {
                                     remove = false;
@@ -469,7 +472,9 @@ namespace System.ComponentModel.Design
                 foreach (object comp in components)
                 {
                     if (comp == null)
+                    {
                         throw new ArgumentNullException(nameof(components));
+                    }
 
                     if (_selection != null && _selection.Contains(comp))
                     {

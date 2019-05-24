@@ -12,7 +12,7 @@ namespace System.Drawing.Design
     /// </summary>
     public class ToolboxComponentsCreatedEventArgs : EventArgs
     {
-        private IComponent[] _components;
+        private readonly IComponent[] _components;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxComponentsCreatedEventArgs'

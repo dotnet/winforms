@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     /// Gives state information about a ListView item/sub-item. Used with owner draw. 
     /// </summary>
     [Flags]
-    public enum ListViewItemStates 
+    public enum ListViewItemStates
     {
         Checked = NativeMethods.CDIS_CHECKED,
         Default = NativeMethods.CDIS_DEFAULT,

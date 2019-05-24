@@ -25,17 +25,17 @@ namespace System.Windows.Forms.Design.Behavior
             public Point positionOffset; //control position offset from primary selection            
         };
 
-        private DragComponent[] dragComponents;
+        private readonly DragComponent[] dragComponents;
         private ArrayList dragObjects; // used to initialize the DragAssistanceManager
-        private BehaviorDataObject data;//drag data that represents the controls we're dragging & the effect/action
-        private DragDropEffects allowedEffects;//initial allowed effects for the drag operation
+        private readonly BehaviorDataObject data;//drag data that represents the controls we're dragging & the effect/action
+        private readonly DragDropEffects allowedEffects;//initial allowed effects for the drag operation
         private DragDropEffects lastEffect;//the last effect we saw (used for determining a valid drop)
 
         private bool targetAllowsSnapLines;//indicates if the drop target allows snaplines (flowpanels don't for ex)
         private IComponent lastDropTarget;//indicates the drop target on the last 'give feedback' event
         private Point lastSnapOffset;//the last snapoffset we used. 
         // These 2 could be different (e.g. if dropping between forms)
-        private BehaviorService behaviorServiceSource;//ptr back to the BehaviorService in the drop source
+        private readonly BehaviorService behaviorServiceSource;//ptr back to the BehaviorService in the drop source
         private BehaviorService behaviorServiceTarget;//ptr back to the BehaviorService in the drop target
 
         //this object will integrate SnapLines into the drag
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Graphics graphicsTarget;//graphics object of the adornerwindows (via BehaviorService) in drop target        
 
-        private IServiceProvider serviceProviderSource;
+        private readonly IServiceProvider serviceProviderSource;
         private IServiceProvider serviceProviderTarget;
 
         private Point initialMouseLoc;//original mouse location in screen coordinates
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool cleanedUpDrag = false;
         private StatusCommandUI statusCommandUITarget;// UI for setting the StatusBar Information in the drop target
 
-        private IDesignerHost srcHost;
+        private readonly IDesignerHost srcHost;
         private IDesignerHost destHost;
 
         private bool currentShowState = true; // Initially the controls are showing
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 //between containers
                 dragSource.Controls.Remove(currentControl);
-                currentControl.Visible = true;              
+                currentControl.Visible = true;
                 dragTarget.Controls.Add(currentControl);
             }
         }
@@ -798,7 +798,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     invalidDragRegion.Translate(mouseLoc.X - initialMouseLoc.X + lastSnapOffset.X, mouseLoc.Y - initialMouseLoc.Y + lastSnapOffset.Y);
                     invalidDragRegion.Complement(newImageRect);
-                    invalidDragRegion.Union(invalidRegion);            
+                    invalidDragRegion.Union(invalidRegion);
                     behaviorServiceTarget.Invalidate(invalidDragRegion);
                 }
                 invalidRegion.Dispose();

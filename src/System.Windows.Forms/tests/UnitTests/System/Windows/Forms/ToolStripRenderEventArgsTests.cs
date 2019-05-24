@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ToolStripDropDown() };
             yield return new object[] { new ToolStripOverflow(new ToolStripButton()) };
             yield return new object[] { new ToolStripOverflow(new ToolStripDropDownButton()) };
-        
+
             var ownedDropDownItem = new ToolStripDropDownButton();
             var owner = new ToolStrip();
             owner.Items.Add(ownedDropDownItem);

@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     /// to accessibility applications.
     /// </summary>
     [ComVisible(true)]
-    public class QueryAccessibilityHelpEventArgs  : EventArgs
+    public class QueryAccessibilityHelpEventArgs : EventArgs
     {
         public QueryAccessibilityHelpEventArgs()
         {

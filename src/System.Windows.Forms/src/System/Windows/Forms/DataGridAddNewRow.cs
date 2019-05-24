@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
     using System;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
@@ -17,12 +18,14 @@ namespace System.Windows.Forms {
     ///      This class fully encapsulates the painting logic for an addnew row
     ///      appearing in a DataGrid.
     /// </summary>
-    internal class DataGridAddNewRow : DataGridRow {
+    internal class DataGridAddNewRow : DataGridRow
+    {
 
         private bool dataBound = false;
 
         public DataGridAddNewRow(DataGrid dGrid, DataGridTableStyle gridTable, int rowNum)
-            : base(dGrid, gridTable, rowNum) {
+            : base(dGrid, gridTable, rowNum)
+        {
         }
 
         // =------------------------------------------------------------------
@@ -36,24 +39,32 @@ namespace System.Windows.Forms {
         ///      row contents and permit editing, etc because a DataRecord
         ///      exists in the cursor that created this row.
         /// </summary>
-        public bool DataBound {
-            get {
+        public bool DataBound
+        {
+            get
+            {
                 return dataBound;
             }
-            set {
+            set
+            {
                 dataBound = value;
             }
         }
 
-        public override void OnEdit() {
-            if (!DataBound) {
+        public override void OnEdit()
+        {
+            if (!DataBound)
+            {
                 DataGrid.AddNewRow();
             }
         }
 
-        public override void OnRowLeave() {
+        public override void OnRowLeave()
+        {
             if (DataBound)
+            {
                 DataBound = false;
+            }
         }
 
         // the addNewRow has nothing to do with losing focus
@@ -82,29 +93,41 @@ namespace System.Windows.Forms {
                                   Rectangle trueRowBounds,
                                   int firstVisibleColumn,
                                   int columnCount,
-                                  bool alignToRight) {
+                                  bool alignToRight)
+        {
             Rectangle dataBounds = bounds;
             DataGridLineStyle gridStyle;
-            if (this.dgTable.IsDefault)
-                gridStyle = this.DataGrid.GridLineStyle;
+            if (dgTable.IsDefault)
+            {
+                gridStyle = DataGrid.GridLineStyle;
+            }
             else
-                gridStyle = this.dgTable.GridLineStyle;
-            int bWidth = this.DataGrid == null ? 0 : gridStyle == DataGridLineStyle.Solid ? 1 : 0;
+            {
+                gridStyle = dgTable.GridLineStyle;
+            }
+
+            int bWidth = DataGrid == null ? 0 : gridStyle == DataGridLineStyle.Solid ? 1 : 0;
             dataBounds.Height -= bWidth;
             int cx = base.PaintData(g, dataBounds, firstVisibleColumn, columnCount, alignToRight);
 
             if (bWidth > 0)
+            {
                 PaintBottomBorder(g, bounds, cx, bWidth, alignToRight);
+            }
+
             return cx;
         }
 
         protected override void PaintCellContents(Graphics g, Rectangle cellBounds, DataGridColumnStyle column,
-                                                  Brush backBr, Brush foreBrush, bool alignToRight) {
-            if (DataBound) {
+                                                  Brush backBr, Brush foreBrush, bool alignToRight)
+        {
+            if (DataBound)
+            {
                 CurrencyManager listManager = DataGrid.ListManager;
-                column.Paint(g, cellBounds, listManager, this.RowNumber, alignToRight);
+                column.Paint(g, cellBounds, listManager, RowNumber, alignToRight);
             }
-            else {
+            else
+            {
                 base.PaintCellContents(g, cellBounds, column, backBr, foreBrush, alignToRight);
             }
         }

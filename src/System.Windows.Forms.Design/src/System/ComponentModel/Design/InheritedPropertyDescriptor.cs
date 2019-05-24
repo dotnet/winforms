@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design
     {
         private PropertyDescriptor propertyDescriptor;
         private object _defaultValue;
-        private static object s_noDefault = new Object();
+        private static readonly object s_noDefault = new Object();
         private bool _initShouldSerialize;
         private object _originalValue;
 
@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design
         /// Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
         /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component, bool rootComponent) : base(propertyDescriptor, new Attribute[] { })
+        public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component, bool rootComponent) : base(propertyDescriptor, new Attribute[] { })
         {
             Debug.Assert(!(propertyDescriptor is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
             this.propertyDescriptor = propertyDescriptor;
@@ -41,8 +41,7 @@ namespace System.ComponentModel.Design
             if (typeof(ICollection).IsAssignableFrom(propertyDescriptor.PropertyType) &&
                 propertyDescriptor.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
             {
-                ICollection collection = propertyDescriptor.GetValue(component) as ICollection;
-                if (collection != null && collection.Count > 0)
+                if (propertyDescriptor.GetValue(component) is ICollection collection && collection.Count > 0)
                 {
                     // Trawl Add and AddRange methods looking for the first compatible serializable method.  All we need is the data type.
                     bool addComponentExists = false;

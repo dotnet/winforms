@@ -14,7 +14,8 @@ using System.Runtime.InteropServices;
 using System.Net;
 using System.Globalization;
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     public sealed class HtmlHistory : IDisposable
     {
         private UnsafeNativeMethods.IOmHistory htmlHistory;
@@ -22,48 +23,60 @@ namespace System.Windows.Forms {
 
         internal HtmlHistory(UnsafeNativeMethods.IOmHistory history)
         {
-            this.htmlHistory = history;
-            Debug.Assert(this.NativeOmHistory != null, "The history object should implement IOmHistory");
+            htmlHistory = history;
+            Debug.Assert(NativeOmHistory != null, "The history object should implement IOmHistory");
         }
 
-        private UnsafeNativeMethods.IOmHistory NativeOmHistory {
-            get {
-                if (this.disposed) {
+        private UnsafeNativeMethods.IOmHistory NativeOmHistory
+        {
+            get
+            {
+                if (disposed)
+                {
                     throw new System.ObjectDisposedException(GetType().Name);
                 }
-                return this.htmlHistory;
+                return htmlHistory;
             }
         }
 
-        public void Dispose() {
-            this.htmlHistory = null;
-            this.disposed = true;
+        public void Dispose()
+        {
+            htmlHistory = null;
+            disposed = true;
             GC.SuppressFinalize(this);
         }
 
-        public int Length {
-            get {
-                return (int)this.NativeOmHistory.GetLength();
+        public int Length
+        {
+            get
+            {
+                return (int)NativeOmHistory.GetLength();
             }
         }
 
-        public void Back(int numberBack) {
-            if (numberBack < 0) {
+        public void Back(int numberBack)
+        {
+            if (numberBack < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(numberBack), numberBack, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberBack), numberBack, 0));
             }
-            else if (numberBack > 0) {
+            else if (numberBack > 0)
+            {
                 object oNumForward = (object)(-numberBack);
-                this.NativeOmHistory.Go(ref oNumForward);
+                NativeOmHistory.Go(ref oNumForward);
             }
         }
 
-        public void Forward(int numberForward) {
-            if (numberForward < 0) {
+        public void Forward(int numberForward)
+        {
+            if (numberForward < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(numberForward), numberForward, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberForward), numberForward, 0));
             }
-            else if (numberForward > 0) {
+            else if (numberForward > 0)
+            {
                 object oNumForward = (object)numberForward;
-                this.NativeOmHistory.Go(ref oNumForward);
+                NativeOmHistory.Go(ref oNumForward);
             }
         }
 
@@ -87,20 +100,23 @@ namespace System.Windows.Forms {
         public void Go(string urlString)
         {
             object loc = (object)urlString;
-            this.NativeOmHistory.Go(ref loc);
+            NativeOmHistory.Go(ref loc);
         }
 
         /// <summary>
         ///    <para>Go to the specified position in the history list</para>
         /// </summary>
-        public void Go(int relativePosition) {
+        public void Go(int relativePosition)
+        {
             object loc = (object)relativePosition;
-            this.NativeOmHistory.Go(ref loc);
+            NativeOmHistory.Go(ref loc);
         }
 
-        public object DomHistory {
-            get {
-                return this.NativeOmHistory;
+        public object DomHistory
+        {
+            get
+            {
+                return NativeOmHistory;
             }
         }
     }

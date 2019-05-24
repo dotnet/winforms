@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    
+
     public interface IDataGridViewEditingCell
     {
         [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]

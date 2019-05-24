@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
     {
-        private ContentAlignment _textAlignment;
+        private readonly ContentAlignment _textAlignment;
         private Color _textColor = SystemColors.ControlText;
         private bool _textColorChanged = false;
 
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             set
             {
                 _textColor = value;
-                _textColorChanged=true;
+                _textColorChanged = true;
             }
         }
 

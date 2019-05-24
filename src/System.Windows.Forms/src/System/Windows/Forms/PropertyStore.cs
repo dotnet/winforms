@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
         /// </summary>
-        public int GetInteger(int key) =>  GetInteger(key, out _);
+        public int GetInteger(int key) => GetInteger(key, out _);
 
         /// <summary>
         /// Retrieves an integer value from our property list.
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
             if (!LocateIntegerEntry(keyIndex, out int index))
             {
                 found = false;
-                return default(int);
+                return default;
             }
 
             // We have found the relevant entry. See if
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             if (((1 << element) & s_intEntries[index].Mask) == 0)
             {
                 found = false;
-                return default(int);
+                return default;
             }
 
             found = true;
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
                     return s_intEntries[index].Value4;
                 default:
                     Debug.Fail("Invalid element obtained from LocateIntegerEntry");
-                    return default(int);
+                    return default;
             }
         }
 
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
                     {
                         index++;
                     }
-    
+
                     return false;
                 }
             }

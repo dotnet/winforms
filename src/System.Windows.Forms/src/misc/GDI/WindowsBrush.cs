@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromLogBrush(System.Windows.Forms.Internal.IntNativeMethods+LOGBRUSH):System.Windows.Forms.Internal.WindowsBrush")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromHdc(System.IntPtr):System.Windows.Forms.Internal.WindowsBrush")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromBrush(System.Drawing.Brush):System.Windows.Forms.Internal.WindowsBrush")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsBrush.FromLogBrush(System.Windows.Forms.Internal.IntNativeMethods+LOGBRUSH):System.Windows.Forms.Internal.WindowsBrush")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsBrush.FromHdc(System.IntPtr):System.Windows.Forms.Internal.WindowsBrush")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsBrush.FromBrush(System.Drawing.Brush):System.Windows.Forms.Internal.WindowsBrush")]
 
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
@@ -35,9 +35,9 @@ namespace System.Experimental.Gdi
     {
         // Handle to the native Windows brush object.
         // 
-        private  DeviceContext dc;
+        private readonly DeviceContext dc;
         private IntPtr nativeHandle;        // Cannot be protected because the class is internal (C# doesn't allow it).
-        private Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
+        private readonly Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
         // Note: We may need to implement background color too.
 
 #if WINGRAPHICS_FINALIZATION_WATCH
@@ -52,13 +52,13 @@ namespace System.Experimental.Gdi
         ///     Parameterless constructor to use default color.
         ///     Notice that the actual object construction is done in the derived classes.
         /// </summary>
-        
+
         public WindowsBrush(DeviceContext dc)
         {
             this.dc = dc;
         }
 
-        
+
         public WindowsBrush(DeviceContext dc, Color color)
         {
             this.dc = dc;
@@ -70,9 +70,11 @@ namespace System.Experimental.Gdi
             Dispose(false);
         }
 
-        protected DeviceContext DC {
-            get {
-                return this.dc;
+        protected DeviceContext DC
+        {
+            get
+            {
+                return dc;
             }
         }
 
@@ -83,13 +85,13 @@ namespace System.Experimental.Gdi
 
         protected virtual void Dispose(bool disposing)
         {
-            if (dc != null && this.nativeHandle != IntPtr.Zero)
+            if (dc != null && nativeHandle != IntPtr.Zero)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
-                dc.DeleteObject(this.nativeHandle, GdiObjectType.Brush);
-                
-                this.nativeHandle = IntPtr.Zero;
+                dc.DeleteObject(nativeHandle, GdiObjectType.Brush);
+
+                nativeHandle = IntPtr.Zero;
             }
 
             if (disposing)
@@ -102,7 +104,7 @@ namespace System.Experimental.Gdi
         {
             get
             {
-                return this.color;
+                return color;
             }
         }
 
@@ -112,21 +114,21 @@ namespace System.Experimental.Gdi
         protected IntPtr NativeHandle
         {
             get
-            { 
-                if( this.nativeHandle == IntPtr.Zero )
+            {
+                if (nativeHandle == IntPtr.Zero)
                 {
                     CreateBrush();
                 }
 
-                return this.nativeHandle;
+                return nativeHandle;
             }
-        
+
             set
-            { 
-                Debug.Assert(this.nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
+            {
+                Debug.Assert(nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
                 Debug.Assert(value != IntPtr.Zero, "WARNING: assigning IntPtr.Zero to the nativeHandle object.");
 
-                this.nativeHandle = value;
+                nativeHandle = value;
             }
         }
 
@@ -200,10 +202,10 @@ namespace System.Experimental.Gdi
         ///    </para>
         /// </summary>
         public IntPtr HBrush
-        { 
+        {
             get
             {
-                return this.NativeHandle;
+                return NativeHandle;
             }
         }
     }

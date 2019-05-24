@@ -437,7 +437,10 @@ namespace System.Windows.Forms
             Guid guid = new Guid(IIDGuid.IShellItem);
             int hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
             if (hr != 0)
+            {
                 throw new System.ComponentModel.Win32Exception(hr);
+            }
+
             return (IShellItem)item;
         }
     }

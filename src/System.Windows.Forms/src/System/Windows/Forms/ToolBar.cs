@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
@@ -25,9 +26,10 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign),
     DefaultProperty(nameof(Buttons))
     ]
-    public class ToolBar : Control {
+    public class ToolBar : Control
+    {
 
-        private ToolBarButtonCollection buttonsCollection;
+        private readonly ToolBarButtonCollection buttonsCollection;
 
         /// <summary>
         ///     The size of a button in the ToolBar
@@ -59,7 +61,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The array of buttons we're working with.
         /// </summary>
-        private ToolBarButton [] buttons;
+        private ToolBarButton[] buttons;
 
         /// <summary>
         ///     The number of buttons we're working with
@@ -88,11 +90,11 @@ namespace System.Windows.Forms {
         private float currentScaleDX = 1.0F;
         private float currentScaleDY = 1.0F;
 
-        private const int   TOOLBARSTATE_wrappable          = 0x00000001;
-        private const int   TOOLBARSTATE_dropDownArrows     = 0x00000002;
-        private const int   TOOLBARSTATE_divider            = 0x00000004;
-        private const int   TOOLBARSTATE_showToolTips       = 0x00000008;
-        private const int   TOOLBARSTATE_autoSize           = 0x00000010;
+        private const int TOOLBARSTATE_wrappable = 0x00000001;
+        private const int TOOLBARSTATE_dropDownArrows = 0x00000002;
+        private const int TOOLBARSTATE_divider = 0x00000004;
+        private const int TOOLBARSTATE_showToolTips = 0x00000008;
+        private const int TOOLBARSTATE_autoSize = 0x00000010;
 
         // PERF: take all the bools and put them into a state variable
         private System.Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above
@@ -107,7 +109,8 @@ namespace System.Windows.Forms {
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBar'/> class.</para>
         /// </summary>
         public ToolBar()
-        : base() {
+        : base()
+        {
 
             // Set this BEFORE calling any other methods so that these defaults will be propagated
             toolBarState = new System.Collections.Specialized.BitVector32(TOOLBARSTATE_autoSize |
@@ -134,18 +137,23 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.ToolBarAppearanceDescr))
         ]
-        public ToolBarAppearance Appearance {
-            get {
+        public ToolBarAppearance Appearance
+        {
+            get
+            {
                 return appearance;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarAppearance.Normal, (int)ToolBarAppearance.Flat)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarAppearance.Normal, (int)ToolBarAppearance.Flat))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarAppearance));
                 }
 
-                if (value != appearance) {
+                if (value != appearance)
+                {
                     appearance = value;
                     RecreateHandle();
                 }
@@ -162,27 +170,33 @@ namespace System.Windows.Forms {
         DefaultValue(true),
         Localizable(true),
         SRDescription(nameof(SR.ToolBarAutoSizeDescr)),
-        Browsable(true), 
+        Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
-        public override bool AutoSize {
-            get {
+        public override bool AutoSize
+        {
+            get
+            {
                 return toolBarState[TOOLBARSTATE_autoSize];
             }
 
-            set {
+            set
+            {
                 // Note that we intentionally do not call base.  Toolbars size themselves by
                 // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
                 // continue to return false to keep our LayoutEngines from messing with TextBoxes.
                 // This is done for backwards compatibility since the new AutoSize behavior differs.
-                if (AutoSize != value) {
+                if (AutoSize != value)
+                {
                     toolBarState[TOOLBARSTATE_autoSize] = value;
-                    if (Dock == DockStyle.Left || Dock == DockStyle.Right) {
+                    if (Dock == DockStyle.Left || Dock == DockStyle.Right)
+                    {
                         SetStyle(ControlStyles.FixedWidth, AutoSize);
                         SetStyle(ControlStyles.FixedHeight, false);
                     }
-                    else {
+                    else
+                    {
                         SetStyle(ControlStyles.FixedHeight, AutoSize);
                         SetStyle(ControlStyles.FixedWidth, false);
                     }
@@ -204,49 +218,61 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color BackColor {
-            get {
+        public override Color BackColor
+        {
+            get
+            {
                 return base.BackColor;
             }
-            set {
+            set
+            {
                 base.BackColor = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged {
+        new public event EventHandler BackColorChanged
+        {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged {
+        new public event EventHandler BackgroundImageChanged
+        {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged {
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
@@ -261,19 +287,24 @@ namespace System.Windows.Forms {
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
         SRDescription(nameof(SR.ToolBarBorderStyleDescr))
         ]
-        public BorderStyle BorderStyle {
-            get {
+        public BorderStyle BorderStyle
+        {
+            get
+            {
                 return borderStyle;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
 
-                if (borderStyle != value) {
+                if (borderStyle != value)
+                {
                     borderStyle = value;
 
                     //UpdateStyles();
@@ -293,8 +324,10 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonsDescr)),
         MergableProperty(false)
         ]
-        public ToolBarButtonCollection Buttons {
-            get {
+        public ToolBarButtonCollection Buttons
+        {
+            get
+            {
                 return buttonsCollection;
             }
         }
@@ -309,36 +342,48 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.ToolBarButtonSizeDescr))
         ]
-        public Size ButtonSize {
-            get {
-                if (buttonSize.IsEmpty) {
+        public Size ButtonSize
+        {
+            get
+            {
+                if (buttonSize.IsEmpty)
+                {
 
                     // Obtain the current buttonsize of the first button from the winctl control
                     //
-                    if (IsHandleCreated && buttons != null && buttonCount > 0) {
-                        int result = unchecked( (int) (long)SendMessage(NativeMethods.TB_GETBUTTONSIZE, 0, 0));
-                        if (result > 0) {
+                    if (IsHandleCreated && buttons != null && buttonCount > 0)
+                    {
+                        int result = unchecked((int)(long)SendMessage(NativeMethods.TB_GETBUTTONSIZE, 0, 0));
+                        if (result > 0)
+                        {
                             return new Size(NativeMethods.Util.LOWORD(result), NativeMethods.Util.HIWORD(result));
                         }
                     }
-                    if (TextAlign == ToolBarTextAlign.Underneath) {
+                    if (TextAlign == ToolBarTextAlign.Underneath)
+                    {
                         return new Size(39, 36);    // Default button size
                     }
-                    else {
+                    else
+                    {
                         return new Size(23, 22);    // Default button size
                     }
                 }
-                else {
+                else
+                {
                     return buttonSize;
                 }
             }
 
-            set {
+            set
+            {
 
                 if (value.Width < 0 || value.Height < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ButtonSize), value));
+                }
 
-                if (buttonSize != value) {
+                if (buttonSize != value)
+                {
                     buttonSize = value;
                     maxWidth = -1; // Force recompute of maxWidth
                     RecreateHandle();
@@ -353,8 +398,10 @@ namespace System.Windows.Forms {
         ///     however, forget to get base.CreateParams first to get the struct
         ///     filled up with the basic info.
         /// </summary>
-        protected override CreateParams CreateParams {
-            get {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TOOLBAR;
 
@@ -364,13 +411,25 @@ namespace System.Windows.Forms {
                             | NativeMethods.CCS_NORESIZE;
                 // | NativeMethods.WS_CHILD was commented out since setTopLevel should be able to work.
 
-                if (!Divider) cp.Style |= NativeMethods.CCS_NODIVIDER ;
-                if (Wrappable) cp.Style |= NativeMethods.TBSTYLE_WRAPPABLE;
-                if (ShowToolTips && !DesignMode) cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
+                if (!Divider)
+                {
+                    cp.Style |= NativeMethods.CCS_NODIVIDER;
+                }
+
+                if (Wrappable)
+                {
+                    cp.Style |= NativeMethods.TBSTYLE_WRAPPABLE;
+                }
+
+                if (ShowToolTips && !DesignMode)
+                {
+                    cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
+                }
 
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
                 cp.Style &= (~NativeMethods.WS_BORDER);
-                switch (borderStyle) {
+                switch (borderStyle)
+                {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
                         break;
@@ -379,7 +438,8 @@ namespace System.Windows.Forms {
                         break;
                 }
 
-                switch (appearance) {
+                switch (appearance)
+                {
                     case ToolBarAppearance.Normal:
                         break;
                     case ToolBarAppearance.Flat:
@@ -387,7 +447,8 @@ namespace System.Windows.Forms {
                         break;
                 }
 
-                switch (textAlign) {
+                switch (textAlign)
+                {
                     case ToolBarTextAlign.Underneath:
                         break;
                     case ToolBarTextAlign.Right:
@@ -399,8 +460,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        protected override ImeMode DefaultImeMode {
-            get {
+        protected override ImeMode DefaultImeMode
+        {
+            get
+            {
                 return ImeMode.Disable;
             }
         }
@@ -409,8 +472,10 @@ namespace System.Windows.Forms {
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(100, 22);
             }
         }
@@ -424,13 +489,17 @@ namespace System.Windows.Forms {
         DefaultValue(true),
         SRDescription(nameof(SR.ToolBarDividerDescr))
         ]
-        public bool Divider {
-            get {
+        public bool Divider
+        {
+            get
+            {
                 return toolBarState[TOOLBARSTATE_divider];
             }
 
-            set {
-                if (Divider != value) {
+            set
+            {
+                if (Divider != value)
+                {
 
                     toolBarState[TOOLBARSTATE_divider] = value;
                     RecreateHandle();
@@ -448,21 +517,27 @@ namespace System.Windows.Forms {
         Localizable(true),
         DefaultValue(DockStyle.Top)
         ]
-        public override DockStyle Dock {
-            get { return base.Dock;}
+        public override DockStyle Dock
+        {
+            get { return base.Dock; }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x5
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
                 }
 
-                if (Dock != value) {
-                    if (value == DockStyle.Left || value == DockStyle.Right) {
+                if (Dock != value)
+                {
+                    if (value == DockStyle.Left || value == DockStyle.Right)
+                    {
                         SetStyle(ControlStyles.FixedWidth, AutoSize);
                         SetStyle(ControlStyles.FixedHeight, false);
                     }
-                    else {
+                    else
+                    {
                         SetStyle(ControlStyles.FixedHeight, AutoSize);
                         SetStyle(ControlStyles.FixedWidth, false);
                     }
@@ -477,11 +552,14 @@ namespace System.Windows.Forms {
         ///     on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override bool DoubleBuffered {
-            get {
+        protected override bool DoubleBuffered
+        {
+            get
+            {
                 return base.DoubleBuffered;
             }
-            set {
+            set
+            {
                 base.DoubleBuffered = value;
             }
         }
@@ -496,14 +574,18 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.ToolBarDropDownArrowsDescr))
         ]
-        public bool DropDownArrows {
-            get {
+        public bool DropDownArrows
+        {
+            get
+            {
                 return toolBarState[TOOLBARSTATE_dropDownArrows];
             }
 
-            set {
+            set
+            {
 
-                if (DropDownArrows != value) {
+                if (DropDownArrows != value)
+                {
                     toolBarState[TOOLBARSTATE_dropDownArrows] = value;
                     RecreateHandle();
                 }
@@ -513,17 +595,21 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color ForeColor {
-            get {
+        public override Color ForeColor
+        {
+            get
+            {
                 return base.ForeColor;
             }
-            set {
+            set
+            {
                 base.ForeColor = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged {
+        new public event EventHandler ForeColorChanged
+        {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
@@ -537,29 +623,37 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         SRDescription(nameof(SR.ToolBarImageListDescr))
         ]
-        public ImageList ImageList {
-            get {
-                return this.imageList;
+        public ImageList ImageList
+        {
+            get
+            {
+                return imageList;
             }
-            set {
-                if (value != imageList) {
+            set
+            {
+                if (value != imageList)
+                {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
-                    if (imageList != null) {
+                    if (imageList != null)
+                    {
                         imageList.Disposed -= disposedHandler;
                         imageList.RecreateHandle -= recreateHandler;
                     }
 
                     imageList = value;
 
-                    if (value != null) {
+                    if (value != null)
+                    {
                         value.Disposed += disposedHandler;
                         value.RecreateHandle += recreateHandler;
                     }
 
                     if (IsHandleCreated)
+                    {
                         RecreateHandle();
+                    }
                 }
             }
         }
@@ -574,29 +668,37 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ToolBarImageSizeDescr))
         ]
-        public Size ImageSize {
-            get {
-                if (this.imageList != null) {
-                    return this.imageList.ImageSize;
+        public Size ImageSize
+        {
+            get
+            {
+                if (imageList != null)
+                {
+                    return imageList.ImageSize;
                 }
-                else {
+                else
+                {
                     return new Size(0, 0);
                 }
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode {
-            get {
+        new public ImeMode ImeMode
+        {
+            get
+            {
                 return base.ImeMode;
             }
-            set {
+            set
+            {
                 base.ImeMode = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged {
+        public new event EventHandler ImeModeChanged
+        {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
         }
@@ -605,25 +707,32 @@ namespace System.Windows.Forms {
         ///     The preferred height for this ToolBar control.  This is
         ///     used by the AutoSizing code.
         /// </summary>
-        internal int PreferredHeight {
-            get {
+        internal int PreferredHeight
+        {
+            get
+            {
                 int height = 0;
 
-                if (buttons == null || buttonCount == 0 || !IsHandleCreated) {
+                if (buttons == null || buttonCount == 0 || !IsHandleCreated)
+                {
                     height = ButtonSize.Height;
                 }
-                else {
+                else
+                {
                     // get the first visible button and get it's height
                     //
                     NativeMethods.RECT rect = new NativeMethods.RECT();
                     int firstVisible;
 
-                    for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++) {
-                        if (buttons[firstVisible] != null && buttons[firstVisible].Visible) {
+                    for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++)
+                    {
+                        if (buttons[firstVisible] != null && buttons[firstVisible].Visible)
+                        {
                             break;
                         }
                     }
-                    if (firstVisible == buttons.Length) {
+                    if (firstVisible == buttons.Length)
+                    {
                         firstVisible = 0;
                     }
 
@@ -637,13 +746,15 @@ namespace System.Windows.Forms {
                 // if the ToolBar is wrappable, and there is more than one row, make
                 // sure the height is correctly adjusted
                 //
-                if (Wrappable && IsHandleCreated) {
-                    height = height * unchecked( (int) (long)SendMessage(NativeMethods.TB_GETROWS, 0, 0));
+                if (Wrappable && IsHandleCreated)
+                {
+                    height *= unchecked((int)(long)SendMessage(NativeMethods.TB_GETROWS, 0, 0));
                 }
 
                 height = (height > 0) ? height : 1;
 
-                switch(borderStyle) {
+                switch (borderStyle)
+                {
                     case BorderStyle.FixedSingle:
                         height += SystemInformation.BorderSize.Height;
                         break;
@@ -652,7 +763,10 @@ namespace System.Windows.Forms {
                         break;
                 }
 
-                if (Divider) height += 2;
+                if (Divider)
+                {
+                    height += 2;
+                }
 
                 height += 4;
 
@@ -668,33 +782,43 @@ namespace System.Windows.Forms {
         ///     if the control is docked left or right [ie, it really
         ///     just returns a max width]
         /// </summary>
-        internal int PreferredWidth {
-            get {
+        internal int PreferredWidth
+        {
+            get
+            {
                 int width;
 
                 // fortunately, we compute this value sometimes, so we can just
                 // use it if we have it.
                 //
-                if (maxWidth == -1) {
+                if (maxWidth == -1)
+                {
                     // don't have it, have to recompute
                     //
                     if (!IsHandleCreated || buttons == null)
+                    {
                         maxWidth = ButtonSize.Width;
-                    else {
+                    }
+                    else
+                    {
 
                         NativeMethods.RECT rect = new NativeMethods.RECT();
 
-                        for (int x = 0; x < buttonCount; x++) {
+                        for (int x = 0; x < buttonCount; x++)
+                        {
                             SendMessage(NativeMethods.TB_GETRECT, 0, ref rect);
                             if ((rect.right - rect.left) > maxWidth)
+                            {
                                 maxWidth = rect.right - rect.left;
+                            }
                         }
                     }
                 }
 
                 width = maxWidth;
 
-                if (borderStyle != BorderStyle.None) {
+                if (borderStyle != BorderStyle.None)
+                {
                     width += SystemInformation.BorderSize.Height * 4 + 3;
                 }
 
@@ -705,17 +829,21 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override RightToLeft RightToLeft {
-            get {
+        public override RightToLeft RightToLeft
+        {
+            get
+            {
                 return base.RightToLeft;
             }
-            set {
+            set
+            {
                 base.RightToLeft = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftChanged {
+        public new event EventHandler RightToLeftChanged
+        {
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
         }
@@ -725,7 +853,8 @@ namespace System.Windows.Forms {
         ///  unmanaged control how to scale its buttons.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override void ScaleCore(float dx, float dy) {
+        protected override void ScaleCore(float dx, float dy)
+        {
             currentScaleDX = dx;
             currentScaleDY = dy;
             base.ScaleCore(dx, dy);
@@ -736,7 +865,8 @@ namespace System.Windows.Forms {
         /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </summary>
-        protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+        {
             currentScaleDX = factor.Width;
             currentScaleDY = factor.Height;
             base.ScaleControl(factor, specified);
@@ -753,12 +883,16 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.ToolBarShowToolTipsDescr))
         ]
-        public bool ShowToolTips {
-            get {
+        public bool ShowToolTips
+        {
+            get
+            {
                 return toolBarState[TOOLBARSTATE_showToolTips];
             }
-            set {
-                if (ShowToolTips != value) {
+            set
+            {
+                if (ShowToolTips != value)
+                {
 
                     toolBarState[TOOLBARSTATE_showToolTips] = value;
                     RecreateHandle();
@@ -769,11 +903,14 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [DefaultValue(false)]
-        new public bool TabStop {
-            get {
+        new public bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
@@ -785,17 +922,21 @@ namespace System.Windows.Forms {
         Bindable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 base.Text = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged {
+        new public event EventHandler TextChanged
+        {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
@@ -811,17 +952,25 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.ToolBarTextAlignDescr))
         ]
-        public ToolBarTextAlign TextAlign {
-            get {
+        public ToolBarTextAlign TextAlign
+        {
+            get
+            {
                 return textAlign;
             }
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarTextAlign.Underneath, (int)ToolBarTextAlign.Right)) {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarTextAlign.Underneath, (int)ToolBarTextAlign.Right))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarTextAlign));
                 }
 
-                if (textAlign == value) return;
+                if (textAlign == value)
+                {
+                    return;
+                }
+
                 textAlign = value;
                 RecreateHandle();
             }
@@ -840,12 +989,16 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.ToolBarWrappableDescr))
         ]
-        public bool Wrappable {
-            get {
+        public bool Wrappable
+        {
+            get
+            {
                 return toolBarState[TOOLBARSTATE_wrappable];
             }
-            set {
-                if (Wrappable != value) {
+            set
+            {
+                if (Wrappable != value)
+                {
                     toolBarState[TOOLBARSTATE_wrappable] = value;
                     RecreateHandle();
                 }
@@ -856,7 +1009,8 @@ namespace System.Windows.Forms {
         /// <para>Occurs when a <see cref='System.Windows.Forms.ToolBarButton'/> on the <see cref='System.Windows.Forms.ToolBar'/> is clicked.</para>
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
-        public event ToolBarButtonClickEventHandler ButtonClick {
+        public event ToolBarButtonClickEventHandler ButtonClick
+        {
             add => onButtonClick += value;
             remove => onButtonClick -= value;
         }
@@ -865,7 +1019,8 @@ namespace System.Windows.Forms {
         /// <para>Occurs when a drop-down style <see cref='System.Windows.Forms.ToolBarButton'/> or its down arrow is clicked.</para>
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
-        public event ToolBarButtonClickEventHandler ButtonDropDown {
+        public event ToolBarButtonClickEventHandler ButtonDropDown
+        {
             add => onButtonDropDown += value;
             remove => onButtonDropDown -= value;
         }
@@ -875,7 +1030,8 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint {
+        public new event PaintEventHandler Paint
+        {
             add => base.Paint += value;
             remove => base.Paint -= value;
         }
@@ -886,17 +1042,22 @@ namespace System.Windows.Forms {
         /// </summary>
         // we pass in a value for dock rather than calling Dock ourselves
         // because we can't change Dock until the size has been properly adjusted.
-        private void AdjustSize(DockStyle dock) {
+        private void AdjustSize(DockStyle dock)
+        {
             int saveSize = requestedSize;
-            try {
-                if (dock == DockStyle.Left || dock == DockStyle.Right) {
+            try
+            {
+                if (dock == DockStyle.Left || dock == DockStyle.Right)
+                {
                     Width = AutoSize ? PreferredWidth : saveSize;
                 }
-                else {
+                else
+                {
                     Height = AutoSize ? PreferredHeight : saveSize;
                 }
             }
-            finally {
+            finally
+            {
                 requestedSize = saveSize;
             }
         }
@@ -906,21 +1067,28 @@ namespace System.Windows.Forms {
         ///     having each operation wait for the paint to complete.  This must be
         ///     matched up with a call to endUpdate().
         /// </summary>
-        internal void BeginUpdate() {
+        internal void BeginUpdate()
+        {
             BeginUpdateInternal();
         }
 
         /// <summary>
         /// </summary>
-        protected override void CreateHandle() {
-            if (!RecreatingHandle) {
+        protected override void CreateHandle()
+        {
+            if (!RecreatingHandle)
+            {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                try {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
+                try
+                {
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_BAR_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
-                finally {
+                finally
+                {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
@@ -931,39 +1099,48 @@ namespace System.Windows.Forms {
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </summary>
-        private void DetachImageList(object sender, EventArgs e) {
+        private void DetachImageList(object sender, EventArgs e)
+        {
             ImageList = null;
         }
 
         /// <summary>
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
                 // 
-                lock(this) {
+                lock (this)
+                {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
                     bool currentDisposing = GetState(STATE_DISPOSING);
-                    
-                    try {
+
+                    try
+                    {
                         SetState(STATE_DISPOSING, true);
 
-                        if (imageList != null) {
+                        if (imageList != null)
+                        {
                             imageList.Disposed -= new EventHandler(DetachImageList);
                             imageList = null;
                         }
 
-                        if (buttonsCollection != null) {
+                        if (buttonsCollection != null)
+                        {
                             ToolBarButton[] buttonCopy = new ToolBarButton[buttonsCollection.Count];
                             ((ICollection)buttonsCollection).CopyTo(buttonCopy, 0);
                             buttonsCollection.Clear();
 
-                            foreach (ToolBarButton b in buttonCopy) {
+                            foreach (ToolBarButton b in buttonCopy)
+                            {
                                 b.Dispose();
                             }
                         }
                     }
-                    finally {
+                    finally
+                    {
                         SetState(STATE_DISPOSING, currentDisposing);
                     }
                 }
@@ -977,7 +1154,8 @@ namespace System.Windows.Forms {
         ///     having each operation wait for the paint to complete.  This must be
         ///     matched up with a call to beginUpdate().
         /// </summary>
-        internal void EndUpdate() {
+        internal void EndUpdate()
+        {
             EndUpdateInternal();
         }
 
@@ -987,21 +1165,27 @@ namespace System.Windows.Forms {
         ///     a little better, and lets us actually show things like DropDown Arrows
         ///     for ToolBars
         /// </summary>
-        private void ForceButtonWidths() {
+        private void ForceButtonWidths()
+        {
 
-            if (buttons != null && buttonSize.IsEmpty && IsHandleCreated) {
+            if (buttons != null && buttonSize.IsEmpty && IsHandleCreated)
+            {
 
                 // force ourselves to re-compute this each time
                 //
                 maxWidth = -1;
 
-                for (int x = 0; x < buttonCount; x++) {
+                for (int x = 0; x < buttonCount; x++)
+                {
 
-                    NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO();
-                    tbbi.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
-                    tbbi.cx = buttons[x].Width;
+                    NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO
+                    {
+                        cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
+                        cx = buttons[x].Width
+                    };
 
-                    if (tbbi.cx > maxWidth) {
+                    if (tbbi.cx > maxWidth)
+                    {
                         maxWidth = tbbi.cx;
                     }
 
@@ -1011,28 +1195,36 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void ImageListRecreateHandle(object sender, EventArgs e) {
+        private void ImageListRecreateHandle(object sender, EventArgs e)
+        {
             if (IsHandleCreated)
+            {
                 RecreateHandle();
+            }
         }
 
         /// <summary>
         /// </summary>
-        private void Insert(int index, ToolBarButton button) {
+        private void Insert(int index, ToolBarButton button)
+        {
 
             button.parent = this;
 
-            if (buttons == null) {
+            if (buttons == null)
+            {
                 buttons = new ToolBarButton[4];
             }
-            else if (buttons.Length == buttonCount) {
+            else if (buttons.Length == buttonCount)
+            {
                 ToolBarButton[] newButtons = new ToolBarButton[buttonCount + 4];
                 System.Array.Copy(buttons, 0, newButtons, 0, buttonCount);
                 buttons = newButtons;
             }
 
             if (index < buttonCount)
+            {
                 System.Array.Copy(buttons, index, buttons, index + 1, buttonCount - index);
+            }
 
             buttons[index] = button;
             buttonCount++;
@@ -1041,18 +1233,25 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Inserts a button at a given location on the toolbar control.</para>
         /// </summary>
-        private void InsertButton(int index, ToolBarButton value) {
+        private void InsertButton(int index, ToolBarButton value)
+        {
 
             if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
+            }
+
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
             //
             Insert(index, value);
-            if (IsHandleCreated) {
+            if (IsHandleCreated)
+            {
                 NativeMethods.TBBUTTON tbbutton = value.GetTBBUTTON(index);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_INSERTBUTTON, index, ref tbbutton);
             }
@@ -1062,9 +1261,13 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Adds a button to the ToolBar
         /// </summary>
-        private int InternalAddButton(ToolBarButton button) {
+        private int InternalAddButton(ToolBarButton button)
+        {
             if (button == null)
+            {
                 throw new ArgumentNullException(nameof(button));
+            }
+
             int index = buttonCount;
             Insert(index, button);
             return index;
@@ -1074,7 +1277,8 @@ namespace System.Windows.Forms {
         ///     Changes the data for a button in the ToolBar, and then does the appropriate
         ///     work to update the ToolBar control.
         /// </summary>
-        internal void InternalSetButton(int index, ToolBarButton value, bool recreate, bool updateText) {
+        internal void InternalSetButton(int index, ToolBarButton value, bool recreate, bool updateText)
+        {
 
             // tragically, there doesn't appear to be a way to remove the
             // string for the button if it has one, so we just have to leave
@@ -1085,25 +1289,29 @@ namespace System.Windows.Forms {
             buttons[index] = value;
             buttons[index].parent = this;
 
-            if (IsHandleCreated) {
+            if (IsHandleCreated)
+            {
                 NativeMethods.TBBUTTONINFO tbbi = value.GetTBBUTTONINFO(updateText, index);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETBUTTONINFO, index, ref tbbi);
 
-                if (tbbi.pszText != IntPtr.Zero) {
+                if (tbbi.pszText != IntPtr.Zero)
+                {
                     Marshal.FreeHGlobal(tbbi.pszText);
                 }
 
-                if (recreate) {
+                if (recreate)
+                {
                     UpdateButtons();
                 }
-                else {
+                else
+                {
                     // after doing anything with the comctl ToolBar control, this
                     // appears to be a good idea.
                     //
                     SendMessage(NativeMethods.TB_AUTOSIZE, 0, 0);
 
                     ForceButtonWidths();
-                    this.Invalidate();
+                    Invalidate();
                 }
             }
         }
@@ -1112,16 +1320,18 @@ namespace System.Windows.Forms {
         /// <para>Raises the <see cref='System.Windows.Forms.ToolBar.ButtonClick'/>
         /// event.</para>
         /// </summary>
-        protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e) {
-            if (onButtonClick != null) onButtonClick(this, e);
+        protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
+        {
+            onButtonClick?.Invoke(this, e);
         }
 
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolBar.ButtonDropDown'/>
         /// event.</para>
         /// </summary>
-        protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e) {
-            if (onButtonDropDown != null) onButtonDropDown(this, e);
+        protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
+        {
+            onButtonDropDown?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1131,7 +1341,8 @@ namespace System.Windows.Forms {
         ///       Don't forget to call base.OnHandleCreated.
         ///    </para>
         /// </summary>
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
 
             // we have to set the button struct size, because they don't.
@@ -1141,12 +1352,16 @@ namespace System.Windows.Forms {
             // set up some extra goo
             //
             if (DropDownArrows)
+            {
                 SendMessage(NativeMethods.TB_SETEXTENDEDSTYLE, 0, NativeMethods.TBSTYLE_EX_DRAWDDARROWS);
+            }
 
             // if we have an imagelist, add it in now.
             //
             if (imageList != null)
+            {
                 SendMessage(NativeMethods.TB_SETIMAGELIST, 0, imageList.Handle);
+            }
 
             RealizeButtons();
 
@@ -1154,12 +1369,14 @@ namespace System.Windows.Forms {
             // (comctl ToolBar is flaky)
             //
             BeginUpdate();
-            try {
+            try
+            {
                 Size size = Size;
                 Size = new Size(size.Width + 1, size.Height);
                 Size = size;
             }
-            finally {
+            finally
+            {
                 EndUpdate();
             }
         }
@@ -1169,9 +1386,13 @@ namespace System.Windows.Forms {
         ///       The control is being resized. Make sure the width/height are correct.
         ///    </para>
         /// </summary>
-        protected override void OnResize(EventArgs e) {
+        protected override void OnResize(EventArgs e)
+        {
             base.OnResize(e);
-            if (Wrappable) AdjustSize(Dock);
+            if (Wrappable)
+            {
+                AdjustSize(Dock);
+            }
         }
 
         /// <summary>
@@ -1180,13 +1401,17 @@ namespace System.Windows.Forms {
         ///       whenever the font changes.
         ///    </para>
         /// </summary>
-        protected override void OnFontChanged(EventArgs e) {
+        protected override void OnFontChanged(EventArgs e)
+        {
             base.OnFontChanged(e);
-            if (IsHandleCreated) {
-                if (!buttonSize.IsEmpty) {
+            if (IsHandleCreated)
+            {
+                if (!buttonSize.IsEmpty)
+                {
                     SendToolbarButtonSizeMessage();
                 }
-                else {
+                else
+                {
                     AdjustSize(Dock);
                     ForceButtonWidths();
                 }
@@ -1196,19 +1421,25 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Sets all the button data into the ToolBar control
         /// </summary>
-        private void RealizeButtons() {
-            if (buttons != null) {
+        private void RealizeButtons()
+        {
+            if (buttons != null)
+            {
                 IntPtr ptbbuttons = IntPtr.Zero;
-                try {
+                try
+                {
                     BeginUpdate();
                     //  go and add in all the strings for all of our buttons
                     //
-                    for (int x = 0; x < buttonCount; x++) {
-                        if (buttons[x].Text.Length > 0) {
+                    for (int x = 0; x < buttonCount; x++)
+                    {
+                        if (buttons[x].Text.Length > 0)
+                        {
                             string addString = buttons[x].Text + '\0'.ToString();
                             buttons[x].stringIndex = SendMessage(NativeMethods.TB_ADDSTRING, 0, addString);
                         }
-                        else {
+                        else
+                        {
                             buttons[x].stringIndex = (IntPtr)(-1);
                         }
                     }
@@ -1219,7 +1450,8 @@ namespace System.Windows.Forms {
                     int count = buttonCount;
                     ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
 
-                    for (int x = 0; x < count; x++) {
+                    for (int x = 0; x < count; x++)
+                    {
 
                         NativeMethods.TBBUTTON tbbutton = buttons[x].GetTBBUTTON(x);
                         Marshal.StructureToPtr(tbbutton, (IntPtr)(checked((long)ptbbuttons + (cb * x))), true);
@@ -1238,15 +1470,18 @@ namespace System.Windows.Forms {
                     // buttons.  Otherwise, we need to manually set the width of all
                     // the buttons so they look reasonable
                     //
-                    if (!buttonSize.IsEmpty) {
-                       SendToolbarButtonSizeMessage();
+                    if (!buttonSize.IsEmpty)
+                    {
+                        SendToolbarButtonSizeMessage();
                     }
-                    else {
+                    else
+                    {
                         ForceButtonWidths();
                     }
                     AdjustSize(Dock);
                 }
-                finally {
+                finally
+                {
                     Marshal.FreeHGlobal(ptbbuttons);
                     EndUpdate();
                 }
@@ -1255,13 +1490,16 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        private void RemoveAt(int index) {
+        private void RemoveAt(int index)
+        {
             buttons[index].parent = null;
             buttons[index].stringIndex = (IntPtr)(-1);
             buttonCount--;
 
             if (index < buttonCount)
+            {
                 System.Array.Copy(buttons, index + 1, buttons, index, buttonCount - index);
+            }
 
             buttons[buttonCount] = null;
         }
@@ -1270,43 +1508,64 @@ namespace System.Windows.Forms {
         ///    <para> Resets the toolbar buttons to the minimum
         ///       size. </para>
         /// </summary>
-        private void ResetButtonSize() {
+        private void ResetButtonSize()
+        {
             buttonSize = Size.Empty;
             RecreateHandle();
         }
 
         /// Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
-        private void SendToolbarButtonSizeMessage() {
-            SendMessage(NativeMethods.TB_SETBUTTONSIZE, 0, NativeMethods.Util.MAKELPARAM((int)(buttonSize.Width*currentScaleDX), (int)(buttonSize.Height*currentScaleDY)));
+        private void SendToolbarButtonSizeMessage()
+        {
+            SendMessage(NativeMethods.TB_SETBUTTONSIZE, 0, NativeMethods.Util.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
         }
 
 
         /// <summary>
         ///     Overrides Control.setBoundsCore to enforce AutoSize.
         /// </summary>
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
             int originalHeight = height;
             int originalWidth = width;
 
             base.SetBoundsCore(x, y, width, height, specified);
 
             Rectangle bounds = Bounds;
-            if (Dock == DockStyle.Left || Dock == DockStyle.Right) {
-                if ((specified & BoundsSpecified.Width) != BoundsSpecified.None) requestedSize = width;
-                if (AutoSize) width = PreferredWidth;
+            if (Dock == DockStyle.Left || Dock == DockStyle.Right)
+            {
+                if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
+                {
+                    requestedSize = width;
+                }
 
-                if (width != originalWidth && Dock == DockStyle.Right) {
-                    int deltaWidth =  originalWidth - width;
+                if (AutoSize)
+                {
+                    width = PreferredWidth;
+                }
+
+                if (width != originalWidth && Dock == DockStyle.Right)
+                {
+                    int deltaWidth = originalWidth - width;
                     x += deltaWidth;
                 }
 
             }
-            else {
-                if ((specified & BoundsSpecified.Height) != BoundsSpecified.None) requestedSize = height;
-                if (AutoSize) height = PreferredHeight;
+            else
+            {
+                if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
+                {
+                    requestedSize = height;
+                }
 
-                if (height != originalHeight && Dock == DockStyle.Bottom) {
-                    int deltaHeight =  originalHeight - height;
+                if (AutoSize)
+                {
+                    height = PreferredHeight;
+                }
+
+                if (height != originalHeight && Dock == DockStyle.Bottom)
+                {
+                    int deltaHeight = originalHeight - height;
                     y += deltaHeight;
                 }
 
@@ -1318,27 +1577,33 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolBar.ButtonSize'/> property needs to be persisted.</para>
         /// </summary>
-        private bool ShouldSerializeButtonSize() {
+        private bool ShouldSerializeButtonSize()
+        {
             return !buttonSize.IsEmpty;
         }
 
         /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip) {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+        internal void SetToolTip(ToolTip toolTip)
+        {
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
 
         }
 
         /// <summary>
         ///     Returns a string representation for this control.
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
 
             string s = base.ToString();
             s += ", Buttons.Count: " + buttonCount.ToString(CultureInfo.CurrentCulture);
             if (buttonCount > 0)
+            {
                 s += ", Buttons[0]: " + buttons[0].ToString();
+            }
+
             return s;
         }
 
@@ -1347,8 +1612,10 @@ namespace System.Windows.Forms {
         ///     control is pretty flakey, and the only real choice here is to recreate
         ///     the handle and re-realize all the buttons.
         /// </summary>
-        internal void UpdateButtons() {
-            if (IsHandleCreated) {
+        internal void UpdateButtons()
+        {
+            if (IsHandleCreated)
+            {
                 RecreateHandle();
             }
         }
@@ -1357,28 +1624,35 @@ namespace System.Windows.Forms {
         ///     The button clicked was a dropdown button.  If it has a menu specified,
         ///     show it now.  Otherwise, fire an onButtonDropDown event.
         /// </summary>
-        private void WmNotifyDropDown(ref Message m) {
+        private void WmNotifyDropDown(ref Message m)
+        {
             NativeMethods.NMTOOLBAR nmTB = (NativeMethods.NMTOOLBAR)m.GetLParam(typeof(NativeMethods.NMTOOLBAR));
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
             if (tbb == null)
+            {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
+            }
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
             Menu menu = tbb.DropDownMenu;
-            if (menu != null) {
+            if (menu != null)
+            {
                 NativeMethods.RECT rc = new NativeMethods.RECT();
                 NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
 
                 SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
 
-                if ((menu.GetType()).IsAssignableFrom(typeof(ContextMenu))) {
+                if ((menu.GetType()).IsAssignableFrom(typeof(ContextMenu)))
+                {
                     ((ContextMenu)menu).Show(this, new Point(rc.left, rc.bottom));
                 }
-                else {
+                else
+                {
                     Menu main = menu.GetMainMenu();
-                    if (main != null) {
+                    if (main != null)
+                    {
                         main.ProcessInitMenuPopup(menu.Handle);
                     }
 
@@ -1400,21 +1674,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void WmNotifyNeedText(ref Message m) {
-            NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
+        private void WmNotifyNeedText(ref Message m)
+        {
+            NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             int commandID = (int)ttt.hdr.idFrom;
-            ToolBarButton tbb = (ToolBarButton) buttons[commandID];
+            ToolBarButton tbb = (ToolBarButton)buttons[commandID];
 
             if (tbb != null && tbb.ToolTipText != null)
+            {
                 ttt.lpszText = tbb.ToolTipText;
+            }
             else
+            {
                 ttt.lpszText = null;
+            }
 
             ttt.hinst = IntPtr.Zero;
 
             // RightToLeft reading order
             //
-            if (RightToLeft == RightToLeft.Yes) {
+            if (RightToLeft == RightToLeft.Yes)
+            {
                 ttt.uFlags |= NativeMethods.TTF_RTLREADING;
             }
 
@@ -1424,38 +1704,59 @@ namespace System.Windows.Forms {
         // Track the currently hot item since the user might be using the tab and
         // arrow keys to navigate the toolbar and if that's the case, we'll need to know where to re-
         // position the tooltip window when the underlying toolbar control attempts to display it.
-        private void WmNotifyHotItemChange(ref Message m) {
+        private void WmNotifyHotItemChange(ref Message m)
+        {
             // Should we set the hot item?
             NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
             if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_LEAVING == (nmTbHotItem.dwFlags & NativeMethods.HICF_LEAVING))
-                this.hotItem = -1;
+            {
+                hotItem = -1;
+            }
             else if (NativeMethods.HICF_MOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_MOUSE))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_ARROWKEYS == (nmTbHotItem.dwFlags & NativeMethods.HICF_ARROWKEYS))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_ACCELERATOR == (nmTbHotItem.dwFlags & NativeMethods.HICF_ACCELERATOR))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_DUPACCEL == (nmTbHotItem.dwFlags & NativeMethods.HICF_DUPACCEL))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_RESELECT == (nmTbHotItem.dwFlags & NativeMethods.HICF_RESELECT))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_LMOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_LMOUSE))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
             else if (NativeMethods.HICF_TOGGLEDROPDOWN == (nmTbHotItem.dwFlags & NativeMethods.HICF_TOGGLEDROPDOWN))
-                this.hotItem = nmTbHotItem.idNew;
+            {
+                hotItem = nmTbHotItem.idNew;
+            }
         }
 
 
         /// <summary>
         /// </summary>
-        private void WmReflectCommand(ref Message m) {
+        private void WmReflectCommand(ref Message m)
+        {
 
             int id = NativeMethods.Util.LOWORD(m.WParam);
             ToolBarButton tbb = buttons[id];
 
-            if (tbb != null) {
+            if (tbb != null)
+            {
                 ToolBarButtonClickEventArgs e = new ToolBarButtonClickEventArgs(tbb);
                 OnButtonClick(e);
             }
@@ -1467,16 +1768,19 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
                 case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
                 case Interop.WindowMessages.WM_NOTIFY:
                 case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
-                    switch (note.code) {
+                    NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    switch (note.code)
+                    {
                         case NativeMethods.TTN_NEEDTEXT:
                             // MSDN:
                             // Setting the max width has the added benefit of enabling multiline
@@ -1495,14 +1799,16 @@ namespace System.Windows.Forms {
                             // but nowhere near the toolbar button?
                             if (wndPlacement.rcNormalPosition_left == 0 &&
                                 wndPlacement.rcNormalPosition_top == 0 &&
-                                this.hotItem != -1) {
+                                hotItem != -1)
+                            {
 
                                 // Assume that we're going to vertically center the tooltip on the right edge of the current
                                 // hot item.
 
                                 // Where is the right edge of the current hot item?
                                 int buttonRight = 0;
-                                for(int idx = 0; idx <= this.hotItem; idx++) {
+                                for (int idx = 0; idx <= hotItem; idx++)
+                                {
                                     // How wide is the item at this index? (It could be a separator, and therefore a different width.)
                                     buttonRight += buttonsCollection[idx].GetButtonWidth();
                                 }
@@ -1512,27 +1818,30 @@ namespace System.Windows.Forms {
                                 int tooltipHeight = wndPlacement.rcNormalPosition_bottom - wndPlacement.rcNormalPosition_top;
 
                                 // We'll need screen coordinates of this position for setting the tooltip's position
-                                int x = this.Location.X + buttonRight + 1;
-                                int y = this.Location.Y + (this.ButtonSize.Height / 2);
+                                int x = Location.X + buttonRight + 1;
+                                int y = Location.Y + (ButtonSize.Height / 2);
                                 NativeMethods.POINT leftTop = new NativeMethods.POINT(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, this.Handle), leftTop);
+                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), leftTop);
 
                                 // Will the tooltip bleed off the top?
-                                if (leftTop.y < SystemInformation.WorkingArea.Y) {
+                                if (leftTop.y < SystemInformation.WorkingArea.Y)
+                                {
                                     // Reposition the tooltip to be displayed below the button
-                                    leftTop.y += (this.ButtonSize.Height / 2) + 1;
+                                    leftTop.y += (ButtonSize.Height / 2) + 1;
                                 }
 
                                 // Will the tooltip bleed off the bottom?
-                                if (leftTop.y + tooltipHeight > SystemInformation.WorkingArea.Height) {
+                                if (leftTop.y + tooltipHeight > SystemInformation.WorkingArea.Height)
+                                {
                                     // Reposition the tooltip to be displayed above the button
-                                    leftTop.y -= ((this.ButtonSize.Height / 2) + tooltipHeight + 1);
+                                    leftTop.y -= ((ButtonSize.Height / 2) + tooltipHeight + 1);
                                 }
 
                                 // Will the tooltip bleed off the right edge?
-                                if (leftTop.x + tooltipWidth > SystemInformation.WorkingArea.Right) {
+                                if (leftTop.x + tooltipWidth > SystemInformation.WorkingArea.Right)
+                                {
                                     // Move the tooltip far enough left that it will display in the working area
-                                    leftTop.x -= (this.ButtonSize.Width + tooltipWidth + 2);
+                                    leftTop.x -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
                                 SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.x, leftTop.y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
@@ -1564,10 +1873,11 @@ namespace System.Windows.Forms {
         /// <para>Encapsulates a collection of <see cref='System.Windows.Forms.ToolBarButton'/> controls for use by the
         /// <see cref='System.Windows.Forms.ToolBar'/> class. </para>
         /// </summary>
-        public class ToolBarButtonCollection : IList {
+        public class ToolBarButtonCollection : IList
+        {
 
-            private ToolBar owner;
-            private bool    suspendUpdate;
+            private readonly ToolBar owner;
+            private bool suspendUpdate;
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
             /// issues by holding on to extra references.
@@ -1577,7 +1887,8 @@ namespace System.Windows.Forms {
             /// <summary>
             /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBar.ToolBarButtonCollection'/> class and assigns it to the specified toolbar.</para>
             /// </summary>
-            public ToolBarButtonCollection(ToolBar owner) {
+            public ToolBarButtonCollection(ToolBar owner)
+            {
                 this.owner = owner;
             }
 
@@ -1585,20 +1896,28 @@ namespace System.Windows.Forms {
             ///    <para>Gets or sets the toolbar button at the specified indexed location in the
             ///       toolbar button collection.</para>
             /// </summary>
-            public virtual ToolBarButton this[int index] {
-                get {
+            public virtual ToolBarButton this[int index]
+            {
+                get
+                {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
-                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                   return owner.buttons[index];
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
+                    return owner.buttons[index];
                 }
-                set {
+                set
+                {
 
                     // Sanity check parameters
                     //
-                    if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount)) {
+                    if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount))
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
-                    if (value == null) {
+                    if (value == null)
+                    {
                         throw new ArgumentNullException(nameof(value));
                     }
 
@@ -1606,35 +1925,45 @@ namespace System.Windows.Forms {
                 }
             }
 
-            object IList.this[int index] {
-                get {
+            object IList.this[int index]
+            {
+                get
+                {
                     return this[index];
                 }
-                set {
-                    if (value is ToolBarButton) {
+                set
+                {
+                    if (value is ToolBarButton)
+                    {
                         this[index] = (ToolBarButton)value;
                     }
-                    else {
-                        throw new ArgumentException(SR.ToolBarBadToolBarButton,"value");
+                    else
+                    {
+                        throw new ArgumentException(SR.ToolBarBadToolBarButton, "value");
                     }
                 }
             }
             /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </summary>
-            public virtual ToolBarButton this[string key] {
-                get {
+            public virtual ToolBarButton this[string key]
+            {
+                get
+                {
                     // We do not support null and empty string as valid keys.
-                    if (string.IsNullOrEmpty(key)){
+                    if (string.IsNullOrEmpty(key))
+                    {
                         return null;
                     }
 
                     // Search for the key in our collection
                     int index = IndexOfKey(key);
-                    if (IsValidIndex(index)) {
+                    if (IsValidIndex(index))
+                    {
                         return this[index];
                     }
-                    else {
+                    else
+                    {
                         return null;
                     }
 
@@ -1644,32 +1973,42 @@ namespace System.Windows.Forms {
             ///    <para> Gets the number of buttons in the toolbar button collection.</para>
             /// </summary>
             [Browsable(false)]
-            public int Count {
-                get {
+            public int Count
+            {
+                get
+                {
                     return owner.buttonCount;
                 }
             }
 
-            object ICollection.SyncRoot {
-                get {
+            object ICollection.SyncRoot
+            {
+                get
+                {
                     return this;
                 }
             }
 
-            bool ICollection.IsSynchronized {
-                get {
+            bool ICollection.IsSynchronized
+            {
+                get
+                {
                     return false;
                 }
             }
 
-            bool IList.IsFixedSize {
-                get {
+            bool IList.IsFixedSize
+            {
+                get
+                {
                     return false;
                 }
             }
 
-            public bool IsReadOnly {
-                get {
+            public bool IsReadOnly
+            {
+                get
+                {
                     return false;
                 }
             }
@@ -1678,42 +2017,53 @@ namespace System.Windows.Forms {
             ///    <para>Adds a new toolbar button to
             ///       the end of the toolbar button collection.</para>
             /// </summary>
-            public int Add(ToolBarButton button) {
+            public int Add(ToolBarButton button)
+            {
 
                 int index = owner.InternalAddButton(button);
 
-                if (!suspendUpdate) {
+                if (!suspendUpdate)
+                {
                     owner.UpdateButtons();
                 }
 
                 return index;
             }
 
-            public int Add(string text) {
+            public int Add(string text)
+            {
                 ToolBarButton button = new ToolBarButton(text);
                 return Add(button);
             }
 
-            int IList.Add(object button) {
-                if (button is ToolBarButton) {
+            int IList.Add(object button)
+            {
+                if (button is ToolBarButton)
+                {
                     return Add((ToolBarButton)button);
                 }
-                else {
-                    throw new ArgumentException(SR.ToolBarBadToolBarButton,"button");
+                else
+                {
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton, "button");
                 }
             }
 
-            public void AddRange(ToolBarButton[] buttons) {
-                if (buttons == null) {
+            public void AddRange(ToolBarButton[] buttons)
+            {
+                if (buttons == null)
+                {
                     throw new ArgumentNullException(nameof(buttons));
                 }
-                try {
+                try
+                {
                     suspendUpdate = true;
-                    foreach(ToolBarButton button in buttons) {
+                    foreach (ToolBarButton button in buttons)
+                    {
                         Add(button);
                     }
                 }
-                finally {
+                finally
+                {
                     suspendUpdate = false;
                     owner.UpdateButtons();
                 }
@@ -1724,14 +2074,18 @@ namespace System.Windows.Forms {
             ///    <para>Removes
             ///       all buttons from the toolbar button collection.</para>
             /// </summary>
-            public void Clear() {
+            public void Clear()
+            {
 
-                if (owner.buttons == null) {
+                if (owner.buttons == null)
+                {
                     return;
                 }
 
-                for (int x = owner.buttonCount; x > 0; x--) {
-                    if (owner.IsHandleCreated) {
+                for (int x = owner.buttonCount; x > 0; x--)
+                {
+                    if (owner.IsHandleCreated)
+                    {
                         owner.SendMessage(NativeMethods.TB_DELETEBUTTON, x - 1, 0);
                     }
                     owner.RemoveAt(x - 1);
@@ -1739,53 +2093,67 @@ namespace System.Windows.Forms {
 
                 owner.buttons = null;
                 owner.buttonCount = 0;
-                if (!owner.Disposing) {
+                if (!owner.Disposing)
+                {
                     owner.UpdateButtons();
                 }
             }
 
-            public bool Contains(ToolBarButton button) {
+            public bool Contains(ToolBarButton button)
+            {
                 return IndexOf(button) != -1;
             }
 
-            bool IList.Contains(object button) {
-                if (button is ToolBarButton) {
+            bool IList.Contains(object button)
+            {
+                if (button is ToolBarButton)
+                {
                     return Contains((ToolBarButton)button);
                 }
-                else {
+                else
+                {
                     return false;
                 }
             }
 
 
-           /// <summary>
-           ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-           /// </summary>
-           public virtual bool ContainsKey(string key) {
-               return IsValidIndex(IndexOfKey(key));
-           }
+            /// <summary>
+            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
+            /// </summary>
+            public virtual bool ContainsKey(string key)
+            {
+                return IsValidIndex(IndexOfKey(key));
+            }
 
 
-            void ICollection.CopyTo(Array dest, int index) {
-                if (owner.buttonCount > 0) {
+            void ICollection.CopyTo(Array dest, int index)
+            {
+                if (owner.buttonCount > 0)
+                {
                     System.Array.Copy(owner.buttons, 0, dest, index, owner.buttonCount);
                 }
             }
 
-            public int IndexOf(ToolBarButton button) {
-                for(int index=0; index < Count; ++index) {
-                    if (this[index] == button) {
+            public int IndexOf(ToolBarButton button)
+            {
+                for (int index = 0; index < Count; ++index)
+                {
+                    if (this[index] == button)
+                    {
                         return index;
                     }
                 }
                 return -1;
             }
 
-            int IList.IndexOf(object button) {
-                if (button is ToolBarButton) {
+            int IList.IndexOf(object button)
+            {
+                if (button is ToolBarButton)
+                {
                     return IndexOf((ToolBarButton)button);
                 }
-                else {
+                else
+                {
                     return -1;
                 }
             }
@@ -1793,23 +2161,28 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </summary>
-            public virtual int  IndexOfKey(string key) {
-                  // Step 0 - Arg validation
-                  if (string.IsNullOrEmpty(key)){
-                        return -1; // we dont support empty or null keys.
-                  }
+            public virtual int IndexOfKey(string key)
+            {
+                // Step 0 - Arg validation
+                if (string.IsNullOrEmpty(key))
+                {
+                    return -1; // we dont support empty or null keys.
+                }
 
                 // step 1 - check the last cached item
                 if (IsValidIndex(lastAccessedIndex))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true)) {
+                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                    {
                         return lastAccessedIndex;
                     }
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i ++) {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true)) {
+                for (int i = 0; i < Count; i++)
+                {
+                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
+                    {
                         lastAccessedIndex = i;
                         return i;
                     }
@@ -1820,37 +2193,46 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            public void Insert(int index, ToolBarButton button) {
+            public void Insert(int index, ToolBarButton button)
+            {
                 owner.InsertButton(index, button);
             }
 
-            void IList.Insert(int index, object button) {
-                if (button is ToolBarButton) {
+            void IList.Insert(int index, object button)
+            {
+                if (button is ToolBarButton)
+                {
                     Insert(index, (ToolBarButton)button);
                 }
-                else {
-                    throw new ArgumentException(SR.ToolBarBadToolBarButton,"button");
+                else
+                {
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton, "button");
                 }
             }
 
 
-           /// <summary>
-           ///     <para>Determines if the index is valid for the collection.</para>
-           /// </summary>
-           private bool IsValidIndex(int index) {
-               return ((index >= 0) && (index < this.Count));
+            /// <summary>
+            ///     <para>Determines if the index is valid for the collection.</para>
+            /// </summary>
+            private bool IsValidIndex(int index)
+            {
+                return ((index >= 0) && (index < Count));
             }
             /// <summary>
             ///    <para>Removes
             ///       a given button from the toolbar button collection.</para>
             /// </summary>
-            public void RemoveAt(int index) {
+            public void RemoveAt(int index)
+            {
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                }
 
-                if (owner.IsHandleCreated) {
+                if (owner.IsHandleCreated)
+                {
                     owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);
                 }
 
@@ -1861,25 +2243,31 @@ namespace System.Windows.Forms {
 
 
 
-           /// <summary>
-           ///     <para>Removes the child control with the specified key.</para>
-           /// </summary>
-           public virtual void RemoveByKey(string key) {
+            /// <summary>
+            ///     <para>Removes the child control with the specified key.</para>
+            /// </summary>
+            public virtual void RemoveByKey(string key)
+            {
                 int index = IndexOfKey(key);
-                if (IsValidIndex(index)) {
-                    RemoveAt(index);
-                 }
-            }
-
-            public void Remove(ToolBarButton button) {
-                int index = IndexOf(button);
-                if (index != -1) {
+                if (IsValidIndex(index))
+                {
                     RemoveAt(index);
                 }
             }
 
-            void IList.Remove(object button) {
-                if (button is ToolBarButton) {
+            public void Remove(ToolBarButton button)
+            {
+                int index = IndexOf(button);
+                if (index != -1)
+                {
+                    RemoveAt(index);
+                }
+            }
+
+            void IList.Remove(object button)
+            {
+                if (button is ToolBarButton)
+                {
                     Remove((ToolBarButton)button);
                 }
             }
@@ -1888,7 +2276,8 @@ namespace System.Windows.Forms {
             ///    <para>Returns an enumerator that can be used to iterate
             ///       through the toolbar button collection.</para>
             /// </summary>
-            public IEnumerator GetEnumerator() {
+            public IEnumerator GetEnumerator()
+            {
                 return new WindowsFormsUtils.ArraySubsetEnumerator(owner.buttons, owner.buttonCount);
             }
         }

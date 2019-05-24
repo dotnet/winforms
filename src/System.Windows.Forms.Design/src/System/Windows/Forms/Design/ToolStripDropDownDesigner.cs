@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design
                     actionLists.Add(cmActionList);
                 }
                 // finally add the verbs for this component there...
-                DesignerVerbCollection cmVerbs = this.Verbs;
+                DesignerVerbCollection cmVerbs = Verbs;
                 if (cmVerbs != null && cmVerbs.Count != 0)
                 {
                     DesignerVerb[] cmverbsArray = new DesignerVerb[cmVerbs.Count];
@@ -164,8 +164,7 @@ namespace System.Windows.Forms.Design
             {
                 if (string.IsNullOrEmpty((string)ShadowProperties["SettingsKey"]))
                 {
-                    IPersistComponentSettings persistableComponent = Component as IPersistComponentSettings;
-                    if (persistableComponent != null && host != null)
+                    if (Component is IPersistComponentSettings persistableComponent && host != null)
                     {
                         if (persistableComponent.SettingsKey == null)
                         {
@@ -240,8 +239,8 @@ namespace System.Windows.Forms.Design
                 // Unhook our services
                 if (selSvc != null)
                 {
-                    selSvc.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
-                    selSvc.SelectionChanging -= new EventHandler(this.OnSelectionChanging);
+                    selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                    selSvc.SelectionChanging -= new EventHandler(OnSelectionChanging);
                 }
 
                 DisposeMenu();
@@ -256,7 +255,7 @@ namespace System.Windows.Forms.Design
                 }
                 if (undoEngine != null)
                 {
-                    undoEngine.Undone -= new EventHandler(this.OnUndone);
+                    undoEngine.Undone -= new EventHandler(OnUndone);
                 }
             }
             base.Dispose(disposing);

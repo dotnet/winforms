@@ -25,7 +25,7 @@ internal static partial class Interop
         public const int EM_LINEFROMCHAR = 0x00C9;
         public const int EM_GETFIRSTVISIBLELINE = 0x00CE;
         public const int EM_LINEINDEX = 0x00BB;
-        
+
         public const int EM_GETLIMITTEXT = (WindowMessages.WM_USER + 37);
 
         public const int EM_POSFROMCHAR = (WindowMessages.WM_USER + 38);

@@ -8,23 +8,23 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace System.ComponentModel.Design.Serialization 
+namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
     ///    A MemberCodeDomSerializer for events.
     /// </summary>
-    internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer 
+    internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
     {
-        private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+        private static readonly CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
         private static EventMemberCodeDomSerializer s_default;
 
-        internal static EventMemberCodeDomSerializer Default 
+        internal static EventMemberCodeDomSerializer Default
         {
-            get 
+            get
             {
                 if (s_default == null)
                 {
-                     s_default = new EventMemberCodeDomSerializer();
+                    s_default = new EventMemberCodeDomSerializer();
                 }
 
                 return s_default;
@@ -36,66 +36,64 @@ namespace System.ComponentModel.Design.Serialization
         ///    the necessary statements will be added to the statements collection.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
-        public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements) 
+        public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
-            EventDescriptor eventToSerialize = descriptor as EventDescriptor;
-
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (value == null) 
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (eventToSerialize == null) 
+            if (!(descriptor is EventDescriptor eventToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
-            if (statements == null) 
+            if (statements == null)
             {
                 throw new ArgumentNullException(nameof(statements));
             }
 
-            try 
+            try
             {
                 IEventBindingService eventBindings = (IEventBindingService)manager.GetService(typeof(IEventBindingService));
 
                 // If the IEventBindingService is not available, we don't throw - we just don't do anything.
-                if (eventBindings != null) 
+                if (eventBindings != null)
                 {
                     PropertyDescriptor prop = eventBindings.GetEventProperty(eventToSerialize);
                     string methodName = (string)prop.GetValue(value);
-    
-                    if (methodName != null) 
+
+                    if (methodName != null)
                     {
                         CodeDomSerializer.Trace("Event {0} bound to {1}", eventToSerialize.Name, methodName);
                         CodeExpression eventTarget = SerializeToExpression(manager, value);
                         CodeDomSerializer.TraceWarningIf(eventTarget == null, "Object has no name and no propery ref in context so we cannot serialize events: {0}", value);
-                        if (eventTarget != null) 
+                        if (eventTarget != null)
                         {
                             CodeTypeReference delegateTypeRef = new CodeTypeReference(eventToSerialize.EventType);
                             CodeDelegateCreateExpression delegateCreate = new CodeDelegateCreateExpression(delegateTypeRef, _thisRef, methodName);
                             CodeEventReferenceExpression eventRef = new CodeEventReferenceExpression(eventTarget, eventToSerialize.Name);
                             CodeAttachEventStatement attach = new CodeAttachEventStatement(eventRef, delegateCreate);
-    
+
                             attach.UserData[typeof(Delegate)] = eventToSerialize.EventType;
                             statements.Add(attach);
                         }
                     }
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 // Since we usually go through reflection, don't 
                 // show what our engine does, show what caused 
                 // the problem.
                 //
-                if (e is TargetInvocationException) 
+                if (e is TargetInvocationException)
                 {
                     e = e.InnerException;
                 }
-                
+
                 manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, eventToSerialize.Name, e.Message), manager));
             }
         }
@@ -105,5 +103,5 @@ namespace System.ComponentModel.Design.Serialization
         ///    or false if there is no need to serialize the member.
         /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor) => true;
-	}
+    }
 }

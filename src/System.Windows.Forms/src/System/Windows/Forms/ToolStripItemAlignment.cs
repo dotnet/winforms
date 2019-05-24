@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// </summary>
     public enum ToolStripItemAlignment
     {
-        Left=0x0,		
-        Right=0x1,
+        Left = 0x0,
+        Right = 0x1,
     }
 }

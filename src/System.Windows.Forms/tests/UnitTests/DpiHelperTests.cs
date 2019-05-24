@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
         public void DpiHelper_LogicalToDeviceUnitsSize(Size value)
         {
-            var expected = new Size ((int)Math.Round(value.Width * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)),
+            var expected = new Size((int)Math.Round(value.Width * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)),
                                      (int)Math.Round(value.Height * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)));
 
             Assert.Equal(expected, DpiHelper.LogicalToDeviceUnits(value));

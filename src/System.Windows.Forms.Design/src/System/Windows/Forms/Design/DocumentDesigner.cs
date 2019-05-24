@@ -140,7 +140,9 @@ namespace System.Windows.Forms.Design
                     }
                     //Here, something is selected, but the menuservice isn't interested so, we'll collapse our active menu accordingly
                     else
+                    {
                         menuEditorService.SetMenu(null);
+                    }
                 }
             }
         }

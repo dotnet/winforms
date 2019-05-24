@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
                 AutoSize = value
             };
             Assert.Equal(value, panel.AutoSize);
-            
+
             // Set same.
             panel.AutoSize = value;
             Assert.Equal(value, panel.AutoSize);
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
                 RowMargin = value
             };
             Assert.Equal(value, panel.RowMargin);
-            
+
             // Set same.
             panel.RowMargin = value;
             Assert.Equal(value, panel.RowMargin);

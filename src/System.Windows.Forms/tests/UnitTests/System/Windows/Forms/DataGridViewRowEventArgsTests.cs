@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             var e = new DataGridViewRowEventArgs(dataGridViewRow);
             Assert.Equal(dataGridViewRow, e.Row);
         }
-        
+
         [Fact]
         public void Ctor_NullDataGridViewRow_ThrowsArgumentNullException()
         {

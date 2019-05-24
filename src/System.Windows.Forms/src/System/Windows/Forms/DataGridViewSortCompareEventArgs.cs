@@ -10,12 +10,14 @@ namespace System.Windows.Forms
 
     public class DataGridViewSortCompareEventArgs : HandledEventArgs
     {
-        private DataGridViewColumn dataGridViewColumn;
-        private object cellValue1, cellValue2;
-        private int sortResult, rowIndex1, rowIndex2;
-    
+        private readonly DataGridViewColumn dataGridViewColumn;
+        private readonly object cellValue1, cellValue2;
+        private int sortResult;
+        private readonly int rowIndex1;
+        private readonly int rowIndex2;
+
         public DataGridViewSortCompareEventArgs(DataGridViewColumn dataGridViewColumn,
-            object cellValue1, 
+            object cellValue1,
             object cellValue2,
             int rowIndex1,
             int rowIndex2)
@@ -33,7 +35,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.cellValue1;
+                return cellValue1;
             }
         }
 
@@ -41,7 +43,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.cellValue2;
+                return cellValue2;
             }
         }
 
@@ -49,7 +51,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewColumn;
+                return dataGridViewColumn;
             }
         }
 
@@ -57,7 +59,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.rowIndex1;
+                return rowIndex1;
             }
         }
 
@@ -65,7 +67,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.rowIndex2;
+                return rowIndex2;
             }
         }
 
@@ -73,11 +75,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.sortResult;
+                return sortResult;
             }
             set
             {
-                this.sortResult = value;
+                sortResult = value;
             }
         }
     }

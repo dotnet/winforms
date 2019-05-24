@@ -13,7 +13,7 @@ internal static partial class Interop
         public static extern int GetWindowTextLengthW(HandleRef hWnd);
 
         [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
-        private static unsafe extern int GetWindowTextW(HandleRef hWnd, char *lpString, int nMaxCount);
+        private static unsafe extern int GetWindowTextW(HandleRef hWnd, char* lpString, int nMaxCount);
 
         public static unsafe string GetWindowText(HandleRef hWnd)
         {
@@ -24,7 +24,7 @@ internal static partial class Interop
                 int textLengthWithNullTerminator = GetWindowTextLengthW(hWnd) + 1;
                 char[] windowTitleBuffer = ArrayPool<char>.Shared.Rent(textLengthWithNullTerminator);
                 string windowTitle;
-                fixed (char *pWindowTitle = windowTitleBuffer)
+                fixed (char* pWindowTitle = windowTitleBuffer)
                 {
                     int actualTextLength = GetWindowTextW(hWnd, pWindowTitle, textLengthWithNullTerminator + 1);
 
@@ -35,10 +35,10 @@ internal static partial class Interop
                         ArrayPool<char>.Shared.Return(windowTitleBuffer);
                         continue;
                     }
-    
+
                     windowTitle = new string(pWindowTitle, 0, actualTextLength);
                 }
-                
+
                 ArrayPool<char>.Shared.Return(windowTitleBuffer);
                 return windowTitle;
             }

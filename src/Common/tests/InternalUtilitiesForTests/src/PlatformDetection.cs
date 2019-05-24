@@ -60,7 +60,7 @@ namespace System
         // running in AppContainer when running on .NetNative.
         public static bool IsNotNetNativeRunningAsConsoleApp => !(IsNetNative && !IsInAppContainer);
 
-        private static Lazy<bool> m_isWindowsSubsystemForLinux = new Lazy<bool>(GetIsWindowsSubsystemForLinux);
+        private static readonly Lazy<bool> m_isWindowsSubsystemForLinux = new Lazy<bool>(GetIsWindowsSubsystemForLinux);
 
         public static bool IsWindowsSubsystemForLinux => m_isWindowsSubsystemForLinux.Value;
         public static bool IsNotWindowsSubsystemForLinux => !IsWindowsSubsystemForLinux;
@@ -86,7 +86,7 @@ namespace System
             return false;
         }
 
-        private static Lazy<bool> s_largeArrayIsNotSupported = new Lazy<bool>(IsLargeArrayNotSupported);
+        private static readonly Lazy<bool> s_largeArrayIsNotSupported = new Lazy<bool>(IsLargeArrayNotSupported);
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
         private static bool IsLargeArrayNotSupported()

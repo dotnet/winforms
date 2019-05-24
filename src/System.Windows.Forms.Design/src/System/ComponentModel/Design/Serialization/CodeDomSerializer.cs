@@ -18,13 +18,13 @@ namespace System.ComponentModel.Design.Serialization
         private static CodeDomSerializer s_default;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-        private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+        private static readonly CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
 
-        internal static CodeDomSerializer Default 
+        internal static CodeDomSerializer Default
         {
-            get 
+            get
             {
-                if (s_default == null) 
+                if (s_default == null)
                 {
                     s_default = new CodeDomSerializer();
                 }
@@ -169,7 +169,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if(value == null) 
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -271,9 +271,20 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMember(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
-            if (member == null) throw new ArgumentNullException(nameof(member));
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (owningObject == null)
+            {
+                throw new ArgumentNullException(nameof(owningObject));
+            }
+
+            if (member == null)
+            {
+                throw new ArgumentNullException(nameof(member));
+            }
 
             CodeStatementCollection statements = new CodeStatementCollection();
             // See if we have an existing expression for this member.  If not, fabricate one
@@ -308,9 +319,20 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMemberAbsolute(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
-            if (member == null) throw new ArgumentNullException(nameof(member));
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (owningObject == null)
+            {
+                throw new ArgumentNullException(nameof(owningObject));
+            }
+
+            if (member == null)
+            {
+                throw new ArgumentNullException(nameof(member));
+            }
 
             CodeStatementCollection statements;
             SerializeAbsoluteContext abs = new SerializeAbsoluteContext(member);

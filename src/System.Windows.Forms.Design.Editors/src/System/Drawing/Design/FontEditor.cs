@@ -30,10 +30,12 @@ namespace System.Drawing.Design
                 {
                     if (_fontDialog == null)
                     {
-                        _fontDialog = new FontDialog();
-                        _fontDialog.ShowApply = false;
-                        _fontDialog.ShowColor = false;
-                        _fontDialog.AllowVerticalFonts = false;
+                        _fontDialog = new FontDialog
+                        {
+                            ShowApply = false,
+                            ShowColor = false,
+                            AllowVerticalFonts = false
+                        };
                     }
 
                     if (value is Font fontValue)

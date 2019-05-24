@@ -138,7 +138,7 @@ namespace System.Drawing.Design
 
             public ColorPalette(ColorUI colorUI, Color[] customColors)
             {
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
@@ -162,9 +162,11 @@ namespace System.Drawing.Design
                 staticColors = new Color[CELLS - CELLS_CUSTOM];
 
                 for (int i = 0; i < staticCells.Length; i++)
+                {
                     staticColors[i] = ColorTranslator.FromOle(staticCells[i]);
+                }
 
-                this.CustomColors = customColors;
+                CustomColors = customColors;
             }
 
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -238,7 +240,10 @@ namespace System.Drawing.Design
             private Color GetColorFromCell(int index)
             {
                 if (index < CELLS - CELLS_CUSTOM)
+                {
                     return staticColors[index];
+                }
+
                 return CustomColors[index - CELLS + CELLS_CUSTOM];
             }
 
@@ -464,12 +469,13 @@ namespace System.Drawing.Design
                 {
                     g.FillRectangle(brush, ClientRectangle);
                 }
-                Rectangle rect = new Rectangle();
-
-                rect.Width = cellSizeX;
-                rect.Height = cellSizeY;
-                rect.X = marginX;
-                rect.Y = marginY;
+                Rectangle rect = new Rectangle
+                {
+                    Width = cellSizeX,
+                    Height = cellSizeY,
+                    X = marginX,
+                    Y = marginY
+                };
                 bool drawSelected = false;
 
                 for (int y = 0; y < CELLS_DOWN; y++)
@@ -806,27 +812,31 @@ namespace System.Drawing.Design
                 tabControl.TabPages.Add(systemTabPage);
                 tabControl.TabStop = false;
                 tabControl.SelectedTab = systemTabPage;
-                tabControl.SelectedIndexChanged += new EventHandler(this.OnTabControlSelChange);
+                tabControl.SelectedIndexChanged += new EventHandler(OnTabControlSelChange);
                 tabControl.Dock = DockStyle.Fill;
-                tabControl.Resize += new EventHandler(this.OnTabControlResize);
+                tabControl.Resize += new EventHandler(OnTabControlResize);
 
-                lbSystem = new ColorEditorListBox();
-                lbSystem.DrawMode = DrawMode.OwnerDrawFixed;
-                lbSystem.BorderStyle = BorderStyle.FixedSingle;
-                lbSystem.IntegralHeight = false;
-                lbSystem.Sorted = false;
-                lbSystem.Click += new EventHandler(this.OnListClick);
+                lbSystem = new ColorEditorListBox
+                {
+                    DrawMode = DrawMode.OwnerDrawFixed,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    IntegralHeight = false,
+                    Sorted = false
+                };
+                lbSystem.Click += new EventHandler(OnListClick);
                 lbSystem.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbSystem.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbSystem.Dock = DockStyle.Fill;
-                lbSystem.FontChanged += new EventHandler(this.OnFontChanged);
+                lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
-                lbCommon = new ColorEditorListBox();
-                lbCommon.DrawMode = DrawMode.OwnerDrawFixed;
-                lbCommon.BorderStyle = BorderStyle.FixedSingle;
-                lbCommon.IntegralHeight = false;
-                lbCommon.Sorted = false;
-                lbCommon.Click += new EventHandler(this.OnListClick);
+                lbCommon = new ColorEditorListBox
+                {
+                    DrawMode = DrawMode.OwnerDrawFixed,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    IntegralHeight = false,
+                    Sorted = false
+                };
+                lbCommon.Click += new EventHandler(OnListClick);
                 lbCommon.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbCommon.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbCommon.Dock = DockStyle.Fill;
@@ -846,7 +856,7 @@ namespace System.Drawing.Design
                 }
 
                 pal = new ColorPalette(this, CustomColors);
-                pal.Picked += new EventHandler(this.OnPalettePick);
+                pal.Picked += new EventHandler(OnPalettePick);
 
                 paletteTabPage.Controls.Add(pal);
                 systemTabPage.Controls.Add(lbSystem);
@@ -966,9 +976,14 @@ namespace System.Drawing.Design
                     {
                         int count = tabControl.TabPages.Count;
                         if (forward)
+                        {
                             sel = (sel + 1) % count;
+                        }
                         else
+                        {
                             sel = (sel + count - 1) % count;
+                        }
+
                         tabControl.SelectedTab = tabControl.TabPages[sel];
 
                         return true;

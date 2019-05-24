@@ -27,5 +27,5 @@ namespace System.Windows.Forms
         /// The newly selected GridItem object
         /// </summary>
         public GridItem NewSelection { get; }
-   }
+    }
 }

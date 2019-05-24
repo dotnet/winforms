@@ -270,11 +270,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
-            
+
             Assert.Equal(collection[expectedIndex], collection[key]);
         }
 
@@ -289,11 +291,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
-            
+
             Assert.Null(collection[key]);
         }
 
@@ -313,11 +317,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
-            
+
             var group3 = new ListViewGroup();
             collection[key] = group3;
             Assert.Same(group3, collection[expectedIndex]);
@@ -334,11 +340,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
-            var group2 = new ListViewGroup();
-            group2.Name = "text";
+            var group2 = new ListViewGroup
+            {
+                Name = "text"
+            };
             collection.Add(group1);
             collection.Add(group2);
-            
+
             var group3 = new ListViewGroup();
             collection[key] = group3;
             Assert.Same(group1, collection[0]);
@@ -375,7 +383,7 @@ namespace System.Windows.Forms.Tests
             // Add another.
             var group2 = new ListViewGroup();
             Assert.Equal(1, collection.Add(group2));
-            Assert.Equal(new ListViewGroup[] { group1, group2 } , collection.Cast<ListViewGroup>());
+            Assert.Equal(new ListViewGroup[] { group1, group2 }, collection.Cast<ListViewGroup>());
             Assert.Same(listView, group2.ListView);
         }
 
@@ -394,7 +402,7 @@ namespace System.Windows.Forms.Tests
             // Add another.
             var group2 = new ListViewGroup();
             Assert.Equal(1, collection.Add(group2));
-            Assert.Equal(new ListViewGroup[] { group1, group2 } , collection.Cast<ListViewGroup>());
+            Assert.Equal(new ListViewGroup[] { group1, group2 }, collection.Cast<ListViewGroup>());
             Assert.Same(listView, group2.ListView);
         }
 
@@ -642,7 +650,7 @@ namespace System.Windows.Forms.Tests
             ListViewGroupCollection collection = listView.Groups;
             var group = new ListViewGroup();
             collection.Add(group);
-            
+
             Assert.True(collection.Contains(group));
             Assert.False(collection.Contains(new ListViewGroup()));
             Assert.False(collection.Contains(null));
@@ -653,7 +661,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
-            
+
             Assert.False(collection.Contains(new ListViewGroup()));
             Assert.False(collection.Contains(null));
         }
@@ -665,7 +673,7 @@ namespace System.Windows.Forms.Tests
             IList collection = listView.Groups;
             var group = new ListViewGroup();
             collection.Add(group);
-            
+
             Assert.True(collection.Contains(group));
             Assert.False(collection.Contains(new ListViewGroup()));
             Assert.False(collection.Contains(new object()));
@@ -677,7 +685,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             IList collection = listView.Groups;
-            
+
             Assert.False(collection.Contains(new ListViewGroup()));
             Assert.False(collection.Contains(new object()));
             Assert.False(collection.Contains(null));
@@ -690,7 +698,7 @@ namespace System.Windows.Forms.Tests
             ListViewGroupCollection collection = listView.Groups;
             var group = new ListViewGroup();
             collection.Add(group);
-            
+
             Assert.Equal(0, collection.IndexOf(group));
             Assert.Equal(-1, collection.IndexOf(new ListViewGroup()));
             Assert.Equal(-1, collection.IndexOf(null));
@@ -701,7 +709,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
-            
+
             Assert.Equal(-1, collection.IndexOf(new ListViewGroup()));
             Assert.Equal(-1, collection.IndexOf(null));
         }

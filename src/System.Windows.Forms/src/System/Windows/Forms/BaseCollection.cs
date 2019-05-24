@@ -10,7 +10,8 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides the base functionality for creating collections.
     /// </summary>
-    public class BaseCollection : MarshalByRefObject, ICollection {
+    public class BaseCollection : MarshalByRefObject, ICollection
+    {
 
         /// <summary>
         /// Gets the total number of elements in a collection.

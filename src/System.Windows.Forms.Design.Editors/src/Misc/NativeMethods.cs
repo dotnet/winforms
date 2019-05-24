@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         public const int EC_LEFTMARGIN = 0x0001;
         public const int EC_RIGHTMARGIN = 0x0002;
         public const int IDOK = 1;
-        
+
         public const int VK_PROCESSKEY = 0xE5;
 
         public const int STGM_READ = 0x00000000;
@@ -3962,8 +3962,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)((n >> 16) & 0xffff);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }
@@ -3972,8 +3972,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)(n & 0xFFFF);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }

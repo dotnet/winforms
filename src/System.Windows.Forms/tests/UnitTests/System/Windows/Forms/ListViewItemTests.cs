@@ -580,7 +580,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, -1, string.Empty };
             yield return new object[] { new string[0], 0, string.Empty };
             yield return new object[] { new string[] { null }, 1, string.Empty };
-            yield return new object[] { new string[] { "text" }, 2,  "text" };
+            yield return new object[] { new string[] { "text" }, 2, "text" };
         }
 
         [Theory]

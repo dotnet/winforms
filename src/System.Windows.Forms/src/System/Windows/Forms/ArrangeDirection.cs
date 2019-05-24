@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     /// </summary>
     [ComVisible(true)]
     [Flags]
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification =  "Maps to native enum")]
+    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum")]
     public enum ArrangeDirection
     {
         /// <summary>

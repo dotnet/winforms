@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     internal class ListManagerBindingsCollection : BindingsCollection
     {
-        private BindingManagerBase _bindingManagerBase;
+        private readonly BindingManagerBase _bindingManagerBase;
 
         /// <summary>
         /// ColumnsCollection constructor.  Used only by DataSource.
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {
             Debug.Assert(bindingManagerBase != null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
-            this._bindingManagerBase = bindingManagerBase;
+            _bindingManagerBase = bindingManagerBase;
         }
 
         protected override void AddCore(Binding dataBinding)

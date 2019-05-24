@@ -86,7 +86,7 @@ namespace System.ComponentModel.Design.Tests
             collection.AddRange(new DesignerActionListCollection(value));
             Assert.Equal(value.Concat(value), collection.Cast<object>());
         }
-        
+
         [Fact]
         public void DesignerActionListCollection_Insert_DesignerActionList_Success()
         {

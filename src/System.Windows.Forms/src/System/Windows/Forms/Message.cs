@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     public struct Message
     {
 #if DEBUG
-        private static TraceSwitch s_allWinMessages = new TraceSwitch("AllWinMessages", "Output every received message");
+        private static readonly TraceSwitch s_allWinMessages = new TraceSwitch("AllWinMessages", "Output every received message");
 #endif
 
         public IntPtr HWnd { get; set; }
@@ -44,15 +44,17 @@ namespace System.Windows.Forms
         /// </summary>
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            var m = new Message();
-            m.HWnd = hWnd;
-            m.Msg = msg;
-            m.WParam = wparam;
-            m.LParam = lparam;
-            m.Result = IntPtr.Zero;
+            var m = new Message
+            {
+                HWnd = hWnd,
+                Msg = msg,
+                WParam = wparam,
+                LParam = lparam,
+                Result = IntPtr.Zero
+            };
 
 #if DEBUG
-            if(s_allWinMessages.TraceVerbose)
+            if (s_allWinMessages.TraceVerbose)
             {
                 Debug.WriteLine(m.ToString());
             }

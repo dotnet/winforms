@@ -255,10 +255,10 @@ namespace System.ComponentModel.Design
             }
         }
 
-    /// <summary>
-    /// Gets the design-time verbs supported by the component associated with the designer.
-    /// </summary>
-    public virtual DesignerVerbCollection Verbs
+        /// <summary>
+        /// Gets the design-time verbs supported by the component associated with the designer.
+        /// </summary>
+        public virtual DesignerVerbCollection Verbs
         {
             get
             {
@@ -390,7 +390,9 @@ namespace System.ComponentModel.Design
                     catch (CheckoutException cxe)
                     {
                         if (cxe == CheckoutException.Canceled)
+                        {
                             return;
+                        }
 
                         throw cxe;
                     }

@@ -6,10 +6,10 @@ namespace System.Windows.Forms
 {
     public class DataGridViewCellMouseEventArgs : MouseEventArgs
     {
-        public DataGridViewCellMouseEventArgs(int columnIndex, 
-            int rowIndex, 
-            int localX, 
-            int localY, 
+        public DataGridViewCellMouseEventArgs(int columnIndex,
+            int rowIndex,
+            int localX,
+            int localY,
             MouseEventArgs e) : base(e.Button, e.Clicks, localX, localY, e.Delta)
         {
             if (columnIndex < -1)

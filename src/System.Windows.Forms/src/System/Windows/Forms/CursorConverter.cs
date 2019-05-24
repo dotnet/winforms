@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
     using Microsoft.Win32;
@@ -19,16 +20,19 @@ namespace System.Windows.Forms {
     ///      colors from one data type to another.  Access this
     ///      class through the TypeDescriptor.
     /// </summary>
-    public class CursorConverter : TypeConverter {
-    
+    public class CursorConverter : TypeConverter
+    {
+
         private StandardValuesCollection values;
 
         /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
-            if (sourceType == typeof(string) || sourceType == typeof(byte[])) {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string) || sourceType == typeof(byte[]))
+            {
                 return true;
             }
             return base.CanConvertFrom(context, sourceType);
@@ -38,33 +42,40 @@ namespace System.Windows.Forms {
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
-            if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(byte[])) {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(byte[]))
+            {
                 return true;
             }
 
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <summary>
         ///      Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-        
-            if (value is string) {
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+
+            if (value is string)
+            {
                 string text = ((string)value).Trim();
-                
+
                 PropertyInfo[] props = GetProperties();
-                for (int i = 0; i < props.Length; i++) {
+                for (int i = 0; i < props.Length; i++)
+                {
                     PropertyInfo prop = props[i];
-                    if (string.Equals(prop.Name, text, StringComparison.OrdinalIgnoreCase) ){
+                    if (string.Equals(prop.Name, text, StringComparison.OrdinalIgnoreCase))
+                    {
                         object[] tempIndex = null;
                         return prop.GetValue(null, tempIndex);
                     }
                 }
             }
-            
-            if (value is byte[]) {
+
+            if (value is byte[])
+            {
                 MemoryStream ms = new MemoryStream((byte[])value);
                 return new Cursor(ms);
             }
@@ -79,33 +90,41 @@ namespace System.Windows.Forms {
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-            if (destinationType == null) {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == null)
+            {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value != null) {
+            if (destinationType == typeof(string) && value != null)
+            {
                 PropertyInfo[] props = GetProperties();
                 int bestMatch = -1;
 
-                for (int i = 0; i < props.Length; i++) {
+                for (int i = 0; i < props.Length; i++)
+                {
                     PropertyInfo prop = props[i];
                     object[] tempIndex = null;
                     Cursor c = (Cursor)prop.GetValue(null, tempIndex);
-                    if (c == (Cursor)value) {
-                        if (Object.ReferenceEquals(c, value)) {
+                    if (c == (Cursor)value)
+                    {
+                        if (Object.ReferenceEquals(c, value))
+                        {
                             return prop.Name;
                         }
-                        else {
+                        else
+                        {
                             bestMatch = i;
                         }
                     }
                 }
 
-                if (bestMatch != -1) {
+                if (bestMatch != -1)
+                {
                     return props[bestMatch].Name;
                 }
-                
+
                 // We throw here because we cannot meaningfully convert a custom
                 // cursor into a string. In fact, the ResXResourceWriter will use
                 // this exception to indicate to itself that this object should
@@ -114,34 +133,42 @@ namespace System.Windows.Forms {
                 throw new FormatException(SR.CursorCannotCovertToString);
             }
 
-            if (destinationType == typeof(InstanceDescriptor) && value is Cursor) {
+            if (destinationType == typeof(InstanceDescriptor) && value is Cursor)
+            {
                 PropertyInfo[] props = GetProperties();
-                foreach(PropertyInfo prop in props) {
-                    if (prop.GetValue(null, null) == value) {
+                foreach (PropertyInfo prop in props)
+                {
+                    if (prop.GetValue(null, null) == value)
+                    {
                         return new InstanceDescriptor(prop, null);
                     }
                 }
             }
-            
-            if (destinationType == typeof(byte[])) {
-                if (value != null) {
+
+            if (destinationType == typeof(byte[]))
+            {
+                if (value != null)
+                {
                     MemoryStream ms = new MemoryStream();
                     Cursor cursor = (Cursor)value;
                     cursor.SavePicture(ms);
                     ms.Close();
                     return ms.ToArray();
                 }
-                else 
+                else
+                {
                     return new byte[0];
+                }
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
+
         /// <summary>
         ///      Retrieves the properties for the available cursors.
         /// </summary>
-        private PropertyInfo[] GetProperties() {
+        private PropertyInfo[] GetProperties()
+        {
             return typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public);
         }
 
@@ -151,20 +178,23 @@ namespace System.Windows.Forms {
         ///      will return null if the data type does not support a
         ///      standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
-            if (values == null) {
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            if (values == null)
+            {
                 ArrayList list = new ArrayList();
                 PropertyInfo[] props = GetProperties();
-                for (int i = 0; i < props.Length; i++) {
+                for (int i = 0; i < props.Length; i++)
+                {
                     PropertyInfo prop = props[i];
                     object[] tempIndex = null;
                     Debug.Assert(prop.GetValue(null, tempIndex) != null, "Property " + prop.Name + " returned NULL");
                     list.Add(prop.GetValue(null, tempIndex));
                 }
-                
+
                 values = new StandardValuesCollection(list.ToArray());
             }
-            
+
             return values;
         }
 
@@ -172,7 +202,8 @@ namespace System.Windows.Forms {
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
         /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
             return true;
         }
     }

@@ -15,13 +15,13 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class ListViewGroupCollection : IList
     {
-        private ListView _listView;
+        private readonly ListView _listView;
 
         private ArrayList _list;
 
         internal ListViewGroupCollection(ListView listView)
         {
-            this._listView = listView;
+            _listView = listView;
         }
 
         public int Count => List.Count;
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         public ListViewGroup this[int index]
         {
-            get => (ListViewGroup)this.List[index];
+            get => (ListViewGroup)List[index];
             set
             {
                 if (value == null)
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
                 if (_list == null)
                 {
-                     // nothing to do
+                    // nothing to do
                     return;
                 }
 
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             int index = List.Add(group);
             if (_listView.IsHandleCreated)
             {
-                _listView.InsertGroupInListView(this.List.Count, group);
+                _listView.InsertGroupInListView(List.Count, group);
                 MoveGroupItems(group);
             }
 
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
             }
-                
+
             return Add(group);
         }
 
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
             {
                 this[i].ListView = null;
             }
-            
+
             List.Clear();
 
             // we have to tell the listView that there are no more groups
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
 
             foreach (ListViewItem item in group.Items)
             {
-                if (item.ListView == this._listView)
+                if (item.ListView == _listView)
                 {
                     item.UpdateStateToListView(item.Index);
                 }

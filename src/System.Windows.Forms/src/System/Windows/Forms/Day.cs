@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// The day Saturday.
         /// </summary>
-        Saturday  = 5,
+        Saturday = 5,
 
         /// <summary>
         /// The day Sunday.
