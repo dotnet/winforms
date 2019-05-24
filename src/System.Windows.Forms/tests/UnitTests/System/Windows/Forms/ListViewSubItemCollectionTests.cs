@@ -714,12 +714,12 @@ namespace System.Windows.Forms.Tests
 
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Null(subItem.owner);
 
             // Remove again.
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Null(subItem.owner);
         }
 
         [Fact]
@@ -732,12 +732,12 @@ namespace System.Windows.Forms.Tests
 
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Null(subItem.owner);
 
             // Remove again.
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Null(subItem.owner);
         }
 
         [Theory]
@@ -759,28 +759,46 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
-            var subItem = new ListViewItem.ListViewSubItem();
-            collection.Add(subItem);
-            collection.Add(new ListViewItem.ListViewSubItem());
-            collection.Add(new ListViewItem.ListViewSubItem());
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var subItem1 = new ListViewItem.ListViewSubItem();
+            var subItem2 = new ListViewItem.ListViewSubItem();
+            var subItem3 = new ListViewItem.ListViewSubItem();
+            var subItem4 = new ListViewItem.ListViewSubItem();
+            collection.Add(subItem1);
+            collection.Add(subItem2);
+            collection.Add(subItem3);
+            collection.Add(subItem4);
 
             // Remove from start.
             collection.RemoveAt(0);
             Assert.Equal(3, collection.Count);
+            Assert.Null(subItem1.owner);
+            Assert.Same(item, subItem2.owner);
+            Assert.Same(item, subItem3.owner);
+            Assert.Same(item, subItem4.owner);
 
             // Remove from middle.
             collection.RemoveAt(1);
             Assert.Equal(2, collection.Count);
+            Assert.Null(subItem1.owner);
+            Assert.Same(item, subItem2.owner);
+            Assert.Null(subItem3.owner);
+            Assert.Same(item, subItem4.owner);
 
             // Remove from end.
             collection.RemoveAt(1);
             Assert.Single(collection);
+            Assert.Null(subItem1.owner);
+            Assert.Same(item, subItem2.owner);
+            Assert.Null(subItem3.owner);
+            Assert.Null(subItem4.owner);
 
             // Remove only.
             collection.RemoveAt(0);
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Null(subItem1.owner);
+            Assert.Null(subItem2.owner);
+            Assert.Null(subItem3.owner);
+            Assert.Null(subItem4.owner);
         }
 
         [Theory]
@@ -826,7 +844,14 @@ namespace System.Windows.Forms.Tests
 
             collection.RemoveByKey(key);
             Assert.Equal(expectedCount, collection.Count);
-            Assert.Same(item, subItem.owner);
+            if (expectedCount == 1)
+            {
+                Assert.Same(item, subItem.owner);
+            }
+            else
+            {
+                Assert.Null(subItem.owner);
+            }
         }
 
         [Fact]
