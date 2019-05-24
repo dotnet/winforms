@@ -29,10 +29,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            if (obj is NativeMethods.ICategorizeProperties)
+            if (obj is NativeMethods.ICategorizeProperties catObj)
             {
-                NativeMethods.ICategorizeProperties catObj = (NativeMethods.ICategorizeProperties)obj;
-
                 try
                 {
                     int categoryID = 0;

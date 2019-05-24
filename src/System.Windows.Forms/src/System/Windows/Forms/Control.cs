@@ -5802,9 +5802,8 @@ namespace System.Windows.Forms
 
             if (lastParent != null)
             {
-                if (lastParent is Form)
+                if (lastParent is Form f)
                 {
-                    Form f = (Form)lastParent;
                     for (Form form = f; form != null; form = form.OwnerInternal)
                     {
                         lastOwner = form;

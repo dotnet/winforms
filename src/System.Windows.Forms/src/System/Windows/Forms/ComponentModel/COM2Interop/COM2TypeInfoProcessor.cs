@@ -80,9 +80,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (wantCoClass == (i == 0))
                 {
-                    if (obj is NativeMethods.IProvideClassInfo)
+                    if (obj is NativeMethods.IProvideClassInfo pProvideClassInfo)
                     {
-                        NativeMethods.IProvideClassInfo pProvideClassInfo = (NativeMethods.IProvideClassInfo)obj;
                         try
                         {
                             pTypeInfo = pProvideClassInfo.GetClassInfo();
@@ -94,9 +93,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    if (obj is UnsafeNativeMethods.IDispatch)
+                    if (obj is UnsafeNativeMethods.IDispatch iDispatch)
                     {
-                        UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)obj;
                         try
                         {
                             pTypeInfo = iDispatch.GetTypeInfo(0, SafeNativeMethods.GetThreadLCID());
@@ -123,9 +121,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             int n = 0;
             UnsafeNativeMethods.ITypeInfo temp = null;
 
-            if (obj is NativeMethods.IProvideMultipleClassInfo)
+            if (obj is NativeMethods.IProvideMultipleClassInfo pCI)
             {
-                NativeMethods.IProvideMultipleClassInfo pCI = (NativeMethods.IProvideMultipleClassInfo)obj;
                 if (!NativeMethods.Succeeded(pCI.GetMultiTypeInfoCount(ref n)) || n == 0)
                 {
                     n = 0;

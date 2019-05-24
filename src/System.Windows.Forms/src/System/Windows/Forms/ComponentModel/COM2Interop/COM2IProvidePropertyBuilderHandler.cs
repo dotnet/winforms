@@ -94,9 +94,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             object target = sender.TargetObject;
 
-            if (target is NativeMethods.IProvidePropertyBuilder)
+            if (target is NativeMethods.IProvidePropertyBuilder propBuilder)
             {
-                NativeMethods.IProvidePropertyBuilder propBuilder = (NativeMethods.IProvidePropertyBuilder)target;
                 int[] pctlBldType = new int[1];
                 string guidString = null;
 

@@ -645,9 +645,8 @@ namespace System.Windows.Forms
             object ret = base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
             if (ret != null && (context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
             {
-                if (ret is bool)
+                if (ret is bool retBool)
                 {
-                    bool retBool = (bool)ret;
                     if (retBool)
                     {
                         return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardChecked : SR.DataGridViewCheckBoxCell_ClipboardTrue);
@@ -657,9 +656,8 @@ namespace System.Windows.Forms
                         return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardUnchecked : SR.DataGridViewCheckBoxCell_ClipboardFalse);
                     }
                 }
-                else if (ret is CheckState)
+                else if (ret is CheckState retCheckState)
                 {
-                    CheckState retCheckState = (CheckState)ret;
                     if (retCheckState == CheckState.Checked)
                     {
                         return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardChecked : SR.DataGridViewCheckBoxCell_ClipboardTrue);
@@ -1733,9 +1731,8 @@ namespace System.Windows.Forms
                                 return AccessibleStates.Indeterminate | base.State;
                         }
                     }
-                    else if (((DataGridViewCheckBoxCell)Owner).EditedFormattedValue is bool)
+                    else if (((DataGridViewCheckBoxCell)Owner).EditedFormattedValue is bool state)
                     {
-                        bool state = (bool)(((DataGridViewCheckBoxCell)Owner).EditedFormattedValue);
                         if (state)
                         {
                             return AccessibleStates.Checked | base.State;

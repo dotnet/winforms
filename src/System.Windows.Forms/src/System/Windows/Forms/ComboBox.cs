@@ -5610,9 +5610,8 @@ namespace System.Windows.Forms
                 if (systemIAccessible != null)
                 {
                     object result = systemIAccessible.accHitTest((int)x, (int)y);
-                    if (result is int)
+                    if (result is int childId)
                     {
-                        int childId = (int)result;
                         return GetChildFragment(childId - 1);
                     }
                     else

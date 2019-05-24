@@ -87,9 +87,8 @@ namespace System.Windows.Forms
                                                               "Start" + separator + " End"));
                 }
             }
-            else if (value is DateTime)
+            else if (value is DateTime dt)
             {
-                DateTime dt = (DateTime)value;
                 return new SelectionRange(dt, dt);
             }
 

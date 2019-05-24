@@ -909,9 +909,8 @@ namespace System.Windows.Forms
 
                     // First check that we're not adding ourself, i.e. walk
                     // the parent chain for equality
-                    if (owner is MenuItem)
+                    if (owner is MenuItem parent)
                     {
-                        MenuItem parent = (MenuItem)owner;
                         while (parent != null)
                         {
                             if (parent.Equals(item))

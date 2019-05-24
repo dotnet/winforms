@@ -1313,9 +1313,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (destinationType == typeof(string))
                 {
-                    if (value is Exception)
+                    if (value is Exception ex)
                     {
-                        Exception ex = (Exception)value;
                         if (ex.InnerException != null)
                         {
                             ex = ex.InnerException;

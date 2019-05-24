@@ -98,10 +98,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
 
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
             {
-                NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
-
                 int hr = NativeMethods.S_OK;
 
                 // we want to avoid allowing clients to force a bad property to be browsable,
@@ -136,9 +134,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnCanResetPropertyValue(Com2PropertyDescriptor sender, GetBoolValueEvent boolEvent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing target)
             {
-                NativeMethods.IVsPerPropertyBrowsing target = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
                 bool canReset = boolEvent.Value;
                 int hr = target.CanResetPropertyValue(sender.DISPID, ref canReset);
 
@@ -155,9 +152,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetDisplayName(Com2PropertyDescriptor sender, GetNameItemEvent nameItem)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
             {
-                NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
 
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
@@ -175,9 +171,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetIsReadOnly(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
             {
-                NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
 
                 // should we make this read only?
                 bool pfResult = false;
@@ -222,11 +217,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing target)
             {
-
-
-                NativeMethods.IVsPerPropertyBrowsing target = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
                 int dispid = sender.DISPID;
                 bool canReset = false;
                 int hr = target.CanResetPropertyValue(dispid, ref canReset);
@@ -241,9 +233,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnShouldSerializeValue(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
             {
-                NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
 
                 // by default we say it's default
                 bool pfResult = true;

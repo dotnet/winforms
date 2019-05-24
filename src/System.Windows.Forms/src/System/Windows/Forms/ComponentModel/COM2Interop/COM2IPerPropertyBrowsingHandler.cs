@@ -120,10 +120,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            if (sender.TargetObject is NativeMethods.IPerPropertyBrowsing)
+            if (sender.TargetObject is NativeMethods.IPerPropertyBrowsing ppb)
             {
-                NativeMethods.IPerPropertyBrowsing ppb = (NativeMethods.IPerPropertyBrowsing)sender.TargetObject;
-
                 bool hasStrings = false;
 
                 // check for enums

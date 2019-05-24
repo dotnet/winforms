@@ -3934,10 +3934,8 @@ namespace System.Windows.Forms
 
             internal ConnectionPointCookie(object source, object sink, Type eventInterface, bool throwException)
             {
-                if (source is UnsafeNativeMethods.IConnectionPointContainer)
+                if (source is UnsafeNativeMethods.IConnectionPointContainer cpc)
                 {
-                    UnsafeNativeMethods.IConnectionPointContainer cpc = (UnsafeNativeMethods.IConnectionPointContainer)source;
-
                     try
                     {
                         Guid tmp = eventInterface.GUID;
@@ -6594,9 +6592,8 @@ namespace System.Windows.Forms
                     return NativeMethods.S_OK;
                 }
                 AxHost ctl = null;
-                if (pActiveObject is UnsafeNativeMethods.IOleObject)
+                if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
                 {
-                    UnsafeNativeMethods.IOleObject oleObject = (UnsafeNativeMethods.IOleObject)pActiveObject;
                     UnsafeNativeMethods.IOleClientSite clientSite = null;
                     try
                     {

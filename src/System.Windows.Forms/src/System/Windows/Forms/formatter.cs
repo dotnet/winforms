@@ -313,9 +313,8 @@ namespace System.Windows.Forms
                     return parseResult;
                 }
             }
-            else if (value is CheckState)
+            else if (value is CheckState state)
             {
-                CheckState state = (CheckState)value;
                 if (state == CheckState.Indeterminate)
                 {
                     return DBNull.Value;

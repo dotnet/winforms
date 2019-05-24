@@ -159,9 +159,8 @@ namespace System.Windows.Forms
                 OnDataError(ex);
             }
 
-            if (parentManager is CurrencyManager)
+            if (parentManager is CurrencyManager curManager)
             {
-                CurrencyManager curManager = (CurrencyManager)parentManager;
                 if (curManager.Count > 0)
                 {
                     // Parent list has a current row, so get the related list from the relevant property on that row.

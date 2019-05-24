@@ -380,10 +380,8 @@ namespace System.Windows.Forms.Design
                 this.edSvc = edSvc;
                 Value = value;
 
-                if (value is DockStyle)
+                if (value is DockStyle dock)
                 {
-                    DockStyle dock = (DockStyle)value;
-
                     none.Checked = false;
                     top.Checked = false;
                     left.Checked = false;

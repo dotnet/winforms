@@ -423,9 +423,8 @@ namespace System.ComponentModel.Design.Serialization
                     AttributeCollection attributes = TypeDescriptor.GetAttributes(objectType);
                     foreach (Attribute attr in attributes)
                     {
-                        if (attr is DesignerSerializerAttribute)
+                        if (attr is DesignerSerializerAttribute da)
                         {
-                            DesignerSerializerAttribute da = (DesignerSerializerAttribute)attr;
                             string typeName = da.SerializerBaseTypeName;
 
                             // This serializer must support the correct base type or we're not interested.

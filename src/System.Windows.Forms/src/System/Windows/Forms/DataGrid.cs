@@ -7582,9 +7582,8 @@ namespace System.Windows.Forms
 
 
             DataGridRow row = localGridRows[rowNumber];
-            if (row is DataGridRelationshipRow)
+            if (row is DataGridRelationshipRow relRow)
             {
-                DataGridRelationshipRow relRow = (DataGridRelationshipRow)row;
                 return relRow.Expanded;
             }
             else
@@ -10177,9 +10176,8 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            else if (localGridRows[row] is DataGridRelationshipRow)
+            else if (localGridRows[row] is DataGridRelationshipRow expandableRow)
             {
-                DataGridRelationshipRow expandableRow = (DataGridRelationshipRow)localGridRows[row];
                 if (expandableRow.Expanded != expanded)
                 {
                     // we need to reposition the edit control
@@ -10699,9 +10697,8 @@ namespace System.Windows.Forms
             /// </summary>
             public override bool Equals(object value)
             {
-                if (value is HitTestInfo)
+                if (value is HitTestInfo ci)
                 {
-                    HitTestInfo ci = (HitTestInfo)value;
                     return (type == ci.type &&
                            row == ci.row &&
                            col == ci.col);

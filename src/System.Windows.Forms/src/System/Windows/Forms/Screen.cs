@@ -309,9 +309,8 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (obj is Screen)
+            if (obj is Screen comp)
             {
-                Screen comp = (Screen)obj;
                 if (hmonitor == comp.hmonitor)
                 {
                     return true;

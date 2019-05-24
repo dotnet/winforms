@@ -561,9 +561,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < children.Count; i++)
                 {
                     Control ctl = children[i];
-                    if (ctl is RadioButton)
+                    if (ctl is RadioButton button)
                     {
-                        RadioButton button = (RadioButton)ctl;
                         if (!tabbedInto)
                         {
                             button.firstfocus = false;
