@@ -39,11 +39,7 @@ namespace System.Windows.Forms
 
         public ToolStripControlHost(Control c)
         {
-            if (c == null)
-            {
-                throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
-            }
-            control = c;
+            control = c ?? throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
             SyncControlParent();
             c.Visible = true;
             SetBounds(c.Bounds);

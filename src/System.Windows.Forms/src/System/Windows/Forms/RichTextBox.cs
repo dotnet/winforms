@@ -1980,9 +1980,6 @@ namespace System.Windows.Forms
         {
 
             int textLen = TextLength;
-
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
             if (start < 0 || start > textLen)
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
             if (end < -1)
@@ -1994,7 +1991,7 @@ namespace System.Windows.Forms
 
             // set up the default values for the FINDTEXT structure, that is
             // the given string and the whole range of the text stream
-            ft.lpstrText = str;
+            ft.lpstrText = str ?? throw new ArgumentNullException(nameof(str));
             if (end == -1)
             {
                 end = textLen;

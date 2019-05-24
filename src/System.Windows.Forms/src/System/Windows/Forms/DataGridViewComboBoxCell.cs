@@ -2904,17 +2904,12 @@ namespace System.Windows.Forms
                     //this.owner.CheckNoSharedCell();
                     owner.CheckNoDataSource();
 
-                    if (value == null)
-                    {
-                        throw new ArgumentNullException(nameof(value));
-                    }
-
                     if (index < 0 || index >= InnerArray.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    InnerArray[index] = value;
+                    InnerArray[index] = value ?? throw new ArgumentNullException(nameof(value));
                     owner.OnItemsCollectionChanged();
                 }
             }

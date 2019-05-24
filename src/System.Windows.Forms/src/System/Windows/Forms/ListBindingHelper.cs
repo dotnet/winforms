@@ -204,16 +204,10 @@ namespace System.Windows.Forms
                 PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
                 PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
 
-                // Error: Property not found - data member is invalid
-                if (dmProp == null)
-                {
-                    throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
-                }
-
                 // Add the data member property to the list accessors
                 int len = (listAccessors == null) ? 1 : (listAccessors.Length + 1);
                 PropertyDescriptor[] listAccessors2 = new PropertyDescriptor[len];
-                listAccessors2[0] = dmProp;
+                listAccessors2[0] = dmProp ?? throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
                 for (int i = 1; i < len; ++i)
                 {
                     listAccessors2[i] = listAccessors[i - 1];

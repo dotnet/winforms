@@ -5911,13 +5911,7 @@ namespace System.Windows.Forms
 
         public ToolStripSplitStackDragDropHandler(ToolStrip owner)
         {
-
-            if (owner == null)
-            {
-                // 
-                throw new ArgumentNullException(nameof(owner));
-            }
-            this.owner = owner;
+            this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
         }
 
         public void OnDragEnter(DragEventArgs e)

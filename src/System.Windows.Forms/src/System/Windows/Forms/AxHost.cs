@@ -4014,9 +4014,7 @@ namespace System.Windows.Forms
 
             internal OleInterfaces(AxHost host)
             {
-                if (host == null)
-                    throw new ArgumentNullException(nameof(host));
-                this.host = host;
+                this.host = host ?? throw new ArgumentNullException(nameof(host));
             }
 
             private void Dispose(bool disposing)

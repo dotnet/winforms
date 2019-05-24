@@ -146,12 +146,9 @@ namespace System.Resources
             {
                 throw new ArgumentNullException(nameof(name));
             }
-            if (fileRef == null)
-            {
-                throw new ArgumentNullException(nameof(fileRef));
-            }
+
             this.name = name;
-            this.fileRef = fileRef;
+            this.fileRef = fileRef ?? throw new ArgumentNullException(nameof(fileRef));
             this.typeNameConverter = typeNameConverter;
         }
 

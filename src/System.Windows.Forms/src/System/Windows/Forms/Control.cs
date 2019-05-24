@@ -20249,12 +20249,8 @@ namespace System.Windows.Forms
             {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
-                if (ownerControl == null)
-                {
-                    throw new ArgumentNullException(nameof(ownerControl));
-                }
 
-                this.ownerControl = ownerControl;
+                this.ownerControl = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
 
                 IntPtr handle = ownerControl.Handle;
 
@@ -20265,14 +20261,10 @@ namespace System.Windows.Forms
             {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
-                if (ownerControl == null)
-                {
-                    throw new ArgumentNullException(nameof(ownerControl));
-                }
 
                 AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
 
-                this.ownerControl = ownerControl;
+                this.ownerControl = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
                 IntPtr handle = ownerControl.Handle;
 
                 Handle = handle;

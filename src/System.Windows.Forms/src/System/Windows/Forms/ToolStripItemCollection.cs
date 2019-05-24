@@ -48,12 +48,7 @@ namespace System.Windows.Forms
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value)
         {
-            if (owner == null)
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
-
-            this.owner = owner;
+            this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             AddRange(value);
         }
 

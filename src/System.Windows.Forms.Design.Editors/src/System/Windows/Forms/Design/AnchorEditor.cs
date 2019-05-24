@@ -239,9 +239,7 @@ namespace System.Windows.Forms.Design
 
                 public SpringControl(AnchorUI picker)
                 {
-                    if (picker == null)
-                        throw new ArgumentException();
-                    this.picker = picker;
+                    this.picker = picker ?? throw new ArgumentException();
                     TabStop = true;
                 }
 

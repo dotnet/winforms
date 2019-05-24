@@ -554,10 +554,7 @@ namespace System.Windows.Forms.Design
                 isActive = false;
                 isDirty = false;
 
-                if (form == null)
-                    throw new ArgumentNullException(nameof(form));
-
-                this.form = form;
+                this.form = form ?? throw new ArgumentNullException(nameof(form));
 
                 try
                 {

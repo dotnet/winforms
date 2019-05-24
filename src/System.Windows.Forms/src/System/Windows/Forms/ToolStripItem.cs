@@ -4298,12 +4298,7 @@ namespace System.Windows.Forms
 
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem)
             {
-                if (ownerItem == null)
-                {
-                    throw new ArgumentNullException(nameof(ownerItem));
-                }
-
-                this.ownerItem = ownerItem;
+                this.ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
             }
 
             public override string DefaultAction
@@ -4870,11 +4865,7 @@ namespace System.Windows.Forms
 
         public ToolStripItemInternalLayout(ToolStripItem ownerItem)
         {
-            if (ownerItem == null)
-            {
-                throw new ArgumentNullException(nameof(ownerItem));
-            }
-            this.ownerItem = ownerItem;
+            this.ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
         }
 
 

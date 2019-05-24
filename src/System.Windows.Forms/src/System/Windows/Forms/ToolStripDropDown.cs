@@ -2165,11 +2165,7 @@ namespace System.Windows.Forms
         /// <summary> show relative to control coordinates </summary>
         public void Show(Control control, Point position)
         {
-            if (control == null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
-            SourceControlInternal = control;
+            SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
             // When we have no owner item and we're set to RTL.Inherit, translate the coordinates
             // so that the menu looks like it's swooping from the other side
             if (OwnerItem == null && control.RightToLeft == RightToLeft.Yes)
@@ -2186,11 +2182,7 @@ namespace System.Windows.Forms
 
         public void Show(Control control, Point position, ToolStripDropDownDirection direction)
         {
-            if (control == null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
-            SourceControlInternal = control;
+            SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
             displayLocation = CalculateDropDownLocation(control.PointToScreen(position), direction).Location;
             Location = displayLocation;
             ShowCore();
@@ -2199,11 +2191,7 @@ namespace System.Windows.Forms
         /// <summary> show relative to control coordinates </summary>
         public void Show(Control control, int x, int y)
         {
-            if (control == null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
-            SourceControlInternal = control;
+            SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
             Show(control, new Point(x, y));
         }
 

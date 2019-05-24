@@ -4679,17 +4679,12 @@ namespace System.Windows.Forms
 
             internal void SetItemInternal(int index, object value)
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
                 if (index < 0 || index >= InnerList.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                InnerList[index] = value;
+                InnerList[index] = value ?? throw new ArgumentNullException(nameof(value));
 
                 // If the native control has been created, and the display text of the new list item object
                 // is different to the current text in the native list item, recreate the native list item...

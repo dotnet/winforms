@@ -2211,9 +2211,7 @@ namespace System.Windows.Forms
 
             public LinkCollection(LinkLabel owner)
             {
-                if (owner == null)
-                    throw new ArgumentNullException(nameof(owner));
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             public virtual Link this[int index]

@@ -56,9 +56,6 @@ namespace System.Windows.Forms
         public void AddToolTip(string toolTipString, IntPtr toolTipId, Rectangle iconBounds)
         {
             Debug.Assert(tipWindow != null && tipWindow.Handle != IntPtr.Zero, "the tipWindow was not initialized, bailing out");
-
-            if (toolTipString == null)
-                throw new ArgumentNullException(nameof(toolTipString));
             if (iconBounds.IsEmpty)
                 throw new ArgumentNullException(nameof(iconBounds), SR.DataGridToolTipEmptyIcon);
 
@@ -66,7 +63,7 @@ namespace System.Windows.Forms
             toolInfo.cbSize = Marshal.SizeOf(toolInfo);
             toolInfo.hwnd = dataGrid.Handle;
             toolInfo.uId = toolTipId;
-            toolInfo.lpszText = toolTipString;
+            toolInfo.lpszText = toolTipString ?? throw new ArgumentNullException(nameof(toolTipString));
             toolInfo.rect = NativeMethods.RECT.FromXYWH(iconBounds.X, iconBounds.Y, iconBounds.Width, iconBounds.Height);
             toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
             UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);

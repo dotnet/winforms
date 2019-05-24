@@ -26,25 +26,13 @@ namespace System.Windows.Forms
                                                  DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                                  DataGridViewPaintParts paintParts)
         {
-            if (dataGridView == null)
-            {
-                throw new ArgumentNullException(nameof(dataGridView));
-            }
-            if (graphics == null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-            if (cellStyle == null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
             if ((paintParts & ~DataGridViewPaintParts.All) != 0)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, nameof(paintParts)), nameof(paintParts));
             }
 
-            _dataGridView = dataGridView;
-            Graphics = graphics;
+            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             ClipBounds = clipBounds;
             CellBounds = cellBounds;
             RowIndex = rowIndex;
@@ -53,7 +41,7 @@ namespace System.Windows.Forms
             Value = value;
             FormattedValue = formattedValue;
             ErrorText = errorText;
-            CellStyle = cellStyle;
+            CellStyle = cellStyle ?? throw new ArgumentNullException(nameof(cellStyle));
             AdvancedBorderStyle = advancedBorderStyle;
             PaintParts = paintParts;
         }

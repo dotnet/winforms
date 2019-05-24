@@ -2278,11 +2278,7 @@ namespace System.Windows.Forms
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public TabPageCollection(TabControl owner)
             {
-                if (owner == null)
-                {
-                    throw new ArgumentNullException(nameof(owner));
-                }
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             public virtual TabPage this[int index]

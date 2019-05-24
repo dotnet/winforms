@@ -129,13 +129,8 @@ namespace System.Windows.Forms
 
         public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
         {
-            if (subItems == null)
-            {
-                throw new ArgumentNullException(nameof(subItems));
-            }
-
             ImageIndexer.Index = imageIndex;
-            this.subItems = subItems;
+            this.subItems = subItems ?? throw new ArgumentNullException(nameof(subItems));
             SubItemCount = subItems.Length;
 
             // Update the owner of these subitems
@@ -215,13 +210,8 @@ namespace System.Windows.Forms
 
         public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this()
         {
-            if (subItems == null)
-            {
-                throw new ArgumentNullException(nameof(subItems));
-            }
-
             ImageIndexer.Key = imageKey;
-            this.subItems = subItems;
+            this.subItems = subItems ?? throw new ArgumentNullException(nameof(subItems));
             SubItemCount = subItems.Length;
 
             // Update the owner of these subitems
@@ -1607,12 +1597,8 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
-                    if (value == null)
-                    {
-                        throw new ArgumentNullException(nameof(value));
-                    }
 
-                    _owner.subItems[index] = value;
+                    _owner.subItems[index] = value ?? throw new ArgumentNullException(nameof(value));
                     _owner.UpdateSubItems(index);
                 }
             }
