@@ -152,7 +152,7 @@ namespace System.Windows.Forms
             if (!LocateIntegerEntry(keyIndex, out int index))
             {
                 found = false;
-                return default(int);
+                return default;
             }
 
             // We have found the relevant entry. See if
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             if (((1 << element) & s_intEntries[index].Mask) == 0)
             {
                 found = false;
-                return default(int);
+                return default;
             }
 
             found = true;
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
                     return s_intEntries[index].Value4;
                 default:
                     Debug.Fail("Invalid element obtained from LocateIntegerEntry");
-                    return default(int);
+                    return default;
             }
         }
 
