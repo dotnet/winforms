@@ -387,9 +387,8 @@ namespace System.Windows.Forms
             for (int i = 0; i < Items.Count; i++)
             {
                 ToolStripItem item = Items[i];
-                ToolStripMenuItem menuItem = item as ToolStripMenuItem;
 
-                if (menuItem != null)
+                if (item is ToolStripMenuItem menuItem)
                 {
 
                     Size menuItemTextSize = menuItem.GetTextSize();
@@ -936,8 +935,7 @@ namespace System.Windows.Forms
             internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
             {
                 Size preferredSize = base.GetPreferredSize(container, proposedConstraints);
-                ToolStripDropDownMenu dropDownMenu = container as ToolStripDropDownMenu;
-                if (dropDownMenu != null)
+                if (container is ToolStripDropDownMenu dropDownMenu)
                 {
                     preferredSize.Width = dropDownMenu.MaxItemSize.Width - dropDownMenu.PaddingToTrim;
                 }

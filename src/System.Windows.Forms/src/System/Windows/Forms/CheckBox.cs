@@ -523,8 +523,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAppearanceChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_APPEARANCECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_APPEARANCECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

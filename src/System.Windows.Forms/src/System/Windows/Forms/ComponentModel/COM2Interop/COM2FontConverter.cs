@@ -48,9 +48,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
             // we're getting an IFont thing here
-            UnsafeNativeMethods.IFont nativeFont = nativeValue as UnsafeNativeMethods.IFont;
 
-            if (nativeFont == null)
+            if (!(nativeValue is UnsafeNativeMethods.IFont nativeFont))
             {
                 lastHandle = IntPtr.Zero;
                 lastFont = Control.DefaultFont;

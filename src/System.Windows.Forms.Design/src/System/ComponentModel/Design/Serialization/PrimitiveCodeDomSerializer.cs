@@ -51,8 +51,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (value is string)
                 {
-                    string stringValue = value as string;
-                    if (stringValue != null && stringValue.Length > 200)
+                    if (value is string stringValue && stringValue.Length > 200)
                     {
                         expression = SerializeToResourceExpression(manager, stringValue);
                     }

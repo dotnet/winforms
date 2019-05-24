@@ -578,9 +578,7 @@ namespace System.Windows.Forms
 
         protected override void OnControlRemoved(ControlEventArgs e)
         {
-            ISupportToolStripPanel controlToBeDragged = e.Control as ISupportToolStripPanel;
-
-            if (controlToBeDragged != null)
+            if (e.Control is ISupportToolStripPanel controlToBeDragged)
             {
                 if (controlToBeDragged.ToolStripPanelRow != null/* && controlToBeDragged.ToolStripPanelRow != owner*/)
                 {
@@ -594,8 +592,7 @@ namespace System.Windows.Forms
         {
             if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control != null)
             {
-                ISupportToolStripPanel draggedControl = e.AffectedComponent as ISupportToolStripPanel;
-                if (draggedControl != null && RowsInternal.Contains(draggedControl.ToolStripPanelRow))
+                if (e.AffectedComponent is ISupportToolStripPanel draggedControl && RowsInternal.Contains(draggedControl.ToolStripPanelRow))
                 {
                     // there's a problem in the base onlayout... if toolstrip needs more space it talks to us
                     // not the row that needs layout.
@@ -739,9 +736,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < controlArray.Length; i++)
                 {
                     int numRows = RowsInternal.Count;
-                    ISupportToolStripPanel draggedControl = controlArray[i] as ISupportToolStripPanel;
 
-                    if (draggedControl != null && draggedControl.ToolStripPanelRow != null && !draggedControl.IsCurrentlyDragging)
+                    if (controlArray[i] is ISupportToolStripPanel draggedControl && draggedControl.ToolStripPanelRow != null && !draggedControl.IsCurrentlyDragging)
                     {
                         ToolStripPanelRow row = draggedControl.ToolStripPanelRow;
                         if (row.Bounds.Contains(controlArray[i].Location))
@@ -1090,9 +1086,7 @@ namespace System.Windows.Forms
 
         internal void MoveControl(ToolStrip toolStripToDrag, Point screenLocation)
         {
-            ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
-
-            if (draggedControl == null)
+            if (!(toolStripToDrag is ISupportToolStripPanel draggedControl))
             {
                 Debug.Fail("Move called on immovable object.");
                 return;

@@ -53,8 +53,7 @@ namespace System.Windows.Forms
                 rightPanel.Dock = DockStyle.Right;
                 leftPanel.Dock = DockStyle.Left;
 
-                ToolStripContainerTypedControlCollection controlCollection = Controls as ToolStripContainerTypedControlCollection;
-                if (controlCollection != null)
+                if (Controls is ToolStripContainerTypedControlCollection controlCollection)
                 {
                     controlCollection.AddInternal(contentPanel);
                     controlCollection.AddInternal(leftPanel);

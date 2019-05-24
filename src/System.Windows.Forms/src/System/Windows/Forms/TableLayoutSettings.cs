@@ -55,8 +55,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(stringVal))
             {
-                TableLayoutSettings tls = converter.ConvertFromInvariantString(stringVal) as TableLayoutSettings;
-                if (tls != null)
+                if (converter.ConvertFromInvariantString(stringVal) is TableLayoutSettings tls)
                 {
                     ApplySettings(tls);
                 }
@@ -556,8 +555,7 @@ namespace System.Windows.Forms
 
                 foreach (IArrangedElement element in Owner.Children)
                 {
-                    Control c = element as Control;
-                    if (c != null)
+                    if (element is Control c)
                     {
                         ControlInformation controlInfo = new ControlInformation();
 
@@ -629,8 +627,7 @@ namespace System.Windows.Forms
                 // apply row,column,rowspan,colspan
                 //
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(settings.Owner);
-                Control appliedControl = containerInfo.Container as Control;
-                if (appliedControl != null && controlsInfo != null)
+                if (containerInfo.Container is Control appliedControl && controlsInfo != null)
                 {
 
                     // we store the control names, look up the controls 

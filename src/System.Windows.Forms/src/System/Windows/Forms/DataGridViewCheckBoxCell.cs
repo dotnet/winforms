@@ -1808,8 +1808,7 @@ namespace System.Windows.Forms
                             dataGridView.InvalidateCell(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
 
                             // notify MSAA clients that the default action changed
-                            DataGridViewCheckBoxCell checkBoxCell = Owner as DataGridViewCheckBoxCell;
-                            if (checkBoxCell != null)
+                            if (Owner is DataGridViewCheckBoxCell checkBoxCell)
                             {
                                 checkBoxCell.NotifyMASSClient(new Point(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                             }

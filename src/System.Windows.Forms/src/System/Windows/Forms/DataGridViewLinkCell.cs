@@ -996,9 +996,8 @@ namespace System.Windows.Forms
             }
 
             Rectangle errorBounds = valBounds;
-            string formattedValueStr = formattedValue as string;
 
-            if (formattedValueStr != null && (paint || computeContentBounds))
+            if (formattedValue is string formattedValueStr && (paint || computeContentBounds))
             {
                 // Font independent margins
                 valBounds.Offset(DATAGRIDVIEWLINKCELL_horizontalTextMarginLeft, DATAGRIDVIEWLINKCELL_verticalTextMarginTop);

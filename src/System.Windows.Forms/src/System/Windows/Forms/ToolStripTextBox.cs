@@ -237,8 +237,7 @@ namespace System.Windows.Forms
 
         protected override void OnSubscribeControlEvents(Control control)
         {
-            TextBox textBox = control as TextBox;
-            if (textBox != null)
+            if (control is TextBox textBox)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 // 
@@ -257,9 +256,7 @@ namespace System.Windows.Forms
 
         protected override void OnUnsubscribeControlEvents(Control control)
         {
-
-            TextBox textBox = control as TextBox;
-            if (textBox != null)
+            if (control is TextBox textBox)
             {
                 // Please keep this alphabetized and in sync with Subscribe
                 // 
@@ -655,8 +652,7 @@ namespace System.Windows.Forms
                 {
                     if (Owner != null)
                     {
-                        ToolStripProfessionalRenderer renderer = Owner.Renderer as ToolStripProfessionalRenderer;
-                        if (renderer != null)
+                        if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
                             return renderer.ColorTable;
                         }
@@ -945,8 +941,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var toolStripTextBoxControl = Owner as ToolStripTextBoxControl;
-                    if (toolStripTextBoxControl != null)
+                    if (Owner is ToolStripTextBoxControl toolStripTextBoxControl)
                     {
                         return toolStripTextBoxControl.Owner.Owner.AccessibilityObject;
                     }
@@ -962,8 +957,7 @@ namespace System.Windows.Forms
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        var toolStripTextBoxControl = Owner as ToolStripTextBoxControl;
-                        if (toolStripTextBoxControl != null)
+                        if (Owner is ToolStripTextBoxControl toolStripTextBoxControl)
                         {
                             return toolStripTextBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                         }

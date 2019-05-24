@@ -2764,8 +2764,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnDropDownButtonGotFocus(object sender, EventArgs e)
         {
-            DropDownButton dropDownButton = sender as DropDownButton;
-            if (dropDownButton != null)
+            if (sender is DropDownButton dropDownButton)
             {
                 dropDownButton.AccessibilityObject.SetFocus();
             }
@@ -3833,11 +3832,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnMouseWheel(MouseEventArgs me)
         {
-
             ownerGrid.OnGridViewMouseWheel(me);
 
-            HandledMouseEventArgs e = me as HandledMouseEventArgs;
-            if (e != null)
+            if (me is HandledMouseEventArgs e)
             {
                 if (e.Handled)
                 {
@@ -7181,8 +7178,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.OnSelectedIndexChanged(e);
                 fInSetSelectedIndex = false;
 
-                var gridViewListBoxAccessibleObject = AccessibilityObject as GridViewListBoxAccessibleObject;
-                if (gridViewListBoxAccessibleObject != null)
+                if (AccessibilityObject is GridViewListBoxAccessibleObject gridViewListBoxAccessibleObject)
                 {
                     gridViewListBoxAccessibleObject.SetListBoxItemFocus();
                 }
@@ -7238,8 +7234,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return _owningGridViewListBox.AccessibilityObject;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
-                        var gridViewListBoxAccessibleObject = _owningGridViewListBox.AccessibilityObject as GridViewListBoxAccessibleObject;
-                        if (gridViewListBoxAccessibleObject != null)
+                        if (_owningGridViewListBox.AccessibilityObject is GridViewListBoxAccessibleObject gridViewListBoxAccessibleObject)
                         {
                             int itemsCount = gridViewListBoxAccessibleObject.GetChildFragmentCount();
                             int nextItemIndex = currentIndex + 1;
@@ -7566,8 +7561,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal void SetListBoxItemFocus()
             {
                 var selectedItem = _owningGridViewListBox.SelectedItem;
-                var itemAccessibleObject = _itemAccessibleObjects[selectedItem] as AccessibleObject;
-                if (itemAccessibleObject != null)
+                if (_itemAccessibleObjects[selectedItem] is AccessibleObject itemAccessibleObject)
                 {
                     itemAccessibleObject.SetFocus();
                 }
@@ -8165,8 +8159,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     get
                     {
-                        PropertyDescriptorGridEntry propertyDescriptorGridEntry = propertyGridView.SelectedGridEntry as PropertyDescriptorGridEntry;
-                        return propertyDescriptorGridEntry == null || propertyDescriptorGridEntry.IsPropertyReadOnly;
+                        return !(propertyGridView.SelectedGridEntry is PropertyDescriptorGridEntry propertyDescriptorGridEntry) || propertyDescriptorGridEntry.IsPropertyReadOnly;
                     }
                 }
 
@@ -8498,8 +8491,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
             {
-                var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
-                if (propertyGridAccessibleObject != null)
+                if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
                     UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                     if (navigationTarget != null)
@@ -8628,8 +8620,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (topLevelGridEntriesCount > 0)
                 {
                     GridItem targetEntry = topLevelGridEntries[categoryIndex];
-                    var categoryGridEntry = targetEntry as CategoryGridEntry;
-                    if (categoryGridEntry != null)
+                    if (targetEntry is CategoryGridEntry categoryGridEntry)
                     {
                         return categoryGridEntry.AccessibilityObject;
                     }

@@ -1283,8 +1283,7 @@ namespace System.ComponentModel.Design
                     UndoEngine.Trace("---> Saving after snapshot for change to '{0}'", _componentName);
                     object component = null;
 
-                    IReferenceService rs = engine.GetService(typeof(IReferenceService)) as IReferenceService;
-                    if (rs != null)
+                    if (engine.GetService(typeof(IReferenceService)) is IReferenceService rs)
                     {
                         component = rs.GetReference(_componentName);
                     }

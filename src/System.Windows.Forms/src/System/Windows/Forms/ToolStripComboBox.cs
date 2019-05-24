@@ -569,8 +569,7 @@ namespace System.Windows.Forms
 
         protected override void OnSubscribeControlEvents(Control control)
         {
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null)
+            if (control is ComboBox comboBox)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 // 
@@ -587,8 +586,7 @@ namespace System.Windows.Forms
 
         protected override void OnUnsubscribeControlEvents(Control control)
         {
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null)
+            if (control is ComboBox comboBox)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 // 
@@ -640,8 +638,7 @@ namespace System.Windows.Forms
                 {
                     if (Owner != null)
                     {
-                        ToolStripProfessionalRenderer renderer = Owner.Renderer as ToolStripProfessionalRenderer;
-                        if (renderer != null)
+                        if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
                             return renderer.ColorTable;
                         }
@@ -833,8 +830,7 @@ namespace System.Windows.Forms
                         case UnsafeNativeMethods.NavigateDirection.Parent:
                         case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                         case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                            var toolStripComboBoxControl = Owner as ToolStripComboBoxControl;
-                            if (toolStripComboBoxControl != null)
+                            if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                             {
                                 return toolStripComboBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                             }
@@ -848,8 +844,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        var toolStripComboBoxControl = Owner as ToolStripComboBoxControl;
-                        if (toolStripComboBoxControl != null)
+                        if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                         {
                             return toolStripComboBoxControl.Owner.Owner.AccessibilityObject;
                         }

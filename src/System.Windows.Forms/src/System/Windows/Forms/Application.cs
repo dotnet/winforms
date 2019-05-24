@@ -1419,8 +1419,7 @@ namespace System.Windows.Forms
                     // HRef exe case
                     hrefExeCase = true;
                     ExitInternal();
-                    string launchUrl = AppDomain.CurrentDomain.GetData("APP_LAUNCH_URL") as string;
-                    if (launchUrl != null)
+                    if (AppDomain.CurrentDomain.GetData("APP_LAUNCH_URL") is string launchUrl)
                     {
                         Process.Start(process.MainModule.FileName, launchUrl);
                     }
@@ -2407,15 +2406,13 @@ namespace System.Windows.Forms
 
                             if (NativeMethods.Succeeded(UnsafeNativeMethods.CoRegisterMessageFilter(NativeMethods.NullHandleRef, ref msgFilterPtr)) && msgFilterPtr != (IntPtr)0)
                             {
-
                                 IntPtr dummy = (IntPtr)0;
                                 UnsafeNativeMethods.CoRegisterMessageFilter(new HandleRef(null, msgFilterPtr), ref dummy);
 
                                 object msgFilterObj = Marshal.GetObjectForIUnknown(msgFilterPtr);
                                 Marshal.Release(msgFilterPtr);
 
-                                UnsafeNativeMethods.IOleServiceProvider sp = msgFilterObj as UnsafeNativeMethods.IOleServiceProvider;
-                                if (sp != null)
+                                if (msgFilterObj is UnsafeNativeMethods.IOleServiceProvider sp)
                                 {
                                     try
                                     {
@@ -2748,8 +2745,7 @@ namespace System.Windows.Forms
                 threadWindows.Enable(false);
                 threadWindows.previousThreadWindows = old;
 
-                ModalApplicationContext modalContext = context as ModalApplicationContext;
-                if (modalContext != null)
+                if (context is ModalApplicationContext modalContext)
                 {
                     modalContext.DisableThreadWindows(true, onlyWinForms);
                 }
@@ -2933,8 +2929,7 @@ namespace System.Windows.Forms
                     threadWindows = threadWindows.previousThreadWindows;
                 }
 
-                ModalApplicationContext modalContext = context as ModalApplicationContext;
-                if (modalContext != null)
+                if (context is ModalApplicationContext modalContext)
                 {
                     modalContext.DisableThreadWindows(false, onlyWinForms);
                 }
@@ -3294,8 +3289,7 @@ namespace System.Windows.Forms
                                     Environment.Exit(0);
                                     break;
                                 case DialogResult.Yes:
-                                    WarningException w = t as WarningException;
-                                    if (w != null)
+                                    if (t is WarningException w)
                                     {
                                         Help.ShowHelp(null, w.HelpUrl, w.HelpTopic);
                                     }

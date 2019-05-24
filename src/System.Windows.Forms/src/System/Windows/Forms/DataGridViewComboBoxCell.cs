@@ -780,8 +780,7 @@ namespace System.Windows.Forms
             Debug.Assert(EditingComboBox != null);
 
             ComboBox comboBox = EditingComboBox;
-            DataGridViewComboBoxColumn owningComboBoxColumn = OwningColumn as DataGridViewComboBoxColumn;
-            if (owningComboBoxColumn != null)
+            if (OwningColumn is DataGridViewComboBoxColumn owningComboBoxColumn)
             {
                 DataGridViewAutoSizeColumnMode autoSizeColumnMode = owningComboBoxColumn.GetInheritedAutoSizeMode(DataGridView);
                 if (autoSizeColumnMode != DataGridViewAutoSizeColumnMode.ColumnHeader &&
@@ -889,9 +888,8 @@ namespace System.Windows.Forms
             Debug.Assert(DataSource is ISupportInitializeNotification);
             Debug.Assert((flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00);
 
-            ISupportInitializeNotification dsInit = DataSource as ISupportInitializeNotification;
             // Unhook the Initialized event.
-            if (dsInit != null)
+            if (DataSource is ISupportInitializeNotification dsInit)
             {
                 dsInit.Initialized -= new EventHandler(DataSource_Initialized);
             }
@@ -984,8 +982,7 @@ namespace System.Windows.Forms
             CurrencyManager cm = (CurrencyManager)Properties.GetObject(PropComboBoxCellDataManager);
             if (cm == null && DataSource != null && dataGridView != null && dataGridView.BindingContext != null && !(DataSource == Convert.DBNull))
             {
-                ISupportInitializeNotification dsInit = DataSource as ISupportInitializeNotification;
-                if (dsInit != null && !dsInit.IsInitialized)
+                if (DataSource is ISupportInitializeNotification dsInit && !dsInit.IsInitialized)
                 {
                     if ((flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) == 0x00)
                     {
@@ -1463,8 +1460,7 @@ namespace System.Windows.Forms
                          DataGridView.EditingControl != null);
             Debug.Assert(!ReadOnly);
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-            ComboBox comboBox = DataGridView.EditingControl as ComboBox;
-            if (comboBox != null)
+            if (DataGridView.EditingControl is ComboBox comboBox)
             {
                 // Use the selection backcolor for the editing panel when the cell is selected
                 if ((GetInheritedState(rowIndex) & DataGridViewElementStates.Selected) == DataGridViewElementStates.Selected)
@@ -1518,8 +1514,7 @@ namespace System.Windows.Forms
                     comboBox.AutoCompleteSource = AutoCompleteSource.None;
                 }
 
-                string initialFormattedValueStr = initialFormattedValue as string;
-                if (initialFormattedValueStr == null)
+                if (!(initialFormattedValue is string initialFormattedValueStr))
                 {
                     initialFormattedValueStr = string.Empty;
                 }
@@ -2527,9 +2522,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                string formattedString = formattedValue as string;
 
-                if (formattedString != null)
+                if (formattedValue is string formattedString)
                 {
                     // Font independent margins
                     int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWCOMBOBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWCOMBOBOXCELL_verticalTextMarginTopWithoutWrapping;
@@ -2662,14 +2656,12 @@ namespace System.Windows.Forms
 
         private void UnwireDataSource()
         {
-            IComponent component = DataSource as IComponent;
-            if (component != null)
+            if (DataSource is IComponent component)
             {
                 component.Disposed -= new EventHandler(DataSource_Disposed);
             }
 
-            ISupportInitializeNotification dsInit = DataSource as ISupportInitializeNotification;
-            if (dsInit != null && (flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00)
+            if (DataSource is ISupportInitializeNotification dsInit && (flags & DATAGRIDVIEWCOMBOBOXCELL_dataSourceInitializedHookedUp) != 0x00)
             {
                 // If we previously hooked the data source's ISupportInitializeNotification
                 // Initialized event, then unhook it now (we don't always hook this event,
@@ -2683,8 +2675,7 @@ namespace System.Windows.Forms
         {
             // If the source is a component, then hook the Disposed event,
             // so we know when the component is deleted from the form
-            IComponent component = dataSource as IComponent;
-            if (component != null)
+            if (dataSource is IComponent component)
             {
                 component.Disposed += new EventHandler(DataSource_Disposed);
             }

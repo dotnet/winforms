@@ -199,8 +199,7 @@ namespace System.Windows.Forms
         {
             if (IntPtr.Size == 4)
             {
-                NativeMethods.PRINTDLG_32 lppd_32 = lppd as NativeMethods.PRINTDLG_32;
-                if (lppd_32 == null)
+                if (!(lppd is NativeMethods.PRINTDLG_32 lppd_32))
                 {
                     throw new System.NullReferenceException("PRINTDLG data is null");
                 }
@@ -208,8 +207,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                NativeMethods.PRINTDLG_64 lppd_64 = lppd as NativeMethods.PRINTDLG_64;
-                if (lppd_64 == null)
+                if (!(lppd is NativeMethods.PRINTDLG_64 lppd_64))
                 {
                     throw new System.NullReferenceException("PRINTDLG data is null");
                 }

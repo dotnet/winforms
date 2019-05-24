@@ -161,8 +161,7 @@ namespace System.Windows.Forms
                 // We are essentially doing to the listManager what we were doing to the
                 // BindToObject: bind only when the control is created and it has a BindingContext
                 BindingContext.UpdateBinding((_control != null && IsComponentCreated(_control) ? _control.BindingContext : null), this);
-                Form form = value as Form;
-                if (form != null)
+                if (value is Form form)
                 {
                     form.Load += new EventHandler(FormLoaded);
                 }

@@ -328,9 +328,7 @@ namespace System.Windows.Forms
                 RTLGrip.Bounds = SizeGripBounds;
                 if (!Controls.Contains(RTLGrip))
                 {
-                    WindowsFormsUtils.ReadOnlyControlCollection controlCollection = Controls as WindowsFormsUtils.ReadOnlyControlCollection;
-
-                    if (controlCollection != null)
+                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.AddInternal(RTLGrip);
                     }
@@ -340,9 +338,7 @@ namespace System.Windows.Forms
             {
                 if (Controls.Contains(rtlLayoutGrip))
                 {
-                    WindowsFormsUtils.ReadOnlyControlCollection controlCollection = Controls as WindowsFormsUtils.ReadOnlyControlCollection;
-
-                    if (controlCollection != null)
+                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.RemoveInternal(rtlLayoutGrip);
                     }
@@ -467,8 +463,7 @@ namespace System.Windows.Forms
                     }
                     else if (item.Bounds.Width == 1)
                     {
-                        ToolStripStatusLabel panel = item as ToolStripStatusLabel;
-                        if (panel != null && panel.Spring)
+                        if (item is ToolStripStatusLabel panel && panel.Spring)
                         {
                             // once we get down to one pixel, there can always be a one pixel 
                             // distribution problem with the TLP - there's usually a spare one around.
@@ -553,8 +548,7 @@ namespace System.Windows.Forms
                         }
 
                         // determine if we "spring" or "autosize" the column
-                        ToolStripStatusLabel panel = DisplayedItems[i] as ToolStripStatusLabel;
-                        bool spring = (panel != null && panel.Spring);
+                        bool spring = (DisplayedItems[i] is ToolStripStatusLabel panel && panel.Spring);
                         DisplayedItems[i].Anchor = (spring) ? AllAnchor : VerticalAnchor;
 
                         // spring is achieved by using 100% as the column style
@@ -600,8 +594,7 @@ namespace System.Windows.Forms
                         }
 
                         // determine if we "spring" or "autosize" the row
-                        ToolStripStatusLabel panel = DisplayedItems[i] as ToolStripStatusLabel;
-                        bool spring = (panel != null && panel.Spring);
+                        bool spring = (DisplayedItems[i] is ToolStripStatusLabel panel && panel.Spring);
                         DisplayedItems[i].Anchor = (spring) ? AllAnchor : HorizontalAnchor;
 
                         // spring is achieved by using 100% as the row style
@@ -759,8 +752,7 @@ namespace System.Windows.Forms
 
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
             {
-                StatusStrip statusStrip = Owner as StatusStrip;
-                if (statusStrip == null || statusStrip.Items.Count == 0)
+                if (!(Owner is StatusStrip statusStrip) || statusStrip.Items.Count == 0)
                 {
                     return null;
                 }

@@ -1686,8 +1686,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAcceptsTabChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_ACCEPTSTABCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_ACCEPTSTABCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1695,8 +1694,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnBorderStyleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_BORDERSTYLECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_BORDERSTYLECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1710,8 +1708,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnHideSelectionChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_HIDESELECTIONCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_HIDESELECTIONCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1719,8 +1716,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnModifiedChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_MODIFIEDCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_MODIFIEDCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1756,8 +1752,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnMultilineChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_MULTILINECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_MULTILINECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1772,8 +1767,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_READONLYCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_READONLYCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1908,9 +1902,8 @@ namespace System.Windows.Forms
                             {
                                 Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
 
-                                UnsafeNativeMethods.ITextDocument textDocument = Marshal.GetObjectForIUnknown(iTextDocument) as UnsafeNativeMethods.ITextDocument;
 
-                                if (textDocument != null)
+                                if (Marshal.GetObjectForIUnknown(iTextDocument) is UnsafeNativeMethods.ITextDocument textDocument)
                                 {
 
                                     // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as

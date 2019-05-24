@@ -60,9 +60,7 @@ namespace System.Experimental.Gdi
 
         private static void OnDcDisposing(object sender, EventArgs e)
         {
-            DeviceContext dc = sender as DeviceContext;
-
-            if (dc != null)
+            if (sender is DeviceContext dc)
             {
                 dc.Disposing -= new EventHandler(OnDcDisposing);
                 RemoveDeviceContext(dc);
@@ -88,8 +86,7 @@ namespace System.Experimental.Gdi
 
             for (int i = 0; i < activeDeviceContexts.Count; i++)
             {
-                DeviceContext dc = activeDeviceContexts[i] as DeviceContext;
-                if (dc != null && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf)))
+                if (activeDeviceContexts[i] is DeviceContext dc && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf)))
                 {
                     return true;
                 }

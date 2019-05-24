@@ -329,8 +329,7 @@ namespace System.Windows.Forms
         {
             OnRenderArrow(e);
 
-            ToolStripArrowRenderEventHandler eh = Events[EventRenderArrow] as ToolStripArrowRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderArrow] is ToolStripArrowRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -343,8 +342,7 @@ namespace System.Windows.Forms
         {
             OnRenderToolStripBackground(e);
 
-            ToolStripRenderEventHandler eh = Events[EventRenderToolStripBackground] as ToolStripRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderToolStripBackground] is ToolStripRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -358,8 +356,7 @@ namespace System.Windows.Forms
         public void DrawGrip(ToolStripGripRenderEventArgs e)
         {
             OnRenderGrip(e);
-            ToolStripGripRenderEventHandler eh = Events[EventRenderGrip] as ToolStripGripRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderGrip] is ToolStripGripRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -373,8 +370,7 @@ namespace System.Windows.Forms
         {
             OnRenderItemBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderItemBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderItemBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -388,8 +384,7 @@ namespace System.Windows.Forms
         {
             OnRenderImageMargin(e);
 
-            ToolStripRenderEventHandler eh = Events[EventRenderImageMargin] as ToolStripRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderImageMargin] is ToolStripRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -401,8 +396,7 @@ namespace System.Windows.Forms
         public void DrawLabelBackground(ToolStripItemRenderEventArgs e)
         {
             OnRenderLabelBackground(e);
-            ToolStripItemRenderEventHandler eh = Events[EventRenderLabelBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderLabelBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -415,8 +409,7 @@ namespace System.Windows.Forms
         {
             OnRenderButtonBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderButtonBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderButtonBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -426,8 +419,7 @@ namespace System.Windows.Forms
         {
             OnRenderToolStripBorder(e);
 
-            ToolStripRenderEventHandler eh = Events[EventRenderBorder] as ToolStripRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderBorder] is ToolStripRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -441,8 +433,7 @@ namespace System.Windows.Forms
         {
             OnRenderDropDownButtonBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderDropDownButtonBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderDropDownButtonBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -455,8 +446,7 @@ namespace System.Windows.Forms
         {
             OnRenderOverflowButtonBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderOverflowButtonBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderOverflowButtonBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -469,8 +459,7 @@ namespace System.Windows.Forms
         {
             OnRenderItemImage(e);
 
-            ToolStripItemImageRenderEventHandler eh = Events[EventRenderItemImage] as ToolStripItemImageRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderItemImage] is ToolStripItemImageRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -483,8 +472,7 @@ namespace System.Windows.Forms
         {
             OnRenderItemCheck(e);
 
-            ToolStripItemImageRenderEventHandler eh = Events[EventRenderItemCheck] as ToolStripItemImageRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderItemCheck] is ToolStripItemImageRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -497,8 +485,7 @@ namespace System.Windows.Forms
         {
             OnRenderItemText(e);
 
-            ToolStripItemTextRenderEventHandler eh = Events[EventRenderItemText] as ToolStripItemTextRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderItemText] is ToolStripItemTextRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -511,8 +498,7 @@ namespace System.Windows.Forms
         {
             OnRenderMenuItemBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderMenuItemBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderMenuItemBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -524,11 +510,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawSplitButton(ToolStripItemRenderEventArgs e)
         {
-
             OnRenderSplitButtonBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderSplitButtonBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderSplitButtonBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -540,11 +524,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
-
             OnRenderToolStripStatusLabelBackground(e);
 
-            ToolStripItemRenderEventHandler eh = Events[EventRenderToolStripStatusLabelBackground] as ToolStripItemRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderToolStripStatusLabelBackground] is ToolStripItemRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -554,11 +536,9 @@ namespace System.Windows.Forms
         // 
         public void DrawStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
-
             OnRenderStatusStripSizingGrip(e);
 
-            ToolStripRenderEventHandler eh = Events[EventRenderStatusStripSizingGrip] as ToolStripRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderStatusStripSizingGrip] is ToolStripRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -569,8 +549,7 @@ namespace System.Windows.Forms
         public void DrawSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             OnRenderSeparator(e);
-            ToolStripSeparatorRenderEventHandler eh = Events[EventRenderSeparator] as ToolStripSeparatorRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderSeparator] is ToolStripSeparatorRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -579,8 +558,7 @@ namespace System.Windows.Forms
         public void DrawToolStripPanelBackground(ToolStripPanelRenderEventArgs e)
         {
             OnRenderToolStripPanelBackground(e);
-            ToolStripPanelRenderEventHandler eh = Events[EventRenderToolStripPanelBackground] as ToolStripPanelRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderToolStripPanelBackground] is ToolStripPanelRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -589,8 +567,7 @@ namespace System.Windows.Forms
         public void DrawToolStripContentPanelBackground(ToolStripContentPanelRenderEventArgs e)
         {
             OnRenderToolStripContentPanelBackground(e);
-            ToolStripContentPanelRenderEventHandler eh = Events[EventRenderToolStripContentPanelBackground] as ToolStripContentPanelRenderEventHandler;
-            if (eh != null)
+            if (Events[EventRenderToolStripContentPanelBackground] is ToolStripContentPanelRenderEventHandler eh)
             {
                 eh(this, e);
             }
@@ -985,13 +962,12 @@ namespace System.Windows.Forms
             }
 
             Graphics g = e.Graphics;
-            StatusStrip statusStrip = e.ToolStrip as StatusStrip;
 
             // we have a set of stock rectangles.  Translate them over to where the grip is to be drawn
             // for the white set, then translate them up and right one pixel for the grey.
 
 
-            if (statusStrip != null)
+            if (e.ToolStrip is StatusStrip statusStrip)
             {
                 Rectangle sizeGripBounds = statusStrip.SizeGripBounds;
 

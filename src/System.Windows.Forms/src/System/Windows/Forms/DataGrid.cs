@@ -3742,8 +3742,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnBorderStyleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_BORDERSTYLECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_BORDERSTYLECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3751,8 +3750,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCaptionVisibleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_CAPTIONVISIBLECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_CAPTIONVISIBLECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3760,8 +3758,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCurrentCellChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_CURRENTCELLCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_CURRENTCELLCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3791,8 +3788,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnFlatModeChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_FLATMODECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_FLATMODECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3800,8 +3796,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnBackgroundColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_BACKGROUNDCOLORCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_BACKGROUNDCOLORCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3809,8 +3804,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAllowNavigationChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_ALLOWNAVIGATIONCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_ALLOWNAVIGATIONCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3818,8 +3812,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnParentRowsVisibleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_PARENTROWSVISIBLECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_PARENTROWSVISIBLECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3827,8 +3820,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnParentRowsLabelStyleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_PARENTROWSLABELSTYLECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_PARENTROWSLABELSTYLECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -3836,8 +3828,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_READONLYCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_READONLYCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -4168,8 +4159,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDataSourceChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATASOURCECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_DATASOURCECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

@@ -594,8 +594,7 @@ namespace System.Windows.Forms
 
         private void OnAppearanceChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_APPEARANCECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_APPEARANCECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

@@ -41,8 +41,7 @@ namespace System.ComponentModel.Design
             if (typeof(ICollection).IsAssignableFrom(propertyDescriptor.PropertyType) &&
                 propertyDescriptor.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
             {
-                ICollection collection = propertyDescriptor.GetValue(component) as ICollection;
-                if (collection != null && collection.Count > 0)
+                if (propertyDescriptor.GetValue(component) is ICollection collection && collection.Count > 0)
                 {
                     // Trawl Add and AddRange methods looking for the first compatible serializable method.  All we need is the data type.
                     bool addComponentExists = false;

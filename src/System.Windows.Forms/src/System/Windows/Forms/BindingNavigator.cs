@@ -887,16 +887,13 @@ namespace System.Windows.Forms
         {
             if (oldTextBox != newTextBox)
             {
-                ToolStripControlHost oldCtrl = oldTextBox as ToolStripControlHost;
-                ToolStripControlHost newCtrl = newTextBox as ToolStripControlHost;
-
-                if (oldCtrl != null)
+                if (oldTextBox is ToolStripControlHost oldCtrl)
                 {
                     oldCtrl.KeyUp -= keyUpHandler;
                     oldCtrl.LostFocus -= lostFocusHandler;
                 }
 
-                if (newCtrl != null)
+                if (newTextBox is ToolStripControlHost newCtrl)
                 {
                     newCtrl.KeyUp += keyUpHandler;
                     newCtrl.LostFocus += lostFocusHandler;

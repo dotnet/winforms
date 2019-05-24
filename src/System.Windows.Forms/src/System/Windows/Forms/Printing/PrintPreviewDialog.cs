@@ -1262,8 +1262,6 @@ namespace System.Windows.Forms
         ]
         void InitForm()
         {
-
-
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintPreviewDialog));
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             printToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -1522,8 +1520,7 @@ namespace System.Windows.Forms
             zoomToolStripSplitButton.DefaultItem = autoToolStripMenuItem;
 
             //ShowCheckMargin
-            ToolStripDropDownMenu menu = zoomToolStripSplitButton.DropDown as ToolStripDropDownMenu;
-            if (menu != null)
+            if (zoomToolStripSplitButton.DropDown is ToolStripDropDownMenu menu)
             {
                 menu.ShowCheckMargin = true;
                 menu.ShowImageMargin = false;
@@ -1725,8 +1722,7 @@ namespace System.Windows.Forms
 
         void OncloseToolStripButtonPaint(object sender, PaintEventArgs e)
         {
-            ToolStripItem item = sender as ToolStripItem;
-            if (item != null && !item.Selected)
+            if (sender is ToolStripItem item && !item.Selected)
             {
                 Rectangle rect = new Rectangle(0, 0, item.Bounds.Width - 1, item.Bounds.Height - 1);
                 using (Pen pen = new Pen(SystemColors.ControlDark))

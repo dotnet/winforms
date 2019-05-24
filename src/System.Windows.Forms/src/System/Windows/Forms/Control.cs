@@ -2020,8 +2020,7 @@ namespace System.Windows.Forms
             IContainerControl c = GetContainerControl();
             if (c != null && CausesValidation)
             {
-                ContainerControl container = c as ContainerControl;
-                if (container != null)
+                if (c is ContainerControl container)
                 {
                     while (container.ActiveControl == null)
                     {
@@ -2428,8 +2427,7 @@ namespace System.Windows.Forms
         {
             if (Properties.ContainsObject(PropFontHandleWrapper))
             {
-                FontHandleWrapper fontHandle = Properties.GetObject(PropFontHandleWrapper) as FontHandleWrapper;
-                if (fontHandle != null)
+                if (Properties.GetObject(PropFontHandleWrapper) is FontHandleWrapper fontHandle)
                 {
                     fontHandle.Dispose();
                 }
@@ -3803,9 +3801,8 @@ namespace System.Windows.Forms
                     value.AddReflectChild();
                 }
 
-                Control c = ReflectParent as Control;
                 reflectParent = value;
-                if (c != null)
+                if (ReflectParent is Control c)
                 {
                     c.RemoveReflectChild();
                 }
@@ -6407,8 +6404,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(asyncResult));
                 }
 
-                ThreadMethodEntry entry = asyncResult as ThreadMethodEntry;
-                if (entry == null)
+                if (!(asyncResult is ThreadMethodEntry entry))
                 {
                     throw new ArgumentException(SR.ControlBadAsyncResult, "asyncResult");
                 }
@@ -6803,8 +6799,7 @@ namespace System.Windows.Forms
                 ISite site = Site;
                 if (site != null && site.DesignMode)
                 {
-                    IDesignerHost host = site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                    if (host != null && host.RootComponent == this)
+                    if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.RootComponent == this)
                     {
                         scaleLoc = false;
                     }
@@ -8299,8 +8294,7 @@ namespace System.Windows.Forms
         protected virtual void OnAutoSizeChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventAutoSizeChanged] as EventHandler;
-            if (eh != null)
+            if (Events[EventAutoSizeChanged] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8331,8 +8325,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            EventHandler eh = Events[EventBackColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventBackColor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8361,8 +8354,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            EventHandler eh = Events[EventBackgroundImage] as EventHandler;
-            if (eh != null)
+            if (Events[EventBackgroundImage] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8391,8 +8383,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            EventHandler eh = Events[EventBackgroundImageLayout] as EventHandler;
-            if (eh != null)
+            if (Events[EventBackgroundImageLayout] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8407,8 +8398,7 @@ namespace System.Windows.Forms
                 UpdateBindings();
             }
 
-            EventHandler eh = Events[EventBindingContext] as EventHandler;
-            if (eh != null)
+            if (Events[EventBindingContext] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8430,8 +8420,7 @@ namespace System.Windows.Forms
         protected virtual void OnCausesValidationChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventCausesValidation] as EventHandler;
-            if (eh != null)
+            if (Events[EventCausesValidation] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8453,8 +8442,7 @@ namespace System.Windows.Forms
         protected virtual void OnContextMenuChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventContextMenu] as EventHandler;
-            if (eh != null)
+            if (Events[EventContextMenu] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8464,8 +8452,7 @@ namespace System.Windows.Forms
         protected virtual void OnContextMenuStripChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventContextMenuStrip] as EventHandler;
-            if (eh != null)
+            if (Events[EventContextMenuStrip] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8475,8 +8462,7 @@ namespace System.Windows.Forms
         protected virtual void OnCursorChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventCursor] as EventHandler;
-            if (eh != null)
+            if (Events[EventCursor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8498,8 +8484,7 @@ namespace System.Windows.Forms
         protected virtual void OnDockChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventDock] as EventHandler;
-            if (eh != null)
+            if (Events[EventDock] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8532,8 +8517,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EventEnabled] as EventHandler;
-            if (eh != null)
+            if (Events[EventEnabled] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8581,8 +8565,7 @@ namespace System.Windows.Forms
                 SetWindowFont();
             }
 
-            EventHandler eh = Events[EventFont] as EventHandler;
-            if (eh != null)
+            if (Events[EventFont] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8617,8 +8600,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            EventHandler eh = Events[EventForeColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventForeColor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8651,8 +8633,7 @@ namespace System.Windows.Forms
 
             RecreateHandle();
 
-            EventHandler eh = Events[EventRightToLeft] as EventHandler;
-            if (eh != null)
+            if (Events[EventRightToLeft] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8857,12 +8838,11 @@ namespace System.Windows.Forms
             }
             else
             {
-                PrintPaintEventArgs ppev = e as PrintPaintEventArgs;
                 Message m;
                 bool releaseDC = false;
                 IntPtr hdc = IntPtr.Zero;
 
-                if (ppev == null)
+                if (!(e is PrintPaintEventArgs ppev))
                 {
                     IntPtr flags = (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT);
                     hdc = e.HDC;
@@ -8898,8 +8878,7 @@ namespace System.Windows.Forms
         protected virtual void OnTabIndexChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventTabIndex] as EventHandler;
-            if (eh != null)
+            if (Events[EventTabIndex] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8909,8 +8888,7 @@ namespace System.Windows.Forms
         protected virtual void OnTabStopChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventTabStop] as EventHandler;
-            if (eh != null)
+            if (Events[EventTabStop] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8920,8 +8898,7 @@ namespace System.Windows.Forms
         protected virtual void OnTextChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventText] as EventHandler;
-            if (eh != null)
+            if (Events[EventText] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8953,8 +8930,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EventVisible] as EventHandler;
-            if (eh != null)
+            if (Events[EventVisible] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -9000,8 +8976,7 @@ namespace System.Windows.Forms
         protected virtual void OnParentChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventParent] as EventHandler;
-            if (eh != null)
+            if (Events[EventParent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -9033,8 +9008,7 @@ namespace System.Windows.Forms
         protected virtual void OnClientSizeChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventClientSize] as EventHandler;
-            if (eh != null)
+            if (Events[EventClientSize] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -9087,7 +9061,6 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             if (IsHandleCreated)
             {
-
                 // Setting fonts is for some reason incredibly expensive.
                 // (Even if you exclude font handle creation)
                 if (!GetStyle(ControlStyles.UserPaint))
@@ -9137,18 +9110,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Update accessbility information.
-                ControlAccessibleObject accObj = Properties.GetObject(PropAccessibility) as ControlAccessibleObject;
-                ControlAccessibleObject ncAccObj = Properties.GetObject(PropNcAccessibility) as ControlAccessibleObject;
-
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
 
-                if (accObj != null)
+                if (Properties.GetObject(PropAccessibility) is ControlAccessibleObject accObj)
                 {
                     accObj.Handle = handle;
                 }
-                if (ncAccObj != null)
+                if (Properties.GetObject(PropNcAccessibility) is ControlAccessibleObject ncAccObj)
                 {
                     ncAccObj.Handle = handle;
                 }
@@ -9222,8 +9191,7 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             OnMove(EventArgs.Empty);
 
-            EventHandler eh = Events[EventLocation] as EventHandler;
-            if (eh != null)
+            if (Events[EventLocation] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -9937,8 +9905,7 @@ namespace System.Windows.Forms
         protected virtual void OnRegionChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler eh = Events[EventRegionChanged] as EventHandler;
-            if (eh != null)
+            if (Events[EventRegionChanged] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -9987,8 +9954,7 @@ namespace System.Windows.Forms
             Contract.Requires(e != null);
             OnResize(EventArgs.Empty);
 
-            EventHandler eh = Events[EventSize] as EventHandler;
-            if (eh != null)
+            if (Events[EventSize] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -10121,7 +10087,6 @@ namespace System.Windows.Forms
 
             if (BackgroundImage != null && !DisplayInformation.HighContrast && !formRTL)
             {
-
                 if (BackgroundImageLayout == ImageLayout.Tile)
                 {
                     if (ControlPaint.IsImageTransparent(BackgroundImage))
@@ -10131,8 +10096,7 @@ namespace System.Windows.Forms
                 }
 
                 Point scrollLocation = scrollOffset;
-                ScrollableControl scrollControl = this as ScrollableControl;
-                if (scrollControl != null && scrollLocation != Point.Empty)
+                if (this is ScrollableControl scrollControl && scrollLocation != Point.Empty)
                 {
                     scrollLocation = ((ScrollableControl)this).AutoScrollPosition;
                 }
@@ -12568,8 +12532,7 @@ namespace System.Windows.Forms
                     {
                         // We will recreate later, when the MdiChild's visibility
                         // is set to true (see 
-                        Form f = this as Form;
-                        if (f != null)
+                        if (this is Form f)
                         {
                             if (!f.CanRecreateHandle())
                             {
@@ -13742,8 +13705,7 @@ namespace System.Windows.Forms
                     // a way that breaks this assumption.
 
                     object tempObject = intAccessibleObject;
-                    IAccessible iAccCheck = tempObject as IAccessible;
-                    if (iAccCheck != null)
+                    if (tempObject is IAccessible iAccCheck)
                     {
                         throw new InvalidOperationException(SR.ControlAccessibileObjectInvalid);
                     }
@@ -14650,8 +14612,7 @@ namespace System.Windows.Forms
                 {
                     bool activateSucceed;
 
-                    ContainerControl knowncontainer = c as ContainerControl;
-                    if (knowncontainer != null)
+                    if (c is ContainerControl knowncontainer)
                     {
                         activateSucceed = knowncontainer.ActivateControlInternal(this);
                     }
@@ -15929,8 +15890,7 @@ namespace System.Windows.Forms
                     owner.OnControlRemoved(new ControlEventArgs(value));
 
                     // ContainerControl needs to see it needs to find a new ActiveControl.
-                    ContainerControl cc = owner.GetContainerControl() as ContainerControl;
-                    if (cc != null)
+                    if (owner.GetContainerControl() is ContainerControl cc)
                     {
                         cc.AfterControlRemoved(value, owner);
                     }
@@ -17995,8 +17955,7 @@ namespace System.Windows.Forms
                 // We also punt if this isn't an in-place site, since we can't
                 // go active then.
                 //
-                UnsafeNativeMethods.IOleInPlaceSite inPlaceSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
-                if (inPlaceSite == null)
+                if (!(clientSite is UnsafeNativeMethods.IOleInPlaceSite inPlaceSite))
                 {
                     return;
                 }
@@ -18146,7 +18105,6 @@ namespace System.Windows.Forms
             /// </summary>
             internal void InPlaceDeactivate()
             {
-
                 // Only do this if we're already in place active.
                 //
                 if (!activeXState[inPlaceActive])
@@ -18170,8 +18128,7 @@ namespace System.Windows.Forms
 
                 // Notify our site of our deactivation.
                 //
-                UnsafeNativeMethods.IOleInPlaceSite oleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
-                if (oleClientSite != null)
+                if (clientSite is UnsafeNativeMethods.IOleInPlaceSite oleClientSite)
                 {
                     oleClientSite.OnInPlaceDeactivate();
                 }
@@ -18543,8 +18500,7 @@ namespace System.Windows.Forms
                             break;
 
                         case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                            IButtonControl ibuttonControl = control as IButtonControl;
-                            if (ibuttonControl != null && GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT, ref obj))
+                            if (control is IButtonControl ibuttonControl && GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT, ref obj))
                             {
                                 ibuttonControl.NotifyDefault((bool)obj);
                             }
@@ -19284,8 +19240,7 @@ namespace System.Windows.Forms
                         //
                         if (activeXState[inPlaceActive])
                         {
-                            UnsafeNativeMethods.IOleInPlaceSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
-                            if (ioleClientSite != null)
+                            if (clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
                             {
                                 Rectangle bounds = control.Bounds;
                                 bounds.Location = new Point(bounds.X, bounds.Y);
@@ -19538,7 +19493,6 @@ namespace System.Windows.Forms
             /// </summary>
             internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg)
             {
-
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo)
                 {
@@ -19611,8 +19565,7 @@ namespace System.Windows.Forms
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
 
-                UnsafeNativeMethods.IOleControlSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleControlSite;
-                if (ioleClientSite != null)
+                if (clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
                 {
                     int keyState = 0;
 
@@ -19662,8 +19615,7 @@ namespace System.Windows.Forms
                 Debug.Assert(inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
                 inPlaceFrame.SetActiveObject(null, null);
 
-                UnsafeNativeMethods.IOleInPlaceSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
-                if (ioleClientSite != null)
+                if (clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
                 {
                     ioleClientSite.OnUIDeactivate(0);
                 }
@@ -19696,8 +19648,7 @@ namespace System.Windows.Forms
             {
                 if (!activeXState[adjustingRect] && activeXState[inPlaceVisible])
                 {
-                    UnsafeNativeMethods.IOleInPlaceSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
-                    if (ioleClientSite != null)
+                    if (clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
                     {
                         NativeMethods.COMRECT rc = new NativeMethods.COMRECT();
 
@@ -19760,8 +19711,7 @@ namespace System.Windows.Forms
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
                 accelCount = -1;
 
-                UnsafeNativeMethods.IOleControlSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleControlSite;
-                if (ioleClientSite != null)
+                if (clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
                 {
                     ioleClientSite.OnControlInfoChanged();
                 }
@@ -20900,8 +20850,7 @@ namespace System.Windows.Forms
                     }
 
                     // Find this control's containing control
-                    ContainerControl container = parent.GetContainerControl() as ContainerControl;
-                    if (container == null)
+                    if (!(parent.GetContainerControl() is ContainerControl container))
                     {
                         return null;
                     }

@@ -1067,8 +1067,7 @@ namespace System.Windows.Forms
                 // if it is, call DISPID_AMBIENT_DISPLAYNAME directly on the
                 // control itself.
                 //
-                UnsafeNativeMethods.IOleControl oleCtl = GetOcx() as UnsafeNativeMethods.IOleControl;
-                if (oleCtl != null)
+                if (GetOcx() is UnsafeNativeMethods.IOleControl oleCtl)
                 {
                     oleCtl.OnAmbientPropertyChange(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME);
                 }
@@ -2345,8 +2344,7 @@ namespace System.Windows.Forms
                 IDesignerHost host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
                 if (host != null)
                 {
-                    ContainerControl rootControl = host.RootComponent as ContainerControl;
-                    if (rootControl != null)
+                    if (host.RootComponent is ContainerControl rootControl)
                     {
                         return rootControl;
                     }
@@ -2357,8 +2355,7 @@ namespace System.Windows.Forms
             Control control = this;
             while (control != null)
             {
-                ContainerControl tempCC = control as ContainerControl;
-                if (tempCC != null)
+                if (control is ContainerControl tempCC)
                 {
                     cc = tempCC;
                     break;
@@ -3137,8 +3134,7 @@ namespace System.Windows.Forms
             PropertyDescriptorCollection props = FillProperties(null);
             foreach (PropertyDescriptor prop in props)
             {
-                AxPropertyDescriptor axprop = prop as AxPropertyDescriptor;
-                if (axprop != null && axprop.Dispid == dispid)
+                if (prop is AxPropertyDescriptor axprop && axprop.Dispid == dispid)
                 {
                     return axprop;
                 }
@@ -5164,14 +5160,12 @@ namespace System.Windows.Forms
 
         private static object GetPICTDESCFromPicture(Image image)
         {
-            Bitmap bmp = image as Bitmap;
-            if (bmp != null)
+            if (image is Bitmap bmp)
             {
                 return new NativeMethods.PICTDESCbmp(bmp);
             }
 
-            Metafile mf = image as Metafile;
-            if (mf != null)
+            if (image is Metafile mf)
             {
                 return new NativeMethods.PICTDESCemf(mf);
             }
@@ -5449,8 +5443,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            UnsafeNativeMethods.IFont ifont = font as UnsafeNativeMethods.IFont;
-            if (ifont != null)
+            if (font is UnsafeNativeMethods.IFont ifont)
             {
                 return GetFontFromIFont(ifont);
             }
@@ -6100,8 +6093,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
-                AxHost hostctl = ctl as AxHost;
-                if (hostctl != null && (dwOleContF & NativeMethods.ActiveX.OLECONTF_EMBEDDINGS) != 0)
+                if (ctl is AxHost hostctl && (dwOleContF & NativeMethods.ActiveX.OLECONTF_EMBEDDINGS) != 0)
                 {
                     l.Add(hostctl.GetOcx());
                 }
@@ -6250,8 +6242,7 @@ namespace System.Windows.Forms
 
             private void OnComponentRemoved(object sender, ComponentEventArgs e)
             {
-                Control c = e.Component as Control;
-                if (sender == assocContainer && c != null)
+                if (sender == assocContainer && e.Component is Control c)
                 {
                     RemoveControl(c);
                 }
@@ -6259,8 +6250,7 @@ namespace System.Windows.Forms
 
             internal static AxContainer FindContainerForControl(Control ctl)
             {
-                AxHost axctl = ctl as AxHost;
-                if (axctl != null)
+                if (ctl is AxHost axctl)
                 {
                     if (axctl.container != null)
                     {
@@ -6442,8 +6432,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < ctls.Length; i++)
                     {
                         Control ctl = ctls[i];
-                        AxHost hostctl = ctl as AxHost;
-                        if (hostctl != null)
+                        if (ctl is AxHost hostctl)
                         {
                             if (fuseOcx)
                             {
@@ -7639,8 +7628,7 @@ namespace System.Windows.Forms
         {
             public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
             {
-                AxHost host = obj as AxHost;
-                if (host != null)
+                if (obj is AxHost host)
                 {
                     try
                     {
@@ -8039,8 +8027,7 @@ namespace System.Windows.Forms
                                 else if (converter is AxEnumConverter)
                                 {
                                     ((AxEnumConverter)converter).RefreshValues();
-                                    AxPerPropertyBrowsingEnum axEnum = ((AxEnumConverter)converter).com2Enum as AxPerPropertyBrowsingEnum;
-                                    if (axEnum != null)
+                                    if (((AxEnumConverter)converter).com2Enum is AxPerPropertyBrowsingEnum axEnum)
                                     {
                                         axEnum.RefreshArrays(stringMarshaler, intMarshaler);
                                     }

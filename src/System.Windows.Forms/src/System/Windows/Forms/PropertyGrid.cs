@@ -2961,8 +2961,7 @@ namespace System.Windows.Forms
             //
             //
             bool fullRefresh = false;
-            PropertyDescriptorGridEntry selectedEntry = gridView.SelectedGridEntry as PropertyDescriptorGridEntry;
-            if (selectedEntry != null && selectedEntry.PropertyDescriptor != null && selectedEntry.PropertyDescriptor.Attributes != null)
+            if (gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry && selectedEntry.PropertyDescriptor != null && selectedEntry.PropertyDescriptor.Attributes != null)
             {
 
                 // fish out the DispIdAttribute which will tell us the DispId of the
@@ -3632,8 +3631,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                var gridEntry = changedItem as GridEntry;
-                if (gridEntry != null && gridEntry.Enumerable)
+                if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
                 {
                     dropDown = true;
                 }
@@ -3683,8 +3681,7 @@ namespace System.Windows.Forms
             if (e.LastTransaction)
             {
                 // We should not refresh the grid if the selectedObject is no longer sited.
-                IComponent currentSelection = SelectedObject as IComponent;
-                if (currentSelection != null)
+                if (SelectedObject is IComponent currentSelection)
                 {
                     if (currentSelection.Site == null) //The component is not logically sited...so clear the PropertyGrid Selection..
                     {
@@ -5396,8 +5393,7 @@ namespace System.Windows.Forms
                         int index = unchecked((int)(long)m.WParam);
                         if (index >= 0 && index < toolStrip.Items.Count)
                         {
-                            ToolStripButton button = toolStrip.Items[index] as ToolStripButton;
-                            if (button != null)
+                            if (toolStrip.Items[index] is ToolStripButton button)
                             {
                                 m.Result = (IntPtr)(button.Checked ? 1 : 0);
                             }
@@ -5415,9 +5411,7 @@ namespace System.Windows.Forms
                         int index = unchecked((int)(long)m.WParam);
                         if (index >= 0 && index < toolStrip.Items.Count)
                         {
-                            ToolStripButton button = toolStrip.Items[index] as ToolStripButton;
-
-                            if (button != null)
+                            if (toolStrip.Items[index] is ToolStripButton button)
                             {
                                 button.Checked = !button.Checked;
                                 // special treatment for the properies page button
@@ -6212,8 +6206,7 @@ namespace System.Windows.Forms
         /// <returns>Returns the element in the specified direction.</returns>
         internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
         {
-            var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
-            if (propertyGridAccessibleObject != null)
+            if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget != null)

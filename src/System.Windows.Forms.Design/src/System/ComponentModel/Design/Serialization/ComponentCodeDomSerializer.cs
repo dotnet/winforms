@@ -64,14 +64,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
 		private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
         {
-            IComponent comp = value as IComponent;
-
-            if (comp != null)
+            if (value is IComponent comp)
             {
                 if (comp.Site != null)
                 {
-                    INestedSite nestedSite = comp.Site as INestedSite;
-                    if (nestedSite != null && !string.IsNullOrEmpty(nestedSite.FullName))
+                    if (comp.Site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
                     {
                         return false;
                     }
@@ -190,15 +187,13 @@ namespace System.ComponentModel.Design.Serialization
                         // if we have an existing expression and this is not
                         // a sited component, do not serialize it.  We need this for Everett / 1.0
                         // backwards compat (even though it's wrong).
-                        IComponent comp = value as IComponent;
-                        if (comp != null && comp.Site == null)
+                        if (value is IComponent comp && comp.Site == null)
                         {
                             // We were in a serialize content
                             // property and would still serialize it.  This code reverses what the
                             // outer if block does for this specific case.  We also need this
                             // for Everett / 1.0 backwards compat.
-                            ExpressionContext expCxt = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
-                            if (expCxt == null || expCxt.PresetValue != value)
+                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCxt) || expCxt.PresetValue != value)
                             {
                                 isComplete = true;
                             }
@@ -476,8 +471,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                     foreach (CodeStatement statement in entry.Statements)
                                     {
-                                        CodeVariableDeclarationStatement local = statement as CodeVariableDeclarationStatement;
-                                        if (local != null)
+                                        if (statement is CodeVariableDeclarationStatement local)
                                         {
                                             entry.Tracking = true;
                                             break;

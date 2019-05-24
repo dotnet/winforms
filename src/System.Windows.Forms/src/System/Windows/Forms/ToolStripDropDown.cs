@@ -1431,10 +1431,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                ToolStripDropDownItem dismissingItem = e.ClickedItem as ToolStripDropDownItem;
                 if (AutoClose)
                 {
-                    if ((dismissingItem == null)                   // it's not a dropdownitem
+                    if ((!(e.ClickedItem is ToolStripDropDownItem dismissingItem))                   // it's not a dropdownitem
                        || (dismissingItem is ToolStripSplitButton && !dismissingItem.DropDown.Visible) // clicking on the split button button dismisses
                        || !(dismissingItem.HasDropDownItems))
                     {    // clicking on a item w/dropdown does not dismiss window
@@ -2311,8 +2310,7 @@ namespace System.Windows.Forms
             if (count == 1)
             {
                 // this is the most common case
-                ToolStripDropDown dropDown = ActiveDropDowns[0] as ToolStripDropDown;
-                if (dropDown != null)
+                if (ActiveDropDowns[0] is ToolStripDropDown dropDown)
                 {
                     dropDown.Visible = false;
                 }
@@ -2325,8 +2323,7 @@ namespace System.Windows.Forms
                 // here as changing visibility changes the collection.
                 for (int i = 0; i < dropDowns.Count; i++)
                 {
-                    ToolStripDropDown dropDown = dropDowns[i] as ToolStripDropDown;
-                    if (dropDown != null)
+                    if (dropDowns[i] is ToolStripDropDown dropDown)
                     {
                         dropDown.Visible = false;
                     }

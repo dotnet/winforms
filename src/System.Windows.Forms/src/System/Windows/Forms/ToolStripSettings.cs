@@ -452,9 +452,8 @@ namespace System.Windows.Forms
             public SettingsStub(ToolStrip toolStrip)
             {
                 ToolStripPanelName = string.Empty;
-                ToolStripPanel parentPanel = toolStrip.Parent as ToolStripPanel;
 
-                if (parentPanel != null)
+                if (toolStrip.Parent is ToolStripPanel parentPanel)
                 {
                     if (!string.IsNullOrEmpty(parentPanel.Name))
                     {

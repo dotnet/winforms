@@ -1392,8 +1392,7 @@ namespace System.Windows.Forms
                     IContainerControl c = ParentInternal.GetContainerControl();
                     if (c != null)
                     {
-                        ContainerControl cc = c as ContainerControl;
-                        if (cc == null)
+                        if (!(c is ContainerControl cc))
                         {
                             c.ActiveControl = this;
                         }
@@ -2099,8 +2098,7 @@ namespace System.Windows.Forms
             {
                 ctl = GetNextControl(ctl, forward);
 
-                SplitterPanel panel = ctl as SplitterPanel;
-                if (panel != null && panel.Visible)
+                if (ctl is SplitterPanel panel && panel.Visible)
                 {
                     //We have crossed over to the second Panel...
                     if (firstPanel != null)
@@ -2142,8 +2140,7 @@ namespace System.Windows.Forms
                 IContainerControl c = ParentInternal.GetContainerControl();
                 if (c != null)
                 {
-                    ContainerControl cc = c as ContainerControl;
-                    if (cc == null)
+                    if (!(c is ContainerControl cc))
                     {
                         c.ActiveControl = this;
                     }
@@ -2251,8 +2248,7 @@ namespace System.Windows.Forms
         // This will select the correct active control in the containerControl (if the passed in control is a containerControl)
         private static void SelectNextActiveControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
-            ContainerControl container = ctl as ContainerControl;
-            if (container != null)
+            if (ctl is ContainerControl container)
             {
                 bool correctParentActiveControl = true;
                 if (container.ParentInternal != null)
@@ -2287,8 +2283,7 @@ namespace System.Windows.Forms
                 {
                     foreach (Control c in ctl.Controls)
                     {
-                        SplitContainer c1 = c as SplitContainer;
-                        if (c1 != null && c1.Dock == DockStyle.Fill)
+                        if (c is SplitContainer c1 && c1.Dock == DockStyle.Fill)
                         {
                             // We need to Overlay borders
                             // if the Children have matching BorderStyles ...
@@ -2671,8 +2666,7 @@ namespace System.Windows.Forms
                     IContainerControl c = ParentInternal.GetContainerControl();
                     if (c != null)
                     {
-                        ContainerControl cc = c as ContainerControl;
-                        if (cc == null)
+                        if (!(c is ContainerControl cc))
                         {
                             c.ActiveControl = this;
                         }

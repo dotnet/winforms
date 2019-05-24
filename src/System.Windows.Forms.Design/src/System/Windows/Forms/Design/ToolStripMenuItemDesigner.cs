@@ -1562,8 +1562,7 @@ namespace System.Windows.Forms.Design
                 // Check if this is a Sited-DropDown
                 if (MenuItem.DropDown.Site != null)
                 {
-                    ToolStripDropDownDesigner designer = designerHost.GetDesigner(MenuItem.DropDown) as ToolStripDropDownDesigner;
-                    if (designer != null)
+                    if (designerHost.GetDesigner(MenuItem.DropDown) is ToolStripDropDownDesigner designer)
                     {
                         designer.currentParent = MenuItem as ToolStripMenuItem;
                     }
@@ -2131,8 +2130,7 @@ namespace System.Windows.Forms.Design
                 if (IsOnContextMenu && !MenuItem.Owner.Visible)
                 {
                     ToolStripDropDown firstDropDown = GetFirstDropDown(MenuItem);
-                    ToolStripDropDownDesigner firstDropDownDesigner = designerHost.GetDesigner(firstDropDown) as ToolStripDropDownDesigner;
-                    if (firstDropDownDesigner != null)
+                    if (designerHost.GetDesigner(firstDropDown) is ToolStripDropDownDesigner firstDropDownDesigner)
                     {
                         InitializeDropDown();
                         firstDropDownDesigner.ShowMenu();
@@ -2201,8 +2199,7 @@ namespace System.Windows.Forms.Design
                     else
                     {
                         // Any ToolStripItem on the DropDown OR any of its Child DropDowns
-                        ToolStripItem item = selectedObj as ToolStripItem;
-                        if (item != null)
+                        if (selectedObj is ToolStripItem item)
                         {
                             ToolStripDropDown parent = item.Owner as ToolStripDropDown;
                             while (parent != null)
@@ -2517,8 +2514,7 @@ namespace System.Windows.Forms.Design
                 currentSelection = (ToolStripDropDownItem)currentDropDown.OwnerItem;
                 if (currentSelection != null && !currentSelection.DropDown.Visible)
                 {
-                    ToolStripMenuItemDesigner currentSelectionDesigner = designerHost.GetDesigner(currentSelection) as ToolStripMenuItemDesigner;
-                    if (currentSelectionDesigner != null)
+                    if (designerHost.GetDesigner(currentSelection) is ToolStripMenuItemDesigner currentSelectionDesigner)
                     {
                         currentSelectionDesigner.InitializeDropDown();
                     }
@@ -2605,8 +2601,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
-                ToolStripItemDataObject data = e.Data as ToolStripItemDataObject;
-                if (data != null)
+                if (e.Data is ToolStripItemDataObject data)
                 {
                     e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
                 }
@@ -2621,8 +2616,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragOver(Glyph g, DragEventArgs e)
             {
-                ToolStripItemDataObject data = e.Data as ToolStripItemDataObject;
-                if (data != null)
+                if (e.Data is ToolStripItemDataObject data)
                 {
                     e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
                 }
@@ -2638,8 +2632,7 @@ namespace System.Windows.Forms.Design
             [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
             public override void OnDragDrop(Glyph g, DragEventArgs e)
             {
-                ToolStripItemDataObject data = e.Data as ToolStripItemDataObject;
-                if (data != null)
+                if (e.Data is ToolStripItemDataObject data)
                 {
                     ToolStripItem primaryItem = data.PrimarySelection;
                     IDesignerHost host = (IDesignerHost)primaryItem.Site.GetService(typeof(IDesignerHost));

@@ -158,11 +158,10 @@ namespace System.Windows.Forms
 
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            ToolStripSplitButton item = e.Item as ToolStripSplitButton;
             Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
             Graphics g = e.Graphics;
 
-            if (item != null)
+            if (e.Item is ToolStripSplitButton item)
             {
                 Rectangle dropDownRect = item.DropDownButtonBounds;
 
@@ -456,8 +455,7 @@ namespace System.Windows.Forms
         {
             if (FillWhenSelected)
             {
-                ToolStripButton button = e.Item as ToolStripButton;
-                if (button != null && button.Checked)
+                if (e.Item is ToolStripButton button && button.Checked)
                 {
                     Graphics g = e.Graphics;
                     Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);

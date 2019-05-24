@@ -1847,8 +1847,7 @@ namespace System.Windows.Forms
                         IContainerControl c = GetContainerControl();
                         if (c != null)
                         {
-                            ContainerControl container = c as ContainerControl;
-                            if (container != null)
+                            if (c is ContainerControl container)
                             {
                                 if (!container.ActivateControlInternal(this, false))
                                 {
@@ -2723,8 +2722,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.ExpandCollapseState.Collapsed,
                 UnsafeNativeMethods.ExpandCollapseState.Expanded);
 
-            var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
-            if (accessibleObject != null)
+            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
                 accessibleObject.SetComboBoxItemFocus();
             }
@@ -2881,8 +2879,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
-                if (accessibleObject != null)
+                if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
                 {
 
                     // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
@@ -4853,8 +4850,7 @@ namespace System.Windows.Forms
                         return _owningComboBox.ChildListAccessibleObject;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
-                        var comboBoxChildListUiaProvider = _owningComboBox.ChildListAccessibleObject as ComboBoxChildListUiaProvider;
-                        if (comboBoxChildListUiaProvider != null)
+                        if (_owningComboBox.ChildListAccessibleObject is ComboBoxChildListUiaProvider comboBoxChildListUiaProvider)
                         {
                             int itemsCount = comboBoxChildListUiaProvider.GetChildFragmentCount();
                             int nextItemIndex = currentIndex + 1;
@@ -5407,8 +5403,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var itemAccessibleObject = ItemAccessibleObjects[selectedItem] as ComboBoxItemAccessibleObject;
-                if (itemAccessibleObject != null)
+                if (ItemAccessibleObjects[selectedItem] is ComboBoxItemAccessibleObject itemAccessibleObject)
                 {
                     itemAccessibleObject.SetFocus();
                 }
@@ -5422,8 +5417,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var itemAccessibleObject = ItemAccessibleObjects[selectedItem] as ComboBoxItemAccessibleObject;
-                if (itemAccessibleObject != null)
+                if (ItemAccessibleObjects[selectedItem] is ComboBoxItemAccessibleObject itemAccessibleObject)
                 {
                     itemAccessibleObject.RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
                 }
@@ -5476,8 +5470,7 @@ namespace System.Windows.Forms
                             return null;
                         }
 
-                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
-                        if (comboBoxAccessibleObject != null)
+                        if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                         {
                             int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1)
@@ -5898,8 +5891,7 @@ namespace System.Windows.Forms
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
-                        if (comboBoxAccessibleObject != null)
+                        if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                         {
                             int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1)
@@ -6083,8 +6075,7 @@ namespace System.Windows.Forms
                 }
                 else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling)
                 {
-                    var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
-                    if (comboBoxAccessibleObject != null)
+                    if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                     {
                         int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                         if (comboBoxChildFragmentCount > 1)
@@ -6291,8 +6282,7 @@ namespace System.Windows.Forms
                     }
                     foreach (object o in ACWindows.Values)
                     {
-                        ACNativeWindow window = o as ACNativeWindow;
-                        if (window != null && window.Visible)
+                        if (o is ACNativeWindow window && window.Visible)
                         {
                             return true;
                         }
@@ -6418,8 +6408,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                FlatComboAdapter comboAdapter = Properties.GetObject(PropFlatComboAdapter) as FlatComboAdapter;
-                if (comboAdapter == null || !comboAdapter.IsValid(this))
+                if (!(Properties.GetObject(PropFlatComboAdapter) is FlatComboAdapter comboAdapter) || !comboAdapter.IsValid(this))
                 {
                     comboAdapter = CreateFlatComboAdapterInstance();
                     Properties.SetObject(PropFlatComboAdapter, comboAdapter);

@@ -5923,8 +5923,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             Debug.Assert(ptCurrentCell.X != -1);
-            System.Windows.Forms.MouseEventArgs me = e as System.Windows.Forms.MouseEventArgs;
-            if (me != null)
+            if (e is System.Windows.Forms.MouseEventArgs me)
             {
                 EditingControls_CommonMouseEventHandler(sender, me, DataGridViewMouseEvent.Click);
             }
@@ -5934,8 +5933,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             Debug.Assert(ptCurrentCell.X != -1);
-            System.Windows.Forms.MouseEventArgs me = e as System.Windows.Forms.MouseEventArgs;
-            if (me != null)
+            if (e is System.Windows.Forms.MouseEventArgs me)
             {
                 EditingControls_CommonMouseEventHandler(sender, me, DataGridViewMouseEvent.DoubleClick);
             }
@@ -11161,8 +11159,7 @@ namespace System.Windows.Forms
         {
             PushAllowUserToAddRows();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11170,8 +11167,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAllowUserToDeleteRowsChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11179,8 +11175,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAllowUserToOrderColumnsChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11188,8 +11183,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAllowUserToResizeColumnsChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11197,8 +11191,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAllowUserToResizeRowsChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11206,8 +11199,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAlternatingRowsDefaultCellStyleChanged(EventArgs e)
         {
-            DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
-            if (dgvcsce != null && !dgvcsce.ChangeAffectsPreferredSize)
+            if (e is DataGridViewCellStyleChangedEventArgs dgvcsce && !dgvcsce.ChangeAffectsPreferredSize)
             {
                 InvalidateData();
             }
@@ -11220,8 +11212,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11234,8 +11225,7 @@ namespace System.Windows.Forms
                 // refresh the list of columns and the rows
                 RefreshColumnsAndRows();
             }
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11313,8 +11303,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewAutoSizeColumnModeEventHandler eh = Events[EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED] as DataGridViewAutoSizeColumnModeEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED] is DataGridViewAutoSizeColumnModeEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11399,8 +11388,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewAutoSizeColumnsModeEventHandler eh = Events[EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED] as DataGridViewAutoSizeColumnsModeEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED] is DataGridViewAutoSizeColumnsModeEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11431,8 +11419,7 @@ namespace System.Windows.Forms
                 AdjustShrinkingRows(autoSizeRowsMode, true /*fixedWidth*/, true /*internalAutosizing*/);
             }
 
-            DataGridViewAutoSizeModeEventHandler eh = Events[EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED] as DataGridViewAutoSizeModeEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED] is DataGridViewAutoSizeModeEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11442,8 +11429,7 @@ namespace System.Windows.Forms
         {
             InvalidateInside();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11451,8 +11437,7 @@ namespace System.Windows.Forms
 
         internal void OnBandContextMenuStripChanged(DataGridViewBand dataGridViewBand)
         {
-            DataGridViewColumn dataGridViewColumn = dataGridViewBand as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
                 OnColumnContextMenuStripChanged(dgvce);
@@ -11466,8 +11451,7 @@ namespace System.Windows.Forms
 
         internal void OnBandDefaultCellStyleChanged(DataGridViewBand dataGridViewBand)
         {
-            DataGridViewColumn dataGridViewColumn = dataGridViewBand as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
                 OnColumnDefaultCellStyleChanged(dgvce);
@@ -11481,8 +11465,7 @@ namespace System.Windows.Forms
 
         internal void OnBandDividerThicknessChanged(DataGridViewBand dataGridViewBand)
         {
-            DataGridViewColumn dataGridViewColumn = dataGridViewBand as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
                 OnColumnDividerWidthChanged(dgvce);
@@ -11496,8 +11479,7 @@ namespace System.Windows.Forms
 
         internal void OnBandHeaderCellChanged(DataGridViewBand dataGridViewBand)
         {
-            DataGridViewColumn dataGridViewColumn = dataGridViewBand as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
                 OnColumnHeaderCellChanged(dgvce);
@@ -11511,8 +11493,7 @@ namespace System.Windows.Forms
 
         internal void OnBandMinimumThicknessChanged(DataGridViewBand dataGridViewBand)
         {
-            DataGridViewColumn dataGridViewColumn = dataGridViewBand as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
                 OnColumnMinimumWidthChanged(dgvce);
@@ -11526,8 +11507,7 @@ namespace System.Windows.Forms
 
         internal void OnBandThicknessChanged(DataGridViewBand dataGridViewBand)
         {
-            DataGridViewColumn dataGridViewColumn = dataGridViewBand as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
                 OnColumnWidthChanged(dgvce);
@@ -11599,8 +11579,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnBorderStyleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWBORDERSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWBORDERSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11608,8 +11587,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCancelRowEdit(QuestionEventArgs e)
         {
-            QuestionEventHandler eh = Events[EVENT_DATAGRIDVIEWCANCELROWEDIT] as QuestionEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCANCELROWEDIT] is QuestionEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
                 CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -11627,8 +11605,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellCancelEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLBEGINEDIT] as DataGridViewCellCancelEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLBEGINEDIT] is DataGridViewCellCancelEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11639,8 +11616,7 @@ namespace System.Windows.Forms
             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
             Invalidate();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11674,8 +11650,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnClickInternal(e);
             }
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLCLICK] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLCLICK] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11759,8 +11734,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnContentClickInternal(e);
             }
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLCONTENTCLICK] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLCONTENTCLICK] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11794,8 +11768,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnContentDoubleClickInternal(e);
             }
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11818,8 +11791,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11843,8 +11815,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellContextMenuStripNeededEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED] as DataGridViewCellContextMenuStripNeededEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED] is DataGridViewCellContextMenuStripNeededEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11873,8 +11844,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnDoubleClickInternal(e);
             }
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLDOUBLECLICK] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLDOUBLECLICK] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11891,8 +11861,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLENDEDIT] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLENDEDIT] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11930,8 +11899,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLENTER] as DataGridViewCellEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWCELLENTER] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                 }
@@ -11964,8 +11932,7 @@ namespace System.Windows.Forms
             }
             UpdateCellErrorText(e.ColumnIndex, e.RowIndex);
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -11991,8 +11958,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellErrorTextNeededEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED] as DataGridViewCellErrorTextNeededEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED] is DataGridViewCellErrorTextNeededEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12020,8 +11986,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellFormattingEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLFORMATTING] as DataGridViewCellFormattingEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLFORMATTING] is DataGridViewCellFormattingEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12059,8 +12024,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLLEAVE] as DataGridViewCellEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWCELLLEAVE] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                 }
@@ -12096,8 +12060,7 @@ namespace System.Windows.Forms
             }
             dataGridViewState2[DATAGRIDVIEWSTATE2_nextMouseUpIsDouble] = false;
 
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSECLICK] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLMOUSECLICK] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12127,8 +12090,7 @@ namespace System.Windows.Forms
             }
             dataGridViewState2[DATAGRIDVIEWSTATE2_nextMouseUpIsDouble] = true;
 
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12201,8 +12163,7 @@ namespace System.Windows.Forms
                     dataGridViewCell.OnMouseDownInternal(e);
                 }
 
-                DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSEDOWN] as DataGridViewCellMouseEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWCELLMOUSEDOWN] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                 }
@@ -12820,8 +12781,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnMouseEnterInternal(e.RowIndex);
             }
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSEENTER] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLMOUSEENTER] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12853,8 +12813,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnMouseLeaveInternal(e.RowIndex);
             }
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSELEAVE] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLMOUSELEAVE] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12883,8 +12842,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnMouseMoveInternal(e);
             }
 
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSEMOVE] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLMOUSEMOVE] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12950,8 +12908,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OnMouseUpInternal(e);
             }
 
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLMOUSEUP] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLMOUSEUP] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12968,8 +12925,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellPaintingEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLPAINTING] as DataGridViewCellPaintingEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLPAINTING] is DataGridViewCellPaintingEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -12996,8 +12952,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellParsingEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLPARSING] as DataGridViewCellParsingEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLPARSING] is DataGridViewCellParsingEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13049,8 +13004,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewCellStateChangedEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLSTATECHANGED] as DataGridViewCellStateChangedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLSTATECHANGED] is DataGridViewCellStateChangedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13094,8 +13048,7 @@ namespace System.Windows.Forms
             }
             OnCellCommonChange(e.ColumnIndex, e.RowIndex);
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLSTYLECHANGED] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLSTYLECHANGED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13252,8 +13205,7 @@ namespace System.Windows.Forms
                 PositionEditingControl(true /*setLocation*/, true /*setSize*/, false /*setFocus*/);
             }
 
-            DataGridViewCellStyleContentChangedEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED] as DataGridViewCellStyleContentChangedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED] is DataGridViewCellStyleContentChangedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13276,8 +13228,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13301,8 +13252,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellToolTipTextNeededEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED] as DataGridViewCellToolTipTextNeededEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED] is DataGridViewCellToolTipTextNeededEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13340,8 +13290,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLVALIDATED] as DataGridViewCellEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWCELLVALIDATED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -13393,8 +13342,7 @@ namespace System.Windows.Forms
                 noDimensionChangeCount++;
                 dataGridViewOper[DATAGRIDVIEWOPER_inCellValidating] = true;
 
-                DataGridViewCellValidatingEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLVALIDATING] as DataGridViewCellValidatingEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWCELLVALIDATING] is DataGridViewCellValidatingEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -13427,8 +13375,7 @@ namespace System.Windows.Forms
             }
             OnCellCommonChange(e.ColumnIndex, e.RowIndex);
 
-            DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLVALUECHANGED] as DataGridViewCellEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLVALUECHANGED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13458,8 +13405,7 @@ namespace System.Windows.Forms
             // but since we're late in Whidbey, throwing an exception would be destabilizing our internal customers.
             // Debug.Assert(this.dataStoreAccessAllowed);
             //#endif
-            DataGridViewCellValueEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLVALUENEEDED] as DataGridViewCellValueEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLVALUENEEDED] is DataGridViewCellValueEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13483,8 +13429,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            DataGridViewCellValueEventHandler eh = Events[EVENT_DATAGRIDVIEWCELLVALUEPUSHED] as DataGridViewCellValueEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCELLVALUEPUSHED] is DataGridViewCellValueEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13562,8 +13507,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
             }
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNADDED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNADDED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13628,8 +13572,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
             }
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13662,8 +13605,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13677,8 +13619,7 @@ namespace System.Windows.Forms
             }
             OnColumnGlobalAutoSize(e.Column.Index);
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13755,9 +13696,10 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments]);
 #if DEBUG
             Debug.Assert(Columns.VerifyColumnDisplayIndexes());
+
 #endif
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+#endif
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13786,8 +13728,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnColumnDividerDoubleClick(DataGridViewColumnDividerDoubleClickEventArgs e)
         {
-            DataGridViewColumnDividerDoubleClickEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK] as DataGridViewColumnDividerDoubleClickEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK] is DataGridViewColumnDividerDoubleClickEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13823,8 +13764,7 @@ namespace System.Windows.Forms
             }
             OnColumnGlobalAutoSize(e.Column.Index);
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13908,8 +13848,7 @@ namespace System.Windows.Forms
 
             OnColumnHeaderGlobalAutoSize(e.Column.Index);
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13990,8 +13929,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -13999,8 +13937,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnColumnHeaderMouseDoubleClick(DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14203,8 +14140,7 @@ namespace System.Windows.Forms
             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
             Invalidate();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14216,8 +14152,7 @@ namespace System.Windows.Forms
             {
                 Invalidate(Rectangle.Union(layout.TopLeftHeader, layout.ColumnHeaders));
 
-                DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
-                if (dgvcsce == null || dgvcsce.ChangeAffectsPreferredSize)
+                if (!(e is DataGridViewCellStyleChangedEventArgs dgvcsce) || dgvcsce.ChangeAffectsPreferredSize)
                 {
                     OnColumnHeadersGlobalAutoSize();
                     if (editingControl != null)
@@ -14227,8 +14162,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14291,8 +14225,7 @@ namespace System.Windows.Forms
 
             OnColumnHeadersGlobalAutoSize();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14314,8 +14247,7 @@ namespace System.Windows.Forms
                 ColumnHeadersHeight = cachedColumnHeadersHeight;
             }
 
-            DataGridViewAutoSizeModeEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED] as DataGridViewAutoSizeModeEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED] is DataGridViewAutoSizeModeEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14363,8 +14295,7 @@ namespace System.Windows.Forms
                 PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
             }
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14416,8 +14347,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14432,8 +14362,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnColumnRemoved(DataGridViewColumnEventArgs e)
         {
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNREMOVED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNREMOVED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14616,8 +14545,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14735,8 +14663,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            DataGridViewColumnStateChangedEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED] as DataGridViewColumnStateChangedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED] is DataGridViewColumnStateChangedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14771,8 +14698,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
             }
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14832,8 +14758,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewColumnEventHandler eh = Events[EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED] as DataGridViewColumnEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14868,8 +14793,7 @@ namespace System.Windows.Forms
         protected virtual void OnCurrentCellChanged(EventArgs e)
         {
             VerifyImeRestrictedModeChanged();
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWCURRENTCELLCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCURRENTCELLCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14893,8 +14817,7 @@ namespace System.Windows.Forms
                 AddNewRow(true /*createdByEditing*/);
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14916,8 +14839,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDataBindingComplete(DataGridViewBindingCompleteEventArgs e)
         {
-            DataGridViewBindingCompleteEventHandler eh = Events[EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE] as DataGridViewBindingCompleteEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE] is DataGridViewBindingCompleteEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -14928,10 +14850,9 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnDataError(bool displayErrorDialogIfNoHandler, DataGridViewDataErrorEventArgs e)
         {
-            DataGridViewDataErrorEventHandler eh = Events[EVENT_DATAGRIDVIEWDATAERROR] as DataGridViewDataErrorEventHandler;
             if (!dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
-                if (eh == null)
+                if (!(Events[EVENT_DATAGRIDVIEWDATAERROR] is DataGridViewDataErrorEventHandler eh))
                 {
                     if (displayErrorDialogIfNoHandler)
                     {
@@ -14970,8 +14891,7 @@ namespace System.Windows.Forms
 
         internal void OnDataGridViewElementStateChanged(DataGridViewElement element, int index, DataGridViewElementStates elementState)
         {
-            DataGridViewColumn dataGridViewColumn = element as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (element is DataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnStateChangedEventArgs dgvcsce = new DataGridViewColumnStateChangedEventArgs(dataGridViewColumn, elementState);
 
@@ -14979,12 +14899,9 @@ namespace System.Windows.Forms
             }
             else
             {
-                DataGridViewRow dataGridViewRow = element as DataGridViewRow;
-                if (dataGridViewRow != null)
+                if (element is DataGridViewRow dataGridViewRow)
                 {
-                    DataGridViewRowStateChangedEventHandler eh = Events[EVENT_DATAGRIDVIEWROWSTATECHANGED] as DataGridViewRowStateChangedEventHandler;
-
-                    if (eh != null && dataGridViewRow.DataGridView != null && dataGridViewRow.Index == -1)
+                    if (Events[EVENT_DATAGRIDVIEWROWSTATECHANGED] is DataGridViewRowStateChangedEventHandler eh && dataGridViewRow.DataGridView != null && dataGridViewRow.Index == -1)
                     {
                         dataGridViewRow = Rows[index];
                     }
@@ -14995,8 +14912,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    DataGridViewCell dataGridViewCell = element as DataGridViewCell;
-                    if (dataGridViewCell != null)
+                    if (element is DataGridViewCell dataGridViewCell)
                     {
                         DataGridViewCellStateChangedEventArgs dgvcsce = new DataGridViewCellStateChangedEventArgs(dataGridViewCell, elementState);
 
@@ -15020,8 +14936,7 @@ namespace System.Windows.Forms
 
         internal void OnDataGridViewElementStateChanging(DataGridViewElement element, int index, DataGridViewElementStates elementState)
         {
-            DataGridViewColumn dataGridViewColumn = element as DataGridViewColumn;
-            if (dataGridViewColumn != null)
+            if (element is DataGridViewColumn dataGridViewColumn)
             {
                 // column.Frozen | .Visible | .ReadOnly changing
                 switch (elementState)
@@ -15094,8 +15009,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                DataGridViewRow dataGridViewRow = element as DataGridViewRow;
-                if (dataGridViewRow != null)
+                if (element is DataGridViewRow dataGridViewRow)
                 {
                     // row.Frozen | .Visible | .ReadOnly changing
                     int rowIndex = ((dataGridViewRow.Index > -1) ? dataGridViewRow.Index : index);
@@ -15153,8 +15067,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    DataGridViewCell dataGridViewCell = element as DataGridViewCell;
-                    if (dataGridViewCell != null)
+                    if (element is DataGridViewCell dataGridViewCell)
                     {
                         // cell.ReadOnly changing
                         switch (elementState)
@@ -15203,8 +15116,7 @@ namespace System.Windows.Forms
         {
             RefreshColumnsAndRows();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWDATAMEMBERCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWDATAMEMBERCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -15220,8 +15132,7 @@ namespace System.Windows.Forms
             RefreshColumnsAndRows();
             InvalidateRowHeights();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWDATASOURCECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWDATASOURCECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -15234,8 +15145,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDefaultCellStyleChanged(EventArgs e)
         {
-            DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
-            if (dgvcsce != null && !dgvcsce.ChangeAffectsPreferredSize)
+            if (e is DataGridViewCellStyleChangedEventArgs dgvcsce && !dgvcsce.ChangeAffectsPreferredSize)
             {
                 Invalidate();
             }
@@ -15248,8 +15158,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -15257,8 +15166,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDefaultValuesNeeded(DataGridViewRowEventArgs e)
         {
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -15270,8 +15178,7 @@ namespace System.Windows.Forms
 
             if (!dataGridViewState2[DATAGRIDVIEWSTATE2_messageFromEditingCtrls] && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
-                MouseEventArgs me = e as MouseEventArgs;
-                if (me != null)
+                if (e is MouseEventArgs me)
                 {
                     HitTestInfo hti = HitTest(me.X, me.Y);
                     if (hti.Type != DataGridViewHitTestType.None &&
@@ -15287,8 +15194,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnEditingControlShowing(DataGridViewEditingControlShowingEventArgs e)
         {
-            DataGridViewEditingControlShowingEventHandler eh = Events[EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING] as DataGridViewEditingControlShowingEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING] is DataGridViewEditingControlShowingEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -15305,8 +15211,7 @@ namespace System.Windows.Forms
                 BeginEditInternal(true /*selectAll*/);
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWEDITMODECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWEDITMODECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -15537,8 +15442,7 @@ namespace System.Windows.Forms
         {
             InvalidateInside();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWGRIDCOLORCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWGRIDCOLORCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -16890,8 +16794,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnMultiSelectChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWMULTISELECTCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWMULTISELECTCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -16903,8 +16806,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
             }
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWNEWROWNEEDED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWNEWROWNEEDED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17105,8 +17007,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWREADONLYCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWREADONLYCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17814,8 +17715,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
             }
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17830,8 +17730,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowContextMenuStripNeeded(DataGridViewRowContextMenuStripNeededEventArgs e)
         {
-            DataGridViewRowContextMenuStripNeededEventHandler eh = Events[EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED] as DataGridViewRowContextMenuStripNeededEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED] is DataGridViewRowContextMenuStripNeededEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17846,8 +17745,7 @@ namespace System.Windows.Forms
 
             OnRowGlobalAutoSize(e.Row.Index);
 
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17855,8 +17753,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowDirtyStateNeeded(QuestionEventArgs e)
         {
-            QuestionEventHandler eh = Events[EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED] as QuestionEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED] is QuestionEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17864,8 +17761,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowDividerDoubleClick(DataGridViewRowDividerDoubleClickEventArgs e)
         {
-            DataGridViewRowDividerDoubleClickEventHandler eh = Events[EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK] as DataGridViewRowDividerDoubleClickEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK] is DataGridViewRowDividerDoubleClickEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17899,8 +17795,7 @@ namespace System.Windows.Forms
 
             OnRowGlobalAutoSize(e.Row.Index);
 
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -17994,8 +17889,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWROWENTER] as DataGridViewCellEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWROWENTER] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -18022,8 +17916,7 @@ namespace System.Windows.Forms
             }
             UpdateRowErrorText(e.Row.Index);
 
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18039,8 +17932,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowErrorTextNeeded(DataGridViewRowErrorTextNeededEventArgs e)
         {
-            DataGridViewRowErrorTextNeededEventHandler eh = Events[EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED] as DataGridViewRowErrorTextNeededEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED] is DataGridViewRowErrorTextNeededEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18115,8 +18007,7 @@ namespace System.Windows.Forms
 
             OnRowHeaderGlobalAutoSize(e.Row.Index);
 
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18180,8 +18071,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowHeaderMouseClick(DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18189,8 +18079,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowHeaderMouseDoubleClick(DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewCellMouseEventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK] as DataGridViewCellMouseEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK] is DataGridViewCellMouseEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18425,8 +18314,7 @@ namespace System.Windows.Forms
             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
             Invalidate();
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18438,8 +18326,7 @@ namespace System.Windows.Forms
             {
                 Invalidate(Rectangle.Union(layout.TopLeftHeader, layout.RowHeaders));
 
-                DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
-                if (dgvcsce == null || dgvcsce.ChangeAffectsPreferredSize)
+                if (!(e is DataGridViewCellStyleChangedEventArgs dgvcsce) || dgvcsce.ChangeAffectsPreferredSize)
                 {
                     OnRowHeadersGlobalAutoSize(false /*expandingRows*/);
                     if (editingControl != null)
@@ -18449,8 +18336,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18508,8 +18394,7 @@ namespace System.Windows.Forms
                 OnRowHeadersGlobalAutoSize(false /*expandingRows*/);
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18534,8 +18419,7 @@ namespace System.Windows.Forms
                 RowHeadersWidth = cachedRowHeadersWidth;
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18549,8 +18433,7 @@ namespace System.Windows.Forms
             }
             UpdateRowHeightInfoPrivate(e.Row.Index, false, false /*invalidInAdjustFillingColumns*/);
 
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEIGHTCHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEIGHTCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18568,8 +18451,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowHeightInfoNeeded(DataGridViewRowHeightInfoNeededEventArgs e)
         {
-            DataGridViewRowHeightInfoNeededEventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED] as DataGridViewRowHeightInfoNeededEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED] is DataGridViewRowHeightInfoNeededEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18594,8 +18476,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowHeightInfoPushed(DataGridViewRowHeightInfoPushedEventArgs e)
         {
-            DataGridViewRowHeightInfoPushedEventHandler eh = Events[EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED] as DataGridViewRowHeightInfoPushedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED] is DataGridViewRowHeightInfoPushedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18629,8 +18510,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWROWLEAVE] as DataGridViewCellEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWROWLEAVE] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -18649,8 +18529,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
             }
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18658,8 +18537,7 @@ namespace System.Windows.Forms
 
         protected internal virtual void OnRowPostPaint(DataGridViewRowPostPaintEventArgs e)
         {
-            DataGridViewRowPostPaintEventHandler eh = Events[EVENT_DATAGRIDVIEWROWPOSTPAINT] as DataGridViewRowPostPaintEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWPOSTPAINT] is DataGridViewRowPostPaintEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18667,8 +18545,7 @@ namespace System.Windows.Forms
 
         protected internal virtual void OnRowPrePaint(DataGridViewRowPrePaintEventArgs e)
         {
-            DataGridViewRowPrePaintEventHandler eh = Events[EVENT_DATAGRIDVIEWROWPREPAINT] as DataGridViewRowPrePaintEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWPREPAINT] is DataGridViewRowPrePaintEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18681,8 +18558,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowsAdded(DataGridViewRowsAddedEventArgs e)
         {
-            DataGridViewRowsAddedEventHandler eh = Events[EVENT_DATAGRIDVIEWROWSADDED] as DataGridViewRowsAddedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWSADDED] is DataGridViewRowsAddedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18690,8 +18566,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowsDefaultCellStyleChanged(EventArgs e)
         {
-            DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
-            if (dgvcsce != null && !dgvcsce.ChangeAffectsPreferredSize)
+            if (e is DataGridViewCellStyleChangedEventArgs dgvcsce && !dgvcsce.ChangeAffectsPreferredSize)
             {
                 InvalidateData();
             }
@@ -18704,8 +18579,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18863,8 +18737,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRowsRemoved(DataGridViewRowsRemovedEventArgs e)
         {
-            DataGridViewRowsRemovedEventHandler eh = Events[EVENT_DATAGRIDVIEWROWSREMOVED] as DataGridViewRowsRemovedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWSREMOVED] is DataGridViewRowsRemovedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -18979,8 +18852,7 @@ namespace System.Windows.Forms
                     }
             }
 
-            DataGridViewRowStateChangedEventHandler eh = Events[EVENT_DATAGRIDVIEWROWSTATECHANGED] as DataGridViewRowStateChangedEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWSTATECHANGED] is DataGridViewRowStateChangedEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19021,8 +18893,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
             }
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWROWUNSHARED] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWUNSHARED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19055,8 +18926,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellCancelEventHandler eh = Events[EVENT_DATAGRIDVIEWROWVALIDATING] as DataGridViewCellCancelEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWROWVALIDATING] is DataGridViewCellCancelEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -19101,8 +18971,7 @@ namespace System.Windows.Forms
             {
                 noDimensionChangeCount++;
 
-                DataGridViewCellEventHandler eh = Events[EVENT_DATAGRIDVIEWROWVALIDATED] as DataGridViewCellEventHandler;
-                if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+                if (Events[EVENT_DATAGRIDVIEWROWVALIDATED] is DataGridViewCellEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
                 {
                     eh(this, e);
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
@@ -19212,8 +19081,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnScroll(ScrollEventArgs e)
         {
-            ScrollEventHandler eh = Events[EVENT_DATAGRIDVIEWSCROLL] as ScrollEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWSCROLL] is ScrollEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19223,8 +19091,7 @@ namespace System.Windows.Forms
         {
             dataGridViewState2[DATAGRIDVIEWSTATE2_raiseSelectionChanged] = false;
 
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWSELECTIONCHANGED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWSELECTIONCHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19240,8 +19107,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnSortCompare(DataGridViewSortCompareEventArgs e)
         {
-            DataGridViewSortCompareEventHandler eh = Events[EVENT_DATAGRIDVIEWSORTCOMPARE] as DataGridViewSortCompareEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWSORTCOMPARE] is DataGridViewSortCompareEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19249,8 +19115,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnSorted(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_DATAGRIDVIEWSORTED] as EventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWSORTED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19318,8 +19183,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
             }
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWUSERADDEDROW] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWUSERADDEDROW] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19327,8 +19191,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnUserDeletedRow(DataGridViewRowEventArgs e)
         {
-            DataGridViewRowEventHandler eh = Events[EVENT_DATAGRIDVIEWUSERDELETEDROW] as DataGridViewRowEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWUSERDELETEDROW] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -19336,8 +19199,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnUserDeletingRow(DataGridViewRowCancelEventArgs e)
         {
-            DataGridViewRowCancelEventHandler eh = Events[EVENT_DATAGRIDVIEWUSERDELETINGROW] as DataGridViewRowCancelEventHandler;
-            if (eh != null && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWUSERDELETINGROW] is DataGridViewRowCancelEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
@@ -27861,8 +27723,7 @@ namespace System.Windows.Forms
 
         private void SortDataBoundDataGridView_PerformCheck(DataGridViewColumn dataGridViewColumn)
         {
-            IBindingList ibl = dataConnection.List as IBindingList;
-            if (ibl == null)
+            if (!(dataConnection.List is IBindingList ibl))
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSortDataBoundDataGridViewBoundToNonIBindingList));
             }

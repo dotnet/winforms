@@ -21,9 +21,7 @@ namespace System
 
         public int Compare(object a, object b)
         {
-            string sa = a as string;
-            string sb = b as string;
-            if (sa != null && sb != null)
+            if (a is string sa && b is string sb)
             {
                 return m_compareInfo.Compare(sa, sb);
             }

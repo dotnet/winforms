@@ -1959,9 +1959,7 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnIsOverwriteModeChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_ISOVERWRITEMODECHANGED] as EventHandler;
-
-            if (eh != null)
+            if (Events[EVENT_ISOVERWRITEMODECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -2198,9 +2196,7 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnMaskChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_MASKCHANGED] as EventHandler;
-
-            if (eh != null)
+            if (Events[EVENT_MASKCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -2219,9 +2215,8 @@ namespace System.Windows.Forms
                 sp.Play();
             }
 
-            MaskInputRejectedEventHandler eh = Events[EVENT_MASKINPUTREJECTED] as MaskInputRejectedEventHandler;
 
-            if (eh != null)
+            if (Events[EVENT_MASKINPUTREJECTED] is MaskInputRejectedEventHandler eh)
             {
                 eh(this, e);
             }
@@ -2243,8 +2238,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnTextAlignChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -2256,8 +2250,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnTypeValidationCompleted(TypeValidationEventArgs e)
         {
-            TypeValidationEventHandler eh = Events[EVENT_VALIDATIONCOMPLETED] as TypeValidationEventHandler;
-            if (eh != null)
+            if (Events[EVENT_VALIDATIONCOMPLETED] is TypeValidationEventHandler eh)
             {
                 eh(this, e);
             }

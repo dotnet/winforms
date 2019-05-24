@@ -68,8 +68,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewTextBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewTextBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.MaxInputLength = value;
                             }

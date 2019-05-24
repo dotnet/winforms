@@ -284,8 +284,7 @@ namespace System.Windows.Forms
             // If we've toggled the ShowUnderlines value, we'll need to invalidate 
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                ToolStrip toolStrip = ToolStrips[i] as ToolStrip;
-                if (toolStrip == null)
+                if (!(ToolStrips[i] is ToolStrip toolStrip))
                 {
                     toolStripPruneNeeded = true;
                     continue;
@@ -359,9 +358,8 @@ namespace System.Windows.Forms
                 index = (forward) ? (index + 1) % totalCount
                                   : (index + totalCount - 1) % totalCount;
 
-                ToolStrip toolStrip = ToolStrips[index] as ToolStrip;
 
-                if (toolStrip == null ||
+                if (!(ToolStrips[index] is ToolStrip toolStrip) ||
                     toolStrip == start)
                 {
                     continue;
@@ -678,9 +676,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < toolStripPanelWeakArrayList.Count; i++)
                 {
-                    ToolStripPanel toolStripPanel = toolStripPanelWeakArrayList[i] as ToolStripPanel;
-
-                    if (toolStripPanel != null && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
+                    if (toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                         toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                     {
                         // Ensure that we cant drag off one window to another.
@@ -1093,8 +1089,7 @@ namespace System.Windows.Forms
             {
                 Keys keyData = (Keys)(int)m.WParam;
 
-                ToolStrip toolStrip = Control.FromHandle(m.HWnd) as ToolStrip;
-                if (toolStrip != null && !toolStrip.IsDropDown)
+                if (Control.FromHandle(m.HWnd) is ToolStrip toolStrip && !toolStrip.IsDropDown)
                 {
                     return;
                 }
@@ -1178,8 +1173,7 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), pt, 1);
                         if (!activeToolStrip.ClientRectangle.Contains(pt.x, pt.y))
                         {
-                            ToolStripDropDown activeToolStripDropDown = activeToolStrip as ToolStripDropDown;
-                            if (activeToolStripDropDown != null)
+                            if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
 
                                 if (!(activeToolStripDropDown.OwnerToolStrip != null
@@ -1221,8 +1215,7 @@ namespace System.Windows.Forms
                 int countDropDowns = _inputFilterQueue.Count;
                 for (int i = 0; i < countDropDowns; i++)
                 {
-                    ToolStripDropDown activeDropDown = GetActiveToolStripInternal() as ToolStripDropDown;
-                    if (activeDropDown != null && activeDropDown.AutoClose)
+                    if (GetActiveToolStripInternal() is ToolStripDropDown activeDropDown && activeDropDown.AutoClose)
                     {
                         activeDropDown.Visible = false;
                     }
@@ -1728,8 +1721,7 @@ namespace System.Windows.Forms
         {
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                ToolStrip t = ToolStrips[i] as ToolStrip;
-                if ((t != null) && t.Shortcuts.Contains(shortcut))
+                if ((ToolStrips[i] is ToolStrip t) && t.Shortcuts.Contains(shortcut))
                 {
                     return true;
                 }
@@ -1815,12 +1807,11 @@ namespace System.Windows.Forms
                 // now search the toolstrips
                 for (int i = 0; i < ToolStrips.Count; i++)
                 {
-                    ToolStrip toolStrip = ToolStrips[i] as ToolStrip;
                     bool isAssociatedContextMenu = false;
                     bool isDoublyAssignedContextMenuStrip = false;
 
 
-                    if (toolStrip == null)
+                    if (!(ToolStrips[i] is ToolStrip toolStrip))
                     {
                         // consider prune tree...
                         needsPrune = true;
@@ -1840,12 +1831,11 @@ namespace System.Windows.Forms
                             // button2's context menu should not be processed if button1 is the one we're processing.
 
                             ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
-                            ContextMenuStrip toplevelContextMenu = dropDown.GetFirstDropDown() as ContextMenuStrip;
 
                             // If a context menu is re-used between the main menu and the 
                             // and some other control's context menu, we should go ahead and evaluate it.
 
-                            if (toplevelContextMenu != null)
+                            if (dropDown.GetFirstDropDown() is ContextMenuStrip toplevelContextMenu)
                             {
                                 isDoublyAssignedContextMenuStrip = toplevelContextMenu.IsAssignedToDropDownItem;
                                 if (!isDoublyAssignedContextMenuStrip)
@@ -1882,8 +1872,7 @@ namespace System.Windows.Forms
                                 if (rootWindowsMatch)
                                 {
                                     // Double check this is not an MDIContainer type situation...
-                                    Form mainForm = Control.FromHandle(rootWindowOfControl.Handle) as Form;
-                                    if (mainForm != null && mainForm.IsMdiContainer)
+                                    if (Control.FromHandle(rootWindowOfControl.Handle) is Form mainForm && mainForm.IsMdiContainer)
                                     {
                                         Form toolStripForm = topMostToolStrip.FindForm();
                                         if (toolStripForm != mainForm && toolStripForm != null)
@@ -1898,8 +1887,7 @@ namespace System.Windows.Forms
                         }
                         if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
                         {
-                            ToolStripMenuItem item = toolStrip.Shortcuts[shortcut] as ToolStripMenuItem;
-                            if (item != null)
+                            if (toolStrip.Shortcuts[shortcut] is ToolStripMenuItem item)
                             {
                                 if (item.ProcessCmdKey(ref m, shortcut))
                                 {
@@ -1972,8 +1960,7 @@ namespace System.Windows.Forms
             else if ((char)keyData == '-')
             {
                 // deal with MDI system menu
-                Form mdiChild = toplevelControl as Form;
-                if (mdiChild != null && mdiChild.IsMdiChild)
+                if (toplevelControl is Form mdiChild && mdiChild.IsMdiChild)
                 {
                     if (mdiChild.WindowState == FormWindowState.Maximized)
                     {
@@ -2248,10 +2235,7 @@ namespace System.Windows.Forms
                         switch (source.MergeAction)
                         {
                             case MergeAction.MatchOnly:
-                                //Debug.WriteLine("matchonly");
-                                ToolStripDropDownItem tsddownDest = item as ToolStripDropDownItem;
-                                ToolStripDropDownItem tsddownSrc = source as ToolStripDropDownItem;
-                                if (tsddownDest != null && tsddownSrc != null && tsddownSrc.DropDownItems.Count != 0)
+                                if (item is ToolStripDropDownItem tsddownDest && source is ToolStripDropDownItem tsddownSrc && tsddownSrc.DropDownItems.Count != 0)
                                 {
 
                                     int originalCount = tsddownSrc.DropDownItems.Count;

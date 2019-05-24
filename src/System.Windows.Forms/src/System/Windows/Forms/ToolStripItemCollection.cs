@@ -238,8 +238,7 @@ namespace System.Windows.Forms
             }
 
 
-            ToolStripDropDown dropDown = owner as ToolStripDropDown;
-            if (dropDown != null)
+            if (owner is ToolStripDropDown dropDown)
             {
                 // If we're on a dropdown, we can only add non-control host items
                 // as we dont want anything on a dropdown to get keyboard messages in the Internet.
@@ -307,8 +306,7 @@ namespace System.Windows.Forms
                 {
                     for (int j = 0; j < itemsToLookIn.Count; j++)
                     {
-                        ToolStripDropDownItem item = itemsToLookIn[j] as ToolStripDropDownItem;
-                        if (item == null)
+                        if (!(itemsToLookIn[j] is ToolStripDropDownItem item))
                         {
                             continue;
                         }

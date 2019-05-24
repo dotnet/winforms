@@ -171,9 +171,7 @@ namespace System.Experimental.Gdi
 
             if ((properties & ApplyGraphicsProperties.TranslateTransform) != 0 || (properties & ApplyGraphicsProperties.Clipping) != 0)
             {
-                object[] data = g.GetContextInfo() as object[];
-
-                if (data != null && data.Length == 2)
+                if (g.GetContextInfo() is object[] data && data.Length == 2)
                 {
                     clipRgn = data[0] as Region;
                     worldTransf = data[1] as Matrix;

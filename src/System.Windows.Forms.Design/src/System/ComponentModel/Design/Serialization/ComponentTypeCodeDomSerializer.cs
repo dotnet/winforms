@@ -54,9 +54,8 @@ namespace System.ComponentModel.Design.Serialization
                 throw new ArgumentNullException(nameof(value));
             }
 
-            CodeMemberMethod method = typeDecl.UserData[_initMethodKey] as CodeMemberMethod;
 
-            if (method == null)
+            if (!(typeDecl.UserData[_initMethodKey] is CodeMemberMethod method))
             {
                 method = new CodeMemberMethod
                 {
@@ -93,13 +92,11 @@ namespace System.ComponentModel.Design.Serialization
 
             foreach (CodeTypeMember member in typeDecl.Members)
             {
-                CodeMemberMethod method = member as CodeMemberMethod;
-
                 // Note: the order is important here for performance! 
                 // method.Parameters causes OnMethodPopulateParameters callback and therefore it is much more 
                 // expensive than method.Name.Equals
 
-                if (method != null && method.Name.Equals(_initMethodName) && method.Parameters.Count == 0)
+                if (member is CodeMemberMethod method && method.Name.Equals(_initMethodName) && method.Parameters.Count == 0)
                 {
                     return new CodeMemberMethod[]
                     {

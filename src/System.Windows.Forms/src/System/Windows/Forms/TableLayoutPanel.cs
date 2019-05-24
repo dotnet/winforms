@@ -222,8 +222,7 @@ namespace System.Windows.Forms
         #region Extended Properties
         bool IExtenderProvider.CanExtend(object obj)
         {
-            Control control = obj as Control;
-            return control != null && control.Parent == this;
+            return obj is Control control && control.Parent == this;
         }
 
         [SRDescription(nameof(SR.GridPanelGetColumnSpanDescr))]

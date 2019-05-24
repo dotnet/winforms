@@ -3472,8 +3472,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form parentForm = TopLevelControlInternal as Form;
-                return parentForm != null && parentForm.WindowState == FormWindowState.Minimized;
+                return TopLevelControlInternal is Form parentForm && parentForm.WindowState == FormWindowState.Minimized;
             }
         }
 

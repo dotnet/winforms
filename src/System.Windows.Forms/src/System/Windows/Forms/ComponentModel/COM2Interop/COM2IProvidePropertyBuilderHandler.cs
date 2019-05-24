@@ -75,9 +75,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            NativeMethods.IProvidePropertyBuilder target = sender.TargetObject as NativeMethods.IProvidePropertyBuilder;
-
-            if (target != null)
+            if (sender.TargetObject is NativeMethods.IProvidePropertyBuilder target)
             {
                 string s = null;
                 bool builderValid = GetBuilderGuidString(target, sender.DISPID, ref s, new int[1]);

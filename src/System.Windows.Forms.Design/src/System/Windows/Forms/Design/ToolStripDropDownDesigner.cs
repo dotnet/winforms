@@ -164,8 +164,7 @@ namespace System.Windows.Forms.Design
             {
                 if (string.IsNullOrEmpty((string)ShadowProperties["SettingsKey"]))
                 {
-                    IPersistComponentSettings persistableComponent = Component as IPersistComponentSettings;
-                    if (persistableComponent != null && host != null)
+                    if (Component is IPersistComponentSettings persistableComponent && host != null)
                     {
                         if (persistableComponent.SettingsKey == null)
                         {

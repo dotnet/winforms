@@ -332,9 +332,7 @@ namespace System.Experimental.Gdi
         /// </summary>
         public override bool Equals(object font)
         {
-            WindowsFont winFont = font as WindowsFont;
-
-            if (winFont == null)
+            if (!(font is WindowsFont winFont))
             {
                 return false;
             }

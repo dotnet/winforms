@@ -546,8 +546,7 @@ namespace System.Windows.Forms
 
                     if (ShowShortcutKeys && IsOnDropDown)
                     {
-                        ToolStripDropDownMenu parent = GetCurrentParentDropDown() as ToolStripDropDownMenu;
-                        if (parent != null)
+                        if (GetCurrentParentDropDown() is ToolStripDropDownMenu parent)
                         {
                             LayoutTransaction.DoLayout(ParentInternal, this, "ShortcutKeys");
                             parent.AdjustSize();
@@ -578,8 +577,7 @@ namespace System.Windows.Forms
                     ClearShortcutCache();
                     if (ShowShortcutKeys)
                     {
-                        ToolStripDropDown parent = ParentInternal as ToolStripDropDown;
-                        if (parent != null)
+                        if (ParentInternal is ToolStripDropDown parent)
                         {
                             LayoutTransaction.DoLayout(parent, this, "ShortcutKeyDisplayString");
                             parent.AdjustSize();
@@ -614,8 +612,7 @@ namespace System.Windows.Forms
                 {
                     ClearShortcutCache();
                     showShortcutKeys = value;
-                    ToolStripDropDown parent = ParentInternal as ToolStripDropDown;
-                    if (parent != null)
+                    if (ParentInternal is ToolStripDropDown parent)
                     {
                         LayoutTransaction.DoLayout(parent, this, "ShortcutKeys");
                         parent.AdjustSize();
@@ -1191,8 +1188,7 @@ namespace System.Windows.Forms
 
                 bool rightToLeft = (RightToLeft == RightToLeft.Yes);
 
-                ToolStripMenuItemInternalLayout menuItemInternalLayout = InternalLayout as ToolStripMenuItemInternalLayout;
-                if (menuItemInternalLayout != null && menuItemInternalLayout.UseMenuLayout)
+                if (InternalLayout is ToolStripMenuItemInternalLayout menuItemInternalLayout && menuItemInternalLayout.UseMenuLayout)
                 {
 
                     // Support for special DropDownMenu layout
@@ -1308,17 +1304,13 @@ namespace System.Windows.Forms
         /// <summary> overridden here so we scooch over when we're in the ToolStripDropDownMenu</summary>
         internal protected override void SetBounds(Rectangle rect)
         {
-
-            ToolStripMenuItemInternalLayout internalLayout = InternalLayout as ToolStripMenuItemInternalLayout;
-            if (internalLayout != null && internalLayout.UseMenuLayout)
+            if (InternalLayout is ToolStripMenuItemInternalLayout internalLayout && internalLayout.UseMenuLayout)
             {
-                ToolStripDropDownMenu dropDownMenu = Owner as ToolStripDropDownMenu;
-
                 // Scooch over by the padding amount.  The padding is added to 
                 // the ToolStripDropDownMenu to keep the non-menu item riffraff
                 // aligned to the text rectangle. When flow layout comes through to set our position
                 // via IArrangedElement DEFY IT!
-                if (dropDownMenu != null)
+                if (Owner is ToolStripDropDownMenu dropDownMenu)
                 {
                     rect.X -= dropDownMenu.Padding.Left;
                     rect.X = Math.Max(rect.X, 0);
@@ -1586,9 +1578,7 @@ namespace System.Windows.Forms
                 // that onmouseleave we make sure there's a selected menu item.
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
-                    ToolStripDropDown dropDown = toolStrip.ActiveDropDowns[0] as ToolStripDropDown;
-
-                    ToolStripMenuItem menuItem = (dropDown == null) ? null : dropDown.OwnerItem as ToolStripMenuItem;
+                    ToolStripMenuItem menuItem = (!(toolStrip.ActiveDropDowns[0] is ToolStripDropDown dropDown)) ? null : dropDown.OwnerItem as ToolStripMenuItem;
                     if (menuItem != null && menuItem.Pressed)
                     {
                         menuItem.Select();
@@ -1629,8 +1619,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                if (menu != null)
+                if (ownerItem.Owner is ToolStripDropDownMenu menu)
                 {
                     return menu.ShowCheckMargin;
                 }
@@ -1641,8 +1630,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                if (menu != null)
+                if (ownerItem.Owner is ToolStripDropDownMenu menu)
                 {
                     return menu.ShowImageMargin;
                 }
@@ -1671,8 +1659,7 @@ namespace System.Windows.Forms
             {
                 if (UseMenuLayout)
                 {
-                    ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                    if (menu != null)
+                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
                         // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
                         // the arrow rect per item
@@ -1690,8 +1677,7 @@ namespace System.Windows.Forms
             {
                 if (UseMenuLayout)
                 {
-                    ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                    if (menu != null)
+                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
                         Rectangle checkRectangle = menu.CheckRectangle;
                         if (ownerItem.CheckedImage != null)
@@ -1713,8 +1699,7 @@ namespace System.Windows.Forms
             {
                 if (UseMenuLayout)
                 {
-                    ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                    if (menu != null)
+                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
 
                         // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
@@ -1744,8 +1729,7 @@ namespace System.Windows.Forms
             {
                 if (UseMenuLayout)
                 {
-                    ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                    if (menu != null)
+                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
                         return menu.TextRectangle;
                     }
@@ -1766,8 +1750,7 @@ namespace System.Windows.Forms
         {
             if (UseMenuLayout)
             {
-                ToolStripDropDownMenu menu = ownerItem.Owner as ToolStripDropDownMenu;
-                if (menu != null)
+                if (ownerItem.Owner is ToolStripDropDownMenu menu)
                 {
                     return menu.MaxItemSize;
                 }

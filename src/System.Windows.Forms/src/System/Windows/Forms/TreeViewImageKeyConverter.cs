@@ -42,8 +42,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                string strValue = value as string;
-                if (strValue != null && (strValue.Length == 0))
+                if (value is string strValue && (strValue.Length == 0))
                 {
                     return SR.toStringDefault;
                 }

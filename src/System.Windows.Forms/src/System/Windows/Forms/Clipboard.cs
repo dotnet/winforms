@@ -355,8 +355,7 @@ namespace System.Windows.Forms
 
             if (dataObject != null)
             {
-                string[] strings = dataObject.GetData(DataFormats.FileDrop, true) as string[];
-                if (strings != null)
+                if (dataObject.GetData(DataFormats.FileDrop, true) is string[] strings)
                 {
                     retVal.AddRange(strings);
                 }
@@ -389,8 +388,7 @@ namespace System.Windows.Forms
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
             {
-                string text = dataObject.GetData(ConvertToDataFormats(format), false) as string;
-                if (text != null)
+                if (dataObject.GetData(ConvertToDataFormats(format), false) is string text)
                 {
                     return text;
                 }

@@ -766,9 +766,8 @@ namespace System.Windows.Forms.Design
             {
                 //turn off Adding and Added Transactions..
                 ToolStripDesigner.s_autoAddNewItems = false;
-                ComponentSerializationService _serializationService = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
                 SerializationStore _serializedData = null;
-                if (_serializationService != null)
+                if (GetService(typeof(ComponentSerializationService)) is ComponentSerializationService _serializationService)
                 {
                     _serializedData = _serializationService.CreateStore();
                     _serializationService.Serialize(_serializedData, Component); //notice the use of component... since we want to preserve the type.

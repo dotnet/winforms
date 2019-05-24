@@ -44,9 +44,7 @@ namespace System.Windows.Forms.Layout
 
         public override bool Equals(object obj)
         {
-            ArrangedElementCollection other = obj as ArrangedElementCollection;
-
-            if (other == null || Count != other.Count)
+            if (!(obj is ArrangedElementCollection other) || Count != other.Count)
             {
                 return false;
             }

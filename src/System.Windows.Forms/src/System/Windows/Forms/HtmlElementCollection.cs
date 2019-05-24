@@ -56,9 +56,7 @@ namespace System.Windows.Forms
 
                 if (NativeHtmlElementCollection != null)
                 {
-                    UnsafeNativeMethods.IHTMLElement htmlElement =
-                            NativeHtmlElementCollection.Item((object)index, (object)0) as UnsafeNativeMethods.IHTMLElement;
-                    return (htmlElement != null) ? new HtmlElement(shimManager, htmlElement) : null;
+                    return (NativeHtmlElementCollection.Item((object)index, (object)0) is UnsafeNativeMethods.IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
                 else if (elementsArray != null)
                 {
@@ -77,9 +75,7 @@ namespace System.Windows.Forms
             {
                 if (NativeHtmlElementCollection != null)
                 {
-                    UnsafeNativeMethods.IHTMLElement htmlElement =
-                            NativeHtmlElementCollection.Item((object)elementId, (object)0) as UnsafeNativeMethods.IHTMLElement;
-                    return (htmlElement != null) ? new HtmlElement(shimManager, htmlElement) : null;
+                    return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is UnsafeNativeMethods.IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
                 else if (elementsArray != null)
                 {

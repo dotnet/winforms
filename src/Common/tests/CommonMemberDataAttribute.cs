@@ -28,8 +28,7 @@ namespace WinForms.Common.Tests
                 return null;
             }
 
-            var array = item as object[];
-            if (array == null)
+            if (!(item is object[] array))
             {
                 throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[]");
             }

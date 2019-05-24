@@ -63,8 +63,7 @@ namespace System.Windows.Forms
         #region Provided properties
         bool IExtenderProvider.CanExtend(object obj)
         {
-            Control control = obj as Control;
-            return control != null && control.Parent == this;
+            return obj is Control control && control.Parent == this;
         }
 
         [DefaultValue(false)]

@@ -191,8 +191,7 @@ namespace System.Windows.Forms
                 }
                 if (ShowDropDownArrow)
                 {
-                    ToolStripDropDownButton.ToolStripDropDownButtonInternalLayout layout = InternalLayout as ToolStripDropDownButtonInternalLayout;
-                    Rectangle dropDownArrowRect = (layout != null) ? layout.DropDownArrowRect : Rectangle.Empty;
+                    Rectangle dropDownArrowRect = (InternalLayout is ToolStripDropDownButtonInternalLayout layout) ? layout.DropDownArrowRect : Rectangle.Empty;
 
                     Color arrowColor;
                     if (Selected && !Pressed && SystemInformation.HighContrast)

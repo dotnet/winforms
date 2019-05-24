@@ -422,11 +422,10 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnInvokedDesignerActionChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
-            IComponent relatedComponent = e.RelatedObject as IComponent;
             DesignerActionGlyph g = null;
             if (e.ChangeType == DesignerActionListsChangedType.ActionListsAdded)
             {
-                if (relatedComponent == null)
+                if (!(e.RelatedObject is IComponent relatedComponent))
                 {
                     Debug.Fail("How can we add a DesignerAction glyphs when it's related object is not  an IComponent?");
                     return;

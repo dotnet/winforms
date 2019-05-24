@@ -192,7 +192,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         private object CopyValue(object value)
         {
-
             // null is always OK
             if (value == null)
             {
@@ -210,8 +209,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             object clonedValue = null;
 
             // ICloneable is the next easiest thing
-            ICloneable clone = value as ICloneable;
-            if (clone != null)
+            if (value is ICloneable clone)
             {
                 clonedValue = clone.Clone();
             }
@@ -408,9 +406,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 0; i < descriptors.Length; i++)
                 {
-                    IList propList = descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) as IList;
-
-                    if (propList == null)
+                    if (!(descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is IList propList))
                     {
                         continue;
                     }

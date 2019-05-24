@@ -65,9 +65,8 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            DockingAttribute other = obj as DockingAttribute;
 
-            return (other != null) && other.DockingBehavior == dockingBehavior;
+            return (obj is DockingAttribute other) && other.DockingBehavior == dockingBehavior;
         }
 
         public override int GetHashCode()

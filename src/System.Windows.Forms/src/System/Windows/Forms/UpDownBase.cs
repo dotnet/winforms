@@ -1004,8 +1004,7 @@ namespace System.Windows.Forms
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            HandledMouseEventArgs hme = e as HandledMouseEventArgs;
-            if (hme != null)
+            if (e is HandledMouseEventArgs hme)
             {
                 if (hme.Handled)
                 {

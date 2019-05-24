@@ -174,8 +174,7 @@ namespace System.Windows.Forms
         {
             if (AutoInstall)
             {
-                WindowsFormsSynchronizationContext winFormsSyncContext = AsyncOperationManager.SynchronizationContext as WindowsFormsSynchronizationContext;
-                if (winFormsSyncContext != null)
+                if (AsyncOperationManager.SynchronizationContext is WindowsFormsSynchronizationContext winFormsSyncContext)
                 {
                     try
                     {

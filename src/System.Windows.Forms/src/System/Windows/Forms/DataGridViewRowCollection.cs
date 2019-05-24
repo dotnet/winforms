@@ -882,8 +882,7 @@ namespace System.Windows.Forms
             }
             if (DataGridView.DataSource != null)
             {
-                IBindingList list = DataGridView.DataConnection.List as IBindingList;
-                if (list != null && list.AllowRemove && list.SupportsChangeNotification)
+                if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
                 {
                     ((IList)list).Clear();
                 }
@@ -2229,8 +2228,7 @@ namespace System.Windows.Forms
 
             if (DataGridView.DataSource != null)
             {
-                IBindingList list = DataGridView.DataConnection.List as IBindingList;
-                if (list != null && list.AllowRemove && list.SupportsChangeNotification)
+                if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
                 {
                     ((IList)list).RemoveAt(index);
                 }

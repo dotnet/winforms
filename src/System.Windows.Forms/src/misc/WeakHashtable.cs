@@ -96,8 +96,7 @@ namespace System.ComponentModel
                 ArrayList cleanupList = null;
                 foreach (object o in Keys)
                 {
-                    WeakReference wr = o as WeakReference;
-                    if (wr != null && !wr.IsAlive)
+                    if (o is WeakReference wr && !wr.IsAlive)
                     {
                         if (cleanupList == null)
                         {
@@ -131,10 +130,7 @@ namespace System.ComponentModel
                 }
                 if (y != null && x.GetHashCode() == y.GetHashCode())
                 {
-                    WeakReference wX = x as WeakReference;
-                    WeakReference wY = y as WeakReference;
-
-                    if (wX != null)
+                    if (x is WeakReference wX)
                     {
                         if (!wX.IsAlive)
                         {
@@ -143,7 +139,7 @@ namespace System.ComponentModel
                         x = wX.Target;
                     }
 
-                    if (wY != null)
+                    if (y is WeakReference wY)
                     {
                         if (!wY.IsAlive)
                         {

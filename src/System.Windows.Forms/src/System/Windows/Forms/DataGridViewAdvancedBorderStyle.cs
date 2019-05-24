@@ -297,9 +297,7 @@ namespace System.Windows.Forms
 
         public override bool Equals(object other)
         {
-            DataGridViewAdvancedBorderStyle dgvabsOther = other as DataGridViewAdvancedBorderStyle;
-
-            if (dgvabsOther == null)
+            if (!(other is DataGridViewAdvancedBorderStyle dgvabsOther))
             {
                 return false;
             }

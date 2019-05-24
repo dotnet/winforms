@@ -609,13 +609,11 @@ namespace System.Windows.Forms.Layout
             }
             else
             {
-
                 // Finish the preferredSize computation and clear cached anchored positions.
                 preferredSizeForAnchoring = GetAnchorPreferredSize(container);
 
                 Padding containerPadding = Padding.Empty;
-                Control control = container as Control;
-                if (control != null)
+                if (container is Control control)
                 {
                     // calling this will respect Control.DefaultPadding.
                     containerPadding = control.Padding;

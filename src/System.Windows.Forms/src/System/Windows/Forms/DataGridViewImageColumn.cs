@@ -112,8 +112,7 @@ namespace System.Windows.Forms
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
                         DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        DataGridViewImageCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewImageCell;
-                        if (dataGridViewCell != null)
+                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                         {
                             dataGridViewCell.Description = value;
                         }
@@ -203,8 +202,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewImageCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewImageCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                             {
                                 dataGridViewCell.ImageLayoutInternal = value;
                             }
@@ -241,8 +239,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewImageCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewImageCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                             {
                                 dataGridViewCell.ValueIsIconInternal = value;
                             }
@@ -292,8 +289,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDefaultCellStyle()
         {
-            DataGridViewImageCell templateCell = CellTemplate as DataGridViewImageCell;
-            if (templateCell == null)
+            if (!(CellTemplate is DataGridViewImageCell templateCell))
             {
                 Debug.Fail("we can't compute the default cell style w/o a template cell");
                 return true;

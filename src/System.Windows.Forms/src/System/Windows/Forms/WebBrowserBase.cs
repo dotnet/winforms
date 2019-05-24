@@ -1331,8 +1331,7 @@ namespace System.Windows.Forms
             ContainerControl cc = null;
             for (Control control = this; control != null; control = control.ParentInternal)
             {
-                ContainerControl tempCC = control as ContainerControl;
-                if (tempCC != null)
+                if (control is ContainerControl tempCC)
                 {
                     cc = tempCC;
                 }

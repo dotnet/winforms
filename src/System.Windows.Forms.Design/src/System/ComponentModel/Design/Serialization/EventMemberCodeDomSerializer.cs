@@ -38,8 +38,6 @@ namespace System.ComponentModel.Design.Serialization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
-            EventDescriptor eventToSerialize = descriptor as EventDescriptor;
-
             if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
@@ -48,7 +46,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (eventToSerialize == null)
+            if (!(descriptor is EventDescriptor eventToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }

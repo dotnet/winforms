@@ -415,8 +415,7 @@ namespace System.Windows.Forms
             }
             if (ValueIsIcon)
             {
-                Icon ico = formattedValue as Icon;
-                if (ico == null)
+                if (!(formattedValue is Icon ico))
                 {
                     ico = ErrorIcon;
                 }
@@ -424,8 +423,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Image img = formattedValue as Image;
-                if (img == null)
+                if (!(formattedValue is Image img))
                 {
                     img = ErrorBitmap;
                 }
@@ -578,8 +576,7 @@ namespace System.Windows.Forms
             object valueBase = base.GetValue(rowIndex);
             if (valueBase == null)
             {
-                DataGridViewImageColumn owningImageColumn = OwningColumn as DataGridViewImageColumn;
-                if (owningImageColumn != null)
+                if (OwningColumn is DataGridViewImageColumn owningImageColumn)
                 {
                     if (defaultTypeImage.IsAssignableFrom(ValueType))
                     {
@@ -973,8 +970,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    DataGridViewImageCell imageCell = Owner as DataGridViewImageCell;
-                    if (imageCell != null)
+                    if (Owner is DataGridViewImageCell imageCell)
                     {
                         return imageCell.Description;
                     }

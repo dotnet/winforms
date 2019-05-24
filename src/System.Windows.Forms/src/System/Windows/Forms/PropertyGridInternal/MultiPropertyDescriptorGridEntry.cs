@@ -44,8 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 foreach (object o in objs)
                 {
-                    IComponent comp = o as IComponent;
-                    if (comp == null)
+                    if (!(o is IComponent comp))
                     {
                         c = null;
                         break;
@@ -253,8 +252,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (changeService != null)
                     {
-                        Array ownerArray = owner as Array;
-                        if (ownerArray != null)
+                        if (owner is Array ownerArray)
                         {
                             for (int i = 0; i < ownerArray.Length; i++)
                             {
@@ -345,9 +343,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(propertyInfo is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
                     Debug.Assert(obj is object[], "Did not get an array of objects!!");
 
-                    MergePropertyDescriptor mpd = propertyInfo as MergePropertyDescriptor;
 
-                    if (mpd != null)
+                    if (propertyInfo is MergePropertyDescriptor mpd)
                     {
                         object[] objs = (object[])obj;
 
@@ -384,10 +381,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                Array a1 = owner1 as Array;
-                Array a2 = owner2 as Array;
-
-                if (a1 != null && a2 != null && a1.Length == a2.Length)
+                if (owner1 is Array a1 && owner2 is Array a2 && a1.Length == a2.Length)
                 {
                     for (int i = 0; i < a1.Length; i++)
                     {

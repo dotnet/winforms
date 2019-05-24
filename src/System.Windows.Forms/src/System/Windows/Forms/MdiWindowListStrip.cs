@@ -193,9 +193,7 @@ namespace System.Windows.Forms
         /// <summary> handler for 1 - 9.  This is similar to MenuItem.cs</summary>
         private void OnWindowListItemClick(object sender, EventArgs e)
         {
-            ToolStripMenuItem windowListItem = sender as ToolStripMenuItem;
-
-            if (windowListItem != null)
+            if (sender is ToolStripMenuItem windowListItem)
             {
                 Form boundForm = windowListItem.MdiForm;
 

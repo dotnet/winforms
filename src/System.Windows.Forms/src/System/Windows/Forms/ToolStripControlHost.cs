@@ -870,8 +870,7 @@ namespace System.Windows.Forms
             if (control != null)
             {
                 SuspendSizeSync();
-                IArrangedElement element = control as IArrangedElement;
-                if (element == null)
+                if (!(control is IArrangedElement element))
                 {
                     Debug.Fail("why are we here? control should not be null");
                     return;

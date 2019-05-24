@@ -99,8 +99,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override bool Equals(object value)
             {
-                HitTestInfo hti = value as HitTestInfo;
-                if (hti != null)
+                if (value is HitTestInfo hti)
                 {
                     return (type == hti.type &&
                             row == hti.row &&

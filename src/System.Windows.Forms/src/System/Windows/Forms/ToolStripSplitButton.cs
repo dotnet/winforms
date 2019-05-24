@@ -531,8 +531,7 @@ namespace System.Windows.Forms
             InvalidateSplitButtonLayout();
             if (CanRaiseEvents)
             {
-                EventHandler eh = Events[EventDefaultItemChanged] as EventHandler;
-                if (eh != null)
+                if (Events[EventDefaultItemChanged] is EventHandler eh)
                 {
                     eh(this, e);
                 }

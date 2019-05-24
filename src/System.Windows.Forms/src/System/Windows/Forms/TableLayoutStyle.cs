@@ -34,8 +34,7 @@ namespace System.Windows.Forms
                     if (Owner != null)
                     {
                         LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Style);
-                        Control owner = Owner as Control;
-                        if (owner != null)
+                        if (Owner is Control owner)
                         {
                             owner.Invalidate();
                         }
@@ -59,8 +58,7 @@ namespace System.Windows.Forms
                     if (Owner != null)
                     {
                         LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Style);
-                        Control owner = Owner as Control;
-                        if (owner != null)
+                        if (Owner is Control owner)
                         {
                             owner.Invalidate();
                         }

@@ -105,15 +105,13 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
             WebBrowserBase ctl = null;
-            UnsafeNativeMethods.IOleObject oleObject = pActiveObject as UnsafeNativeMethods.IOleObject;
-            if (oleObject != null)
+            if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
             {
                 UnsafeNativeMethods.IOleClientSite clientSite = null;
                 try
                 {
                     clientSite = oleObject.GetClientSite();
-                    WebBrowserSiteBase webBrowserSiteBase = clientSite as WebBrowserSiteBase;
-                    if (webBrowserSiteBase != null)
+                    if (clientSite is WebBrowserSiteBase webBrowserSiteBase)
                     {
                         ctl = webBrowserSiteBase.GetAXHost();
                     }
@@ -196,8 +194,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < ctls.Length; i++)
                 {
                     Control ctl = ctls[i];
-                    WebBrowserBase webBrowserBase = ctl as WebBrowserBase;
-                    if (webBrowserBase != null)
+                    if (ctl is WebBrowserBase webBrowserBase)
                     {
                         if (fuseOcx)
                         {
@@ -342,8 +339,7 @@ namespace System.Windows.Forms
 
         private void OnComponentRemoved(object sender, ComponentEventArgs e)
         {
-            Control c = e.Component as Control;
-            if (sender == assocContainer && c != null)
+            if (sender == assocContainer && e.Component is Control c)
             {
                 RemoveControl(c);
             }

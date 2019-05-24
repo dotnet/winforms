@@ -315,14 +315,11 @@ namespace System.Windows.Forms
             {
                 ListSortDescriptionCollection sortsColln = null;
 
-                IBindingListView iblv = List as IBindingListView;
-                IBindingList ibl = List as IBindingList;
-
-                if (iblv != null && iblv.SupportsAdvancedSorting)
+                if (List is IBindingListView iblv && iblv.SupportsAdvancedSorting)
                 {
                     sortsColln = iblv.SortDescriptions;
                 }
-                else if (ibl != null && ibl.SupportsSorting && ibl.IsSorted)
+                else if (List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
                 {
                     ListSortDescription[] sortsArray = new ListSortDescription[1];
                     sortsArray[0] = new ListSortDescription(ibl.SortProperty, ibl.SortDirection);
@@ -1201,8 +1198,7 @@ namespace System.Windows.Forms
             UnhookItemChangedEventsForOldCurrent();
 
             // Bind to the new list
-            IList listInternal = ListBindingHelper.GetList(list) as IList;
-            if (listInternal == null)
+            if (!(ListBindingHelper.GetList(list) is IList listInternal))
             {
                 listInternal = list;
             }

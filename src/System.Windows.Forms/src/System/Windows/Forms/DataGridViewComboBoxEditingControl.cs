@@ -52,8 +52,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                string valueStr = value as string;
-                if (valueStr != null)
+                if (value is string valueStr)
                 {
                     Text = valueStr;
                     if (string.Compare(valueStr, Text, true, CultureInfo.CurrentCulture) != 0)
@@ -191,8 +190,7 @@ namespace System.Windows.Forms
             switch (direction)
             {
                 case UnsafeNativeMethods.NavigateDirection.Parent:
-                    var owner = Owner as IDataGridViewEditingControl;
-                    if (owner != null && owner.EditingControlDataGridView.EditingControl == owner)
+                    if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
                     {
                         return _parentAccessibleObject;
                     }

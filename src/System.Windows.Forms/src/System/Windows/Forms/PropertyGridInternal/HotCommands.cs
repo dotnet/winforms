@@ -289,8 +289,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>Returns the element in the specified direction.</returns>
         internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
         {
-            var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
-            if (propertyGridAccessibleObject != null)
+            if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget != null)

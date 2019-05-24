@@ -47,8 +47,7 @@ namespace System.Collections.Specialized
 
         public virtual int GetHashCode(object o)
         {
-            string obj = o as string;
-            if (obj == null)
+            if (!(o is string obj))
             {
                 return o.GetHashCode();
             }

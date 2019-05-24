@@ -157,8 +157,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException();
             }
 
-            TextBox textBox = dgv.EditingControl as TextBox;
-            if (textBox != null)
+            if (dgv.EditingControl is TextBox textBox)
             {
                 textBox.ClearUndo();
             }
@@ -173,9 +172,8 @@ namespace System.Windows.Forms
             Debug.Assert(cellStyle.WrapMode != DataGridViewTriState.NotSet);
             Debug.Assert(DataGridView != null);
 
-            TextBox txtEditingControl = DataGridView.EditingControl as TextBox;
             int originalWidth = editingControlBounds.Width;
-            if (txtEditingControl != null)
+            if (DataGridView.EditingControl is TextBox txtEditingControl)
             {
                 switch (cellStyle.Alignment)
                 {
@@ -505,14 +503,12 @@ namespace System.Windows.Forms
                          DataGridView.EditingControl != null);
             Debug.Assert(!ReadOnly);
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-            TextBox textBox = DataGridView.EditingControl as TextBox;
-            if (textBox != null)
+            if (DataGridView.EditingControl is TextBox textBox)
             {
                 textBox.BorderStyle = BorderStyle.None;
                 textBox.AcceptsReturn = textBox.Multiline = dataGridViewCellStyle.WrapMode == DataGridViewTriState.True;
                 textBox.MaxLength = MaxInputLength;
-                string initialFormattedValueStr = initialFormattedValue as string;
-                if (initialFormattedValueStr == null)
+                if (!(initialFormattedValue is string initialFormattedValueStr))
                 {
                     textBox.Text = string.Empty;
                 }

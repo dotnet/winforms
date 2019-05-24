@@ -173,9 +173,8 @@ namespace System.ComponentModel.Design.Serialization
 
         private static TypeDescriptionProvider GetTargetFrameworkProviderForType(IServiceProvider provider, Type type)
         {
-            TypeDescriptionProviderService service = provider.GetService(typeof(TypeDescriptionProviderService)) as TypeDescriptionProviderService;
             // service will be null outside the VisualStudio
-            if (service != null)
+            if (provider.GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService service)
             {
                 return service.GetProvider(type);
             }
@@ -678,17 +677,13 @@ namespace System.ComponentModel.Design.Serialization
                 // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.  
                 //Perf: is -> as changes, change ordering based on possibility of occurence
                 CodeExpression expression = statement.Left;
-                CodePropertyReferenceExpression propertyReferenceEx;
-                CodeFieldReferenceExpression fieldReferenceEx;
-                CodeVariableReferenceExpression variableReferenceEx;
-                CodeArrayIndexerExpression arrayIndexerEx;
 
                 Trace("Processing LHS");
-                if ((propertyReferenceEx = expression as CodePropertyReferenceExpression) != null)
+                if (expression is CodePropertyReferenceExpression propertyReferenceEx)
                 {
                     DeserializePropertyAssignStatement(manager, statement, propertyReferenceEx, true);
                 }
-                else if ((fieldReferenceEx = expression as CodeFieldReferenceExpression) != null)
+                else if (expression is CodeFieldReferenceExpression fieldReferenceEx)
                 {
                     Trace("LHS is field : {0}", fieldReferenceEx.FieldName);
                     object lhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, fieldReferenceEx.TargetObject);
@@ -778,7 +773,7 @@ namespace System.ComponentModel.Design.Serialization
                         TraceWarning("Could not find target object for field {0}", fieldReferenceEx.FieldName);
                     }
                 }
-                else if ((variableReferenceEx = expression as CodeVariableReferenceExpression) != null)
+                else if (expression is CodeVariableReferenceExpression variableReferenceEx)
                 {
                     // This is the easiest.  Just relate the RHS object to the name of the variable.
                     Trace("Processing RHS");
@@ -790,7 +785,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     manager.SetName(rhs, variableReferenceEx.VariableName);
                 }
-                else if ((arrayIndexerEx = expression as CodeArrayIndexerExpression) != null)
+                else if (expression is CodeArrayIndexerExpression arrayIndexerEx)
                 {
                     int[] indexes = new int[arrayIndexerEx.Indices.Count];
                     Trace("LHS is Array Indexer with dims {0}", indexes.Length);
@@ -873,7 +868,6 @@ namespace System.ComponentModel.Design.Serialization
             {
                 // Perf: is -> as changes, change ordering based on possibility of occurance
                 // If you are adding to this, use as instead of is + cast and order new expressions in order of frequency in typical user code.
-                CodePrimitiveExpression primitiveEx;
                 CodePropertyReferenceExpression propertyReferenceEx;
                 CodeTypeReferenceExpression typeReferenceEx;
                 CodeObjectCreateExpression objectCreateEx;
@@ -893,7 +887,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 while (result != null)
                 {
-                    if ((primitiveEx = result as CodePrimitiveExpression) != null)
+                    if (result is CodePrimitiveExpression primitiveEx)
                     {
                         Trace("Primitive.  Value: {0}", (primitiveEx.Value == null ? "(null)" : primitiveEx.Value));
                         result = primitiveEx.Value;
@@ -1123,9 +1117,8 @@ namespace System.ComponentModel.Design.Serialization
                                         // We did not find the method directly. Let's see if we can find it 
                                         // as an private implemented interface name.
                                         //
-                                        CodeCastExpression castExpr = methodInvokeEx.Method.TargetObject as CodeCastExpression;
 
-                                        if (castExpr != null)
+                                        if (methodInvokeEx.Method.TargetObject is CodeCastExpression castExpr)
                                         {
                                             Type castType = manager.GetType(GetTypeNameFromCodeTypeReference(manager, castExpr.TargetType));
 
@@ -1246,9 +1239,8 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 object o = DeserializeExpression(manager, name, arrayCreateEx.SizeExpression);
                                 Debug.Assert(o is IConvertible, "Array size expression could not be resolved to IConvertible: " + (o == null ? "(null)" : o.GetType().Name));
-                                IConvertible ic = o as IConvertible;
 
-                                if (ic != null)
+                                if (o is IConvertible ic)
                                 {
                                     int size = ic.ToInt32(null);
                                     Trace("Initialized with expression that simplified to {0}", size);
@@ -1284,9 +1276,8 @@ namespace System.ComponentModel.Design.Serialization
                         //
                         result = null;
 
-                        Array array = DeserializeExpression(manager, name, arrayIndexerEx.TargetObject) as Array;
 
-                        if (array != null)
+                        if (DeserializeExpression(manager, name, arrayIndexerEx.TargetObject) is Array array)
                         {
                             int[] indexes = new int[arrayIndexerEx.Indices.Count];
 
@@ -1334,10 +1325,7 @@ namespace System.ComponentModel.Design.Serialization
                         //
                         result = left;
 
-                        IConvertible icLeft = left as IConvertible;
-                        IConvertible icRight = right as IConvertible;
-
-                        if (icLeft != null && icRight != null)
+                        if (left is IConvertible icLeft && right is IConvertible icRight)
                         {
                             result = ExecuteBinaryExpression(icLeft, icRight, binaryOperatorEx.Operator);
                         }
@@ -1958,9 +1946,8 @@ namespace System.ComponentModel.Design.Serialization
                         return false;
                     }
 
-                    IConvertible ic = rhs as IConvertible;
 
-                    if (ic != null && p.PropertyType != rhs.GetType())
+                    if (rhs is IConvertible ic && p.PropertyType != rhs.GetType())
                     {
                         try
                         {
@@ -2087,9 +2074,8 @@ namespace System.ComponentModel.Design.Serialization
             Trace("GetExpression called for object {0}", value.ToString());
 
             // Is the expression part of a prior SetExpression call?
-            ExpressionTable table = manager.Context[typeof(ExpressionTable)] as ExpressionTable;
 
-            if (table != null)
+            if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table)
             {
                 expression = table.GetExpression(value);
                 TraceIf(expression != null, "Resolved through expression table : {0}", expression);
@@ -2098,9 +2084,7 @@ namespace System.ComponentModel.Design.Serialization
             // Check to see if this object represents the root context.
             if (expression == null)
             {
-                RootContext rootEx = manager.Context[typeof(RootContext)] as RootContext;
-
-                if (rootEx != null && object.ReferenceEquals(rootEx.Value, value))
+                if (manager.Context[typeof(RootContext)] is RootContext rootEx && object.ReferenceEquals(rootEx.Value, value))
                 {
                     expression = rootEx.Expression;
                     TraceIf(expression != null, "Resolved through root expression context : {0}", expression);
@@ -2118,8 +2102,7 @@ namespace System.ComponentModel.Design.Serialization
                 string objectName = manager.GetName(value);
                 if (objectName == null || objectName.IndexOf('.') != -1)
                 {
-                    IReferenceService refSvc = manager.GetService(typeof(IReferenceService)) as IReferenceService;
-                    if (refSvc != null)
+                    if (manager.GetService(typeof(IReferenceService)) is IReferenceService refSvc)
                     {
                         objectName = refSvc.GetName(value);
                         if (objectName != null && objectName.IndexOf('.') != -1)
@@ -2157,8 +2140,7 @@ namespace System.ComponentModel.Design.Serialization
             // Finally, the expression context.
             if (expression == null)
             {
-                ExpressionContext cxt = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
-                if (cxt != null && object.ReferenceEquals(cxt.PresetValue, value))
+                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && object.ReferenceEquals(cxt.PresetValue, value))
                 {
                     expression = cxt.Expression;
                 }
@@ -2668,9 +2650,8 @@ namespace System.ComponentModel.Design.Serialization
         }
         private PropertyDescriptorCollection GetFilteredProperties(IDesignerSerializationManager manager, object value, Attribute[] filter)
         {
-            IComponent comp = value as IComponent;
             PropertyDescriptorCollection props = GetPropertiesHelper(manager, value, filter);
-            if (comp != null)
+            if (value is IComponent comp)
             {
                 if (((IDictionary)props).IsReadOnly)
                 {

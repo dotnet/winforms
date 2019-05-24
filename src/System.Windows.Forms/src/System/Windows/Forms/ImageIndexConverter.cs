@@ -56,8 +56,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            string stringValue = value as string;
-            if (stringValue != null && string.Compare(stringValue, SR.toStringNone, true, culture) == 0)
+            if (value is string stringValue && string.Compare(stringValue, SR.toStringNone, true, culture) == 0)
             {
                 return -1;
             }

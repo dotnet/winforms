@@ -178,8 +178,7 @@ namespace System.ComponentModel.Design
                     throw ex;
                 }
 
-                IRootDesigner rootDesigner = ((IDesignerHost)_host).GetDesigner(rootComponent) as IRootDesigner;
-                if (rootDesigner == null)
+                if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
                 {
                     ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {

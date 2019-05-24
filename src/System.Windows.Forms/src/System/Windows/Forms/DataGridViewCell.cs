@@ -1264,8 +1264,7 @@ namespace System.Windows.Forms
             {
                 if (dgv.EditingControl.ContainsFocus)
                 {
-                    ContainerControl cc = dgv.GetContainerControl() as ContainerControl;
-                    if (cc != null && (dgv.EditingControl == cc.ActiveControl || dgv.EditingControl.Contains(cc.ActiveControl)))
+                    if (dgv.GetContainerControl() is ContainerControl cc && (dgv.EditingControl == cc.ActiveControl || dgv.EditingControl.Contains(cc.ActiveControl)))
                     {
                         dgv.Focus();
                     }
@@ -1739,8 +1738,7 @@ namespace System.Windows.Forms
                 {
                     return dgvectl.GetEditingControlFormattedValue(context);
                 }
-                IDataGridViewEditingCell dgvecell = this as IDataGridViewEditingCell;
-                if (dgvecell != null && DataGridView.IsCurrentCellInEditMode)
+                if (this is IDataGridViewEditingCell dgvecell && DataGridView.IsCurrentCellInEditMode)
                 {
                     return dgvecell.GetEditingCellFormattedValue(context);
                 }

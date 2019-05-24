@@ -602,10 +602,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                LabelImageIndexer imageIndexer = Properties.GetObject(PropImageIndex, out bool found) as LabelImageIndexer;
-
                 // Demand create the ImageIndexer property
-                if ((imageIndexer == null) || (!found))
+                if ((!(Properties.GetObject(PropImageIndex, out bool found) is LabelImageIndexer imageIndexer)) || (!found))
                 {
                     imageIndexer = new LabelImageIndexer(this);
                     ImageIndexer = imageIndexer;
@@ -1583,8 +1581,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnTextAlignChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

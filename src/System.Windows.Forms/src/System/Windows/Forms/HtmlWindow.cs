@@ -70,8 +70,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLDocument iHTMLDocument = NativeHtmlWindow.GetDocument() as UnsafeNativeMethods.IHTMLDocument;
-                return iHTMLDocument != null ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
+                return NativeHtmlWindow.GetDocument() is UnsafeNativeMethods.IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
             }
         }
 
@@ -128,8 +127,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.GetOpener() as UnsafeNativeMethods.IHTMLWindow2;
-                return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+                return (NativeHtmlWindow.GetOpener() is UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
 
@@ -193,8 +191,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement htmlElement = ((UnsafeNativeMethods.IHTMLWindow4)NativeHtmlWindow).frameElement() as UnsafeNativeMethods.IHTMLElement;
-                return (htmlElement != null) ? new HtmlElement(ShimManager, htmlElement) : null;
+                return (((UnsafeNativeMethods.IHTMLWindow4)NativeHtmlWindow).frameElement() is UnsafeNativeMethods.IHTMLElement htmlElement) ? new HtmlElement(ShimManager, htmlElement) : null;
             }
         }
 

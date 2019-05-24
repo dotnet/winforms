@@ -96,8 +96,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewButtonCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewButtonCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
                             {
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
@@ -137,8 +136,7 @@ namespace System.Windows.Forms
                             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                             {
                                 DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                                DataGridViewButtonCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewButtonCell;
-                                if (dataGridViewCell != null && dataGridViewCell.UseColumnTextForButtonValue)
+                                if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell && dataGridViewCell.UseColumnTextForButtonValue)
                                 {
                                     DataGridView.OnColumnCommonChange(Index);
                                     return;
@@ -178,8 +176,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewButtonCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewButtonCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
                             {
                                 dataGridViewCell.UseColumnTextForButtonValueInternal = value;
                             }

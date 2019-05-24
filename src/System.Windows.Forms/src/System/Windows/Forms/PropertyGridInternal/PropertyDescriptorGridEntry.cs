@@ -1016,11 +1016,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (component == null && propertyInfo is MergePropertyDescriptor)
             {
-
                 // It's possible that multiple objects are selected, and we're trying to create an event for each of them
                 //
-                Array objArray = obj as Array;
-                if (objArray != null && objArray.Length > 0)
+                if (obj is Array objArray && objArray.Length > 0)
                 {
                     component = objArray.GetValue(0) as IComponent;
                 }
@@ -1343,9 +1341,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
-                Exception except = value as Exception;
-
-                if (except != null)
+                if (value is Exception except)
                 {
                     IUIService uis = null;
 

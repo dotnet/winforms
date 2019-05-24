@@ -118,8 +118,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                IDesignerHost host = value.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                if (host != null)
+                if (value.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
                     IComponent baseComp = host.RootComponent;
 
@@ -439,9 +438,8 @@ namespace System.Windows.Forms
                 listManager.CurrentChanged += currentChanged;
                 listManager.BindingComplete += new BindingCompleteEventHandler(ErrorManager_BindingComplete);
 
-                CurrencyManager currManager = listManager as CurrencyManager;
 
-                if (currManager != null)
+                if (listManager is CurrencyManager currManager)
                 {
                     currManager.ItemChanged += new ItemChangedEventHandler(ErrorManager_ItemChanged);
                     currManager.Bindings.CollectionChanged += new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
@@ -456,9 +454,8 @@ namespace System.Windows.Forms
                 listManager.CurrentChanged -= currentChanged;
                 listManager.BindingComplete -= new BindingCompleteEventHandler(ErrorManager_BindingComplete);
 
-                CurrencyManager currManager = listManager as CurrencyManager;
 
-                if (currManager != null)
+                if (listManager is CurrencyManager currManager)
                 {
                     currManager.ItemChanged -= new ItemChangedEventHandler(ErrorManager_ItemChanged);
                     currManager.Bindings.CollectionChanged -= new CollectionChangeEventHandler(ErrorManager_BindingsChanged);

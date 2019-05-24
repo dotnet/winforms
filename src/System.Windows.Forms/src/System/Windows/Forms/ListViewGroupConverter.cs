@@ -59,8 +59,7 @@ namespace System.Windows.Forms
                 string text = ((string)value).Trim();
                 if (context != null && context.Instance != null)
                 {
-                    ListViewItem item = context.Instance as ListViewItem;
-                    if (item != null && item.ListView != null)
+                    if (context.Instance is ListViewItem item && item.ListView != null)
                     {
                         foreach (ListViewGroup group in item.ListView.Groups)
                         {

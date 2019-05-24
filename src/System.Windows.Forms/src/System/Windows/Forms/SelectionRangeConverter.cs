@@ -111,8 +111,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            SelectionRange range = value as SelectionRange;
-            if (range != null)
+            if (value is SelectionRange range)
             {
                 if (destinationType == typeof(string))
                 {

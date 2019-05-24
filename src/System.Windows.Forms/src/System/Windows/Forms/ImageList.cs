@@ -1153,8 +1153,7 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < imageInfoCollection.Count; i++)
                     {
-                        ImageInfo image = imageInfoCollection[i] as ImageInfo;
-                        if ((image != null) && (image.Name != null) && (image.Name.Length != 0))
+                        if ((imageInfoCollection[i] is ImageInfo image) && (image.Name != null) && (image.Name.Length != 0))
                         {
                             keysCollection.Add(image.Name);
                         }

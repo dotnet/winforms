@@ -716,8 +716,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnTextAlignChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

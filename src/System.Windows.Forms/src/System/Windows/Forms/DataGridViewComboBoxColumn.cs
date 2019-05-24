@@ -53,8 +53,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.AutoComplete = value;
                             }
@@ -128,8 +127,7 @@ namespace System.Windows.Forms
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
                         DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                        if (dataGridViewCell != null)
+                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                         {
                             dataGridViewCell.DataSource = value;
                         }
@@ -170,8 +168,7 @@ namespace System.Windows.Forms
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
                         DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                        if (dataGridViewCell != null)
+                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                         {
                             dataGridViewCell.DisplayMember = value;
                         }
@@ -210,8 +207,7 @@ namespace System.Windows.Forms
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
                         DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                        if (dataGridViewCell != null)
+                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                         {
                             dataGridViewCell.DisplayStyleInternal = value;
                         }
@@ -251,8 +247,7 @@ namespace System.Windows.Forms
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
                         DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                        if (dataGridViewCell != null)
+                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                         {
                             dataGridViewCell.DisplayStyleForCurrentCellOnlyInternal = value;
                         }
@@ -290,8 +285,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.DropDownWidth = value;
                             }
@@ -328,8 +322,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
@@ -389,8 +382,7 @@ namespace System.Windows.Forms
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
                         DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                        if (dataGridViewCell != null)
+                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                         {
                             dataGridViewCell.ValueMember = value;
                         }
@@ -427,8 +419,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.MaxDropDownItems = value;
                             }
@@ -465,8 +456,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.Sorted = value;
                             }
@@ -511,8 +501,7 @@ namespace System.Windows.Forms
                 for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
                     DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    DataGridViewComboBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewComboBoxCell;
-                    if (dataGridViewCell != null)
+                    if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                     {
                         dataGridViewCell.Items.ClearInternal();
                         dataGridViewCell.Items.AddRangeInternal(items);

@@ -43,8 +43,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            DataGridViewColumn dataGridViewColumn = value as DataGridViewColumn;
-            if (destinationType == typeof(InstanceDescriptor) && dataGridViewColumn != null)
+            if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewColumn dataGridViewColumn)
             {
                 ConstructorInfo ctor;
 

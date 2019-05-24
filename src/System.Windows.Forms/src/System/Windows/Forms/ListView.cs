@@ -4914,8 +4914,7 @@ namespace System.Windows.Forms
                 RecreateHandleInternal();
             }
 
-            EventHandler eh = Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

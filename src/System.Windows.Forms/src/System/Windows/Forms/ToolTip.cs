@@ -355,10 +355,9 @@ namespace System.Windows.Forms
         // ToolTips should be shown only on active Windows.
         private bool IsWindowActive(IWin32Window window)
         {
-            Control windowControl = window as Control;
             // We want to enter in the IF block only if ShowParams does not return SW_SHOWNOACTIVATE.
             // for ToolStripDropDown ShowParams returns SW_SHOWNOACTIVATE, in which case we DONT want to check IsWindowActive and hence return true.
-            if (windowControl != null &&
+            if (window is Control windowControl &&
                 (windowControl.ShowParams & 0xF) != NativeMethods.SW_SHOWNOACTIVATE)
             {
                 IntPtr hWnd = UnsafeNativeMethods.GetActiveWindow();
@@ -780,15 +779,13 @@ namespace System.Windows.Forms
 
         private void CheckNativeToolTip(Control associatedControl)
         {
-
             //Wait for the Handle Creation..
             if (!GetHandleCreated())
             {
                 return;
             }
 
-            TreeView treeView = associatedControl as TreeView;
-            if (treeView != null)
+            if (associatedControl is TreeView treeView)
             {
                 if (treeView.ShowNodeToolTips)
                 {
@@ -801,8 +798,7 @@ namespace System.Windows.Forms
                 ((ToolBar)associatedControl).SetToolTip(this);
             }
 
-            TabControl tabControl = associatedControl as TabControl;
-            if (tabControl != null)
+            if (associatedControl is TabControl tabControl)
             {
                 if (tabControl.ShowToolTips)
                 {
@@ -1034,15 +1030,13 @@ namespace System.Windows.Forms
                 int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, tool);
                 if (ctl is TreeView || ctl is ListView)
                 {
-                    TreeView tv = ctl as TreeView;
-                    if (tv != null && tv.ShowNodeToolTips)
+                    if (ctl is TreeView tv && tv.ShowNodeToolTips)
                     {
                         return;
                     }
                     else
                     {
-                        ListView lv = ctl as ListView;
-                        if (lv != null && lv.ShowItemToolTips)
+                        if (ctl is ListView lv && lv.ShowItemToolTips)
                         {
                             return;
                         }
@@ -1122,7 +1116,6 @@ namespace System.Windows.Forms
 
         private void DestroyRegion(Control ctl)
         {
-
             // when the toplevelControl is a form and is Modal, the Handle of the tooltip is releasedbefore we come here.
             // In such a case the tool wont get deleted from the tooltip.
             // So we dont check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
@@ -1132,8 +1125,7 @@ namespace System.Windows.Forms
                                 && topLevelControl.IsHandleCreated
                                 && !isDisposing;
 
-            Form topForm = topLevelControl as Form;
-            if (topForm == null || (topForm != null && !topForm.Modal))
+            if (!(topLevelControl is Form topForm) || (topForm != null && !topForm.Modal))
             {
                 handlesCreated = handlesCreated && GetHandleCreated();
             }
@@ -1174,8 +1166,7 @@ namespace System.Windows.Forms
                     //Unhook the DeactiveEvent...
                     // Lets find the Form for associated Control ...
                     // and hook up to the Deactivated event to Hide the Shown tooltip
-                    Form baseFrom = TopLevelControl as Form;
-                    if (baseFrom != null)
+                    if (TopLevelControl is Form baseFrom)
                     {
                         baseFrom.Deactivate -= new EventHandler(BaseFormDeactivate);
                     }
@@ -1261,15 +1252,13 @@ namespace System.Windows.Forms
 
             if (ctl is TreeView || ctl is ListView)
             {
-                TreeView tv = ctl as TreeView;
-                if (tv != null && tv.ShowNodeToolTips)
+                if (ctl is TreeView tv && tv.ShowNodeToolTips)
                 {
                     ti.lpszText = NativeMethods.InvalidIntPtr;
                 }
                 else
                 {
-                    ListView lv = ctl as ListView;
-                    if (lv != null && lv.ShowItemToolTips)
+                    if (ctl is ListView lv && lv.ShowItemToolTips)
                     {
                         ti.lpszText = NativeMethods.InvalidIntPtr;
                     }
@@ -1680,8 +1669,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(win));
             }
 
-            Control associatedControl = win as Control;
-            if (associatedControl != null)
+            if (win is Control associatedControl)
             {
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
@@ -2135,8 +2123,7 @@ namespace System.Windows.Forms
             StopTimer();
 
             //Check if the passed in IWin32Window is a Control...
-            Control tool = win as Control;
-            if (tool == null)
+            if (!(win is Control tool))
             {
                 owners.Remove(win.Handle);
             }
@@ -2408,8 +2395,7 @@ namespace System.Windows.Forms
                 }
 
                 // Treeview handles its own ToolTips.
-                TreeView treeView = win as TreeView;
-                if (treeView != null)
+                if (win is TreeView treeView)
                 {
                     if (treeView.ShowNodeToolTips)
                     {
@@ -2501,7 +2487,6 @@ namespace System.Windows.Forms
 
             if (ret != 0)
             {
-
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null)
                 {
@@ -2519,8 +2504,7 @@ namespace System.Windows.Forms
                 PopupEventArgs e = new PopupEventArgs(win, toolControl, IsBalloon, currentTooltipSize);
                 OnPopup(e);
 
-                DataGridView dataGridView = toolControl as DataGridView;
-                if (dataGridView != null && dataGridView.CancelToolTipPopup(this))
+                if (toolControl is DataGridView dataGridView && dataGridView.CancelToolTipPopup(this))
                 {
                     // The dataGridView cancelled the tooltip.
                     e.Cancel = true;
@@ -2641,8 +2625,7 @@ namespace System.Windows.Forms
                     }
 
                     // Treeview handles its own ToolTips.
-                    TreeView treeView = win as TreeView;
-                    if (treeView != null)
+                    if (win is TreeView treeView)
                     {
                         if (treeView.ShowNodeToolTips)
                         {

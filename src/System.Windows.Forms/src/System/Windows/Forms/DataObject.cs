@@ -320,8 +320,7 @@ namespace System.Windows.Forms
         public virtual StringCollection GetFileDropList()
         {
             StringCollection retVal = new StringCollection();
-            string[] strings = GetData(DataFormats.FileDrop, true) as string[];
-            if (strings != null)
+            if (GetData(DataFormats.FileDrop, true) is string[] strings)
             {
                 retVal.AddRange(strings);
             }
@@ -346,8 +345,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
-            string text = GetData(ConvertToDataFormats(format), false) as string;
-            if (text != null)
+            if (GetData(ConvertToDataFormats(format), false) is string text)
             {
                 return text;
             }
@@ -1161,8 +1159,7 @@ namespace System.Windows.Forms
                 current = 0;
                 if (formats != null)
                 {
-                    DataObject dataObject = parent as DataObject;
-                    if (dataObject != null && dataObject.RestrictedFormats)
+                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
                     {
                         if (!Clipboard.IsFormatValid(formats))
                         {
@@ -1196,9 +1193,7 @@ namespace System.Windows.Forms
 
                 if (formats != null)
                 {
-
-                    DataObject dataObject = parent as DataObject;
-                    if (dataObject != null && dataObject.RestrictedFormats)
+                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
                     {
                         if (!Clipboard.IsFormatValid(formats))
                         {

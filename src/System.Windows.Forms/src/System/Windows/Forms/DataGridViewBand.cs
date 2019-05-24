@@ -343,8 +343,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell = value as DataGridViewColumnHeaderCell;
-                            if (dataGridViewColumnHeaderCell == null)
+                            if (!(value is DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell))
                             {
                                 throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DataGridViewColumn.HeaderCell), "System.Windows.Forms.DataGridViewColumnHeaderCell"), nameof(value));
                             }

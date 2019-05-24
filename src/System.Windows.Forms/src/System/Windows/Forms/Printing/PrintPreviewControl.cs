@@ -716,8 +716,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnStartPageChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_STARTPAGECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_STARTPAGECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

@@ -1267,8 +1267,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnFormatChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_FORMATCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_FORMATCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

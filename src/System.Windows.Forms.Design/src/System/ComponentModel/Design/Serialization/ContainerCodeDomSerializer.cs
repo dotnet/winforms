@@ -64,14 +64,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            // See if there is a type declaration on the stack. If there is, create a field representing
-            // the container member variable.
-            CodeTypeDeclaration typeDecl = manager.Context[typeof(CodeTypeDeclaration)] as CodeTypeDeclaration;
-            RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
             CodeStatementCollection statements = new CodeStatementCollection();
             CodeExpression lhs;
 
-            if (typeDecl != null && rootCxt != null)
+            if (manager.Context[typeof(CodeTypeDeclaration)] is CodeTypeDeclaration typeDecl && manager.Context[typeof(RootContext)] is RootContext rootCxt)
             {
                 CodeMemberField field = new CodeMemberField(typeof(IContainer), _containerName)
                 {

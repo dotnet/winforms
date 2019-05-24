@@ -57,14 +57,12 @@ namespace System.Windows.Forms.ButtonInternal
         {
             get
             {
-                CheckBox checkBox = Control as CheckBox;
-                if (checkBox != null)
+                if (Control is CheckBox checkBox)
                 {
                     return checkBox.Appearance;
                 }
 
-                RadioButton radioButton = Control as RadioButton;
-                if (radioButton != null)
+                if (Control is RadioButton radioButton)
                 {
                     return radioButton.Appearance;
                 }

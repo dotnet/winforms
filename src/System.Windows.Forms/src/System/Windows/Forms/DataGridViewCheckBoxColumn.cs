@@ -113,8 +113,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewCheckBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewCheckBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.FalseValueInternal = value;
                             }
@@ -152,8 +151,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewCheckBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewCheckBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
@@ -192,8 +190,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewCheckBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewCheckBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.IndeterminateValueInternal = value;
                             }
@@ -234,8 +231,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewCheckBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewCheckBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.ThreeStateInternal = value;
                             }
@@ -287,8 +283,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewCheckBoxCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewCheckBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.TrueValueInternal = value;
                             }
@@ -302,8 +297,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeDefaultCellStyle()
         {
             object defaultNullValue;
-            DataGridViewCheckBoxCell templateCell = CellTemplate as DataGridViewCheckBoxCell;
-            if (templateCell == null)
+            if (!(CellTemplate is DataGridViewCheckBoxCell templateCell))
             {
                 Debug.Fail("we can't compute the default cell style w/o a template cell");
                 return true;

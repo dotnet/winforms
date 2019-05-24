@@ -84,7 +84,6 @@ namespace System.Windows.Forms
         /// </summary>
         public ThreadExceptionDialog(Exception t)
         {
-
             if (DpiHelper.IsScalingRequirementMet)
             {
                 scaledMaxWidth = LogicalToDeviceUnits(MAXWIDTH);
@@ -113,8 +112,7 @@ namespace System.Windows.Forms
             Button[] buttons;
             bool detailAnchor = false;
 
-            WarningException w = t as WarningException;
-            if (w != null)
+            if (t is WarningException w)
             {
                 messageFormat = SR.ExDlgWarningText;
                 messageText = w.Message;

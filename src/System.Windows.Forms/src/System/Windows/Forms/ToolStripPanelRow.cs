@@ -341,12 +341,9 @@ namespace System.Windows.Forms
 
         protected internal virtual void OnControlAdded(Control control, int index)
         {
-
-
             // if previously added - remove.
-            ISupportToolStripPanel controlToBeDragged = control as ISupportToolStripPanel;
 
-            if (controlToBeDragged != null)
+            if (control is ISupportToolStripPanel controlToBeDragged)
             {
                 controlToBeDragged.ToolStripPanelRow = this;
             }
@@ -373,9 +370,8 @@ namespace System.Windows.Forms
                 RowManager.OnControlRemoved(control, index);
 
                 // if previously added - remove.
-                ISupportToolStripPanel controlToBeDragged = control as ISupportToolStripPanel;
 
-                if (controlToBeDragged != null && controlToBeDragged.ToolStripPanelRow == this)
+                if (control is ISupportToolStripPanel controlToBeDragged && controlToBeDragged.ToolStripPanelRow == this)
                 {
                     controlToBeDragged.ToolStripPanelRow = null;
                 }
@@ -867,8 +863,7 @@ namespace System.Windows.Forms
 
             public virtual bool CanMove(ToolStrip toolStripToDrag)
             {
-                ISupportToolStripPanel raftingControl = toolStripToDrag as ISupportToolStripPanel;
-                if (raftingControl != null)
+                if (toolStripToDrag is ISupportToolStripPanel raftingControl)
                 {
                     if (raftingControl.Stretch)
                     {
@@ -2359,13 +2354,11 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int Add(Control value)
             {
-                ISupportToolStripPanel control = value as ISupportToolStripPanel;
-
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                if (control == null)
+                if (!(value is ISupportToolStripPanel control))
                 {
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
                 }
@@ -2512,8 +2505,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                ISupportToolStripPanel control = value as ISupportToolStripPanel;
-                if (control == null)
+                if (!(value is ISupportToolStripPanel control))
                 {
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
                 }
@@ -2555,12 +2547,10 @@ namespace System.Windows.Forms
 
                         if (controlToBeDragged != null)
                         {
-
                             controlToBeDragged.ToolStripPanelRow = owner;
 
-                            Control control = controlToBeDragged as Control;
 
-                            if (control != null)
+                            if (controlToBeDragged is Control control)
                             {
                                 control.ParentInternal = owner.ToolStripPanel;
                                 owner.OnControlAdded(control, index);

@@ -350,24 +350,21 @@ namespace System.Windows.Forms
 
         private void OnTrueValueChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventTrueValue] as EventHandler;
-            if (eh != null)
+            if (Events[EventTrueValue] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         private void OnFalseValueChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventFalseValue] as EventHandler;
-            if (eh != null)
+            if (Events[EventFalseValue] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         private void OnAllowNullChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventAllowNull] as EventHandler;
-            if (eh != null)
+            if (Events[EventAllowNull] is EventHandler eh)
             {
                 eh(this, e);
             }

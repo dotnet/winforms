@@ -103,8 +103,7 @@ namespace System.Windows.Forms
             {
                 return string.Empty;
             }
-            ITypedList typedList = list as ITypedList;
-            if (typedList != null)
+            if (list is ITypedList typedList)
             {
                 // Use typed list
                 name = typedList.GetListName(listAccessors);
@@ -433,8 +432,7 @@ namespace System.Windows.Forms
                 // We have the Instance (e.g. Orders)
                 ++startIndex;
 
-                IEnumerable ienumerableSubList = subList as IEnumerable;
-                if (ienumerableSubList != null)
+                if (subList is IEnumerable ienumerableSubList)
                 {
                     if (startIndex == listAccessors.Length)
                     {
@@ -600,8 +598,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ITypedList typedListEnumerable = enumerable as ITypedList;
-                if (typedListEnumerable != null)
+                if (enumerable is ITypedList typedListEnumerable)
                 {
                     pdc = typedListEnumerable.GetItemProperties(null);
                 }

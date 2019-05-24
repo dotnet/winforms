@@ -405,8 +405,7 @@ namespace System.Windows.Forms
             object name = (object)(replaceInHistory ? "replace" : "");
             object nullObject = null;
             object ohtmlDocument = NativeHtmlDocument2.Open("text/html", name, nullObject, nullObject);
-            UnsafeNativeMethods.IHTMLDocument iHTMLDocument = ohtmlDocument as UnsafeNativeMethods.IHTMLDocument;
-            return iHTMLDocument != null ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
+            return ohtmlDocument is UnsafeNativeMethods.IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
         }
 
         public HtmlElement CreateElement(string elementTag)
@@ -424,8 +423,7 @@ namespace System.Windows.Forms
             };
             try
             {
-                UnsafeNativeMethods.IDispatch scriptObject = NativeHtmlDocument2.GetScript() as UnsafeNativeMethods.IDispatch;
-                if (scriptObject != null)
+                if (NativeHtmlDocument2.GetScript() is UnsafeNativeMethods.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };

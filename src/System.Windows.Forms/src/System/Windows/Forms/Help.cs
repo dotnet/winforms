@@ -225,13 +225,11 @@ namespace System.Windows.Forms
             }
 
             object htmlParam;
-            string stringParam = param as string;
-            if (stringParam != null)
+            if (param is string stringParam)
             {
                 int htmlCommand = MapCommandToHTMLCommand(command, stringParam, out htmlParam);
 
-                string stringHtmlParam = htmlParam as string;
-                if (stringHtmlParam != null)
+                if (htmlParam is string stringHtmlParam)
                 {
                     SafeNativeMethods.HtmlHelp(handle, pathAndFileName, htmlCommand, stringHtmlParam);
                 }

@@ -117,8 +117,7 @@ namespace System.Windows.Forms.Design
             {
                 selectionMenuItem = new ToolStripMenuItem();
 
-                IUIService uis = serviceProvider.GetService(typeof(IUIService)) as IUIService;
-                if (uis != null)
+                if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                 {
                     selectionMenuItem.DropDown.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
                     //Set the right Font
@@ -228,8 +227,7 @@ namespace System.Windows.Forms.Design
 
             foreach (ToolStripItem item in this.Items)
             {
-                StandardCommandToolStripMenuItem stdItem = item as StandardCommandToolStripMenuItem;
-                if (stdItem != null)
+                if (item is StandardCommandToolStripMenuItem stdItem)
                 {
                     stdItem.RefreshItem();
                 }

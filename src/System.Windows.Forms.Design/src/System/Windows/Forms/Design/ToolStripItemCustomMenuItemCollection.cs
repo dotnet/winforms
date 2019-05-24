@@ -410,8 +410,7 @@ namespace System.Windows.Forms.Design
                 // We need to cancel the ToolStripDesigner's nested MenuItemTransaction; otherwise, we can't cancel our Transaction and the Designer will be left in an unusable state
                 if ((parent != null) && (parent.OwnerItem != null) && (parent.OwnerItem.Owner != null))
                 {
-                    ToolStripDesigner toolStripDesigner = designerHost.GetDesigner(parent.OwnerItem.Owner) as ToolStripDesigner;
-                    if (toolStripDesigner != null)
+                    if (designerHost.GetDesigner(parent.OwnerItem.Owner) is ToolStripDesigner toolStripDesigner)
                     {
                         toolStripDesigner.CancelPendingMenuItemTransaction();
                     }

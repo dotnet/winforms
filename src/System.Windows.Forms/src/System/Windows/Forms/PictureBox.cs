@@ -1315,8 +1315,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnSizeModeChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_SIZEMODECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_SIZEMODECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

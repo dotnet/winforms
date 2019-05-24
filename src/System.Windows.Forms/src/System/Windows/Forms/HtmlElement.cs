@@ -47,8 +47,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = NativeHtmlElement.GetAll() as UnsafeNativeMethods.IHTMLElementCollection;
-                return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
+                return NativeHtmlElement.GetAll() is UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
             }
         }
 
@@ -56,8 +55,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = NativeHtmlElement.GetChildren() as UnsafeNativeMethods.IHTMLElementCollection;
-                return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
+                return NativeHtmlElement.GetChildren() is UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
             }
         }
 
@@ -84,8 +82,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLDocument iHTMLDocument = NativeHtmlElement.GetDocument() as UnsafeNativeMethods.IHTMLDocument;
-                return iHTMLDocument != null ? new HtmlDocument(shimManager, iHTMLDocument) : null;
+                return NativeHtmlElement.GetDocument() is UnsafeNativeMethods.IHTMLDocument iHTMLDocument ? new HtmlDocument(shimManager, iHTMLDocument) : null;
             }
         }
 
@@ -124,9 +121,8 @@ namespace System.Windows.Forms
             get
             {
                 UnsafeNativeMethods.IHTMLElement iHtmlElement = null;
-                UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode = NativeHtmlElement as UnsafeNativeMethods.IHTMLDOMNode;
 
-                if (iHtmlDomNode != null)
+                if (NativeHtmlElement is UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode)
                 {
                     iHtmlElement = iHtmlDomNode.FirstChild() as UnsafeNativeMethods.IHTMLElement;
                 }
@@ -220,9 +216,8 @@ namespace System.Windows.Forms
             get
             {
                 UnsafeNativeMethods.IHTMLElement iHtmlElement = null;
-                UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode = NativeHtmlElement as UnsafeNativeMethods.IHTMLDOMNode;
 
-                if (iHtmlDomNode != null)
+                if (NativeHtmlElement is UnsafeNativeMethods.IHTMLDOMNode iHtmlDomNode)
                 {
                     iHtmlElement = iHtmlDomNode.NextSibling() as UnsafeNativeMethods.IHTMLElement;
                 }
@@ -455,8 +450,7 @@ namespace System.Windows.Forms
             };
             try
             {
-                UnsafeNativeMethods.IDispatch scriptObject = NativeHtmlElement as UnsafeNativeMethods.IDispatch;
-                if (scriptObject != null)
+                if (NativeHtmlElement is UnsafeNativeMethods.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { methodName };

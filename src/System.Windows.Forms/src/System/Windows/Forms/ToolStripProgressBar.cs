@@ -21,8 +21,7 @@ namespace System.Windows.Forms
         public ToolStripProgressBar()
             : base(CreateControlInstance())
         {
-            ToolStripProgressBarControl toolStripProgressBarControl = Control as ToolStripProgressBarControl;
-            if (toolStripProgressBarControl != null)
+            if (Control is ToolStripProgressBarControl toolStripProgressBarControl)
             {
                 toolStripProgressBarControl.Owner = this;
             }
@@ -308,8 +307,7 @@ namespace System.Windows.Forms
 
         protected override void OnSubscribeControlEvents(Control control)
         {
-            ProgressBar bar = control as ProgressBar;
-            if (bar != null)
+            if (control is ProgressBar bar)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 // 
@@ -321,9 +319,7 @@ namespace System.Windows.Forms
 
         protected override void OnUnsubscribeControlEvents(Control control)
         {
-
-            ProgressBar bar = control as ProgressBar;
-            if (bar != null)
+            if (control is ProgressBar bar)
             {
                 // Please keep this alphabetized and in sync with Subscribe
                 // 
@@ -519,8 +515,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var toolStripProgressBarControl = Owner as ToolStripProgressBarControl;
-                    if (toolStripProgressBarControl != null)
+                    if (Owner is ToolStripProgressBarControl toolStripProgressBarControl)
                     {
                         return toolStripProgressBarControl.Owner.Owner.AccessibilityObject;
                     }
@@ -536,8 +531,7 @@ namespace System.Windows.Forms
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        var toolStripProgressBarControl = Owner as ToolStripProgressBarControl;
-                        if (toolStripProgressBarControl != null)
+                        if (Owner is ToolStripProgressBarControl toolStripProgressBarControl)
                         {
                             return toolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                         }

@@ -4241,8 +4241,7 @@ namespace System.Windows.Forms
             // needs to be rebuilt).  Then, we signal the parent to updated its menus.
             if (Properties.ContainsObject(PropMergedMenu))
             {
-                MainMenu menu = Properties.GetObject(PropMergedMenu) as MainMenu;
-                if (menu != null && menu.ownerForm == this)
+                if (Properties.GetObject(PropMergedMenu) is MainMenu menu && menu.ownerForm == this)
                 {
                     menu.Dispose();
                 }
@@ -4305,8 +4304,7 @@ namespace System.Windows.Forms
                         Control ctl = children[i];
                         if (ctl is Form && ctl.Properties.ContainsObject(PropMergedMenu))
                         {
-                            MainMenu mainMenu = ctl.Properties.GetObject(PropMergedMenu) as MainMenu;
-                            if (mainMenu != null && mainMenu.ownerForm == ctl)
+                            if (ctl.Properties.GetObject(PropMergedMenu) is MainMenu mainMenu && mainMenu.ownerForm == ctl)
                             {
                                 mainMenu.Dispose();
                             }
@@ -4570,8 +4568,7 @@ namespace System.Windows.Forms
                 // a modal resizing loop (WM_WINDOWPOSCHANGED).
                 Size adjustedSize = AutoSizeMode == AutoSizeMode.GrowAndShrink ? prefSize : LayoutUtils.UnionSizes(prefSize, Size);
 
-                IArrangedElement form = this as IArrangedElement;
-                if (form != null)
+                if (this is IArrangedElement form)
                 {
                     form.SetBounds(new Rectangle(Left, Top, adjustedSize.Width, adjustedSize.Height), BoundsSpecified.None);
                 }
@@ -4675,8 +4672,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMaximizedBoundsChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_MAXIMIZEDBOUNDSCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_MAXIMIZEDBOUNDSCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -4685,8 +4681,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMaximumSizeChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_MAXIMUMSIZECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_MAXIMUMSIZECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -4695,8 +4690,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMinimumSizeChanged(EventArgs e)
         {
-            EventHandler eh = Events[EVENT_MINIMUMSIZECHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_MINIMUMSIZECHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -4963,8 +4957,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            EventHandler eh = Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }

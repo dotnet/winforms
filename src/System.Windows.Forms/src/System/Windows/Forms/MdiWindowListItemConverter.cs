@@ -20,16 +20,14 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            MenuStrip menu = context.Instance as MenuStrip;
-            if (menu != null)
+            if (context.Instance is MenuStrip menu)
             {
                 StandardValuesCollection values = base.GetStandardValues(context);
                 ArrayList list = new ArrayList();
                 int count = values.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    ToolStripItem currentItem = values[i] as ToolStripItem;
-                    if (currentItem != null && currentItem.Owner == menu)
+                    if (values[i] is ToolStripItem currentItem && currentItem.Owner == menu)
                     {
                         list.Add(currentItem);
                     }

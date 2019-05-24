@@ -721,8 +721,7 @@ namespace System.Windows.Forms
         internal void ShowDropDown(bool mousePush)
         {
             ShowDropDownInternal();
-            ToolStripDropDownMenu menu = dropDown as ToolStripDropDownMenu;
-            if (menu != null)
+            if (dropDown is ToolStripDropDownMenu menu)
             {
                 if (!mousePush)
                 {
@@ -820,8 +819,7 @@ namespace System.Windows.Forms
 
         public override void DoDefaultAction()
         {
-            ToolStripDropDownItem item = Owner as ToolStripDropDownItem;
-            if (item != null && item.HasDropDownItems)
+            if (Owner is ToolStripDropDownItem item && item.HasDropDownItems)
             {
                 item.ShowDropDown();
             }
@@ -962,8 +960,7 @@ namespace System.Windows.Forms
 
         internal AccessibleObject GetChildFragment(int index)
         {
-            var toolStripAccessibleObject = owner.DropDown.AccessibilityObject as ToolStrip.ToolStripAccessibleObject;
-            if (toolStripAccessibleObject != null)
+            if (owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
             {
                 return toolStripAccessibleObject.GetChildFragment(index);
             }
@@ -998,9 +995,7 @@ namespace System.Windows.Forms
                     return null;
                 case UnsafeNativeMethods.NavigateDirection.NextSibling:
                 case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                    ToolStripDropDown dropDown = owner.Owner as ToolStripDropDown;
-
-                    if (dropDown == null)
+                    if (!(owner.Owner is ToolStripDropDown dropDown))
                     {
                         break;
                     }
@@ -1017,8 +1012,7 @@ namespace System.Windows.Forms
                     if (index >= 0 && index < dropDown.Items.Count)
                     {
                         ToolStripItem item = dropDown.Items[index];
-                        var controlHostItem = item as ToolStripControlHost;
-                        if (controlHostItem != null)
+                        if (item is ToolStripControlHost controlHostItem)
                         {
                             return controlHostItem.ControlAccessibilityObject;
                         }

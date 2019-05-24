@@ -2120,8 +2120,7 @@ namespace System.Windows.Forms
 
                 nextItem.Select();
 
-                ToolStripMenuItem tsNextItem = nextItem as ToolStripMenuItem;
-                if (tsNextItem != null && !IsDropDown)
+                if (nextItem is ToolStripMenuItem tsNextItem && !IsDropDown)
                 {
                     // only toplevel menus auto expand when the selection changes.
                     tsNextItem.HandleAutoExpansion();
@@ -2186,9 +2185,8 @@ namespace System.Windows.Forms
                     else if (item != null && DisplayedItems[i].Pressed)
                     {
                         // 
-                        ToolStripDropDownItem dropDownItem = DisplayedItems[i] as ToolStripDropDownItem;
 
-                        if (dropDownItem != null && dropDownItem.HasDropDownItems)
+                        if (DisplayedItems[i] is ToolStripDropDownItem dropDownItem && dropDownItem.HasDropDownItems)
                         {
                             dropDownItem.AutoHide(item);
                         }
@@ -2281,7 +2279,6 @@ namespace System.Windows.Forms
 
                 try
                 {
-
                     SuspendLayout();
                     if (overflow != null)
                     {
@@ -2293,8 +2290,7 @@ namespace System.Windows.Forms
 
                     HookStaticEvents(/*hook=*/false);
 
-                    ToolStripPanelCell toolStripPanelCell = Properties.GetObject(ToolStrip.PropToolStripPanelCell) as ToolStripPanelCell;
-                    if (toolStripPanelCell != null)
+                    if (Properties.GetObject(ToolStrip.PropToolStripPanelCell) is ToolStripPanelCell toolStripPanelCell)
                     {
                         toolStripPanelCell.Dispose();
                     }
@@ -2510,7 +2506,6 @@ namespace System.Windows.Forms
 
             do
             {
-
                 if (forward)
                 {
                     current = ++current % count;
@@ -2519,8 +2514,7 @@ namespace System.Windows.Forms
                 {  // provide negative wrap if necessary
                     current = (--current < 0) ? count + current : current;
                 }
-                ToolStripDropDown dropDown = this as ToolStripDropDown;
-                if (dropDown != null)
+                if (this is ToolStripDropDown dropDown)
                 {
                     if (dropDown.OwnerItem != null && dropDown.OwnerItem.IsInDesignMode)
                     {
@@ -2544,7 +2538,6 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
         private ToolStripItem GetNextItemVertical(ToolStripItem selectedItem, bool down)
         {
-
             ToolStripItem tanWinner = null;
             ToolStripItem hypotenuseWinner = null;
 
@@ -2559,8 +2552,7 @@ namespace System.Windows.Forms
                 return item;
             }
 
-            ToolStripDropDown dropDown = this as ToolStripDropDown;
-            if (dropDown != null)
+            if (this is ToolStripDropDown dropDown)
             {
                 if (dropDown.OwnerItem != null && (dropDown.OwnerItem.IsInDesignMode || (dropDown.OwnerItem.Owner != null && dropDown.OwnerItem.Owner.IsInDesignMode)))
                 {
@@ -2945,8 +2937,7 @@ namespace System.Windows.Forms
             /*if (ContainsFocus && !Focused) {
                 RestoreFocusInternal();
             }*/
-            ToolStripDropDownItem item = dismissingItem as ToolStripDropDownItem;
-            if (item != null && !item.HasDropDownItems)
+            if (dismissingItem is ToolStripDropDownItem item && !item.HasDropDownItems)
             {
                 KeyboardActive = false;
             }
@@ -5471,8 +5462,7 @@ namespace System.Windows.Forms
                     ToolStripItem item = items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Left && fragmentIndex == index)
                     {
-                        var controlHostItem = item as ToolStripControlHost;
-                        if (controlHostItem != null)
+                        if (item is ToolStripControlHost controlHostItem)
                         {
                             return controlHostItem.ControlAccessibilityObject;
                         }
@@ -5486,8 +5476,7 @@ namespace System.Windows.Forms
                     ToolStripItem item = owner.Items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Right && fragmentIndex == index)
                     {
-                        var controlHostItem = item as ToolStripControlHost;
-                        if (controlHostItem != null)
+                        if (item is ToolStripControlHost controlHostItem)
                         {
                             return controlHostItem.ControlAccessibilityObject;
                         }

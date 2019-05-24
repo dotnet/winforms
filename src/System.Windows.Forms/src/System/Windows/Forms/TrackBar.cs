@@ -921,8 +921,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            EventHandler eh = Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] as EventHandler;
-            if (eh != null)
+            if (Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -951,8 +950,7 @@ namespace System.Windows.Forms
         {
             base.OnMouseWheel(e);
 
-            HandledMouseEventArgs hme = e as HandledMouseEventArgs;
-            if (hme != null)
+            if (e is HandledMouseEventArgs hme)
             {
                 if (hme.Handled)
                 {

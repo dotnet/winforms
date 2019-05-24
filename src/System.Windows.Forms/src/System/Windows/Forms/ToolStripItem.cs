@@ -1272,8 +1272,7 @@ namespace System.Windows.Forms
                 if (Image != value)
                 {
                     StopAnimate();
-                    Bitmap bmp = value as Bitmap;
-                    if (bmp != null && ImageTransparentColor != Color.Empty)
+                    if (value is Bitmap bmp && ImageTransparentColor != Color.Empty)
                     {
                         if (bmp.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(bmp))
                         {
@@ -1310,8 +1309,7 @@ namespace System.Windows.Forms
                 if (imageTransparentColor != value)
                 {
                     imageTransparentColor = value;
-                    Bitmap currentImage = Image as Bitmap;
-                    if (currentImage != null && value != Color.Empty)
+                    if (Image is Bitmap currentImage && value != Color.Empty)
                     {
                         if (currentImage.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(currentImage))
                         {
@@ -2670,8 +2668,7 @@ namespace System.Windows.Forms
             if (dataObject == null)
             {
                 DataObject iwdata = null;
-                IDataObject idataObject = data as IDataObject;
-                if (idataObject != null)
+                if (data is IDataObject idataObject)
                 {
                     iwdata = new DataObject(idataObject);
                 }
@@ -4218,8 +4215,7 @@ namespace System.Windows.Forms
                 Debug.Assert(i < count, "Item has a parent set but the parent doesn't own the item");
             }
 
-            ToolStripDropDown dropDown = parent as ToolStripDropDown;
-            if (dropDown != null && dropDown.OwnerItem != null)
+            if (parent is ToolStripDropDown dropDown && dropDown.OwnerItem != null)
             {
                 neighbors.Add(((IKeyboardToolTip)dropDown.OwnerItem).GetNativeScreenRectangle());
             }
@@ -4730,8 +4726,7 @@ namespace System.Windows.Forms
 
             private AccessibleObject GetChildFragment(int index)
             {
-                var toolStripParent = Parent as ToolStrip.ToolStripAccessibleObject;
-                if (toolStripParent != null)
+                if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
                 {
                     return toolStripParent.GetChildFragment(index);
                 }
@@ -4739,18 +4734,15 @@ namespace System.Windows.Forms
                 // ToolStripOverflowButtonAccessibleObject is derived from ToolStripDropDownItemAccessibleObject
                 // and we should not process ToolStripOverflowButton as a ToolStripDropDownItem here so check for
                 // the ToolStripOverflowButton firstly as more specific condition.
-                var toolStripOverflowButtonParent = Parent as ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject;
-                if (toolStripOverflowButtonParent != null)
+                if (Parent is ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject toolStripOverflowButtonParent)
                 {
-                    var toolStripGrandParent = toolStripOverflowButtonParent.Parent as ToolStrip.ToolStripAccessibleObject;
-                    if (toolStripGrandParent != null)
+                    if (toolStripOverflowButtonParent.Parent is ToolStrip.ToolStripAccessibleObject toolStripGrandParent)
                     {
                         return toolStripGrandParent.GetChildFragment(index, true);
                     }
                 }
 
-                var dropDownItemParent = Parent as ToolStripDropDownItemAccessibleObject;
-                if (dropDownItemParent != null)
+                if (Parent is ToolStripDropDownItemAccessibleObject dropDownItemParent)
                 {
                     return dropDownItemParent.GetChildFragment(index);
                 }
@@ -4760,24 +4752,20 @@ namespace System.Windows.Forms
 
             private int GetChildFragmentCount()
             {
-                var toolStripParent = Parent as ToolStrip.ToolStripAccessibleObject;
-                if (toolStripParent != null)
+                if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
                 {
                     return toolStripParent.GetChildFragmentCount();
                 }
 
-                var toolStripOverflowButtonParent = Parent as ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject;
-                if (toolStripOverflowButtonParent != null)
+                if (Parent is ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject toolStripOverflowButtonParent)
                 {
-                    var toolStripGrandParent = toolStripOverflowButtonParent.Parent as ToolStrip.ToolStripAccessibleObject;
-                    if (toolStripGrandParent != null)
+                    if (toolStripOverflowButtonParent.Parent is ToolStrip.ToolStripAccessibleObject toolStripGrandParent)
                     {
                         return toolStripGrandParent.GetChildOverflowFragmentCount();
                     }
                 }
 
-                var dropDownItemParent = Parent as ToolStripDropDownItemAccessibleObject;
-                if (dropDownItemParent != null)
+                if (Parent is ToolStripDropDownItemAccessibleObject dropDownItemParent)
                 {
                     return dropDownItemParent.GetChildCount();
                 }
@@ -4787,24 +4775,20 @@ namespace System.Windows.Forms
 
             private int GetChildFragmentIndex()
             {
-                var toolStripParent = Parent as ToolStrip.ToolStripAccessibleObject;
-                if (toolStripParent != null)
+                if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
                 {
                     return toolStripParent.GetChildFragmentIndex(this);
                 }
 
-                var toolStripOverflowButtonParent = Parent as ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject;
-                if (toolStripOverflowButtonParent != null)
+                if (Parent is ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject toolStripOverflowButtonParent)
                 {
-                    var toolStripGrandParent = toolStripOverflowButtonParent.Parent as ToolStrip.ToolStripAccessibleObject;
-                    if (toolStripGrandParent != null)
+                    if (toolStripOverflowButtonParent.Parent is ToolStrip.ToolStripAccessibleObject toolStripGrandParent)
                     {
                         return toolStripGrandParent.GetChildFragmentIndex(this);
                     }
                 }
 
-                var dropDownItemParent = Parent as ToolStripDropDownItemAccessibleObject;
-                if (dropDownItemParent != null)
+                if (Parent is ToolStripDropDownItemAccessibleObject dropDownItemParent)
                 {
                     return dropDownItemParent.GetChildFragmentIndex(this);
                 }

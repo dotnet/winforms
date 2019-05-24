@@ -106,8 +106,6 @@ namespace System.ComponentModel.Design.Serialization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
-            PropertyDescriptor propertyToSerialize = descriptor as PropertyDescriptor;
-
             if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
@@ -116,7 +114,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (propertyToSerialize == null)
+            if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
@@ -258,9 +256,8 @@ namespace System.ComponentModel.Design.Serialization
                                 manager.Context.Pop();
                             }
 
-                            CodeStatementCollection csc = result as CodeStatementCollection;
 
-                            if (csc != null)
+                            if (result is CodeStatementCollection csc)
                             {
                                 foreach (CodeStatement statement in csc)
                                 {
@@ -269,9 +266,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                CodeStatement cs = result as CodeStatement;
-
-                                if (cs != null)
+                                if (result is CodeStatement cs)
                                 {
                                     statements.Add(cs);
                                 }
@@ -375,9 +370,8 @@ namespace System.ComponentModel.Design.Serialization
                     // is related to another member.  If it is, then we will use that 
                     // relationship to construct the property assign statement.  if
                     // it isn't, then we're serialize ourselves.
-                    MemberRelationshipService relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
 
-                    if (relationships != null)
+                    if (manager.GetService(typeof(MemberRelationshipService)) is MemberRelationshipService relationships)
                     {
                         MemberRelationship relationship = relationships[value, property];
 
@@ -441,9 +435,6 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor)
         {
-
-            PropertyDescriptor propertyToSerialize = descriptor as PropertyDescriptor;
-
             if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
@@ -452,7 +443,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (propertyToSerialize == null)
+            if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
@@ -493,9 +484,8 @@ namespace System.ComponentModel.Design.Serialization
             // If we don't have to serialize, we need to make sure there isn't a member
             // relationship with this property.  If there is, we still need to serialize.
 
-            MemberRelationshipService relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
 
-            if (relationships != null)
+            if (manager.GetService(typeof(MemberRelationshipService)) is MemberRelationshipService relationships)
             {
                 MemberRelationship relationship = relationships[value, descriptor];
 

@@ -1240,11 +1240,12 @@ namespace System.Windows.Forms
         {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogChar [" + charCode.ToString() + "]");
+
+#endif
 #endif
             // If we're the top-level form or control, we need to do the mnemonic handling
             //
-            ContainerControl parent = GetContainerControl() as ContainerControl;
-            if (parent != null && charCode != ' ' && ProcessMnemonic(charCode))
+            if (GetContainerControl() is ContainerControl parent && charCode != ' ' && ProcessMnemonic(charCode))
             {
                 return true;
             }
@@ -2070,8 +2071,7 @@ namespace System.Windows.Forms
                         {
                             bool succeeded = false;
 
-                            ContainerControl knowncontainer = c as ContainerControl;
-                            if (knowncontainer != null)
+                            if (c is ContainerControl knowncontainer)
                             {
                                 succeeded = knowncontainer.ActivateControlInternal(this);
                             }

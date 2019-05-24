@@ -376,9 +376,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    WeakRefObject weakRef = InnerList[index] as WeakRefObject;
-
-                    if ((weakRef != null) && (weakRef.IsAlive))
+                    if ((InnerList[index] is WeakRefObject weakRef) && (weakRef.IsAlive))
                     {
                         return weakRef.Target;
                     }

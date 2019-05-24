@@ -160,8 +160,7 @@ namespace System.Windows.Forms
 
         private void OnControlVisibleChanged(object sender, EventArgs e)
         {
-            Control control = sender as Control;
-            if (control != null)
+            if (sender is Control control)
             {
                 if (control.Visible)
                 {

@@ -76,9 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            NativeMethods.IVsPerPropertyBrowsing vsObj = sender.TargetObject as NativeMethods.IVsPerPropertyBrowsing;
-
-            if (vsObj == null)
+            if (!(sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj))
             {
                 return;
             }

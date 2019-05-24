@@ -752,8 +752,7 @@ namespace System.Windows.Forms.Layout
             string diff = string.Empty;
             if (PreferredSize.TraceVerbose)
             {
-                Hashtable propertyHash = element.Properties.GetObject(_lastKnownStateProperty) as Hashtable;
-                if (propertyHash != null)
+                if (element.Properties.GetObject(_lastKnownStateProperty) is Hashtable propertyHash)
                 {
                     foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
                     {

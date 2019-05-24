@@ -40,9 +40,7 @@ namespace System.Windows.Forms
                 }
 
                 object oIndex = (object)index;
-                UnsafeNativeMethods.IHTMLWindow2 htmlWindow2 = NativeHTMLFramesCollection2.Item(ref oIndex)
-                        as UnsafeNativeMethods.IHTMLWindow2;
-                return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
+                return (NativeHTMLFramesCollection2.Item(ref oIndex) is UnsafeNativeMethods.IHTMLWindow2 htmlWindow2) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }
         }
 

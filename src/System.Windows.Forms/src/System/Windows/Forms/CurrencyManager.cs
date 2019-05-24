@@ -341,8 +341,7 @@ namespace System.Windows.Forms
 
         public override void AddNew()
         {
-            IBindingList ibl = list as IBindingList;
-            if (ibl != null)
+            if (list is IBindingList ibl)
             {
                 ibl.AddNew();
             }
@@ -367,14 +366,12 @@ namespace System.Windows.Forms
 
                 // onItemChangedCalled = false;
 
-                IEditableObject iEditableItem = item as IEditableObject;
-                if (iEditableItem != null)
+                if (item is IEditableObject iEditableItem)
                 {
                     iEditableItem.CancelEdit();
                 }
 
-                ICancelAddNew iListWithCancelAddNewSupport = list as ICancelAddNew;
-                if (iListWithCancelAddNewSupport != null)
+                if (list is ICancelAddNew iListWithCancelAddNewSupport)
                 {
                     iListWithCancelAddNewSupport.CancelNew(Position);
                 }
@@ -537,14 +534,12 @@ namespace System.Windows.Forms
                 {
                     object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
 
-                    IEditableObject iEditableItem = item as IEditableObject;
-                    if (iEditableItem != null)
+                    if (item is IEditableObject iEditableItem)
                     {
                         iEditableItem.EndEdit();
                     }
 
-                    ICancelAddNew iListWithCancelAddNewSupport = list as ICancelAddNew;
-                    if (iListWithCancelAddNewSupport != null)
+                    if (list is ICancelAddNew iListWithCancelAddNewSupport)
                     {
                         iListWithCancelAddNewSupport.EndNew(Position);
                     }

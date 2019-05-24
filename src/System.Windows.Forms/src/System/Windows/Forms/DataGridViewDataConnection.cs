@@ -813,8 +813,7 @@ namespace System.Windows.Forms
                         // row is being committed, don't scroll it into view.
                         if (dataConnectionState[DATACONNECTIONSTATE_rowValidatingInAddNew])
                         {
-                            IBindingList ibl = currencyManager.List as IBindingList;
-                            if (ibl != null && ibl.SupportsSorting && ibl.IsSorted)
+                            if (currencyManager.List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
                             {
                                 scrollIntoView = false;
                             }
@@ -864,9 +863,8 @@ namespace System.Windows.Forms
                 Debug.Assert(dataSource is ISupportInitializeNotification);
                 Debug.Assert(dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp]);
 
-                ISupportInitializeNotification dsInit = dataSource as ISupportInitializeNotification;
                 // Unhook the Initialized event.
-                if (dsInit != null)
+                if (dataSource is ISupportInitializeNotification dsInit)
                 {
                     dsInit.Initialized -= new EventHandler(DataSource_Initialized);
                 }
@@ -1127,8 +1125,7 @@ namespace System.Windows.Forms
                     dataMember = string.Empty;
                 }
 
-                ISupportInitializeNotification dsInit = this.dataSource as ISupportInitializeNotification;
-                if (dsInit != null && dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
+                if (this.dataSource is ISupportInitializeNotification dsInit && dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
                 {
                     // If we previously hooked the data source's ISupportInitializeNotification
                     // Initialized event, then unhook it now (we don't always hook this event,
@@ -1463,8 +1460,7 @@ namespace System.Windows.Forms
                             ProcessException(exception, dgvce, false /*beginEdit*/);
                         }
 
-                        IEditableObject iEditObj = currencyManager.Current as IEditableObject;
-                        if (iEditObj != null)
+                        if (currencyManager.Current is IEditableObject iEditObj)
                         {
                             iEditObj.BeginEdit();
                         }
@@ -1548,8 +1544,7 @@ namespace System.Windows.Forms
                     e.Cancel = true;
                     if (beginEdit)
                     {
-                        IEditableObject iEditObj = currencyManager.Current as IEditableObject;
-                        if (iEditObj != null)
+                        if (currencyManager.Current is IEditableObject iEditObj)
                         {
                             iEditObj.BeginEdit();
                         }
@@ -1624,8 +1619,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                CurrencyManager cm = owner.BindingContext[newDataSource] as CurrencyManager;
-                if (cm == null)
+                if (!(owner.BindingContext[newDataSource] is CurrencyManager cm))
                 {
                     // if we don't have a currency manager then the data member can be valid
                     return false;

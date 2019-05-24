@@ -311,8 +311,7 @@ namespace System.Windows.Forms
                 {
                     parent = Owner;
                 }
-                ToolStripDropDownMenu dropDownMenu = parent as ToolStripDropDownMenu;
-                if (dropDownMenu != null)
+                if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
                     return false;
                 }
@@ -456,8 +455,7 @@ namespace System.Windows.Forms
                 return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
             }
 
-            ToolStripDropDownMenu dropDownMenu = parent as ToolStripDropDownMenu;
-            if (dropDownMenu != null)
+            if (parent is ToolStripDropDownMenu dropDownMenu)
             {
                 return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), ToolStrip_SEPARATORTHICKNESS);
             }
@@ -506,9 +504,7 @@ namespace System.Windows.Forms
 
         internal protected override void SetBounds(Rectangle rect)
         {
-
-            ToolStripDropDownMenu dropDownMenu = Owner as ToolStripDropDownMenu;
-            if (dropDownMenu != null)
+            if (Owner is ToolStripDropDownMenu dropDownMenu)
             {
 
                 // Scooch over by the padding amount.  The padding is added to 

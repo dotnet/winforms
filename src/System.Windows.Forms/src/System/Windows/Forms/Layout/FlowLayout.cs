@@ -387,8 +387,7 @@ namespace System.Windows.Forms.Layout
                             value.X = DisplayRect.Right - value.Right;
                         }
 
-                        FlowLayoutPanel flp = Container as FlowLayoutPanel;
-                        if (flp != null)
+                        if (Container is FlowLayoutPanel flp)
                         {
                             Point ptScroll = flp.AutoScrollPosition;
                             if (ptScroll != Point.Empty)
@@ -471,14 +470,12 @@ namespace System.Windows.Forms.Layout
             // used when you want to translate from right to left, but preserve Margin.Right & Margin.Left.
             protected Rectangle RTLTranslateNoMarginSwap(Rectangle bounds)
             {
-
                 Rectangle newBounds = bounds;
 
                 newBounds.X = DisplayRect.Right - bounds.X - bounds.Width + ElementProxy.Margin.Left - ElementProxy.Margin.Right;
 
                 // Since DisplayRect.Right and bounds.X are both adjusted for the AutoScrollPosition, we need add it back here.                
-                FlowLayoutPanel flp = Container as FlowLayoutPanel;
-                if (flp != null)
+                if (Container is FlowLayoutPanel flp)
                 {
                     Point ptScroll = flp.AutoScrollPosition;
                     if (ptScroll != Point.Empty)
@@ -745,8 +742,7 @@ namespace System.Windows.Forms.Layout
             //We cannot apply any of these checks @ design-time since dragging new children into a FlowLayoutPanel
             //will attempt to set the children at the mouse position when the child was dropped - we rely on the controil
             //to reposition the children once added.
-            Control flp = container as Control;
-            if (flp != null && flp.Site != null && flp.Site.DesignMode)
+            if (container is Control flp && flp.Site != null && flp.Site.DesignMode)
             {
                 return;
             }

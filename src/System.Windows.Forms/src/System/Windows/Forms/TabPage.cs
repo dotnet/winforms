@@ -116,8 +116,7 @@ namespace System.Windows.Forms
                     return color;
                 }
                 // If user has not set a color and if theming ON  and Parent's appearance is Normal, then return the Transparent Color....
-                TabControl parent = ParentInternal as TabControl;
-                if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal))
+                if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
                 {
                     return Color.Transparent;
                 }
@@ -196,9 +195,8 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
 
-                TabControl parent = ParentInternal as TabControl;
 
-                if (parent != null)
+                if (ParentInternal is TabControl parent)
                 {
                     ImageIndexer.ImageList = parent.ImageList;
                 }
@@ -230,9 +228,8 @@ namespace System.Windows.Forms
             {
                 ImageIndexer.Key = value;
 
-                TabControl parent = ParentInternal as TabControl;
 
-                if (parent != null)
+                if (ParentInternal is TabControl parent)
                 {
                     ImageIndexer.ImageList = parent.ImageList;
                 }
@@ -641,9 +638,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnEnter(EventArgs e)
         {
-            TabControl parent = ParentInternal as TabControl;
-
-            if (parent != null)
+            if (ParentInternal is TabControl parent)
             {
                 if (enterFired)
                 {
@@ -669,9 +664,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
-            TabControl parent = ParentInternal as TabControl;
-
-            if (parent != null)
+            if (ParentInternal is TabControl parent)
             {
                 if (leaveFired)
                 {
@@ -684,7 +677,6 @@ namespace System.Windows.Forms
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-
             // Utilize the TabRenderer new to Whidbey to draw the tab pages so that the
             // panels are drawn using the correct visual styles when the application supports using visual
             // styles.
@@ -692,8 +684,7 @@ namespace System.Windows.Forms
             // Does this application utilize Visual Styles?
             // Utilize the UseVisualStyleBackColor property to determine whether or
             // not the themed background should be utilized.
-            TabControl parent = ParentInternal as TabControl;
-            if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal))
+            if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
             {
 
                 Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : BackColor;
@@ -771,9 +762,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateParent()
         {
-            TabControl parent = ParentInternal as TabControl;
-
-            if (parent != null)
+            if (ParentInternal is TabControl parent)
             {
                 parent.UpdateTab(this);
             }

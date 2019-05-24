@@ -48,8 +48,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
                             {
                                 dataGridViewCell.ActiveLinkColorInternal = value;
                             }
@@ -117,8 +116,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
                             {
                                 dataGridViewCell.LinkBehaviorInternal = value;
                             }
@@ -155,8 +153,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
                             {
                                 dataGridViewCell.LinkColorInternal = value;
                             }
@@ -206,8 +203,7 @@ namespace System.Windows.Forms
                             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                             {
                                 DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                                DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                                if (dataGridViewCell != null && dataGridViewCell.UseColumnTextForLinkValue)
+                                if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell && dataGridViewCell.UseColumnTextForLinkValue)
                                 {
                                     DataGridView.OnColumnCommonChange(Index);
                                     return;
@@ -247,8 +243,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
                             {
                                 dataGridViewCell.TrackVisitedStateInternal = value;
                             }
@@ -286,8 +281,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
                             {
                                 dataGridViewCell.UseColumnTextForLinkValueInternal = value;
                             }
@@ -324,8 +318,7 @@ namespace System.Windows.Forms
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewLinkCell dataGridViewCell = dataGridViewRow.Cells[Index] as DataGridViewLinkCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
                             {
                                 dataGridViewCell.VisitedLinkColorInternal = value;
                             }

@@ -540,8 +540,7 @@ namespace System.Windows.Forms
             {
                 if (HasHeaderCell)
                 {
-                    string headerValue = HeaderCell.Value as string;
-                    if (headerValue != null)
+                    if (HeaderCell.Value is string headerValue)
                     {
                         return headerValue;
                     }

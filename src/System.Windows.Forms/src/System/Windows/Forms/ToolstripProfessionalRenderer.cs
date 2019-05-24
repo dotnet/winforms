@@ -240,9 +240,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripDropDownItem item = e.Item as ToolStripDropDownItem;
 
-            if (item != null && item.Pressed && item.HasDropDownItems)
+            if (e.Item is ToolStripDropDownItem item && item.Pressed && item.HasDropDownItems)
             {
                 Rectangle bounds = new Rectangle(Point.Empty, item.Size);
 
@@ -273,10 +272,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripSplitButton item = e.Item as ToolStripSplitButton;
             Graphics g = e.Graphics;
 
-            if (item != null)
+            if (e.Item is ToolStripSplitButton item)
             {
 
                 Rectangle bounds = new Rectangle(Point.Empty, item.Size);
@@ -769,8 +767,7 @@ namespace System.Windows.Forms
                 ToolStripMenuItem item = e.Item as ToolStripMenuItem;
                 if (item.CheckState != CheckState.Unchecked)
                 {
-                    ToolStripDropDownMenu dropDownMenu = item.ParentInternal as ToolStripDropDownMenu;
-                    if (dropDownMenu != null && !dropDownMenu.ShowCheckMargin && dropDownMenu.ShowImageMargin)
+                    if (item.ParentInternal is ToolStripDropDownMenu dropDownMenu && !dropDownMenu.ShowCheckMargin && dropDownMenu.ShowImageMargin)
                     {
                         RenderCheckBackground(e);
                     }
@@ -1213,10 +1210,9 @@ namespace System.Windows.Forms
 
         private void RenderToolStripDropDownBorder(ToolStripRenderEventArgs e)
         {
-            ToolStripDropDown toolStripDropDown = e.ToolStrip as ToolStripDropDown;
             Graphics g = e.Graphics;
 
-            if (toolStripDropDown != null)
+            if (e.ToolStrip is ToolStripDropDown toolStripDropDown)
             {
                 Rectangle bounds = new Rectangle(Point.Empty, toolStripDropDown.Size);
 
@@ -1506,8 +1502,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // offset after the image margin
-                    ToolStripDropDownMenu dropDownMenu = item.GetCurrentParent() as ToolStripDropDownMenu;
-                    if (dropDownMenu != null)
+                    if (item.GetCurrentParent() is ToolStripDropDownMenu dropDownMenu)
                     {
                         if (dropDownMenu.RightToLeft == RightToLeft.No)
                         {

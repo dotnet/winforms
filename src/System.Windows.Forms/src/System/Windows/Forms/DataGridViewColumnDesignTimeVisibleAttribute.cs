@@ -53,8 +53,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            DataGridViewColumnDesignTimeVisibleAttribute other = obj as DataGridViewColumnDesignTimeVisibleAttribute;
-            return other != null && other.Visible == visible;
+            return obj is DataGridViewColumnDesignTimeVisibleAttribute other && other.Visible == visible;
         }
 
         public override int GetHashCode()

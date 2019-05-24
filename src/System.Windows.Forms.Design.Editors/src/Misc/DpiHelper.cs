@@ -564,8 +564,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            Bitmap buttonBitmap = button.Image as Bitmap;
-            if (buttonBitmap == null)
+            if (!(button.Image is Bitmap buttonBitmap))
             {
                 return;
             }

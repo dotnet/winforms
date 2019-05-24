@@ -1710,8 +1710,7 @@ namespace System.Windows.Forms
 #endif
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventReadOnly] as EventHandler;
-            if (eh != null)
+            if (Events[EventReadOnly] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1719,8 +1718,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnMappingNameChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventMappingName] as EventHandler;
-            if (eh != null)
+            if (Events[EventMappingName] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1728,8 +1726,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAlternatingBackColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventAlternatingBackColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventAlternatingBackColor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1737,8 +1734,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnForeColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventBackColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventBackColor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1746,8 +1742,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnBackColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventForeColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventForeColor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1755,120 +1750,105 @@ namespace System.Windows.Forms
 
         protected virtual void OnAllowSortingChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventAllowSorting] as EventHandler;
-            if (eh != null)
+            if (Events[EventAllowSorting] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnGridLineColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventGridLineColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventGridLineColor] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnGridLineStyleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventGridLineStyle] as EventHandler;
-            if (eh != null)
+            if (Events[EventGridLineStyle] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnHeaderBackColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventHeaderBackColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventHeaderBackColor] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnHeaderFontChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventHeaderFont] as EventHandler;
-            if (eh != null)
+            if (Events[EventHeaderFont] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnHeaderForeColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventHeaderForeColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventHeaderForeColor] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnLinkColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventLinkColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventLinkColor] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnLinkHoverColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventLinkHoverColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventLinkHoverColor] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnPreferredRowHeightChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventPreferredRowHeight] as EventHandler;
-            if (eh != null)
+            if (Events[EventPreferredRowHeight] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnPreferredColumnWidthChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventPreferredColumnWidth] as EventHandler;
-            if (eh != null)
+            if (Events[EventPreferredColumnWidth] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnColumnHeadersVisibleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventColumnHeadersVisible] as EventHandler;
-            if (eh != null)
+            if (Events[EventColumnHeadersVisible] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnRowHeadersVisibleChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventRowHeadersVisible] as EventHandler;
-            if (eh != null)
+            if (Events[EventRowHeadersVisible] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnRowHeaderWidthChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventRowHeaderWidth] as EventHandler;
-            if (eh != null)
+            if (Events[EventRowHeaderWidth] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnSelectionForeColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventSelectionForeColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventSelectionForeColor] is EventHandler eh)
             {
                 eh(this, e);
             }
         }
         protected virtual void OnSelectionBackColorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventSelectionBackColor] as EventHandler;
-            if (eh != null)
+            if (Events[EventSelectionBackColor] is EventHandler eh)
             {
                 eh(this, e);
             }

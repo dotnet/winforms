@@ -455,10 +455,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>        
         private void OnPropsInfoDisposed(object sender, EventArgs e)
         {
-
-            Com2Properties propsInfo = sender as Com2Properties;
-
-            if (propsInfo != null)
+            if (sender is Com2Properties propsInfo)
             {
                 propsInfo.Disposed -= new EventHandler(OnPropsInfoDisposed);
 

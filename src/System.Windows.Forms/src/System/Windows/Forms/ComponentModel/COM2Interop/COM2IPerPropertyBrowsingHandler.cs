@@ -72,8 +72,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            NativeMethods.IPerPropertyBrowsing target = sender.TargetObject as NativeMethods.IPerPropertyBrowsing;
-            if (target != null)
+            if (sender.TargetObject is NativeMethods.IPerPropertyBrowsing target)
             {
                 // we hide IDispatch props by default, we we need to force showing them here
 

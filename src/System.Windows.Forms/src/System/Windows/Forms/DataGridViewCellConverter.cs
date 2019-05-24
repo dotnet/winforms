@@ -32,8 +32,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            DataGridViewCell cell = value as DataGridViewCell;
-            if (destinationType == typeof(InstanceDescriptor) && cell != null)
+            if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewCell cell)
             {
                 ConstructorInfo ctor = cell.GetType().GetConstructor(new Type[0]);
                 if (ctor != null)

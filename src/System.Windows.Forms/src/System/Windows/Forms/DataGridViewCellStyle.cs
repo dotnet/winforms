@@ -633,8 +633,7 @@ namespace System.Windows.Forms
 
         public override bool Equals(object o)
         {
-            DataGridViewCellStyle dgvcs = o as DataGridViewCellStyle;
-            if (dgvcs != null)
+            if (o is DataGridViewCellStyle dgvcs)
             {
                 return GetDifferencesFrom(dgvcs) == DataGridViewCellStyleDifferences.None;
             }

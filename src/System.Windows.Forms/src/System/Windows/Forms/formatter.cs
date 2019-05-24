@@ -403,9 +403,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static bool EqualsFormattedNullValue(object value, object formattedNullValue, IFormatProvider formatInfo)
         {
-            string formattedNullValueStr = formattedNullValue as string;
-            string valueStr = value as string;
-            if (formattedNullValueStr != null && valueStr != null)
+            if (formattedNullValue is string formattedNullValueStr && value is string valueStr)
             {
                 // Use same optimization as in WindowsFormsUtils.SafeCompareStrings(...). This addresses 
                 if (formattedNullValueStr.Length != valueStr.Length)
@@ -551,8 +549,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static TypeConverter NullableUnwrap(TypeConverter typeConverter)
         {
-            NullableConverter nullableConverter = typeConverter as NullableConverter;
-            return (nullableConverter != null) ? nullableConverter.UnderlyingTypeConverter : typeConverter;
+            return (typeConverter is NullableConverter nullableConverter) ? nullableConverter.UnderlyingTypeConverter : typeConverter;
         }
 
         public static object GetDefaultDataSourceNullValue(Type type)

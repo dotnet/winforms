@@ -44,8 +44,7 @@ namespace System.Windows.Forms
             system = new SystemMenuItem();
 
             // However in the event that the target handle changes we have to push the new handle into everyone.
-            Control controlTarget = target as Control;
-            if (controlTarget != null)
+            if (target is Control controlTarget)
             {
                 controlTarget.HandleCreated += new EventHandler(OnTargetWindowHandleRecreated);
                 controlTarget.Disposed += new EventHandler(OnTargetWindowDisposed);
@@ -212,8 +211,7 @@ namespace System.Windows.Forms
         {
             if (target != null)
             {
-                Control controlTarget = target as Control;
-                if (controlTarget != null)
+                if (target is Control controlTarget)
                 {
                     controlTarget.HandleCreated -= new EventHandler(OnTargetWindowHandleRecreated);
                     controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);

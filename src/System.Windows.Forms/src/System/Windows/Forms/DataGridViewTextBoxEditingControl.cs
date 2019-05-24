@@ -350,8 +350,7 @@ namespace System.Windows.Forms
             switch (direction)
             {
                 case UnsafeNativeMethods.NavigateDirection.Parent:
-                    var owner = Owner as IDataGridViewEditingControl;
-                    if (owner != null && owner.EditingControlDataGridView.EditingControl == owner)
+                    if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
                     {
                         return _parentAccessibleObject;
                     }
