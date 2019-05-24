@@ -36,9 +36,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
         private void TestForm_Load(object sender, EventArgs e)
         {
-            this.propertyGrid.SelectedObject = this.domainUpDown;
+            propertyGrid.SelectedObject = domainUpDown;
 
-            PropertyGrid propertyGrid = (PropertyGrid)((Form)sender).Controls[0];
             GridEntryCollection entries = propertyGrid.GetPropEntries();
             PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.ActiveControl;
 
