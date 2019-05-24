@@ -1858,7 +1858,7 @@ namespace System.Windows.Forms
                 // Should we force focus to stay on same control if there is a validation error?
                 bool preventFocusChangeOnError = true;
 
-                Control controlToValidate = unvalidatedControl != null ? unvalidatedControl : focusedControl;
+                Control controlToValidate = unvalidatedControl ?? focusedControl;
 
                 if (controlToValidate != null)
                 {

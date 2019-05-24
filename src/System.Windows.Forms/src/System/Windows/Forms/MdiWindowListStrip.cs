@@ -120,7 +120,7 @@ namespace System.Windows.Forms
                                 (forms[i].Equals(activeMdiChild))))
                             {                            // there's always room for activeMdiChild
                                 string text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
-                                text = (text == null) ? string.Empty : text;
+                                text = text ?? string.Empty;
                                 ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i])
                                 {
                                     Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text),

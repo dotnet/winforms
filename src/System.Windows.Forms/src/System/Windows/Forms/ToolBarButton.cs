@@ -439,7 +439,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (text == null) ? "" : text;
+                return text ?? "";
             }
             set
             {
@@ -474,7 +474,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return tooltipText == null ? "" : tooltipText;
+                return tooltipText ?? "";
             }
             set
             {

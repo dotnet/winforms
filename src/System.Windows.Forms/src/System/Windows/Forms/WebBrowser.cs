@@ -2051,7 +2051,7 @@ namespace System.Windows.Forms
 
             public void StatusTextChange(string text)
             {
-                parent.statusText = (text == null) ? "" : text;
+                parent.statusText = text ?? "";
                 parent.OnStatusTextChanged(EventArgs.Empty);
             }
 

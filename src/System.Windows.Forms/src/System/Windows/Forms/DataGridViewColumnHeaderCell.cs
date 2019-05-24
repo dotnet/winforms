@@ -308,7 +308,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            DataGridViewCellStyle inheritedCellStyleTmp = (inheritedCellStyle == null) ? new DataGridViewCellStyle() : inheritedCellStyle;
+            DataGridViewCellStyle inheritedCellStyleTmp = inheritedCellStyle ?? new DataGridViewCellStyle();
 
             DataGridViewCellStyle cellStyle = null;
             if (HasStyle)

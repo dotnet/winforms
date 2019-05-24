@@ -469,7 +469,7 @@ namespace System.Windows.Forms
 
             if (binding != null && binding.Control != null)
             {
-                SetError(binding.Control, (e.ErrorText == null ? string.Empty : e.ErrorText));
+                SetError(binding.Control, (e.ErrorText ?? string.Empty));
             }
         }
 

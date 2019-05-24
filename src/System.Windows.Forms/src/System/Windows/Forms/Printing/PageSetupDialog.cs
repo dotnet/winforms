@@ -440,7 +440,7 @@ namespace System.Windows.Forms
             data.marginRight = Math.Max(data.marginRight, data.minMarginRight);
             data.marginBottom = Math.Max(data.marginBottom, data.minMarginBottom);
 
-            PrinterSettings printer = (printerSettings == null) ? pageSettings.PrinterSettings : printerSettings;
+            PrinterSettings printer = printerSettings ?? pageSettings.PrinterSettings;
 
             data.hDevMode = printer.GetHdevmode(pageSettings);
             data.hDevNames = printer.GetHdevnames();

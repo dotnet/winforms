@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms.Layout
                         }
                         _state[stateChildInfoValid] = true;
                     }
-                    return (_childInfo == null) ? new LayoutInfo[0] : _childInfo;
+                    return _childInfo ?? (new LayoutInfo[0]);
                 }
             }
 

@@ -128,7 +128,7 @@ namespace System.Windows.Forms
                 set
                 {
                     index = -1;
-                    key = (value == null ? string.Empty : value);
+                    key = (value ?? string.Empty);
                     useIntegerIndex = false;
                 }
             }

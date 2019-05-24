@@ -1838,8 +1838,8 @@ namespace System.Windows.Forms
                 {
                     formattedValue = Formatter.FormatObject(formattedValue,
                                                             FormattedValueType,
-                                                            valueTypeConverter == null ? ValueTypeConverter : valueTypeConverter, /*sourceConverter*/
-                                                            formattedValueTypeConverter == null ? FormattedValueTypeConverter : formattedValueTypeConverter, /*targetConverter*/
+                                                            valueTypeConverter ?? ValueTypeConverter, /*sourceConverter*/
+                                                            formattedValueTypeConverter ?? FormattedValueTypeConverter, /*targetConverter*/
                                                             cellStyle.Format,
                                                             cellStyle.FormatProvider,
                                                             cellStyle.NullValue,
@@ -4346,8 +4346,8 @@ namespace System.Windows.Forms
             return Formatter.ParseObject(formattedValue,
                                          valueType,
                                          FormattedValueType,
-                                         valueTypeConverter == null ? ValueTypeConverter : valueTypeConverter /*sourceConverter*/,
-                                         formattedValueTypeConverter == null ? FormattedValueTypeConverter : formattedValueTypeConverter /*targetConverter*/,
+                                         valueTypeConverter ?? ValueTypeConverter,
+                                         formattedValueTypeConverter ?? FormattedValueTypeConverter,
                                          cellStyle.FormatProvider,
                                          cellStyle.NullValue,
                                          cellStyle.IsDataSourceNullValueDefault ? Formatter.GetDefaultDataSourceNullValue(valueType) : cellStyle.DataSourceNullValue);

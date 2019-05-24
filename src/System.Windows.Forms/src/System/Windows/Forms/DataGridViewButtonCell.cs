@@ -917,7 +917,7 @@ namespace System.Windows.Forms
                                                                                                    cellStyle.ForeColor,
                                                                                                    cellStyle.BackColor,
                                                                                                    DataGridView.Enabled).Calculate();
-                            string text = (formattedString != null) ? formattedString : string.Empty;
+                            string text = formattedString ?? string.Empty;
 
                             ButtonBaseAdapter.LayoutOptions options = ButtonInternal.ButtonFlatAdapter.PaintFlatLayout(g,
                                                                                                                    true,
@@ -948,7 +948,7 @@ namespace System.Windows.Forms
                             // If we are painting the current cell, then paint the text up.
                             // If we are painting the current cell and the current cell is pressed down, then paint the text down.
                             bool paintUp = (ButtonState == ButtonState.Normal);
-                            string text = (formattedString != null) ? formattedString : string.Empty;
+                            string text = formattedString ?? string.Empty;
                             ButtonBaseAdapter.LayoutOptions options = ButtonInternal.ButtonPopupAdapter.PaintPopupLayout(g,
                                                                                                                    paintUp,
                                                                                                                    SystemInformation.HighContrast ? 2 : 1,

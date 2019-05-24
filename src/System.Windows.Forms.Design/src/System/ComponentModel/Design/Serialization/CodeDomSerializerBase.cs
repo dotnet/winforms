@@ -444,7 +444,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (passFilter)
                         {
                             object resourceObject = de.Value;
-                            Trace("Resource: {0}, value: {1}", resourceName, (resourceObject == null ? "(null)" : resourceObject));
+                            Trace("Resource: {0}, value: {1}", resourceName, (resourceObject ?? "(null)"));
                             try
                             {
                                 property.SetValue(value, resourceObject);
@@ -889,7 +889,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (result is CodePrimitiveExpression primitiveEx)
                     {
-                        Trace("Primitive.  Value: {0}", (primitiveEx.Value == null ? "(null)" : primitiveEx.Value));
+                        Trace("Primitive.  Value: {0}", (primitiveEx.Value ?? "(null)"));
                         result = primitiveEx.Value;
                         break;
                     }

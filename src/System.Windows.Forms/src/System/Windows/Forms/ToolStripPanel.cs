@@ -1457,14 +1457,14 @@ namespace System.Windows.Forms
 
                         string fail = string.Format(CultureInfo.CurrentCulture,
                             "OVERLAP detection:\r\n{0}: {1} row {2} row bounds {3}",
-                            c1.Name == null ? "" : c1.Name,
+                            c1.Name ?? "",
                             c1.Bounds,
                             !RowsInternal.Contains(draggedToolStrip1.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip1.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
                             draggedToolStrip1.ToolStripPanelRow.Bounds);
 
                         fail += string.Format(CultureInfo.CurrentCulture,
                             "\r\n{0}: {1} row {2} row bounds {3}",
-                            c2.Name == null ? "" : c2.Name,
+                            c2.Name ?? "",
                             c2.Bounds,
                             !RowsInternal.Contains(draggedToolStrip2.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip2.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
                             draggedToolStrip2.ToolStripPanelRow.Bounds);

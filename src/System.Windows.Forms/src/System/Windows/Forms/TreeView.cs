@@ -3042,7 +3042,7 @@ namespace System.Windows.Forms
                                 //Simulate default text drawing here
                                 TreeNodeStates curState = e.State;
 
-                                Font font = (node.NodeFont != null) ? node.NodeFont : node.TreeView.Font;
+                                Font font = node.NodeFont ?? node.TreeView.Font;
                                 Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
 
                                 // Draw the actual node.

@@ -224,7 +224,7 @@ namespace System.Windows.Forms
             IContainer rval = GetParentIContainer();
             Debug.Assert(rval == null || assocContainer == null || rval == assocContainer,
                          "mismatch between getIPD & aContainer");
-            return rval == null ? assocContainer : rval;
+            return rval ?? assocContainer;
         }
 
         private IContainer GetParentIContainer()

@@ -79,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 if (value != null)
                 {
                     string str = com2Enum.ToString(value);
-                    return (str == null ? "" : str);
+                    return (str ?? "");
                 }
             }
 

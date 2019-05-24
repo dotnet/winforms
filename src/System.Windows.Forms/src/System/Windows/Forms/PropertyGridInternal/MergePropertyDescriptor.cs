@@ -356,7 +356,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            return (collection != null ? collection : obj);
+            return (collection ?? obj);
         }
 
         internal object[] GetValues(Array components)

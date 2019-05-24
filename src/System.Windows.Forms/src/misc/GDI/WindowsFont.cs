@@ -147,7 +147,7 @@ namespace System.Experimental.Gdi
             // provides the closest match for the character height rather than the cell height (MSDN).
             //
             logFont.lfHeight = -pixelsY;
-            logFont.lfFaceName = faceName != null ? faceName : defaultFaceName;
+            logFont.lfFaceName = faceName ?? defaultFaceName;
             logFont.lfCharSet = charSet;
             logFont.lfOutPrecision = IntNativeMethods.OUT_TT_PRECIS;
             logFont.lfQuality = (byte)fontQuality;

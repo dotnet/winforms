@@ -13305,7 +13305,7 @@ namespace System.Windows.Forms
 
         internal bool OnCellValidating(ref DataGridViewCell dataGridViewCell, int columnIndex, int rowIndex, DataGridViewDataErrorContexts context)
         {
-            DataGridViewCell currentCell = (dataGridViewCell == null) ? CurrentCellInternal : dataGridViewCell;
+            DataGridViewCell currentCell = dataGridViewCell ?? CurrentCellInternal;
             DataGridViewCellStyle dataGridViewCellStyle = currentCell.GetInheritedStyle(null, rowIndex, false);
             object val = currentCell.GetValueInternal(rowIndex);
             object editedFormattedValue = currentCell.GetEditedFormattedValue(val, rowIndex, ref dataGridViewCellStyle, context);

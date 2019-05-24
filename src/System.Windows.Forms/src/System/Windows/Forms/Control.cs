@@ -4330,7 +4330,7 @@ namespace System.Windows.Forms
             {
                 if (CacheTextInternal)
                 {
-                    return (text == null) ? "" : text;
+                    return text ?? "";
                 }
                 else
                 {
@@ -20083,7 +20083,7 @@ namespace System.Windows.Forms
                     Debug.Indent();
                     for (int i = current - fetched; i < current; i++)
                     {
-                        Debug.WriteLine(i.ToString(CultureInfo.InvariantCulture) + ": " + verbs[i].lVerb + " " + (verbs[i].lpszVerbName == null ? string.Empty : verbs[i].lpszVerbName));
+                        Debug.WriteLine(i.ToString(CultureInfo.InvariantCulture) + ": " + verbs[i].lVerb + " " + (verbs[i].lpszVerbName ?? string.Empty));
                     }
                     Debug.Unindent();
                 }

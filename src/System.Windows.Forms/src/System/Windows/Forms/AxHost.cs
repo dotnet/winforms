@@ -5883,7 +5883,7 @@ namespace System.Windows.Forms
             internal string GetNameForControl(Control ctl)
             {
                 string name = (ctl.Site != null) ? ctl.Site.Name : ctl.Name;
-                return (name == null) ? "" : name;
+                return name ?? "";
             }
 
             internal object GetProxyForContainer()
@@ -6208,7 +6208,7 @@ namespace System.Windows.Forms
                 IContainer rval = GetParentIsDesigned();
                 Debug.Assert(rval == null || assocContainer == null || (rval == assocContainer),
                              "mismatch between getIPD & aContainer");
-                return rval == null ? assocContainer : rval;
+                return rval ?? assocContainer;
             }
 
             private bool RegisterControl(AxHost ctl)
@@ -6570,7 +6570,7 @@ namespace System.Windows.Forms
 
             int UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(UnsafeNativeMethods.IOleInPlaceActiveObject pActiveObject, string pszObjName)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + ((pszObjName == null) ? "<null>" : pszObjName));
+                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + (pszObjName ?? "<null>"));
                 if (siteUIActive != null)
                 {
                     if (siteUIActive.iOleInPlaceActiveObjectExternal != pActiveObject)
@@ -7724,7 +7724,7 @@ namespace System.Windows.Forms
                     {
                         UpdateTypeConverterAndTypeEditorInternal(false, Dispid);
                     }
-                    return (converter != null) ? converter : base.Converter;
+                    return converter ?? base.Converter;
                 }
             }
 

@@ -411,7 +411,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(DataGridView != null);
 
-            DataGridViewCellStyle inheritedCellStyleTmp = (inheritedCellStyle == null) ? new DataGridViewCellStyle() : inheritedCellStyle;
+            DataGridViewCellStyle inheritedCellStyleTmp = inheritedCellStyle ?? new DataGridViewCellStyle();
 
             DataGridViewCellStyle cellStyle = null;
             if (HasStyle)

@@ -838,7 +838,7 @@ namespace System.Windows.Forms
             get
             {
                 string matchingText = (string)Properties.GetObject(PropMatchingText);
-                return (matchingText == null) ? string.Empty : matchingText;
+                return matchingText ?? string.Empty;
             }
             set
             {
@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms
                 {
                     //guard against null string, since otherwise we will throw an
                     //AccessViolation exception, which is bad
-                    string str = (value == null ? "" : value);
+                    string str = (value ?? "");
                     CreateControl();
                     if (IsHandleCreated)
                     {

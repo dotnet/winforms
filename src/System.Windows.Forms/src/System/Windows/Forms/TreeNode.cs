@@ -1183,7 +1183,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return text == null ? "" : text;
+                return text ?? "";
             }
             set
             {
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return name == null ? "" : name;
+                return name ?? "";
             }
             set
             {
@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "TreeNode: " + (text == null ? "" : text);
+            return "TreeNode: " + (text ?? "");
         }
 
         /// <summary>

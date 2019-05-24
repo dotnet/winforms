@@ -652,7 +652,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (headerFont == null ? (DataGrid == null ? Control.DefaultFont : DataGrid.Font) : headerFont);
+                return (headerFont ?? (DataGrid == null ? Control.DefaultFont : DataGrid.Font));
             }
             set
             {

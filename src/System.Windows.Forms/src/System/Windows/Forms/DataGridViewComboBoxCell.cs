@@ -1734,7 +1734,7 @@ namespace System.Windows.Forms
             {
                 //Now look up the item in the Combobox datasource - this can be horribly inefficient
                 //and it uses reflection which makes it expensive - ripe for optimization
-                item = ItemFromComboBoxDataSource(ValueMemberProperty != null ? ValueMemberProperty : DisplayMemberProperty, value);
+                item = ItemFromComboBoxDataSource(ValueMemberProperty ?? DisplayMemberProperty, value);
             }
             else
             {
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms
             {
                 //Now look up the item in the DataGridViewComboboxCell datasource - this can be horribly inefficient
                 //and it uses reflection which makes it expensive - ripe for optimization
-                item = ItemFromComboBoxDataSource(DisplayMemberProperty != null ? DisplayMemberProperty : ValueMemberProperty, formattedValue);
+                item = ItemFromComboBoxDataSource(DisplayMemberProperty ?? ValueMemberProperty, formattedValue);
             }
             else
             {

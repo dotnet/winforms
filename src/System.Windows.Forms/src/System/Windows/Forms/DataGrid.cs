@@ -1780,7 +1780,7 @@ namespace System.Windows.Forms
 
                 // update the dataSource and the dateMember
                 dataSource = newDataSource;
-                dataMember = newDataMember == null ? "" : newDataMember;
+                dataMember = newDataMember ?? "";
 
                 listManagerChanged = (listManager != oldListManager);
 
@@ -2366,7 +2366,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (headerFont == null ? Font : headerFont);
+                return (headerFont ?? Font);
             }
             set
             {

@@ -206,7 +206,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return (toolTipText != null ? toolTipText : base.LabelToolTipText);
+                return (toolTipText ?? base.LabelToolTipText);
             }
         }
 
@@ -760,7 +760,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (host != null)
                 {
-                    string text = (undoText == null ? string.Format(SR.PropertyGridSetValue, propertyInfo.Name) : undoText);
+                    string text = (undoText ?? string.Format(SR.PropertyGridSetValue, propertyInfo.Name));
                     trans = host.CreateTransaction(text);
                 }
 

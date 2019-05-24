@@ -838,7 +838,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 continue;
                             }
 
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name == null ? "(null)" : name) + ", helpstring=" + (helpstr == null ? "(null)" : helpstr));
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name ?? "(null)") + ", helpstring=" + (helpstr ?? "(null)"));
 
                             // get the value
                             try

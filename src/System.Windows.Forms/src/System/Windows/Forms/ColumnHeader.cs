@@ -329,7 +329,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (text != null ? text : "ColumnHeader");
+                return (text ?? "ColumnHeader");
             }
             set
             {

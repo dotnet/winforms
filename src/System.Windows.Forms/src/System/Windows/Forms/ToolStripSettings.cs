@@ -188,7 +188,7 @@ namespace System.Windows.Forms
 
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
-                itemNames.Append((toolStrip.Items[i].Name == null) ? "null" : toolStrip.Items[i].Name);
+                itemNames.Append(toolStrip.Items[i].Name ?? "null");
                 if (i != toolStrip.Items.Count - 1)
                 {
                     itemNames.Append(',');
