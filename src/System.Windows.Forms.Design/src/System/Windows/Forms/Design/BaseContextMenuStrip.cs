@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Design
                 Font = (Font)uis.Styles["DialogFont"];
             }
 
-            foreach (ToolStripItem item in this.Items)
+            foreach (ToolStripItem item in Items)
             {
                 if (item is StandardCommandToolStripMenuItem stdItem)
                 {

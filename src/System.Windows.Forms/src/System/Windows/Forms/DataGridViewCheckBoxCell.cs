@@ -1720,9 +1720,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (((DataGridViewCheckBoxCell)Owner).EditedFormattedValue is CheckState)
+                    if ((Owner as DataGridViewCheckBoxCell).EditedFormattedValue is CheckState state)
                     {
-                        CheckState state = (CheckState)(((DataGridViewCheckBoxCell)Owner).EditedFormattedValue);
                         switch (state)
                         {
                             case CheckState.Checked:
@@ -1731,9 +1730,9 @@ namespace System.Windows.Forms
                                 return AccessibleStates.Indeterminate | base.State;
                         }
                     }
-                    else if (((DataGridViewCheckBoxCell)Owner).EditedFormattedValue is bool state)
+                    else if ((Owner as DataGridViewCheckBoxCell).EditedFormattedValue is bool stateAsBool)
                     {
-                        if (state)
+                        if (stateAsBool)
                         {
                             return AccessibleStates.Checked | base.State;
                         }

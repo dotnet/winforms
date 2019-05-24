@@ -132,20 +132,20 @@ namespace System.Windows.Forms.Design
                 {
                     checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
                     showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
-                    this.AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
+                    AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
                 }
                 else
                 {
                     if (selectedItem is ToolStripLabel)
                     {
                         isLinkToolStripMenuItem = CreateBooleanItem("IsLin&k", "IsLink");
-                        this.Add(isLinkToolStripMenuItem);
+                        Add(isLinkToolStripMenuItem);
                     }
 
                     if (selectedItem is ToolStripStatusLabel)
                     {
                         springToolStripMenuItem = CreateBooleanItem("Sprin&g", "Spring");
-                        this.Add(springToolStripMenuItem);
+                        Add(springToolStripMenuItem);
                     }
 
                     leftToolStripMenuItem = CreateEnumValueItem("Alignment", "Left", ToolStripItemAlignment.Left);
@@ -180,10 +180,10 @@ namespace System.Windows.Forms.Design
                             displayStyleToolStripMenuItem.DropDown.ForeColor = panelTextColor;
                         }
                     }
-                    this.AddRange(new System.Windows.Forms.ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
+                    AddRange(new System.Windows.Forms.ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
                 }
                 toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-                this.Add(toolStripSeparator1);
+                Add(toolStripSeparator1);
             }
 
             convertToolStripMenuItem = new ToolStripMenuItem
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Design
                 DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), false, serviceProvider, true)
             };
 
-            this.AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
+            AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
 
             if (currentItem is ToolStripDropDownItem)
             {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Design
                         editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
                         editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist.bmp").ToBitmap();
                         editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
-                        this.Add(editItemsToolStripMenuItem);
+                        Add(editItemsToolStripMenuItem);
                     }
                 }
             }

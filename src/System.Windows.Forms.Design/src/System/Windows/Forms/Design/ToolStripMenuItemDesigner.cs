@@ -1477,7 +1477,7 @@ namespace System.Windows.Forms.Design
                 MenuItem.DropDownClosed += new EventHandler(DropDownItem_DropDownClosed);
                 MenuItem.DropDown.Resize += new System.EventHandler(DropDownResize);
                 MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
-                MenuItem.DropDown.Paint += new PaintEventHandler(this.DropDownPaint);
+                MenuItem.DropDown.Paint += new PaintEventHandler(DropDownPaint);
                 MenuItem.DropDown.Click += new EventHandler(DropDownClick);
                 MenuItem.DropDown.LocationChanged += new EventHandler(DropDownLocationChanged);
             }

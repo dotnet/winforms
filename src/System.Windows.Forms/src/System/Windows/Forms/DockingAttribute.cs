@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute
     {
-        private readonly DockingBehavior dockingBehavior;
+        private readonly DockingBehavior _dockingBehavior;
 
         /// <summary>
         ///    <para>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DockingAttribute()
         {
-            dockingBehavior = DockingBehavior.Never;
+            _dockingBehavior = DockingBehavior.Never;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior)
         {
-            dockingBehavior = dockingBehavior;
+            _dockingBehavior = dockingBehavior;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return dockingBehavior;
+                return _dockingBehavior;
             }
         }
 
@@ -66,12 +66,12 @@ namespace System.Windows.Forms
             }
 
 
-            return (obj is DockingAttribute other) && other.DockingBehavior == dockingBehavior;
+            return (obj is DockingAttribute other && other.DockingBehavior == DockingBehavior);
         }
 
         public override int GetHashCode()
         {
-            return dockingBehavior.GetHashCode();
+            return DockingBehavior.GetHashCode();
         }
 
         /// <summary>

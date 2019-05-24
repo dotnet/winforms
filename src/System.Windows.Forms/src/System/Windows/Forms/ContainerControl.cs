@@ -1239,7 +1239,6 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogChar [" + charCode.ToString() + "]");
 
 #endif
-#endif
             // If we're the top-level form or control, we need to do the mnemonic handling
             //
             if (GetContainerControl() is ContainerControl parent && charCode != ' ' && ProcessMnemonic(charCode))

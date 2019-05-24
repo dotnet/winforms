@@ -452,7 +452,7 @@ namespace System.ComponentModel.Design
             else if (g != null)
             {
                 // we need to recreate the panel here, since it's content has changed...
-                RecreatePanel(relatedComponent);
+                RecreatePanel(e.RelatedObject as IComponent);
             }
         }
 

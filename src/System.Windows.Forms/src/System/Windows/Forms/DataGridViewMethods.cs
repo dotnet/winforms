@@ -13698,7 +13698,6 @@ namespace System.Windows.Forms
             Debug.Assert(Columns.VerifyColumnDisplayIndexes());
 
 #endif
-#endif
             if (Events[EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
