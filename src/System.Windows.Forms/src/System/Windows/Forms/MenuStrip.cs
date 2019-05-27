@@ -37,7 +37,8 @@ namespace System.Windows.Forms
 
         internal override bool KeyboardActive
         {
-            get { return base.KeyboardActive; }
+            get => base.KeyboardActive;
+
             set
             {
                 if (base.KeyboardActive != value)
@@ -64,41 +65,25 @@ namespace System.Windows.Forms
         ]
         public new bool CanOverflow
         {
-            get
-            {
-                return base.CanOverflow;
-            }
-            set
-            {
-                base.CanOverflow = value;
-            }
+            get => base.CanOverflow;
+            set => base.CanOverflow = value;
         }
-        protected override bool DefaultShowItemToolTips
-        {
-            get
-            {
-                return false;
-            }
-        }
-        protected override Padding DefaultGripMargin
-        {
-            get
-            {
+        protected override bool DefaultShowItemToolTips 
+            => false;
+
+        protected override Padding DefaultGripMargin 
+            =>
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Ensure grip aligns properly when set visible.
-                return DpiHelper.IsPerMonitorV2Awareness ? 
+                DpiHelper.IsPerMonitorV2Awareness ?
                        DpiHelper.LogicalToDeviceUnits(new Padding(2, 2, 0, 2), DeviceDpi) :
-                       new Padding(2, 2, 0, 2);            }
-        }
+                       new Padding(2, 2, 0, 2);
 
         /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
-        protected override Size DefaultSize {
-            get {
-                return DpiHelper.IsPerMonitorV2Awareness ?
-                       DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
-                       new Size(200, 24);
-            }
-        }
+        protected override Size DefaultSize 
+            => DpiHelper.IsPerMonitorV2Awareness ?
+               DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
+               new Size(200, 24);
 
         protected override Padding DefaultPadding
         {
@@ -106,28 +91,23 @@ namespace System.Windows.Forms
             {
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Scoot the grip over when present
-                if (GripStyle == ToolStripGripStyle.Visible) {
-                    return DpiHelper.IsPerMonitorV2Awareness ? 
+                if (GripStyle == ToolStripGripStyle.Visible)
+                {
+                    return DpiHelper.IsPerMonitorV2Awareness ?
                            DpiHelper.LogicalToDeviceUnits(new Padding(3, 2, 0, 2), DeviceDpi) :
                            new Padding(3, 2, 0, 2);
                 }
-                return DpiHelper.IsPerMonitorV2Awareness ? 
+                return DpiHelper.IsPerMonitorV2Awareness ?
                        DpiHelper.LogicalToDeviceUnits(new Padding(6, 2, 0, 2), DeviceDpi) :
                        new Padding(6, 2, 0, 2);
-             }
+            }
         }
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
         public new ToolStripGripStyle GripStyle
         {
-            get
-            {
-                return base.GripStyle;
-            }
-            set
-            {
-                base.GripStyle = value;
-            }
+            get => base.GripStyle;
+            set => base.GripStyle = value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
@@ -149,14 +129,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         public new bool ShowItemToolTips
         {
-            get
-            {
-                return base.ShowItemToolTips;
-            }
-            set
-            {
-                base.ShowItemToolTips = value;
-            }
+            get => base.ShowItemToolTips;
+            set => base.ShowItemToolTips = value;
         }
 
         [DefaultValue(true)]
@@ -164,14 +138,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripStretchDescr))]
         public new bool Stretch
         {
-            get
-            {
-                return base.Stretch;
-            }
-            set
-            {
-                base.Stretch = value;
-            }
+            get => base.Stretch;
+            set => base.Stretch = value;
         }
 
         [DefaultValue(null)]
@@ -181,20 +149,13 @@ namespace System.Windows.Forms
         [TypeConverterAttribute(typeof(MdiWindowListItemConverter))]
         public ToolStripMenuItem MdiWindowListItem
         {
-            get
-            {
-                return mdiWindowListItem;
-            }
-            set
-            {
-                mdiWindowListItem = value;
-            }
+            get => mdiWindowListItem;
+            set => mdiWindowListItem = value;
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new MenuStripAccessibleObject(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() 
+            => new MenuStripAccessibleObject(this);
+
         protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
         {
             if (text == "-")
@@ -263,7 +224,6 @@ namespace System.Windows.Forms
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
-
             if (ToolStripManager.ModalMenuFilter.InMenuMode)
             {
                 // ALT, then space should dismiss the menu and activate the system menu.
@@ -284,7 +244,6 @@ namespace System.Windows.Forms
                 }
             }
             return base.ProcessCmdKey(ref m, keyData);
-
 
         }
         /// <summary>
@@ -342,6 +301,5 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
         }
-
     }
 }

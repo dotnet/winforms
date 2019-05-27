@@ -189,16 +189,17 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override int DeviceDpi {
-            get {
-                return base.DeviceDpi;
-            }
+        internal override int DeviceDpi
+        {
+            get => base.DeviceDpi;
 
             // This gets called via ToolStripItem.RescaleConstantsForDpi.
             // It's practically calling Initialize on DpiChanging with the new Dpi value.
             // ToolStripItem.RescaleConstantsForDpi is already behind quirks.
-            set {
-                if (base.DeviceDpi != value) {
+            set
+            {
+                if (base.DeviceDpi != value)
+                {
                     base.DeviceDpi = value;
                     standardButtonWidth = DpiHelper.LogicalToDeviceUnits(STANDARD_BUTTON_WIDTH, DeviceDpi);
                 }

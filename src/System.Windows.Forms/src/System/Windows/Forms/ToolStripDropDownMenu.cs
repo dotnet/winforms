@@ -53,13 +53,13 @@ namespace System.Windows.Forms
         private static readonly Size DefaultImageSize = new Size(16, 16);
 
         private Size scaledDefaultImageSize = DefaultImageSize;
-        private readonly int scaledDefaultImageMarginWidth = DefaultImageMarginWidth + 1; // 1px for border
-        private readonly int scaledDefaultImageAndCheckMarginWidth = DefaultImageAndCheckMarginWidth + 1; // 1px for border
+        private int scaledDefaultImageMarginWidth = DefaultImageMarginWidth + 1; // 1px for border
+        private int scaledDefaultImageAndCheckMarginWidth = DefaultImageAndCheckMarginWidth + 1; // 1px for border
         private Padding scaledImagePadding = ImagePadding;
         private Padding scaledTextPadding = TextPadding;
         private Padding scaledCheckPadding = CheckPadding;
         private Padding scaledArrowPadding = ArrowPadding;
-        private readonly int scaledArrowSize = ArrowSize;
+        private int scaledArrowSize = ArrowSize;
 
         /// <summary>
         /// Summary of ToolStripDropDown.
@@ -86,31 +86,15 @@ namespace System.Windows.Forms
 
         internal override bool AllItemsVisible
         {
-            get
-            {
-                return !RequiresScrollButtons;
-            }
-            set
-            {
-                RequiresScrollButtons = !value;
-            }
+            get => !RequiresScrollButtons;
+            set => RequiresScrollButtons = !value;
         }
 
-        internal Rectangle ArrowRectangle
-        {
-            get
-            {
-                return arrowRectangle;
-            }
-        }
+        internal Rectangle ArrowRectangle 
+            => arrowRectangle;
 
-        internal Rectangle CheckRectangle
-        {
-            get
-            {
-                return checkRectangle;
-            }
-        }
+        internal Rectangle CheckRectangle 
+            => checkRectangle;
 
         protected override Padding DefaultPadding
         {
@@ -126,6 +110,7 @@ namespace System.Windows.Forms
                 {
                     return new Padding(1, 2, padding, 2);
                 }
+
                 return new Padding(padding, 2, 1, 2);
             }
         }
@@ -143,6 +128,7 @@ namespace System.Windows.Forms
                     // Because we're going to draw the scroll buttons on top of the padding, we need to add it back in here.
                     rect = LayoutUtils.InflateRect(rect, new Padding(0, Padding.Top, 0, Padding.Bottom));
                 }
+
                 return rect;
             }
         }
@@ -158,26 +144,20 @@ namespace System.Windows.Forms
                         ParentInternal = this
                     };
                 }
+
                 return downScrollButton;
             }
         }
+
         /// <summary>
         ///  the rectangle representing 
         /// </summary>
-        internal Rectangle ImageRectangle
-        {
-            get
-            {
-                return imageRectangle;
-            }
-        }
+        internal Rectangle ImageRectangle => imageRectangle;
 
         internal int PaddingToTrim
         {
-            get
-            {
-                return paddingToTrim;
-            }
+            get => paddingToTrim;
+
             set
             {
                 if (paddingToTrim != value)
@@ -185,7 +165,6 @@ namespace System.Windows.Forms
                     paddingToTrim = value;
                     AdjustSize();
                 }
-
             }
         }
 
@@ -202,21 +181,13 @@ namespace System.Windows.Forms
             }
         }
 
-        public override LayoutEngine LayoutEngine
-        {
-            get
-            {
-                return ToolStripDropDownLayoutEngine.LayoutInstance;
-            }
-        }
+        public override LayoutEngine LayoutEngine => ToolStripDropDownLayoutEngine.LayoutInstance;
 
-        [
-        DefaultValue(ToolStripLayoutStyle.Flow)
-        ]
+        [DefaultValue(ToolStripLayoutStyle.Flow)]
         public new ToolStripLayoutStyle LayoutStyle
         {
-            get { return base.LayoutStyle; }
-            set { base.LayoutStyle = value; }
+            get => base.LayoutStyle;
+            set => base.LayoutStyle = value;
         }
 
         protected internal override Size MaxItemSize
@@ -227,21 +198,18 @@ namespace System.Windows.Forms
                 {
                     CalculateInternalLayoutMetrics();
                 }
+
                 return maxItemSize;
             }
         }
 
-        [
-        DefaultValue(true),
+        [DefaultValue(true),
         SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        SRCategory(nameof(SR.CatAppearance))]
         public bool ShowImageMargin
         {
-            get
-            {
-                return state[stateShowImageMargin];
-            }
+            get => state[stateShowImageMargin];
+
             set
             {
                 if (value != state[stateShowImageMargin])
@@ -252,17 +220,13 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(false),
+        [DefaultValue(false),
         SRDescription(nameof(SR.ToolStripDropDownMenuShowCheckMarginDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        SRCategory(nameof(SR.CatAppearance))]
         public bool ShowCheckMargin
         {
-            get
-            {
-                return state[stateShowCheckMargin];
-            }
+            get => state[stateShowCheckMargin];
+
             set
             {
                 if (value != state[stateShowCheckMargin])
@@ -274,13 +238,8 @@ namespace System.Windows.Forms
         }
 
 
-        internal Rectangle TextRectangle
-        {
-            get
-            {
-                return textRectangle;
-            }
-        }
+        internal Rectangle TextRectangle 
+            => textRectangle;
 
         private ToolStripScrollButton UpScrollButton
         {
@@ -297,13 +256,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> this takes a native menu and builds up a managed toolstrip around it.
-        ///          Scenario: showing the items from the SystemMenu.
-        ///          targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to
-        ///          hmenu is a handle to the native menu
-        ///
-        ///  
-
+        /// <summary> 
+        /// this takes a native menu and builds up a managed toolstrip around it.
+        /// Scenario: showing the items from the SystemMenu. 
+        /// targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to 
+        /// hmenu is a handle to the native menu.
+        /// </summary>
         internal static ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
         {
             ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
@@ -342,11 +300,11 @@ namespace System.Windows.Forms
                         fMask = NativeMethods.MIIM_ID,
                         fType = NativeMethods.MIIM_ID
                     };
+
                     UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
 
                     // create the managed object - toolstripmenu item knows how to grok hmenu for information.
                     itemToAdd = new ToolStripMenuItem(hmenu, info.wID, targetWindow);
-
 
                     // if there is a submenu fetch it.
                     info = new NativeMethods.MENUITEMINFO_T_RW
@@ -355,6 +313,7 @@ namespace System.Windows.Forms
                         fMask = NativeMethods.MIIM_SUBMENU,
                         fType = NativeMethods.MIIM_SUBMENU
                     };
+
                     UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
 
                     if (info.hSubMenu != IntPtr.Zero)
@@ -373,8 +332,6 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // using "\t" to figure out the width of tab
         private void CalculateInternalLayoutMetrics()
         {
-
-
             Size maxTextSize = Size.Empty;
             Size maxImageSize = Size.Empty;
             Size maxCheckSize = scaledDefaultImageSize;
@@ -388,7 +345,6 @@ namespace System.Windows.Forms
 
                 if (item is ToolStripMenuItem menuItem)
                 {
-
                     Size menuItemTextSize = menuItem.GetTextSize();
 
                     if (menuItem.ShowShortcutKeys)
@@ -507,14 +463,12 @@ namespace System.Windows.Forms
 
                 // align the image
                 imageRectangle = checkRectangle;
-
             }
             else
             {
                 checkAndImageMarginWidth = 0;
             }
             nextPoint.X = checkAndImageMarginWidth + 1;
-
 
             // calculate space for image
             // if we didnt have a check - make sure to ignore check padding
@@ -556,8 +510,6 @@ namespace System.Windows.Forms
                 trimPadding += scaledTextPadding.Left;
             }
 
-
-
             // We need to make sure that the text really appears vertically centered - this can be a problem in 
             // systems which force the text rectangle to be odd.
 
@@ -568,7 +520,6 @@ namespace System.Windows.Forms
             textRectangle.Y += (textRectangle.Height % 2); // if the height is odd, push down by one px
             state[stateMaxItemSizeValid] = true;
             PaddingToTrim = trimPadding;
-
         }
 
         internal override void ChangeSelection(ToolStripItem nextItem)
@@ -716,10 +667,8 @@ namespace System.Windows.Forms
                 }
             }
 
-        internal void ResetScrollPosition()
-        {
-            scrollAmount = 0;
-        }
+        internal void ResetScrollPosition() 
+            => scrollAmount = 0;
 
         internal void RestoreScrollPosition()
         {
@@ -799,7 +748,6 @@ namespace System.Windows.Forms
             UpdateScrollButtonLocations();
         }
 
-
         internal override void ScrollInternal(int delta)
         {
             base.ScrollInternal(delta);
@@ -857,7 +805,6 @@ namespace System.Windows.Forms
 
         protected override void SetDisplayedItems()
         {
-
             base.SetDisplayedItems();
             if (RequiresScrollButtons)
             {
@@ -893,7 +840,6 @@ namespace System.Windows.Forms
                 DownScrollButton.SetBounds(new Rectangle(downLocation, downSize));
                 UpdateScrollButtonStatus();
             }
-
         }
 
         private void UpdateScrollButtonStatus()
@@ -947,7 +893,6 @@ namespace System.Windows.Forms
                 }
                 return preferredSize;
             }
-
         }
     }
 }

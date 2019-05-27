@@ -65,22 +65,27 @@ namespace System.Windows.Forms
             get
             {
                 Font sysFont = null;
-                
+
                 // We need to cache the default fonts for the different DPIs.
-                if (DpiHelper.IsPerMonitorV2Awareness) {
+                if (DpiHelper.IsPerMonitorV2Awareness)
+                {
                     int dpi = CurrentDpi;
 
                     Font retFont = null;
-                    if (defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont == null) {
+                    if (defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont == null)
+                    {
                         // default to menu font
                         sysFont = SystemInformation.GetMenuFontForDpi(dpi);
-                        if (sysFont != null) {
+                        if (sysFont != null)
+                        {
                             // ensure font is in pixels so it displays properly in the property grid at design time.
-                            if (sysFont.Unit != GraphicsUnit.Point) {
+                            if (sysFont.Unit != GraphicsUnit.Point)
+                            {
                                 retFont = ControlPaint.FontInPoints(sysFont);
                                 sysFont.Dispose();
                             }
-                            else {
+                            else
+                            {
                                 retFont = sysFont;
                             }
                             defaultFontCache[dpi] = retFont;
@@ -88,45 +93,59 @@ namespace System.Windows.Forms
                     }
                     return retFont;
                 }
-                else {
+                else
+                {
                     Font retFont = defaultFont;  // threadsafe local reference
 
-                if (retFont == null)
-                {
-                    lock (internalSyncObject)
+                    if (retFont == null)
                     {
-                        // double check the defaultFont after the lock.
-                        retFont = defaultFont;
-
-                        if (retFont == null)
+                        lock (internalSyncObject)
                         {
-                            // default to menu font
-                            sysFont = SystemFonts.MenuFont;
-                            if (sysFont == null)
+                            // double check the defaultFont after the lock.
+                            retFont = defaultFont;
+
+                            if (retFont == null)
                             {
-                                // ...or to control font if menu font unavailable
-                                sysFont = Control.DefaultFont;
-                            }
-                            if (sysFont != null)
-                            {
-                                // ensure font is in pixels so it displays properly in the property grid at design time.
-                                if (sysFont.Unit != GraphicsUnit.Point)
+                                // default to menu font
+                                sysFont = SystemFonts.MenuFont;
+                                if (sysFont == null)
                                 {
-                                    defaultFont = ControlPaint.FontInPoints(sysFont);
-                                    retFont = defaultFont;
-                                    sysFont.Dispose();
+                                    // ...or to control font if menu font unavailable
+                                    sysFont = Control.DefaultFont;
                                 }
-                                else
+                                if (sysFont != null)
                                 {
-                                    defaultFont = sysFont;
-                                    retFont = defaultFont;
+                                    // ensure font is in pixels so it displays properly in the property grid at design time.
+                                    if (sysFont.Unit != GraphicsUnit.Point)
+                                    {
+                                        defaultFont = ControlPaint.FontInPoints(sysFont);
+                                        retFont = defaultFont;
+                                        sysFont.Dispose();
+                                    }
+                                    else
+                                    {
+                                        defaultFont = sysFont;
+                                        retFont = defaultFont;
+                                    }
                                 }
+                                return retFont;
                             }
-                            return retFont;
                         }
                     }
+                    return retFont;
                 }
-                return retFont;
+            }
+        }
+
+        internal static int CurrentDpi
+        {
+            get
+            {
+                return currentDpi;
+            }
+            set
+            {
+                currentDpi = value;
             }
         }
 

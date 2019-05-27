@@ -5,25 +5,21 @@
 namespace System.Windows.Forms
 {
     using System;
-    using System.Configuration;
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Windows.Forms.Layout;
     using System.ComponentModel.Design.Serialization;
-    using System.Drawing.Drawing2D;
-    using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
     using System.Globalization;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Text.RegularExpressions;
     using System.Windows.Forms.Internal;
+    using System.Windows.Forms.Layout;
     using Microsoft.Win32;
-    using System.Runtime.Versioning;
 
     /// <summary>
     /// Summary of ToolStrip.
@@ -674,13 +670,10 @@ namespace System.Windows.Forms
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
-        protected override Size DefaultSize {
-            get {
-                return DpiHelper.IsPerMonitorV2Awareness ?
-                       DpiHelper.LogicalToDeviceUnits(new Size(100, 25), DeviceDpi) :
-                       new Size(100, 25);
-            }
-        }
+        protected override Size DefaultSize 
+            => DpiHelper.IsPerMonitorV2Awareness ?
+               DpiHelper.LogicalToDeviceUnits(new Size(100, 25), DeviceDpi) :
+               new Size(100, 25);
 
         protected override Padding DefaultPadding
         {

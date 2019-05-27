@@ -90,14 +90,8 @@ namespace System.Windows.Forms
             isInitializeDpiHelperForWinforms = true;
         }
 
-        // TODO: We need to talk about this.
         internal static bool DoesCurrentContextRequireScaling
-        {
-            get
-            {
-                return true;
-            }
-        }
+            => true;
 
         /// <summary>
         /// Returns a boolean to specify if we should enable processing of WM_DPICHANGED and related messages

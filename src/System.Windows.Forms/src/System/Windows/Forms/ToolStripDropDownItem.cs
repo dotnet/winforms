@@ -108,10 +108,8 @@ namespace System.Windows.Forms
         }
 
         // the area which activates the dropdown.
-        internal virtual Rectangle DropDownButtonArea
-        {
-            get { return Bounds; }
-        }
+        internal virtual Rectangle DropDownButtonArea 
+            => Bounds;
 
         [Browsable(false)]
         [SRDescription(nameof(SR.ToolStripDropDownItemDropDownDirectionDescr))]
@@ -248,13 +246,8 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.ToolStripDropDownItemsDescr))
         ]
-        public ToolStripItemCollection DropDownItems
-        {
-            get
-            {
-                return DropDown.Items;
-            }
-        }
+        public ToolStripItemCollection DropDownItems 
+            => DropDown.Items;
 
         /// <summary>
         /// Occurs when the dropdown is opened
@@ -267,27 +260,20 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public virtual bool HasDropDownItems
-        {
-            get
-            {
+        public virtual bool HasDropDownItems 
+            =>
                 //Use count of visible DisplayedItems instead so that we take into account things that arent visible
-                return (dropDown != null) && dropDown.HasVisibleItems;
-            }
-        }
+                (dropDown != null) && dropDown.HasVisibleItems;
 
         [Browsable(false)]
-        public bool HasDropDown
-        {
-            get { return dropDown != null; }
-        }
+        public bool HasDropDown 
+            => dropDown != null;
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Pressed
         {
             get
             {
-                // 
                 if (dropDown != null)
                 {
                     if (DropDown.AutoClose || !IsInDesignMode || (IsInDesignMode && !IsOnDropDown))
@@ -299,21 +285,15 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual bool OppositeDropDownAlign
-        {
-            get { return false; }
-        }
+        internal virtual bool OppositeDropDownAlign 
+            => false;
 
 
-        internal virtual void AutoHide(ToolStripItem otherItemBeingSelected)
-        {
-            HideDropDown();
-        }
+        internal virtual void AutoHide(ToolStripItem otherItemBeingSelected) 
+            => HideDropDown();
 
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripDropDownItemAccessibleObject(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() 
+            => new ToolStripDropDownItemAccessibleObject(this);
 
         protected virtual ToolStripDropDown CreateDefaultDropDown()
         {
@@ -362,20 +342,15 @@ namespace System.Windows.Forms
         }
 
 
-        private void DropDown_Closed(object sender, ToolStripDropDownClosedEventArgs e)
-        {
-            OnDropDownClosed(EventArgs.Empty);
-        }
+        private void DropDown_Closed(object sender, ToolStripDropDownClosedEventArgs e) 
+            => OnDropDownClosed(EventArgs.Empty);
 
-        private void DropDown_Opened(object sender, EventArgs e)
-        {
-            OnDropDownOpened(EventArgs.Empty);
-        }
+        private void DropDown_Opened(object sender, EventArgs e) 
+            => OnDropDownOpened(EventArgs.Empty);
 
-        private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            OnDropDownItemClicked(e);
-        }
+        private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e) 
+            => OnDropDownItemClicked(e);
+
         /// <summary>
         /// Make sure we unhook dropdown events.
         /// </summary>
@@ -496,6 +471,7 @@ namespace System.Windows.Forms
                 DropDown.DoLayoutIfHandleCreated(new ToolStripItemEventArgs(this));
             }
         }
+
         /// <summary>
         /// Called as a response to HideDropDown
         /// </summary>
@@ -505,6 +481,7 @@ namespace System.Windows.Forms
 
             ((EventHandler)Events[EventDropDownHide])?.Invoke(this, e);
         }
+
         /// <summary>
         /// Last chance to stick in the DropDown before it is shown.
         /// </summary>
@@ -543,10 +520,7 @@ namespace System.Windows.Forms
                     DropDown.OwnerItem = null;
                 }
             }
-
         }
-
-
 
         /// <summary>
         /// called when the default item is clicked
@@ -569,7 +543,6 @@ namespace System.Windows.Forms
             }
             return base.ProcessCmdKey(ref m, keyData);
         }
-
 
         protected internal override bool ProcessDialogKey(Keys keyData)
         {
@@ -622,17 +595,13 @@ namespace System.Windows.Forms
                 }
             }
 
-
             if (IsOnDropDown)
             {
-
                 bool menusCascadeRight = (((int)DropDownDirection & 0x0001) == 0);
                 bool backward = ((menusCascadeRight && keyCode == Keys.Right) || (!menusCascadeRight && keyCode == Keys.Left));
 
                 if (backward)
                 {
-
-
                     Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] close submenu from NON-toplevel item");
 
                     // we're on a drop down but we're heading back up the chain. 
@@ -655,7 +624,6 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] ddi calling base");
             return base.ProcessDialogKey(keyData);
-
         }
 
         private ToolStripDropDownDirection RTLTranslateDropDownDirection(ToolStripDropDownDirection dropDownDirection, RightToLeft rightToLeft)
@@ -686,17 +654,13 @@ namespace System.Windows.Forms
             {
                 return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.BelowLeft : ToolStripDropDownDirection.BelowRight;
             }
-
-
         }
 
         /// <summary>
         /// Shows the DropDown, if one is set.
         /// </summary>
-        public void ShowDropDown()
-        {
-            ShowDropDown(false);
-        }
+        public void ShowDropDown() 
+            => ShowDropDown(false);
 
         internal void ShowDropDown(bool mousePush)
         {
@@ -713,7 +677,6 @@ namespace System.Windows.Forms
 
         private void ShowDropDownInternal()
         {
-
             if (dropDown == null || (!dropDown.Visible))
             {
                 // We want to show if there's no dropdown
@@ -726,7 +689,6 @@ namespace System.Windows.Forms
 
             if (dropDown != null && !dropDown.Visible)
             {
-
                 if (dropDown.IsAutoGenerated && DropDownItems.Count <= 0)
                 {
                     return;  // this is a no-op for autogenerated drop downs.
@@ -747,20 +709,14 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeDropDown()
-        {
-            return dropDown != null && !dropDown.IsAutoGenerated;
-        }
+        private bool ShouldSerializeDropDown() 
+            => dropDown != null && !dropDown.IsAutoGenerated;
 
-        private bool ShouldSerializeDropDownDirection()
-        {
-            return (toolStripDropDownDirection != ToolStripDropDownDirection.Default);
-        }
+        private bool ShouldSerializeDropDownDirection() 
+            => toolStripDropDownDirection != ToolStripDropDownDirection.Default;
 
-        private bool ShouldSerializeDropDownItems()
-        {
-            return (dropDown != null && dropDown.IsAutoGenerated);
-        }
+        private bool ShouldSerializeDropDownItems() 
+            => dropDown != null && dropDown.IsAutoGenerated;
 
         internal override void OnKeyboardToolTipHook(ToolTip toolTip)
         {
@@ -859,7 +815,6 @@ namespace System.Windows.Forms
             {
                 base.DoDefaultAction();
             }
-
         }
 
         internal override bool IsIAccessibleExSupported()
@@ -896,10 +851,8 @@ namespace System.Windows.Forms
             return base.GetPropertyValue(propertyID);
         }
 
-        internal override void Expand()
-        {
-            DoDefaultAction();
-        }
+        internal override void Expand() 
+            => DoDefaultAction();
 
         internal override void Collapse()
         {
@@ -924,8 +877,8 @@ namespace System.Windows.Forms
                 return null;
             }
             return owner.DropDown.AccessibilityObject.GetChild(index);
-
         }
+
         public override int GetChildCount()
         {
             if ((owner == null) || !owner.HasDropDownItems)
@@ -946,7 +899,6 @@ namespace System.Windows.Forms
                 LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
             }
             return owner.DropDown.AccessibilityObject.GetChildCount();
-
         }
 
         internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
