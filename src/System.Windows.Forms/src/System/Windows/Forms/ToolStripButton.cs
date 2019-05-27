@@ -189,7 +189,25 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
+        internal override int DeviceDpi
+        {
+            get => base.DeviceDpi;
+
+            // This gets called via ToolStripItem.RescaleConstantsForDpi.
+            // It's practically calling Initialize on DpiChanging with the new Dpi value.
+            // ToolStripItem.RescaleConstantsForDpi is already behind quirks.
+            set
+            {
+                if (base.DeviceDpi != value)
+                {
+                    base.DeviceDpi = value;
+                    standardButtonWidth = DpiHelper.LogicalToDeviceUnits(STANDARD_BUTTON_WIDTH, DeviceDpi);
+                }
+            }
+        }
+
+        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CreateAccessibilityInstance"]/*' />
+        /// <devdoc>
         /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
         /// should not call base.CreateAccessibilityObject.
         /// </summary>

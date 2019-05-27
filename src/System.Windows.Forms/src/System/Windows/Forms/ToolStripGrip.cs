@@ -6,10 +6,7 @@ namespace System.Windows.Forms
 {
     using System;
     using System.Drawing;
-    using System.Windows.Forms;
-    using System.Windows.Forms.VisualStyles;
     using System.Windows.Forms.Layout;
-    using System.Diagnostics;
 
     /// <summary>
     /// 
@@ -18,7 +15,7 @@ namespace System.Windows.Forms
     {
 
         private Cursor oldCursor;
-        private readonly int gripThickness = 0;
+        private int gripThickness = 0;
         Point startLocation = Point.Empty;
         private bool movingToolStrip = false;
         private Point lastEndLocation = ToolStrip.InvalidMouseEnter;
@@ -28,8 +25,8 @@ namespace System.Windows.Forms
         private static readonly int gripThicknessDefault = 3;
         private static readonly int gripThicknessVisualStylesEnabled = 5;
         private Padding scaledDefaultPadding = defaultPadding;
-        private readonly int scaledGripThickness = gripThicknessDefault;
-        private readonly int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;
+        private int scaledGripThickness = gripThicknessDefault;
+        private int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripGrip()
@@ -286,8 +283,19 @@ namespace System.Windows.Forms
             base.OnMouseUp(mea);
         }
 
-        private static void SetCursor(Control control, Cursor cursor)
-        {
+        internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
+            base.RescaleConstantsInternal(newDpi);
+            scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
+            scaledGripThickness = DpiHelper.LogicalToDeviceUnits(gripThicknessDefault, newDpi);
+            scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(gripThicknessVisualStylesEnabled, newDpi);
+            this.Margin = DefaultMargin;
+
+            gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;
+
+            OnFontChanged(EventArgs.Empty);
+        }
+
+        private static void SetCursor(Control control, Cursor cursor) {
             control.Cursor = cursor;
         }
 

@@ -1772,36 +1772,36 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ownerHandle);
         }
 
-        /// <summary>
-        ///     VERY similar to Form.ScaleCore
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override void ScaleCore(float dx, float dy)
-        {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
-            SuspendLayout();
-            try
-            {
-                //Get size values in advance to prevent one change from affecting another.
-                Size clientSize = ClientSize;
-                Size minSize = MinimumSize;
-                Size maxSize = MaximumSize;
-                ClientSize = ScaleSize(clientSize, dx, dy);
-                if (!MinimumSize.IsEmpty)
-                {
-                    MinimumSize = ScaleSize(minSize, dx, dy);
-                }
-                if (!MaximumSize.IsEmpty)
-                {
-                    MaximumSize = ScaleSize(maxSize, dx, dy);
-                }
+          internal override void ResetScaling(int newDpi) {
+              base.ResetScaling(newDpi);
+              CommonProperties.xClearPreferredSizeCache(this);
+              scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
+          }
 
-                ScaleDockPadding(dx, dy);
-
-                foreach (Control control in Controls)
-                {
-                    if (control != null)
-                    {
+          /// <devdoc>
+          ///     VERY similar to Form.ScaleCore
+          /// </devdoc>
+          [EditorBrowsable(EditorBrowsableState.Never)]
+          protected override void ScaleCore(float dx, float dy) {
+              Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
+              SuspendLayout();
+              try {
+                  //Get size values in advance to prevent one change from affecting another.
+                  Size clientSize = ClientSize;
+                  Size minSize = MinimumSize;
+                  Size maxSize = MaximumSize;
+                  ClientSize = ScaleSize(clientSize, dx, dy);
+                  if (!MinimumSize.IsEmpty) {
+                      MinimumSize = ScaleSize(minSize, dx, dy);
+                  }
+                  if (!MaximumSize.IsEmpty) {
+                      MaximumSize = ScaleSize(maxSize, dx, dy);
+                  }
+                 
+                  ScaleDockPadding(dx, dy);
+    
+                  foreach(Control control in Controls) {
+                      if (control != null) {
 #pragma warning disable 618
                         control.Scale(dx, dy);
 #pragma warning restore 618
