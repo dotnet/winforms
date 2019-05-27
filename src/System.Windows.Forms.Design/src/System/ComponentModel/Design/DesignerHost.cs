@@ -617,10 +617,12 @@ namespace System.ComponentModel.Design
             if (RemoveFromContainerPreProcess(component, this))
             {
                 Site site = component.Site as Site;
-                Debug.Assert(site != null, "RemoveFromContainerPreProcess should have returned false for this.");
                 RemoveWithoutUnsiting(component);
                 RemoveFromContainerPostProcess(component, this);
-                site.Disposed = true;
+                if (site != null)
+                {
+                    site.Disposed = true;
+                }
             }
         }
 
@@ -733,8 +735,6 @@ namespace System.ComponentModel.Design
                             }
                             catch (Exception e)
                             {
-                                string failedComponent = designer != null ? designer.GetType().Name : string.Empty;
-                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Designer threw during unload: {0}", failedComponent));
                                 exceptions.Add(e);
                             }
                         }
@@ -744,8 +744,6 @@ namespace System.ComponentModel.Design
                         }
                         catch (Exception e)
                         {
-                            string failedComponent = comp != null ? comp.GetType().Name : string.Empty;
-                            Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Component threw during unload: {0}", failedComponent));
                             exceptions.Add(e);
                         }
                     }
@@ -757,20 +755,20 @@ namespace System.ComponentModel.Design
                     {
                         _designers.Remove(_rootComponent);
                         try
-                        { designer.Dispose(); }
+                        {
+                            designer.Dispose();
+                        }
                         catch (Exception e)
                         {
-                            string failedComponent = designer != null ? designer.GetType().Name : string.Empty;
-                            Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Designer threw during unload: {0}", failedComponent));
                             exceptions.Add(e);
                         }
                     }
                     try
-                    { _rootComponent.Dispose(); }
+                    {
+                        _rootComponent.Dispose();
+                    }
                     catch (Exception e)
                     {
-                        string failedComponent = _rootComponent != null ? _rootComponent.GetType().Name : string.Empty;
-                        Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Component threw during unload: {0}", failedComponent));
                         exceptions.Add(e);
                     }
                 }

@@ -92,8 +92,6 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            ISite site = component.Site;
-            Debug.Assert(site != null, "RemoveFromContainerPreProcess should have returned false for this.");
             RemoveWithoutUnsiting(component);
             _host.RemoveFromContainerPostProcess(component, this);
         }
