@@ -155,28 +155,35 @@ namespace System.ComponentModel.Design
         void IDesignerFilter.PostFilterAttributes(IDictionary attributes)
         {
             // If this component is being inherited, mark it as such in the class attributes.
-            if (attributes != null)
+            if (attributes == null)
             {
-                if (attributes.Contains(typeof(InheritanceAttribute)))
+                return;
+            }
+
+            if (attributes.Contains(typeof(InheritanceAttribute)))
+            {
+                _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
+            }
+            else
+            {
+                InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+                if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
                 {
-                    _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
-                }
-                else
-                {
-                    InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
-                    if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
-                    {
-                        attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
-                    }
+                    attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
                 }
             }
         }
 
         void IDesignerFilter.PostFilterEvents(IDictionary events)
         {
-
             // If this component is being privately inherited, we need to filter the events to make them read-only.
-            if (InheritanceAttribute != null && InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly) && events != null)
+            if (events == null)
+            {
+                return;
+            }
+
+            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            if (inheritanceAttribute != null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
             {
                 EventDescriptor[] values = new EventDescriptor[events.Values.Count];
                 events.Values.CopyTo(values, 0);
@@ -747,19 +754,21 @@ namespace System.ComponentModel.Design
         {
             // If this component is being inherited, mark it as such in the class attributes.
             // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and through InheritanceAttribute directly is the same.
-            if (attributes != null)
+            if (attributes == null)
             {
-                if (attributes.Contains(typeof(InheritanceAttribute)))
+                return;
+            }
+
+            if (attributes.Contains(typeof(InheritanceAttribute)))
+            {
+                _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
+            }
+            else
+            {
+                InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+                if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
                 {
-                    _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
-                }
-                else
-                {
-                    InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
-                    if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
-                    {
-                        attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
-                    }
+                    attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
                 }
             }
         }
@@ -770,7 +779,13 @@ namespace System.ComponentModel.Design
         protected virtual void PostFilterEvents(IDictionary events)
         {
             // If this component is being privately inherited, we need to filter the events to make them read-only.
-            if (InheritanceAttribute != null && InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly) && events != null)
+            if (events == null)
+            {
+                return;
+            }
+
+            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            if (inheritanceAttribute != null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
             {
                 EventDescriptor[] values = new EventDescriptor[events.Values.Count];
                 events.Values.CopyTo(values, 0);
