@@ -823,13 +823,14 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    text = null; break;
+                    text = null;
+                    break;
             }
 
             if (text == null && ((msg & Interop.WindowMessages.WM_REFLECT) == Interop.WindowMessages.WM_REFLECT))
             {
                 string subtext = MsgToString(msg - Interop.WindowMessages.WM_REFLECT) ?? "???";
-               
+
                 text = "WM_REFLECT + " + subtext;
             }
 
@@ -842,7 +843,7 @@ namespace System.Windows.Forms
             {
                 return string.Empty;
             }
-            
+
             return " (" + input + ")";
         }
 

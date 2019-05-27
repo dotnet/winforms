@@ -58,7 +58,7 @@ namespace System.Experimental.Gdi
         ///   For example, this occurs commonly in East Asian fonts. 
         /// If set, text is rendered (when possible) using ClearType antialiasing method. 
         /// <summary>
-        ClearType        = IntNativeMethods.CLEARTYPE_QUALITY,
+        ClearType = IntNativeMethods.CLEARTYPE_QUALITY,
 
         ClearTypeNatural = IntNativeMethods.CLEARTYPE_NATURAL_QUALITY
     }

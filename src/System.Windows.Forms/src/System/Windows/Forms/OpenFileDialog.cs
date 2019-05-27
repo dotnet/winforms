@@ -176,23 +176,19 @@ namespace System.Windows.Forms
             FileDialogNative.IFileOpenDialog openDialog = (FileDialogNative.IFileOpenDialog)dialog;
             if (Multiselect)
             {
-                FileDialogNative.IShellItemArray results;
-                openDialog.GetResults(out results);
-                uint count;
-                results.GetCount(out count);
+                openDialog.GetResults(out FileDialogNative.IShellItemArray results);
+                results.GetCount(out uint count);
                 string[] files = new string[count];
                 for (uint i = 0; i < count; ++i)
-                { 
-                    FileDialogNative.IShellItem item;
-                    results.GetItemAt(i, out item);
+                {
+                    results.GetItemAt(i, out FileDialogNative.IShellItem item);
                     files[unchecked((int)i)] = GetFilePathFromShellItem(item);
                 }
                 return files;
             }
             else
-            { 
-                FileDialogNative.IShellItem item;
-                openDialog.GetResult(out item);
+            {
+                openDialog.GetResult(out FileDialogNative.IShellItem item);
                 return new string[] { GetFilePathFromShellItem(item) };
             }
         }
@@ -244,7 +240,7 @@ namespace System.Windows.Forms
         }
 
         private protected override bool SettingsSupportVistaDialog
-        { 
+        {
             get => base.SettingsSupportVistaDialog && !ShowReadOnly;
         }
     }

@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System.Collections;
@@ -17,15 +18,18 @@ namespace System.Windows.Forms {
     ///      ImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
     /// </summary>
-    public class ImageIndexConverter : Int32Converter {
+    public class ImageIndexConverter : Int32Converter
+    {
 
-        private string parentImageListProperty  = "Parent";
-        
-        protected virtual bool IncludeNoneAsStandardValue {
-            get {
+        private string parentImageListProperty = "Parent";
+
+        protected virtual bool IncludeNoneAsStandardValue
+        {
+            get
+            {
                 return true;
             }
-        }                                
+        }
 
         /// <summary> 
         /// this is the property to look at when there is no ImageList property
@@ -33,23 +37,27 @@ namespace System.Windows.Forms {
         /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
         /// the ToolStripItem.Owner property.
         /// </summary>
-        internal string ParentImageListProperty {
-            get {
+        internal string ParentImageListProperty
+        {
+            get
+            {
                 return parentImageListProperty;
             }
-            set {
+            set
+            {
                 parentImageListProperty = value;
             }
         }
-        
+
         /// <summary>
         ///    <para>
         ///       Converts the given value object to a 32-bit signed integer object.
         ///    </para>
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-            string stringValue = value as string;
-            if (stringValue != null && string.Compare(stringValue, SR.toStringNone, true, culture) == 0) {
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value is string stringValue && string.Compare(stringValue, SR.toStringNone, true, culture) == 0)
+            {
                 return -1;
             }
 
@@ -64,12 +72,15 @@ namespace System.Windows.Forms {
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-            if (destinationType == null) {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == null)
+            {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value is int && ((int)value) == -1) {
+            if (destinationType == typeof(string) && value is int && ((int)value) == -1)
+            {
                 return SR.toStringNone;
             }
 
@@ -82,32 +93,40 @@ namespace System.Windows.Forms {
         ///      will return null if the data type does not support a
         ///      standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
-            if (context != null && context.Instance != null) {
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            if (context != null && context.Instance != null)
+            {
                 object instance = context.Instance;
-                
+
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
-                while (instance != null && imageListProp == null) {
+                while (instance != null && imageListProp == null)
+                {
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
-                    foreach (PropertyDescriptor prop in props) {
-                        if (typeof(ImageList).IsAssignableFrom(prop.PropertyType)) {
+                    foreach (PropertyDescriptor prop in props)
+                    {
+                        if (typeof(ImageList).IsAssignableFrom(prop.PropertyType))
+                        {
                             imageListProp = prop;
                             break;
                         }
                     }
 
-                    if (imageListProp == null) {
+                    if (imageListProp == null)
+                    {
 
                         // We didn't find the image list in this component.  See if the 
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
-                        if (parentProp != null) {
+                        if (parentProp != null)
+                        {
                             instance = parentProp.GetValue(instance);
                         }
-                        else {
+                        else
+                        {
                             // Stick a fork in us, we're done.
                             //
                             instance = null;
@@ -115,39 +134,46 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                if (imageListProp != null) {
+                if (imageListProp != null)
+                {
                     ImageList imageList = (ImageList)imageListProp.GetValue(instance);
 
-                    if (imageList != null) {
-                        
+                    if (imageList != null)
+                    {
+
                         // Create array to contain standard values
                         //
                         object[] values;
                         int nImages = imageList.Images.Count;
-                        if (IncludeNoneAsStandardValue) {
+                        if (IncludeNoneAsStandardValue)
+                        {
                             values = new object[nImages + 1];
                             values[nImages] = -1;
                         }
-                        else {
+                        else
+                        {
                             values = new object[nImages];
                         }
-                        
-                        
+
+
                         // Fill in the array
                         //
-                        for (int i = 0; i < nImages; i++) {
+                        for (int i = 0; i < nImages; i++)
+                        {
                             values[i] = i;
                         }
-                        
+
                         return new StandardValuesCollection(values);
                     }
                 }
             }
 
-            if (IncludeNoneAsStandardValue) {
-                return new StandardValuesCollection(new object[] {-1});
+            if (IncludeNoneAsStandardValue)
+            {
+                return new StandardValuesCollection(new object[] { -1 });
             }
-            else {
+            else
+            {
                 return new StandardValuesCollection(new object[0]);
             }
         }
@@ -160,7 +186,8 @@ namespace System.Windows.Forms {
         ///      then there are other valid values besides the list of
         ///      standard values GetStandardValues provides.
         /// </summary>
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) {
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        {
             return false;
         }
 
@@ -168,7 +195,8 @@ namespace System.Windows.Forms {
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
         /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
             return true;
         }
     }

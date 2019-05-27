@@ -23,13 +23,13 @@ namespace System.Windows.Forms
         /// Only vertical scroll bars are shown.
         /// 
         /// </summary>
-        Vertical   = 2,
+        Vertical = 2,
 
         /// <summary>
         /// Both horizontal and vertical scroll bars are shown.
         /// 
         /// </summary>
-        Both       = 3,
+        Both = 3,
 
     }
 }

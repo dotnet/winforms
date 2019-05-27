@@ -22,6 +22,6 @@ namespace System.Windows.Forms
         /// <summary> 
         /// Forces insertion mode to be 'off' regardless of the Insert key mode. 
         /// </summary>
-        Overwrite        
+        Overwrite
     }
 }

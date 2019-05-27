@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading); // Designer is currently unloading.
         private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading); // A transaction is in the process of being Canceled or Commited.
 
-        private static Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
+        private static readonly Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
 
         // IDesignerHost events
         private static readonly object s_eventActivated = new object(); // Designer has been activated
@@ -192,8 +192,10 @@ namespace System.ComponentModel.Design
             {
                 if (string.Equals(component.GetType().FullName, _rootComponentClassName, StringComparison.OrdinalIgnoreCase))
                 {
-                    Exception ex = new Exception(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName));
-                    ex.HelpLink = SR.DesignerHostCyclicAdd;
+                    Exception ex = new Exception(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
+                    {
+                        HelpLink = SR.DesignerHostCyclicAdd
+                    };
                     throw ex;
                 }
             }
@@ -297,8 +299,10 @@ namespace System.ComponentModel.Design
         {
             if (_loader != null && _loader != loader)
             {
-                Exception ex = new InvalidOperationException(SR.DesignerHostLoaderSpecified);
-                ex.HelpLink = SR.DesignerHostLoaderSpecified;
+                Exception ex = new InvalidOperationException(SR.DesignerHostLoaderSpecified)
+                {
+                    HelpLink = SR.DesignerHostLoaderSpecified
+                };
                 throw ex;
             }
 
@@ -773,7 +777,9 @@ namespace System.ComponentModel.Design
 
                 _designers.Clear();
                 while (Components.Count > 0)
+                {
                     Remove(Components[0]);
+                }
             }
             finally
             {
@@ -1128,8 +1134,10 @@ namespace System.ComponentModel.Design
             InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
             if (ia != null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
             {
-                Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostCantDestroyInheritedComponent, name));
-                ex.HelpLink = SR.DesignerHostCantDestroyInheritedComponent;
+                Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostCantDestroyInheritedComponent, name))
+                {
+                    HelpLink = SR.DesignerHostCantDestroyInheritedComponent
+                };
                 throw ex;
             }
 
@@ -1202,8 +1210,10 @@ namespace System.ComponentModel.Design
             if (successful && _rootComponent == null)
             {
                 ArrayList errorList = new ArrayList();
-                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass);
-                ex.HelpLink = SR.DesignerHostNoBaseClass;
+                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                {
+                    HelpLink = SR.DesignerHostNoBaseClass
+                };
                 errorList.Add(ex);
                 errorCollection = errorList;
                 successful = false;
@@ -1244,8 +1254,10 @@ namespace System.ComponentModel.Design
                         _state[s_stateLoading] = true;
                         Unload();
 
-                        ArrayList errorList = new ArrayList();
-                        errorList.Add(ex);
+                        ArrayList errorList = new ArrayList
+                        {
+                            ex
+                        };
                         if (errorCollection != null)
                         {
                             errorList.AddRange(errorCollection);
@@ -1520,7 +1532,7 @@ namespace System.ComponentModel.Design
         {
             private DesignerHost _host;
 #if DEBUG
-            private string _creatorStack;
+            private readonly string _creatorStack;
 #endif
 
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)
@@ -1853,8 +1865,10 @@ namespace System.ComponentModel.Design
                             // allow renames that are just case changes of the current name.
                             if (namedComponent != null && validateName)
                             {
-                                Exception ex = new Exception(string.Format(SR.DesignerHostDuplicateName, value));
-                                ex.HelpLink = SR.DesignerHostDuplicateName;
+                                Exception ex = new Exception(string.Format(SR.DesignerHostDuplicateName, value))
+                                {
+                                    HelpLink = SR.DesignerHostDuplicateName
+                                };
                                 throw ex;
                             }
                         }

@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     /// <summary>
     ///    <para>
@@ -10,16 +11,20 @@ namespace System.Windows.Forms {
     ///       specific ImageList property
     ///    </para>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=true)]
-    public sealed class RelatedImageListAttribute : Attribute {
-        private string relatedImageList=null;
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public sealed class RelatedImageListAttribute : Attribute
+    {
+        private readonly string relatedImageList = null;
 
-        public RelatedImageListAttribute(string relatedImageList) {
+        public RelatedImageListAttribute(string relatedImageList)
+        {
             this.relatedImageList = relatedImageList;
         }
 
-        public string RelatedImageList {
-            get {
+        public string RelatedImageList
+        {
+            get
+            {
                 return relatedImageList;
             }
         }

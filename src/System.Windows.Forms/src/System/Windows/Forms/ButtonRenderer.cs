@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System;
     using System.Drawing;
@@ -17,7 +18,8 @@ namespace System.Windows.Forms {
     ///       without visual styles applied.)
     ///    </para>
     /// </summary>
-    public sealed class ButtonRenderer {
+    public sealed class ButtonRenderer
+    {
 
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
@@ -26,7 +28,8 @@ namespace System.Windows.Forms {
         private static bool renderMatchingApplicationState = true;
 
         //cannot instantiate
-        private ButtonRenderer() {
+        private ButtonRenderer()
+        {
         }
 
         /// <summary>
@@ -36,17 +39,22 @@ namespace System.Windows.Forms {
         ///      If this property is false, the renderer will always render with visualstyles.
         ///    </para>
         /// </summary>
-        public static bool RenderMatchingApplicationState {
-            get {
+        public static bool RenderMatchingApplicationState
+        {
+            get
+            {
                 return renderMatchingApplicationState;
             }
-            set {
+            set
+            {
                 renderMatchingApplicationState = value;
             }
         }
 
-        private static bool RenderWithVisualStyles {
-            get {
+        private static bool RenderWithVisualStyles
+        {
+            get
+            {
                 return (!renderMatchingApplicationState || Application.RenderWithVisualStyles);
             }
         }
@@ -56,13 +64,16 @@ namespace System.Windows.Forms {
         ///       Returns true if the background corresponding to the given state is partially transparent, else false.
         ///    </para>
         /// </summary>
-        public static bool IsBackgroundPartiallyTransparent(PushButtonState state) {
-            if (RenderWithVisualStyles) {
+        public static bool IsBackgroundPartiallyTransparent(PushButtonState state)
+        {
+            if (RenderWithVisualStyles)
+            {
                 InitializeRenderer((int)state);
 
                 return visualStyleRenderer.IsBackgroundPartiallyTransparent();
             }
-            else {
+            else
+            {
                 return false; //for downlevel, this is false
             }
         }
@@ -74,8 +85,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl) {
-            if (RenderWithVisualStyles) {
+        public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
+        {
+            if (RenderWithVisualStyles)
+            {
                 InitializeRenderer(0);
                 visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
             }
@@ -86,15 +99,18 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state) {
-                if (RenderWithVisualStyles) {
-                    InitializeRenderer((int)state);
+        public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state)
+        {
+            if (RenderWithVisualStyles)
+            {
+                InitializeRenderer((int)state);
 
-                    visualStyleRenderer.DrawBackground(g, bounds);
-                }
-                else {
-                    ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
-                }
+                visualStyleRenderer.DrawBackground(g, bounds);
+            }
+            else
+            {
+                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
+            }
         }
 
         /// <summary>
@@ -105,21 +121,25 @@ namespace System.Windows.Forms {
         /// <param name="focused"> is focused?</param>
         /// <param name="state"> state</param>
         /// <param name="handle"> handle to the control</param>
-        internal static void DrawButtonForHandle(Graphics g, Rectangle bounds, bool focused, PushButtonState state, IntPtr handle) {
+        internal static void DrawButtonForHandle(Graphics g, Rectangle bounds, bool focused, PushButtonState state, IntPtr handle)
+        {
             Rectangle contentBounds;
 
-            if (RenderWithVisualStyles) {
+            if (RenderWithVisualStyles)
+            {
                 InitializeRenderer((int)state);
 
                 visualStyleRenderer.DrawBackground(g, bounds, handle);
                 contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
             }
-            else {
+            else
+            {
                 ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
                 contentBounds = Rectangle.Inflate(bounds, -3, -3);
             }
 
-            if (focused) {
+            if (focused)
+            {
                 ControlPaint.DrawFocusRectangle(g, contentBounds);
             }
         }
@@ -129,7 +149,8 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state) {
+        public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state)
+        {
             DrawButtonForHandle(g, bounds, focused, state, IntPtr.Zero);
         }
 
@@ -138,7 +159,8 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, bool focused, PushButtonState state) {
+        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, bool focused, PushButtonState state)
+        {
             DrawButton(g, bounds, buttonText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                        focused, state);
@@ -150,28 +172,32 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, TextFormatFlags flags, bool focused, PushButtonState state) {
-                Rectangle contentBounds;
-                Color textColor;
+        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, TextFormatFlags flags, bool focused, PushButtonState state)
+        {
+            Rectangle contentBounds;
+            Color textColor;
 
-                if (RenderWithVisualStyles) {
-                    InitializeRenderer((int)state);
+            if (RenderWithVisualStyles)
+            {
+                InitializeRenderer((int)state);
 
-                    visualStyleRenderer.DrawBackground(g, bounds);
-                    contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
-                    textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
-                }
-                else {
-                    ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
-                    contentBounds = Rectangle.Inflate(bounds, -3, -3);
-                    textColor = SystemColors.ControlText;
-                }
+                visualStyleRenderer.DrawBackground(g, bounds);
+                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+            }
+            else
+            {
+                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
+                contentBounds = Rectangle.Inflate(bounds, -3, -3);
+                textColor = SystemColors.ControlText;
+            }
 
-                TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
+            TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
 
-                if (focused) {
-                    ControlPaint.DrawFocusRectangle(g, contentBounds);
-                }
+            if (focused)
+            {
+                ControlPaint.DrawFocusRectangle(g, contentBounds);
+            }
         }
 
         /// <summary>
@@ -179,25 +205,29 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, Image image, Rectangle imageBounds, bool focused, PushButtonState state) {
-                Rectangle contentBounds;
+        public static void DrawButton(Graphics g, Rectangle bounds, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
+        {
+            Rectangle contentBounds;
 
-                if (RenderWithVisualStyles) {
-                    InitializeRenderer((int)state);
+            if (RenderWithVisualStyles)
+            {
+                InitializeRenderer((int)state);
 
-                    visualStyleRenderer.DrawBackground(g, bounds);
-                    visualStyleRenderer.DrawImage(g, imageBounds, image);
-                    contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
-                }
-                else {
-                    ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
-                    g.DrawImage(image, imageBounds);
-                    contentBounds = Rectangle.Inflate(bounds, -3, -3);
-                }
+                visualStyleRenderer.DrawBackground(g, bounds);
+                visualStyleRenderer.DrawImage(g, imageBounds, image);
+                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+            }
+            else
+            {
+                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
+                g.DrawImage(image, imageBounds);
+                contentBounds = Rectangle.Inflate(bounds, -3, -3);
+            }
 
-                if (focused) {
-                    ControlPaint.DrawFocusRectangle(g, contentBounds);
-                }
+            if (focused)
+            {
+                ControlPaint.DrawFocusRectangle(g, contentBounds);
+            }
         }
 
         /// <summary>
@@ -205,7 +235,8 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, Image image, Rectangle imageBounds, bool focused, PushButtonState state) {
+        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
+        {
             DrawButton(g, bounds, buttonText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                        image, imageBounds, focused, state);
@@ -216,34 +247,40 @@ namespace System.Windows.Forms {
         ///       Renders a Button control.
         ///    </para>
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, PushButtonState state) {
-                Rectangle contentBounds;
-                Color textColor;
+        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
+        {
+            Rectangle contentBounds;
+            Color textColor;
 
-                if (RenderWithVisualStyles) {
-                    InitializeRenderer((int)state);
+            if (RenderWithVisualStyles)
+            {
+                InitializeRenderer((int)state);
 
-                    visualStyleRenderer.DrawBackground(g, bounds);
-                    visualStyleRenderer.DrawImage(g, imageBounds, image);
-                    contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
-                    textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
-                }
-                else {
-                    ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
-                    g.DrawImage(image, imageBounds);
-                    contentBounds = Rectangle.Inflate(bounds, -3, -3);
-                    textColor = SystemColors.ControlText;
-                }
+                visualStyleRenderer.DrawBackground(g, bounds);
+                visualStyleRenderer.DrawImage(g, imageBounds, image);
+                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+            }
+            else
+            {
+                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
+                g.DrawImage(image, imageBounds);
+                contentBounds = Rectangle.Inflate(bounds, -3, -3);
+                textColor = SystemColors.ControlText;
+            }
 
-                TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
+            TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
 
-                if (focused) {
-                    ControlPaint.DrawFocusRectangle(g, contentBounds);
-                }
+            if (focused)
+            {
+                ControlPaint.DrawFocusRectangle(g, contentBounds);
+            }
         }
 
-        internal static ButtonState ConvertToButtonState(PushButtonState state) {
-            switch (state) {
+        internal static ButtonState ConvertToButtonState(PushButtonState state)
+        {
+            switch (state)
+            {
 
                 case PushButtonState.Pressed:
                     return ButtonState.Pushed;
@@ -255,11 +292,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        private static void InitializeRenderer(int state) {
-            if (visualStyleRenderer == null) {
+        private static void InitializeRenderer(int state)
+        {
+            if (visualStyleRenderer == null)
+            {
                 visualStyleRenderer = new VisualStyleRenderer(ButtonElement.ClassName, ButtonElement.Part, state);
             }
-            else {
+            else
+            {
                 visualStyleRenderer.SetParameters(ButtonElement.ClassName, ButtonElement.Part, state);
             }
         }

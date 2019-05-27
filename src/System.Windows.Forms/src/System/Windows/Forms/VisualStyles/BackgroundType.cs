@@ -8,13 +8,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum BackgroundType 
+    public enum BackgroundType
     {
-    	ImageFile = 0,
-    	BorderFill = 1,
-    	None = 2,
-    //		TM_ENUM(0, BT, IMAGEFILE)
-    //		TM_ENUM(1, BT, BORDERFILL)
-    //		TM_ENUM(2, BT, NONE)
+        ImageFile = 0,
+        BorderFill = 1,
+        None = 2,
+        //		TM_ENUM(0, BT, IMAGEFILE)
+        //		TM_ENUM(1, BT, BORDERFILL)
+        //		TM_ENUM(2, BT, NONE)
     }
 }

@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1, -1, -1, 0, 0, 0, 0, 0, 0)]
         [InlineData(0, 0, 0, 0, 0, 0, 0, 0, 0)]
         [InlineData(1, 1, 1, 1, 1, 1, 1, 1, 1)]
-        [InlineData(1, 2, 3, 4, 0, 1, 2, 3, 4)] 
+        [InlineData(1, 2, 3, 4, 0, 1, 2, 3, 4)]
         public void DockPaddingEdges_Properties_Get_ReturnsExpected(int left, int top, int right, int bottom, int expectedAll, int expectedLeft, int expectedTop, int expectedRight, int expectedBottom)
         {
             var owner = new ScrollableControl

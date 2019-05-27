@@ -2,13 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics;
     using System;
     using System.Runtime.InteropServices;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
     using System.Windows.Forms.Design;
     using Microsoft.Win32;
     using System.Drawing;
@@ -27,8 +28,9 @@ namespace System.Windows.Forms {
     ToolboxItemFilter("System.Windows.Forms"),
     SRDescription(nameof(SR.DescriptionNotifyIcon))
     ]
-    public sealed class NotifyIcon : Component {
-        private static readonly object EVENT_MOUSEDOWN  = new object();
+    public sealed class NotifyIcon : Component
+    {
+        private static readonly object EVENT_MOUSEDOWN = new object();
         private static readonly object EVENT_MOUSEMOVE = new object();
         private static readonly object EVENT_MOUSEUP = new object();
         private static readonly object EVENT_CLICK = new object();
@@ -40,13 +42,13 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
         private const int WM_TRAYMOUSEMESSAGE = Interop.WindowMessages.WM_USER + 1024;
-        private static int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
+        private static readonly int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
 
-        private object syncObj = new object();
+        private readonly object syncObj = new object();
 
         private Icon icon = null;
         private string text = string.Empty;
-        private int id = 0;
+        private readonly int id = 0;
         private bool added = false;
         private NotifyIconNativeWindow window = null;
         private ContextMenu contextMenu = null;
@@ -68,7 +70,8 @@ namespace System.Windows.Forms {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.NotifyIcon'/> class.
         ///    </para>
         /// </summary>
-        public NotifyIcon() {
+        public NotifyIcon()
+        {
             id = ++nextId;
             window = new NotifyIconNativeWindow(this);
             UpdateIcon(visible);
@@ -79,8 +82,10 @@ namespace System.Windows.Forms {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.NotifyIcon'/> class.
         ///    </para>
         /// </summary>
-        public NotifyIcon(IContainer container) : this() {
-            if (container == null) {
+        public NotifyIcon(IContainer container) : this()
+        {
+            if (container == null)
+            {
                 throw new ArgumentNullException(nameof(container));
             }
 
@@ -100,12 +105,16 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconBalloonTipTextDescr)),
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
-        public string BalloonTipText {
-            get { 
-                return balloonTipText; 
+        public string BalloonTipText
+        {
+            get
+            {
+                return balloonTipText;
             }
-            set {
-                if (value != balloonTipText) {
+            set
+            {
+                if (value != balloonTipText)
+                {
                     balloonTipText = value;
                 }
             }
@@ -122,16 +131,21 @@ namespace System.Windows.Forms {
         DefaultValue(ToolTipIcon.None),
         SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))
         ]
-        public ToolTipIcon BalloonTipIcon {
-            get { 
-                return balloonTipIcon; 
+        public ToolTipIcon BalloonTipIcon
+        {
+            get
+            {
+                return balloonTipIcon;
             }
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error)){
-                   throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolTipIcon));
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolTipIcon));
                 }
-                if (value != balloonTipIcon) {
+                if (value != balloonTipIcon)
+                {
                     balloonTipIcon = value;
                 }
             }
@@ -149,12 +163,16 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))
         ]
-        public string BalloonTipTitle {
-            get { 
-                return balloonTipTitle; 
+        public string BalloonTipTitle
+        {
+            get
+            {
+                return balloonTipTitle;
             }
-            set {
-                if (value != balloonTipTitle) {
+            set
+            {
+                if (value != balloonTipTitle)
+                {
                     balloonTipTitle = value;
                 }
             }
@@ -164,7 +182,8 @@ namespace System.Windows.Forms {
         ///    <para>[This event is raised on the NIN_BALLOONUSERCLICK message.]</para>
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
-        public event EventHandler BalloonTipClicked {
+        public event EventHandler BalloonTipClicked
+        {
             add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
 
             remove => Events.RemoveHandler(EVENT_BALLOONTIPCLICKED, value);
@@ -174,7 +193,8 @@ namespace System.Windows.Forms {
         ///    <para>[This event is raised on the NIN_BALLOONTIMEOUT message.]</para>
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
-        public event EventHandler BalloonTipClosed {
+        public event EventHandler BalloonTipClosed
+        {
             add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
 
             remove => Events.RemoveHandler(EVENT_BALLOONTIPCLOSED, value);
@@ -184,7 +204,8 @@ namespace System.Windows.Forms {
         ///    <para>[This event is raised on the NIN_BALLOONSHOW or NIN_BALLOONHIDE message.]</para>
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
-        public event EventHandler BalloonTipShown {
+        public event EventHandler BalloonTipShown
+        {
             add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
             remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
         }
@@ -201,13 +222,16 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.NotifyIconMenuDescr))
         ]
-        public ContextMenu ContextMenu {
-            get {
+        public ContextMenu ContextMenu
+        {
+            get
+            {
                 return contextMenu;
             }
 
-            set {
-                this.contextMenu = value;
+            set
+            {
+                contextMenu = value;
             }
         }
 
@@ -216,13 +240,16 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.NotifyIconMenuDescr))
         ]
-        public ContextMenuStrip ContextMenuStrip {
-            get {
+        public ContextMenuStrip ContextMenuStrip
+        {
+            get
+            {
                 return contextMenuStrip;
             }
-    
-            set {
-                this.contextMenuStrip = value;
+
+            set
+            {
+                contextMenuStrip = value;
             }
         }
 
@@ -238,13 +265,17 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         SRDescription(nameof(SR.NotifyIconIconDescr))
         ]
-        public Icon Icon {
-            get {
+        public Icon Icon
+        {
+            get
+            {
                 return icon;
             }
-            set {
-                if (icon != value) {
-                    this.icon = value;
+            set
+            {
+                if (icon != value)
+                {
+                    icon = value;
                     UpdateIcon(visible);
                 }
             }
@@ -263,18 +294,28 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconTextDescr)),
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
-        public string Text {
-            get {
+        public string Text
+        {
+            get
+            {
                 return text;
             }
-            set {
-                if (value == null) value = string.Empty;
-                if (value != null && !value.Equals(this.text)) {
-                    if (value != null && value.Length > 63) {
+            set
+            {
+                if (value == null)
+                {
+                    value = string.Empty;
+                }
+
+                if (value != null && !value.Equals(text))
+                {
+                    if (value != null && value.Length > 63)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, string.Format(SR.TrayIcon_TextTooLong));
                     }
-                    this.text = value;
-                    if (added) {
+                    text = value;
+                    if (added)
+                    {
                         UpdateIcon(true);
                     }
                 }
@@ -292,12 +333,16 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.NotifyIconVisDescr))
         ]
-        public bool Visible {
-            get {
+        public bool Visible
+        {
+            get
+            {
                 return visible;
             }
-            set {
-                if (visible != value) {
+            set
+            {
+                if (visible != value)
+                {
                     UpdateIcon(value);
                     visible = value;
                 }
@@ -312,11 +357,14 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
-        public object Tag {
-            get {
+        public object Tag
+        {
+            get
+            {
                 return userData;
             }
-            set {
+            set
+            {
                 userData = value;
             }
         }
@@ -325,7 +373,8 @@ namespace System.Windows.Forms {
         ///     Occurs when the user clicks the icon in the system tray.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
-        public event EventHandler Click {
+        public event EventHandler Click
+        {
             add => Events.AddHandler(EVENT_CLICK, value);
             remove => Events.RemoveHandler(EVENT_CLICK, value);
         }
@@ -334,7 +383,8 @@ namespace System.Windows.Forms {
         ///     Occurs when the user double-clicks the icon in the system tray.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
-        public event EventHandler DoubleClick {
+        public event EventHandler DoubleClick
+        {
             add => Events.AddHandler(EVENT_DOUBLECLICK, value);
             remove => Events.RemoveHandler(EVENT_DOUBLECLICK, value);
         }
@@ -343,7 +393,8 @@ namespace System.Windows.Forms {
         ///     Occurs when the user clicks the icon in the system tray.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
-        public event MouseEventHandler MouseClick {
+        public event MouseEventHandler MouseClick
+        {
             add => Events.AddHandler(EVENT_MOUSECLICK, value);
             remove => Events.RemoveHandler(EVENT_MOUSECLICK, value);
         }
@@ -352,7 +403,8 @@ namespace System.Windows.Forms {
         ///     Occurs when the user mouse double clicks the icon in the system tray.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
-        public event MouseEventHandler MouseDoubleClick {
+        public event MouseEventHandler MouseDoubleClick
+        {
             add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
             remove => Events.RemoveHandler(EVENT_MOUSEDOUBLECLICK, value);
         }
@@ -364,10 +416,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
-        public event MouseEventHandler MouseDown {
+        public event MouseEventHandler MouseDown
+        {
             add => Events.AddHandler(EVENT_MOUSEDOWN, value);
             remove => Events.RemoveHandler(EVENT_MOUSEDOWN, value);
-        }        
+        }
 
         /// <summary>
         ///    <para>
@@ -376,10 +429,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
-        public event MouseEventHandler MouseMove {
+        public event MouseEventHandler MouseMove
+        {
             add => Events.AddHandler(EVENT_MOUSEMOVE, value);
             remove => Events.RemoveHandler(EVENT_MOUSEMOVE, value);
-        }        
+        }
 
         /// <summary>
         ///    <para>
@@ -389,10 +443,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
-        public event MouseEventHandler MouseUp {
+        public event MouseEventHandler MouseUp
+        {
             add => Events.AddHandler(EVENT_MOUSEUP, value);
             remove => Events.RemoveHandler(EVENT_MOUSEUP, value);
-        }        
+        }
 
         /// <summary>
         ///    <para>
@@ -400,11 +455,14 @@ namespace System.Windows.Forms {
         ///    <see cref='System.Windows.Forms.NotifyIcon'/>.
         ///    </para>
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (window != null) {
-                    this.icon = null;
-                    this.Text = string.Empty;
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (window != null)
+                {
+                    icon = null;
+                    Text = string.Empty;
                     UpdateIcon(false);
                     window.DestroyHandle();
                     window = null;
@@ -412,11 +470,13 @@ namespace System.Windows.Forms {
                     contextMenuStrip = null;
                 }
             }
-            else {
+            else
+            {
                 // This same post is done in ControlNativeWindow's finalize method, so if you change
                 // it, change it there too.
                 //
-                if (window != null && window.Handle != IntPtr.Zero) {
+                if (window != null && window.Handle != IntPtr.Zero)
+                {
                     UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
                     window.ReleaseHandle();
                 }
@@ -429,11 +489,9 @@ namespace System.Windows.Forms {
         ///       This method raised the BalloonTipClicked event. 
         ///    </para>
         /// </summary>
-        private void OnBalloonTipClicked() {
-            EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPCLICKED];
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+        private void OnBalloonTipClicked()
+        {
+            ((EventHandler)Events[EVENT_BALLOONTIPCLICKED])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -441,11 +499,9 @@ namespace System.Windows.Forms {
         ///       This method raised the BalloonTipClosed event. 
         ///    </para>
         /// </summary>
-        private void OnBalloonTipClosed() {
-            EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPCLOSED];
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+        private void OnBalloonTipClosed()
+        {
+            ((EventHandler)Events[EVENT_BALLOONTIPCLOSED])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -453,11 +509,9 @@ namespace System.Windows.Forms {
         ///       This method raised the BalloonTipShown event. 
         ///    </para>
         /// </summary>
-        private void OnBalloonTipShown() {
-            EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPSHOWN];
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+        private void OnBalloonTipShown()
+        {
+            ((EventHandler)Events[EVENT_BALLOONTIPSHOWN])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -469,20 +523,18 @@ namespace System.Windows.Forms {
         ///       other recipients do actually get the event.
         ///    </para>
         /// </summary>
-        private void OnClick(EventArgs e) {
-            EventHandler handler = (EventHandler) Events[ EVENT_CLICK ];
-            if (handler != null)
-                handler( this, e );
+        private void OnClick(EventArgs e)
+        {
+            ((EventHandler)Events[EVENT_CLICK])?.Invoke(this, e);
         }
 
         /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDoubleClick to send this event to any registered event listeners.
         /// </summary>
-        private void OnDoubleClick(EventArgs e) {
-            EventHandler handler = (EventHandler) Events[ EVENT_DOUBLECLICK ];
-            if (handler != null)
-                handler( this, e );
+        private void OnDoubleClick(EventArgs e)
+        {
+            ((EventHandler)Events[EVENT_DOUBLECLICK])?.Invoke(this, e);
         }
 
 
@@ -490,20 +542,18 @@ namespace System.Windows.Forms {
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseClick to send this event to any registered event listeners.
         /// </summary>
-        private void OnMouseClick(MouseEventArgs mea) {
-            MouseEventHandler handler = (MouseEventHandler) Events[ EVENT_MOUSECLICK ];
-            if (handler != null)
-                handler( this, mea );
+        private void OnMouseClick(MouseEventArgs mea)
+        {
+            ((MouseEventHandler)Events[EVENT_MOUSECLICK])?.Invoke(this, mea);
         }
-        
+
         /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseDoubleClick to send this event to any registered event listeners.
         /// </summary>
-        private void OnMouseDoubleClick(MouseEventArgs mea) {
-            MouseEventHandler handler = (MouseEventHandler) Events[ EVENT_MOUSEDOUBLECLICK ];
-            if (handler != null)
-                handler( this, mea );
+        private void OnMouseDoubleClick(MouseEventArgs mea)
+        {
+            ((MouseEventHandler)Events[EVENT_MOUSEDOUBLECLICK])?.Invoke(this, mea);
         }
 
         /// <summary>
@@ -514,10 +564,9 @@ namespace System.Windows.Forms {
         ///       
         ///    </para>
         /// </summary>
-        private void OnMouseDown(MouseEventArgs e) {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEDOWN];
-            if (handler != null)
-                handler(this, e);
+        private void OnMouseDown(MouseEventArgs e)
+        {
+            ((MouseEventHandler)Events[EVENT_MOUSEDOWN])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -527,10 +576,9 @@ namespace System.Windows.Forms {
         ///       
         ///    </para>
         /// </summary>
-        private void OnMouseMove(MouseEventArgs e) {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEMOVE];
-            if (handler != null)
-                handler(this, e);
+        private void OnMouseMove(MouseEventArgs e)
+        {
+            ((MouseEventHandler)Events[EVENT_MOUSEMOVE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -539,10 +587,9 @@ namespace System.Windows.Forms {
         ///       Call base.onMouseUp to send this event to any registered event listeners.
         ///    </para>
         /// </summary>
-        private void OnMouseUp(MouseEventArgs e) {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEUP];
-            if (handler != null)
-                handler(this, e);
+        private void OnMouseUp(MouseEventArgs e)
+        {
+            ((MouseEventHandler)Events[EVENT_MOUSEUP])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -564,8 +611,9 @@ namespace System.Windows.Forms {
         ///       ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         ///    </para>
         /// </summary>
-        public void ShowBalloonTip(int timeout) {
-            ShowBalloonTip(timeout, this.balloonTipTitle, this.balloonTipText, this.balloonTipIcon);
+        public void ShowBalloonTip(int timeout)
+        {
+            ShowBalloonTip(timeout, balloonTipTitle, balloonTipText, balloonTipIcon);
         }
 
 
@@ -589,10 +637,12 @@ namespace System.Windows.Forms {
         ///       ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         ///    </para>
         /// </summary>
-        public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon) {
+        public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon)
+        {
 
-            if (timeout < 0) {
-               throw new ArgumentOutOfRangeException(nameof(timeout), timeout, string.Format(SR.InvalidArgument, nameof(timeout), timeout));
+            if (timeout < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(timeout), timeout, string.Format(SR.InvalidArgument, nameof(timeout), timeout));
             }
 
             if (string.IsNullOrEmpty(tipText))
@@ -601,20 +651,24 @@ namespace System.Windows.Forms {
             }
 
             //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(tipIcon, (int)tipIcon, (int)ToolTipIcon.None, (int)ToolTipIcon.Error)){
+            if (!ClientUtils.IsEnumValid(tipIcon, (int)tipIcon, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
+            {
                 throw new InvalidEnumArgumentException(nameof(tipIcon), (int)tipIcon, typeof(ToolTipIcon));
             }
-            
-            
-           if (added ) {
+
+
+            if (added)
+            {
                 // Bail if in design mode...
-                if (DesignMode) {
-                   return;
+                if (DesignMode)
+                {
+                    return;
                 }
 
                 NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA();
-                if (window.Handle == IntPtr.Zero) {
-                   window.CreateHandle(new CreateParams());
+                if (window.Handle == IntPtr.Zero)
+                {
+                    window.CreateHandle(new CreateParams());
                 }
                 data.hWnd = window.Handle;
                 data.uID = id;
@@ -622,32 +676,44 @@ namespace System.Windows.Forms {
                 data.uTimeoutOrVersion = timeout;
                 data.szInfoTitle = tipTitle;
                 data.szInfo = tipText;
-                switch (tipIcon) {
-                   case ToolTipIcon.Info: data.dwInfoFlags = NativeMethods.NIIF_INFO; break;
-                   case ToolTipIcon.Warning: data.dwInfoFlags = NativeMethods.NIIF_WARNING; break;
-                   case ToolTipIcon.Error: data.dwInfoFlags = NativeMethods.NIIF_ERROR; break;
-                   case ToolTipIcon.None: data.dwInfoFlags = NativeMethods.NIIF_NONE; break;
+                switch (tipIcon)
+                {
+                    case ToolTipIcon.Info:
+                        data.dwInfoFlags = NativeMethods.NIIF_INFO;
+                        break;
+                    case ToolTipIcon.Warning:
+                        data.dwInfoFlags = NativeMethods.NIIF_WARNING;
+                        break;
+                    case ToolTipIcon.Error:
+                        data.dwInfoFlags = NativeMethods.NIIF_ERROR;
+                        break;
+                    case ToolTipIcon.None:
+                        data.dwInfoFlags = NativeMethods.NIIF_NONE;
+                        break;
                 }
                 UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_MODIFY, data);
-           }
+            }
         }
 
         /// <summary>
         ///     Shows the context menu for the tray icon.
         /// </summary>
-        private void ShowContextMenu() {
+        private void ShowContextMenu()
+        {
 
-            if (contextMenu != null || contextMenuStrip != null) {
+            if (contextMenu != null || contextMenuStrip != null)
+            {
                 NativeMethods.POINT pt = new NativeMethods.POINT();
                 UnsafeNativeMethods.GetCursorPos(pt);
-                                
+
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
                 UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
 
-                if (contextMenu != null) {
-                    contextMenu.OnPopup( EventArgs.Empty );
+                if (contextMenu != null)
+                {
+                    contextMenu.OnPopup(EventArgs.Empty);
 
                     SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
                                              NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTALIGN,
@@ -659,33 +725,41 @@ namespace System.Windows.Forms {
                     // Force task switch (see above)
                     UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), Interop.WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
-                else if (contextMenuStrip != null) {
+                else if (contextMenuStrip != null)
+                {
                     // this will set the context menu strip to be toplevel
                     // and will allow us to overlap the system tray
                     contextMenuStrip.ShowInTaskbar(pt.x, pt.y);
                 }
             }
         }
-    
+
         /// <summary>
         ///     Updates the icon in the system tray.
         /// </summary>
-        private void UpdateIcon(bool showIconInTray) {
-            lock(syncObj) {
+        private void UpdateIcon(bool showIconInTray)
+        {
+            lock (syncObj)
+            {
 
                 // Bail if in design mode...
                 //
-                if (DesignMode) {
+                if (DesignMode)
+                {
                     return;
                 }
 
                 window.LockReference(showIconInTray);
 
-                NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA();
-                data.uCallbackMessage = WM_TRAYMOUSEMESSAGE;
-                data.uFlags = NativeMethods.NIF_MESSAGE;
-                if (showIconInTray) {
-                    if (window.Handle == IntPtr.Zero) {
+                NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA
+                {
+                    uCallbackMessage = WM_TRAYMOUSEMESSAGE,
+                    uFlags = NativeMethods.NIF_MESSAGE
+                };
+                if (showIconInTray)
+                {
+                    if (window.Handle == IntPtr.Zero)
+                    {
                         window.CreateHandle(new CreateParams());
                     }
                 }
@@ -693,23 +767,28 @@ namespace System.Windows.Forms {
                 data.uID = id;
                 data.hIcon = IntPtr.Zero;
                 data.szTip = null;
-                if (icon != null) {
+                if (icon != null)
+                {
                     data.uFlags |= NativeMethods.NIF_ICON;
                     data.hIcon = icon.Handle;
                 }
                 data.uFlags |= NativeMethods.NIF_TIP;
                 data.szTip = text;
 
-                if (showIconInTray && icon != null) {
-                    if (!added) {
+                if (showIconInTray && icon != null)
+                {
+                    if (!added)
+                    {
                         UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_ADD, data);
                         added = true;
                     }
-                    else {
+                    else
+                    {
                         UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_MODIFY, data);
                     }
                 }
-                else if (added) {
+                else if (added)
+                {
                     UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_DELETE, data);
                     added = false;
                 }
@@ -719,8 +798,10 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Handles the mouse-down event
         /// </summary>
-        private void WmMouseDown(ref Message m, MouseButtons button, int clicks) {
-            if (clicks == 2) {
+        private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
+        {
+            if (clicks == 2)
+            {
                 OnDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
                 OnMouseDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
                 doubleClick = true;
@@ -731,33 +812,40 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Handles the mouse-move event
         /// </summary>
-        private void WmMouseMove(ref Message m) {
+        private void WmMouseMove(ref Message m)
+        {
             OnMouseMove(new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
         }
 
         /// <summary>
         ///     Handles the mouse-up event
         /// </summary>
-        private void WmMouseUp(ref Message m, MouseButtons button) {
+        private void WmMouseUp(ref Message m, MouseButtons button)
+        {
             OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
             //subhag
-            if(!doubleClick) {
-               OnClick(new MouseEventArgs(button, 0, 0, 0, 0));
-               OnMouseClick(new MouseEventArgs(button, 0, 0, 0, 0));
+            if (!doubleClick)
+            {
+                OnClick(new MouseEventArgs(button, 0, 0, 0, 0));
+                OnMouseClick(new MouseEventArgs(button, 0, 0, 0, 0));
             }
             doubleClick = false;
         }
 
-        private void WmTaskbarCreated(ref Message m) {
+        private void WmTaskbarCreated(ref Message m)
+        {
             added = false;
             UpdateIcon(visible);
         }
 
-        private void WndProc(ref Message msg) {
+        private void WndProc(ref Message msg)
+        {
 
-            switch (msg.Msg) {
+            switch (msg.Msg)
+            {
                 case WM_TRAYMOUSEMESSAGE:
-                    switch ((int)msg.LParam) {
+                    switch ((int)msg.LParam)
+                    {
                         case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
                             break;
@@ -786,7 +874,8 @@ namespace System.Windows.Forms {
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
                         case Interop.WindowMessages.WM_RBUTTONUP:
-                            if (contextMenu != null || contextMenuStrip != null) {
+                            if (contextMenu != null || contextMenuStrip != null)
+                            {
                                 ShowContextMenu();
                             }
                             WmMouseUp(ref msg, MouseButtons.Right);
@@ -806,27 +895,34 @@ namespace System.Windows.Forms {
                     }
                     break;
                 case Interop.WindowMessages.WM_COMMAND:
-                    if (IntPtr.Zero == msg.LParam) {
-                        if (Command.DispatchID((int)msg.WParam & 0xFFFF)) return;
+                    if (IntPtr.Zero == msg.LParam)
+                    {
+                        if (Command.DispatchID((int)msg.WParam & 0xFFFF))
+                        {
+                            return;
+                        }
                     }
-                    else {
+                    else
+                    {
                         window.DefWndProc(ref msg);
                     }
                     break;
                 case Interop.WindowMessages.WM_DRAWITEM:
                     // If the wparam is zero, then the message was sent by a menu.
                     // See WM_DRAWITEM in MSDN.
-                    if (msg.WParam == IntPtr.Zero) {
+                    if (msg.WParam == IntPtr.Zero)
+                    {
                         WmDrawItemMenuItem(ref msg);
                     }
                     break;
                 case Interop.WindowMessages.WM_MEASUREITEM:
                     // If the wparam is zero, then the message was sent by a menu.
-                    if (msg.WParam == IntPtr.Zero) {
+                    if (msg.WParam == IntPtr.Zero)
+                    {
                         WmMeasureMenuItem(ref msg);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref msg);
                     break;
@@ -837,7 +933,8 @@ namespace System.Windows.Forms {
                     break;
 
                 default:
-                    if (msg.Msg == WM_TASKBARCREATED) {
+                    if (msg.Msg == WM_TASKBARCREATED)
+                    {
                         WmTaskbarCreated(ref msg);
                     }
                     window.DefWndProc(ref msg);
@@ -845,9 +942,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void WmInitMenuPopup(ref Message m) {
-            if (contextMenu != null) {
-                if (contextMenu.ProcessInitMenuPopup(m.WParam)) {
+        private void WmInitMenuPopup(ref Message m)
+        {
+            if (contextMenu != null)
+            {
+                if (contextMenu.ProcessInitMenuPopup(m.WParam))
+                {
                     return;
                 }
             }
@@ -855,7 +955,8 @@ namespace System.Windows.Forms {
             window.DefWndProc(ref m);
         }
 
-        private void WmMeasureMenuItem(ref Message m) {
+        private void WmMeasureMenuItem(ref Message m)
+        {
             // Obtain the menu item object
             NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
 
@@ -868,12 +969,14 @@ namespace System.Windows.Forms {
             Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
 
             // Delegate this message to the menu item
-            if (menuItem != null) {
+            if (menuItem != null)
+            {
                 menuItem.WmMeasureItem(ref m);
             }
         }
 
-        private void WmDrawItemMenuItem(ref Message m) {
+        private void WmDrawItemMenuItem(ref Message m)
+        {
             // Obtain the menu item object
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
 
@@ -883,7 +986,8 @@ namespace System.Windows.Forms {
             MenuItem menuItem = MenuItem.GetMenuItemFromItemData(dis.itemData);
 
             // Delegate this message to the menu item
-            if (menuItem != null) {
+            if (menuItem != null)
+            {
                 menuItem.WmDrawItem(ref m);
             }
         }
@@ -891,50 +995,61 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Defines a placeholder window that the NotifyIcon is attached to.
         /// </summary>
-        private class NotifyIconNativeWindow : NativeWindow {
+        private class NotifyIconNativeWindow : NativeWindow
+        {
             internal NotifyIcon reference;
-            private  GCHandle   rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
+            private GCHandle rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
 
             /// <summary>
             ///     Create a new NotifyIcon, and bind the window to the NotifyIcon component.
             /// </summary>
-            internal NotifyIconNativeWindow(NotifyIcon component) {
+            internal NotifyIconNativeWindow(NotifyIcon component)
+            {
                 reference = component;
             }
 
-            ~NotifyIconNativeWindow() {
+            ~NotifyIconNativeWindow()
+            {
                 // This same post is done in Control's Dispose method, so if you change
                 // it, change it there too.
                 //
-                if (Handle != IntPtr.Zero) {
+                if (Handle != IntPtr.Zero)
+                {
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
                 }
-                
+
                 // This releases the handle from our window proc, re-routing it back to
                 // the system.
             }
 
-            public void LockReference(bool locked) {
-                if (locked) {
-                    if (!rootRef.IsAllocated) {
+            public void LockReference(bool locked)
+            {
+                if (locked)
+                {
+                    if (!rootRef.IsAllocated)
+                    {
                         rootRef = GCHandle.Alloc(reference, GCHandleType.Normal);
                     }
                 }
-                else {
-                    if (rootRef.IsAllocated) {
+                else
+                {
+                    if (rootRef.IsAllocated)
+                    {
                         rootRef.Free();
                     }
                 }
             }
 
-            protected override void OnThreadException(Exception e) {
+            protected override void OnThreadException(Exception e)
+            {
                 Application.OnThreadException(e);
             }
 
             /// <summary>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </summary>
-            protected override void WndProc(ref Message m) {
+            protected override void WndProc(ref Message m)
+            {
                 Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);
             }

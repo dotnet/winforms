@@ -2,14 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Layout {
+namespace System.Windows.Forms.Layout
+{
     using System.Diagnostics.CodeAnalysis;
 
     // LayoutEventArgs takes a string for AffectedProperty.  This class contains const
     // strings to use as property names.  Doing this allows us to use reference comparisons
     // which is advantageous because 1) pref and 2) we will not accidently collide with
     // names that extenders provide.
-    internal class PropertyNames {
+    internal class PropertyNames
+    {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string Alignment = "Alignment";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
@@ -19,7 +21,7 @@ namespace System.Windows.Forms.Layout {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string AutoSize = "AutoSize";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string Appearance = "Appearance";        
+        public static readonly string Appearance = "Appearance";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string AutoEllipsis = "AutoEllipsis";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
@@ -43,7 +45,7 @@ namespace System.Windows.Forms.Layout {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string ColumnStyles = "ColumnStyles";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string Controls = "Controls";        
+        public static readonly string Controls = "Controls";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string Dock = "Dock";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
@@ -69,15 +71,15 @@ namespace System.Windows.Forms.Layout {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string GrowStyle = "GrowStyle";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string Image= "Image";
+        public static readonly string Image = "Image";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string ImageIndex= nameof(ImageIndex);
+        public static readonly string ImageIndex = nameof(ImageIndex);
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string ImageScaling= "ImageScaling";
+        public static readonly string ImageScaling = "ImageScaling";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string ImageScalingSize= "ImageScalingSize";
+        public static readonly string ImageScalingSize = "ImageScalingSize";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string ImageKey= "ImageKey";
+        public static readonly string ImageKey = "ImageKey";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string ImageAlign = "ImageAlign";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]

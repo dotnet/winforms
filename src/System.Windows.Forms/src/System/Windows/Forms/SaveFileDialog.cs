@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
@@ -26,7 +27,8 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionSaveFileDialog))
     ]
-    public sealed class SaveFileDialog : FileDialog {
+    public sealed class SaveFileDialog : FileDialog
+    {
 
         /// <summary>
         ///    <para>
@@ -35,15 +37,18 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.SaveFileDialogCreatePrompt))
         ]
-        public bool CreatePrompt {
-            get {
+        public bool CreatePrompt
+        {
+            get
+            {
                 return GetOption(NativeMethods.OFN_CREATEPROMPT);
             }
-            set {
+            set
+            {
                 SetOption(NativeMethods.OFN_CREATEPROMPT, value);
             }
         }
@@ -55,15 +60,18 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))
         ]
-        public bool OverwritePrompt {
-            get {
+        public bool OverwritePrompt
+        {
+            get
+            {
                 return GetOption(NativeMethods.OFN_OVERWRITEPROMPT);
             }
-            set {
+            set
+            {
                 SetOption(NativeMethods.OFN_OVERWRITEPROMPT, value);
             }
         }
@@ -73,15 +81,16 @@ namespace System.Windows.Forms {
         ///       Opens the file with read/write permission selected by the user.
         ///    </para>
         /// </summary>
-        
+
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        public Stream OpenFile() {
+        public Stream OpenFile()
+        {
             string filename = FileNames[0];
             if (string.IsNullOrEmpty(filename))
             {
                 throw new ArgumentNullException(nameof(FileName));
             }
-                
+
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
@@ -94,7 +103,7 @@ namespace System.Windows.Forms {
         ///       closing.
         ///    </para>
         /// </summary>
-        private bool PromptFileCreate(string fileName) 
+        private bool PromptFileCreate(string fileName)
         {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -109,7 +118,8 @@ namespace System.Windows.Forms {
         ///       
         ///    </para>
         /// </summary>
-        private bool PromptFileOverwrite(string fileName) {
+        private bool PromptFileOverwrite(string fileName)
+        {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogOverwritePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
@@ -117,24 +127,30 @@ namespace System.Windows.Forms {
         // If it's necessary to throw up a "This file exists, are you sure?" kind of
         // MessageBox, here's where we do it.
         // Return value is whether or not the user hit "okay".
-        private protected override bool PromptUserIfAppropriate(string fileName) {
-            if (!base.PromptUserIfAppropriate(fileName)) {
+        private protected override bool PromptUserIfAppropriate(string fileName)
+        {
+            if (!base.PromptUserIfAppropriate(fileName))
+            {
                 return false;
             }
 
             //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal) {
-                if (!PromptFileOverwrite(fileName)) {
+            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !UseVistaDialogInternal)
+            {
+                if (!PromptFileOverwrite(fileName))
+                {
                     return false;
                 }
             }
 
-            if ((_options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName)) {
-                if (!PromptFileCreate(fileName)) {
+            if ((_options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName))
+            {
+                if (!PromptFileCreate(fileName))
+                {
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -144,26 +160,30 @@ namespace System.Windows.Forms {
         ///       values.
         ///    </para>
         /// </summary>
-        public override void Reset() {
+        public override void Reset()
+        {
             base.Reset();
             SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
         }
 
         /// <summary>
         /// </summary>
-        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+        {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 
-            if (!result) {
+            if (!result)
+            {
                 // Something may have gone wrong - check for error condition
                 //
                 int errorCode = SafeNativeMethods.CommDlgExtendedError();
-                switch(errorCode) {
+                switch (errorCode)
+                {
                     case NativeMethods.FNERR_INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
-            
+
             return result;
         }
 

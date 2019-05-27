@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     {
         public FormClosingEventArgs(CloseReason closeReason, bool cancel) : base(cancel)
         {
-            CloseReason = closeReason;                                           
+            CloseReason = closeReason;
         }
 
         /// <summary>

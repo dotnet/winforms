@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     ]
     public class DataGridViewSelectedCellCollection : BaseCollection, IList
     {
-        ArrayList items = new ArrayList();
+        readonly ArrayList items = new ArrayList();
 
         int IList.Add(object value)
         {
@@ -36,12 +36,12 @@ namespace System.Windows.Forms
 
         bool IList.Contains(object value)
         {
-            return this.items.Contains(value);
+            return items.Contains(value);
         }
 
         int IList.IndexOf(object value)
         {
-            return this.items.IndexOf(value);
+            return items.IndexOf(value);
         }
 
         void IList.Insert(int index, object value)
@@ -71,18 +71,18 @@ namespace System.Windows.Forms
 
         object IList.this[int index]
         {
-            get { return this.items[index]; }
+            get { return items[index]; }
             set { throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection)); }
         }
 
         void ICollection.CopyTo(Array array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
         int ICollection.Count
         {
-            get { return this.items.Count; }
+            get { return items.Count; }
         }
 
         bool ICollection.IsSynchronized
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.items.GetEnumerator();
+            return items.GetEnumerator();
         }
 
         internal DataGridViewSelectedCellCollection()
@@ -108,15 +108,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.items;
+                return items;
             }
         }
-        
+
         public DataGridViewCell this[int index]
         {
             get
             {
-                return (DataGridViewCell) this.items[index];
+                return (DataGridViewCell)items[index];
             }
         }
 
@@ -126,9 +126,9 @@ namespace System.Windows.Forms
         internal int Add(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(!Contains(dataGridViewCell));
-            return this.items.Add(dataGridViewCell);
+            return items.Add(dataGridViewCell);
         }
-        
+
         /* Not used for now
         internal void AddRange(DataGridViewCell[] dataGridViewCells)
         {
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));
-                this.items.Add(dataGridViewCell);
+                items.Add(dataGridViewCell);
             }
         }
 
@@ -177,12 +177,12 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Contains(DataGridViewCell dataGridViewCell)
         {
-            return this.items.IndexOf(dataGridViewCell) != -1;
+            return items.IndexOf(dataGridViewCell) != -1;
         }
 
         public void CopyTo(DataGridViewCell[] array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
         [

@@ -30,9 +30,8 @@ namespace System.ComponentModel.Design
         /// <param name="editValue"></param>
         protected override object[] GetItems(object editValue)
         {
-            if (editValue is Array)
+            if (editValue is Array valueArray)
             {
-                Array valueArray = (Array)editValue;
                 object[] items = new object[valueArray.GetLength(0)];
                 Array.Copy(valueArray, items, items.Length);
                 return items;

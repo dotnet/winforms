@@ -32,14 +32,20 @@ namespace System.Windows.Forms.Design
                 {
                     if (shortcutKeysUI == null)
                     {
-                        shortcutKeysUI = new ShortcutKeysUI(this);
-                        shortcutKeysUI.BackColor = SystemColors.Control;
+                        shortcutKeysUI = new ShortcutKeysUI(this)
+                        {
+                            BackColor = SystemColors.Control
+                        };
                     }
 
                     shortcutKeysUI.Start(edSvc, value);
                     edSvc.DropDownControl(shortcutKeysUI);
 
-                    if (shortcutKeysUI.Value != null) value = shortcutKeysUI.Value;
+                    if (shortcutKeysUI.Value != null)
+                    {
+                        value = shortcutKeysUI.Value;
+                    }
+
                     shortcutKeysUI.End();
                 }
             }
@@ -90,7 +96,7 @@ namespace System.Windows.Forms.Design
             private CheckBox chkCtrl;
             private CheckBox chkShift;
             private ComboBox cmbKey;
-            private ShortcutKeysEditor editor;
+            private readonly ShortcutKeysEditor editor;
             private TypeConverter keysConverter;
             private Label lblKey;
             private Label lblModifiers;
@@ -112,8 +118,12 @@ namespace System.Windows.Forms.Design
                 // Looking for duplicates in validKeys
                 int keyCount = validKeys.Length;
                 for (int key1 = 0; key1 < keyCount - 1; key1++)
+                {
                     for (int key2 = key1 + 1; key2 < keyCount; key2++)
+                    {
                         Debug.Assert((int)validKeys[key1] != (int)validKeys[key2]);
+                    }
+                }
 #endif
             }
 
@@ -135,7 +145,11 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (keysConverter == null) keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
+                    if (keysConverter == null)
+                    {
+                        keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
+                    }
+
                     Debug.Assert(keysConverter != null);
                     return keysConverter;
                 }
@@ -148,7 +162,11 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (((Keys)currentValue & Keys.KeyCode) == 0) return Keys.None;
+                    if (((Keys)currentValue & Keys.KeyCode) == 0)
+                    {
+                        return Keys.None;
+                    }
+
                     return currentValue;
                 }
             }
@@ -287,7 +305,11 @@ namespace System.Windows.Forms.Design
                 cmbKey.Margin = new Padding(12, 4, 3, 3);
                 cmbKey.Padding = cmbKey.Margin;
 
-                foreach (Keys keyCode in validKeys) cmbKey.Items.Add(KeysConverter.ConvertToString(keyCode));
+                foreach (Keys keyCode in validKeys)
+                {
+                    cmbKey.Items.Add(KeysConverter.ConvertToString(keyCode));
+                }
+
                 cmbKey.SelectedIndexChanged += cmbKey_SelectedIndexChanged;
 
                 // 
@@ -325,8 +347,13 @@ namespace System.Windows.Forms.Design
             {
                 Debug.Assert((keyCode & Keys.KeyCode) == keyCode);
                 foreach (Keys validKeyCode in validKeys)
+                {
                     if (validKeyCode == keyCode)
+                    {
                         return true;
+                    }
+                }
+
                 return false;
             }
 
@@ -361,11 +388,13 @@ namespace System.Windows.Forms.Design
 
                     case Keys.Left:
                         if ((keyModifiers & (Keys.Control | Keys.Alt)) == 0)
+                        {
                             if (chkCtrl.Focused)
                             {
                                 btnReset.Focus();
                                 return true;
                             }
+                        }
 
                         break;
 
@@ -391,7 +420,10 @@ namespace System.Windows.Forms.Design
                         if (!cmbKey.Focused ||
                             (keyModifiers & (Keys.Control | Keys.Alt)) != 0 ||
                             !cmbKey.DroppedDown)
+                        {
                             currentValue = originalValue;
+                        }
+
                         break;
                 }
 
@@ -438,16 +470,37 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private void UpdateCurrentValue()
             {
-                if (!updateCurrentValue) return;
+                if (!updateCurrentValue)
+                {
+                    return;
+                }
+
                 int cmbKeySelectedIndex = cmbKey.SelectedIndex;
                 Keys valueKeys = Keys.None;
-                if (chkCtrl.Checked) valueKeys |= Keys.Control;
-                if (chkAlt.Checked) valueKeys |= Keys.Alt;
-                if (chkShift.Checked) valueKeys |= Keys.Shift;
+                if (chkCtrl.Checked)
+                {
+                    valueKeys |= Keys.Control;
+                }
+
+                if (chkAlt.Checked)
+                {
+                    valueKeys |= Keys.Alt;
+                }
+
+                if (chkShift.Checked)
+                {
+                    valueKeys |= Keys.Shift;
+                }
+
                 if (unknownKeyCode != Keys.None && cmbKeySelectedIndex == 0)
+                {
                     valueKeys |= unknownKeyCode;
+                }
                 else if (cmbKeySelectedIndex != -1)
+                {
                     valueKeys |= validKeys[unknownKeyCode == Keys.None ? cmbKeySelectedIndex : cmbKeySelectedIndex - 1];
+                }
+
                 currentValue = valueKeys;
             }
         }

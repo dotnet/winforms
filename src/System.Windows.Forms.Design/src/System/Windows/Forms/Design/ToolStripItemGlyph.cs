@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Design
             }
             return null;
         }
-        
+
         /// <summary>
         /// Control host dont draw on Invalidation...
         /// </summary>

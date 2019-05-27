@@ -4,7 +4,8 @@
 
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
@@ -23,24 +24,30 @@ namespace System.Windows.Forms {
     ///
     ///    </para>
     /// </summary>
-    public class TreeViewCancelEventArgs : CancelEventArgs {
-        private TreeNode node;
-        private TreeViewAction action;
+    public class TreeViewCancelEventArgs : CancelEventArgs
+    {
+        private readonly TreeNode node;
+        private readonly TreeViewAction action;
 
         public TreeViewCancelEventArgs(TreeNode node, bool cancel, TreeViewAction action)
-        : base(cancel) {
-            this.node = node;                                           
+        : base(cancel)
+        {
+            this.node = node;
             this.action = action;
         }
 
-        public TreeNode Node {
-            get {
+        public TreeNode Node
+        {
+            get
+            {
                 return node;
             }
         }
-        
-        public TreeViewAction Action {
-            get {
+
+        public TreeViewAction Action
+        {
+            get
+            {
                 return action;
             }
         }

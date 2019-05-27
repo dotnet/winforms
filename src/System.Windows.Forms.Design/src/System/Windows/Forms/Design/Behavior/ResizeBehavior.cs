@@ -328,7 +328,9 @@ namespace System.Windows.Forms.Design.Behavior
                     if (prop != null)
                     {
                         if ((bool)prop.GetValue(o))
+                        {
                             continue;
+                        }
                     }
                     components.Add(o);
                 }

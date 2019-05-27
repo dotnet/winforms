@@ -19,35 +19,42 @@ namespace System.Windows.Forms
         private static bool dropShadowEnabled;
         private static bool menuAccessKeysUnderlinedValid;
         private static bool menuAccessKeysUnderlined;
-    
-    
-        static DisplayInformation() {
+
+
+        static DisplayInformation()
+        {
             SystemEvents.UserPreferenceChanging += new UserPreferenceChangingEventHandler(UserPreferenceChanging);
-            SystemEvents.DisplaySettingsChanging += new EventHandler(DisplaySettingsChanging); 
+            SystemEvents.DisplaySettingsChanging += new EventHandler(DisplaySettingsChanging);
         }
 
-        public static short BitsPerPixel {
-           get {
-               if (bitsPerPixel == 0) {
+        public static short BitsPerPixel
+        {
+            get
+            {
+                if (bitsPerPixel == 0)
+                {
                     // we used to iterate through all screens, but 
                     // for some reason unused screens can temparily appear 
                     // in the AllScreens collection - we would honor the display
                     // setting of an unused screen.  
                     // According to EnumDisplayMonitors, a primary screen check should be sufficient 
                     bitsPerPixel = (short)Screen.PrimaryScreen.BitsPerPixel;
-                    
-               }
-               return bitsPerPixel;
-           }
-       }
+
+                }
+                return bitsPerPixel;
+            }
+        }
 
         ///<summary>
         ///tests to see if the monitor is in low resolution mode (8-bit color depth or less).
         ///</summary>
-        public static bool LowResolution {
-            get {
-                
-                if (lowResSettingValid && !lowRes) {
+        public static bool LowResolution
+        {
+            get
+            {
+
+                if (lowResSettingValid && !lowRes)
+                {
                     return lowRes;
                 }
                 // dont cache if we're in low resolution.  
@@ -60,9 +67,12 @@ namespace System.Windows.Forms
         ///<summary>
         ///tests to see if we are under high contrast mode
         ///</summary>
-        public static bool HighContrast {
-            get {
-                if (highContrastSettingValid) {
+        public static bool HighContrast
+        {
+            get
+            {
+                if (highContrastSettingValid)
+                {
                     return highContrast;
                 }
                 highContrast = SystemInformation.HighContrast;
@@ -70,9 +80,12 @@ namespace System.Windows.Forms
                 return highContrast;
             }
         }
-        public static bool IsDropShadowEnabled {
-            get {
-                if (dropShadowSettingValid) {
+        public static bool IsDropShadowEnabled
+        {
+            get
+            {
+                if (dropShadowSettingValid)
+                {
                     return dropShadowEnabled;
                 }
                 dropShadowEnabled = SystemInformation.IsDropShadowEnabled;
@@ -84,9 +97,12 @@ namespace System.Windows.Forms
         ///<summary>
         ///test to see if we are under terminal server mode
         ///</summary>
-        public static bool TerminalServer {
-            get {
-                if (terminalSettingValid) {
+        public static bool TerminalServer
+        {
+            get
+            {
+                if (terminalSettingValid)
+                {
                     return isTerminalServerSession;
                 }
 
@@ -97,14 +113,17 @@ namespace System.Windows.Forms
         }
 
         // return if mnemonic underlines should always be there regardless of ALT
-        public static bool MenuAccessKeysUnderlined {
-            get {
-                 if (menuAccessKeysUnderlinedValid) {
-                     return menuAccessKeysUnderlined;
-                 }
-                 menuAccessKeysUnderlined = SystemInformation.MenuAccessKeysUnderlined;
-                 menuAccessKeysUnderlinedValid = true;
-                 return menuAccessKeysUnderlined;
+        public static bool MenuAccessKeysUnderlined
+        {
+            get
+            {
+                if (menuAccessKeysUnderlinedValid)
+                {
+                    return menuAccessKeysUnderlined;
+                }
+                menuAccessKeysUnderlined = SystemInformation.MenuAccessKeysUnderlined;
+                menuAccessKeysUnderlinedValid = true;
+                return menuAccessKeysUnderlined;
             }
         }
 
@@ -112,7 +131,7 @@ namespace System.Windows.Forms
         ///event handler for change in display setting
         ///</summary>
         private static void DisplaySettingsChanging(object obj, EventArgs ea)
-        {    
+        {
             highContrastSettingValid = false;
             lowResSettingValid = false;
             terminalSettingValid = false;
@@ -124,16 +143,18 @@ namespace System.Windows.Forms
         ///<summary>
         ///event handler for change in user preference
         ///</summary>
-        private static void UserPreferenceChanging(object obj, UserPreferenceChangingEventArgs e) {
+        private static void UserPreferenceChanging(object obj, UserPreferenceChangingEventArgs e)
+        {
             highContrastSettingValid = false;
             lowResSettingValid = false;
             terminalSettingValid = false;
             dropShadowSettingValid = false;
             bitsPerPixel = 0;
-            
-            if (e.Category == UserPreferenceCategory.General) {
-                menuAccessKeysUnderlinedValid =false;
+
+            if (e.Category == UserPreferenceCategory.General)
+            {
+                menuAccessKeysUnderlinedValid = false;
             }
         }
     }
-    }
+}

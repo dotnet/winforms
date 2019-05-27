@@ -2,14 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Microsoft.Win32;
-using System.Globalization;
+namespace System.Windows.Forms
+{
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using Microsoft.Win32;
+    using System.Globalization;
 
-    internal class LinkUtilities {
+    internal class LinkUtilities
+    {
 
         // IE fonts and colors
         static Color ielinkColor = Color.Empty;
@@ -26,18 +28,21 @@ using System.Globalization;
         ///     Retrieves a named IE color from the registry. There are constants at the top
         ///     of this file of the valid names to retrieve.
         /// </summary>
-        private static Color GetIEColor(string name) {
+        private static Color GetIEColor(string name)
+        {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
-            if (key != null) {
+            if (key != null)
+            {
 
                 // Since this comes from the registry, be very careful about its contents.
                 //
                 string s = (string)key.GetValue(name);
                 key.Close();
 
-                if (s != null) {
-                    string[] rgbs = s.Split(new char[] {','});
+                if (s != null)
+                {
+                    string[] rgbs = s.Split(new char[] { ',' });
                     int[] rgb = new int[3];
 
                     int nMax = Math.Min(rgb.Length, rgbs.Length);
@@ -52,41 +57,54 @@ using System.Globalization;
                 }
             }
 
-            if (string.Equals(name, IEAnchorColor, StringComparison.OrdinalIgnoreCase)) {
+            if (string.Equals(name, IEAnchorColor, StringComparison.OrdinalIgnoreCase))
+            {
                 return Color.Blue;
             }
-            else if (string.Equals(name, IEAnchorColorVisited, StringComparison.OrdinalIgnoreCase)) {
+            else if (string.Equals(name, IEAnchorColorVisited, StringComparison.OrdinalIgnoreCase))
+            {
                 return Color.Purple;
             }
-            else if (string.Equals(name, IEAnchorColorHover, StringComparison.OrdinalIgnoreCase)) {
+            else if (string.Equals(name, IEAnchorColorHover, StringComparison.OrdinalIgnoreCase))
+            {
                 return Color.Red;
             }
-            else {
+            else
+            {
                 return Color.Red;
             }
 
         }
 
-        public static Color IELinkColor {
-            get {
-                if (ielinkColor.IsEmpty) {
+        public static Color IELinkColor
+        {
+            get
+            {
+                if (ielinkColor.IsEmpty)
+                {
                     ielinkColor = GetIEColor(IEAnchorColor);
                 }
                 return ielinkColor;
             }
         }
 
-        public static Color IEActiveLinkColor {
-            get {
-                if (ieactiveLinkColor.IsEmpty) {
+        public static Color IEActiveLinkColor
+        {
+            get
+            {
+                if (ieactiveLinkColor.IsEmpty)
+                {
                     ieactiveLinkColor = GetIEColor(IEAnchorColorHover);
                 }
                 return ieactiveLinkColor;
             }
         }
-        public static Color IEVisitedLinkColor {
-            get {
-                if (ievisitedLinkColor.IsEmpty) {
+        public static Color IEVisitedLinkColor
+        {
+            get
+            {
+                if (ievisitedLinkColor.IsEmpty)
+                {
                     ievisitedLinkColor = GetIEColor(IEAnchorColorVisited);
                 }
                 return ievisitedLinkColor;
@@ -106,27 +124,34 @@ using System.Globalization;
         /// <summary>
         ///     Retrieves the IE settings for link behavior from the registry.
         /// </summary>
-        public static LinkBehavior GetIELinkBehavior() {
+        public static LinkBehavior GetIELinkBehavior()
+        {
             RegistryKey key = null;
-            try {
+            try
+            {
                 key = Registry.CurrentUser.OpenSubKey(IEMainRegPath);
             }
-            catch (System.Security.SecurityException) {
+            catch (System.Security.SecurityException)
+            {
                 // User does not have right to access Registry path HKCU\\Software\\Microsoft\\Internet Explorer\\Main.
                 // Catch SecurityException silently and let the return value fallback to AlwaysUnderline.
             }
 
-            if (key != null) {
+            if (key != null)
+            {
                 string s = (string)key.GetValue("Anchor Underline");
                 key.Close();
 
-                if (s != null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0) {
+                if (s != null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0)
+                {
                     return LinkBehavior.NeverUnderline;
                 }
-                if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0) {
+                if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0)
+                {
                     return LinkBehavior.HoverUnderline;
                 }
-                else {
+                else
+                {
                     return LinkBehavior.AlwaysUnderline;
                 }
             }
@@ -134,19 +159,23 @@ using System.Globalization;
             return LinkBehavior.AlwaysUnderline;
         }
 
-        public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font linkFont, ref Font hoverLinkFont) {
-            if (linkFont != null && hoverLinkFont != null) {
+        public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font linkFont, ref Font hoverLinkFont)
+        {
+            if (linkFont != null && hoverLinkFont != null)
+            {
                 return;
             }
 
             bool underlineLink = true;
             bool underlineHover = true;
 
-            if (link == LinkBehavior.SystemDefault) {
+            if (link == LinkBehavior.SystemDefault)
+            {
                 link = GetIELinkBehavior();
             }
 
-            switch (link) {
+            switch (link)
+            {
                 case LinkBehavior.AlwaysUnderline:
                     underlineLink = true;
                     underlineHover = true;
@@ -166,33 +195,41 @@ using System.Globalization;
             // We optimize for the "same" value (never & always) to avoid creating an
             // extra font object.
             //
-            if (underlineHover == underlineLink) {
+            if (underlineHover == underlineLink)
+            {
                 FontStyle style = f.Style;
-                if (underlineHover) {
+                if (underlineHover)
+                {
                     style |= FontStyle.Underline;
                 }
-                else {
+                else
+                {
                     style &= ~FontStyle.Underline;
                 }
                 hoverLinkFont = new Font(f, style);
                 linkFont = hoverLinkFont;
             }
-            else {
+            else
+            {
                 FontStyle hoverStyle = f.Style;
-                if (underlineHover) {
+                if (underlineHover)
+                {
                     hoverStyle |= FontStyle.Underline;
                 }
-                else {
+                else
+                {
                     hoverStyle &= ~FontStyle.Underline;
                 }
 
                 hoverLinkFont = new Font(f, hoverStyle);
 
                 FontStyle linkStyle = f.Style;
-                if (underlineLink) {
+                if (underlineLink)
+                {
                     linkStyle |= FontStyle.Underline;
                 }
-                else {
+                else
+                {
                     linkStyle &= ~FontStyle.Underline;
                 }
 

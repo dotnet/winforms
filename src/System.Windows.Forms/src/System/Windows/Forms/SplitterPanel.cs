@@ -15,45 +15,53 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public sealed class SplitterPanel : Panel
     {
-        SplitContainer owner  = null;
+        readonly SplitContainer owner = null;
         private bool collapsed = false;
-        
+
         public SplitterPanel(SplitContainer owner)
-        : base() {
-              this.owner =   owner;
-              SetStyle(ControlStyles.ResizeRedraw, true);
-          
+        : base()
+        {
+            this.owner = owner;
+            SetStyle(ControlStyles.ResizeRedraw, true);
+
         }
 
-        internal bool Collapsed {
-            get {
+        internal bool Collapsed
+        {
+            get
+            {
                 return collapsed;
             }
-            set {
+            set
+            {
                 collapsed = value;
             }
         }
 
-        
+
         /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new bool AutoSize {
-            get {
+        public new bool AutoSize
+        {
+            get
+            {
                 return base.AutoSize;
             }
-            set {
+            set
+            {
                 base.AutoSize = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged {
+        new public event EventHandler AutoSizeChanged
+        {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
@@ -67,27 +75,33 @@ namespace System.Windows.Forms
         Browsable(false),
         Localizable(false)
         ]
-        public override AutoSizeMode AutoSizeMode {
-            get {
+        public override AutoSizeMode AutoSizeMode
+        {
+            get
+            {
                 return AutoSizeMode.GrowOnly;
             }
-            set {
+            set
+            {
             }
         }
-        
+
         /// <summary>
         ///    Override Anchor to make it hidden from the user in the designer 
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new AnchorStyles Anchor {
-            get {
+        public new AnchorStyles Anchor
+        {
+            get
+            {
                 return base.Anchor;
             }
-            set {
+            set
+            {
                 base.Anchor = value;
             }
         }
@@ -99,13 +113,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new BorderStyle BorderStyle {
-            get {
+        public new BorderStyle BorderStyle
+        {
+            get
+            {
                 return base.BorderStyle;
             }
-            set {
+            set
+            {
                 base.BorderStyle = value;
             }
         }
@@ -119,13 +136,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new DockStyle Dock {
-            get {
+        public new DockStyle Dock
+        {
+            get
+            {
                 return base.Dock;
             }
-            set {
+            set
+            {
                 base.Dock = value;
             }
         }
@@ -136,10 +156,12 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        new public DockPaddingEdges DockPadding {
-            get {
+        new public DockPaddingEdges DockPadding
+        {
+            get
+            {
                 return base.DockPadding;
             }
         }
@@ -153,23 +175,30 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ControlHeightDescr))
         ]
-        public new int Height {
-            get {
-                if (Collapsed) {
+        public new int Height
+        {
+            get
+            {
+                if (Collapsed)
+                {
                     return 0;
                 }
                 return base.Height;
             }
-            set {
-                throw new NotSupportedException(SR.SplitContainerPanelHeight); 
+            set
+            {
+                throw new NotSupportedException(SR.SplitContainerPanelHeight);
             }
         }
 
-        internal int HeightInternal {
-            get {
+        internal int HeightInternal
+        {
+            get
+            {
                 return ((Panel)this).Height;
             }
-            set {
+            set
+            {
                 ((Panel)this).Height = value;
             }
         }
@@ -180,13 +209,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Point Location {
-            get {
+        public new Point Location
+        {
+            get
+            {
                 return base.Location;
             }
-            set {
+            set
+            {
                 base.Location = value;
             }
         }
@@ -195,8 +227,10 @@ namespace System.Windows.Forms
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Padding DefaultMargin {
-            get {
+        protected override Padding DefaultMargin
+        {
+            get
+            {
                 return new Padding(0, 0, 0, 0);
             }
         }
@@ -208,13 +242,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Size MinimumSize {
-            get {
+        public new Size MinimumSize
+        {
+            get
+            {
                 return base.MinimumSize;
             }
-            set {
+            set
+            {
                 base.MinimumSize = value;
             }
         }
@@ -226,17 +263,20 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Size MaximumSize {
-            get {
+        public new Size MaximumSize
+        {
+            get
+            {
                 return base.MaximumSize;
             }
-            set {
+            set
+            {
                 base.MaximumSize = value;
             }
         }
-        
+
         /// <summary>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
@@ -245,22 +285,27 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new string Name {
-            get {
+        public new string Name
+        {
+            get
+            {
                 return base.Name;
             }
-            set {
+            set
+            {
                 base.Name = value;
             }
         }
-        
+
         /// <summary>
         ///     The parent of this control.
         /// </summary>
-        internal SplitContainer Owner {
-            get {
+        internal SplitContainer Owner
+        {
+            get
+            {
                 return owner;
             }
         }
@@ -271,13 +316,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Control Parent {
-            get {
+        public new Control Parent
+        {
+            get
+            {
                 return base.Parent;
             }
-            set {
+            set
+            {
                 base.Parent = value;
             }
         }
@@ -288,16 +336,20 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Size Size {
-            get {
-                if (Collapsed) {
+        public new Size Size
+        {
+            get
+            {
+                if (Collapsed)
+                {
                     return Size.Empty;
                 }
                 return base.Size;
             }
-            set {
+            set
+            {
                 base.Size = value;
             }
         }
@@ -308,13 +360,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new int TabIndex {
-            get {
+        public new int TabIndex
+        {
+            get
+            {
                 return base.TabIndex;
             }
-            set {
+            set
+            {
                 base.TabIndex = value;
             }
         }
@@ -326,13 +381,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new bool TabStop {
-            get {
+        public new bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
@@ -343,13 +401,16 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new bool Visible {
-            get {
+        public new bool Visible
+        {
+            get
+            {
                 return base.Visible;
             }
-            set {
+            set
+            {
                 base.Visible = value;
             }
         }
@@ -363,23 +424,30 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ControlWidthDescr))
         ]
-        public new int Width {
-            get {
-                if (Collapsed) {
+        public new int Width
+        {
+            get
+            {
+                if (Collapsed)
+                {
                     return 0;
                 }
                 return base.Width;
             }
-            set {
+            set
+            {
                 throw new NotSupportedException(SR.SplitContainerPanelWidth);
             }
         }
 
-        internal int WidthInternal {
-            get {
+        internal int WidthInternal
+        {
+            get
+            {
                 return ((Panel)this).Width;
             }
-            set {
+            set
+            {
                 ((Panel)this).Width = value;
             }
         }
@@ -390,9 +458,10 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler VisibleChanged {
+        public new event EventHandler VisibleChanged
+        {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
         }
@@ -403,9 +472,10 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler DockChanged {
+        public new event EventHandler DockChanged
+        {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
         }
@@ -416,9 +486,10 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler LocationChanged {
+        public new event EventHandler LocationChanged
+        {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
         }
@@ -429,12 +500,13 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler TabIndexChanged {
+        public new event EventHandler TabIndexChanged
+        {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
-        }        
+        }
 
         /// <summary>
         ///     Override TabStopChanged to make it hidden from the user in the designer
@@ -442,9 +514,10 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler TabStopChanged {
+        public new event EventHandler TabStopChanged
+        {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }

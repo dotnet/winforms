@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ButtonInternal {
+namespace System.Windows.Forms.ButtonInternal
+{
     using System;
     using System.Diagnostics;
     using System.Drawing;
@@ -13,34 +14,38 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Windows.Forms;
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
-    
-    internal class ButtonFlatAdapter : ButtonBaseAdapter {
+
+    internal class ButtonFlatAdapter : ButtonBaseAdapter
+    {
 
         private const int BORDERSIZE = 1;
 
-        internal ButtonFlatAdapter(ButtonBase control) : base(control) {}
+        internal ButtonFlatAdapter(ButtonBase control) : base(control) { }
 
-        private void PaintBackground(PaintEventArgs e, Rectangle r, Color backColor) {
+        private void PaintBackground(PaintEventArgs e, Rectangle r, Color backColor)
+        {
             Rectangle rect = r;
-            rect.Inflate(-Control.FlatAppearance.BorderSize,-Control.FlatAppearance.BorderSize);
+            rect.Inflate(-Control.FlatAppearance.BorderSize, -Control.FlatAppearance.BorderSize);
             Control.PaintBackground(e, rect, backColor, rect.Location);
         }
 
-        internal override void PaintUp(PaintEventArgs e, CheckState state) {
+        internal override void PaintUp(PaintEventArgs e, CheckState state)
+        {
             bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BORDERSIZE || !Control.FlatAppearance.BorderColor.IsEmpty);
 
             ColorData colors = PaintFlatRender(e.Graphics).Calculate();
-            LayoutData layout = PaintFlatLayout(e, 
+            LayoutData layout = PaintFlatLayout(e,
                 !Control.FlatAppearance.CheckedBackColor.IsEmpty || (SystemInformation.HighContrast ? state != CheckState.Indeterminate : state == CheckState.Unchecked),
                 !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
                 Control.FlatAppearance.BorderSize).Layout();
 
             //Paint with the BorderColor if Set.
             ///
-            if (!Control.FlatAppearance.BorderColor.IsEmpty) {
+            if (!Control.FlatAppearance.BorderColor.IsEmpty)
+            {
                 colors.windowFrame = Control.FlatAppearance.BorderColor;
             }
-            
+
             Graphics g = e.Graphics;
             //Region original = g.Clip;
 
@@ -48,8 +53,10 @@ namespace System.Windows.Forms.ButtonInternal {
 
             Color backColor = Control.BackColor;
 
-            if (!Control.FlatAppearance.CheckedBackColor.IsEmpty) {
-                switch (state) {
+            if (!Control.FlatAppearance.CheckedBackColor.IsEmpty)
+            {
+                switch (state)
+                {
                     case CheckState.Checked:
                         backColor = Control.FlatAppearance.CheckedBackColor;
                         break;
@@ -58,8 +65,10 @@ namespace System.Windows.Forms.ButtonInternal {
                         break;
                 }
             }
-            else {
-                switch (state) {
+            else
+            {
+                switch (state)
+                {
                     case CheckState.Checked:
                         backColor = colors.highlight;
                         break;
@@ -71,57 +80,68 @@ namespace System.Windows.Forms.ButtonInternal {
 
             PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
-            if (Control.IsDefault) {
+            if (Control.IsDefault)
+            {
                 r.Inflate(-1, -1);
             }
 
             PaintImage(e, layout);
             PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, false);
 
-            if (Control.Focused && Control.ShowFocusCues) {
+            if (Control.Focused && Control.ShowFocusCues)
+            {
                 DrawFlatFocus(g, layout.focus, colors.options.highContrast ? colors.windowText : colors.constrastButtonShadow);
             }
 
 
-            if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0))) {
-                DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+            if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
+            {
+                DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
             }
 
             //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
-            if (hasCustomBorder) {
-                if (Control.FlatAppearance.BorderSize != BORDERSIZE) {
-                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize); 
+            if (hasCustomBorder)
+            {
+                if (Control.FlatAppearance.BorderSize != BORDERSIZE)
+                {
+                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize);
                 }
-                else {
+                else
+                {
                     DrawFlatBorder(g, r, colors.windowFrame);
                 }
             }
-            else if (state == CheckState.Checked && SystemInformation.HighContrast) {
+            else if (state == CheckState.Checked && SystemInformation.HighContrast)
+            {
                 DrawFlatBorder(g, r, colors.windowFrame);
                 DrawFlatBorder(g, r, colors.buttonShadow);
             }
-            else if (state == CheckState.Indeterminate) {
+            else if (state == CheckState.Indeterminate)
+            {
                 Draw3DLiteBorder(g, r, colors, false);
             }
-            else {
+            else
+            {
                 DrawFlatBorder(g, r, colors.windowFrame);
             }
         }
 
-        internal override void PaintDown(PaintEventArgs e, CheckState state) {
+        internal override void PaintDown(PaintEventArgs e, CheckState state)
+        {
             bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BORDERSIZE || !Control.FlatAppearance.BorderColor.IsEmpty);
 
             ColorData colors = PaintFlatRender(e.Graphics).Calculate();
-            LayoutData layout = PaintFlatLayout(e, 
+            LayoutData layout = PaintFlatLayout(e,
                 !Control.FlatAppearance.CheckedBackColor.IsEmpty || (SystemInformation.HighContrast ? state != CheckState.Indeterminate : state == CheckState.Unchecked),
                 !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
                 Control.FlatAppearance.BorderSize).Layout();
 
             //Paint with the BorderColor if Set.
-            if (!Control.FlatAppearance.BorderColor.IsEmpty) {
+            if (!Control.FlatAppearance.BorderColor.IsEmpty)
+            {
                 colors.windowFrame = Control.FlatAppearance.BorderColor;
             }
-            
+
             Graphics g = e.Graphics;
             //Region original = g.Clip;
 
@@ -129,11 +149,14 @@ namespace System.Windows.Forms.ButtonInternal {
 
             Color backColor = Control.BackColor;
 
-            if (!Control.FlatAppearance.MouseDownBackColor.IsEmpty) {
+            if (!Control.FlatAppearance.MouseDownBackColor.IsEmpty)
+            {
                 backColor = Control.FlatAppearance.MouseDownBackColor;
             }
-            else {
-                switch (state) {
+            else
+            {
+                switch (state)
+                {
                     case CheckState.Unchecked:
                     case CheckState.Checked:
                         backColor = colors.options.highContrast ? colors.buttonShadow : colors.lowHighlight;
@@ -146,47 +169,59 @@ namespace System.Windows.Forms.ButtonInternal {
 
             PaintBackground(e, r, backColor);
 
-            if (Control.IsDefault) {
+            if (Control.IsDefault)
+            {
                 r.Inflate(-1, -1);
             }
 
             PaintImage(e, layout);
             PaintField(e, layout, colors, colors.windowText, false);
 
-            if (Control.Focused && Control.ShowFocusCues) {
+            if (Control.Focused && Control.ShowFocusCues)
+            {
                 DrawFlatFocus(g, layout.focus, colors.options.highContrast ? colors.windowText : colors.constrastButtonShadow);
             }
 
-            if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0))) {
-                DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+            if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
+            {
+                DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
             }
 
             //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
-            if (hasCustomBorder) {
-                if (Control.FlatAppearance.BorderSize != BORDERSIZE) {
-                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize); 
+            if (hasCustomBorder)
+            {
+                if (Control.FlatAppearance.BorderSize != BORDERSIZE)
+                {
+                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize);
                 }
-                else {
+                else
+                {
                     DrawFlatBorder(g, r, colors.windowFrame);
                 }
             }
-            else if (state == CheckState.Checked && SystemInformation.HighContrast) {
+            else if (state == CheckState.Checked && SystemInformation.HighContrast)
+            {
                 DrawFlatBorder(g, r, colors.windowFrame);
                 DrawFlatBorder(g, r, colors.buttonShadow);
             }
-            else if (state == CheckState.Indeterminate) {
+            else if (state == CheckState.Indeterminate)
+            {
                 Draw3DLiteBorder(g, r, colors, false);
             }
-            else {
+            else
+            {
                 DrawFlatBorder(g, r, colors.windowFrame);
             }
         }
-        
-        internal override void PaintOver(PaintEventArgs e, CheckState state) {
-            if (SystemInformation.HighContrast) {
+
+        internal override void PaintOver(PaintEventArgs e, CheckState state)
+        {
+            if (SystemInformation.HighContrast)
+            {
                 PaintUp(e, state);
             }
-            else {
+            else
+            {
                 bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BORDERSIZE || !Control.FlatAppearance.BorderColor.IsEmpty);
 
                 ColorData colors = PaintFlatRender(e.Graphics).Calculate();
@@ -197,10 +232,11 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 //Paint with the BorderColor if Set.
                 ///
-                if (!Control.FlatAppearance.BorderColor.IsEmpty) {
+                if (!Control.FlatAppearance.BorderColor.IsEmpty)
+                {
                     colors.windowFrame = Control.FlatAppearance.BorderColor;
                 }
-                
+
                 Graphics g = e.Graphics;
                 //Region original = g.Clip;
 
@@ -208,56 +244,71 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 Color backColor = Control.BackColor;
 
-                if (!Control.FlatAppearance.MouseOverBackColor.IsEmpty) {
+                if (!Control.FlatAppearance.MouseOverBackColor.IsEmpty)
+                {
                     backColor = Control.FlatAppearance.MouseOverBackColor;
                 }
-                else if (!Control.FlatAppearance.CheckedBackColor.IsEmpty) {
-                    if (state == CheckState.Checked || state == CheckState.Indeterminate) {
+                else if (!Control.FlatAppearance.CheckedBackColor.IsEmpty)
+                {
+                    if (state == CheckState.Checked || state == CheckState.Indeterminate)
+                    {
                         backColor = MixedColor(Control.FlatAppearance.CheckedBackColor, colors.lowButtonFace);
                     }
-                    else {
+                    else
+                    {
                         backColor = colors.lowButtonFace;
                     }
                 }
-                else {
-                    if (state == CheckState.Indeterminate) {
+                else
+                {
+                    if (state == CheckState.Indeterminate)
+                    {
                         backColor = MixedColor(colors.buttonFace, colors.lowButtonFace);
                     }
-                    else {
+                    else
+                    {
                         backColor = colors.lowButtonFace;
                     }
                 }
 
                 PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
-                if (Control.IsDefault) {
+                if (Control.IsDefault)
+                {
                     r.Inflate(-1, -1);
                 }
 
                 PaintImage(e, layout);
                 PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, false);
 
-                if (Control.Focused && Control.ShowFocusCues) {
+                if (Control.Focused && Control.ShowFocusCues)
+                {
                     DrawFlatFocus(g, layout.focus, colors.constrastButtonShadow);
                 }
 
-                if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0))) {
-                    DrawDefaultBorder(g, r, colors.windowFrame, this.Control.IsDefault);
+                if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
+                {
+                    DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
                 }
 
                 //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
-                if (hasCustomBorder) {
-                    if (Control.FlatAppearance.BorderSize != BORDERSIZE) {
-                        DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize); 
+                if (hasCustomBorder)
+                {
+                    if (Control.FlatAppearance.BorderSize != BORDERSIZE)
+                    {
+                        DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize);
                     }
-                    else {
+                    else
+                    {
                         DrawFlatBorder(g, r, colors.windowFrame);
                     }
                 }
-                else if (state == CheckState.Unchecked) {
+                else if (state == CheckState.Unchecked)
+                {
                     DrawFlatBorder(g, r, colors.windowFrame);
                 }
-                else {
+                else
+                {
                     Draw3DLiteBorder(g, r, colors, false);
                 }
             }
@@ -266,7 +317,8 @@ namespace System.Windows.Forms.ButtonInternal {
 
         #region LayoutData
 
-        protected override LayoutOptions Layout(PaintEventArgs e) {
+        protected override LayoutOptions Layout(PaintEventArgs e)
+        {
             LayoutOptions layout = PaintFlatLayout(e, /* up = */ false, /* check = */ true, Control.FlatAppearance.BorderSize);
 #if DEBUG
             Size prefSize = layout.GetPreferredSizeCore(LayoutUtils.MaxSize);
@@ -278,7 +330,7 @@ namespace System.Windows.Forms.ButtonInternal {
 #endif
             return layout;
         }
-        
+
 
         // used by DataGridViewButtonCell        
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
@@ -286,24 +338,25 @@ namespace System.Windows.Forms.ButtonInternal {
                                                       bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
         {
             LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
-            layout.borderSize        = borderSize + (check ? 1 : 0);
-            layout.paddingSize       = check ? 1 : 2;
+            layout.borderSize = borderSize + (check ? 1 : 0);
+            layout.paddingSize = check ? 1 : 2;
             layout.focusOddEvenFixup = false;
-            layout.textOffset        = !up;
-            layout.shadowedText      = SystemInformation.HighContrast;
+            layout.textOffset = !up;
+            layout.shadowedText = SystemInformation.HighContrast;
 
             return layout;
         }
 
 
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
-        private LayoutOptions PaintFlatLayout(PaintEventArgs e, bool up, bool check, int borderSize) {
+        private LayoutOptions PaintFlatLayout(PaintEventArgs e, bool up, bool check, int borderSize)
+        {
             LayoutOptions layout = CommonLayout();
-            layout.borderSize        = borderSize + (check ? 1 : 0);
-            layout.paddingSize       = check ? 1 : 2;
+            layout.borderSize = borderSize + (check ? 1 : 0);
+            layout.paddingSize = check ? 1 : 2;
             layout.focusOddEvenFixup = false;
-            layout.textOffset        = !up;
-            layout.shadowedText      = SystemInformation.HighContrast;
+            layout.textOffset = !up;
+            layout.shadowedText = SystemInformation.HighContrast;
 
             return layout;
         }

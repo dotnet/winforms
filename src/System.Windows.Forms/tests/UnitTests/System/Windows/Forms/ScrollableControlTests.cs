@@ -381,8 +381,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ScrollableControl_ScaleCore_InvokeWithDockPadding_Success()
         {
-            var control = new ScrollableControl();
-            control.Padding = new Padding(1, 2, 3, 4);
+            var control = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
             Assert.Equal(1, control.DockPadding.Left);
             Assert.Equal(2, control.DockPadding.Top);
             Assert.Equal(3, control.DockPadding.Right);
@@ -412,8 +414,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ScrollableControl_ScaleControl_InvokeWithDockPadding_Success()
         {
-            var control = new ScrollableControl();
-            control.Padding = new Padding(1, 2, 3, 4);
+            var control = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
             Assert.Equal(1, control.DockPadding.Left);
             Assert.Equal(2, control.DockPadding.Top);
             Assert.Equal(3, control.DockPadding.Right);
@@ -529,7 +533,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, true, true, new Size(70, 80), null, new Rectangle(0, 0, 70, 80) };
 
             yield return new object[] { true, true, true, new Size(70, 80), new Control(), new Rectangle(0, 0, 70, 80) };
-            
+
             // Can't scroll - not AutoScroll.
             yield return new object[] { false, true, true, new Size(70, 80), new LargeControl(), new Rectangle(0, 0, 70, 80) };
 
@@ -602,11 +606,11 @@ namespace System.Windows.Forms.Tests
         public class SubScrollableControl : ScrollableControl
         {
             public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
-    
+
             public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
-    
+
             public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
-    
+
             public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
             public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;

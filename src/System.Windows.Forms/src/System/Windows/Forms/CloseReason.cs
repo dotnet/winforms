@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         /// No reason for closure of the Form.
         /// </summary>
         None = 0,
-        
+
         /// <summary>
         /// In the process of shutting down, Windows has closed the application.
         /// </summary>

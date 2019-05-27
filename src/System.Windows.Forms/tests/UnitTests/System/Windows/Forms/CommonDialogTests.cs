@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { Interop.WindowMessages.WM_INITDIALOG };
             yield return new object[] { Interop.WindowMessages.WM_SETFOCUS };
-            
+
             const int CDM_SETDEFAULTFOCUS = Interop.WindowMessages.WM_USER + 0x51;
             yield return new object[] { CDM_SETDEFAULTFOCUS };
 
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
             var dialog = new SubCommonDialog();
             FieldInfo field = typeof(CommonDialog).GetField("s_helpMsg", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.NotNull(field);
-            
+
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.Tests
             var dialog = new SubCommonDialog();
             FieldInfo field = typeof(CommonDialog).GetField("s_helpMsg", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.NotNull(field);
-            
+
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {

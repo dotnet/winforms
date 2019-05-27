@@ -18,12 +18,12 @@ namespace System.Windows.Forms
         /// <summary>
         /// The backColor to paint each menu item with.
         /// </summary>
-        private Color _backColor;
+        private readonly Color _backColor;
 
         /// <summary>
         /// The foreColor to paint each menu item with.
         /// </summary>
-        private Color _foreColor;
+        private readonly Color _foreColor;
 
         /// <summary>
         /// Creates a new DrawItemEventArgs with the given parameters.

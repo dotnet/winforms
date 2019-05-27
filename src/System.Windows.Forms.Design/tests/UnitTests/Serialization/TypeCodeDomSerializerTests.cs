@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void TypeCodeDomSerializer_Serialize_Manager_Null ()
+        public void TypeCodeDomSerializer_Serialize_Manager_Null()
         {
             var underTest = new TypeCodeDomSerializer();
             Assert.Throws<ArgumentNullException>(() => underTest.Serialize(null, null, null));

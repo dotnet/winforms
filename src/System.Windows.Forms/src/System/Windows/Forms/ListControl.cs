@@ -309,7 +309,7 @@ namespace System.Windows.Forms
                     {
                         SetDataConnection(DataSource, newValueMember, force: false);
                     }
-    
+
                     // See if the valueMember is a member of 
                     // the properties in the dataManager
                     if (DataManager != null && !string.IsNullOrEmpty(value))

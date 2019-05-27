@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
             var manager = new PropertyManager();
             BindingsCollection collection = manager.Bindings;
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(manager, binding.BindingManagerBase);
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
             var manager = new PropertyManager();
             BindingsCollection collection = manager.Bindings;
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(manager, binding.BindingManagerBase);
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Tests
             var manager = new PropertyManager();
             BindingsCollection collection = manager.Bindings;
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(manager, binding.BindingManagerBase);
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests
             var manager = new PropertyManager();
             BindingsCollection collection = manager.Bindings;
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(manager, binding.BindingManagerBase);

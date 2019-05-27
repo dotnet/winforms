@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingContext : ICollection
     {
-        private Hashtable _listManagers;
+        private readonly Hashtable _listManagers;
 
         /// <summary>
         /// Initializes a new instance of the System.Windows.Forms.BindingContext class.
@@ -183,9 +183,9 @@ namespace System.Windows.Forms
 
         internal class HashKey
         {
-            private WeakReference _wRef;
-            private int _dataSourceHashCode;
-            private string _dataMember;
+            private readonly WeakReference _wRef;
+            private readonly int _dataSourceHashCode;
+            private readonly string _dataMember;
 
             internal HashKey(object dataSource, string dataMember)
             {
@@ -213,7 +213,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                
+
                 return _wRef.Target == keyTarget._wRef.Target && _dataMember == keyTarget._dataMember;
             }
         }

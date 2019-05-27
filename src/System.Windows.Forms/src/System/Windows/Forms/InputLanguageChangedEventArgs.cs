@@ -28,12 +28,7 @@ namespace System.Windows.Forms
         /// </summary>
         public InputLanguageChangedEventArgs(InputLanguage inputLanguage, byte charSet)
         {
-            if (inputLanguage == null)
-            {
-                throw new ArgumentNullException(nameof(inputLanguage));
-            }
-
-            InputLanguage = inputLanguage;
+            InputLanguage = inputLanguage ?? throw new ArgumentNullException(nameof(inputLanguage));
             Culture = inputLanguage.Culture;
             CharSet = charSet;
         }

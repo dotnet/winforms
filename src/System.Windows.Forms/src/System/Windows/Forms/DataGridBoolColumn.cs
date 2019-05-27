@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
     using System;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
@@ -18,36 +19,37 @@ namespace System.Windows.Forms {
     ///       which each cell contains a check box for representing
     ///       a boolean value.</para>
     /// </summary>
-    public class DataGridBoolColumn : DataGridColumnStyle {
+    public class DataGridBoolColumn : DataGridColumnStyle
+    {
         private static readonly int idealCheckSize = 14;
 
         private bool isEditing = false;
         private bool isSelected = false;
         private bool allowNull = true;
-        private int  editingRow = -1;
+        private int editingRow = -1;
         private object currentValue = Convert.DBNull;
-        
+
         private object trueValue = true;
         private object falseValue = false;
         private object nullValue = Convert.DBNull;
 
-        private static readonly object  EventTrueValue      = new object();
-        private static readonly object  EventFalseValue     = new object();
-        private static readonly object  EventAllowNull      = new object();
-        
+        private static readonly object EventTrueValue = new object();
+        private static readonly object EventFalseValue = new object();
+        private static readonly object EventAllowNull = new object();
+
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridBoolColumn'/> class.</para>
         /// </summary>
-        public DataGridBoolColumn() : base() {}
+        public DataGridBoolColumn() : base() { }
 
         /// <summary>
         /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the specified <see cref='System.Data.DataColumn'/>.</para>
         /// </summary>
         public DataGridBoolColumn(PropertyDescriptor prop)
-            : base(prop) {}
+            : base(prop) { }
 
         public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
-            : base(prop, isDefault){}
+            : base(prop, isDefault) { }
 
         /// <summary>
         ///    <para>Gets or sets the actual value used when setting the 
@@ -55,65 +57,79 @@ namespace System.Windows.Forms {
         /// </summary>
         [TypeConverterAttribute(typeof(StringConverter)),
         DefaultValue(true)]
-        public object TrueValue {
-            get {
+        public object TrueValue
+        {
+            get
+            {
                 return trueValue;
             }
-            set {
-                if (!trueValue.Equals(value)) {
-                    this.trueValue = value;
+            set
+            {
+                if (!trueValue.Equals(value))
+                {
+                    trueValue = value;
                     OnTrueValueChanged(EventArgs.Empty);
                     Invalidate();
                 }
             }
         }
 
-        public event EventHandler TrueValueChanged { 
+        public event EventHandler TrueValueChanged
+        {
             add => Events.AddHandler(EventTrueValue, value);
             remove => Events.RemoveHandler(EventTrueValue, value);
         }
-        
+
         /// <summary>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='false'/>.</para>
         /// </summary>
         [TypeConverterAttribute(typeof(StringConverter)), DefaultValue(false)]
-        public object FalseValue {
-            get {
+        public object FalseValue
+        {
+            get
+            {
                 return falseValue;
             }
-            set {
-                if (!falseValue.Equals(value)) {
-                    this.falseValue = value;
+            set
+            {
+                if (!falseValue.Equals(value))
+                {
+                    falseValue = value;
                     OnFalseValueChanged(EventArgs.Empty);
                     Invalidate();
                 }
             }
         }
-        
-        public event EventHandler FalseValueChanged { 
+
+        public event EventHandler FalseValueChanged
+        {
             add => Events.AddHandler(EventFalseValue, value);
             remove => Events.RemoveHandler(EventFalseValue, value);
         }
-        
+
         /// <summary>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='null'/>.</para>
         /// </summary>
         [TypeConverterAttribute(typeof(StringConverter))]
-        public object NullValue {
-            get {
+        public object NullValue
+        {
+            get
+            {
                 return nullValue;
             }
-            set {
-                if (!nullValue.Equals(value)) {
-                    this.nullValue = value;
+            set
+            {
+                if (!nullValue.Equals(value))
+                {
+                    nullValue = value;
                     OnFalseValueChanged(EventArgs.Empty);
                     Invalidate();
                 }
             }
         }
-        
+
         // =------------------------------------------------------------------
         // =        Methods
         // =------------------------------------------------------------------
@@ -122,46 +138,59 @@ namespace System.Windows.Forms {
         // so there is no data to be pushed back into the backEnd.
         // make isEditing false so that in the Commit call we do not do any work.
         //
-        protected internal override void ConcedeFocus() {
+        protected internal override void ConcedeFocus()
+        {
             base.ConcedeFocus();
-            this.isSelected = false;
-            this.isEditing = false;
+            isSelected = false;
+            isEditing = false;
         }
 
-        private Rectangle GetCheckBoxBounds(Rectangle bounds, bool alignToRight) {
+        private Rectangle GetCheckBoxBounds(Rectangle bounds, bool alignToRight)
+        {
             if (alignToRight)
-                return new Rectangle(bounds.X +((bounds.Width - idealCheckSize) /2),
-                                     bounds.Y +((bounds.Height - idealCheckSize) / 2),
+            {
+                return new Rectangle(bounds.X + ((bounds.Width - idealCheckSize) / 2),
+                                     bounds.Y + ((bounds.Height - idealCheckSize) / 2),
                                      bounds.Width < idealCheckSize ? bounds.Width : idealCheckSize,
                                      idealCheckSize);
+            }
             else
-                return new Rectangle(Math.Max(0,bounds.X +((bounds.Width - idealCheckSize) /2)),
-                                     Math.Max(0,bounds.Y +((bounds.Height - idealCheckSize) / 2)),
+            {
+                return new Rectangle(Math.Max(0, bounds.X + ((bounds.Width - idealCheckSize) / 2)),
+                                     Math.Max(0, bounds.Y + ((bounds.Height - idealCheckSize) / 2)),
                                      bounds.Width < idealCheckSize ? bounds.Width : idealCheckSize,
                                      idealCheckSize);
+            }
         }
 
         /// <summary>
         ///    <para>Gets the value at the specified row.</para>
         /// </summary>
-        protected internal override object GetColumnValueAtRow(CurrencyManager lm, int row) {
+        protected internal override object GetColumnValueAtRow(CurrencyManager lm, int row)
+        {
             object baseValue = base.GetColumnValueAtRow(lm, row);
             object value = Convert.DBNull;
-            if (baseValue.Equals(trueValue)) {
+            if (baseValue.Equals(trueValue))
+            {
                 value = true;
             }
-            else if (baseValue.Equals(falseValue)) {
+            else if (baseValue.Equals(falseValue))
+            {
                 value = false;
             }
             return value;
         }
 
-        private bool IsReadOnly() {
-            bool ret = this.ReadOnly;
-            if (this.DataGridTableStyle != null) {
-                ret = ret || this.DataGridTableStyle.ReadOnly;
-                if (this.DataGridTableStyle.DataGrid != null)
-                    ret = ret || this.DataGridTableStyle.DataGrid.ReadOnly;
+        private bool IsReadOnly()
+        {
+            bool ret = ReadOnly;
+            if (DataGridTableStyle != null)
+            {
+                ret = ret || DataGridTableStyle.ReadOnly;
+                if (DataGridTableStyle.DataGrid != null)
+                {
+                    ret = ret || DataGridTableStyle.DataGrid.ReadOnly;
+                }
             }
             return ret;
         }
@@ -169,35 +198,41 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Sets the value a a specified row.</para>
         /// </summary>
-        protected internal override void SetColumnValueAtRow(CurrencyManager lm, int row, object value) {
+        protected internal override void SetColumnValueAtRow(CurrencyManager lm, int row, object value)
+        {
             object baseValue = null;
-            if (true.Equals(value)) {
+            if (true.Equals(value))
+            {
                 baseValue = TrueValue;
             }
-            else if (false.Equals(value)) {
+            else if (false.Equals(value))
+            {
                 baseValue = FalseValue;
             }
-            else if (Convert.IsDBNull(value)) {
+            else if (Convert.IsDBNull(value))
+            {
                 baseValue = NullValue;
             }
             currentValue = baseValue;
             base.SetColumnValueAtRow(lm, row, baseValue);
         }
-        
+
         /// <summary>
         ///    <para>Gets the optimum width and height of a cell given
         ///       a specific value to contain.</para>
         /// </summary>
-        protected internal override Size GetPreferredSize(Graphics g, object value) {
-            return new Size(idealCheckSize+2, idealCheckSize+2);
+        protected internal override Size GetPreferredSize(Graphics g, object value)
+        {
+            return new Size(idealCheckSize + 2, idealCheckSize + 2);
         }
 
         /// <summary>
         ///    <para>Gets
         ///       the height of a cell in a column.</para>
         /// </summary>
-        protected internal override int GetMinimumHeight() {
-            return idealCheckSize+2;
+        protected internal override int GetMinimumHeight()
+        {
+            return idealCheckSize + 2;
         }
 
         /// <summary>
@@ -215,7 +250,8 @@ namespace System.Windows.Forms {
         ///       Initiates a request to interrupt an edit procedure.
         ///    </para>
         /// </summary>
-        protected internal override void Abort(int rowNum) {
+        protected internal override void Abort(int rowNum)
+        {
             isSelected = false;
             isEditing = false;
             Invalidate();
@@ -227,12 +263,15 @@ namespace System.Windows.Forms {
         ///       Initiates a request to complete an editing procedure.
         ///    </para>
         /// </summary>
-        protected internal override bool Commit(CurrencyManager dataSource, int rowNum) {
+        protected internal override bool Commit(CurrencyManager dataSource, int rowNum)
+        {
             isSelected = false;
             // always invalidate
             Invalidate();
             if (!isEditing)
+            {
                 return true;
+            }
 
             SetColumnValueAtRow(dataSource, rowNum, currentValue);
             isEditing = false;
@@ -256,11 +295,14 @@ namespace System.Windows.Forms {
 
             // move the focus away from the previous column and give it to the grid
             //
-            DataGrid grid = this.DataGridTableStyle.DataGrid;
+            DataGrid grid = DataGridTableStyle.DataGrid;
             if (!grid.Focused)
+            {
                 grid.Focus();
+            }
 
-            if (!readOnly && !IsReadOnly()) {
+            if (!readOnly && !IsReadOnly())
+            {
                 editingRow = rowNum;
                 currentValue = GetColumnValueAtRow(source, rowNum);
             }
@@ -274,9 +316,12 @@ namespace System.Windows.Forms {
         ///       process it.
         ///    </para>
         /// </summary>
-        internal override bool KeyPress(int rowNum, Keys keyData) {
-            if (isSelected && editingRow == rowNum && !IsReadOnly()) {
-                if ((keyData & Keys.KeyCode) == Keys.Space) {
+        internal override bool KeyPress(int rowNum, Keys keyData)
+        {
+            if (isSelected && editingRow == rowNum && !IsReadOnly())
+            {
+                if ((keyData & Keys.KeyCode) == Keys.Space)
+                {
                     ToggleValue();
                     Invalidate();
                     return true;
@@ -291,9 +336,11 @@ namespace System.Windows.Forms {
         ///       the specified x and y coordinates.
         ///    </para>
         /// </summary>
-        internal override bool MouseDown(int rowNum, int x, int y) {
+        internal override bool MouseDown(int rowNum, int x, int y)
+        {
             base.MouseDown(rowNum, x, y);
-            if (isSelected && editingRow == rowNum && !IsReadOnly()) {
+            if (isSelected && editingRow == rowNum && !IsReadOnly())
+            {
                 ToggleValue();
                 Invalidate();
                 return true;
@@ -301,20 +348,26 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        private void OnTrueValueChanged(EventArgs e) {
-            EventHandler eh = this.Events[EventTrueValue] as EventHandler;
-            if (eh != null)
+        private void OnTrueValueChanged(EventArgs e)
+        {
+            if (Events[EventTrueValue] is EventHandler eh)
+            {
                 eh(this, e);
+            }
         }
-        private void OnFalseValueChanged(EventArgs e) {
-            EventHandler eh = this.Events[EventFalseValue] as EventHandler;
-            if (eh != null)
+        private void OnFalseValueChanged(EventArgs e)
+        {
+            if (Events[EventFalseValue] is EventHandler eh)
+            {
                 eh(this, e);
+            }
         }
-        private void OnAllowNullChanged(EventArgs e) {
-            EventHandler eh = this.Events[EventAllowNull] as EventHandler;
-            if (eh != null)
+        private void OnAllowNullChanged(EventArgs e)
+        {
+            if (Events[EventAllowNull] is EventHandler eh)
+            {
                 eh(this, e);
+            }
         }
 
         /// <summary>
@@ -324,7 +377,7 @@ namespace System.Windows.Forms {
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
         {
-            Paint(g,bounds,source, rowNum, false);
+            Paint(g, bounds, source, rowNum, false);
         }
 
         /// <summary>
@@ -332,8 +385,9 @@ namespace System.Windows.Forms {
         /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
         /// row number, and alignment settings. </para>
         /// </summary>
-        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight) {
-            Paint(g,bounds,source, rowNum, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
+        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight)
+        {
+            Paint(g, bounds, source, rowNum, DataGridTableStyle.BackBrush, DataGridTableStyle.ForeBrush, alignToRight);
         }
 
         /// <summary>
@@ -342,10 +396,12 @@ namespace System.Windows.Forms {
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                      Brush backBrush, Brush foreBrush,
-                                     bool alignToRight) {
+                                     bool alignToRight)
+        {
             object value = (isEditing && editingRow == rowNum) ? currentValue : GetColumnValueAtRow(source, rowNum);
             ButtonState checkedState = ButtonState.Inactive;
-            if (!Convert.IsDBNull(value)) {
+            if (!Convert.IsDBNull(value))
+            {
                 checkedState = ((bool)value ? ButtonState.Checked : ButtonState.Normal);
             }
 
@@ -354,29 +410,39 @@ namespace System.Windows.Forms {
             Region r = g.Clip;
             g.ExcludeClip(box);
 
-            System.Drawing.Brush selectionBrush = this.DataGridTableStyle.IsDefault ? this.DataGridTableStyle.DataGrid.SelectionBackBrush : this.DataGridTableStyle.SelectionBackBrush;
-            if (isSelected && editingRow == rowNum && !IsReadOnly()) {
+            System.Drawing.Brush selectionBrush = DataGridTableStyle.IsDefault ? DataGridTableStyle.DataGrid.SelectionBackBrush : DataGridTableStyle.SelectionBackBrush;
+            if (isSelected && editingRow == rowNum && !IsReadOnly())
+            {
                 g.FillRectangle(selectionBrush, bounds);
             }
             else
+            {
                 g.FillRectangle(backBrush, bounds);
+            }
+
             g.Clip = r;
 
-            if (checkedState == ButtonState.Inactive) {
+            if (checkedState == ButtonState.Inactive)
+            {
                 ControlPaint.DrawMixedCheckBox(g, box, ButtonState.Checked);
-            } else {
+            }
+            else
+            {
                 ControlPaint.DrawCheckBox(g, box, checkedState);
             }
 
             // if the column is read only we should still show selection
-            if (IsReadOnly() && isSelected && source.Position == rowNum) {
-                bounds.Inflate(-1,-1);
-                System.Drawing.Pen pen = new System.Drawing.Pen(selectionBrush);
-                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            if (IsReadOnly() && isSelected && source.Position == rowNum)
+            {
+                bounds.Inflate(-1, -1);
+                System.Drawing.Pen pen = new System.Drawing.Pen(selectionBrush)
+                {
+                    DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                };
                 g.DrawRectangle(pen, bounds);
                 pen.Dispose();
                 // restore the bounds rectangle
-                bounds.Inflate(1,1);
+                bounds.Inflate(1, 1);
             }
         }
 
@@ -388,11 +454,14 @@ namespace System.Windows.Forms {
         DefaultValue(true),
         SRDescription(nameof(SR.DataGridBoolColumnAllowNullValue))
         ]
-        public bool AllowNull {
-            get {
+        public bool AllowNull
+        {
+            get
+            {
                 return allowNull;
             }
-            set {
+            set
+            {
                 if (allowNull != value)
                 {
                     allowNull = value;
@@ -408,11 +477,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        public event EventHandler AllowNullChanged { 
+        public event EventHandler AllowNullChanged
+        {
             add => Events.AddHandler(EventAllowNull, value);
             remove => Events.RemoveHandler(EventAllowNull, value);
         }
-        
+
         /// <summary>
         /// <para>Enters a <see langword='null'/> into the column.</para>
         /// </summary>
@@ -420,37 +490,50 @@ namespace System.Windows.Forms {
         {
             // do not throw an exception when the column is marked as readOnly or
             // does not allowNull
-            if (!this.AllowNull || IsReadOnly())
+            if (!AllowNull || IsReadOnly())
+            {
                 return;
-            if (currentValue != Convert.DBNull) {
+            }
+
+            if (currentValue != Convert.DBNull)
+            {
                 currentValue = Convert.DBNull;
                 Invalidate();
             }
         }
 
-        private void ResetNullValue() {
+        private void ResetNullValue()
+        {
             NullValue = Convert.DBNull;
         }
 
-        private bool ShouldSerializeNullValue() {
+        private bool ShouldSerializeNullValue()
+        {
             return nullValue != Convert.DBNull;
         }
 
-        private void ToggleValue() {
-         
-            if (currentValue is bool && ((bool)currentValue) == false) {
+        private void ToggleValue()
+        {
+
+            if (currentValue is bool && ((bool)currentValue) == false)
+            {
                 currentValue = true;
             }
-            else {
-                if (AllowNull) {
-                    if (Convert.IsDBNull(currentValue)) {
+            else
+            {
+                if (AllowNull)
+                {
+                    if (Convert.IsDBNull(currentValue))
+                    {
                         currentValue = false;
                     }
-                    else {
+                    else
+                    {
                         currentValue = Convert.DBNull;
                     }
                 }
-                else {
+                else
+                {
                     currentValue = false;
                 }
             }
@@ -458,7 +541,7 @@ namespace System.Windows.Forms {
             isEditing = true;
             // tell the dataGrid that things are changing
             // we put Rectangle.Empty cause toggle will invalidate the row anyhow
-            this.DataGridTableStyle.DataGrid.ColumnStartedEditing(Rectangle.Empty);
+            DataGridTableStyle.DataGrid.ColumnStartedEditing(Rectangle.Empty);
         }
     }
 }

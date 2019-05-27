@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             TYMED.TYMED_MFPICT,
             TYMED.TYMED_GDI};
 
-        private IDataObject innerData = null;
+        private readonly IDataObject innerData = null;
         internal bool RestrictedFormats { get; set; }
 
         // We use this to identify that a stream is actually a serialized object.  On read,
@@ -320,8 +320,7 @@ namespace System.Windows.Forms
         public virtual StringCollection GetFileDropList()
         {
             StringCollection retVal = new StringCollection();
-            string[] strings = GetData(DataFormats.FileDrop, true) as string[];
-            if (strings != null)
+            if (GetData(DataFormats.FileDrop, true) is string[] strings)
             {
                 retVal.AddRange(strings);
             }
@@ -346,8 +345,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
-            string text = GetData(ConvertToDataFormats(format), false) as string;
-            if (text != null)
+            if (GetData(ConvertToDataFormats(format), false) is string text)
             {
                 return text;
             }
@@ -1161,8 +1159,7 @@ namespace System.Windows.Forms
                 current = 0;
                 if (formats != null)
                 {
-                    DataObject dataObject = parent as DataObject;
-                    if (dataObject != null && dataObject.RestrictedFormats)
+                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
                     {
                         if (!Clipboard.IsFormatValid(formats))
                         {
@@ -1174,12 +1171,14 @@ namespace System.Windows.Forms
                     {
                         FORMATETC currentFormat = formats[i];
 
-                        FORMATETC temp = new FORMATETC();
-                        temp.cfFormat = currentFormat.cfFormat;
-                        temp.dwAspect = currentFormat.dwAspect;
-                        temp.ptd = currentFormat.ptd;
-                        temp.lindex = currentFormat.lindex;
-                        temp.tymed = currentFormat.tymed;
+                        FORMATETC temp = new FORMATETC
+                        {
+                            cfFormat = currentFormat.cfFormat,
+                            dwAspect = currentFormat.dwAspect,
+                            ptd = currentFormat.ptd,
+                            lindex = currentFormat.lindex,
+                            tymed = currentFormat.tymed
+                        };
                         this.formats.Add(temp);
                     }
                 }
@@ -1194,9 +1193,7 @@ namespace System.Windows.Forms
 
                 if (formats != null)
                 {
-
-                    DataObject dataObject = parent as DataObject;
-                    if (dataObject != null && dataObject.RestrictedFormats)
+                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
                     {
                         if (!Clipboard.IsFormatValid(formats))
                         {
@@ -1207,11 +1204,13 @@ namespace System.Windows.Forms
                     for (int i = 0; i < formats.Length; i++)
                     {
                         string format = formats[i];
-                        FORMATETC temp = new FORMATETC();
-                        temp.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-                        temp.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                        temp.ptd = IntPtr.Zero;
-                        temp.lindex = -1;
+                        FORMATETC temp = new FORMATETC
+                        {
+                            cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                            dwAspect = DVASPECT.DVASPECT_CONTENT,
+                            ptd = IntPtr.Zero,
+                            lindex = -1
+                        };
 
                         if (format.Equals(DataFormats.Bitmap))
                         {
@@ -1279,7 +1278,7 @@ namespace System.Windows.Forms
             public int Skip(int celt)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
-                if (current + celt >= this.formats.Count)
+                if (current + celt >= formats.Count)
                 {
                     return NativeMethods.S_FALSE;
                 }
@@ -1646,8 +1645,7 @@ namespace System.Windows.Forms
             {
                 object value = null;
 
-                bool isSerializedObject;
-                Stream stream = ReadByteStreamFromHandle(handle, out isSerializedObject);
+                Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
 
                 if (isSerializedObject)
                 {
@@ -1692,7 +1690,10 @@ namespace System.Windows.Forms
                     {
                         int charlen = UnsafeNativeMethods.DragQueryFileLongPath(new HandleRef(null, hdrop), i, sb);
                         if (0 == charlen)
+                        {
                             continue;
+                        }
+
                         string s = sb.ToString(0, charlen);
                         string fullPath = Path.GetFullPath(s);
                         files[i] = s;
@@ -1754,8 +1755,7 @@ namespace System.Windows.Forms
             //=------------------------------------------------------------------------=
             public virtual object GetData(string format, bool autoConvert)
             {
-                bool done = false;
-                object baseVar = GetDataFromBoundOleDataObject(format, out done);
+                object baseVar = GetDataFromBoundOleDataObject(format, out bool done);
                 object original = baseVar;
 
                 if (!done && autoConvert && (baseVar == null || baseVar is MemoryStream))
@@ -1842,10 +1842,12 @@ namespace System.Windows.Forms
             private bool GetDataPresentInner(string format)
             {
                 Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
-                FORMATETC formatetc = new FORMATETC();
-                formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-                formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                formatetc.lindex = -1;
+                FORMATETC formatetc = new FORMATETC
+                {
+                    cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1
+                };
 
                 for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
                 {
@@ -1971,7 +1973,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
+            private readonly Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
 
             public DataStore()
             {
@@ -2188,7 +2190,7 @@ namespace System.Windows.Forms
             private static readonly string s_allowedTypeName = "System.Drawing.Bitmap";
             private static readonly string s_allowedAssemblyName = "System.Drawing";
             // PublicKeyToken=b03f5f7f11d50a3a
-            private static byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
+            private static readonly byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
             /// <summary>
             ///  Only safe to deserialize types are bypassing this callback, Strings 

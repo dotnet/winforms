@@ -85,11 +85,11 @@ namespace System.ComponentModel.Design.Tests
                 DtelLoading = value
             };
             Assert.Equal(value, surface.DtelLoading);
-            
+
             // Set same
             surface.DtelLoading = value;
             Assert.Equal(value, surface.DtelLoading);
-            
+
             // Set different
             surface.DtelLoading = !value;
             Assert.Equal(!value, surface.DtelLoading);
@@ -375,7 +375,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, unloadedCallCount);
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
-            
+
             // Begin again.
             surface.BeginLoad(mockLoader.Object);
             Assert.False(surface.IsLoaded);
@@ -439,7 +439,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, loadedCallCount);
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
-            
+
             // Begin again.
             surface.BeginLoad(mockLoader.Object);
             Assert.False(surface.IsLoaded);
@@ -628,7 +628,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
-        
+
         [Fact]
         public void DesignSurface_BeginLoad_NullLoader_ThrowsArgumentNullException()
         {

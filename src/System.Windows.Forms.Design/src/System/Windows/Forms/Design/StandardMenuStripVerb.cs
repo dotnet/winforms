@@ -488,7 +488,7 @@ namespace System.Windows.Forms.Design
                 baseName = name.ToString();
                 if (adjustCapitalization)
                 {
-                    string nameOfRandomItem = ToolStripDesigner.NameFromText(null, typeof(ToolStripMenuItem),  _designer.Component.Site);
+                    string nameOfRandomItem = ToolStripDesigner.NameFromText(null, typeof(ToolStripMenuItem), _designer.Component.Site);
                     if (!string.IsNullOrEmpty(nameOfRandomItem) && char.IsUpper(nameOfRandomItem[0]))
                     {
                         baseName = char.ToUpper(baseName[0], CultureInfo.InvariantCulture) + baseName.Substring(1);

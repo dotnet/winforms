@@ -11,16 +11,16 @@ namespace System.Windows.Forms
 
     public sealed class HtmlElementEventArgs : EventArgs
     {
-        private HtmlShimManager _shimManager;
-        
+        private readonly HtmlShimManager _shimManager;
+
         internal HtmlElementEventArgs(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
             Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
-            
+
             _shimManager = shimManager;
         }
-        
+
         private UnsafeNativeMethods.IHTMLEventObj NativeHTMLEventObj { get; }
 
         public MouseButtons MouseButtonsPressed
@@ -29,13 +29,16 @@ namespace System.Windows.Forms
             {
                 MouseButtons buttons = MouseButtons.None;
                 int nButtons = NativeHTMLEventObj.GetButton();
-                if ((nButtons & 1) != 0) {
+                if ((nButtons & 1) != 0)
+                {
                     buttons |= MouseButtons.Left;
                 }
-                if ((nButtons & 2) != 0) {
+                if ((nButtons & 2) != 0)
+                {
                     buttons |= MouseButtons.Right;
                 }
-                if ((nButtons & 4) != 0) {
+                if ((nButtons & 4) != 0)
+                {
                     buttons |= MouseButtons.Middle;
                 }
                 return buttons;
@@ -57,7 +60,8 @@ namespace System.Windows.Forms
             get => new Point(NativeHTMLEventObj.GetX(), NativeHTMLEventObj.GetY());
         }
 
-        public bool BubbleEvent {
+        public bool BubbleEvent
+        {
             get => !NativeHTMLEventObj.GetCancelBubble();
             set => NativeHTMLEventObj.SetCancelBubble(!value);
         }

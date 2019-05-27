@@ -4,60 +4,66 @@
 
 namespace System.Windows.Forms
 {
-	using System;
+    using System;
 
-	/// </summary>
-        internal class DropSource : UnsafeNativeMethods.IOleDropSource {
+    /// </summary>
+    internal class DropSource : UnsafeNativeMethods.IOleDropSource
+    {
 
-            private const int DragDropSDrop    = 0x00040100;
-            private const int DragDropSCancel  = 0x00040101;
-            private const int DragDropSUseDefaultCursors = 0x00040102;
-    
-            private ISupportOleDropSource peer;
+        private const int DragDropSDrop = 0x00040100;
+        private const int DragDropSCancel = 0x00040101;
+        private const int DragDropSUseDefaultCursors = 0x00040102;
 
-            public DropSource(ISupportOleDropSource peer ) {
-                if (peer == null)
-                    throw new ArgumentNullException(nameof(peer));
-                this.peer = peer;
-            }
+        private readonly ISupportOleDropSource peer;
 
-            public int OleQueryContinueDrag(int fEscapePressed, int grfKeyState) {
-                QueryContinueDragEventArgs qcdevent = null;
-                bool escapePressed = (fEscapePressed != 0);
-                DragAction action = DragAction.Continue;
-                if (escapePressed) {
-                    action = DragAction.Cancel;
-                }
-                else if ((grfKeyState & NativeMethods.MK_LBUTTON) == 0
-                         && (grfKeyState & NativeMethods.MK_RBUTTON) == 0
-                         && (grfKeyState & NativeMethods.MK_MBUTTON) == 0) {
-                    action = DragAction.Drop;
-                }
-
-                qcdevent = new QueryContinueDragEventArgs(grfKeyState,escapePressed, action);
-                peer.OnQueryContinueDrag(qcdevent);
-
-                int hr = 0;
-
-                switch (qcdevent.Action) {
-                    case DragAction.Drop:
-                        hr = DragDropSDrop;
-                        break;
-                    case DragAction.Cancel:
-                        hr = DragDropSCancel;
-                        break;
-                }
-
-                return hr;
-            }
-
-            public int OleGiveFeedback(int dwEffect) {
-                GiveFeedbackEventArgs gfbevent = new GiveFeedbackEventArgs((DragDropEffects) dwEffect, true);
-                peer.OnGiveFeedback(gfbevent);
-                if (gfbevent.UseDefaultCursors) {
-                    return DragDropSUseDefaultCursors;
-                }
-                return 0;
-            }
+        public DropSource(ISupportOleDropSource peer)
+        {
+            this.peer = peer ?? throw new ArgumentNullException(nameof(peer));
         }
+
+        public int OleQueryContinueDrag(int fEscapePressed, int grfKeyState)
+        {
+            QueryContinueDragEventArgs qcdevent = null;
+            bool escapePressed = (fEscapePressed != 0);
+            DragAction action = DragAction.Continue;
+            if (escapePressed)
+            {
+                action = DragAction.Cancel;
+            }
+            else if ((grfKeyState & NativeMethods.MK_LBUTTON) == 0
+                     && (grfKeyState & NativeMethods.MK_RBUTTON) == 0
+                     && (grfKeyState & NativeMethods.MK_MBUTTON) == 0)
+            {
+                action = DragAction.Drop;
+            }
+
+            qcdevent = new QueryContinueDragEventArgs(grfKeyState, escapePressed, action);
+            peer.OnQueryContinueDrag(qcdevent);
+
+            int hr = 0;
+
+            switch (qcdevent.Action)
+            {
+                case DragAction.Drop:
+                    hr = DragDropSDrop;
+                    break;
+                case DragAction.Cancel:
+                    hr = DragDropSCancel;
+                    break;
+            }
+
+            return hr;
+        }
+
+        public int OleGiveFeedback(int dwEffect)
+        {
+            GiveFeedbackEventArgs gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true);
+            peer.OnGiveFeedback(gfbevent);
+            if (gfbevent.UseDefaultCursors)
+            {
+                return DragDropSUseDefaultCursors;
+            }
+            return 0;
+        }
+    }
 }

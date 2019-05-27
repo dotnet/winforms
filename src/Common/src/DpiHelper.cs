@@ -70,10 +70,9 @@ namespace System.Windows.Forms
             {
 
                 // We are on Windows 10/1603 or greater all right, but we could still be DpiUnaware or SystemAware, so let's find that out...
-                NativeMethods.PROCESS_DPI_AWARENESS processDpiAwareness;
                 var currentProcessId = SafeNativeMethods.GetCurrentProcessId();
                 IntPtr hProcess = SafeNativeMethods.OpenProcess(SafeNativeMethods.PROCESS_QUERY_INFORMATION, false, currentProcessId);
-                var result = SafeNativeMethods.GetProcessDpiAwareness(hProcess, out processDpiAwareness);
+                var result = SafeNativeMethods.GetProcessDpiAwareness(hProcess, out CAPS.PROCESS_DPI_AWARENESS processDpiAwareness);
 
                 // Only if we're not, it makes sense to query for PerMonitorV2 awareness from now on, if needed.
                 if (!(processDpiAwareness == CAPS.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE ||
@@ -346,7 +345,7 @@ namespace System.Windows.Forms
         /// Set, when the first (Parking)Window has been created. From that moment on, 
         /// we will not be able nor allow to change the Process' DpiMode.
         /// </summary>
-        internal static bool FirstParkingWindowCreated {get; set;}
+        internal static bool FirstParkingWindowCreated { get; set; }
 
         /// <summary>
         /// Gets the DPI awareness.
@@ -388,9 +387,8 @@ namespace System.Windows.Forms
             // For operating systems windows 8.1 to Windows 10 redstone 1 version.
             else if (ApiHelper.IsApiAvailable(ExternDll.ShCore, nameof(SafeNativeMethods.GetProcessDpiAwareness)))
             {
-                CAPS.PROCESS_DPI_AWARENESS processDpiAwareness;
 
-                SafeNativeMethods.GetProcessDpiAwareness(IntPtr.Zero, out processDpiAwareness);
+                SafeNativeMethods.GetProcessDpiAwareness(IntPtr.Zero, out CAPS.PROCESS_DPI_AWARENESS processDpiAwareness);
                 switch (processDpiAwareness)
                 {
                     case CAPS.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE:

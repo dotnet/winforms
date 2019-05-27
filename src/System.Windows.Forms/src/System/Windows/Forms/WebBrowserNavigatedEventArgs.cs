@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         {
             _url = url;
         }
-        
+
         /// <summary>
         /// Url the browser navigated to.
         /// </summary>

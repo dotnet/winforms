@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
-        private static Type s_rowType = typeof(DataGridViewRow);
+        private static readonly Type s_rowType = typeof(DataGridViewRow);
         private static readonly int s_propRowErrorText = PropertyStore.CreateKey();
         private static readonly int s_propRowAccessibilityObject = PropertyStore.CreateKey();
 
@@ -1802,19 +1802,19 @@ namespace System.Windows.Forms
                     }
 
                     Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
-                    
+
                     int horizontalScrollBarHeight = 0;
-                    if (this.owner.DataGridView.HorizontalScrollBarVisible)
+                    if (owner.DataGridView.HorizontalScrollBarVisible)
                     {
-                        horizontalScrollBarHeight = this.owner.DataGridView.HorizontalScrollBarHeight;
+                        horizontalScrollBarHeight = owner.DataGridView.HorizontalScrollBarHeight;
                     }
 
                     Rectangle dataGridViewRect = ParentPrivate.Bounds;
 
                     int columnHeadersHeight = 0;
-                    if (this.owner.DataGridView.ColumnHeadersVisible)
+                    if (owner.DataGridView.ColumnHeadersVisible)
                     {
-                        columnHeadersHeight = this.owner.DataGridView.ColumnHeadersHeight;
+                        columnHeadersHeight = owner.DataGridView.ColumnHeadersHeight;
                     }
 
                     int rowRectBottom = rowRect.Bottom;
@@ -1823,7 +1823,7 @@ namespace System.Windows.Forms
                         rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
                     }
 
-                    
+
 
                     if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
                     {
@@ -2192,7 +2192,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    var dataGridView = owner.DataGridView;
+                    DataGridView dataGridView = owner.DataGridView;
 
                     switch (direction)
                     {
@@ -2252,7 +2252,7 @@ namespace System.Windows.Forms
 
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
-            private DataGridViewRow owner;
+            private readonly DataGridViewRow owner;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {

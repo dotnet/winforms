@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
 {
     public class CommonUnsafeNativeMethodsTests
     {
-        
+
 
         /*/// <summary>
         /// Data for the TryFindDpiAwarenessContextsEqual test

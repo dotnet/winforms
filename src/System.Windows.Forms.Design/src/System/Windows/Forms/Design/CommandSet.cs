@@ -321,7 +321,9 @@ namespace System.Windows.Forms.Design
         {
             object[] selection = null;
             if (components == null)
+            {
                 return new object[0];
+            }
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
@@ -504,7 +506,10 @@ namespace System.Windows.Forms.Design
                 catch (CheckoutException chkex)
                 {
                     if (chkex == CheckoutException.Canceled)
+                    {
                         return false;
+                    }
+
                     throw chkex;
                 }
             }
@@ -850,7 +855,9 @@ namespace System.Windows.Forms.Design
                         if (lockProp != null)
                         {
                             if ((bool)lockProp.GetValue(comp))
+                            {
                                 continue;
+                            }
                         }
 
                         // Skip all components that don't have a location property
@@ -1132,13 +1139,24 @@ namespace System.Windows.Forms.Design
                             }
 
                             if (loc.X < left)
+                            {
                                 left = loc.X;
+                            }
+
                             if (loc.Y < top)
+                            {
                                 top = loc.Y;
+                            }
+
                             if (loc.X + size.Width > right)
+                            {
                                 right = loc.X + size.Width;
+                            }
+
                             if (loc.Y + size.Height > bottom)
+                            {
                                 bottom = loc.Y + size.Height;
+                            }
                         }
                     }
 
@@ -1162,7 +1180,9 @@ namespace System.Windows.Forms.Design
                         shiftRight = true;
                     }
                     else
+                    {
                         deltaX = centerOfUnionRectX - centerOfParentX;
+                    }
 
                     if (centerOfParentY >= centerOfUnionRectY)
                     {
@@ -1170,7 +1190,9 @@ namespace System.Windows.Forms.Design
                         shiftBottom = true;
                     }
                     else
+                    {
                         deltaY = centerOfUnionRectY - centerOfParentY;
+                    }
 
                     bool firstTry = true;
                     foreach (object obj in selectedComponents)
@@ -1190,16 +1212,24 @@ namespace System.Windows.Forms.Design
                             if (cmdID == MenuCommands.CenterHorizontally)
                             {
                                 if (shiftRight)
+                                {
                                     loc.X += deltaX;
+                                }
                                 else
+                                {
                                     loc.X -= deltaX;
+                                }
                             }
                             else if (cmdID == MenuCommands.CenterVertically)
                             {
                                 if (shiftBottom)
+                                {
                                     loc.Y += deltaY;
+                                }
                                 else
+                                {
                                     loc.Y -= deltaY;
+                                }
                             }
                             // look if it's ok to change the first time
                             if (firstTry && !CanCheckout(comp))
@@ -1381,7 +1411,10 @@ namespace System.Windows.Forms.Design
                         finally
                         {
                             if (trans != null)
+                            {
                                 trans.Commit();
+                            }
+
                             foreach (ParentControlDesigner des in designerList)
                             {
                                 if (des != null)
@@ -1662,7 +1695,10 @@ namespace System.Windows.Forms.Design
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
                 if (host == null)
+                {
                     return; // nothing we can do here!
+                }
+
                 IDataObject dataObj = Clipboard.GetDataObject();
                 ICollection components = null;
                 bool createdItems = false;
@@ -1742,7 +1778,10 @@ namespace System.Windows.Forms.Design
                             else
                             {
                                 if (tree == tree.Parent)
+                                {
                                     break;
+                                }
+
                                 tree = tree.Parent as ITreeDesigner;
                             }
                         }
@@ -2009,7 +2048,10 @@ namespace System.Windows.Forms.Design
                             foreach (IComponent comp in components)
                             {
                                 if (baseComp == comp)
+                                {
                                     continue;
+                                }
+
                                 selComps[j++] = comp;
                             }
                         }
@@ -2054,7 +2096,9 @@ namespace System.Windows.Forms.Design
                     finally
                     {
                         if (trans != null)
+                        {
                             trans.Commit();
+                        }
                     }
                 }
             }
@@ -2113,7 +2157,10 @@ namespace System.Windows.Forms.Design
                     foreach (object obj in selectedObjects)
                     {
                         if (obj.Equals(selPrimary))
+                        {
                             continue;
+                        }
+
                         if (!(obj is IComponent comp))
                         {
                             continue;
@@ -2290,7 +2337,9 @@ namespace System.Windows.Forms.Design
                     finally
                     {
                         if (trans != null)
+                        {
                             trans.Commit();
+                        }
                     }
                 }
             }
@@ -2364,7 +2413,9 @@ namespace System.Windows.Forms.Design
                 object primary = SelectionService.PrimarySelection;
                 int primaryIndex = 0;
                 if (primary != null)
+                {
                     primaryIndex = Array.IndexOf(selectedObjects, primary);
+                }
 
                 // And compute delta values for Make Equal
                 if (cmdID == MenuCommands.HorizSpaceMakeEqual ||
@@ -2485,7 +2536,9 @@ namespace System.Windows.Forms.Design
                             nEqualDelta = (lastSize.Height + lastLoc.Y - curLoc.Y - total) / (selectedObjects.Length - 1);
                         }
                         if (nEqualDelta < 0)
+                        {
                             nEqualDelta = 0;
+                        }
                     }
                 }
                 curComp = lastComp = null;
@@ -2580,13 +2633,17 @@ namespace System.Windows.Forms.Design
                         {
                             curLoc.X -= grid.Width * (n - primaryIndex);
                             if (curLoc.X < primaryLoc.X)
+                            {
                                 curLoc.X = primaryLoc.X;
+                            }
                         }
                         else if (primaryIndex > n)
                         {
                             curLoc.X += grid.Width * (primaryIndex - n);
                             if (curLoc.X > primaryLoc.X)
+                            {
                                 curLoc.X = primaryLoc.X;
+                            }
                         }
                     }
                     else if (cmdID == MenuCommands.HorizSpaceIncrease)
@@ -2615,13 +2672,17 @@ namespace System.Windows.Forms.Design
                         {
                             curLoc.Y -= grid.Height * (n - primaryIndex);
                             if (curLoc.Y < primaryLoc.Y)
+                            {
                                 curLoc.Y = primaryLoc.Y;
+                            }
                         }
                         else if (primaryIndex > n)
                         {
                             curLoc.Y += grid.Height * (primaryIndex - n);
                             if (curLoc.Y > primaryLoc.Y)
+                            {
                                 curLoc.Y = primaryLoc.Y;
+                            }
                         }
                     }
                     else if (cmdID == MenuCommands.VertSpaceIncrease)

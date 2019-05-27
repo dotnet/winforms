@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
-                
+
                 // Parse 2 integer values.
                 if (culture == null)
                 {

@@ -16,14 +16,14 @@ namespace System.Windows.Forms
         /// in this case, the user might not know that there is a new error.
         /// </summary>
         BlinkIfDifferentError,
-        
+
         /// <summary>
         /// Blink the error icon when the error is first displayed, or when 
         /// a new error description string is set for the control and the
         /// error icon is already displayed.
         /// </summary>
         AlwaysBlink,
-        
+
         /// <summary>
         /// Never blink the error icon.
         /// </summary>

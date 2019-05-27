@@ -154,96 +154,96 @@ namespace System.Windows.Forms
         private static readonly object EVENT_DATAGRIDVIEWUSERDELETEDROW = new object();
         private static readonly object EVENT_DATAGRIDVIEWUSERDELETINGROW = new object();
 
-        private const int DATAGRIDVIEWSTATE1_allowUserToAddRows           = 0x00000001;
-        private const int DATAGRIDVIEWSTATE1_allowUserToDeleteRows        = 0x00000002;
-        private const int DATAGRIDVIEWSTATE1_allowUserToOrderColumns      = 0x00000004;
-        private const int DATAGRIDVIEWSTATE1_columnHeadersVisible         = 0x00000008;
-        private const int DATAGRIDVIEWSTATE1_rowHeadersVisible            = 0x00000010;
-        private const int DATAGRIDVIEWSTATE1_forwardCharMessage           = 0x00000020;
-        private const int DATAGRIDVIEWSTATE1_leavingWithTabKey            = 0x00000040;
-        private const int DATAGRIDVIEWSTATE1_multiSelect                  = 0x00000080;
-        private const int DATAGRIDVIEWSTATE1_ignoringEditingChanges       = 0x00000200;
-        private const int DATAGRIDVIEWSTATE1_ambientForeColor             = 0x00000400;
-        private const int DATAGRIDVIEWSTATE1_scrolledSinceMouseDown       = 0x00000800;
-        private const int DATAGRIDVIEWSTATE1_editingControlHidden         = 0x00001000;
-        private const int DATAGRIDVIEWSTATE1_standardTab                  = 0x00002000;
-        private const int DATAGRIDVIEWSTATE1_editingControlChanging       = 0x00004000;
-        private const int DATAGRIDVIEWSTATE1_currentCellInEditMode        = 0x00008000;
-        private const int DATAGRIDVIEWSTATE1_virtualMode                  = 0x00010000;
-        private const int DATAGRIDVIEWSTATE1_editedCellChanged            = 0x00020000;
-        private const int DATAGRIDVIEWSTATE1_editedRowChanged             = 0x00040000;
-        private const int DATAGRIDVIEWSTATE1_newRowEdited                 = 0x00080000;
-        private const int DATAGRIDVIEWSTATE1_readOnly                     = 0x00100000;
-        private const int DATAGRIDVIEWSTATE1_newRowCreatedByEditing       = 0x00200000;
-        private const int DATAGRIDVIEWSTATE1_temporarilyResetCurrentCell  = 0x00400000;
-        private const int DATAGRIDVIEWSTATE1_autoGenerateColumns          = 0x00800000;
-        private const int DATAGRIDVIEWSTATE1_customCursorSet              = 0x01000000;
-        private const int DATAGRIDVIEWSTATE1_ambientFont                  = 0x02000000;
-        private const int DATAGRIDVIEWSTATE1_ambientColumnHeadersFont     = 0x04000000;
-        private const int DATAGRIDVIEWSTATE1_ambientRowHeadersFont        = 0x08000000;
-        private const int DATAGRIDVIEWSTATE1_isAutoSized                  = 0x40000000;
+        private const int DATAGRIDVIEWSTATE1_allowUserToAddRows = 0x00000001;
+        private const int DATAGRIDVIEWSTATE1_allowUserToDeleteRows = 0x00000002;
+        private const int DATAGRIDVIEWSTATE1_allowUserToOrderColumns = 0x00000004;
+        private const int DATAGRIDVIEWSTATE1_columnHeadersVisible = 0x00000008;
+        private const int DATAGRIDVIEWSTATE1_rowHeadersVisible = 0x00000010;
+        private const int DATAGRIDVIEWSTATE1_forwardCharMessage = 0x00000020;
+        private const int DATAGRIDVIEWSTATE1_leavingWithTabKey = 0x00000040;
+        private const int DATAGRIDVIEWSTATE1_multiSelect = 0x00000080;
+        private const int DATAGRIDVIEWSTATE1_ignoringEditingChanges = 0x00000200;
+        private const int DATAGRIDVIEWSTATE1_ambientForeColor = 0x00000400;
+        private const int DATAGRIDVIEWSTATE1_scrolledSinceMouseDown = 0x00000800;
+        private const int DATAGRIDVIEWSTATE1_editingControlHidden = 0x00001000;
+        private const int DATAGRIDVIEWSTATE1_standardTab = 0x00002000;
+        private const int DATAGRIDVIEWSTATE1_editingControlChanging = 0x00004000;
+        private const int DATAGRIDVIEWSTATE1_currentCellInEditMode = 0x00008000;
+        private const int DATAGRIDVIEWSTATE1_virtualMode = 0x00010000;
+        private const int DATAGRIDVIEWSTATE1_editedCellChanged = 0x00020000;
+        private const int DATAGRIDVIEWSTATE1_editedRowChanged = 0x00040000;
+        private const int DATAGRIDVIEWSTATE1_newRowEdited = 0x00080000;
+        private const int DATAGRIDVIEWSTATE1_readOnly = 0x00100000;
+        private const int DATAGRIDVIEWSTATE1_newRowCreatedByEditing = 0x00200000;
+        private const int DATAGRIDVIEWSTATE1_temporarilyResetCurrentCell = 0x00400000;
+        private const int DATAGRIDVIEWSTATE1_autoGenerateColumns = 0x00800000;
+        private const int DATAGRIDVIEWSTATE1_customCursorSet = 0x01000000;
+        private const int DATAGRIDVIEWSTATE1_ambientFont = 0x02000000;
+        private const int DATAGRIDVIEWSTATE1_ambientColumnHeadersFont = 0x04000000;
+        private const int DATAGRIDVIEWSTATE1_ambientRowHeadersFont = 0x08000000;
+        private const int DATAGRIDVIEWSTATE1_isAutoSized = 0x40000000;
 
         // DATAGRIDVIEWSTATE2_
-        private const int DATAGRIDVIEWSTATE2_showEditingIcon               = 0x00000001;
-        private const int DATAGRIDVIEWSTATE2_allowUserToResizeColumns      = 0x00000002;
-        private const int DATAGRIDVIEWSTATE2_allowUserToResizeRows         = 0x00000004;
-        private const int DATAGRIDVIEWSTATE2_mouseOverRemovedEditingCtrl   = 0x00000008;
-        private const int DATAGRIDVIEWSTATE2_mouseOverRemovedEditingPanel  = 0x00000010;
-        private const int DATAGRIDVIEWSTATE2_mouseEnterExpected            = 0x00000020;
-        private const int DATAGRIDVIEWSTATE2_enableHeadersVisualStyles     = 0x00000040;
-        private const int DATAGRIDVIEWSTATE2_showCellErrors                = 0x00000080;
-        private const int DATAGRIDVIEWSTATE2_showCellToolTips              = 0x00000100;
-        private const int DATAGRIDVIEWSTATE2_showRowErrors                 = 0x00000200;
+        private const int DATAGRIDVIEWSTATE2_showEditingIcon = 0x00000001;
+        private const int DATAGRIDVIEWSTATE2_allowUserToResizeColumns = 0x00000002;
+        private const int DATAGRIDVIEWSTATE2_allowUserToResizeRows = 0x00000004;
+        private const int DATAGRIDVIEWSTATE2_mouseOverRemovedEditingCtrl = 0x00000008;
+        private const int DATAGRIDVIEWSTATE2_mouseOverRemovedEditingPanel = 0x00000010;
+        private const int DATAGRIDVIEWSTATE2_mouseEnterExpected = 0x00000020;
+        private const int DATAGRIDVIEWSTATE2_enableHeadersVisualStyles = 0x00000040;
+        private const int DATAGRIDVIEWSTATE2_showCellErrors = 0x00000080;
+        private const int DATAGRIDVIEWSTATE2_showCellToolTips = 0x00000100;
+        private const int DATAGRIDVIEWSTATE2_showRowErrors = 0x00000200;
         private const int DATAGRIDVIEWSTATE2_showColumnRelocationInsertion = 0x00000400;
-        private const int DATAGRIDVIEWSTATE2_rightToLeftMode               = 0x00000800;
-        private const int DATAGRIDVIEWSTATE2_rightToLeftValid              = 0x00001000;
-        private const int DATAGRIDVIEWSTATE2_currentCellWantsInputKey      = 0x00002000;
-        private const int DATAGRIDVIEWSTATE2_stopRaisingVerticalScroll     = 0x00004000;
-        private const int DATAGRIDVIEWSTATE2_stopRaisingHorizontalScroll   = 0x00008000;
-        private const int DATAGRIDVIEWSTATE2_replacedCellSelected          = 0x00010000;
-        private const int DATAGRIDVIEWSTATE2_replacedCellReadOnly          = 0x00020000;
-        private const int DATAGRIDVIEWSTATE2_raiseSelectionChanged         = 0x00040000;
-        private const int DATAGRIDVIEWSTATE2_initializing                  = 0x00080000;
-        private const int DATAGRIDVIEWSTATE2_autoSizedWithoutHandle        = 0x00100000;
-        private const int DATAGRIDVIEWSTATE2_ignoreCursorChange            = 0x00200000;
-        private const int DATAGRIDVIEWSTATE2_rowsCollectionClearedInSetCell= 0x00400000;
-        private const int DATAGRIDVIEWSTATE2_nextMouseUpIsDouble           = 0x00800000;
-        private const int DATAGRIDVIEWSTATE2_inBindingContextChanged       = 0x01000000;
-        private const int DATAGRIDVIEWSTATE2_allowHorizontalScrollbar      = 0x02000000;
-        private const int DATAGRIDVIEWSTATE2_usedFillWeightsDirty          = 0x04000000;
-        private const int DATAGRIDVIEWSTATE2_messageFromEditingCtrls       = 0x08000000;
-        private const int DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds  = 0x10000000;
-        private const int DATAGRIDVIEWSTATE2_discardEditingControl         = 0x20000000;
+        private const int DATAGRIDVIEWSTATE2_rightToLeftMode = 0x00000800;
+        private const int DATAGRIDVIEWSTATE2_rightToLeftValid = 0x00001000;
+        private const int DATAGRIDVIEWSTATE2_currentCellWantsInputKey = 0x00002000;
+        private const int DATAGRIDVIEWSTATE2_stopRaisingVerticalScroll = 0x00004000;
+        private const int DATAGRIDVIEWSTATE2_stopRaisingHorizontalScroll = 0x00008000;
+        private const int DATAGRIDVIEWSTATE2_replacedCellSelected = 0x00010000;
+        private const int DATAGRIDVIEWSTATE2_replacedCellReadOnly = 0x00020000;
+        private const int DATAGRIDVIEWSTATE2_raiseSelectionChanged = 0x00040000;
+        private const int DATAGRIDVIEWSTATE2_initializing = 0x00080000;
+        private const int DATAGRIDVIEWSTATE2_autoSizedWithoutHandle = 0x00100000;
+        private const int DATAGRIDVIEWSTATE2_ignoreCursorChange = 0x00200000;
+        private const int DATAGRIDVIEWSTATE2_rowsCollectionClearedInSetCell = 0x00400000;
+        private const int DATAGRIDVIEWSTATE2_nextMouseUpIsDouble = 0x00800000;
+        private const int DATAGRIDVIEWSTATE2_inBindingContextChanged = 0x01000000;
+        private const int DATAGRIDVIEWSTATE2_allowHorizontalScrollbar = 0x02000000;
+        private const int DATAGRIDVIEWSTATE2_usedFillWeightsDirty = 0x04000000;
+        private const int DATAGRIDVIEWSTATE2_messageFromEditingCtrls = 0x08000000;
+        private const int DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds = 0x10000000;
+        private const int DATAGRIDVIEWSTATE2_discardEditingControl = 0x20000000;
 
         // DATAGRIDVIEWOPER_
-        private const int DATAGRIDVIEWOPER_trackColResize                = 0x00000001;
-        private const int DATAGRIDVIEWOPER_trackRowResize                = 0x00000002;
-        private const int DATAGRIDVIEWOPER_trackColSelect                = 0x00000004;
-        private const int DATAGRIDVIEWOPER_trackRowSelect                = 0x00000008;
-        private const int DATAGRIDVIEWOPER_trackCellSelect               = 0x00000010;
-        private const int DATAGRIDVIEWOPER_trackColRelocation            = 0x00000020;
-        private const int DATAGRIDVIEWOPER_inSort                        = 0x00000040;
-        private const int DATAGRIDVIEWOPER_trackColHeadersResize         = 0x00000080;
-        private const int DATAGRIDVIEWOPER_trackRowHeadersResize         = 0x00000100;
-        private const int DATAGRIDVIEWOPER_trackMouseMoves               = 0x00000200;
-        private const int DATAGRIDVIEWOPER_inRefreshColumns              = 0x00000400;
-        private const int DATAGRIDVIEWOPER_inDisplayIndexAdjustments     = 0x00000800;
-        private const int DATAGRIDVIEWOPER_lastEditCtrlClickDoubled      = 0x00001000;
-        private const int DATAGRIDVIEWOPER_inMouseDown                   = 0x00002000;
-        private const int DATAGRIDVIEWOPER_inReadOnlyChange              = 0x00004000;
-        private const int DATAGRIDVIEWOPER_inCellValidating              = 0x00008000;
-        private const int DATAGRIDVIEWOPER_inBorderStyleChange           = 0x00010000;
-        private const int DATAGRIDVIEWOPER_inCurrentCellChange           = 0x00020000;
-        private const int DATAGRIDVIEWOPER_inAdjustFillingColumns        = 0x00040000;
-        private const int DATAGRIDVIEWOPER_inAdjustFillingColumn         = 0x00080000;
-        private const int DATAGRIDVIEWOPER_inDispose                     = 0x00100000;
-        private const int DATAGRIDVIEWOPER_inBeginEdit                   = 0x00200000;
-        private const int DATAGRIDVIEWOPER_inEndEdit                     = 0x00400000;
+        private const int DATAGRIDVIEWOPER_trackColResize = 0x00000001;
+        private const int DATAGRIDVIEWOPER_trackRowResize = 0x00000002;
+        private const int DATAGRIDVIEWOPER_trackColSelect = 0x00000004;
+        private const int DATAGRIDVIEWOPER_trackRowSelect = 0x00000008;
+        private const int DATAGRIDVIEWOPER_trackCellSelect = 0x00000010;
+        private const int DATAGRIDVIEWOPER_trackColRelocation = 0x00000020;
+        private const int DATAGRIDVIEWOPER_inSort = 0x00000040;
+        private const int DATAGRIDVIEWOPER_trackColHeadersResize = 0x00000080;
+        private const int DATAGRIDVIEWOPER_trackRowHeadersResize = 0x00000100;
+        private const int DATAGRIDVIEWOPER_trackMouseMoves = 0x00000200;
+        private const int DATAGRIDVIEWOPER_inRefreshColumns = 0x00000400;
+        private const int DATAGRIDVIEWOPER_inDisplayIndexAdjustments = 0x00000800;
+        private const int DATAGRIDVIEWOPER_lastEditCtrlClickDoubled = 0x00001000;
+        private const int DATAGRIDVIEWOPER_inMouseDown = 0x00002000;
+        private const int DATAGRIDVIEWOPER_inReadOnlyChange = 0x00004000;
+        private const int DATAGRIDVIEWOPER_inCellValidating = 0x00008000;
+        private const int DATAGRIDVIEWOPER_inBorderStyleChange = 0x00010000;
+        private const int DATAGRIDVIEWOPER_inCurrentCellChange = 0x00020000;
+        private const int DATAGRIDVIEWOPER_inAdjustFillingColumns = 0x00040000;
+        private const int DATAGRIDVIEWOPER_inAdjustFillingColumn = 0x00080000;
+        private const int DATAGRIDVIEWOPER_inDispose = 0x00100000;
+        private const int DATAGRIDVIEWOPER_inBeginEdit = 0x00200000;
+        private const int DATAGRIDVIEWOPER_inEndEdit = 0x00400000;
         private const int DATAGRIDVIEWOPER_resizingOperationAboutToStart = 0x00800000;
-        private const int DATAGRIDVIEWOPER_trackKeyboardColResize        = 0x01000000;
-        private const int DATAGRIDVIEWOPER_mouseOperationMask            = DATAGRIDVIEWOPER_trackColResize | DATAGRIDVIEWOPER_trackRowResize | 
+        private const int DATAGRIDVIEWOPER_trackKeyboardColResize = 0x01000000;
+        private const int DATAGRIDVIEWOPER_mouseOperationMask = DATAGRIDVIEWOPER_trackColResize | DATAGRIDVIEWOPER_trackRowResize |
             DATAGRIDVIEWOPER_trackColRelocation | DATAGRIDVIEWOPER_trackColHeadersResize | DATAGRIDVIEWOPER_trackRowHeadersResize;
-        private const int DATAGRIDVIEWOPER_keyboardOperationMask         = DATAGRIDVIEWOPER_trackKeyboardColResize;
+        private const int DATAGRIDVIEWOPER_keyboardOperationMask = DATAGRIDVIEWOPER_trackKeyboardColResize;
 
         private static Size DragSize = SystemInformation.DragSize;
 
@@ -300,24 +300,24 @@ namespace System.Windows.Forms
         private DataGridViewEditMode editMode;
 
         // Note that a cell can only be in one bag but not both at the same time.
-        private DataGridViewCellLinkedList individualSelectedCells;
-        private DataGridViewCellLinkedList individualReadOnlyCells;
-        private DataGridViewIntLinkedList selectedBandIndexes;
+        private readonly DataGridViewCellLinkedList individualSelectedCells;
+        private readonly DataGridViewCellLinkedList individualReadOnlyCells;
+        private readonly DataGridViewIntLinkedList selectedBandIndexes;
         private DataGridViewIntLinkedList selectedBandSnapshotIndexes;
 
         private DataGridViewCellStyle defaultCellStyle, columnHeadersDefaultCellStyle, rowHeadersDefaultCellStyle;
         private DataGridViewCellStyle rowsDefaultCellStyle, alternatingRowsDefaultCellStyle;
         private ScrollBars scrollBars;
         private LayoutData layout;
-        private DisplayedBandsData displayedBandsInfo;
+        private readonly DisplayedBandsData displayedBandsInfo;
         private Rectangle normalClientRectangle;
-        private ArrayList lstRows;
+        private readonly ArrayList lstRows;
         private int availableWidthForFillColumns;
 
         private BorderStyle borderStyle;
-        private DataGridViewAdvancedBorderStyle advancedCellBorderStyle;
-        private DataGridViewAdvancedBorderStyle advancedRowHeadersBorderStyle;
-        private DataGridViewAdvancedBorderStyle advancedColumnHeadersBorderStyle;
+        private readonly DataGridViewAdvancedBorderStyle advancedCellBorderStyle;
+        private readonly DataGridViewAdvancedBorderStyle advancedRowHeadersBorderStyle;
+        private readonly DataGridViewAdvancedBorderStyle advancedColumnHeadersBorderStyle;
 
         private DataGridViewClipboardCopyMode clipboardCopyMode;
 
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
         private System.Windows.Forms.Timer vertScrollTimer, horizScrollTimer;
 
-        private Hashtable converters;
+        private readonly Hashtable converters;
         private Hashtable pens;
         private Hashtable brushes;
 
@@ -393,10 +393,10 @@ namespace System.Windows.Forms
         private DataGridViewDataConnection dataConnection;
 
         // ToolTip
-        private DataGridViewToolTip toolTipControl;
+        private readonly DataGridViewToolTip toolTipControl;
         // the tool tip string we get from cells
         private string toolTipCaption = string.Empty;
-        
+
         private const int maxTTDISPINFOBufferLength = 80;
 
         // Last Mouse Click Info
@@ -415,28 +415,28 @@ namespace System.Windows.Forms
         /// </summary>
         public DataGridView()
         {
-            SetStyle(ControlStyles.UserPaint | 
-                     ControlStyles.Opaque | 
+            SetStyle(ControlStyles.UserPaint |
+                     ControlStyles.Opaque |
                      ControlStyles.UserMouse, true);
-            
+
             SetStyle(ControlStyles.SupportsTransparentBackColor, false);
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
-            this.dataGridViewState1 = new System.Collections.Specialized.BitVector32(0x00000000);
-            this.dataGridViewState2 = new System.Collections.Specialized.BitVector32(0x00000000);
-            this.dataGridViewOper   = new System.Collections.Specialized.BitVector32(0x00000000);
+            dataGridViewState1 = new System.Collections.Specialized.BitVector32(0x00000000);
+            dataGridViewState2 = new System.Collections.Specialized.BitVector32(0x00000000);
+            dataGridViewOper = new System.Collections.Specialized.BitVector32(0x00000000);
 
-            this.dataGridViewState1[  DATAGRIDVIEWSTATE1_columnHeadersVisible 
-                                    | DATAGRIDVIEWSTATE1_rowHeadersVisible 
+            dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible
+                                    | DATAGRIDVIEWSTATE1_rowHeadersVisible
                                     | DATAGRIDVIEWSTATE1_autoGenerateColumns
                                     | DATAGRIDVIEWSTATE1_allowUserToAddRows
-                                    | DATAGRIDVIEWSTATE1_allowUserToDeleteRows ] = true;
+                                    | DATAGRIDVIEWSTATE1_allowUserToDeleteRows] = true;
 
 
 
-            this.dataGridViewState2[  DATAGRIDVIEWSTATE2_showEditingIcon
+            dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon
                                     | DATAGRIDVIEWSTATE2_enableHeadersVisualStyles
                                     | DATAGRIDVIEWSTATE2_mouseEnterExpected
                                     | DATAGRIDVIEWSTATE2_allowUserToResizeColumns
@@ -445,83 +445,85 @@ namespace System.Windows.Forms
                                     | DATAGRIDVIEWSTATE2_showCellErrors
                                     | DATAGRIDVIEWSTATE2_showRowErrors
                                     | DATAGRIDVIEWSTATE2_allowHorizontalScrollbar
-                                    | DATAGRIDVIEWSTATE2_usedFillWeightsDirty ] = true;
+                                    | DATAGRIDVIEWSTATE2_usedFillWeightsDirty] = true;
 
 
-            this.displayedBandsInfo = new DisplayedBandsData();
-            this.lstRows = new ArrayList();
+            displayedBandsInfo = new DisplayedBandsData();
+            lstRows = new ArrayList();
 
-            this.converters = new Hashtable(8);
-            this.pens = new Hashtable(8);
-            this.brushes = new Hashtable(10);
-            this.gridPen = new Pen(DefaultGridColor);
+            converters = new Hashtable(8);
+            pens = new Hashtable(8);
+            brushes = new Hashtable(10);
+            gridPen = new Pen(DefaultGridColor);
 
-            this.selectedBandIndexes = new DataGridViewIntLinkedList();
-            this.individualSelectedCells = new DataGridViewCellLinkedList();
-            this.individualReadOnlyCells = new DataGridViewCellLinkedList();
+            selectedBandIndexes = new DataGridViewIntLinkedList();
+            individualSelectedCells = new DataGridViewCellLinkedList();
+            individualReadOnlyCells = new DataGridViewCellLinkedList();
 
-            this.advancedCellBorderStyle = new DataGridViewAdvancedBorderStyle(this, 
-                DataGridViewAdvancedCellBorderStyle.OutsetDouble, 
-                DataGridViewAdvancedCellBorderStyle.OutsetPartial, 
+            advancedCellBorderStyle = new DataGridViewAdvancedBorderStyle(this,
+                DataGridViewAdvancedCellBorderStyle.OutsetDouble,
+                DataGridViewAdvancedCellBorderStyle.OutsetPartial,
                 DataGridViewAdvancedCellBorderStyle.InsetDouble);
-            this.advancedRowHeadersBorderStyle = new DataGridViewAdvancedBorderStyle(this);
-            this.advancedColumnHeadersBorderStyle = new DataGridViewAdvancedBorderStyle(this);
-            this.advancedCellBorderStyle.All = defaultAdvancedCellBorderStyle;
-            this.advancedRowHeadersBorderStyle.All = defaultAdvancedRowHeadersBorderStyle;
-            this.advancedColumnHeadersBorderStyle.All = defaultAdvancedColumnHeadersBorderStyle;
-            this.borderStyle = defaultBorderStyle;
-            this.dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect] = true;
-            this.selectionMode = defaultSelectionMode;
-            this.editMode = defaultEditMode;
-            this.autoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            this.autoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            this.columnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            this.rowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
+            advancedRowHeadersBorderStyle = new DataGridViewAdvancedBorderStyle(this);
+            advancedColumnHeadersBorderStyle = new DataGridViewAdvancedBorderStyle(this);
+            advancedCellBorderStyle.All = defaultAdvancedCellBorderStyle;
+            advancedRowHeadersBorderStyle.All = defaultAdvancedRowHeadersBorderStyle;
+            advancedColumnHeadersBorderStyle.All = defaultAdvancedColumnHeadersBorderStyle;
+            borderStyle = defaultBorderStyle;
+            dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect] = true;
+            selectionMode = defaultSelectionMode;
+            editMode = defaultEditMode;
+            autoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            autoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            columnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            rowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
 
-            this.clipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText;
+            clipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText;
 
-            this.layout = new LayoutData();
-            this.layout.TopLeftHeader        = Rectangle.Empty;
-            this.layout.ColumnHeaders        = Rectangle.Empty;
-            this.layout.RowHeaders           = Rectangle.Empty;
-            this.layout.ColumnHeadersVisible = true;
-            this.layout.RowHeadersVisible    = true;
-            this.layout.ClientRectangle      = this.ClientRectangle;
+            layout = new LayoutData
+            {
+                TopLeftHeader = Rectangle.Empty,
+                ColumnHeaders = Rectangle.Empty,
+                RowHeaders = Rectangle.Empty,
+                ColumnHeadersVisible = true,
+                RowHeadersVisible = true,
+                ClientRectangle = ClientRectangle
+            };
 
-            this.scrollBars = ScrollBars.Both;
+            scrollBars = ScrollBars.Both;
 
-            this.horizScrollBar.RightToLeft = RightToLeft.Inherit;
-            this.horizScrollBar.AccessibleName = string.Format(SR.DataGridView_AccHorizontalScrollBarAccName);
-            this.horizScrollBar.Top = this.ClientRectangle.Height - horizScrollBar.Height;
-            this.horizScrollBar.Left = 0;
-            this.horizScrollBar.Visible = false;
-            this.horizScrollBar.Scroll += new ScrollEventHandler(DataGridViewHScrolled);
-            this.Controls.Add(this.horizScrollBar);
+            horizScrollBar.RightToLeft = RightToLeft.Inherit;
+            horizScrollBar.AccessibleName = string.Format(SR.DataGridView_AccHorizontalScrollBarAccName);
+            horizScrollBar.Top = ClientRectangle.Height - horizScrollBar.Height;
+            horizScrollBar.Left = 0;
+            horizScrollBar.Visible = false;
+            horizScrollBar.Scroll += new ScrollEventHandler(DataGridViewHScrolled);
+            Controls.Add(horizScrollBar);
 
-            this.vertScrollBar.Top = 0;
-            this.vertScrollBar.AccessibleName = string.Format(SR.DataGridView_AccVerticalScrollBarAccName);
-            this.vertScrollBar.Left = this.ClientRectangle.Width - vertScrollBar.Width;
-            this.vertScrollBar.Visible = false;
-            this.vertScrollBar.Scroll += new ScrollEventHandler(DataGridViewVScrolled);
-            this.Controls.Add(this.vertScrollBar);
+            vertScrollBar.Top = 0;
+            vertScrollBar.AccessibleName = string.Format(SR.DataGridView_AccVerticalScrollBarAccName);
+            vertScrollBar.Left = ClientRectangle.Width - vertScrollBar.Width;
+            vertScrollBar.Visible = false;
+            vertScrollBar.Scroll += new ScrollEventHandler(DataGridViewVScrolled);
+            Controls.Add(vertScrollBar);
 
-            this.ptCurrentCell = new Point(-1, -1);
-            this.ptAnchorCell = new Point(-1, -1);
-            this.ptMouseDownCell = new Point(-2, -2);
-            this.ptMouseEnteredCell = new Point(-2, -2);
-            this.ptToolTipCell = new Point(-1, -1);
-            this.ptMouseDownGridCoord = new Point(-1, -1);
+            ptCurrentCell = new Point(-1, -1);
+            ptAnchorCell = new Point(-1, -1);
+            ptMouseDownCell = new Point(-2, -2);
+            ptMouseEnteredCell = new Point(-2, -2);
+            ptToolTipCell = new Point(-1, -1);
+            ptMouseDownGridCoord = new Point(-1, -1);
 
-            this.sortOrder = SortOrder.None;
+            sortOrder = SortOrder.None;
 
-            this.lastMouseClickInfo.timeStamp = 0;
+            lastMouseClickInfo.timeStamp = 0;
 
             WireScrollBarsEvents();
             PerformLayout();
 
-            this.toolTipControl = new DataGridViewToolTip(this);
-            this.rowHeadersWidth = ScaleToCurrentDpi(defaultRowHeadersWidth);
-            this.columnHeadersHeight = ScaleToCurrentDpi(defaultColumnHeadersHeight);
+            toolTipControl = new DataGridViewToolTip(this);
+            rowHeadersWidth = ScaleToCurrentDpi(defaultRowHeadersWidth);
+            columnHeadersHeight = ScaleToCurrentDpi(defaultColumnHeadersHeight);
             Invalidate();
         }
 
@@ -543,14 +545,14 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewAdvancedBorderStyle dgvabs;
-                if (this.ApplyVisualStylesToHeaderCells)
+                if (ApplyVisualStylesToHeaderCells)
                 {
-                    switch (this.AdvancedColumnHeadersBorderStyle.All)
+                    switch (AdvancedColumnHeadersBorderStyle.All)
                     {
                         case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                         case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                             dgvabs = new DataGridViewAdvancedBorderStyle();
-                            if (this.RightToLeftInternal)
+                            if (RightToLeftInternal)
                             {
                                 dgvabs.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                             }
@@ -565,7 +567,7 @@ namespace System.Windows.Forms
 
                         case DataGridViewAdvancedCellBorderStyle.InsetDouble:
                             dgvabs = new DataGridViewAdvancedBorderStyle();
-                            if (this.RightToLeftInternal)
+                            if (RightToLeftInternal)
                             {
                                 dgvabs.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                             }
@@ -581,84 +583,88 @@ namespace System.Windows.Forms
                         case DataGridViewAdvancedCellBorderStyle.NotSet:
                             // Since the row headers are visible, we should make sure
                             // that there is a left/right border for the TopLeftHeaderCell no matter what.
-                            if ((!this.RightToLeftInternal && this.AdvancedColumnHeadersBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ||
-                                (this.RightToLeftInternal && this.AdvancedColumnHeadersBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None))
+                            if ((!RightToLeftInternal && AdvancedColumnHeadersBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ||
+                                (RightToLeftInternal && AdvancedColumnHeadersBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None))
                             {
                                 dgvabs = new DataGridViewAdvancedBorderStyle();
-                                if (this.RightToLeftInternal)
+                                if (RightToLeftInternal)
                                 {
-                                    dgvabs.LeftInternal = this.AdvancedColumnHeadersBorderStyle.Left;
-                                    dgvabs.RightInternal = this.AdvancedRowHeadersBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ?
-                                        DataGridViewAdvancedCellBorderStyle.Outset : this.AdvancedRowHeadersBorderStyle.Right;
+                                    dgvabs.LeftInternal = AdvancedColumnHeadersBorderStyle.Left;
+                                    dgvabs.RightInternal = AdvancedRowHeadersBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ?
+                                        DataGridViewAdvancedCellBorderStyle.Outset : AdvancedRowHeadersBorderStyle.Right;
                                 }
                                 else
                                 {
-                                    dgvabs.LeftInternal = this.AdvancedRowHeadersBorderStyle.Left;
-                                    dgvabs.RightInternal = this.AdvancedColumnHeadersBorderStyle.Right;
+                                    dgvabs.LeftInternal = AdvancedRowHeadersBorderStyle.Left;
+                                    dgvabs.RightInternal = AdvancedColumnHeadersBorderStyle.Right;
                                 }
-                                dgvabs.TopInternal = this.AdvancedColumnHeadersBorderStyle.Top;
-                                dgvabs.BottomInternal = this.AdvancedColumnHeadersBorderStyle.Bottom;
+                                dgvabs.TopInternal = AdvancedColumnHeadersBorderStyle.Top;
+                                dgvabs.BottomInternal = AdvancedColumnHeadersBorderStyle.Bottom;
                             }
                             else
                             {
-                                dgvabs = this.AdvancedColumnHeadersBorderStyle;
+                                dgvabs = AdvancedColumnHeadersBorderStyle;
                             }
                             break;
 
                         default:
-                            dgvabs = this.AdvancedColumnHeadersBorderStyle;
+                            dgvabs = AdvancedColumnHeadersBorderStyle;
                             break;
                     }
                 }
                 else
                 {
-                    switch (this.AdvancedColumnHeadersBorderStyle.All)
+                    switch (AdvancedColumnHeadersBorderStyle.All)
                     {
                         case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                         case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                            dgvabs = new DataGridViewAdvancedBorderStyle();
-                            dgvabs.LeftInternal = this.RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
-                            dgvabs.RightInternal = this.RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.OutsetDouble : DataGridViewAdvancedCellBorderStyle.Outset;
-                            dgvabs.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
-                            dgvabs.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                            dgvabs = new DataGridViewAdvancedBorderStyle
+                            {
+                                LeftInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble,
+                                RightInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.OutsetDouble : DataGridViewAdvancedCellBorderStyle.Outset,
+                                TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble,
+                                BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset
+                            };
                             break;
 
                         case DataGridViewAdvancedCellBorderStyle.InsetDouble:
-                            dgvabs = new DataGridViewAdvancedBorderStyle();
-                            dgvabs.LeftInternal = this.RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
-                            dgvabs.RightInternal = this.RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.InsetDouble : DataGridViewAdvancedCellBorderStyle.Inset;
-                            dgvabs.TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
-                            dgvabs.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
+                            dgvabs = new DataGridViewAdvancedBorderStyle
+                            {
+                                LeftInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble,
+                                RightInternal = RightToLeftInternal ? DataGridViewAdvancedCellBorderStyle.InsetDouble : DataGridViewAdvancedCellBorderStyle.Inset,
+                                TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble,
+                                BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset
+                            };
                             break;
 
                         case DataGridViewAdvancedCellBorderStyle.NotSet:
                             // Since the row headers are visible, we should make sure
                             // that there is a left/right border for the TopLeftHeaderCell no matter what.
-                            if ((!this.RightToLeftInternal && this.AdvancedColumnHeadersBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ||
-                                (this.RightToLeftInternal && this.AdvancedColumnHeadersBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None))
+                            if ((!RightToLeftInternal && AdvancedColumnHeadersBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ||
+                                (RightToLeftInternal && AdvancedColumnHeadersBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None))
                             {
                                 dgvabs = new DataGridViewAdvancedBorderStyle();
-                                if (this.RightToLeftInternal)
+                                if (RightToLeftInternal)
                                 {
-                                    dgvabs.LeftInternal = this.AdvancedColumnHeadersBorderStyle.Left;
-                                    dgvabs.RightInternal = this.AdvancedRowHeadersBorderStyle.Right;
+                                    dgvabs.LeftInternal = AdvancedColumnHeadersBorderStyle.Left;
+                                    dgvabs.RightInternal = AdvancedRowHeadersBorderStyle.Right;
                                 }
                                 else
                                 {
-                                    dgvabs.LeftInternal = this.AdvancedRowHeadersBorderStyle.Left;
-                                    dgvabs.RightInternal = this.AdvancedColumnHeadersBorderStyle.Right;
+                                    dgvabs.LeftInternal = AdvancedRowHeadersBorderStyle.Left;
+                                    dgvabs.RightInternal = AdvancedColumnHeadersBorderStyle.Right;
                                 }
-                                dgvabs.TopInternal = this.AdvancedColumnHeadersBorderStyle.Top;
-                                dgvabs.BottomInternal = this.AdvancedColumnHeadersBorderStyle.Bottom;
+                                dgvabs.TopInternal = AdvancedColumnHeadersBorderStyle.Top;
+                                dgvabs.BottomInternal = AdvancedColumnHeadersBorderStyle.Bottom;
                             }
                             else
                             {
-                                dgvabs = this.AdvancedColumnHeadersBorderStyle;
+                                dgvabs = AdvancedColumnHeadersBorderStyle;
                             }
                             break;
 
                         default:
-                            dgvabs = this.AdvancedColumnHeadersBorderStyle;
+                            dgvabs = AdvancedColumnHeadersBorderStyle;
                             break;
                     }
                 }
@@ -672,9 +678,9 @@ namespace System.Windows.Forms
         ]
         public DataGridViewAdvancedBorderStyle AdvancedCellBorderStyle
         {
-            get 
+            get
             {
-                return this.advancedCellBorderStyle;
+                return advancedCellBorderStyle;
             }
         }
 
@@ -686,7 +692,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.advancedColumnHeadersBorderStyle;
+                return advancedColumnHeadersBorderStyle;
             }
         }
 
@@ -698,7 +704,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.advancedRowHeadersBorderStyle;
+                return advancedRowHeadersBorderStyle;
             }
         }
 
@@ -711,16 +717,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToAddRows];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToAddRows];
             }
             set
             {
-                if (this.AllowUserToAddRows != value)
+                if (AllowUserToAddRows != value)
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToAddRows] = value;
-                    if (this.DataSource != null)
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToAddRows] = value;
+                    if (DataSource != null)
                     {
-                        this.dataConnection.ResetCachedAllowUserToAddRowsInternal();
+                        dataConnection.ResetCachedAllowUserToAddRowsInternal();
                     }
                     OnAllowUserToAddRowsChanged(EventArgs.Empty);
                 }
@@ -731,25 +737,25 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.DataSource == null)
+                if (DataSource == null)
                 {
-                    return this.AllowUserToAddRows;
+                    return AllowUserToAddRows;
                 }
                 else
                 {
-                    return this.AllowUserToAddRows && this.dataConnection.AllowAdd;
+                    return AllowUserToAddRows && dataConnection.AllowAdd;
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnAllowUserToAddRowsChangedDescr))
         ]
         public event EventHandler AllowUserToAddRowsChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
         }
 
         [
@@ -761,13 +767,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToDeleteRows];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToDeleteRows];
             }
             set
             {
-                if (this.AllowUserToDeleteRows != value)
+                if (AllowUserToDeleteRows != value)
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToDeleteRows] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToDeleteRows] = value;
                     OnAllowUserToDeleteRowsChanged(EventArgs.Empty);
                 }
             }
@@ -777,25 +783,25 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.DataSource == null)
+                if (DataSource == null)
                 {
-                    return this.AllowUserToDeleteRows;
+                    return AllowUserToDeleteRows;
                 }
                 else
                 {
-                    return this.AllowUserToDeleteRows && this.dataConnection.AllowRemove;
+                    return AllowUserToDeleteRows && dataConnection.AllowRemove;
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnAllowUserToDeleteRowsChangedDescr))
         ]
         public event EventHandler AllowUserToDeleteRowsChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
         }
 
         [
@@ -807,26 +813,26 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToOrderColumns];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToOrderColumns];
             }
             set
             {
-                if (this.AllowUserToOrderColumns != value)
+                if (AllowUserToOrderColumns != value)
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToOrderColumns] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToOrderColumns] = value;
                     OnAllowUserToOrderColumnsChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnAllowUserToOrderColumnsChangedDescr))
         ]
         public event EventHandler AllowUserToOrderColumnsChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
         }
 
         /// <summary>
@@ -844,26 +850,26 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeColumns];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeColumns];
             }
             set
             {
-                if (this.AllowUserToResizeColumns != value)
+                if (AllowUserToResizeColumns != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeColumns] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeColumns] = value;
                     OnAllowUserToResizeColumnsChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnAllowUserToResizeColumnsChangedDescr))
         ]
         public event EventHandler AllowUserToResizeColumnsChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
         }
 
         /// <summary>
@@ -881,26 +887,26 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeRows];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeRows];
             }
             set
             {
-                if (this.AllowUserToResizeRows != value)
+                if (AllowUserToResizeRows != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeRows] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeRows] = value;
                     OnAllowUserToResizeRowsChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnAllowUserToResizeRowsChangedDescr))
         ]
         public event EventHandler AllowUserToResizeRowsChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
         }
 
         [
@@ -911,39 +917,39 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.alternatingRowsDefaultCellStyle == null)
+                if (alternatingRowsDefaultCellStyle == null)
                 {
-                    this.alternatingRowsDefaultCellStyle = new DataGridViewCellStyle();
-                    this.alternatingRowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.AlternatingRows);
+                    alternatingRowsDefaultCellStyle = new DataGridViewCellStyle();
+                    alternatingRowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.AlternatingRows);
                 }
-                return this.alternatingRowsDefaultCellStyle;
+                return alternatingRowsDefaultCellStyle;
             }
             set
             {
-                DataGridViewCellStyle cs = this.AlternatingRowsDefaultCellStyle;
+                DataGridViewCellStyle cs = AlternatingRowsDefaultCellStyle;
                 cs.RemoveScope(DataGridViewCellStyleScopes.AlternatingRows);
-                this.alternatingRowsDefaultCellStyle = value;
+                alternatingRowsDefaultCellStyle = value;
                 if (value != null)
                 {
-                    this.alternatingRowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.AlternatingRows);
+                    alternatingRowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.AlternatingRows);
                 }
-                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(this.AlternatingRowsDefaultCellStyle);
+                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(AlternatingRowsDefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
-                    this.CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
-                    OnAlternatingRowsDefaultCellStyleChanged(this.CellStyleChangedEventArgs);
+                    CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
+                    OnAlternatingRowsDefaultCellStyleChanged(CellStyleChangedEventArgs);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewAlternatingRowsDefaultCellStyleChangedDescr))
         ]
         public event EventHandler AlternatingRowsDefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
         }
 
         internal bool ApplyVisualStylesToInnerCells
@@ -958,7 +964,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Application.RenderWithVisualStyles && this.EnableHeadersVisualStyles;
+                return Application.RenderWithVisualStyles && EnableHeadersVisualStyles;
             }
         }
 
@@ -975,12 +981,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns];
             }
-            set{
-                if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns] != value)
+            set
+            {
+                if (dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns] != value)
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns] = value;
                     OnAutoGenerateColumnsChanged(EventArgs.Empty);
                 }
             }
@@ -992,8 +999,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler AutoGenerateColumnsChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
         }
 
         /// <summary>
@@ -1003,12 +1010,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_isAutoSized];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_isAutoSized];
             }
             set
             {
                 base.AutoSize = value;
-                this.dataGridViewState1[DATAGRIDVIEWSTATE1_isAutoSized] = value;
+                dataGridViewState1[DATAGRIDVIEWSTATE1_isAutoSized] = value;
             }
         }
 
@@ -1026,13 +1033,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.autoSizeColumnsMode;
+                return autoSizeColumnsMode;
             }
-        
+
             set
             {
-                switch (value) 
-                { 
+                switch (value)
+                {
                     case DataGridViewAutoSizeColumnsMode.None:
                     case DataGridViewAutoSizeColumnsMode.ColumnHeader:
                     case DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader:
@@ -1041,19 +1048,19 @@ namespace System.Windows.Forms
                     case DataGridViewAutoSizeColumnsMode.DisplayedCells:
                     case DataGridViewAutoSizeColumnsMode.Fill:
                         break;
-                    default: 
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnsMode)); 
-                 }
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnsMode));
+                }
 
 
-                if (this.autoSizeColumnsMode != value)
+                if (autoSizeColumnsMode != value)
                 {
-                    foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+                    foreach (DataGridViewColumn dataGridViewColumn in Columns)
                     {
                         if (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && dataGridViewColumn.Visible)
                         {
                             // Make sure there is no visible column which would have an inherited autosize mode based on the header only.
-                            if (value == DataGridViewAutoSizeColumnsMode.ColumnHeader && !this.ColumnHeadersVisible)
+                            if (value == DataGridViewAutoSizeColumnsMode.ColumnHeader && !ColumnHeadersVisible)
                             {
                                 throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeColumnsInvisibleColumnHeaders));
                             }
@@ -1064,8 +1071,8 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    DataGridViewAutoSizeColumnMode[] previousModes = new DataGridViewAutoSizeColumnMode[this.Columns.Count];
-                    foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+                    DataGridViewAutoSizeColumnMode[] previousModes = new DataGridViewAutoSizeColumnMode[Columns.Count];
+                    foreach (DataGridViewColumn dataGridViewColumn in Columns)
                     {
                         /*DataGridViewAutoSizeColumnMode previousInheritedMode = dataGridViewColumn.InheritedAutoSizeMode;
                         bool previousInheritedModeAutoSized = previousInheritedMode != DataGridViewAutoSizeColumnMode.Fill &&
@@ -1074,20 +1081,20 @@ namespace System.Windows.Forms
                         previousModes[dataGridViewColumn.Index] = dataGridViewColumn.InheritedAutoSizeMode;
                     }
                     DataGridViewAutoSizeColumnsModeEventArgs dgvcasme = new DataGridViewAutoSizeColumnsModeEventArgs(previousModes);
-                    this.autoSizeColumnsMode = value;
+                    autoSizeColumnsMode = value;
                     OnAutoSizeColumnsModeChanged(dgvcasme);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewAutoSizeColumnsModeChangedDescr))
         ]
         public event DataGridViewAutoSizeColumnsModeEventHandler AutoSizeColumnsModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
         }
 
         /// <summary>
@@ -1102,59 +1109,59 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.autoSizeRowsMode;
+                return autoSizeRowsMode;
             }
             set
             {
-                switch (value) 
-                { 
-                   case DataGridViewAutoSizeRowsMode.None:
-                   case DataGridViewAutoSizeRowsMode.AllHeaders:
-                   case DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders:
-                   case DataGridViewAutoSizeRowsMode.AllCells:
-                   case DataGridViewAutoSizeRowsMode.DisplayedHeaders:
-                   case DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders:
-                   case DataGridViewAutoSizeRowsMode.DisplayedCells:
-                       break;
-                   default: 
-                       throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeRowsMode)); 
+                switch (value)
+                {
+                    case DataGridViewAutoSizeRowsMode.None:
+                    case DataGridViewAutoSizeRowsMode.AllHeaders:
+                    case DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders:
+                    case DataGridViewAutoSizeRowsMode.AllCells:
+                    case DataGridViewAutoSizeRowsMode.DisplayedHeaders:
+                    case DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders:
+                    case DataGridViewAutoSizeRowsMode.DisplayedCells:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeRowsMode));
                 }
-                if ((value == DataGridViewAutoSizeRowsMode.AllHeaders || value == DataGridViewAutoSizeRowsMode.DisplayedHeaders) && 
-                    !this.RowHeadersVisible)
+                if ((value == DataGridViewAutoSizeRowsMode.AllHeaders || value == DataGridViewAutoSizeRowsMode.DisplayedHeaders) &&
+                    !RowHeadersVisible)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader));
                 }
-                if (this.autoSizeRowsMode != value)
+                if (autoSizeRowsMode != value)
                 {
-                    DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(this.autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None);
-                    this.autoSizeRowsMode = value;
+                    DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None);
+                    autoSizeRowsMode = value;
                     OnAutoSizeRowsModeChanged(dgvasme);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewAutoSizeRowsModeChangedDescr))
         ]
         public event DataGridViewAutoSizeModeEventHandler AutoSizeRowsModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
         }
-        
+
         [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Color BackColor
         {
-            get 
+            get
             {
                 return base.BackColor;
             }
-            set 
+            set
             {
                 base.BackColor = value;
             }
@@ -1170,11 +1177,11 @@ namespace System.Windows.Forms
             remove => base.BackColorChanged -= value;
         }
 
-        internal SolidBrush BackgroundBrush 
+        internal SolidBrush BackgroundBrush
         {
-            get 
+            get
             {
-                return this.backgroundBrush;
+                return backgroundBrush;
             }
         }
 
@@ -1189,7 +1196,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.backgroundBrush.Color;
+                return backgroundBrush.Color;
             }
             set
             {
@@ -1201,22 +1208,22 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, "BackgroundColor"));
                 }
-                if (!value.Equals(this.backgroundBrush.Color)) 
+                if (!value.Equals(backgroundBrush.Color))
                 {
-                    this.backgroundBrush = new SolidBrush(value);
+                    backgroundBrush = new SolidBrush(value);
                     OnBackgroundColorChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewBackgroundColorChangedDescr))
         ]
-        public event EventHandler BackgroundColorChanged 
+        public event EventHandler BackgroundColorChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
         }
 
         [
@@ -1273,7 +1280,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeBackgroundColor()
         {
-            return !this.BackgroundColor.Equals(DefaultBackgroundBrush.Color);
+            return !BackgroundColor.Equals(DefaultBackgroundBrush.Color);
         }
 
         [
@@ -1283,22 +1290,23 @@ namespace System.Windows.Forms
         ]
         public BorderStyle BorderStyle
         {
-            get 
+            get
             {
-                return this.borderStyle;
+                return borderStyle;
             }
-            set 
+            set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle)); 
-                }
-                if (this.borderStyle != value) 
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
-                    using (LayoutTransaction.CreateTransactionIf(this.AutoSize, this.ParentInternal, this, PropertyNames.BorderStyle))
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
+                }
+                if (borderStyle != value)
+                {
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle))
                     {
-                        this.borderStyle = value;
-                        if (!this.AutoSize)
+                        borderStyle = value;
+                        if (!AutoSize)
                         {
                             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                         }
@@ -1310,28 +1318,28 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewBorderStyleChangedDescr))
         ]
         public event EventHandler BorderStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
         }
 
-        internal int BorderWidth 
+        internal int BorderWidth
         {
-            get 
+            get
             {
-                if (this.BorderStyle == BorderStyle.Fixed3D) 
+                if (BorderStyle == BorderStyle.Fixed3D)
                 {
                     return Application.RenderWithVisualStyles ? 1 : SystemInformation.Border3DSize.Width;
                 }
-                else if (this.BorderStyle == BorderStyle.FixedSingle) 
+                else if (BorderStyle == BorderStyle.FixedSingle)
                 {
                     return 1;
                 }
-                else 
+                else
                 {
                     return 0;
                 }
@@ -1345,21 +1353,21 @@ namespace System.Windows.Forms
             {
                 bool canEnable = false;
 
-                Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this );
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this);
                 Debug.Indent();
 
-                if (this.ptCurrentCell.X != -1 /*&& !this.IsCurrentCellInEditMode*/ && ColumnEditable(this.ptCurrentCell.X))
+                if (ptCurrentCell.X != -1 /*&& !this.IsCurrentCellInEditMode*/ && ColumnEditable(ptCurrentCell.X))
                 {
-                    DataGridViewCell dataGridViewCell = this.CurrentCellInternal;
+                    DataGridViewCell dataGridViewCell = CurrentCellInternal;
                     Debug.Assert(dataGridViewCell != null);
 
-                    if (!IsSharedCellReadOnly(dataGridViewCell, this.ptCurrentCell.Y))
+                    if (!IsSharedCellReadOnly(dataGridViewCell, ptCurrentCell.Y))
                     {
                         canEnable = base.CanEnableIme;
                     }
                 }
 
-                Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + canEnable );
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + canEnable);
                 Debug.Unindent();
 
                 return canEnable;
@@ -1374,56 +1382,56 @@ namespace System.Windows.Forms
         ]
         public DataGridViewCellBorderStyle CellBorderStyle
         {
-            get 
+            get
             {
-                switch (this.advancedCellBorderStyle.All)
+                switch (advancedCellBorderStyle.All)
                 {
                     case DataGridViewAdvancedCellBorderStyle.NotSet:
-                        if (this.advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None &&
-                            this.advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.None)
+                        if (advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None &&
+                            advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.None)
                         {
-                            if (this.RightToLeftInternal)
+                            if (RightToLeftInternal)
                             {
-                                if (this.advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None &&
-                                    this.advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.Single)
+                                if (advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None &&
+                                    advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.Single)
                                 {
                                     return DataGridViewCellBorderStyle.SingleVertical;
                                 }
                             }
                             else
                             {
-                                if (this.advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None &&
-                                    this.advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Single)
+                                if (advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None &&
+                                    advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Single)
                                 {
                                     return DataGridViewCellBorderStyle.SingleVertical;
                                 }
                             }
-                            if (this.advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Outset && 
-                                this.advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.Outset)
+                            if (advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Outset &&
+                                advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.Outset)
                             {
                                 return DataGridViewCellBorderStyle.RaisedVertical;
                             }
-                            if (this.advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Inset && 
-                                this.advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.Inset)
+                            if (advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Inset &&
+                                advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.Inset)
                             {
                                 return DataGridViewCellBorderStyle.SunkenVertical;
                             }
                         }
-                        if (this.advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None &&
-                            this.advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None)
+                        if (advancedCellBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None &&
+                            advancedCellBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None)
                         {
-                            if (this.advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None &&
-                                this.advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Single)
+                            if (advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None &&
+                                advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Single)
                             {
                                 return DataGridViewCellBorderStyle.SingleHorizontal;
                             }
-                            if (this.advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.Outset && 
-                                this.advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Outset)
+                            if (advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.Outset &&
+                                advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Outset)
                             {
                                 return DataGridViewCellBorderStyle.RaisedHorizontal;
                             }
-                            if (this.advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.Inset && 
-                                this.advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Inset)
+                            if (advancedCellBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.Inset &&
+                                advancedCellBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Inset)
                             {
                                 return DataGridViewCellBorderStyle.SunkenHorizontal;
                             }
@@ -1452,81 +1460,81 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0xa
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewCellBorderStyle.Custom, (int)DataGridViewCellBorderStyle.SunkenHorizontal))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewCellBorderStyle));
                 }
 
-                if (value != this.CellBorderStyle)
+                if (value != CellBorderStyle)
                 {
                     if (value == DataGridViewCellBorderStyle.Custom)
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_CustomCellBorderStyleInvalid, "CellBorderStyle"));
                     }
-                    this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
+                    dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
                     try
                     {
                         switch (value)
                         {
                             case DataGridViewCellBorderStyle.Single:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
                                 break;
 
                             case DataGridViewCellBorderStyle.Raised:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Outset;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Outset;
                                 break;
 
                             case DataGridViewCellBorderStyle.Sunken:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Inset;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Inset;
                                 break;
 
                             case DataGridViewCellBorderStyle.None:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
                                 break;
 
                             case DataGridViewCellBorderStyle.SingleVertical:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
-                                if (this.RightToLeftInternal)
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                if (RightToLeftInternal)
                                 {
-                                    this.advancedCellBorderStyle.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
+                                    advancedCellBorderStyle.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                                 }
                                 else
                                 {
-                                    this.advancedCellBorderStyle.RightInternal = DataGridViewAdvancedCellBorderStyle.Single;
+                                    advancedCellBorderStyle.RightInternal = DataGridViewAdvancedCellBorderStyle.Single;
                                 }
                                 break;
 
                             case DataGridViewCellBorderStyle.RaisedVertical:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
-                                this.advancedCellBorderStyle.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
-                                this.advancedCellBorderStyle.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedCellBorderStyle.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                                advancedCellBorderStyle.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                                 break;
 
                             case DataGridViewCellBorderStyle.SunkenVertical:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
-                                this.advancedCellBorderStyle.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
-                                this.advancedCellBorderStyle.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedCellBorderStyle.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
+                                advancedCellBorderStyle.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                                 break;
 
                             case DataGridViewCellBorderStyle.SingleHorizontal:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
-                                this.advancedCellBorderStyle.BottomInternal = DataGridViewAdvancedCellBorderStyle.Single;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedCellBorderStyle.BottomInternal = DataGridViewAdvancedCellBorderStyle.Single;
                                 break;
 
                             case DataGridViewCellBorderStyle.RaisedHorizontal:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
-                                this.advancedCellBorderStyle.TopInternal = DataGridViewAdvancedCellBorderStyle.Outset;
-                                this.advancedCellBorderStyle.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedCellBorderStyle.TopInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                                advancedCellBorderStyle.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                                 break;
 
                             case DataGridViewCellBorderStyle.SunkenHorizontal:
-                                this.advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
-                                this.advancedCellBorderStyle.TopInternal = DataGridViewAdvancedCellBorderStyle.Inset;
-                                this.advancedCellBorderStyle.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
+                                advancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedCellBorderStyle.TopInternal = DataGridViewAdvancedCellBorderStyle.Inset;
+                                advancedCellBorderStyle.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                                 break;
                         }
                     }
                     finally
                     {
-                        this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = false;
+                        dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = false;
                     }
                     OnCellBorderStyleChanged(EventArgs.Empty);
                 }
@@ -1534,24 +1542,24 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_CellBorderStyleChangedDescr))
         ]
         public event EventHandler CellBorderStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
         }
 
         internal bool CellMouseDownInContentBounds
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds];
             }
             set
             {
-                this.dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds] = value;
+                dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds] = value;
             }
         }
 
@@ -1559,11 +1567,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dgvcpe == null)
+                if (dgvcpe == null)
                 {
-                    this.dgvcpe = new DataGridViewCellPaintingEventArgs(this);
+                    dgvcpe = new DataGridViewCellPaintingEventArgs(this);
                 }
-                return this.dgvcpe;
+                return dgvcpe;
             }
         }
 
@@ -1571,23 +1579,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dgvcsce == null)
+                if (dgvcsce == null)
                 {
-                    this.dgvcsce = new DataGridViewCellStyleChangedEventArgs();
+                    dgvcsce = new DataGridViewCellStyleChangedEventArgs();
                 }
-                return this.dgvcsce;
+                return dgvcsce;
             }
-        }        
+        }
 
         internal DataGridViewCellValueEventArgs CellValueEventArgs
         {
             get
             {
-                if (this.dgvcve == null)
+                if (dgvcve == null)
                 {
-                    this.dgvcve = new DataGridViewCellValueEventArgs();
+                    dgvcve = new DataGridViewCellValueEventArgs();
                 }
-                return this.dgvcve;
+                return dgvcve;
             }
         }
 
@@ -1601,16 +1609,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.clipboardCopyMode;
+                return clipboardCopyMode;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewClipboardCopyMode.Disable, (int)DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText))
                 {
-                   throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewClipboardCopyMode)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewClipboardCopyMode));
                 }
-                this.clipboardCopyMode = value;
+                clipboardCopyMode = value;
             }
         }
 
@@ -1624,7 +1632,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Columns.Count;
+                return Columns.Count;
             }
             set
             {
@@ -1632,25 +1640,25 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
                 }
-                if (this.DataSource != null)
+                if (DataSource != null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSetColumnCountOnDataBoundDataGridView));
                 }
-                if (value != this.Columns.Count)
+                if (value != Columns.Count)
                 {
                     if (value == 0)
                     {
                         // Total removal of the columns. This also clears the rows.
-                        this.Columns.Clear();
+                        Columns.Clear();
                     }
-                    else if (value < this.Columns.Count)
+                    else if (value < Columns.Count)
                     {
                         // Some columns need to be removed, from the tail of the columns collection
-                        while (value < this.Columns.Count)
+                        while (value < Columns.Count)
                         {
-                            int currentColumnCount = this.Columns.Count;
-                            this.Columns.RemoveAt(currentColumnCount - 1);
-                            if (this.Columns.Count >= currentColumnCount)
+                            int currentColumnCount = Columns.Count;
+                            Columns.RemoveAt(currentColumnCount - 1);
+                            if (Columns.Count >= currentColumnCount)
                             {
                                 // Column removal failed. We stop the loop.
                                 break;
@@ -1660,11 +1668,11 @@ namespace System.Windows.Forms
                     else
                     {
                         // Some DataGridViewTextBoxColumn columns need to be appened.
-                        while (value > this.Columns.Count)
+                        while (value > Columns.Count)
                         {
-                            int currentColumnCount = this.Columns.Count;
-                            this.Columns.Add(null /*columnName*/, null /*headerText*/);
-                            if (this.Columns.Count <= currentColumnCount)
+                            int currentColumnCount = Columns.Count;
+                            Columns.Add(null /*columnName*/, null /*headerText*/);
+                            if (Columns.Count <= currentColumnCount)
                             {
                                 // Column addition failed. We stop the loop.
                                 break;
@@ -1683,9 +1691,9 @@ namespace System.Windows.Forms
         ]
         public DataGridViewHeaderBorderStyle ColumnHeadersBorderStyle
         {
-            get 
+            get
             {
-                switch (this.advancedColumnHeadersBorderStyle.All)
+                switch (advancedColumnHeadersBorderStyle.All)
                 {
                     case DataGridViewAdvancedCellBorderStyle.NotSet:
                         return DataGridViewHeaderBorderStyle.Custom;
@@ -1711,39 +1719,39 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewHeaderBorderStyle.Custom, (int)DataGridViewHeaderBorderStyle.None))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewHeaderBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewHeaderBorderStyle));
                 }
-                if (value != this.ColumnHeadersBorderStyle)
+                if (value != ColumnHeadersBorderStyle)
                 {
                     if (value == DataGridViewHeaderBorderStyle.Custom)
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_CustomCellBorderStyleInvalid, "ColumnHeadersBorderStyle"));
                     }
-                    this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
+                    dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
                     try
                     {
                         switch (value)
                         {
                             case DataGridViewHeaderBorderStyle.Single:
-                                this.advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
+                                advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
                                 break;
 
                             case DataGridViewHeaderBorderStyle.Raised:
-                                this.advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.OutsetPartial;
+                                advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.OutsetPartial;
                                 break;
 
                             case DataGridViewHeaderBorderStyle.Sunken:
-                                this.advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.InsetDouble;
+                                advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                                 break;
 
                             case DataGridViewHeaderBorderStyle.None:
-                                this.advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
                                 break;
                         }
                     }
                     finally
                     {
-                        this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = false;
+                        dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = false;
                     }
                     OnColumnHeadersBorderStyleChanged(EventArgs.Empty);
                 }
@@ -1751,13 +1759,13 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnHeadersBorderStyleChangedDescr))
         ]
         public event EventHandler ColumnHeadersBorderStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
         }
 
         [
@@ -1767,73 +1775,76 @@ namespace System.Windows.Forms
         ]
         public DataGridViewCellStyle ColumnHeadersDefaultCellStyle
         {
-            get 
+            get
             {
-                if (this.columnHeadersDefaultCellStyle == null)
+                if (columnHeadersDefaultCellStyle == null)
                 {
-                    this.columnHeadersDefaultCellStyle = this.DefaultColumnHeadersDefaultCellStyle;
+                    columnHeadersDefaultCellStyle = DefaultColumnHeadersDefaultCellStyle;
                 }
-                return this.columnHeadersDefaultCellStyle;
+                return columnHeadersDefaultCellStyle;
             }
-            set 
+            set
             {
-                DataGridViewCellStyle cs = this.ColumnHeadersDefaultCellStyle;
+                DataGridViewCellStyle cs = ColumnHeadersDefaultCellStyle;
                 cs.RemoveScope(DataGridViewCellStyleScopes.ColumnHeaders);
-                this.columnHeadersDefaultCellStyle = value;
+                columnHeadersDefaultCellStyle = value;
                 if (value != null)
                 {
-                    this.columnHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
+                    columnHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
                 }
-                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(this.ColumnHeadersDefaultCellStyle);
+                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(ColumnHeadersDefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
-                    this.CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
-                    OnColumnHeadersDefaultCellStyleChanged(this.CellStyleChangedEventArgs);
+                    CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
+                    OnColumnHeadersDefaultCellStyleChanged(CellStyleChangedEventArgs);
                 }
             }
         }
 
-        private DataGridViewCellStyle DefaultColumnHeadersDefaultCellStyle {
+        private DataGridViewCellStyle DefaultColumnHeadersDefaultCellStyle
+        {
             get
             {
-                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
-                defaultStyle.BackColor = DefaultHeadersBackBrush.Color;
-                defaultStyle.ForeColor = DefaultForeBrush.Color;
-                defaultStyle.SelectionBackColor = DefaultSelectionBackBrush.Color;
-                defaultStyle.SelectionForeColor = DefaultSelectionForeBrush.Color;
-                defaultStyle.Font = base.Font;
-                defaultStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
-                defaultStyle.WrapModeInternal = DataGridViewTriState.True;
+                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle
+                {
+                    BackColor = DefaultHeadersBackBrush.Color,
+                    ForeColor = DefaultForeBrush.Color,
+                    SelectionBackColor = DefaultSelectionBackBrush.Color,
+                    SelectionForeColor = DefaultSelectionForeBrush.Color,
+                    Font = base.Font,
+                    AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
+                    WrapModeInternal = DataGridViewTriState.True
+                };
                 defaultStyle.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
 
-                this.dataGridViewState1[DATAGRIDVIEWSTATE1_ambientColumnHeadersFont] = true;
+                dataGridViewState1[DATAGRIDVIEWSTATE1_ambientColumnHeadersFont] = true;
 
                 return defaultStyle;
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewColumnHeadersDefaultCellStyleChangedDescr))
         ]
         public event EventHandler ColumnHeadersDefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatAppearance)),
-            Localizable(true), 
+            Localizable(true),
             SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightDescr))
         ]
         public int ColumnHeadersHeight
         {
-            get 
+            get
             {
-                return this.columnHeadersHeight;
+                return columnHeadersHeight;
             }
-            set 
+            set
             {
                 if (value < minimumColumnHeadersHeight)
                 {
@@ -1843,11 +1854,11 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(ColumnHeadersHeight), value, maxHeadersThickness));
                 }
-                if (this.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
+                if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                 {
-                    this.cachedColumnHeadersHeight = value;
+                    cachedColumnHeadersHeight = value;
                 }
-                else if (this.columnHeadersHeight != value)
+                else if (columnHeadersHeight != value)
                 {
                     SetColumnHeadersHeightInternal(value, true /*invalidInAdjustFillingColumns*/);
                 }
@@ -1855,18 +1866,18 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewColumnHeadersHeightChangedDescr))
         ]
         public event EventHandler ColumnHeadersHeightChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
         }
 
         private bool ShouldSerializeColumnHeadersHeight()
         {
-            return this.ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && defaultColumnHeadersHeight != this.ColumnHeadersHeight;
+            return ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && defaultColumnHeadersHeight != ColumnHeadersHeight;
         }
 
         /// <summary>
@@ -1884,36 +1895,36 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.columnHeadersHeightSizeMode;
+                return columnHeadersHeightSizeMode;
             }
             set
             {
-               // Sequential enum.  Valid values are 0x0 to 0x2
+                // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewColumnHeadersHeightSizeMode.EnableResizing, (int)DataGridViewColumnHeadersHeightSizeMode.AutoSize))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewColumnHeadersHeightSizeMode)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewColumnHeadersHeightSizeMode));
                 }
-                if (this.columnHeadersHeightSizeMode != value)
+                if (columnHeadersHeightSizeMode != value)
                 {
                     /*if (value == DataGridViewColumnHeadersHeightSizeMode.AutoSize && !this.ColumnHeadersVisible)
                     {
                         We intentionally don't throw an error because of designer code spit order.
                     }*/
-                    DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(this.columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize);
-                    this.columnHeadersHeightSizeMode = value;
+                    DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize);
+                    columnHeadersHeightSizeMode = value;
                     OnColumnHeadersHeightSizeModeChanged(dgvasme);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightSizeModeChangedDescr))
         ]
         public event DataGridViewAutoSizeModeEventHandler ColumnHeadersHeightSizeModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
         }
 
         /// <summary>
@@ -1937,37 +1948,37 @@ namespace System.Windows.Forms
             DefaultValue(true),
             SRDescription(nameof(SR.DataGridViewColumnHeadersVisibleDescr))
         ]
-        public bool ColumnHeadersVisible 
+        public bool ColumnHeadersVisible
         {
-            get 
+            get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible];
             }
-            set 
+            set
             {
-                if (this.ColumnHeadersVisible != value)
+                if (ColumnHeadersVisible != value)
                 {
                     if (!value)
                     {
                         // Make sure that there is no visible column that only counts on the column headers to autosize
-                        DataGridViewColumn dataGridViewColumn = this.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                         while (dataGridViewColumn != null)
                         {
                             if (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader)
                             {
                                 throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnHeadersCannotBeInvisible));
                             }
-                            dataGridViewColumn = this.Columns.GetNextColumn(dataGridViewColumn,
+                            dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                                 DataGridViewElementStates.Visible,
                                 DataGridViewElementStates.None);
                         }
                     }
-                    using (LayoutTransaction.CreateTransactionIf(this.AutoSize, this.ParentInternal, this, PropertyNames.ColumnHeadersVisible))
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ColumnHeadersVisible))
                     {
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible] = value;
-                        this.layout.ColumnHeadersVisible = value;
-                        this.displayedBandsInfo.EnsureDirtyState();
-                        if (!this.AutoSize)
+                        dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible] = value;
+                        layout.ColumnHeadersVisible = value;
+                        displayedBandsInfo.EnsureDirtyState();
+                        if (!AutoSize)
                         {
                             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                         }
@@ -1987,11 +1998,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dataGridViewColumns == null)
+                if (dataGridViewColumns == null)
                 {
-                    this.dataGridViewColumns = CreateColumnsInstance();
+                    dataGridViewColumns = CreateColumnsInstance();
                 }
-                return this.dataGridViewColumns;
+                return dataGridViewColumns;
             }
         }
 
@@ -2003,20 +2014,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ptCurrentCell.X == -1 && this.ptCurrentCell.Y == -1)
+                if (ptCurrentCell.X == -1 && ptCurrentCell.Y == -1)
                 {
                     return null;
                 }
-                Debug.Assert(this.ptCurrentCell.X >= 0 && ptCurrentCell.Y >= 0);
-                Debug.Assert(this.ptCurrentCell.X < this.Columns.Count);
-                Debug.Assert(this.ptCurrentCell.Y < this.Rows.Count);
-                DataGridViewRow dataGridViewRow = (DataGridViewRow) this.Rows[this.ptCurrentCell.Y]; // unsharing row
-                return dataGridViewRow.Cells[this.ptCurrentCell.X];
+                Debug.Assert(ptCurrentCell.X >= 0 && ptCurrentCell.Y >= 0);
+                Debug.Assert(ptCurrentCell.X < Columns.Count);
+                Debug.Assert(ptCurrentCell.Y < Rows.Count);
+                DataGridViewRow dataGridViewRow = (DataGridViewRow)Rows[ptCurrentCell.Y]; // unsharing row
+                return dataGridViewRow.Cells[ptCurrentCell.X];
             }
             set
             {
-                if ((value != null && (value.RowIndex != this.ptCurrentCell.Y || value.ColumnIndex != this.ptCurrentCell.X)) ||
-                    (value == null && this.ptCurrentCell.X != -1))
+                if ((value != null && (value.RowIndex != ptCurrentCell.Y || value.ColumnIndex != ptCurrentCell.X)) ||
+                    (value == null && ptCurrentCell.X != -1))
                 {
                     if (value == null)
                     {
@@ -2033,8 +2044,8 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentException(string.Format(SR.DataGridView_CellDoesNotBelongToDataGridView));
                         }
-                        if (!this.Columns[value.ColumnIndex].Visible ||
-                            (this.Rows.GetRowState(value.RowIndex) & DataGridViewElementStates.Visible) == 0)
+                        if (!Columns[value.ColumnIndex].Visible ||
+                            (Rows.GetRowState(value.RowIndex) & DataGridViewElementStates.Visible) == 0)
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridView_CurrentCellCannotBeInvisible));
                         }
@@ -2063,7 +2074,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.ptCurrentCell;
+                return ptCurrentCell;
             }
         }
 
@@ -2071,12 +2082,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(this.ptCurrentCell.X >= 0 && this.ptCurrentCell.X < this.Columns.Count);
-                Debug.Assert(this.ptCurrentCell.Y >= 0 && this.ptCurrentCell.Y < this.Rows.Count);
-                DataGridViewRow dataGridViewRow = this.Rows.SharedRow(this.ptCurrentCell.Y);
+                Debug.Assert(ptCurrentCell.X >= 0 && ptCurrentCell.X < Columns.Count);
+                Debug.Assert(ptCurrentCell.Y >= 0 && ptCurrentCell.Y < Rows.Count);
+                DataGridViewRow dataGridViewRow = Rows.SharedRow(ptCurrentCell.Y);
                 Debug.Assert(dataGridViewRow != null);
-                DataGridViewCell dataGridViewCell = dataGridViewRow.Cells[this.ptCurrentCell.X];
-                Debug.Assert(this.IsSharedCellVisible(dataGridViewCell, this.ptCurrentCell.Y));
+                DataGridViewCell dataGridViewCell = dataGridViewRow.Cells[ptCurrentCell.X];
+                Debug.Assert(IsSharedCellVisible(dataGridViewCell, ptCurrentCell.Y));
                 return dataGridViewCell;
             }
         }
@@ -2085,14 +2096,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ptCurrentCell.X == -1)
+                if (ptCurrentCell.X == -1)
                 {
                     return false;
                 }
-                Debug.Assert(this.ptCurrentCell.Y != -1);
+                Debug.Assert(ptCurrentCell.Y != -1);
 
-                bool previousVisibleColumnExists = (null != this.Columns.GetPreviousColumn(this.Columns[this.ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
-                bool previousVisibleRowExists = (-1 != this.Rows.GetPreviousRow(this.ptCurrentCell.Y, DataGridViewElementStates.Visible));
+                bool previousVisibleColumnExists = (null != Columns.GetPreviousColumn(Columns[ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
+                bool previousVisibleRowExists = (-1 != Rows.GetPreviousRow(ptCurrentCell.Y, DataGridViewElementStates.Visible));
 
                 return !previousVisibleColumnExists && !previousVisibleRowExists;
             }
@@ -2102,15 +2113,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ptCurrentCell.X == -1)
+                if (ptCurrentCell.X == -1)
                 {
                     return false;
                 }
 
-                Debug.Assert(this.ptCurrentCell.Y != -1);
+                Debug.Assert(ptCurrentCell.Y != -1);
 
-                bool nextVisibleColumnExists = (null != this.Columns.GetNextColumn(this.Columns[this.ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
-                bool nextVisibleRowExists = (-1 != this.Rows.GetNextRow(this.ptCurrentCell.Y, DataGridViewElementStates.Visible));
+                bool nextVisibleColumnExists = (null != Columns.GetNextColumn(Columns[ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
+                bool nextVisibleRowExists = (-1 != Rows.GetNextRow(ptCurrentCell.Y, DataGridViewElementStates.Visible));
 
                 return !nextVisibleColumnExists && !nextVisibleRowExists;
             }
@@ -2120,35 +2131,35 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ptCurrentCell.X == -1)
+                if (ptCurrentCell.X == -1)
                 {
                     return false;
                 }
 
-                Debug.Assert(this.ptCurrentCell.Y != -1);
+                Debug.Assert(ptCurrentCell.Y != -1);
 
-                return this.editingControl != null &&
+                return editingControl != null &&
                        GetCellCount(DataGridViewElementStates.Selected) == 1 &&
-                       this.CurrentCellInternal.Selected;
+                       CurrentCellInternal.Selected;
             }
         }
 
         [
             Browsable(false)
         ]
-        public DataGridViewRow CurrentRow 
+        public DataGridViewRow CurrentRow
         {
             get
             {
-                if (this.ptCurrentCell.X == -1)
+                if (ptCurrentCell.X == -1)
                 {
                     return null;
                 }
 
-                Debug.Assert(this.ptCurrentCell.Y >= 0);
-                Debug.Assert(this.ptCurrentCell.Y < this.Rows.Count);
+                Debug.Assert(ptCurrentCell.Y >= 0);
+                Debug.Assert(ptCurrentCell.Y < Rows.Count);
 
-                return this.Rows[this.ptCurrentCell.Y];
+                return Rows[ptCurrentCell.Y];
             }
         }
 
@@ -2156,14 +2167,14 @@ namespace System.Windows.Forms
         {
             set
             {
-                this.dataGridViewState2[DATAGRIDVIEWSTATE2_ignoreCursorChange] = true;
+                dataGridViewState2[DATAGRIDVIEWSTATE2_ignoreCursorChange] = true;
                 try
                 {
-                    this.Cursor = value;
+                    Cursor = value;
                 }
                 finally
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_ignoreCursorChange] = false;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_ignoreCursorChange] = false;
                 }
             }
         }
@@ -2172,7 +2183,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataConnection;
+                return dataConnection;
             }
         }
 
@@ -2186,38 +2197,38 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dataConnection == null)
+                if (dataConnection == null)
                 {
                     return string.Empty;
                 }
                 else
                 {
-                    return this.dataConnection.DataMember;
+                    return dataConnection.DataMember;
                 }
             }
             set
             {
-                if (value != this.DataMember)
+                if (value != DataMember)
                 {
-                    this.CurrentCell = null;
-                    if (this.dataConnection == null)
+                    CurrentCell = null;
+                    if (dataConnection == null)
                     {
-                        this.dataConnection = new DataGridViewDataConnection(this);
+                        dataConnection = new DataGridViewDataConnection(this);
                     }
-                    this.dataConnection.SetDataConnection(this.DataSource, value);
+                    dataConnection.SetDataConnection(DataSource, value);
                     OnDataMemberChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewDataMemberChangedDescr))
         ]
         public event EventHandler DataMemberChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
         }
 
         [
@@ -2231,36 +2242,36 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dataConnection == null)
+                if (dataConnection == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return this.dataConnection.DataSource;
+                    return dataConnection.DataSource;
                 }
             }
             set
             {
-                if (value != this.DataSource)
+                if (value != DataSource)
                 {
-                    this.CurrentCell = null;
-                    if (this.dataConnection == null)
+                    CurrentCell = null;
+                    if (dataConnection == null)
                     {
-                        this.dataConnection = new DataGridViewDataConnection(this);
-                        this.dataConnection.SetDataConnection(value, this.DataMember);
+                        dataConnection = new DataGridViewDataConnection(this);
+                        dataConnection.SetDataConnection(value, DataMember);
                     }
                     else
                     {
-                        if (this.dataConnection.ShouldChangeDataMember(value))
+                        if (dataConnection.ShouldChangeDataMember(value))
                         {
                             // we fire DataMemberChanged event
-                            this.DataMember = string.Empty;
+                            DataMember = string.Empty;
                         }
-                        this.dataConnection.SetDataConnection(value, this.DataMember);
+                        dataConnection.SetDataConnection(value, DataMember);
                         if (value == null)
                         {
-                            this.dataConnection = null;
+                            dataConnection = null;
                         }
                     }
                     OnDataSourceChanged(EventArgs.Empty);
@@ -2269,28 +2280,28 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewDataSourceChangedDescr))
         ]
         public event EventHandler DataSourceChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
         }
 
-        private static SolidBrush DefaultBackBrush 
+        private static SolidBrush DefaultBackBrush
         {
-            get 
+            get
             {
-                return (SolidBrush) SystemBrushes.Window;
+                return (SolidBrush)SystemBrushes.Window;
             }
         }
 
-        private static SolidBrush DefaultBackgroundBrush 
+        private static SolidBrush DefaultBackgroundBrush
         {
-            get 
+            get
             {
-                return (SolidBrush) SystemBrushes.AppWorkspace;
+                return (SolidBrush)SystemBrushes.AppWorkspace;
             }
         }
 
@@ -2299,52 +2310,54 @@ namespace System.Windows.Forms
             SRDescription(nameof(SR.DataGridView_DefaultCellStyleDescr)),
             AmbientValue(null)
         ]
-        public DataGridViewCellStyle DefaultCellStyle 
+        public DataGridViewCellStyle DefaultCellStyle
         {
-            get 
+            get
             {
-                if (this.defaultCellStyle == null)
+                if (defaultCellStyle == null)
                 {
-                    this.defaultCellStyle = this.DefaultDefaultCellStyle;                    
-                    return this.defaultCellStyle;
+                    defaultCellStyle = DefaultDefaultCellStyle;
+                    return defaultCellStyle;
                 }
-                else if (this.defaultCellStyle.BackColor == Color.Empty || 
-                    this.defaultCellStyle.ForeColor == Color.Empty || 
-                    this.defaultCellStyle.SelectionBackColor == Color.Empty || 
-                    this.defaultCellStyle.SelectionForeColor == Color.Empty || 
-                    this.defaultCellStyle.Font == null || 
-                    this.defaultCellStyle.Alignment == DataGridViewContentAlignment.NotSet || 
-                    this.defaultCellStyle.WrapMode == DataGridViewTriState.NotSet)
+                else if (defaultCellStyle.BackColor == Color.Empty ||
+                    defaultCellStyle.ForeColor == Color.Empty ||
+                    defaultCellStyle.SelectionBackColor == Color.Empty ||
+                    defaultCellStyle.SelectionForeColor == Color.Empty ||
+                    defaultCellStyle.Font == null ||
+                    defaultCellStyle.Alignment == DataGridViewContentAlignment.NotSet ||
+                    defaultCellStyle.WrapMode == DataGridViewTriState.NotSet)
                 {
-                    DataGridViewCellStyle defaultCellStyleTmp = new DataGridViewCellStyle(this.defaultCellStyle);
-                    defaultCellStyleTmp.Scope = DataGridViewCellStyleScopes.None;
-                    if (this.defaultCellStyle.BackColor == Color.Empty)
+                    DataGridViewCellStyle defaultCellStyleTmp = new DataGridViewCellStyle(defaultCellStyle)
+                    {
+                        Scope = DataGridViewCellStyleScopes.None
+                    };
+                    if (defaultCellStyle.BackColor == Color.Empty)
                     {
                         defaultCellStyleTmp.BackColor = DefaultBackBrush.Color;
                     }
-                    if (this.defaultCellStyle.ForeColor == Color.Empty)
+                    if (defaultCellStyle.ForeColor == Color.Empty)
                     {
                         defaultCellStyleTmp.ForeColor = base.ForeColor;
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_ambientForeColor] = true;
+                        dataGridViewState1[DATAGRIDVIEWSTATE1_ambientForeColor] = true;
                     }
-                    if (this.defaultCellStyle.SelectionBackColor == Color.Empty)
+                    if (defaultCellStyle.SelectionBackColor == Color.Empty)
                     {
                         defaultCellStyleTmp.SelectionBackColor = DefaultSelectionBackBrush.Color;
                     }
-                    if (this.defaultCellStyle.SelectionForeColor == Color.Empty)
+                    if (defaultCellStyle.SelectionForeColor == Color.Empty)
                     {
                         defaultCellStyleTmp.SelectionForeColor = DefaultSelectionForeBrush.Color;
                     }
-                    if (this.defaultCellStyle.Font == null)
+                    if (defaultCellStyle.Font == null)
                     {
                         defaultCellStyleTmp.Font = base.Font;
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_ambientFont] = true;
+                        dataGridViewState1[DATAGRIDVIEWSTATE1_ambientFont] = true;
                     }
-                    if (this.defaultCellStyle.Alignment == DataGridViewContentAlignment.NotSet)
+                    if (defaultCellStyle.Alignment == DataGridViewContentAlignment.NotSet)
                     {
                         defaultCellStyleTmp.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
                     }
-                    if (this.defaultCellStyle.WrapMode == DataGridViewTriState.NotSet)
+                    if (defaultCellStyle.WrapMode == DataGridViewTriState.NotSet)
                     {
                         defaultCellStyleTmp.WrapModeInternal = DataGridViewTriState.False;
                     }
@@ -2353,69 +2366,71 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return this.defaultCellStyle;
+                    return defaultCellStyle;
                 }
             }
-            set 
+            set
             {
-                DataGridViewCellStyle cs = this.DefaultCellStyle;
+                DataGridViewCellStyle cs = DefaultCellStyle;
                 cs.RemoveScope(DataGridViewCellStyleScopes.DataGridView);
-                this.defaultCellStyle = value;
+                defaultCellStyle = value;
                 if (value != null)
                 {
-                    this.defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
+                    defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
                 }
-                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(this.DefaultCellStyle);
+                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(DefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
-                    this.CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
-                    OnDefaultCellStyleChanged(this.CellStyleChangedEventArgs);
+                    CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
+                    OnDefaultCellStyleChanged(CellStyleChangedEventArgs);
                 }
             }
         }
 
-        private DataGridViewCellStyle DefaultDefaultCellStyle 
+        private DataGridViewCellStyle DefaultDefaultCellStyle
         {
-            get 
+            get
             {
-                DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-                defaultCellStyle.BackColor = DefaultBackBrush.Color;
-                defaultCellStyle.ForeColor = base.ForeColor;
-                defaultCellStyle.SelectionBackColor = DefaultSelectionBackBrush.Color;
-                defaultCellStyle.SelectionForeColor = DefaultSelectionForeBrush.Color;
-                defaultCellStyle.Font = base.Font;
-                defaultCellStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
-                defaultCellStyle.WrapModeInternal = DataGridViewTriState.False;
+                DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = DefaultBackBrush.Color,
+                    ForeColor = base.ForeColor,
+                    SelectionBackColor = DefaultSelectionBackBrush.Color,
+                    SelectionForeColor = DefaultSelectionForeBrush.Color,
+                    Font = base.Font,
+                    AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
+                    WrapModeInternal = DataGridViewTriState.False
+                };
                 defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
 
-                this.dataGridViewState1[DATAGRIDVIEWSTATE1_ambientFont] = true;
-                this.dataGridViewState1[DATAGRIDVIEWSTATE1_ambientForeColor] = true;
-                
+                dataGridViewState1[DATAGRIDVIEWSTATE1_ambientFont] = true;
+                dataGridViewState1[DATAGRIDVIEWSTATE1_ambientForeColor] = true;
+
                 return defaultCellStyle;
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewDefaultCellStyleChangedDescr))
         ]
         public event EventHandler DefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
         }
 
-        private static SolidBrush DefaultForeBrush 
+        private static SolidBrush DefaultForeBrush
         {
-            get 
+            get
             {
-                return (SolidBrush) SystemBrushes.WindowText;
+                return (SolidBrush)SystemBrushes.WindowText;
             }
         }
 
         private static Color DefaultGridColor
         {
-            get 
+            get
             {
                 return SystemColors.ControlDark;
             }
@@ -2423,45 +2438,47 @@ namespace System.Windows.Forms
 
         private static SolidBrush DefaultHeadersBackBrush
         {
-            get 
+            get
             {
-                return (SolidBrush) SystemBrushes.Control;
+                return (SolidBrush)SystemBrushes.Control;
             }
         }
 
         private DataGridViewCellStyle DefaultRowHeadersDefaultCellStyle
         {
-            get 
+            get
             {
-                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
-                defaultStyle.BackColor = DefaultHeadersBackBrush.Color;
-                defaultStyle.ForeColor = DefaultForeBrush.Color;
-                defaultStyle.SelectionBackColor = DefaultSelectionBackBrush.Color;
-                defaultStyle.SelectionForeColor = DefaultSelectionForeBrush.Color;
-                defaultStyle.Font = base.Font;
-                defaultStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleLeft;
-                defaultStyle.WrapModeInternal = DataGridViewTriState.True;
+                DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle
+                {
+                    BackColor = DefaultHeadersBackBrush.Color,
+                    ForeColor = DefaultForeBrush.Color,
+                    SelectionBackColor = DefaultSelectionBackBrush.Color,
+                    SelectionForeColor = DefaultSelectionForeBrush.Color,
+                    Font = base.Font,
+                    AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
+                    WrapModeInternal = DataGridViewTriState.True
+                };
                 defaultStyle.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
 
-                this.dataGridViewState1[DATAGRIDVIEWSTATE1_ambientRowHeadersFont] = true;
+                dataGridViewState1[DATAGRIDVIEWSTATE1_ambientRowHeadersFont] = true;
 
                 return defaultStyle;
             }
         }
 
-        private static SolidBrush DefaultSelectionBackBrush 
+        private static SolidBrush DefaultSelectionBackBrush
         {
-            get 
+            get
             {
-                return (SolidBrush) SystemBrushes.Highlight;
+                return (SolidBrush)SystemBrushes.Highlight;
             }
         }
-        
-        private static SolidBrush DefaultSelectionForeBrush 
+
+        private static SolidBrush DefaultSelectionForeBrush
         {
-            get 
+            get
             {
-                return (SolidBrush) SystemBrushes.HighlightText;
+                return (SolidBrush)SystemBrushes.HighlightText;
             }
         }
 
@@ -2477,7 +2494,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.displayedBandsInfo;
+                return displayedBandsInfo;
             }
         }
 
@@ -2485,19 +2502,21 @@ namespace System.Windows.Forms
         ///     Returns the client rect of the display area of the control.
         ///     The DataGridView control return its client rectangle minus the potential scrollbars.
         /// </summary>
-        public override Rectangle DisplayRectangle {
-            get {
-                Rectangle rectDisplay = this.ClientRectangle;
-                if (this.horizScrollBar != null && this.horizScrollBar.Visible)
+        public override Rectangle DisplayRectangle
+        {
+            get
+            {
+                Rectangle rectDisplay = ClientRectangle;
+                if (horizScrollBar != null && horizScrollBar.Visible)
                 {
-                    rectDisplay.Height -= this.horizScrollBar.Height;
+                    rectDisplay.Height -= horizScrollBar.Height;
                 }
-                if (this.vertScrollBar != null && this.vertScrollBar.Visible)
+                if (vertScrollBar != null && vertScrollBar.Visible)
                 {
-                    rectDisplay.Width -= this.vertScrollBar.Width;
-                    if (this.RightToLeftInternal)
+                    rectDisplay.Width -= vertScrollBar.Width;
+                    if (RightToLeftInternal)
                     {
-                        rectDisplay.X = this.vertScrollBar.Width;
+                        rectDisplay.X = vertScrollBar.Width;
                     }
                 }
                 return rectDisplay;
@@ -2513,38 +2532,38 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.editMode;
+                return editMode;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewEditMode.EditOnEnter, (int)DataGridViewEditMode.EditProgrammatically))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewEditMode)); 
-                }               
-                if (this.editMode != value)
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewEditMode));
+                }
+                if (editMode != value)
                 {
-                    this.editMode = value;
+                    editMode = value;
                     OnEditModeChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_EditModeChangedDescr))
         ]
         public event EventHandler EditModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
         }
 
         internal Point MouseEnteredCellAddress
         {
             get
             {
-                return this.ptMouseEnteredCell;
+                return ptMouseEnteredCell;
             }
         }
 
@@ -2552,10 +2571,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.editingControl != null)
+                if (editingControl != null)
                 {
                     Point ptMouse = PointToClient(Control.MousePosition);
-                    return this.editingControl.Bounds.Contains(ptMouse);
+                    return editingControl.Bounds.Contains(ptMouse);
                 }
                 return false;
             }
@@ -2565,10 +2584,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.editingPanel != null)
+                if (editingPanel != null)
                 {
                     Point ptMouse = PointToClient(Control.MousePosition);
-                    return this.editingPanel.Bounds.Contains(ptMouse);
+                    return editingPanel.Bounds.Contains(ptMouse);
                 }
                 return false;
             }
@@ -2579,16 +2598,16 @@ namespace System.Windows.Forms
             get
             {
                 Point ptMouse = PointToClient(Control.MousePosition);
-                if (this.vertScrollBar != null && this.vertScrollBar.Visible)
+                if (vertScrollBar != null && vertScrollBar.Visible)
                 {
-                    if (this.vertScrollBar.Bounds.Contains(ptMouse))
+                    if (vertScrollBar.Bounds.Contains(ptMouse))
                     {
                         return true;
                     }
                 }
-                if (this.horizScrollBar != null && this.horizScrollBar.Visible)
+                if (horizScrollBar != null && horizScrollBar.Visible)
                 {
-                    return this.horizScrollBar.Bounds.Contains(ptMouse);
+                    return horizScrollBar.Bounds.Contains(ptMouse);
                 }
                 return false;
             }
@@ -2602,7 +2621,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.editingControl;
+                return editingControl;
             }
         }
 
@@ -2622,12 +2641,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.editingPanel == null)
+                if (editingPanel == null)
                 {
-                    this.editingPanel = new DataGridViewEditingPanel(this);
-                    this.editingPanel.AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName);
+                    editingPanel = new DataGridViewEditingPanel(this)
+                    {
+                        AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName)
+                    };
                 }
-                return this.editingPanel;
+                return editingPanel;
             }
         }
 
@@ -2635,9 +2656,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.editingPanelAccessibleObject == null)
+                if (editingPanelAccessibleObject == null)
                 {
-                    editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, this.EditingPanel);
+                    editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
                 }
 
                 return editingPanelAccessibleObject;
@@ -2659,13 +2680,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles];
             }
             set
             {
-                if (this.dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] != value)
+                if (dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] = value;
                     //OnEnableHeadersVisualStylesChanged(EventArgs.Empty);
                     // Some autosizing may have to be applied since the margins are potentially changed.
                     OnGlobalAutoSize(); // Put this into OnEnableHeadersVisualStylesChanged if created.
@@ -2681,10 +2702,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                Point firstDisplayedCellAddress = this.FirstDisplayedCellAddress;
+                Point firstDisplayedCellAddress = FirstDisplayedCellAddress;
                 if (firstDisplayedCellAddress.X >= 0)
                 {
-                    return this.Rows[firstDisplayedCellAddress.Y].Cells[firstDisplayedCellAddress.X]; // unshares the row of first displayed cell
+                    return Rows[firstDisplayedCellAddress.Y].Cells[firstDisplayedCellAddress.X]; // unshares the row of first displayed cell
                 }
                 return null;
             }
@@ -2703,9 +2724,9 @@ namespace System.Windows.Forms
                     }
 
                     Debug.Assert(firstDisplayedCell.RowIndex >= 0 &&
-                        firstDisplayedCell.RowIndex < this.Rows.Count &&
+                        firstDisplayedCell.RowIndex < Rows.Count &&
                         firstDisplayedCell.ColumnIndex >= 0 &&
-                        firstDisplayedCell.ColumnIndex < this.Columns.Count);
+                        firstDisplayedCell.ColumnIndex < Columns.Count);
 
                     if (!firstDisplayedCell.Visible)
                     {
@@ -2714,14 +2735,14 @@ namespace System.Windows.Forms
 
                     if (!firstDisplayedCell.Frozen)
                     {
-                        if (!this.Rows[firstDisplayedCell.RowIndex].Frozen)
+                        if (!Rows[firstDisplayedCell.RowIndex].Frozen)
                         {
-                            this.FirstDisplayedScrollingRowIndex = firstDisplayedCell.RowIndex;
+                            FirstDisplayedScrollingRowIndex = firstDisplayedCell.RowIndex;
                         }
 
-                        if (!this.Columns[firstDisplayedCell.ColumnIndex].Frozen)
+                        if (!Columns[firstDisplayedCell.ColumnIndex].Frozen)
                         {
-                            this.FirstDisplayedScrollingColumnIndex = firstDisplayedCell.ColumnIndex;
+                            FirstDisplayedScrollingColumnIndex = firstDisplayedCell.ColumnIndex;
                         }
                     }
                 }
@@ -2732,27 +2753,29 @@ namespace System.Windows.Forms
         {
             get
             {
-                Point ptFirstDisplayedCellAddress = new Point(-1, -1);
-                ptFirstDisplayedCellAddress.Y = this.Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                Point ptFirstDisplayedCellAddress = new Point(-1, -1)
+                {
+                    Y = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+                };
                 if (ptFirstDisplayedCellAddress.Y == -1)
                 {
-                    Debug.Assert(this.displayedBandsInfo.NumTotallyDisplayedFrozenRows == 0);
-                    if (this.displayedBandsInfo.FirstDisplayedScrollingRow >= 0)
+                    Debug.Assert(displayedBandsInfo.NumTotallyDisplayedFrozenRows == 0);
+                    if (displayedBandsInfo.FirstDisplayedScrollingRow >= 0)
                     {
-                        ptFirstDisplayedCellAddress.Y = this.displayedBandsInfo.FirstDisplayedScrollingRow;
+                        ptFirstDisplayedCellAddress.Y = displayedBandsInfo.FirstDisplayedScrollingRow;
                     }
 #if DEBUG
                     else
                     {
-                        Debug.Assert(this.displayedBandsInfo.FirstDisplayedScrollingRow == -1);
-                        Debug.Assert(this.displayedBandsInfo.NumDisplayedScrollingRows == 0);
-                        Debug.Assert(this.displayedBandsInfo.NumTotallyDisplayedScrollingRows == 0);
+                        Debug.Assert(displayedBandsInfo.FirstDisplayedScrollingRow == -1);
+                        Debug.Assert(displayedBandsInfo.NumDisplayedScrollingRows == 0);
+                        Debug.Assert(displayedBandsInfo.NumTotallyDisplayedScrollingRows == 0);
                     }
 #endif
                 }
                 if (ptFirstDisplayedCellAddress.Y >= 0)
                 {
-                    ptFirstDisplayedCellAddress.X = this.FirstDisplayedColumnIndex;
+                    ptFirstDisplayedCellAddress.X = FirstDisplayedColumnIndex;
                 }
                 return ptFirstDisplayedCellAddress;
             }
@@ -2762,44 +2785,44 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.IsHandleCreated)
+                if (!IsHandleCreated)
                 {
                     return -1;
                 }
-                
+
                 int firstDisplayedColumnIndex = -1;
-                DataGridViewColumn dataGridViewColumn = this.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                 if (dataGridViewColumn != null)
                 {
                     if (dataGridViewColumn.Frozen)
                     {
                         firstDisplayedColumnIndex = dataGridViewColumn.Index;
                     }
-                    else if (this.displayedBandsInfo.FirstDisplayedScrollingCol >= 0)
+                    else if (displayedBandsInfo.FirstDisplayedScrollingCol >= 0)
                     {
-                        firstDisplayedColumnIndex = this.displayedBandsInfo.FirstDisplayedScrollingCol;
+                        firstDisplayedColumnIndex = displayedBandsInfo.FirstDisplayedScrollingCol;
                     }
                 }
 #if DEBUG
-                DataGridViewColumn dataGridViewColumnDbg1 = this.Columns.GetFirstColumn(DataGridViewElementStates.Displayed);
+                DataGridViewColumn dataGridViewColumnDbg1 = Columns.GetFirstColumn(DataGridViewElementStates.Displayed);
                 int firstDisplayedColumnIndexDbg1 = (dataGridViewColumnDbg1 == null) ? -1 : dataGridViewColumnDbg1.Index;
 
                 int firstDisplayedColumnIndexDbg2 = -1;
-                DataGridViewColumn dataGridViewColumnDbg = this.Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                DataGridViewColumn dataGridViewColumnDbg = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (dataGridViewColumnDbg != null)
                 {
                     firstDisplayedColumnIndexDbg2 = dataGridViewColumnDbg.Index;
                 }
-                else if (this.displayedBandsInfo.FirstDisplayedScrollingCol >= 0)
+                else if (displayedBandsInfo.FirstDisplayedScrollingCol >= 0)
                 {
-                    firstDisplayedColumnIndexDbg2 = this.displayedBandsInfo.FirstDisplayedScrollingCol;
+                    firstDisplayedColumnIndexDbg2 = displayedBandsInfo.FirstDisplayedScrollingCol;
                 }
                 else
                 {
-                    Debug.Assert(this.displayedBandsInfo.LastTotallyDisplayedScrollingCol == -1);
+                    Debug.Assert(displayedBandsInfo.LastTotallyDisplayedScrollingCol == -1);
                 }
-                Debug.Assert(firstDisplayedColumnIndex == firstDisplayedColumnIndexDbg1 || !this.Visible || this.displayedBandsInfo.Dirty);
-                Debug.Assert(firstDisplayedColumnIndex == firstDisplayedColumnIndexDbg2 || this.displayedBandsInfo.Dirty);
+                Debug.Assert(firstDisplayedColumnIndex == firstDisplayedColumnIndexDbg1 || !Visible || displayedBandsInfo.Dirty);
+                Debug.Assert(firstDisplayedColumnIndex == firstDisplayedColumnIndexDbg2 || displayedBandsInfo.Dirty);
 #endif
                 return firstDisplayedColumnIndex;
             }
@@ -2809,18 +2832,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.IsHandleCreated)
+                if (!IsHandleCreated)
                 {
                     return -1;
                 }
 
-                int firstDisplayedRowIndex = this.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                int firstDisplayedRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
                 if (firstDisplayedRowIndex != -1)
                 {
-                    if ((this.Rows.GetRowState(firstDisplayedRowIndex) & DataGridViewElementStates.Frozen) == 0 &&
-                        this.displayedBandsInfo.FirstDisplayedScrollingRow >= 0)
+                    if ((Rows.GetRowState(firstDisplayedRowIndex) & DataGridViewElementStates.Frozen) == 0 &&
+                        displayedBandsInfo.FirstDisplayedScrollingRow >= 0)
                     {
-                        firstDisplayedRowIndex = this.displayedBandsInfo.FirstDisplayedScrollingRow;
+                        firstDisplayedRowIndex = displayedBandsInfo.FirstDisplayedScrollingRow;
                     }
                 }
 #if FALSE //DEBUG
@@ -2851,7 +2874,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.negOffset;
+                return negOffset;
             }
         }
 
@@ -2863,48 +2886,48 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.displayedBandsInfo.FirstDisplayedScrollingCol;
+                return displayedBandsInfo.FirstDisplayedScrollingCol;
             }
             set
             {
-                if (value < 0 || value >= this.Columns.Count)
+                if (value < 0 || value >= Columns.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value));
                 }
-                if (!this.Columns[value].Visible)
+                if (!Columns[value].Visible)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeInvisible));
                 }
-                if (this.Columns[value].Frozen)
+                if (Columns[value].Frozen)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeFrozen));
                 }
 
-                if (!this.IsHandleCreated)
+                if (!IsHandleCreated)
                 {
                     CreateHandle();
                 }
 
-                int displayWidth = this.layout.Data.Width;
+                int displayWidth = layout.Data.Width;
                 if (displayWidth <= 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_NoRoomForDisplayedColumns));
                 }
 
-                int totalVisibleFrozenWidth = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (totalVisibleFrozenWidth >= displayWidth)
                 {
                     Debug.Assert(totalVisibleFrozenWidth > 0);
                     throw new InvalidOperationException(string.Format(SR.DataGridView_FrozenColumnsPreventFirstDisplayedScrollingColumn));
                 }
 
-                if (value == this.displayedBandsInfo.FirstDisplayedScrollingCol)
+                if (value == displayedBandsInfo.FirstDisplayedScrollingCol)
                 {
                     return;
                 }
 
-                if (this.ptCurrentCell.X >= 0 && 
-                    !CommitEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll, 
+                if (ptCurrentCell.X >= 0 &&
+                    !CommitEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll,
                                 false /*forCurrentCellChange*/, false /*forCurrentRowChange*/))
                 {
                     // Could not commit edited cell value - return silently
@@ -2918,12 +2941,12 @@ namespace System.Windows.Forms
                 bool success = ScrollColumnIntoView(value, -1, /*committed*/ true, false /*forCurrentCellChange*/);
                 Debug.Assert(success);
 
-                Debug.Assert(this.displayedBandsInfo.FirstDisplayedScrollingCol >= 0);
-                Debug.Assert(this.displayedBandsInfo.FirstDisplayedScrollingCol == value ||
-                             this.Columns.DisplayInOrder(this.displayedBandsInfo.FirstDisplayedScrollingCol, value));
-                int maxHorizontalOffset = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - displayWidth;
-                while (this.displayedBandsInfo.FirstDisplayedScrollingCol != value &&
-                        this.HorizontalOffset < maxHorizontalOffset)
+                Debug.Assert(displayedBandsInfo.FirstDisplayedScrollingCol >= 0);
+                Debug.Assert(displayedBandsInfo.FirstDisplayedScrollingCol == value ||
+                             Columns.DisplayInOrder(displayedBandsInfo.FirstDisplayedScrollingCol, value));
+                int maxHorizontalOffset = Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - displayWidth;
+                while (displayedBandsInfo.FirstDisplayedScrollingCol != value &&
+                        HorizontalOffset < maxHorizontalOffset)
                 {
                     ScrollColumns(1);
                 }
@@ -2938,48 +2961,48 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.displayedBandsInfo.FirstDisplayedScrollingRow;
+                return displayedBandsInfo.FirstDisplayedScrollingRow;
             }
             set
             {
-                if (value < 0 || value >= this.Rows.Count)
+                if (value < 0 || value >= Rows.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value));
                 }
-                if ((this.Rows.GetRowState(value) & DataGridViewElementStates.Visible) == 0)
+                if ((Rows.GetRowState(value) & DataGridViewElementStates.Visible) == 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingRowCannotBeInvisible));
                 }
-                if ((this.Rows.GetRowState(value) & DataGridViewElementStates.Frozen) != 0)
+                if ((Rows.GetRowState(value) & DataGridViewElementStates.Frozen) != 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingRowCannotBeFrozen));
                 }
 
-                if (!this.IsHandleCreated)
+                if (!IsHandleCreated)
                 {
                     CreateHandle();
                 }
 
-                int displayHeight = this.layout.Data.Height;
+                int displayHeight = layout.Data.Height;
                 if (displayHeight <= 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_NoRoomForDisplayedRows));
                 }
 
-                int totalVisibleFrozenHeight = this.Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (totalVisibleFrozenHeight >= displayHeight)
                 {
                     Debug.Assert(totalVisibleFrozenHeight > 0);
                     throw new InvalidOperationException(string.Format(SR.DataGridView_FrozenRowsPreventFirstDisplayedScrollingRow));
                 }
 
-                if (value == this.displayedBandsInfo.FirstDisplayedScrollingRow)
+                if (value == displayedBandsInfo.FirstDisplayedScrollingRow)
                 {
                     return;
                 }
 
-                if (this.ptCurrentCell.X >= 0 &&
-                    !CommitEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll, 
+                if (ptCurrentCell.X >= 0 &&
+                    !CommitEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll,
                                 false /*forCurrentCellChange*/, false /*forCurrentRowChange*/))
                 {
                     // Could not commit edited cell value - return silently
@@ -2991,11 +3014,11 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                Debug.Assert(this.displayedBandsInfo.FirstDisplayedScrollingRow >= 0);
+                Debug.Assert(displayedBandsInfo.FirstDisplayedScrollingRow >= 0);
 
-                if (value > this.displayedBandsInfo.FirstDisplayedScrollingRow)
+                if (value > displayedBandsInfo.FirstDisplayedScrollingRow)
                 {
-                    int rowsToScroll = this.Rows.GetRowCount(DataGridViewElementStates.Visible, this.displayedBandsInfo.FirstDisplayedScrollingRow, value);
+                    int rowsToScroll = Rows.GetRowCount(DataGridViewElementStates.Visible, displayedBandsInfo.FirstDisplayedScrollingRow, value);
                     Debug.Assert(rowsToScroll != 0);
                     ScrollRowsByCount(rowsToScroll, rowsToScroll > 1 ? ScrollEventType.LargeIncrement : ScrollEventType.SmallIncrement);
                 }
@@ -3014,11 +3037,11 @@ namespace System.Windows.Forms
         ]
         public override Color ForeColor
         {
-            get 
+            get
             {
                 return base.ForeColor;
             }
-            set 
+            set
             {
                 base.ForeColor = value;
             }
@@ -3035,16 +3058,16 @@ namespace System.Windows.Forms
         }
 
         [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public override Font Font
         {
-            get 
+            get
             {
                 return base.Font;
             }
-            set 
+            set
             {
                 base.Font = value;
             }
@@ -3071,7 +3094,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.gridPen.Color;
+                return gridPen.Color;
             }
             set
             {
@@ -3083,113 +3106,113 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, "GridColor"));
                 }
-                if (!value.Equals(this.gridPen.Color)) 
+                if (!value.Equals(gridPen.Color))
                 {
-                    if (this.gridPen != null)
+                    if (gridPen != null)
                     {
-                        this.gridPen.Dispose();
+                        gridPen.Dispose();
                     }
 
-                    this.gridPen = new Pen(value);
+                    gridPen = new Pen(value);
                     OnGridColorChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnGridColorChangedDescr))
         ]
-        public event EventHandler GridColorChanged 
+        public event EventHandler GridColorChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
         }
 
         private bool ShouldSerializeGridColor()
         {
-            return !this.GridPen.Color.Equals(DefaultGridColor);
+            return !GridPen.Color.Equals(DefaultGridColor);
         }
 
         internal Pen GridPen
         {
             get
             {
-                return this.gridPen;
+                return gridPen;
             }
         }
 
-        internal int HorizontalOffset 
+        internal int HorizontalOffset
         {
-            get 
+            get
             {
-                return this.horizontalOffset;
+                return horizontalOffset;
             }
-            set 
+            set
             {
                 if (value < 0)
                 {
                     value = 0;
                 }
-                int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
+                int widthNotVisible = Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - layout.Data.Width;
                 if (value > widthNotVisible && widthNotVisible > 0)
                 {
                     value = widthNotVisible;
                 }
-                if (value == this.horizontalOffset)
+                if (value == horizontalOffset)
                 {
                     return;
                 }
 
                 ScrollEventType scrollEventType;
-                int oldFirstVisibleScrollingCol = this.displayedBandsInfo.FirstDisplayedScrollingCol;
-                int change = this.horizontalOffset - value;
-                if (this.horizScrollBar.Enabled)
+                int oldFirstVisibleScrollingCol = displayedBandsInfo.FirstDisplayedScrollingCol;
+                int change = horizontalOffset - value;
+                if (horizScrollBar.Enabled)
                 {
-                    this.horizScrollBar.Value = value;
+                    horizScrollBar.Value = value;
                 }
-                this.horizontalOffset = value;
+                horizontalOffset = value;
 
-                int totalVisibleFrozenWidth = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
-                Rectangle rectTmp = this.layout.Data;
-                if (this.layout.ColumnHeadersVisible)
+                Rectangle rectTmp = layout.Data;
+                if (layout.ColumnHeadersVisible)
                 {
                     // column headers must scroll as well
-                    rectTmp = Rectangle.Union(rectTmp, this.layout.ColumnHeaders);
+                    rectTmp = Rectangle.Union(rectTmp, layout.ColumnHeaders);
                 }
-                else if (this.SingleVerticalBorderAdded)
+                else if (SingleVerticalBorderAdded)
                 {
-                    if (!this.RightToLeftInternal)
+                    if (!RightToLeftInternal)
                     {
                         rectTmp.X--;
                     }
                     rectTmp.Width++;
                 }
 
-                if (this.SingleVerticalBorderAdded &&
+                if (SingleVerticalBorderAdded &&
                     totalVisibleFrozenWidth > 0)
                 {
-                    if (!this.RightToLeftInternal)
+                    if (!RightToLeftInternal)
                     {
                         rectTmp.X++;
                     }
                     rectTmp.Width--;
                 }
 
-                if (!this.RightToLeftInternal)
+                if (!RightToLeftInternal)
                 {
                     rectTmp.X += totalVisibleFrozenWidth;
                 }
                 rectTmp.Width -= totalVisibleFrozenWidth;
 
-                this.displayedBandsInfo.FirstDisplayedScrollingCol = ComputeFirstVisibleScrollingColumn();
+                displayedBandsInfo.FirstDisplayedScrollingCol = ComputeFirstVisibleScrollingColumn();
                 // update the lastTotallyDisplayedScrollingCol
                 ComputeVisibleColumns();
 
-                if (this.editingControl != null && 
-                    !this.Columns[this.ptCurrentCell.X].Frozen &&
-                    this.displayedBandsInfo.FirstDisplayedScrollingCol > -1)
+                if (editingControl != null &&
+                    !Columns[ptCurrentCell.X].Frozen &&
+                    displayedBandsInfo.FirstDisplayedScrollingCol > -1)
                 {
                     PositionEditingControl(true /*setLocation*/, false /*setSize*/, false /*setFocus*/);
                 }
@@ -3197,29 +3220,29 @@ namespace System.Windows.Forms
                 // The mouse probably is not over the same cell after the scroll.
                 UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
 
-                if (oldFirstVisibleScrollingCol == this.displayedBandsInfo.FirstDisplayedScrollingCol)
+                if (oldFirstVisibleScrollingCol == displayedBandsInfo.FirstDisplayedScrollingCol)
                 {
                     scrollEventType = change > 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement;
                 }
-                else if (this.Columns.DisplayInOrder(oldFirstVisibleScrollingCol, this.displayedBandsInfo.FirstDisplayedScrollingCol))
+                else if (Columns.DisplayInOrder(oldFirstVisibleScrollingCol, displayedBandsInfo.FirstDisplayedScrollingCol))
                 {
-                    scrollEventType = this.Columns.GetColumnCount(DataGridViewElementStates.Visible, oldFirstVisibleScrollingCol, this.displayedBandsInfo.FirstDisplayedScrollingCol) > 1 ? ScrollEventType.LargeIncrement : ScrollEventType.SmallIncrement;
+                    scrollEventType = Columns.GetColumnCount(DataGridViewElementStates.Visible, oldFirstVisibleScrollingCol, displayedBandsInfo.FirstDisplayedScrollingCol) > 1 ? ScrollEventType.LargeIncrement : ScrollEventType.SmallIncrement;
                 }
                 else
                 {
-                    Debug.Assert(this.Columns.DisplayInOrder(this.displayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol));
-                    scrollEventType = this.Columns.GetColumnCount(DataGridViewElementStates.Visible, this.displayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol) > 1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
+                    Debug.Assert(Columns.DisplayInOrder(displayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol));
+                    scrollEventType = Columns.GetColumnCount(DataGridViewElementStates.Visible, displayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol) > 1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
                 }
 
                 NativeMethods.RECT[] rects = CreateScrollableRegion(rectTmp);
-                if (this.RightToLeftInternal)
+                if (RightToLeftInternal)
                 {
                     change = -change;
                 }
                 ScrollRectangles(rects, change);
-                if (!this.dataGridViewState2[DATAGRIDVIEWSTATE2_stopRaisingHorizontalScroll])
+                if (!dataGridViewState2[DATAGRIDVIEWSTATE2_stopRaisingHorizontalScroll])
                 {
-                    OnScroll(scrollEventType, this.horizontalOffset + change, this.horizontalOffset, ScrollOrientation.HorizontalScroll);
+                    OnScroll(scrollEventType, horizontalOffset + change, horizontalOffset, ScrollOrientation.HorizontalScroll);
                 }
                 FlushDisplayedChanged();
             }
@@ -3229,7 +3252,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.horizScrollBar;
+                return horizScrollBar;
             }
         }
 
@@ -3237,7 +3260,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.horizScrollBar.Height;
+                return horizScrollBar.Height;
             }
         }
 
@@ -3245,7 +3268,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.horizScrollBar.Visible;
+                return horizScrollBar.Visible;
             }
         }
 
@@ -3257,7 +3280,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.horizontalOffset;
+                return horizontalOffset;
             }
             set
             {
@@ -3271,18 +3294,18 @@ namespace System.Windows.Forms
                 //{
                 //    throw new ArgumentOutOfRangeException(string.Format(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
                 //}
-                else if (value > 0 && (this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width) <= 0)
+                else if (value > 0 && (Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - layout.Data.Width) <= 0)
                 {
                     // Intentionally ignoring the case where dev tries to set value while there is no horizontal scrolling possible.
                     // throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), string.Format(SR.DataGridView_PropertyMustBeZero));
-                    Debug.Assert(this.horizontalOffset == 0);
+                    Debug.Assert(horizontalOffset == 0);
                     return;
                 }
-                if (value == this.horizontalOffset)
+                if (value == horizontalOffset)
                 {
                     return;
                 }
-                this.HorizontalOffset = value;
+                HorizontalOffset = value;
             }
         }
 
@@ -3290,12 +3313,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.horizScrollTimer == null)
+                if (horizScrollTimer == null)
                 {
-                    this.horizScrollTimer = new System.Windows.Forms.Timer();
-                    this.horizScrollTimer.Tick += new System.EventHandler(HorizScrollTimer_Tick);
+                    horizScrollTimer = new System.Windows.Forms.Timer();
+                    horizScrollTimer.Tick += new System.EventHandler(HorizScrollTimer_Tick);
                 }
-                return this.horizScrollTimer;
+                return horizScrollTimer;
             }
         }
 
@@ -3303,7 +3326,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_inAdjustFillingColumn] || this.dataGridViewOper[DATAGRIDVIEWOPER_inAdjustFillingColumns];
+                return dataGridViewOper[DATAGRIDVIEWOPER_inAdjustFillingColumn] || dataGridViewOper[DATAGRIDVIEWOPER_inAdjustFillingColumns];
             }
         }
 
@@ -3311,7 +3334,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_inBeginEdit];
+                return dataGridViewOper[DATAGRIDVIEWOPER_inBeginEdit];
             }
         }
 
@@ -3319,11 +3342,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments];
+                return dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments];
             }
             set
             {
-                this.dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments] = value;
+                dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments] = value;
             }
         }
 
@@ -3331,7 +3354,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_inEndEdit];
+                return dataGridViewOper[DATAGRIDVIEWOPER_inEndEdit];
             }
         }
 
@@ -3339,12 +3362,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.ptCurrentCell.X == -1)
+                if (ptCurrentCell.X == -1)
                 {
                     return null;
                 }
 
-                return this.CurrentCellInternal.GetInheritedStyleInternal(this.ptCurrentCell.Y);
+                return CurrentCellInternal.GetInheritedStyleInternal(ptCurrentCell.Y);
             }
         }
 
@@ -3352,7 +3375,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_initializing];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_initializing];
             }
         }
 
@@ -3360,7 +3383,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_inSort];
+                return dataGridViewOper[DATAGRIDVIEWOPER_inSort];
             }
         }
 
@@ -3369,7 +3392,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedCellChanged];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_editedCellChanged];
             }
         }
 
@@ -3377,9 +3400,9 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (value != this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedCellChanged])
+                if (value != dataGridViewState1[DATAGRIDVIEWSTATE1_editedCellChanged])
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedCellChanged] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_editedCellChanged] = value;
                     OnCurrentCellDirtyStateChanged(EventArgs.Empty);
                 }
             }
@@ -3390,7 +3413,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.editingControl != null || this.dataGridViewState1[DATAGRIDVIEWSTATE1_currentCellInEditMode];
+                return editingControl != null || dataGridViewState1[DATAGRIDVIEWSTATE1_currentCellInEditMode];
             }
         }
 
@@ -3400,13 +3423,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.VirtualMode)
+                if (!VirtualMode)
                 {
-                    return this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged] || this.IsCurrentCellDirty;
+                    return dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged] || IsCurrentCellDirty;
                 }
                 else
                 {
-                    QuestionEventArgs qe = new QuestionEventArgs(this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged] || this.IsCurrentCellDirty);
+                    QuestionEventArgs qe = new QuestionEventArgs(dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged] || IsCurrentCellDirty);
                     OnRowDirtyStateNeeded(qe);
                     return qe.Response;
                 }
@@ -3417,13 +3440,13 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (value != this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged])
+                if (value != dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged])
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged] = value;
-                    if (this.RowHeadersVisible && this.ShowEditingIcon && this.ptCurrentCell.Y >= 0)
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_editedRowChanged] = value;
+                    if (RowHeadersVisible && ShowEditingIcon && ptCurrentCell.Y >= 0)
                     {
                         // Force the pencil to appear in the row header
-                        InvalidateCellPrivate(-1, this.ptCurrentCell.Y);
+                        InvalidateCellPrivate(-1, ptCurrentCell.Y);
                     }
                 }
             }
@@ -3433,15 +3456,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_trackColResize] ||
-                       this.dataGridViewOper[DATAGRIDVIEWOPER_trackRowResize] ||
-                       this.dataGridViewOper[DATAGRIDVIEWOPER_trackColHeadersResize] ||
-                       this.dataGridViewOper[DATAGRIDVIEWOPER_trackRowHeadersResize] ||
-                       this.dataGridViewOper[DATAGRIDVIEWOPER_trackColRelocation] ||
-                       this.IsCurrentCellDirty ||
-                       ((this.VirtualMode || this.DataSource != null) && this.IsCurrentRowDirty) ||
-                       (this.EditMode != DataGridViewEditMode.EditOnEnter && this.editingControl != null ||
-                       this.dataGridViewState1[DATAGRIDVIEWSTATE1_newRowEdited]);
+                return dataGridViewOper[DATAGRIDVIEWOPER_trackColResize] ||
+                       dataGridViewOper[DATAGRIDVIEWOPER_trackRowResize] ||
+                       dataGridViewOper[DATAGRIDVIEWOPER_trackColHeadersResize] ||
+                       dataGridViewOper[DATAGRIDVIEWOPER_trackRowHeadersResize] ||
+                       dataGridViewOper[DATAGRIDVIEWOPER_trackColRelocation] ||
+                       IsCurrentCellDirty ||
+                       ((VirtualMode || DataSource != null) && IsCurrentRowDirty) ||
+                       (EditMode != DataGridViewEditMode.EditOnEnter && editingControl != null ||
+                       dataGridViewState1[DATAGRIDVIEWSTATE1_newRowEdited]);
             }
         }
 
@@ -3449,8 +3472,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form parentForm = this.TopLevelControlInternal as Form;
-                return parentForm != null && parentForm.WindowState == FormWindowState.Minimized;
+                return TopLevelControlInternal is Form parentForm && parentForm.WindowState == FormWindowState.Minimized;
             }
         }
 
@@ -3458,8 +3480,8 @@ namespace System.Windows.Forms
         {
             Debug.Assert(dataGridViewCell != null);
             Debug.Assert(rowIndex >= 0);
-            DataGridViewElementStates rowState = this.Rows.GetRowState(rowIndex); 
-            return this.ReadOnly ||
+            DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
+            return ReadOnly ||
                    (rowState & DataGridViewElementStates.ReadOnly) != 0 ||
                    (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.ReadOnly) ||
                    dataGridViewCell.StateIncludes(DataGridViewElementStates.ReadOnly);
@@ -3469,7 +3491,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(dataGridViewCell != null);
             Debug.Assert(rowIndex >= 0);
-            DataGridViewElementStates rowState = this.Rows.GetRowState(rowIndex);
+            DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
             return (rowState & DataGridViewElementStates.Selected) != 0 ||
                    (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Selected) ||
                    dataGridViewCell.StateIncludes(DataGridViewElementStates.Selected);
@@ -3479,7 +3501,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(dataGridViewCell != null);
             Debug.Assert(rowIndex >= 0);
-            DataGridViewElementStates rowState = this.Rows.GetRowState(rowIndex);
+            DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
             return (rowState & DataGridViewElementStates.Visible) != 0 &&
                    (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Visible);
         }
@@ -3488,11 +3510,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.layout.dirty && this.IsHandleCreated)
+                if (layout.dirty && IsHandleCreated)
                 {
                     PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
                 }
-                return this.layout;
+                return layout;
             }
         }
 
@@ -3500,7 +3522,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.ptMouseDownCell;
+                return ptMouseDownCell;
             }
         }
 
@@ -3513,27 +3535,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect];
             }
             set
             {
-                if (this.MultiSelect != value)
+                if (MultiSelect != value)
                 {
                     ClearSelection();
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect] = value;
                     OnMultiSelectChanged(EventArgs.Empty);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnMultiSelectChangedDescr))
         ]
         public event EventHandler MultiSelectChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
         }
 
         [
@@ -3544,7 +3566,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.newRowIndex;
+                return newRowIndex;
             }
         }
 
@@ -3552,7 +3574,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.noDimensionChangeCount > 0;
+                return noDimensionChangeCount > 0;
             }
         }
 
@@ -3560,12 +3582,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.noSelectionChangeCount;
+                return noSelectionChangeCount;
             }
             set
             {
                 Debug.Assert(value >= 0);
-                this.noSelectionChangeCount = value;
+                noSelectionChangeCount = value;
                 if (value == 0)
                 {
                     FlushSelectionChanged();
@@ -3578,16 +3600,16 @@ namespace System.Windows.Forms
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Padding Padding 
+        public new Padding Padding
         {
-            get 
-            { 
-                return base.Padding; 
+            get
+            {
+                return base.Padding;
             }
-            set 
-            { 
+            set
+            {
                 base.Padding = value;
-            }        
+            }
         }
 
         [
@@ -3605,11 +3627,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.placeholderCellStyle == null)
+                if (placeholderCellStyle == null)
                 {
-                    this.placeholderCellStyle = new DataGridViewCellStyle();
+                    placeholderCellStyle = new DataGridViewCellStyle();
                 }
-                return this.placeholderCellStyle;
+                return placeholderCellStyle;
             }
         }
 
@@ -3623,24 +3645,24 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly];
             }
             set
             {
-                if (value != this.dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly])
+                if (value != dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly])
                 {
                     if (value &&
-                        this.ptCurrentCell.X != -1 &&
-                        this.IsCurrentCellInEditMode)
+                        ptCurrentCell.X != -1 &&
+                        IsCurrentCellInEditMode)
                     {
                         // Current cell becomes read-only. Exit editing mode.
                         if (!EndEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit,
-                                     DataGridViewValidateCellInternal.Always /*validateCell*/, 
+                                     DataGridViewValidateCellInternal.Always /*validateCell*/,
                                      false /*fireCellLeave*/,
                                      false /*fireCellEnter*/,
                                      false /*fireRowLeave*/,
                                      false /*fireRowEnter*/,
-                                     false /*fireLeave*/, 
+                                     false /*fireLeave*/,
                                      true /*keepFocus*/,
                                      false /*resetCurrentCell*/,
                                      false /*resetAnchorCell*/))
@@ -3649,18 +3671,18 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly] = value;
 
                     if (value)
                     {
                         try
                         {
-                            this.dataGridViewOper[DATAGRIDVIEWOPER_inReadOnlyChange] = true;
-                            for (int columnIndex = 0; columnIndex < this.Columns.Count; columnIndex++)
+                            dataGridViewOper[DATAGRIDVIEWOPER_inReadOnlyChange] = true;
+                            for (int columnIndex = 0; columnIndex < Columns.Count; columnIndex++)
                             {
                                 SetReadOnlyColumnCore(columnIndex, false);
                             }
-                            int rowCount = this.Rows.Count;
+                            int rowCount = Rows.Count;
                             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                             {
                                 SetReadOnlyRowCore(rowIndex, false);
@@ -3668,21 +3690,21 @@ namespace System.Windows.Forms
                         }
                         finally
                         {
-                            this.dataGridViewOper[DATAGRIDVIEWOPER_inReadOnlyChange] = false;
+                            dataGridViewOper[DATAGRIDVIEWOPER_inReadOnlyChange] = false;
                         }
                     }
 #if DEBUG
                     else
                     {
-                        Debug.Assert(this.individualReadOnlyCells.Count == 0);
-                        for (int columnIndex = 0; columnIndex < this.Columns.Count; columnIndex++)
+                        Debug.Assert(individualReadOnlyCells.Count == 0);
+                        for (int columnIndex = 0; columnIndex < Columns.Count; columnIndex++)
                         {
-                            Debug.Assert(this.Columns[columnIndex].ReadOnly == false);
+                            Debug.Assert(Columns[columnIndex].ReadOnly == false);
                         }
-                        int rowCount = this.Rows.Count;
+                        int rowCount = Rows.Count;
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
-                            Debug.Assert((this.Rows.GetRowState(rowIndex) & DataGridViewElementStates.ReadOnly) == 0);
+                            Debug.Assert((Rows.GetRowState(rowIndex) & DataGridViewElementStates.ReadOnly) == 0);
                         }
                     }
 #endif
@@ -3692,18 +3714,18 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewOnReadOnlyChangedDescr))
         ]
         public event EventHandler ReadOnlyChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
         }
 
         private void ResetCurrentCell()
         {
-            if (this.ptCurrentCell.X != -1 &&
+            if (ptCurrentCell.X != -1 &&
                 !SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
             {
                 // Edited value couldn't be committed or aborted
@@ -3715,7 +3737,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_resizingOperationAboutToStart];
+                return dataGridViewOper[DATAGRIDVIEWOPER_resizingOperationAboutToStart];
             }
         }
 
@@ -3723,13 +3745,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftValid])
+                if (dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftValid])
                 {
-                    return this.dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftMode];
+                    return dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftMode];
                 }
-                this.dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftMode] = (this.RightToLeft == RightToLeft.Yes);
-                this.dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftValid] = true;
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftMode];
+                dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftMode] = (RightToLeft == RightToLeft.Yes);
+                dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftValid] = true;
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftMode];
             }
         }
 
@@ -3743,11 +3765,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Rows.Count;
+                return Rows.Count;
             }
             set
             {
-                if (this.AllowUserToAddRowsInternal)
+                if (AllowUserToAddRowsInternal)
                 {
                     if (value < 1)
                     {
@@ -3761,25 +3783,25 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
                     }
                 }
-                if (this.DataSource != null)
+                if (DataSource != null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSetRowCountOnDataBoundDataGridView));
                 }
-                if (value != this.Rows.Count)
+                if (value != Rows.Count)
                 {
                     if (value == 0)
                     {
                         // Total removal of the rows.
-                        this.Rows.Clear();
+                        Rows.Clear();
                     }
-                    else if (value < this.Rows.Count)
+                    else if (value < Rows.Count)
                     {
                         // Some rows need to be removed, from the tail of the rows collection
-                        while (value < this.Rows.Count)
+                        while (value < Rows.Count)
                         {
-                            int currentRowCount = this.Rows.Count;
-                            this.Rows.RemoveAt(currentRowCount - (this.AllowUserToAddRowsInternal ? 2 :  1));
-                            if (this.Rows.Count >= currentRowCount)
+                            int currentRowCount = Rows.Count;
+                            Rows.RemoveAt(currentRowCount - (AllowUserToAddRowsInternal ? 2 : 1));
+                            if (Rows.Count >= currentRowCount)
                             {
                                 // Row removal failed. We stop the loop.
                                 break;
@@ -3789,16 +3811,16 @@ namespace System.Windows.Forms
                     else
                     {
                         // Some rows need to be appened.
-                        if (this.Columns.Count == 0)
+                        if (Columns.Count == 0)
                         {
                             // There are no columns yet, we simply create a single DataGridViewTextBoxColumn.
                             DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-                            this.Columns.Add(dataGridViewTextBoxColumn);
+                            Columns.Add(dataGridViewTextBoxColumn);
                         }
-                        int rowsToAdd = value - this.Rows.Count;
+                        int rowsToAdd = value - Rows.Count;
                         if (rowsToAdd > 0)
                         {
-                            this.Rows.Add(rowsToAdd);
+                            Rows.Add(rowsToAdd);
                         }
                     }
                 }
@@ -3815,7 +3837,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                switch (this.advancedRowHeadersBorderStyle.All)
+                switch (advancedRowHeadersBorderStyle.All)
                 {
                     case DataGridViewAdvancedCellBorderStyle.NotSet:
                         return DataGridViewHeaderBorderStyle.Custom;
@@ -3841,40 +3863,40 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewHeaderBorderStyle.Custom, (int)DataGridViewHeaderBorderStyle.None))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewHeaderBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewHeaderBorderStyle));
                 }
 
-                if (value != this.RowHeadersBorderStyle)
+                if (value != RowHeadersBorderStyle)
                 {
                     if (value == DataGridViewHeaderBorderStyle.Custom)
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_CustomCellBorderStyleInvalid, "RowHeadersBorderStyle"));
                     }
-                    this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
+                    dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
                     try
                     {
                         switch (value)
                         {
                             case DataGridViewHeaderBorderStyle.Single:
-                                this.advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
+                                advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
                                 break;
 
                             case DataGridViewHeaderBorderStyle.Raised:
-                                this.advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.OutsetPartial;
+                                advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.OutsetPartial;
                                 break;
 
                             case DataGridViewHeaderBorderStyle.Sunken:
-                                this.advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.InsetDouble;
+                                advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                                 break;
 
                             case DataGridViewHeaderBorderStyle.None:
-                                this.advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                                advancedRowHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
                                 break;
                         }
                     }
                     finally
                     {
-                        this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = false;
+                        dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = false;
                     }
                     OnRowHeadersBorderStyleChanged(EventArgs.Empty);
                 }
@@ -3882,13 +3904,13 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowHeadersBorderStyleChangedDescr))
         ]
         public event EventHandler RowHeadersBorderStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
         }
 
         [
@@ -3898,42 +3920,42 @@ namespace System.Windows.Forms
         ]
         public DataGridViewCellStyle RowHeadersDefaultCellStyle
         {
-            get 
+            get
             {
-                if (this.rowHeadersDefaultCellStyle == null)
+                if (rowHeadersDefaultCellStyle == null)
                 {
-                    this.rowHeadersDefaultCellStyle = this.DefaultRowHeadersDefaultCellStyle;
+                    rowHeadersDefaultCellStyle = DefaultRowHeadersDefaultCellStyle;
                 }
-                return this.rowHeadersDefaultCellStyle;
+                return rowHeadersDefaultCellStyle;
             }
-            set 
+            set
             {
-                DataGridViewCellStyle cs = this.RowHeadersDefaultCellStyle;
+                DataGridViewCellStyle cs = RowHeadersDefaultCellStyle;
                 cs.RemoveScope(DataGridViewCellStyleScopes.RowHeaders);
-                this.rowHeadersDefaultCellStyle = value;
+                rowHeadersDefaultCellStyle = value;
                 if (value != null)
                 {
-                    this.rowHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
+                    rowHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
                 }
-                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(this.RowHeadersDefaultCellStyle);
+                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(RowHeadersDefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
-                    this.CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
-                    OnRowHeadersDefaultCellStyleChanged(this.CellStyleChangedEventArgs);
+                    CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
+                    OnRowHeadersDefaultCellStyleChanged(CellStyleChangedEventArgs);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewRowHeadersDefaultCellStyleChangedDescr))
         ]
         public event EventHandler RowHeadersDefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
-        
+
         /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dataGridView's row headers are
@@ -3947,25 +3969,25 @@ namespace System.Windows.Forms
         ]
         public bool RowHeadersVisible
         {
-            get 
+            get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_rowHeadersVisible];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_rowHeadersVisible];
             }
-            set 
+            set
             {
-                if (this.RowHeadersVisible != value)
+                if (RowHeadersVisible != value)
                 {
                     if (!value &&
-                        (this.autoSizeRowsMode == DataGridViewAutoSizeRowsMode.AllHeaders || this.autoSizeRowsMode == DataGridViewAutoSizeRowsMode.DisplayedHeaders))
+                        (autoSizeRowsMode == DataGridViewAutoSizeRowsMode.AllHeaders || autoSizeRowsMode == DataGridViewAutoSizeRowsMode.DisplayedHeaders))
                     {
                         throw new InvalidOperationException(string.Format(SR.DataGridView_RowHeadersCannotBeInvisible));
                     }
-                    using (LayoutTransaction.CreateTransactionIf(this.AutoSize, this.ParentInternal, this, PropertyNames.RowHeadersVisible))
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.RowHeadersVisible))
                     {
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_rowHeadersVisible] = value;
-                        this.layout.RowHeadersVisible = value;
-                        this.displayedBandsInfo.EnsureDirtyState();
-                        if (!this.AutoSize)
+                        dataGridViewState1[DATAGRIDVIEWSTATE1_rowHeadersVisible] = value;
+                        layout.RowHeadersVisible = value;
+                        displayedBandsInfo.EnsureDirtyState();
+                        if (!AutoSize)
                         {
                             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                         }
@@ -3978,16 +4000,16 @@ namespace System.Windows.Forms
 
         [
             SRCategory(nameof(SR.CatLayout)),
-            Localizable(true), 
+            Localizable(true),
             SRDescription(nameof(SR.DataGridView_RowHeadersWidthDescr))
         ]
         public int RowHeadersWidth
         {
-            get 
+            get
             {
-                return this.rowHeadersWidth;
+                return rowHeadersWidth;
             }
-            set 
+            set
             {
                 if (value < minimumRowHeadersWidth)
                 {
@@ -3998,14 +4020,14 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(RowHeadersWidth), value, maxHeadersThickness));
                 }
 
-                if (this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
-                    this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing)
+                if (RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
+                    RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing)
                 {
-                    this.cachedRowHeadersWidth = value;
+                    cachedRowHeadersWidth = value;
                 }
-                else if (this.rowHeadersWidth != value)
+                else if (rowHeadersWidth != value)
                 {
-                    this.RowHeadersWidthInternal = value;
+                    RowHeadersWidthInternal = value;
                 }
             }
         }
@@ -4014,18 +4036,18 @@ namespace System.Windows.Forms
         {
             set
             {
-                using (LayoutTransaction.CreateTransactionIf(this.AutoSize, this.ParentInternal, this, PropertyNames.RowHeadersWidth))
+                using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.RowHeadersWidth))
                 {
-                    Debug.Assert(this.rowHeadersWidth != value);
+                    Debug.Assert(rowHeadersWidth != value);
                     Debug.Assert(value >= minimumRowHeadersWidth);
-                    this.rowHeadersWidth = value;
-                    if (this.AutoSize)
+                    rowHeadersWidth = value;
+                    if (AutoSize)
                     {
                         InvalidateInside();
                     }
                     else
                     {
-                        if (this.layout.RowHeadersVisible)
+                        if (layout.RowHeadersVisible)
                         {
                             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                             InvalidateInside();
@@ -4037,19 +4059,19 @@ namespace System.Windows.Forms
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewRowHeadersWidthChangedDescr))
         ]
         public event EventHandler RowHeadersWidthChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
         }
 
         private bool ShouldSerializeRowHeadersWidth()
         {
-            return (this.rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || this.rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing) && 
-                   defaultRowHeadersWidth != this.RowHeadersWidth;
+            return (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing) &&
+                   defaultRowHeadersWidth != RowHeadersWidth;
         }
 
         /// <summary>
@@ -4067,16 +4089,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.rowHeadersWidthSizeMode;
+                return rowHeadersWidthSizeMode;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewRowHeadersWidthSizeMode.EnableResizing, (int)DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewRowHeadersWidthSizeMode)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewRowHeadersWidthSizeMode));
                 }
-                if (this.rowHeadersWidthSizeMode != value)
+                if (rowHeadersWidthSizeMode != value)
                 {
                     /*if (value != DataGridViewRowHeadersWidthSizeMode.EnableResizing && 
                      *    value != DataGridViewRowHeadersWidthSizeMode.DisableResizing &&
@@ -4084,22 +4106,22 @@ namespace System.Windows.Forms
                     {
                         We intentionally don't throw an error because of designer code spit order.
                     }*/
-                    DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(this.rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
-                                                                                                      this.rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing);
-                    this.rowHeadersWidthSizeMode = value;
+                    DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
+                                                                                                      rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing);
+                    rowHeadersWidthSizeMode = value;
                     OnRowHeadersWidthSizeModeChanged(dgvasme);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowHeadersWidthSizeModeChangedDescr))
         ]
         public event DataGridViewAutoSizeModeEventHandler RowHeadersWidthSizeModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
         }
 
         [
@@ -4109,11 +4131,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dataGridViewRows == null)
+                if (dataGridViewRows == null)
                 {
-                    this.dataGridViewRows = CreateRowsInstance();
+                    dataGridViewRows = CreateRowsInstance();
                 }
-                return this.dataGridViewRows;
+                return dataGridViewRows;
             }
         }
 
@@ -4125,39 +4147,39 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.rowsDefaultCellStyle == null)
+                if (rowsDefaultCellStyle == null)
                 {
-                    this.rowsDefaultCellStyle = new DataGridViewCellStyle();
-                    this.rowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.Rows);
+                    rowsDefaultCellStyle = new DataGridViewCellStyle();
+                    rowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.Rows);
                 }
-                return this.rowsDefaultCellStyle;
+                return rowsDefaultCellStyle;
             }
             set
             {
-                DataGridViewCellStyle cs = this.RowsDefaultCellStyle;
+                DataGridViewCellStyle cs = RowsDefaultCellStyle;
                 cs.RemoveScope(DataGridViewCellStyleScopes.Rows);
-                this.rowsDefaultCellStyle = value;
+                rowsDefaultCellStyle = value;
                 if (value != null)
                 {
-                    this.rowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.Rows);
+                    rowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.Rows);
                 }
-                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(this.RowsDefaultCellStyle);
+                DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(RowsDefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
-                    this.CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
-                    OnRowsDefaultCellStyleChanged(this.CellStyleChangedEventArgs);
+                    CellStyleChangedEventArgs.ChangeAffectsPreferredSize = (dgvcsc == DataGridViewCellStyleDifferences.AffectPreferredSize);
+                    OnRowsDefaultCellStyleChanged(CellStyleChangedEventArgs);
                 }
             }
         }
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewRowsDefaultCellStyleChangedDescr))
         ]
         public event EventHandler RowsDefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
         }
 
         [
@@ -4170,11 +4192,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.rowTemplate == null)
+                if (rowTemplate == null)
                 {
-                    this.rowTemplate = new DataGridViewRow();
+                    rowTemplate = new DataGridViewRow();
                 }
-                return this.rowTemplate;
+                return rowTemplate;
             }
             set
             {
@@ -4190,20 +4212,20 @@ namespace System.Windows.Forms
                     //    throw new InvalidOperationException(string.Format(SR.DataGridView_RowTemplateCannotBeSelected));
                     //}
                 }
-                this.rowTemplate = dataGridViewRow;
+                rowTemplate = dataGridViewRow;
             }
         }
 
         private bool ShouldSerializeRowTemplate()
         {
-            return this.rowTemplate != null;
+            return rowTemplate != null;
         }
 
         internal DataGridViewRow RowTemplateClone
         {
             get
             {
-                DataGridViewRow rowTemplateClone = (DataGridViewRow) this.RowTemplate.Clone();
+                DataGridViewRow rowTemplateClone = (DataGridViewRow)RowTemplate.Clone();
                 CompleteCellsCollection(rowTemplateClone);
                 return rowTemplateClone;
             }
@@ -4213,33 +4235,33 @@ namespace System.Windows.Forms
         ///     Possible return values are given by the ScrollBars enumeration.
         /// </summary>
         [
-            DefaultValue(ScrollBars.Both), 
-            Localizable(true), 
-            SRCategory(nameof(SR.CatLayout)), 
+            DefaultValue(ScrollBars.Both),
+            Localizable(true),
+            SRCategory(nameof(SR.CatLayout)),
             SRDescription(nameof(SR.DataGridView_ScrollBarsDescr))
         ]
         public ScrollBars ScrollBars
         {
             get
             {
-                return this.scrollBars;
+                return scrollBars;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars));
                 }
 
-                if (this.scrollBars != value)
+                if (scrollBars != value)
                 {
-                    using (LayoutTransaction.CreateTransactionIf(this.AutoSize, this.ParentInternal, this, PropertyNames.ScrollBars))
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars))
                     {
                         // Before changing the value of this.scrollBars, we scroll to the top-left cell to
                         // avoid inconsitent state of scrollbars.
-                        DataGridViewColumn dataGridViewColumn = this.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
-                        int firstVisibleRowIndex = this.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                        int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
 
                         if (dataGridViewColumn != null && firstVisibleRowIndex != -1)
                         {
@@ -4248,12 +4270,12 @@ namespace System.Windows.Forms
                                 throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                             }
                         }
-                        Debug.Assert(this.HorizontalOffset == 0);
-                        Debug.Assert(this.VerticalOffset == 0);
+                        Debug.Assert(HorizontalOffset == 0);
+                        Debug.Assert(VerticalOffset == 0);
 
-                        this.scrollBars = value;
+                        scrollBars = value;
 
-                        if (!this.AutoSize)
+                        if (!AutoSize)
                         {
                             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                         }
@@ -4275,48 +4297,48 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewSelectedCellCollection stcc = new DataGridViewSelectedCellCollection();
-                switch (this.SelectionMode)
+                switch (SelectionMode)
                 {
                     case DataGridViewSelectionMode.CellSelect:
-                    {
-                        // Note: If we change the design and decide that SelectAll() should use band selection, 
-                        // we need to add those to the selected cells.
-                        stcc.AddCellLinkedList(this.individualSelectedCells);
-                        break;
-                    }
+                        {
+                            // Note: If we change the design and decide that SelectAll() should use band selection, 
+                            // we need to add those to the selected cells.
+                            stcc.AddCellLinkedList(individualSelectedCells);
+                            break;
+                        }
                     case DataGridViewSelectionMode.FullColumnSelect:
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
-                    {
-                        foreach (int columnIndex in this.selectedBandIndexes)
                         {
-                            foreach (DataGridViewRow dataGridViewRow in this.Rows)   // unshares all rows!
+                            foreach (int columnIndex in selectedBandIndexes)
                             {
-                                stcc.Add(dataGridViewRow.Cells[columnIndex]);
+                                foreach (DataGridViewRow dataGridViewRow in Rows)   // unshares all rows!
+                                {
+                                    stcc.Add(dataGridViewRow.Cells[columnIndex]);
+                                }
                             }
+                            if (SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
+                            {
+                                stcc.AddCellLinkedList(individualSelectedCells);
+                            }
+                            break;
                         }
-                        if (this.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
-                        {
-                            stcc.AddCellLinkedList(this.individualSelectedCells);
-                        }
-                        break;
-                    }
                     case DataGridViewSelectionMode.FullRowSelect:
                     case DataGridViewSelectionMode.RowHeaderSelect:
-                    {
-                        foreach (int rowIndex in this.selectedBandIndexes)
                         {
-                            DataGridViewRow dataGridViewRow = (DataGridViewRow) this.Rows[rowIndex]; // unshares the selected row
-                            foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
+                            foreach (int rowIndex in selectedBandIndexes)
                             {
-                                stcc.Add(dataGridViewCell);
+                                DataGridViewRow dataGridViewRow = (DataGridViewRow)Rows[rowIndex]; // unshares the selected row
+                                foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
+                                {
+                                    stcc.Add(dataGridViewCell);
+                                }
                             }
+                            if (SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
+                            {
+                                stcc.AddCellLinkedList(individualSelectedCells);
+                            }
+                            break;
                         }
-                        if (this.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
-                        {
-                            stcc.AddCellLinkedList(this.individualSelectedCells);
-                        }
-                        break;
-                    }
                 }
                 return stcc;
             }
@@ -4333,7 +4355,7 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewSelectedColumnCollection strc = new DataGridViewSelectedColumnCollection();
-                switch (this.SelectionMode)
+                switch (SelectionMode)
                 {
                     case DataGridViewSelectionMode.CellSelect:
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -4341,16 +4363,16 @@ namespace System.Windows.Forms
                         break;
                     case DataGridViewSelectionMode.FullColumnSelect:
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
-                        foreach (int columnIndex in this.selectedBandIndexes)
+                        foreach (int columnIndex in selectedBandIndexes)
                         {
-                            strc.Add(this.Columns[columnIndex]);
+                            strc.Add(Columns[columnIndex]);
                         }
                         break;
                 }
                 return strc;
             }
         }
-        
+
         [
             Browsable(false),
         ]
@@ -4363,7 +4385,7 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewSelectedRowCollection strc = new DataGridViewSelectedRowCollection();
-                switch (this.SelectionMode)
+                switch (SelectionMode)
                 {
                     case DataGridViewSelectionMode.CellSelect:
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -4371,9 +4393,9 @@ namespace System.Windows.Forms
                         break;
                     case DataGridViewSelectionMode.FullRowSelect:
                     case DataGridViewSelectionMode.RowHeaderSelect:
-                        foreach (int rowIndex in this.selectedBandIndexes)
+                        foreach (int rowIndex in selectedBandIndexes)
                         {
-                            strc.Add((DataGridViewRow) this.Rows[rowIndex]); // unshares the selected row
+                            strc.Add((DataGridViewRow)Rows[rowIndex]); // unshares the selected row
                         }
                         break;
                 }
@@ -4391,22 +4413,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.selectionMode;
+                return selectionMode;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewSelectionMode.CellSelect, (int)DataGridViewSelectionMode.ColumnHeaderSelect))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewSelectionMode)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewSelectionMode));
                 }
 
-                if (this.SelectionMode != value)
+                if (SelectionMode != value)
                 {
-                    if (!this.dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] &&
+                    if (!dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] &&
                         (value == DataGridViewSelectionMode.FullColumnSelect || value == DataGridViewSelectionMode.ColumnHeaderSelect))
                     {
-                        foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+                        foreach (DataGridViewColumn dataGridViewColumn in Columns)
                         {
                             if (dataGridViewColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                             {
@@ -4415,7 +4437,7 @@ namespace System.Windows.Forms
                         }
                     }
                     ClearSelection();
-                    this.selectionMode = value;
+                    selectionMode = value;
                 }
             }
         }
@@ -4429,46 +4451,46 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrors];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrors];
             }
             set
             {
-                if (this.ShowCellErrors != value)
+                if (ShowCellErrors != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrors] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrors] = value;
 
                     // Put this into OnShowCellErrorsChanged if created.
-                    if (this.IsHandleCreated && !this.DesignMode)
+                    if (IsHandleCreated && !DesignMode)
                     {
-                        if (value && !this.ShowRowErrors && !this.ShowCellToolTips)
+                        if (value && !ShowRowErrors && !ShowCellToolTips)
                         {
                             // the tool tip hasn't yet been activated
                             // activate it now
-                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
+                            toolTipControl.Activate(!string.IsNullOrEmpty(toolTipCaption));
                         }
 
-                        if (!value && !this.ShowRowErrors && !this.ShowCellToolTips)
+                        if (!value && !ShowRowErrors && !ShowCellToolTips)
                         {
                             // there is no reason to keep the tool tip activated
                             // deactivate it
-                            this.toolTipCaption = string.Empty;
-                            this.toolTipControl.Activate(false /*activate*/);
+                            toolTipCaption = string.Empty;
+                            toolTipControl.Activate(false /*activate*/);
                         }
 
-                        if (!value && (this.ShowRowErrors || this.ShowCellToolTips))
+                        if (!value && (ShowRowErrors || ShowCellToolTips))
                         {
                             // reset the tool tip
-                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
+                            toolTipControl.Activate(!string.IsNullOrEmpty(toolTipCaption));
                         }
 
                         // Some autosizing may have to be applied since the potential presence of error icons influences the preferred sizes.
                         OnGlobalAutoSize();
                     }
 
-                    if (!this.layout.dirty && !this.DesignMode)
+                    if (!layout.dirty && !DesignMode)
                     {
-                        this.Invalidate(Rectangle.Union(this.layout.Data, this.layout.ColumnHeaders));
-                        this.Invalidate(this.layout.TopLeftHeader);
+                        Invalidate(Rectangle.Union(layout.Data, layout.ColumnHeaders));
+                        Invalidate(layout.TopLeftHeader);
                     }
                 }
             }
@@ -4483,45 +4505,45 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellToolTips];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_showCellToolTips];
             }
             set
             {
-                if (this.ShowCellToolTips != value)
+                if (ShowCellToolTips != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellToolTips] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_showCellToolTips] = value;
 
-                    if (this.IsHandleCreated && !this.DesignMode)
+                    if (IsHandleCreated && !DesignMode)
                     {
-                        if (value && !this.ShowRowErrors && !this.ShowCellErrors)
+                        if (value && !ShowRowErrors && !ShowCellErrors)
                         {
                             // the tool tip hasn't yet been activated
                             // activate it now
-                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption) /*activate*/);
+                            toolTipControl.Activate(!string.IsNullOrEmpty(toolTipCaption) /*activate*/);
                         }
 
-                        if (!value && !this.ShowRowErrors && !this.ShowCellErrors)
+                        if (!value && !ShowRowErrors && !ShowCellErrors)
                         {
                             // there is no reason to keep the tool tip activated
                             // deactivate it
-                            this.toolTipCaption = string.Empty;
-                            this.toolTipControl.Activate(false /*activate*/);
+                            toolTipCaption = string.Empty;
+                            toolTipControl.Activate(false /*activate*/);
                         }
 
-                        if (!value && (this.ShowRowErrors || this.ShowCellErrors))
+                        if (!value && (ShowRowErrors || ShowCellErrors))
                         {
-                            bool activate = !string.IsNullOrEmpty(this.toolTipCaption);
+                            bool activate = !string.IsNullOrEmpty(toolTipCaption);
                             Point mouseCoord = System.Windows.Forms.Control.MousePosition;
-                            activate &= this.ClientRectangle.Contains(PointToClient(mouseCoord));
+                            activate &= ClientRectangle.Contains(PointToClient(mouseCoord));
 
                             // reset the tool tip
-                            this.toolTipControl.Activate(activate);
+                            toolTipControl.Activate(activate);
                         }
                     }
 
-                    if (!this.layout.dirty && !this.DesignMode)
+                    if (!layout.dirty && !DesignMode)
                     {
-                        Invalidate(this.layout.Data);
+                        Invalidate(layout.Data);
                     }
                 }
             }
@@ -4536,30 +4558,31 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon];
             }
             set
             {
-                if (this.ShowEditingIcon != value)
+                if (ShowEditingIcon != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon] = value;
 
                     // invalidate the row header to pick up the new ShowEditingIcon value 
-                    if (this.RowHeadersVisible)
+                    if (RowHeadersVisible)
                     {
-                        if (this.VirtualMode || this.DataSource != null)
+                        if (VirtualMode || DataSource != null)
                         {
-                            if (this.IsCurrentRowDirty)
+                            if (IsCurrentRowDirty)
                             {
-                                Debug.Assert(this.ptCurrentCell.Y >= 0);
-                                InvalidateCellPrivate(-1, this.ptCurrentCell.Y);
+                                Debug.Assert(ptCurrentCell.Y >= 0);
+                                InvalidateCellPrivate(-1, ptCurrentCell.Y);
                             }
                         }
                         else
                         {
-                            if (this.IsCurrentCellDirty) {
-                                Debug.Assert(this.ptCurrentCell.Y >= 0);
-                                InvalidateCellPrivate(-1, this.ptCurrentCell.Y);
+                            if (IsCurrentCellDirty)
+                            {
+                                Debug.Assert(ptCurrentCell.Y >= 0);
+                                InvalidateCellPrivate(-1, ptCurrentCell.Y);
                             }
                         }
                     }
@@ -4576,41 +4599,41 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showRowErrors];
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_showRowErrors];
             }
-            set 
+            set
             {
-                if (this.ShowRowErrors != value)
+                if (ShowRowErrors != value)
                 {
-                    this.dataGridViewState2[DATAGRIDVIEWSTATE2_showRowErrors] = value;
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_showRowErrors] = value;
 
-                    if (this.IsHandleCreated && !this.DesignMode)
+                    if (IsHandleCreated && !DesignMode)
                     {
-                        if (value && !this.ShowCellErrors && !this.ShowCellToolTips)
+                        if (value && !ShowCellErrors && !ShowCellToolTips)
                         {
                             // the tool tip hasn't yet been activated
                             // activate it now
-                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
+                            toolTipControl.Activate(!string.IsNullOrEmpty(toolTipCaption));
                         }
 
-                        if (!value && !this.ShowCellErrors && !this.ShowCellToolTips)
+                        if (!value && !ShowCellErrors && !ShowCellToolTips)
                         {
                             // there is no reason to keep the tool tip activated
                             // deactivate it
-                            this.toolTipCaption = string.Empty;
-                            this.toolTipControl.Activate(false /*activate*/);
+                            toolTipCaption = string.Empty;
+                            toolTipControl.Activate(false /*activate*/);
                         }
 
-                        if (!value && (this.ShowCellErrors || this.ShowCellToolTips))
+                        if (!value && (ShowCellErrors || ShowCellToolTips))
                         {
                             // reset the tool tip
-                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
+                            toolTipControl.Activate(!string.IsNullOrEmpty(toolTipCaption));
                         }
                     }
 
-                    if (!this.layout.dirty && !this.DesignMode)
+                    if (!layout.dirty && !DesignMode)
                     {
-                        Invalidate(this.layout.RowHeaders);
+                        Invalidate(layout.RowHeaders);
                     }
                 }
             }
@@ -4620,9 +4643,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                return !this.layout.ColumnHeadersVisible && 
-                    (this.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
-                     this.CellBorderStyle == DataGridViewCellBorderStyle.SingleHorizontal);
+                return !layout.ColumnHeadersVisible &&
+                    (AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
+                     CellBorderStyle == DataGridViewCellBorderStyle.SingleHorizontal);
             }
         }
 
@@ -4630,9 +4653,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                return !this.layout.RowHeadersVisible && 
-                    (this.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
-                     this.CellBorderStyle == DataGridViewCellBorderStyle.SingleVertical);
+                return !layout.RowHeadersVisible &&
+                    (AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
+                     CellBorderStyle == DataGridViewCellBorderStyle.SingleVertical);
             }
         }
 
@@ -4643,7 +4666,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.sortedColumn;
+                return sortedColumn;
             }
         }
 
@@ -4654,7 +4677,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.sortOrder;
+                return sortOrder;
             }
         }
 
@@ -4663,8 +4686,8 @@ namespace System.Windows.Forms
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
-            DefaultValue(false), 
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.DataGridView_StandardTabDescr))
         ]
@@ -4672,13 +4695,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab];
             }
             set
             {
-                if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] != value)
+                if (dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] != value)
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] = value;
                     //OnStandardTabChanged(EventArgs.Empty);
                 }
             }
@@ -4687,7 +4710,7 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             Bindable(false)
         ]
@@ -4722,12 +4745,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGridViewRow row = this.Rows[rowIndex];
+                DataGridViewRow row = Rows[rowIndex];
                 return row.Cells[columnIndex];
             }
             set
             {
-                DataGridViewRow row = this.Rows[rowIndex];
+                DataGridViewRow row = Rows[rowIndex];
                 row.Cells[columnIndex] = value;
             }
         }
@@ -4741,12 +4764,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGridViewRow row = this.Rows[rowIndex];
+                DataGridViewRow row = Rows[rowIndex];
                 return row.Cells[columnName];
             }
             set
             {
-                DataGridViewRow row = this.Rows[rowIndex];
+                DataGridViewRow row = Rows[rowIndex];
                 row.Cells[columnName] = value;
             }
         }
@@ -4755,7 +4778,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.toolTipCaption;
+                return toolTipCaption;
             }
         }
 
@@ -4767,33 +4790,33 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.topLeftHeaderCell == null)
+                if (topLeftHeaderCell == null)
                 {
-                    this.TopLeftHeaderCell = new DataGridViewTopLeftHeaderCell();
+                    TopLeftHeaderCell = new DataGridViewTopLeftHeaderCell();
                 }
-                return this.topLeftHeaderCell;
+                return topLeftHeaderCell;
             }
             set
             {
-                if (this.topLeftHeaderCell != value)
+                if (topLeftHeaderCell != value)
                 {
-                    if (this.topLeftHeaderCell != null)
+                    if (topLeftHeaderCell != null)
                     {
                         // Detach existing header cell
-                        this.topLeftHeaderCell.DataGridViewInternal = null;
+                        topLeftHeaderCell.DataGridViewInternal = null;
                     }
-                    this.topLeftHeaderCell = value;
+                    topLeftHeaderCell = value;
                     if (value != null)
                     {
-                        this.topLeftHeaderCell.DataGridViewInternal = this;
+                        topLeftHeaderCell.DataGridViewInternal = this;
                     }
-                    if (this.ColumnHeadersVisible && this.RowHeadersVisible)
+                    if (ColumnHeadersVisible && RowHeadersVisible)
                     {
                         // If headers (rows or columns) are autosized, then this.RowHeadersWidth or this.ColumnHeadersHeight
                         // must be updated based on new cell preferred size
                         OnColumnHeadersGlobalAutoSize();
                         // In all cases, the top left cell needs to repaint
-                        Invalidate(new Rectangle(this.layout.Inside.X, this.layout.Inside.Y, this.RowHeadersWidth, this.ColumnHeadersHeight));
+                        Invalidate(new Rectangle(layout.Inside.X, layout.Inside.Y, RowHeadersWidth, ColumnHeadersHeight));
                     }
                 }
             }
@@ -4807,13 +4830,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_customCursorSet])
+                if (dataGridViewState1[DATAGRIDVIEWSTATE1_customCursorSet])
                 {
-                    return this.oldCursor;
+                    return oldCursor;
                 }
                 else
                 {
-                    return this.Cursor;
+                    return Cursor;
                 }
             }
         }
@@ -4822,29 +4845,29 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.verticalOffset;
+                return verticalOffset;
             }
-            set 
+            set
             {
                 if (value < 0)
                 {
                     value = 0;
                 }
-                int totalVisibleFrozenHeight = this.Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 int fittingTrailingScrollingRowsHeight = ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight);
-                if (value > this.vertScrollBar.Maximum - fittingTrailingScrollingRowsHeight)
+                if (value > vertScrollBar.Maximum - fittingTrailingScrollingRowsHeight)
                 {
-                    value = this.vertScrollBar.Maximum - fittingTrailingScrollingRowsHeight;
+                    value = vertScrollBar.Maximum - fittingTrailingScrollingRowsHeight;
                 }
-                if (value == this.verticalOffset)
+                if (value == verticalOffset)
                 {
                     return;
                 }
 
-                int change = value - this.verticalOffset;
-                if (this.vertScrollBar.Enabled)
+                int change = value - verticalOffset;
+                if (vertScrollBar.Enabled)
                 {
-                    this.vertScrollBar.Value = value;
+                    vertScrollBar.Value = value;
                 }
                 ScrollRowsByHeight(change); // calculate how many rows need to be scrolled based on 'change'
             }
@@ -4854,7 +4877,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.vertScrollBar;
+                return vertScrollBar;
             }
         }
 
@@ -4866,7 +4889,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.verticalOffset;
+                return verticalOffset;
             }
         }
 
@@ -4874,12 +4897,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.vertScrollTimer == null)
+                if (vertScrollTimer == null)
                 {
-                    this.vertScrollTimer = new System.Windows.Forms.Timer();
-                    this.vertScrollTimer.Tick += new System.EventHandler(VertScrollTimer_Tick);
+                    vertScrollTimer = new System.Windows.Forms.Timer();
+                    vertScrollTimer.Tick += new System.EventHandler(VertScrollTimer_Tick);
                 }
-                return this.vertScrollTimer;
+                return vertScrollTimer;
             }
         }
 
@@ -4897,13 +4920,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode];
+                return dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode];
             }
             set
             {
-                if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode] != value)
+                if (dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode] != value)
                 {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode] = value;
+                    dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode] = value;
                     InvalidateRowHeights();
                     //OnVirtualModeChanged(EventArgs.Empty);
                 }
@@ -4914,24 +4937,24 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (null == this.Columns.GetFirstColumn(DataGridViewElementStates.Visible))
+                if (null == Columns.GetFirstColumn(DataGridViewElementStates.Visible))
                 {
                     return false;
                 }
-                return -1 != this.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                return -1 != Rows.GetFirstRow(DataGridViewElementStates.Visible);
             }
         }
 
         // Events start here
 
         [
-            SRCategory(nameof(SR.CatPropertyChanged)), 
+            SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridViewAutoSizeColumnModeChangedDescr))
         ]
         public event DataGridViewAutoSizeColumnModeEventHandler AutoSizeColumnModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
         }
 
         [
@@ -4940,18 +4963,18 @@ namespace System.Windows.Forms
         ]
         public event QuestionEventHandler CancelRowEdit
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
         }
 
         [
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_CellBeginEditDescr))
         ]
-        public event DataGridViewCellCancelEventHandler CellBeginEdit 
+        public event DataGridViewCellCancelEventHandler CellBeginEdit
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
         }
 
         [
@@ -4960,8 +4983,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
         }
 
         [
@@ -4970,8 +4993,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellContentClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
         }
 
         [
@@ -4980,8 +5003,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellContentDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
         }
 
         [
@@ -4991,8 +5014,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellContextMenuStripChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
         }
 
         [
@@ -5002,8 +5025,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellContextMenuStripNeededEventHandler CellContextMenuStripNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
         }
 
         [
@@ -5012,18 +5035,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
         }
 
         [
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_CellEndEditDescr))
         ]
-        public event DataGridViewCellEventHandler CellEndEdit 
+        public event DataGridViewCellEventHandler CellEndEdit
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
         }
 
         [
@@ -5032,8 +5055,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellEnter
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
         }
 
         [
@@ -5042,8 +5065,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellErrorTextChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
         }
 
         [
@@ -5053,18 +5076,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellErrorTextNeededEventHandler CellErrorTextNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
         }
 
         [
             SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_CellFormattingDescr))
         ]
-        public event DataGridViewCellFormattingEventHandler CellFormatting 
+        public event DataGridViewCellFormattingEventHandler CellFormatting
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
         }
 
         [
@@ -5073,8 +5096,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellLeave
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
         }
 
         [
@@ -5083,8 +5106,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellMouseEventHandler CellMouseClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
         }
 
         [
@@ -5093,8 +5116,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellMouseEventHandler CellMouseDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
         }
 
         [
@@ -5103,8 +5126,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellMouseEventHandler CellMouseDown
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
         }
 
         [
@@ -5113,8 +5136,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellMouseEnter
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
         }
 
         [
@@ -5123,8 +5146,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellMouseLeave
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
         }
 
         [
@@ -5133,28 +5156,28 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellMouseEventHandler CellMouseMove
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
         }
 
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseUpDescr))
         ]
-        public event DataGridViewCellMouseEventHandler CellMouseUp 
+        public event DataGridViewCellMouseEventHandler CellMouseUp
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
         }
 
         [
             SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_CellPaintingDescr))
         ]
-        public event DataGridViewCellPaintingEventHandler CellPainting 
+        public event DataGridViewCellPaintingEventHandler CellPainting
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
         }
 
         [
@@ -5163,28 +5186,28 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellParsingEventHandler CellParsing
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
         }
 
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_CellStateChangedDescr))
         ]
-        public event DataGridViewCellStateChangedEventHandler CellStateChanged 
+        public event DataGridViewCellStateChangedEventHandler CellStateChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_CellStyleChangedDescr))
         ]
-        public event DataGridViewCellEventHandler CellStyleChanged 
+        public event DataGridViewCellEventHandler CellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
         }
 
         [
@@ -5193,8 +5216,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellStyleContentChangedEventHandler CellStyleContentChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
         }
 
         [
@@ -5203,8 +5226,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellToolTipTextChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
         }
 
         [
@@ -5214,8 +5237,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellToolTipTextNeededEventHandler CellToolTipTextNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
         }
 
         [
@@ -5224,8 +5247,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler CellValidated
         {
-         add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
         }
 
         [
@@ -5234,18 +5257,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellValidatingEventHandler CellValidating
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
         }
 
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_CellValueChangedDescr))
         ]
-        public event DataGridViewCellEventHandler CellValueChanged 
+        public event DataGridViewCellEventHandler CellValueChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
         }
 
         [
@@ -5253,10 +5276,10 @@ namespace System.Windows.Forms
             EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.DataGridView_CellValueNeededDescr))
         ]
-        public event DataGridViewCellValueEventHandler CellValueNeeded 
+        public event DataGridViewCellValueEventHandler CellValueNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
         }
 
         [
@@ -5264,10 +5287,10 @@ namespace System.Windows.Forms
             EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.DataGridView_CellValuePushedDescr))
         ]
-        public event DataGridViewCellValueEventHandler CellValuePushed 
+        public event DataGridViewCellValueEventHandler CellValuePushed
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
         }
 
         [
@@ -5276,8 +5299,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnAdded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
         }
 
         [
@@ -5286,8 +5309,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnContextMenuStripChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
         }
 
         [
@@ -5296,8 +5319,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnDataPropertyNameChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
         }
 
         [
@@ -5306,18 +5329,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnDefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnDisplayIndexChangedDescr))
         ]
-        public event DataGridViewColumnEventHandler ColumnDisplayIndexChanged 
+        public event DataGridViewColumnEventHandler ColumnDisplayIndexChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
         }
 
         [
@@ -5326,8 +5349,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnDividerDoubleClickEventHandler ColumnDividerDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
         }
 
         [
@@ -5336,48 +5359,48 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnDividerWidthChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderMouseClickDescr))
         ]
-        public event DataGridViewCellMouseEventHandler ColumnHeaderMouseClick 
+        public event DataGridViewCellMouseEventHandler ColumnHeaderMouseClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
         }
 
         [
-            SRCategory(nameof(SR.CatMouse)), 
+            SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderMouseDoubleClickDescr))
         ]
         public event DataGridViewCellMouseEventHandler ColumnHeaderMouseDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderCellChangedDescr))
         ]
-        public event DataGridViewColumnEventHandler ColumnHeaderCellChanged 
+        public event DataGridViewColumnEventHandler ColumnHeaderCellChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthChangedDescr))
         ]
-        public event DataGridViewColumnEventHandler ColumnMinimumWidthChanged 
+        public event DataGridViewColumnEventHandler ColumnMinimumWidthChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
         }
 
         [
@@ -5386,8 +5409,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnNameChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
         }
 
         [
@@ -5396,8 +5419,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnRemoved
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
         }
 
         /*
@@ -5413,18 +5436,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnSortModeChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_ColumnStateChangedDescr))
         ]
-        public event DataGridViewColumnStateChangedEventHandler ColumnStateChanged 
+        public event DataGridViewColumnStateChangedEventHandler ColumnStateChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
         }
 
         [
@@ -5433,49 +5456,49 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewColumnEventHandler ColumnToolTipTextChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_ColumnWidthChangedDescr))
         ]
-        public event DataGridViewColumnEventHandler ColumnWidthChanged 
+        public event DataGridViewColumnEventHandler ColumnWidthChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
         }
 
         [
-            SRCategory(nameof(SR.CatAction)), 
+            SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_CurrentCellChangedDescr))
         ]
         public event EventHandler CurrentCellChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
         }
 
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.DataGridView_CurrentCellDirtyStateChangedDescr))
         ]
         public event EventHandler CurrentCellDirtyStateChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
         }
 
         [
-            SRCategory(nameof(SR.CatData)), 
+            SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_DataBindingCompleteDescr))
         ]
         public event DataGridViewBindingCompleteEventHandler DataBindingComplete
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
         }
 
         [
@@ -5484,19 +5507,19 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewDataErrorEventHandler DataError
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
         }
 
         [
-            SRCategory(nameof(SR.CatData)), 
+            SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.DataGridView_DefaultValuesNeededDescr))
         ]
         public event DataGridViewRowEventHandler DefaultValuesNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
         }
 
         [
@@ -5505,8 +5528,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewEditingControlShowingEventHandler EditingControlShowing
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
         }
 
         /*
@@ -5529,8 +5552,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowEventHandler NewRowNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
         }
 
         [
@@ -5539,8 +5562,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowEventHandler RowContextMenuStripChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
         }
 
         [
@@ -5550,18 +5573,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowContextMenuStripNeededEventHandler RowContextMenuStripNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleChangedDescr))
         ]
-        public event DataGridViewRowEventHandler RowDefaultCellStyleChanged 
+        public event DataGridViewRowEventHandler RowDefaultCellStyleChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
         }
 
         [
@@ -5571,8 +5594,8 @@ namespace System.Windows.Forms
         ]
         public event QuestionEventHandler RowDirtyStateNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
         }
 
         [
@@ -5581,8 +5604,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowDividerDoubleClickEventHandler RowDividerDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
         }
 
         [
@@ -5591,8 +5614,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowEventHandler RowDividerHeightChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
         }
 
         [
@@ -5601,8 +5624,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler RowEnter
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWENTER, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWENTER, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWENTER, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWENTER, value);
         }
 
         [
@@ -5611,8 +5634,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowEventHandler RowErrorTextChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
         }
 
         [
@@ -5622,48 +5645,48 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowErrorTextNeededEventHandler RowErrorTextNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
         }
 
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_RowHeaderMouseClickDescr))
         ]
-        public event DataGridViewCellMouseEventHandler RowHeaderMouseClick 
+        public event DataGridViewCellMouseEventHandler RowHeaderMouseClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
         }
 
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_RowHeaderMouseDoubleClickDescr))
         ]
-        public event DataGridViewCellMouseEventHandler RowHeaderMouseDoubleClick 
+        public event DataGridViewCellMouseEventHandler RowHeaderMouseDoubleClick
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowHeaderCellChangedDescr))
         ]
-        public event DataGridViewRowEventHandler RowHeaderCellChanged 
+        public event DataGridViewRowEventHandler RowHeaderCellChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowHeightChangedDescr))
         ]
-        public event DataGridViewRowEventHandler RowHeightChanged 
+        public event DataGridViewRowEventHandler RowHeightChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
         }
 
         [
@@ -5673,19 +5696,19 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowHeightInfoNeededEventHandler RowHeightInfoNeeded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
         }
 
         internal DataGridViewRowHeightInfoNeededEventArgs RowHeightInfoNeededEventArgs
         {
             get
             {
-                if (this.dgvrhine == null)
+                if (dgvrhine == null)
                 {
-                    this.dgvrhine = new DataGridViewRowHeightInfoNeededEventArgs();
+                    dgvrhine = new DataGridViewRowHeightInfoNeededEventArgs();
                 }
-                return this.dgvrhine;
+                return dgvrhine;
             }
         }
 
@@ -5696,8 +5719,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowHeightInfoPushedEventHandler RowHeightInfoPushed
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
         }
 
         [
@@ -5706,72 +5729,72 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler RowLeave
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
         }
 
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowMinimumHeightChangedDescr))
         ]
-        public event DataGridViewRowEventHandler RowMinimumHeightChanged 
+        public event DataGridViewRowEventHandler RowMinimumHeightChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
         }
 
         [
-            SRCategory(nameof(SR.CatDisplay)), 
+            SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_RowPostPaintDescr))
         ]
         public event DataGridViewRowPostPaintEventHandler RowPostPaint
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
         }
 
         internal DataGridViewRowPostPaintEventArgs RowPostPaintEventArgs
         {
             get
             {
-                if (this.dgvrpope == null)
+                if (dgvrpope == null)
                 {
-                    this.dgvrpope = new DataGridViewRowPostPaintEventArgs(this);
+                    dgvrpope = new DataGridViewRowPostPaintEventArgs(this);
                 }
-                return this.dgvrpope;
+                return dgvrpope;
             }
         }
 
         [
-            SRCategory(nameof(SR.CatDisplay)), 
+            SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_RowPrePaintDescr))
         ]
         public event DataGridViewRowPrePaintEventHandler RowPrePaint
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
         }
 
         internal DataGridViewRowPrePaintEventArgs RowPrePaintEventArgs
         {
             get
             {
-                if (this.dgvrprpe == null)
+                if (dgvrprpe == null)
                 {
-                    this.dgvrprpe = new DataGridViewRowPrePaintEventArgs(this);
+                    dgvrprpe = new DataGridViewRowPrePaintEventArgs(this);
                 }
-                return this.dgvrprpe;
+                return dgvrprpe;
             }
         }
 
         [
-            SRCategory(nameof(SR.CatAction)), 
+            SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_RowsAddedDescr))
         ]
         public event DataGridViewRowsAddedEventHandler RowsAdded
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
         }
 
         [
@@ -5780,29 +5803,29 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowsRemovedEventHandler RowsRemoved
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
         }
 
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_RowStateChangedDescr))
         ]
-        public event DataGridViewRowStateChangedEventHandler RowStateChanged 
+        public event DataGridViewRowStateChangedEventHandler RowStateChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
         }
 
         [
             SRCategory(nameof(SR.CatBehavior)),
             EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.DataGridView_RowUnsharedDescr))
-        ] 
-        public event DataGridViewRowEventHandler RowUnshared 
+        ]
+        public event DataGridViewRowEventHandler RowUnshared
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
         }
 
         [
@@ -5811,8 +5834,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellEventHandler RowValidated
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
         }
 
         [
@@ -5821,18 +5844,18 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewCellCancelEventHandler RowValidating
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
         }
 
         [
-            SRCategory(nameof(SR.CatAction)), 
+            SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_ScrollDescr))
         ]
         public event ScrollEventHandler Scroll
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSCROLL, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSCROLL, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWSCROLL, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWSCROLL, value);
         }
 
         [
@@ -5841,8 +5864,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler SelectionChanged
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
         }
 
         [
@@ -5852,8 +5875,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewSortCompareEventHandler SortCompare
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
         }
 
         [
@@ -5862,12 +5885,12 @@ namespace System.Windows.Forms
         ]
         public event EventHandler Sorted
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSORTED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTED, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWSORTED, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTED, value);
         }
 
         [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler StyleChanged
@@ -5882,8 +5905,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowEventHandler UserAddedRow
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
         }
 
         /*
@@ -5899,8 +5922,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowEventHandler UserDeletedRow
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
         }
 
         [
@@ -5909,8 +5932,8 @@ namespace System.Windows.Forms
         ]
         public event DataGridViewRowCancelEventHandler UserDeletingRow
         {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
+            add => Events.AddHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
+            remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
         }
 
         ////////////////////////
@@ -5923,12 +5946,12 @@ namespace System.Windows.Forms
         ]
         void ISupportInitialize.BeginInit()
         {
-            if (this.dataGridViewState2[DATAGRIDVIEWSTATE2_initializing])
+            if (dataGridViewState2[DATAGRIDVIEWSTATE2_initializing])
             {
                 throw new InvalidOperationException(SR.DataGridViewBeginInit);
             }
 
-            this.dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] = true;
+            dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] = true;
         }
 
         [
@@ -5936,9 +5959,9 @@ namespace System.Windows.Forms
         ]
         void ISupportInitialize.EndInit()
         {
-            this.dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] = false;
+            dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] = false;
 
-            foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+            foreach (DataGridViewColumn dataGridViewColumn in Columns)
             {
                 if (dataGridViewColumn.Frozen &&
                     dataGridViewColumn.Visible &&
@@ -5948,17 +5971,17 @@ namespace System.Windows.Forms
                 }
             }
 
-            DataGridViewSelectionMode selectionMode = this.SelectionMode;
+            DataGridViewSelectionMode selectionMode = SelectionMode;
             if (selectionMode == DataGridViewSelectionMode.FullColumnSelect || selectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
             {
-                foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+                foreach (DataGridViewColumn dataGridViewColumn in Columns)
                 {
                     if (dataGridViewColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                     {
                         // Resetting SelectionMode to its acceptable default value. We don't want the control to ever end up in an invalid state.
-                        this.SelectionMode = defaultSelectionMode; // DataGridViewSelectionMode.RowHeaderSelect
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_SelectionModeReset, 
-                                                                         string.Format(SR.DataGridView_SelectionModeAndSortModeClash, (selectionMode).ToString()), 
+                        SelectionMode = defaultSelectionMode; // DataGridViewSelectionMode.RowHeaderSelect
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_SelectionModeReset,
+                                                                         string.Format(SR.DataGridView_SelectionModeAndSortModeClash, (selectionMode).ToString()),
                                                                          (defaultSelectionMode).ToString()));
                     }
                 }
@@ -5967,7 +5990,7 @@ namespace System.Windows.Forms
 
         /* INTERNAL ENUMERATIONS */
 
-        internal enum DataGridViewHitTestTypeInternal 
+        internal enum DataGridViewHitTestTypeInternal
         {
             None,
             Cell,
@@ -6021,7 +6044,7 @@ namespace System.Windows.Forms
 
         internal class DataGridViewEditingPanel : Panel
         {
-            private DataGridView owningDataGridView;
+            private readonly DataGridView owningDataGridView;
 
             public DataGridViewEditingPanel(DataGridView owningDataGridView)
             {

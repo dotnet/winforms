@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         {
             _url = url;
         }
-        
+
         /// <summary>
         /// Url of the Document.
         /// </summary>

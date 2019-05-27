@@ -2,9 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
-  
+
     /// <summary>
     ///    Comprises the information specifying how acceleration should be performed
     ///     on a Windows up-down control when the up/down button is pressed for certain
@@ -27,7 +28,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException(nameof(increment), increment, SR.NumericUpDownLessThanZeroError);
             }
 
-            this.seconds   = seconds;
+            this.seconds = seconds;
             this.increment = increment;
         }
 
@@ -39,7 +40,7 @@ namespace System.Windows.Forms {
         {
             get
             {
-                return this.seconds;
+                return seconds;
             }
             set
             {
@@ -47,18 +48,19 @@ namespace System.Windows.Forms {
                 {
                     throw new ArgumentOutOfRangeException(nameof(seconds), value, SR.NumericUpDownLessThanZeroError);
                 }
-                this.seconds = value;
+                seconds = value;
             }
         }
 
         /// <summary>
         ///     Determines the amount to increment by.
         /// </summary>
-        public decimal Increment {
+        public decimal Increment
+        {
 
-            get 
+            get
             {
-                return this.increment;
+                return increment;
             }
 
             set
@@ -67,7 +69,7 @@ namespace System.Windows.Forms {
                 {
                     throw new ArgumentOutOfRangeException(nameof(increment), value, SR.NumericUpDownLessThanZeroError);
                 }
-                this.increment = value;
+                increment = value;
             }
         }
     }

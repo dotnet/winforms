@@ -16,7 +16,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DragEventArgs'/> class.
         /// </summary>
-        public DragEventArgs(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect) {
+        public DragEventArgs(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect)
+        {
             Data = data;
             KeyState = keyState;
             X = x;
@@ -51,7 +52,7 @@ namespace System.Windows.Forms
         /// of the drag event.
         /// </summary>
         public DragDropEffects AllowedEffect { get; }
-        
+
         /// <summary>
         /// Gets or sets which drag-and-drop operations are allowed by the target of the drag event.
         /// </summary>

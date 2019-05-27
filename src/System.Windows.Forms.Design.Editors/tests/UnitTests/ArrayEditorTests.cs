@@ -14,14 +14,14 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ArrayEditor_Constructor()
         {
-            var underTest = GetNewEditor();
+            TestArrayEditor underTest = GetNewEditor();
             Assert.NotNull(underTest);
         }
 
         [Fact]
         public void ArrayEditor_Getters()
         {
-            var underTest = GetNewEditor();
+            TestArrayEditor underTest = GetNewEditor();
             Assert.Equal(typeof(string), underTest.GetCollectionType());
             Assert.True(underTest.CanSelectMultiple());
             Assert.True(underTest.CanRemove("some string"));

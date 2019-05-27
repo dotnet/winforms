@@ -26,10 +26,10 @@ namespace System.Windows.Forms
         /// The item to draw
         /// </summary>
         public ToolStripItem Item { get; }
-        
-	    /// <summary>
-	    /// The toolstrip the item is currently parented to
-	    /// </summary>
+
+        /// <summary>
+        /// The toolstrip the item is currently parented to
+        /// </summary>
         public ToolStrip ToolStrip => Item.ParentInternal;
     }
 }

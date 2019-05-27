@@ -119,7 +119,7 @@ internal static partial class Interop
         {
             internal readonly string _name;
 
-            private int _initialThreshHold;
+            private readonly int _initialThreshHold;
             private int _threshold;
             private int _handleCount;
             private readonly int _deltaPercent;
@@ -251,7 +251,7 @@ internal static partial class Interop
                 {
                     return handle;
                 }
-    
+
                 int currentCount = 0;
                 lock (this)
                 {

@@ -21,7 +21,10 @@ namespace WinForms.Common.Tests
         {
             var data = new TheoryData<T>();
             foreach (T item in Enum.GetValues(typeof(T)))
+            {
                 data.Add(item);
+            }
+
             return data;
         }
 
@@ -39,11 +42,13 @@ namespace WinForms.Common.Tests
         // This method assumes that int.MinValue and int.MaxValue are not in the enum
         internal static TheoryData<T> GetEnumTheoryDataInvalid<T>() where T : Enum
         {
-            var data = new TheoryData<T>();
-            // This boxing is necessary because you can't cast an int to a generic,
-            // even if the generic is guaranteed to be an enum
-            data.Add((T)(object)int.MinValue);
-            data.Add((T)(object)int.MaxValue);
+            var data = new TheoryData<T>
+            {
+                // This boxing is necessary because you can't cast an int to a generic,
+                // even if the generic is guaranteed to be an enum
+                (T)(object)int.MinValue,
+                (T)(object)int.MaxValue
+            };
             return data;
         }
 
@@ -63,198 +68,275 @@ namespace WinForms.Common.Tests
         // helper method to generate theory data for all values of a boolean
         public static TheoryData<bool> GetBoolTheoryData()
         {
-            var data = new TheoryData<bool>();
-            data.Add(true);
-            data.Add(false);
+            var data = new TheoryData<bool>
+            {
+                true,
+                false
+            };
             return data;
         }
 
         // helper method to generate theory data for some values of a int
         public static TheoryData<int> GetIntTheoryData()
         {
-            var data = new TheoryData<int>();
-            data.Add(int.MinValue);
-            data.Add(int.MaxValue);
-            data.Add(0);
-            data.Add(1);
-            data.Add(-1);
-            data.Add(int.MaxValue / 2);
+            var data = new TheoryData<int>
+            {
+                int.MinValue,
+                int.MaxValue,
+                0,
+                1,
+                -1,
+                int.MaxValue / 2
+            };
             return data;
         }
 
         public static TheoryData<int> GetNonNegativeIntTheoryData()
         {
-            var data = new TheoryData<int>();
-            data.Add(int.MaxValue);
-            data.Add(0);
-            data.Add(1);
-            data.Add(int.MaxValue / 2);
+            var data = new TheoryData<int>
+            {
+                int.MaxValue,
+                0,
+                1,
+                int.MaxValue / 2
+            };
             return data;
         }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<uint> GetUIntTheoryData()
         {
-            var data = new TheoryData<uint>();
-            data.Add(int.MaxValue);
-            data.Add(0);
-            data.Add(1);
-            data.Add(int.MaxValue / 2);
+            var data = new TheoryData<uint>
+            {
+                int.MaxValue,
+                0,
+                1,
+                int.MaxValue / 2
+            };
             return data;
         }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<int> GetNIntTheoryData()
         {
-            var data = new TheoryData<int>();
-            data.Add(int.MinValue);
-            data.Add(-1);
-            data.Add(int.MinValue / 2);
+            var data = new TheoryData<int>
+            {
+                int.MinValue,
+                -1,
+                int.MinValue / 2
+            };
             return data;
         }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<float> GetFloatTheoryData()
         {
-            var data = new TheoryData<float>();
-            data.Add(float.MaxValue);
-            data.Add(float.MinValue);
-            data.Add(float.Epsilon);
-            data.Add(float.Epsilon * -1);
-            data.Add(float.NegativeInfinity); // not sure about these two
-            data.Add(float.PositiveInfinity); // 2
-            data.Add(0);
-            data.Add(-1);
-            data.Add(1);
-            data.Add(float.MaxValue / 2);
+            var data = new TheoryData<float>
+            {
+                float.MaxValue,
+                float.MinValue,
+                float.Epsilon,
+                float.Epsilon * -1,
+                float.NegativeInfinity, // not sure about these two
+                float.PositiveInfinity, // 2
+                0,
+                -1,
+                1,
+                float.MaxValue / 2
+            };
             return data;
         }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<float> GetUFloatTheoryData()
         {
-            var data = new TheoryData<float>();
-            data.Add(float.MaxValue);
-            data.Add(float.Epsilon);
-            data.Add(float.PositiveInfinity); // not sure about this one
-            data.Add(0);
-            data.Add(1);
-            data.Add(float.MaxValue / 2);
+            var data = new TheoryData<float>
+            {
+                float.MaxValue,
+                float.Epsilon,
+                float.PositiveInfinity, // not sure about this one
+                0,
+                1,
+                float.MaxValue / 2
+            };
             return data;
         }
 
         // helper method to generate theory data for a span of string values
         public static TheoryData<string> GetStringTheoryData()
         {
-            var data = new TheoryData<string>();
-            data.Add(string.Empty);
-            data.Add("reasonable");
+            var data = new TheoryData<string>
+            {
+                string.Empty,
+                "reasonable"
+            };
             return data;
         }
 
         public static TheoryData<string> GetStringWithNullTheoryData()
         {
-            var data = new TheoryData<string>();
-            data.Add(null);
-            data.Add(string.Empty);
-            data.Add("reasonable");
+            var data = new TheoryData<string>
+            {
+                null,
+                string.Empty,
+                "reasonable"
+            };
             return data;
         }
 
         public static TheoryData<string> GetNullOrEmptyStringTheoryData()
         {
-            var data = new TheoryData<string>();
-            data.Add(null);
-            data.Add(string.Empty);
+            var data = new TheoryData<string>
+            {
+                null,
+                string.Empty
+            };
             return data;
         }
 
         public static TheoryData<string, string> GetStringNormalizedTheoryData()
         {
-            var data = new TheoryData<string, string>();
-            data.Add(null, string.Empty);
-            data.Add(string.Empty, string.Empty);
-            data.Add("reasonable", "reasonable");
+            var data = new TheoryData<string, string>
+            {
+                { null, string.Empty },
+                { string.Empty, string.Empty },
+                { "reasonable", "reasonable" }
+            };
+            return data;
+        }
+
+        public static TheoryData<string, string, int> GetCtrlBackspaceData()
+        {
+            var data = new TheoryData<string, string, int>
+            {
+                { "aaa", "", 0 },
+                { "---", "", 0 },
+                { " aaa", "", 0 },
+                { " ---", "", 0 },
+                { "aaa---", "", 0 },
+                { "---aaa", "---", 0 },
+                { "aaa---aaa", "aaa---", 0 },
+                { "---aaa---", "---", 0 },
+                { "a-a", "a-", 0 },
+                { "-a-", "", 0 },
+                { "--a-", "--", 0 },
+                { "abc", "c", -1 },
+                { "a,1-b", "a,b", -1 }
+            };
+            return data;
+        }
+
+        public static TheoryData<string, string, int> GetCtrlBackspaceRepeatedData()
+        {
+            var data = new TheoryData<string, string, int>
+            {
+                { "aaa", "", 2 },
+                { "---", "", 2 },
+                { "aaa---aaa", "", 2 },
+                { "---aaa---", "", 2 },
+                { "aaa bbb", "", 2 },
+                { "aaa bbb ccc", "aaa ", 2 },
+                { "aaa --- ccc", "", 2 },
+                { "1 2 3 4 5 6 7 8 9 0", "1 ", 9 }
+            };
             return data;
         }
 
         public static TheoryData<char> GetCharTheoryData()
         {
-            var data = new TheoryData<char>();
-            data.Add('\0');
-            data.Add('a');
+            var data = new TheoryData<char>
+            {
+                '\0',
+                'a'
+            };
             return data;
         }
 
         public static TheoryData<IntPtr> GetIntPtrTheoryData()
         {
-            var data = new TheoryData<IntPtr>();
-            data.Add((IntPtr)(-1));
-            data.Add(IntPtr.Zero);
-            data.Add((IntPtr)1);
+            var data = new TheoryData<IntPtr>
+            {
+                (IntPtr)(-1),
+                IntPtr.Zero,
+                (IntPtr)1
+            };
             return data;
         }
 
         public static TheoryData<Guid> GetGuidTheoryData()
         {
-            var data = new TheoryData<Guid>();
-            data.Add(Guid.Empty);
-            data.Add(Guid.NewGuid());
+            var data = new TheoryData<Guid>
+            {
+                Guid.Empty,
+                Guid.NewGuid()
+            };
             return data;
         }
 
         public static TheoryData<Color> GetColorTheoryData()
         {
-            var data = new TheoryData<Color>();
-            data.Add(Color.Red);
-            data.Add(Color.Blue);
-            data.Add(Color.Black);
+            var data = new TheoryData<Color>
+            {
+                Color.Red,
+                Color.Blue,
+                Color.Black
+            };
             return data;
         }
 
         public static TheoryData<Color> GetColorWithEmptyTheoryData()
         {
-            var data = new TheoryData<Color>();
-            data.Add(Color.Red);
-            data.Add(Color.Empty);
+            var data = new TheoryData<Color>
+            {
+                Color.Red,
+                Color.Empty
+            };
             return data;
         }
 
         public static TheoryData<Image> GetImageTheoryData()
         {
-            var data = new TheoryData<Image>();
-            data.Add(new Bitmap(10, 10));
-            data.Add(null);
+            var data = new TheoryData<Image>
+            {
+                new Bitmap(10, 10),
+                null
+            };
             return data;
         }
 
         public static TheoryData<Font> GetFontTheoryData()
         {
-            var data = new TheoryData<Font>();
-            data.Add(SystemFonts.MenuFont);
-            data.Add(null);
+            var data = new TheoryData<Font>
+            {
+                SystemFonts.MenuFont,
+                null
+            };
             return data;
         }
 
         public static TheoryData<Type> GetTypeWithNullTheoryData()
         {
-            var data = new TheoryData<Type>();
-            data.Add(null);
-            data.Add(typeof(int));
+            var data = new TheoryData<Type>
+            {
+                null,
+                typeof(int)
+            };
             return data;
         }
 
         public static TheoryData<RightToLeft, RightToLeft> GetRightToLeftTheoryData()
         {
-            var data = new TheoryData<RightToLeft, RightToLeft>();
-            data.Add(RightToLeft.Inherit, RightToLeft.No);
-            data.Add(RightToLeft.Yes, RightToLeft.Yes);
-            data.Add(RightToLeft.No, RightToLeft.No);
+            var data = new TheoryData<RightToLeft, RightToLeft>
+            {
+                { RightToLeft.Inherit, RightToLeft.No },
+                { RightToLeft.Yes, RightToLeft.Yes },
+                { RightToLeft.No, RightToLeft.No }
+            };
             return data;
         }
 
         public static TheoryData<Point> GetPointTheoryData() => GetPointTheoryData(TestIncludeType.All);
-        
+
         public static TheoryData<Point> GetPointTheoryData(TestIncludeType includeType)
         {
             var data = new TheoryData<Point>();
@@ -280,7 +362,7 @@ namespace WinForms.Common.Tests
             if (!includeType.HasFlag(TestIncludeType.NoPositives))
             {
                 data.Add(new Size());
-                data.Add(new Size(new Point(1,1)));
+                data.Add(new Size(new Point(1, 1)));
                 data.Add(new Size(1, 2));
             }
             if (!includeType.HasFlag(TestIncludeType.NoNegatives))
@@ -293,73 +375,89 @@ namespace WinForms.Common.Tests
 
         public static TheoryData<Size> GetPositiveSizeTheoryData()
         {
-            var data = new TheoryData<Size>();
-            data.Add(new Size());
-            data.Add(new Size(1, 2));
+            var data = new TheoryData<Size>
+            {
+                new Size(),
+                new Size(1, 2)
+            };
             return data;
         }
 
         public static TheoryData<Rectangle> GetRectangleTheoryData()
         {
-            var data = new TheoryData<Rectangle>();
-            data.Add(new Rectangle());
-            data.Add(new Rectangle(1, 2, 3, 4));
-            data.Add(new Rectangle(-1, -2, -3, -4));
+            var data = new TheoryData<Rectangle>
+            {
+                new Rectangle(),
+                new Rectangle(1, 2, 3, 4),
+                new Rectangle(-1, -2, -3, -4)
+            };
             return data;
         }
 
         public static TheoryData<Padding> GetPaddingTheoryData()
         {
-            var data = new TheoryData<Padding>();
-            data.Add(new Padding());
-            data.Add(new Padding(1, 2, 3, 4));
-            data.Add(new Padding(1));
-            data.Add(new Padding(-1, -2, -3, -4));
+            var data = new TheoryData<Padding>
+            {
+                new Padding(),
+                new Padding(1, 2, 3, 4),
+                new Padding(1),
+                new Padding(-1, -2, -3, -4)
+            };
             return data;
         }
 
         public static TheoryData<Padding, Padding> GetPaddingNormalizedTheoryData()
         {
-            var data = new TheoryData<Padding, Padding>();
-            data.Add(new Padding(), new Padding());
-            data.Add(new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4));
-            data.Add(new Padding(1), new Padding(1));
-            data.Add(new Padding(-1, -2, -3, -4), Padding.Empty);
+            var data = new TheoryData<Padding, Padding>
+            {
+                { new Padding(), new Padding() },
+                { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4) },
+                { new Padding(1), new Padding(1) },
+                { new Padding(-1, -2, -3, -4), Padding.Empty }
+            };
             return data;
         }
 
         public static TheoryData<Type, bool> GetConvertFromTheoryData()
         {
-            var data = new TheoryData<Type, bool>();
-            data.Add(typeof(bool), false);
-            data.Add(typeof(InstanceDescriptor), true);
-            data.Add(typeof(int), false);
-            data.Add(typeof(double), false);
-            data.Add(null, false);
+            var data = new TheoryData<Type, bool>
+            {
+                { typeof(bool), false },
+                { typeof(InstanceDescriptor), true },
+                { typeof(int), false },
+                { typeof(double), false },
+                { null, false }
+            };
             return data;
         }
 
         public static TheoryData<Cursor> GetCursorTheoryData()
         {
-            var data = new TheoryData<Cursor>();
-            data.Add(null);
-            data.Add(new Cursor((IntPtr)1));
+            var data = new TheoryData<Cursor>
+            {
+                null,
+                new Cursor((IntPtr)1)
+            };
             return data;
         }
 
         public static TheoryData<EventArgs> GetEventArgsTheoryData()
         {
-            var data = new TheoryData<EventArgs>();
-            data.Add(null);
-            data.Add(new EventArgs());
+            var data = new TheoryData<EventArgs>
+            {
+                null,
+                new EventArgs()
+            };
             return data;
         }
 
         public static TheoryData<Exception> GetSecurityOrCriticalException()
         {
-            var data = new TheoryData<Exception>();
-            data.Add(new NullReferenceException());
-            data.Add(new SecurityException());
+            var data = new TheoryData<Exception>
+            {
+                new NullReferenceException(),
+                new SecurityException()
+            };
             return data;
         }
 

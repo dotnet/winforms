@@ -144,7 +144,7 @@ namespace System.Windows.Forms
                 {
                     return string.Empty;
                 }
-                
+
                 return _fileNames[0];
             }
             set => _fileNames = value != null ? new string[] { value } : null;
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
 
             if (directory[directory.Length - 1] != '\\')
             {
-                directory = directory + "\\";
+                directory += "\\";
             }
             ArrayList names = new ArrayList();
             do
@@ -747,7 +747,7 @@ namespace System.Windows.Forms
 
         private bool RunDialogOld(IntPtr hWndOwner)
         {
-            var hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            var hookProcPtr = new NativeMethods.WndProc(HookProc);
             var ofn = new NativeMethods.OPENFILENAME_I();
             try
             {

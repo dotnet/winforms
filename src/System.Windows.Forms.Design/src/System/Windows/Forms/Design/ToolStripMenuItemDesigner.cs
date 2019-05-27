@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                     else if (selectedItem is ContextMenuStrip &&
-                        ((ContextMenuStrip)selectedItem).OwnerItem == this.Component && // VSO 214130--SelectedItem must belong to this designer
+                        ((ContextMenuStrip)selectedItem).OwnerItem == Component && // VSO 214130--SelectedItem must belong to this designer
                         MenuItem.DropDown == selectedItem)
                     {
                         return true;
@@ -968,12 +968,12 @@ namespace System.Windows.Forms.Design
                 //clean up
                 if (selSvc != null)
                 {
-                    selSvc.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                    selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
                 if (undoEngine != null)
                 {
-                    undoEngine.Undoing -= new EventHandler(this.OnUndoing);
-                    undoEngine.Undone -= new EventHandler(this.OnUndone);
+                    undoEngine.Undoing -= new EventHandler(OnUndoing);
+                    undoEngine.Undone -= new EventHandler(OnUndone);
                 }
                 if (MenuItem != null && MenuItem.HasDropDown)
                 {
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms.Design
         internal override ToolStrip GetMainToolStrip()
         {
             ToolStripDropDown topmost = GetFirstDropDown(MenuItem);
-            ToolStripItem topMostItem = (topmost == null) ? null : topmost.OwnerItem;
+            ToolStripItem topMostItem = topmost?.OwnerItem;
             if (topMostItem != null)
             {
                 return topMostItem.Owner;
@@ -1475,11 +1475,11 @@ namespace System.Windows.Forms.Design
                 MenuItem.DropDownOpening += new EventHandler(DropDownItem_DropDownOpening);
                 MenuItem.DropDownOpened += new EventHandler(DropDownItem_DropDownOpened);
                 MenuItem.DropDownClosed += new EventHandler(DropDownItem_DropDownClosed);
-                MenuItem.DropDown.Resize += new System.EventHandler(this.DropDownResize);
+                MenuItem.DropDown.Resize += new System.EventHandler(DropDownResize);
                 MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
-                MenuItem.DropDown.Paint += new PaintEventHandler(this.DropDownPaint);
-                MenuItem.DropDown.Click += new EventHandler(this.DropDownClick);
-                MenuItem.DropDown.LocationChanged += new EventHandler(this.DropDownLocationChanged);
+                MenuItem.DropDown.Paint += new PaintEventHandler(DropDownPaint);
+                MenuItem.DropDown.Click += new EventHandler(DropDownClick);
+                MenuItem.DropDown.LocationChanged += new EventHandler(DropDownLocationChanged);
             }
         }
 
@@ -1496,7 +1496,7 @@ namespace System.Windows.Forms.Design
             selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
-                selSvc.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
 
             //hookup to the AdornerService..
@@ -1510,8 +1510,8 @@ namespace System.Windows.Forms.Design
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine != null)
                 {
-                    undoEngine.Undoing += new EventHandler(this.OnUndoing);
-                    undoEngine.Undone += new EventHandler(this.OnUndone);
+                    undoEngine.Undoing += new EventHandler(OnUndoing);
+                    undoEngine.Undone += new EventHandler(OnUndone);
                 }
             }
         }
@@ -1562,8 +1562,7 @@ namespace System.Windows.Forms.Design
                 // Check if this is a Sited-DropDown
                 if (MenuItem.DropDown.Site != null)
                 {
-                    ToolStripDropDownDesigner designer = designerHost.GetDesigner(MenuItem.DropDown) as ToolStripDropDownDesigner;
-                    if (designer != null)
+                    if (designerHost.GetDesigner(MenuItem.DropDown) is ToolStripDropDownDesigner designer)
                     {
                         designer.currentParent = MenuItem as ToolStripMenuItem;
                     }
@@ -2131,8 +2130,7 @@ namespace System.Windows.Forms.Design
                 if (IsOnContextMenu && !MenuItem.Owner.Visible)
                 {
                     ToolStripDropDown firstDropDown = GetFirstDropDown(MenuItem);
-                    ToolStripDropDownDesigner firstDropDownDesigner = designerHost.GetDesigner(firstDropDown) as ToolStripDropDownDesigner;
-                    if (firstDropDownDesigner != null)
+                    if (designerHost.GetDesigner(firstDropDown) is ToolStripDropDownDesigner firstDropDownDesigner)
                     {
                         InitializeDropDown();
                         firstDropDownDesigner.ShowMenu();
@@ -2201,8 +2199,7 @@ namespace System.Windows.Forms.Design
                     else
                     {
                         // Any ToolStripItem on the DropDown OR any of its Child DropDowns
-                        ToolStripItem item = selectedObj as ToolStripItem;
-                        if (item != null)
+                        if (selectedObj is ToolStripItem item)
                         {
                             ToolStripDropDown parent = item.Owner as ToolStripDropDown;
                             while (parent != null)
@@ -2517,8 +2514,7 @@ namespace System.Windows.Forms.Design
                 currentSelection = (ToolStripDropDownItem)currentDropDown.OwnerItem;
                 if (currentSelection != null && !currentSelection.DropDown.Visible)
                 {
-                    ToolStripMenuItemDesigner currentSelectionDesigner = designerHost.GetDesigner(currentSelection) as ToolStripMenuItemDesigner;
-                    if (currentSelectionDesigner != null)
+                    if (designerHost.GetDesigner(currentSelection) is ToolStripMenuItemDesigner currentSelectionDesigner)
                     {
                         currentSelectionDesigner.InitializeDropDown();
                     }
@@ -2576,7 +2572,7 @@ namespace System.Windows.Forms.Design
                 }
                 return null;
             }
-  
+
             /// <summary>
             /// Overrides Glyph::Paint - this implementation does nothing.
             /// </summary>
@@ -2593,7 +2589,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Constructor that accepts the related ControlDesigner.
             /// </summary>
-            private ToolStripMenuItemDesigner menuItemDesigner;
+            private readonly ToolStripMenuItemDesigner menuItemDesigner;
 
             internal DropDownBehavior(ControlDesigner designer, ToolStripMenuItemDesigner menuItemDesigner) : base(designer)
             {
@@ -2605,8 +2601,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
-                ToolStripItemDataObject data = e.Data as ToolStripItemDataObject;
-                if (data != null)
+                if (e.Data is ToolStripItemDataObject data)
                 {
                     e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
                 }
@@ -2621,8 +2616,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragOver(Glyph g, DragEventArgs e)
             {
-                ToolStripItemDataObject data = e.Data as ToolStripItemDataObject;
-                if (data != null)
+                if (e.Data is ToolStripItemDataObject data)
                 {
                     e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
                 }
@@ -2638,8 +2632,7 @@ namespace System.Windows.Forms.Design
             [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
             public override void OnDragDrop(Glyph g, DragEventArgs e)
             {
-                ToolStripItemDataObject data = e.Data as ToolStripItemDataObject;
-                if (data != null)
+                if (e.Data is ToolStripItemDataObject data)
                 {
                     ToolStripItem primaryItem = data.PrimarySelection;
                     IDesignerHost host = (IDesignerHost)primaryItem.Site.GetService(typeof(IDesignerHost));
@@ -2675,7 +2668,9 @@ namespace System.Windows.Forms.Design
                         {
                             IComponentChangeService changeSvc = (IComponentChangeService)primaryItem.Site.GetService(typeof(IComponentChangeService));
                             if (changeSvc != null)
+                            {
                                 changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                            }
                             // If we are copying, then we want to make a copy of the components we are dragging
                             if (copy)
                             {
@@ -2762,7 +2757,10 @@ namespace System.Windows.Forms.Design
                         finally
                         {
                             if (changeParent != null)
+                            {
                                 changeParent.Commit();
+                            }
+
                             changeParent = null;
                         }
                     }

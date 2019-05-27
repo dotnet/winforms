@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Design
         private class ToolStripAdornerWindow : Control
         {
             private Control _designerFrame; //the designer's frame
-           
+
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             internal ToolStripAdornerWindow(Control designerFrame)
             {

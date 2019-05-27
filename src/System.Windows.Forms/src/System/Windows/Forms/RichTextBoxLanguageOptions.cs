@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms 
+namespace System.Windows.Forms
 {
     /// <summary>
     /// Rich edit control's option settings for Input Method Editor (IME) and 
@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     /// </summary>
     [Flags]
     public enum RichTextBoxLanguageOptions
-	{
+    {
         /// <summary>
         /// If this flag is set, the control automatically changes fonts when the
         /// user explicitly changes to a different keyboard layout. 

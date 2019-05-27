@@ -19,15 +19,15 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextMapMode
-    {   
-        Text             = 1, // MM_TEXT
-        LoMetric         = 2,
-        HiMetric         = 3,
-        LoEnglish        = 4,
-        HiEnglish        = 5,
-        Twips            = 6,
-        Isotropic        = 7,
-        Anisotropic      = 8
+    {
+        Text = 1, // MM_TEXT
+        LoMetric = 2,
+        HiMetric = 3,
+        LoEnglish = 4,
+        HiEnglish = 5,
+        Twips = 6,
+        Isotropic = 7,
+        Anisotropic = 8
 
         /*
         Mapping Mode        Logical Unit        x-axis      y-axis 

@@ -112,7 +112,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> Add_InvalidNameCreationServiceParentProvider_TestData()
         {
             yield return new object[] { null };
-            
+
             var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
             nullMockServiceProvider
                 .Setup(p => p.GetService(typeof(INameCreationService)))
@@ -453,7 +453,7 @@ namespace System.ComponentModel.Design.Tests
             service.SetValue(key1, value1);
             Assert.Same(key1, service.GetKey(value1));
             Assert.Same(value1, service.GetValue(key1));
-    
+
             Assert.Null(service.GetKey(null));
             Assert.Null(service.GetKey(new object()));
         }
@@ -484,7 +484,7 @@ namespace System.ComponentModel.Design.Tests
             service.SetValue(key1, value1);
             Assert.Same(key1, service.GetKey(value1));
             Assert.Same(value1, service.GetValue(key1));
-    
+
             Assert.Null(service.GetValue(new object()));
         }
 
@@ -514,7 +514,7 @@ namespace System.ComponentModel.Design.Tests
             service.SetValue(key1, value1);
             Assert.Same(key1, service.GetKey(value1));
             Assert.Same(value1, service.GetValue(key1));
-    
+
             Assert.Throws<ArgumentNullException>("key", () => service.GetValue(null));
         }
 
@@ -1139,7 +1139,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("service", () => host.GetService(null));
         }
 
-        private static IDesignerHost s_placeholderHost = new Mock<IDesignerHost>(MockBehavior.Strict).Object;
+        private static readonly IDesignerHost s_placeholderHost = new Mock<IDesignerHost>(MockBehavior.Strict).Object;
 
         public static IEnumerable<object[]> ChangeActiveDesigner_TestData()
         {
@@ -1219,7 +1219,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(expectedActivatedCallCount, activatedCallCount);
             Assert.Equal(expectedDeactivatedCallCount, deactivatedCallCount);
             Assert.Equal(expectedFlushCount, flushCallCount);
-            
+
             // Should not invoke if removed.
             host.Activated -= activatedHandler;
             host.Deactivated -= deactivatedHandler;

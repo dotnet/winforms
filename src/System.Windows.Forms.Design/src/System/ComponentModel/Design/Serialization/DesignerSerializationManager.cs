@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     public class DesignerSerializationManager : IDesignerSerializationManager
     {
-        private IServiceProvider provider;
+        private readonly IServiceProvider provider;
         private ITypeResolutionService typeResolver;
         private bool searchedTypeResolver;
         private bool recycleInstances;
@@ -346,8 +346,10 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                     }
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()));
-                    ex.HelpLink = SR.SerializationManagerNoMatchingCtor;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
+                    {
+                        HelpLink = SR.SerializationManagerNoMatchingCtor
+                    };
                     throw ex;
                 }
 
@@ -421,9 +423,8 @@ namespace System.ComponentModel.Design.Serialization
                     AttributeCollection attributes = TypeDescriptor.GetAttributes(objectType);
                     foreach (Attribute attr in attributes)
                     {
-                        if (attr is DesignerSerializerAttribute)
+                        if (attr is DesignerSerializerAttribute da)
                         {
-                            DesignerSerializerAttribute da = (DesignerSerializerAttribute)attr;
                             string typeName = da.SerializerBaseTypeName;
 
                             // This serializer must support the correct base type or we're not interested.
@@ -715,8 +716,10 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (instancesByName != null && instancesByName.ContainsKey(name))
                 {
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name));
-                    ex.HelpLink = SR.SerializationManagerDuplicateComponentDecl;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name))
+                    {
+                        HelpLink = SR.SerializationManagerDuplicateComponentDecl
+                    };
                     throw ex;
                 }
             }
@@ -876,8 +879,15 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
 
             if (instancesByName == null)
             {
@@ -911,7 +921,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private sealed class SerializationSession : IDisposable
         {
-            private DesignerSerializationManager _serializationManager;
+            private readonly DesignerSerializationManager _serializationManager;
 
             internal SerializationSession(DesignerSerializationManager serializationManager)
             {
@@ -949,8 +959,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private sealed class WrappedPropertyDescriptor : PropertyDescriptor
         {
-            private object target;
-            private PropertyDescriptor property;
+            private readonly object target;
+            private readonly PropertyDescriptor property;
 
             internal WrappedPropertyDescriptor(PropertyDescriptor property, object target) : base(property.Name, null)
             {

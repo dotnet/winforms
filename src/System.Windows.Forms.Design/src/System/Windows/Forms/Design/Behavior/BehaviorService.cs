@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool _cancelDrag = false; // should we cancel the drag on the next QueryContinueDrag
 
 
-        private int _adornerWindowIndex = -1;
+        private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
         private static int WM_GETALLSNAPLINES;
@@ -220,7 +220,9 @@ namespace System.Windows.Forms.Design.Behavior
 
             MenuCommandHandler menuCommandHandler = null;
             if (_serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService)
+            {
                 menuCommandHandler = menuCommandService as MenuCommandHandler;
+            }
 
             if (menuCommandHandler != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
@@ -316,10 +318,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void OnBeginDrag(BehaviorDragDropEventArgs e)
         {
-            if (_beginDragHandler != null)
-            {
-                _beginDragHandler(this, e);
-            }
+            _beginDragHandler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -351,9 +350,11 @@ namespace System.Windows.Forms.Design.Behavior
                 return Point.Empty;
             }
 
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            pt.x = c.Left;
-            pt.y = c.Top;
+            NativeMethods.POINT pt = new NativeMethods.POINT
+            {
+                x = c.Left,
+                y = c.Top
+            };
             NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, pt, 1);
             if (c.Parent.IsMirrored)
             {
@@ -367,9 +368,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            NativeMethods.POINT nativePoint = new NativeMethods.POINT();
-            nativePoint.x = pt.X;
-            nativePoint.y = pt.Y;
+            NativeMethods.POINT nativePoint = new NativeMethods.POINT
+            {
+                x = pt.X,
+                y = pt.Y
+            };
             NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, nativePoint, 1);
             return new Point(nativePoint.x, nativePoint.y);
         }
@@ -477,10 +480,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void SyncSelection()
         {
-            if (_synchronizeEventHandler != null)
-            {
-                _synchronizeEventHandler(this, EventArgs.Empty);
-            }
+            _synchronizeEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -568,9 +568,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point ScreenToAdornerWindow(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT();
-            offset.x = p.X;
-            offset.y = p.Y;
+            NativeMethods.POINT offset = new NativeMethods.POINT
+            {
+                x = p.X,
+                y = p.Y
+            };
             NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, offset, 1);
             return new Point(offset.x, offset.y);
         }
@@ -597,10 +599,10 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private class AdornerWindow : Control
         {
-            private BehaviorService _behaviorService;//ptr back to BehaviorService
+            private readonly BehaviorService _behaviorService;//ptr back to BehaviorService
             private Control _designerFrame;//the designer's frame
             private static MouseHook s_mouseHook; // shared mouse hook
-            private static List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
+            private static readonly List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
             private bool _processingDrag; // is this particular window in a drag operation
 
             /// <summary>
@@ -610,8 +612,8 @@ namespace System.Windows.Forms.Design.Behavior
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             internal AdornerWindow(BehaviorService behaviorService, Control designerFrame)
             {
-                this._behaviorService = behaviorService;
-                this._designerFrame = designerFrame;
+                _behaviorService = behaviorService;
+                _designerFrame = designerFrame;
                 Dock = DockStyle.Fill;
                 AllowDrop = true;
                 Text = "AdornerWindow";
@@ -1307,23 +1309,23 @@ namespace System.Windows.Forms.Design.Behavior
             private readonly BehaviorService _owner; // ptr back to the behavior service
             private readonly IMenuCommandService _menuService; // core service used for most implementations of the IMCS interface
             private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
-         
+
             public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
             {
                 _owner = owner;
                 _menuService = menuService;
             }
-          
+
             public IMenuCommandService MenuService
             {
                 get => _menuService;
             }
-          
+
             void IMenuCommandService.AddCommand(MenuCommand command)
             {
                 _menuService.AddCommand(command);
             }
-           
+
             void IMenuCommandService.RemoveVerb(DesignerVerb verb)
             {
                 _menuService.RemoveVerb(verb);
@@ -1333,7 +1335,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 _menuService.RemoveCommand(command);
             }
-         
+
             MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
             {
                 try
@@ -1355,17 +1357,17 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return _menuService.GlobalInvoke(commandID);
             }
-          
+
             void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
             {
                 _menuService.ShowContextMenu(menuID, x, y);
             }
-          
+
             void IMenuCommandService.AddVerb(DesignerVerb verb)
             {
                 _menuService.AddVerb(verb);
             }
-           
+
             DesignerVerbCollection IMenuCommandService.Verbs
             {
                 get => _menuService.Verbs;
@@ -1406,15 +1408,18 @@ namespace System.Windows.Forms.Design.Behavior
             return menuService.FindCommand(commandID);
         }
 
-        private Behavior GetAppropriateBehavior(Glyph g) {
-            if (_behaviorStack != null && _behaviorStack.Count > 0) {
+        private Behavior GetAppropriateBehavior(Glyph g)
+        {
+            if (_behaviorStack != null && _behaviorStack.Count > 0)
+            {
                 return _behaviorStack[0] as Behavior;
             }
-            
-            if (g != null && g.Behavior != null) {
+
+            if (g != null && g.Behavior != null)
+            {
                 return g.Behavior;
             }
-            
+
             return null;
         }
 

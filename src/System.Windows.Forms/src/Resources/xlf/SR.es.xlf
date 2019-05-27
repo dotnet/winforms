@@ -5182,7 +5182,7 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">Aceptar</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">

@@ -55,10 +55,12 @@ namespace System.Windows.Forms
                 EnsureSystemEvents();
                 if (s_systemEventsDirty)
                 {
-                    var data = new NativeMethods.HIGHCONTRAST_I();
-                    data.cbSize = Marshal.SizeOf<NativeMethods.HIGHCONTRAST_I>();
-                    data.dwFlags = 0;
-                    data.lpszDefaultScheme = IntPtr.Zero;
+                    var data = new NativeMethods.HIGHCONTRAST_I
+                    {
+                        cbSize = Marshal.SizeOf<NativeMethods.HIGHCONTRAST_I>(),
+                        dwFlags = 0,
+                        lpszDefaultScheme = IntPtr.Zero
+                    };
 
                     // Force it to false if we fail to get the parameter.
                     if (UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0))
@@ -1327,9 +1329,11 @@ namespace System.Windows.Forms
             get
             {
                 ScreenOrientation so = ScreenOrientation.Angle0;
-                NativeMethods.DEVMODE dm = new NativeMethods.DEVMODE();
-                dm.dmSize = (short)Marshal.SizeOf<NativeMethods.DEVMODE>();
-                dm.dmDriverExtra = 0;
+                NativeMethods.DEVMODE dm = new NativeMethods.DEVMODE
+                {
+                    dmSize = (short)Marshal.SizeOf<NativeMethods.DEVMODE>(),
+                    dmDriverExtra = 0
+                };
                 try
                 {
                     SafeNativeMethods.EnumDisplaySettings(null, -1 /*ENUM_CURRENT_SETTINGS*/, ref dm);
@@ -1421,7 +1425,7 @@ namespace System.Windows.Forms
                     int error = Marshal.GetLastWin32Error();
                     return error == NativeMethods.ERROR_ACCESS_DENIED;
                 }
-                
+
                 SafeNativeMethods.CloseDesktop(hDsk);
             }
 

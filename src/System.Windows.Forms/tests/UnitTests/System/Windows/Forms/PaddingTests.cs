@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(boxedPadding));
             Assert.False(property.ShouldSerializeValue(boxedPadding));
             property.ResetValue(boxedPadding);
-    
+
             Assert.Equal(0, ((Padding)boxedPadding).All);
             Assert.Equal(0, ((Padding)boxedPadding).Left);
             Assert.Equal(0, ((Padding)boxedPadding).Top);
@@ -122,7 +122,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(property.CanResetValue(boxedPadding));
             Assert.True(property.ShouldSerializeValue(boxedPadding));
             property.ResetValue(boxedPadding);
-    
+
             Assert.Equal(0, ((Padding)boxedPadding).All);
             Assert.Equal(0, ((Padding)boxedPadding).Left);
             Assert.Equal(0, ((Padding)boxedPadding).Top);

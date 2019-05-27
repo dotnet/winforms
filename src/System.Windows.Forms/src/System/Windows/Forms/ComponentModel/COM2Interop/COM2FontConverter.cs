@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop {
+namespace System.Windows.Forms.ComponentModel.Com2Interop
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
-    using System;    
+    using System;
     using System.Drawing;
     using System.Collections;
     using Microsoft.Win32;
@@ -16,22 +17,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// <summary>
     /// This class maps an OLE_COLOR to a managed Color editor.
     /// </summary>
-    internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter {
+    internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter
+    {
 
         private IntPtr lastHandle = IntPtr.Zero;
-        private Font lastFont  = null;
+        private Font lastFont = null;
 
-        public override bool AllowExpand {
-             get {
-                 return true;
-             }
-         }
+        public override bool AllowExpand
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         /// <summary>
         ///     Returns the managed type that this editor maps the property type to.
         /// </summary>
-        public override Type ManagedType {
-            get {
+        public override Type ManagedType
+        {
+            get
+            {
                 return typeof(Font);
             }
         }
@@ -39,11 +45,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Converts the native value into a managed value
         /// </summary>
-        public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
+        public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
+        {
             // we're getting an IFont thing here
-            UnsafeNativeMethods.IFont nativeFont = nativeValue as UnsafeNativeMethods.IFont;
 
-            if (nativeFont == null) {
+            if (!(nativeValue is UnsafeNativeMethods.IFont nativeFont))
+            {
                 lastHandle = IntPtr.Zero;
                 lastFont = Control.DefaultFont;
                 return lastFont;
@@ -52,47 +59,55 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             IntPtr fontHandle = nativeFont.GetHFont();
 
             // see if we have this guy cached
-            if (fontHandle == lastHandle && lastFont != null) {
+            if (fontHandle == lastHandle && lastFont != null)
+            {
                 return lastFont;
             }
 
             lastHandle = fontHandle;
-            
-            try {
+
+            try
+            {
                 // this wasn't working because it was converting everything to 
                 // world units.
                 //
                 Font font = Font.FromHfont(lastHandle);
-                try {
+                try
+                {
                     lastFont = ControlPaint.FontInPoints(font);
-                } 
-                finally {
+                }
+                finally
+                {
                     font.Dispose();
                 }
             }
-            catch(ArgumentException) {
+            catch (ArgumentException)
+            {
                 // we will fail on non-truetype fonts, so 
                 // just use the default font.
                 lastFont = Control.DefaultFont;
             }
-            
+
             return lastFont;
         }
 
         /// <summary>
         ///     Converts the managed value into a native value
         /// </summary>
-        public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {
+        public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
+        {
 
             // we default to black.
             //
-            if (managedValue == null) {
+            if (managedValue == null)
+            {
                 managedValue = Control.DefaultFont;
             }
 
             cancelSet = true;
 
-            if (lastFont != null && lastFont.Equals(managedValue)) {
+            if (lastFont != null && lastFont.Equals(managedValue))
+            {
                 // don't do anything here.
                 return null;
             }
@@ -101,10 +116,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             UnsafeNativeMethods.IFont nativeFont = (UnsafeNativeMethods.IFont)pd.GetNativeValue(pd.TargetObject);
 
             // now, push all the values into the native side
-            if (nativeFont != null) {
+            if (nativeFont != null)
+            {
                 bool changed = ControlPaint.FontToIFont(lastFont, nativeFont);
 
-                if (changed) {
+                if (changed)
+                {
                     // here, we want to pick up a new font from the handle
                     lastFont = null;
                     ConvertNativeToManaged(nativeFont, pd);

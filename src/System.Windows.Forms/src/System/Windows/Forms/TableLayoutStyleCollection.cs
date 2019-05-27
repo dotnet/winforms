@@ -94,7 +94,7 @@ namespace System.Windows.Forms
 
         public void Clear()
         {
-            foreach(TableLayoutStyle style in _innerList)
+            foreach (TableLayoutStyle style in _innerList)
             {
                 style.Owner = null;
             }
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
 
         public void RemoveAt(int index)
         {
-            TableLayoutStyle style = (TableLayoutStyle) _innerList[index];
+            TableLayoutStyle style = (TableLayoutStyle)_innerList[index];
             style.Owner = null;
             _innerList.RemoveAt(index);
             PerformLayoutIfOwned();

@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<ArgumentException>("paintParts", () => new DataGridViewCellPaintingEventArgs(new DataGridView(), graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, paintParts));
             }
         }
-        
+
         [Theory]
         [InlineData(0, 0)]
         [InlineData(-1, -1)]
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
             }
         }
-        
+
         [Theory]
         [InlineData(0, 0)]
         [InlineData(-1, -1)]
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
             }
         }
-        
+
         [Theory]
         [InlineData(0, 0)]
         [InlineData(-1, -1)]

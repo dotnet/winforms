@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             DataGridView dataGridView = new DataGridView();
 
-            var accessibleObject = dataGridView.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.NotNull(accessibleObject);
             Assert.Equal(AccessibleRole.Table, accessibleObject.Role);
         }

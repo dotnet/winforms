@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Specifies that the message box contains an exclamation symbol.
         /// </summary>
-        Exclamation  = 0x00000030,
+        Exclamation = 0x00000030,
 
         /// <summary>
         /// Specifies that the message box contains an asterisk symbol.
@@ -53,6 +53,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Specifies that the message box contains an asterisk icon.
         /// </summary>
-        Information  = Asterisk,
+        Information = Asterisk,
     }
 }

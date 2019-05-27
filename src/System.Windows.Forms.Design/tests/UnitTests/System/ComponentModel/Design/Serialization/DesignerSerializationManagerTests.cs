@@ -25,7 +25,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Same(iManager.Properties, iManager.Properties);
             Assert.Null(manager.PropertyProvider);
             Assert.False(manager.RecycleInstances);
-            Assert.True(manager.ValidateRecycledTypes);;
+            Assert.True(manager.ValidateRecycledTypes);
+            ;
         }
 
         public static IEnumerable<object[]> Ctor_IServiceProvider_TestData()
@@ -67,7 +68,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Same(iManager.Properties, iManager.Properties);
             Assert.Null(manager.PropertyProvider);
             Assert.False(manager.RecycleInstances);
-            Assert.True(manager.ValidateRecycledTypes);;
+            Assert.True(manager.ValidateRecycledTypes);
+            ;
         }
 
         [Fact]
@@ -92,7 +94,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             };
             Assert.Same(value, manager.Container);
             Assert.Same(value, manager.GetService(typeof(IContainer)));
-            
+
             // Set same.
             manager.Container = value;
             Assert.Same(value, manager.Container);
@@ -176,11 +178,11 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 PreserveNames = value
             };
             Assert.Equal(value, manager.PreserveNames);
-            
+
             // Set same
             manager.PreserveNames = value;
             Assert.Equal(value, manager.PreserveNames);
-            
+
             // Set different
             manager.PreserveNames = !value;
             Assert.Equal(!value, manager.PreserveNames);
@@ -274,7 +276,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 PropertyProvider = value
             };
             Assert.Same(value, manager.PropertyProvider);
-            
+
             // Set same
             manager.PropertyProvider = value;
             Assert.Same(value, manager.PropertyProvider);
@@ -286,10 +288,10 @@ namespace System.ComponentModel.Design.Serialization.Tests
         {
             var manager = new DesignerSerializationManager();
             manager.CreateSession();
-            
+
             manager.PropertyProvider = value;
             Assert.Same(value, manager.PropertyProvider);
-            
+
             // Set same
             manager.PropertyProvider = value;
             Assert.Same(value, manager.PropertyProvider);
@@ -307,7 +309,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             PropertyDescriptor property = Assert.IsAssignableFrom<PropertyDescriptor>(Assert.Single(properties));
             Assert.Equal(nameof(PropertyProvider.Value), property.Name);
             Assert.Same(properties, iManager.Properties);
-            
+
             var provider = new OtherPropertyProvider();
             manager.PropertyProvider = provider;
             Assert.Same(provider, manager.PropertyProvider);
@@ -315,7 +317,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             PropertyDescriptor otherProperty = Assert.IsAssignableFrom<PropertyDescriptor>(Assert.Single(otherProperties));
             Assert.Equal(nameof(OtherPropertyProvider.OtherValue), otherProperty.Name);
             Assert.Same(otherProperties, iManager.Properties);
-            
+
             // Set same.
             manager.PropertyProvider = provider;
             Assert.Same(provider, manager.PropertyProvider);
@@ -331,11 +333,11 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 RecycleInstances = value
             };
             Assert.Equal(value, manager.RecycleInstances);
-            
+
             // Set same
             manager.RecycleInstances = value;
             Assert.Equal(value, manager.RecycleInstances);
-            
+
             // Set different
             manager.RecycleInstances = !value;
             Assert.Equal(!value, manager.RecycleInstances);
@@ -360,11 +362,11 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 ValidateRecycledTypes = value
             };
             Assert.Equal(value, manager.ValidateRecycledTypes);
-            
+
             // Set same
             manager.ValidateRecycledTypes = value;
             Assert.Equal(value, manager.ValidateRecycledTypes);
-            
+
             // Set different
             manager.ValidateRecycledTypes = !value;
             Assert.Equal(!value, manager.ValidateRecycledTypes);
@@ -426,7 +428,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             iManager.AddSerializationProvider(mockDesignerSerializationProvider.Object);
             Assert.Same(expected, iManager.GetSerializer(objectType, mockDesignerSerializationProvider.Object.GetType()));
             mockDesignerSerializationProvider.Verify(p => p.GetSerializer(manager, null, objectType, mockDesignerSerializationProvider.Object.GetType()), Times.Once());
-            
+
             // Call again.
             Assert.Same(expected, iManager.GetSerializer(objectType, mockDesignerSerializationProvider.Object.GetType()));
             mockDesignerSerializationProvider.Verify(p => p.GetSerializer(manager, null, objectType, mockDesignerSerializationProvider.Object.GetType()), Times.Exactly(2));
@@ -611,7 +613,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             manager.OnResolveName(eventArgs);
             Assert.Equal(1, callCount);
             session.Dispose();
-            
+
             // Call again.
             session = manager.CreateSession();
             manager.OnResolveName(eventArgs);
@@ -986,7 +988,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Same(service, ((IServiceProvider)manager).GetService(serviceType));
             mockServiceProvider.Verify(p => p.GetService(serviceType), Times.Exactly(2));
         }
-        
+
         [Theory]
         [MemberData(nameof(Ctor_IServiceProvider_TestData))]
         public void DesignerSerializationManager_GetService_IContainer_ReturnsExpected(IServiceProvider provider, object expected)
@@ -1039,7 +1041,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Same(service, ((IServiceProvider)iManager).GetService(serviceType));
             mockServiceProvider.Verify(p => p.GetService(serviceType), Times.Exactly(2));
         }
-        
+
         [Theory]
         [MemberData(nameof(Ctor_IServiceProvider_TestData))]
         public void DesignerSerializationManager_IDesignerSerializationManagerGetService_IContainer_ReturnsExpected(IServiceProvider provider, object expected)
@@ -1672,7 +1674,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             manager.OnResolveName(eventArgs);
             Assert.Equal(1, callCount);
             session.Dispose();
-            
+
             // Call again.
             session = manager.CreateSession();
             iManager.ResolveName += handler;
@@ -1705,7 +1707,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             // With handler.
             manager.OnSessionCreated(eventArgs);
             Assert.Equal(1, callCount);
-            
+
             // Call again.
             manager.OnSessionCreated(eventArgs);
             Assert.Equal(2, callCount);

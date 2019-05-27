@@ -36,7 +36,8 @@ namespace System.Windows.Forms.Design.Behavior
                     // VisualStudio shell implements a mutable derived class from the base CommandID. The mutable class compares overridden properties instead of the read-only backing fields when testing equality of command IDs. Thus Equals method is asymmetrical derived class's override that compares properties is the accurate one.
                     if (commandId.Equals(candidateCommandId))
                     {
-                        MenuCommand dummyMC = new MenuCommand(delegate { }, commandId)
+                        MenuCommand dummyMC = new MenuCommand(delegate
+                        { }, commandId)
                         {
                             Enabled = false
                         };

@@ -29,10 +29,10 @@ namespace System.Windows.Forms
         /// </summary>
         public Image Image { get; }
 
-	    /// <summary>
-	    /// The rectangle to draw the Image in
-	    /// </summary>
-	    public Rectangle ImageRectangle { get; }
+        /// <summary>
+        /// The rectangle to draw the Image in
+        /// </summary>
+        public Rectangle ImageRectangle { get; }
 
         /// <summary>
         /// Not public as it currently pertains to button &amp; system renderer.
