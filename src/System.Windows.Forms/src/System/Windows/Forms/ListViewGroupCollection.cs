@@ -51,6 +51,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
+                CheckListViewItems(value);
+                value.ListView = _listView;
                 List[index] = value;
             }
         }

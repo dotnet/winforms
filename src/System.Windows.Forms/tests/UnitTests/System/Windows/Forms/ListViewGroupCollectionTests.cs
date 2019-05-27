@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
             var group = new ListViewGroup();
             collection[0] = group;
             Assert.Same(group, collection[0]);
-            Assert.Null(group.ListView);
+            Assert.Same(listView, group.ListView);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests
             var group = new ListViewGroup();
             collection[0] = group;
             Assert.Same(group, collection[0]);
-            Assert.Null(group.ListView);
+            Assert.Same(listView, group.ListView);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
 
             collection[0] = group;
             Assert.Same(group, Assert.Single(collection));
-            Assert.Null(group.ListView);
+            Assert.Same(listView, group.ListView);
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
 
             collection[0] = group;
             Assert.Same(group, Assert.Single(collection));
-            Assert.Null(group.ListView);
+            Assert.Same(listView, group.ListView);
         }
 
         [Theory]
@@ -146,20 +146,20 @@ namespace System.Windows.Forms.Tests
             var group = new ListViewGroup();
             otherCollection.Add(group);
 
-            // The group appears to belong to two list views.
             collection[0] = group;
             Assert.Same(group, collection[0]);
-            Assert.Same(otherListView, group.ListView);
+            Assert.Same(listView, group.ListView);
             Assert.Equal(group, Assert.Single(collection));
             Assert.Equal(group, Assert.Single(otherCollection));
         }
 
         [Fact]
-        public void ListViewGroupCollection_Item_SetHasItemsFromOtherListView_Success()
+        public void ListViewGroupCollection_Item_SetHasItemsFromOtherListView_ThrowsArgumentException()
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
-            collection.Add(new ListViewGroup());
+            var oldGroup = new ListViewGroup();
+            collection.Add(oldGroup);
             var otherListView = new ListView();
 
             var item = new ListViewItem();
@@ -167,8 +167,8 @@ namespace System.Windows.Forms.Tests
             group.Items.Add(item);
             otherListView.Items.Add(item);
 
-            collection[0] = group;
-            Assert.Same(group, Assert.Single(collection.Cast<ListViewGroup>()));
+            Assert.Throws<ArgumentException>(null, () => collection[0] = group);
+            Assert.Same(oldGroup, Assert.Single(collection.Cast<ListViewGroup>()));
             Assert.Null(group.ListView);
         }
 
