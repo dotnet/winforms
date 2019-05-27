@@ -34,36 +34,16 @@ namespace System.Windows.Forms.VisualStyles
         private static VisualStyleRenderer visualStyleRenderer = null;
 
         /// <summary>
-        ///    <para>
-        ///       Used to find whether visual styles are supported by the current OS. Same as 
-        ///       using the OSFeature class to see if themes are supported.
-        ///    </para>
+        /// Used to find whether visual styles are supported by the current OS. Same as 
+        /// using the OSFeature class to see if themes are supported.
+        /// This is always supported on platforms that .NET Core supports.
         /// </summary>
-        public static bool IsSupportedByOS
-        {
-            get
-            {
-                return (OSFeature.Feature.IsPresent(OSFeature.Themes));
-            }
-        }
+        public static bool IsSupportedByOS => true;
 
         /// <summary>
-        ///    <para> 
-        ///     Returns true if a visual style has currently been applied by the user, else false.
-        ///    </para>
+        /// Returns true if a visual style has currently been applied by the user, else false.
         /// </summary>
-        public static bool IsEnabledByUser
-        {
-            get
-            {
-                if (!IsSupportedByOS)
-                {
-                    return false;
-                }
-
-                return (SafeNativeMethods.IsAppThemed());
-            }
-        }
+        public static bool IsEnabledByUser => SafeNativeMethods.IsAppThemed();
 
         internal static string ThemeFilename
         {
