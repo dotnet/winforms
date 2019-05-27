@@ -6,33 +6,33 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.TabControl.OnDeselecting'/>,
     /// <see cref='System.Windows.Forms.TabControl.OnDeselected'/> event.
-    /// </devdoc>
+    /// </summary>
     public class TabControlCancelEventArgs : CancelEventArgs
     {
         public TabControlCancelEventArgs(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action) : base(cancel)
         {
-            TabPage = tabPage;                                           
+            TabPage = tabPage;
             TabPageIndex = tabPageIndex;
             Action = action;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the referemce to the tabpage that is undergoing the TabControl event.
-        /// </devdoc>
+        /// </summary>
         public TabPage TabPage { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the index to the tabpage that is undergoing the TabControl event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int TabPageIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the TabControl action which instigated the TabControl event.
-        /// </devdoc>
+        /// </summary>
         public TabControlAction Action { get; }
     }
 }

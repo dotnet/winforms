@@ -136,7 +136,9 @@ namespace System.ComponentModel.Design
         public bool CodeMarker(int nTimerID)
         {
             if (!IsEnabled)
+            {
                 return false;
+            }
 
             try
             {
@@ -170,12 +172,16 @@ namespace System.ComponentModel.Design
         public bool CodeMarkerEx(int nTimerID, byte[] aBuff)
         {
             if (!IsEnabled)
+            {
                 return false;
+            }
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
             if (aBuff == null)
-                throw new ArgumentNullException("aBuff");
+            {
+                throw new ArgumentNullException(nameof(aBuff));
+            }
 
             try
             {
@@ -231,12 +237,16 @@ namespace System.ComponentModel.Design
         public bool CodeMarkerEx(int nTimerID, string stringData)
         {
             if (!IsEnabled)
+            {
                 return false;
+            }
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
             if (stringData == null)
-                throw new ArgumentNullException("stringData");
+            {
+                throw new ArgumentNullException(nameof(stringData));
+            }
 
             try
             {
@@ -328,7 +338,7 @@ namespace System.ComponentModel.Design
         {
             if (regRoot == null)
             {
-                throw new ArgumentNullException("regRoot");
+                throw new ArgumentNullException(nameof(regRoot));
             }
 
             // Reads the Performance subkey from the given registry key
@@ -393,7 +403,7 @@ namespace System.ComponentModel.Design
 
             if (strRegRoot == null)
             {
-                throw new ArgumentNullException("strRegRoot");
+                throw new ArgumentNullException(nameof(strRegRoot));
             }
             
             this.regroot = strRegRoot;

@@ -12,10 +12,9 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para> Base class for the columns in a data grid view.</para>
-    /// </devdoc>
+    /// </summary>
     [
         Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign),
         TypeConverterAttribute(typeof(DataGridViewColumnConverter)),
@@ -25,14 +24,14 @@ namespace System.Windows.Forms
     public class DataGridViewColumn : DataGridViewBand, IComponent
     {
         private const float DATAGRIDVIEWCOLUMN_defaultFillWeight = 100F;
-        private const int   DATAGRIDVIEWCOLUMN_defaultWidth = 100;
-        private const int   DATAGRIDVIEWCOLUMN_defaultMinColumnThickness = 5;
+        private const int DATAGRIDVIEWCOLUMN_defaultWidth = 100;
+        private const int DATAGRIDVIEWCOLUMN_defaultMinColumnThickness = 5;
 
-        private const byte DATAGRIDVIEWCOLUMN_automaticSort                     = 0x01;
-        private const byte DATAGRIDVIEWCOLUMN_programmaticSort                  = 0x02;
-        private const byte DATAGRIDVIEWCOLUMN_isDataBound                       = 0x04;
-        private const byte DATAGRIDVIEWCOLUMN_isBrowsableInternal               = 0x08;
-        private const byte DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal    = 0x10;
+        private const byte DATAGRIDVIEWCOLUMN_automaticSort = 0x01;
+        private const byte DATAGRIDVIEWCOLUMN_programmaticSort = 0x02;
+        private const byte DATAGRIDVIEWCOLUMN_isDataBound = 0x04;
+        private const byte DATAGRIDVIEWCOLUMN_isBrowsableInternal = 0x08;
+        private const byte DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal = 0x10;
 
         private byte flags;  // see DATAGRIDVIEWCOLUMN_ consts above
         private DataGridViewCell cellTemplate;
@@ -52,28 +51,26 @@ namespace System.Windows.Forms
 
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DataGridViewColumn"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewColumn'/> class.
         ///    </para>
-        /// </devdoc>
-        public DataGridViewColumn() : this((DataGridViewCell) null)
+        /// </summary>
+        public DataGridViewColumn() : this((DataGridViewCell)null)
         {
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DataGridViewColumn3"]/*' />
         public DataGridViewColumn(DataGridViewCell cellTemplate) : base()
         {
-            this.fillWeight = DATAGRIDVIEWCOLUMN_defaultFillWeight;
-            this.usedFillWeight = DATAGRIDVIEWCOLUMN_defaultFillWeight;
-            this.Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
-            this.MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
-            this.name = string.Empty;
-            this.bandIsRow = false;
-            this.displayIndex = -1;
+            fillWeight = DATAGRIDVIEWCOLUMN_defaultFillWeight;
+            usedFillWeight = DATAGRIDVIEWCOLUMN_defaultFillWeight;
+            Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
+            MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
+            name = string.Empty;
+            _bandIsRow = false;
+            displayIndex = -1;
             this.cellTemplate = cellTemplate;
-            this.autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
+            autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
         }
 
         /// <summary>
@@ -86,7 +83,6 @@ namespace System.Windows.Forms
             return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.AutoSizeMode"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
             DefaultValue(DataGridViewAutoSizeColumnMode.NotSet),
@@ -97,71 +93,71 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.autoSizeMode;
+                return autoSizeMode;
             }
             set
             {
-               switch (value) 
-               { 
-                   case DataGridViewAutoSizeColumnMode.NotSet:
-                   case DataGridViewAutoSizeColumnMode.None:
-                   case DataGridViewAutoSizeColumnMode.ColumnHeader:
-                   case DataGridViewAutoSizeColumnMode.AllCellsExceptHeader:
-                   case DataGridViewAutoSizeColumnMode.AllCells:
-                   case DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader:
-                   case DataGridViewAutoSizeColumnMode.DisplayedCells:
-                   case DataGridViewAutoSizeColumnMode.Fill:
-                       break;
-                   default: 
-                       throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnMode)); 
-                }
-                if (this.autoSizeMode != value)
+                switch (value)
                 {
-                    if (this.Visible && this.DataGridView != null)
+                    case DataGridViewAutoSizeColumnMode.NotSet:
+                    case DataGridViewAutoSizeColumnMode.None:
+                    case DataGridViewAutoSizeColumnMode.ColumnHeader:
+                    case DataGridViewAutoSizeColumnMode.AllCellsExceptHeader:
+                    case DataGridViewAutoSizeColumnMode.AllCells:
+                    case DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader:
+                    case DataGridViewAutoSizeColumnMode.DisplayedCells:
+                    case DataGridViewAutoSizeColumnMode.Fill:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnMode));
+                }
+                if (autoSizeMode != value)
+                {
+                    if (Visible && DataGridView != null)
                     {
-                        if (!this.DataGridView.ColumnHeadersVisible &&
+                        if (!DataGridView.ColumnHeadersVisible &&
                             (value == DataGridViewAutoSizeColumnMode.ColumnHeader ||
-                             (value == DataGridViewAutoSizeColumnMode.NotSet && this.DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
+                             (value == DataGridViewAutoSizeColumnMode.NotSet && DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_AutoSizeCriteriaCannotUseInvisibleHeaders));
                         }
-                        if (this.Frozen &&
+                        if (Frozen &&
                             (value == DataGridViewAutoSizeColumnMode.Fill ||
-                             (value == DataGridViewAutoSizeColumnMode.NotSet && this.DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
+                             (value == DataGridViewAutoSizeColumnMode.NotSet && DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
                         {
                             // Cannot set the inherited auto size mode to Fill when the column is frozen
                             throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_FrozenColumnCannotAutoFill));
                         }
                     }
-                    DataGridViewAutoSizeColumnMode previousInheritedMode = this.InheritedAutoSizeMode;
+                    DataGridViewAutoSizeColumnMode previousInheritedMode = InheritedAutoSizeMode;
                     bool previousInheritedModeAutoSized = previousInheritedMode != DataGridViewAutoSizeColumnMode.Fill &&
                                                           previousInheritedMode != DataGridViewAutoSizeColumnMode.None &&
                                                           previousInheritedMode != DataGridViewAutoSizeColumnMode.NotSet;
-                    this.autoSizeMode = value;
-                    if (this.DataGridView == null)
+                    autoSizeMode = value;
+                    if (DataGridView == null)
                     {
-                        if (this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.Fill && 
-                            this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.None &&
-                            this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.NotSet)
+                        if (InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.Fill &&
+                            InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.None &&
+                            InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.NotSet)
                         {
                             if (!previousInheritedModeAutoSized)
                             {
                                 // Save current column width for later reuse
-                                this.CachedThickness = this.Thickness;
+                                CachedThickness = Thickness;
                             }
                         }
                         else
                         {
-                            if (this.Thickness != this.CachedThickness && previousInheritedModeAutoSized)
+                            if (Thickness != CachedThickness && previousInheritedModeAutoSized)
                             {
                                 // Restoring cached column width
-                                this.ThicknessInternal = this.CachedThickness;
+                                ThicknessInternal = CachedThickness;
                             }
                         }
                     }
                     else
                     {
-                        this.DataGridView.OnAutoSizeColumnModeChanged(this, previousInheritedMode);
+                        DataGridView.OnAutoSizeColumnModeChanged(this, previousInheritedMode);
                     }
                 }
             }
@@ -173,11 +169,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.boundColumnConverter;
+                return boundColumnConverter;
             }
             set
             {
-                this.boundColumnConverter = value;
+                boundColumnConverter = value;
             }
         }
 
@@ -185,15 +181,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.boundColumnIndex;
+                return boundColumnIndex;
             }
             set
             {
-                this.boundColumnIndex = value;
+                boundColumnIndex = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -203,15 +198,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.cellTemplate;
+                return cellTemplate;
             }
             set
             {
-                this.cellTemplate = value;
+                cellTemplate = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.CellType"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -220,9 +214,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.cellTemplate != null)
+                if (cellTemplate != null)
                 {
-                    return this.cellTemplate.GetType();
+                    return cellTemplate.GetType();
                 }
                 else
                 {
@@ -231,7 +225,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ContextMenuStrip"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatBehavior)),
@@ -249,7 +242,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DataPropertyName"]/*' />
         [
             Browsable(true),
             DefaultValue(""),
@@ -262,7 +254,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataPropertyName;
+                return dataPropertyName;
             }
             set
             {
@@ -270,18 +262,17 @@ namespace System.Windows.Forms
                 {
                     value = string.Empty;
                 }
-                if (value != this.dataPropertyName)
+                if (value != dataPropertyName)
                 {
-                    this.dataPropertyName = value;
-                    if (this.DataGridView != null)
+                    dataPropertyName = value;
+                    if (DataGridView != null)
                     {
-                        this.DataGridView.OnColumnDataPropertyNameChanged(this);
+                        DataGridView.OnColumnDataPropertyNameChanged(this);
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -302,16 +293,16 @@ namespace System.Windows.Forms
         private bool ShouldSerializeDefaultCellStyle()
         {
 
-            if (!this.HasDefaultCellStyle)
+            if (!HasDefaultCellStyle)
             {
                 return false;
             }
 
-            DataGridViewCellStyle defaultCellStyle = this.DefaultCellStyle;
+            DataGridViewCellStyle defaultCellStyle = DefaultCellStyle;
 
-            return (!defaultCellStyle.BackColor.IsEmpty || 
+            return (!defaultCellStyle.BackColor.IsEmpty ||
                     !defaultCellStyle.ForeColor.IsEmpty ||
-                    !defaultCellStyle.SelectionBackColor.IsEmpty || 
+                    !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
@@ -320,7 +311,7 @@ namespace System.Windows.Forms
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.NotSet ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag !=  null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
@@ -328,11 +319,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.desiredFillWidth;
+                return desiredFillWidth;
             }
             set
             {
-                this.desiredFillWidth = value;
+                desiredFillWidth = value;
             }
         }
 
@@ -340,56 +331,56 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.desiredMinimumWidth;
+                return desiredMinimumWidth;
             }
             set
             {
-                this.desiredMinimumWidth = value;
+                desiredMinimumWidth = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DisplayIndex"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public int DisplayIndex
         {
-            get 
+            get
             {
-                return this.displayIndex;
+                return displayIndex;
             }
-            set 
+            set
             {
-                if (this.displayIndex != value)
+                if (displayIndex != value)
                 {
                     if (value == int.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue));
                     }
-                    if (this.DataGridView != null)
+                    if (DataGridView != null)
                     {
                         if (value < 0)
                         {
-                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexNegative));
+                            throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridViewColumn_DisplayIndexNegative);
                         }
-                        if (value >= this.DataGridView.Columns.Count)
+                        if (value >= DataGridView.Columns.Count)
                         {
-                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexExceedsColumnCount));
+                            throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridViewColumn_DisplayIndexExceedsColumnCount);
                         }
+
                         // Will throw an error if a visible frozen column is placed inside a non-frozen area or vice-versa.
-                        this.DataGridView.OnColumnDisplayIndexChanging(this, value);
-                        this.displayIndex = value;
+                        DataGridView.OnColumnDisplayIndexChanging(this, value);
+                        displayIndex = value;
                         try
                         {
-                            this.DataGridView.InDisplayIndexAdjustments = true;
-                            this.DataGridView.OnColumnDisplayIndexChanged_PreNotification();
-                            this.DataGridView.OnColumnDisplayIndexChanged(this);
-                            this.DataGridView.OnColumnDisplayIndexChanged_PostNotification();
+                            DataGridView.InDisplayIndexAdjustments = true;
+                            DataGridView.OnColumnDisplayIndexChanged_PreNotification();
+                            DataGridView.OnColumnDisplayIndexChanged(this);
+                            DataGridView.OnColumnDisplayIndexChanged_PostNotification();
                         }
                         finally
                         {
-                            this.DataGridView.InDisplayIndexAdjustments = false;
+                            DataGridView.InDisplayIndexAdjustments = false;
                         }
                     }
                     else
@@ -398,7 +389,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooNegative));
                         }
-                        this.displayIndex = value;
+                        displayIndex = value;
                     }
                 }
             }
@@ -408,17 +399,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (this.flags & DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal) != 0;
+                return (flags & DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal) != 0;
             }
             set
             {
                 if (value)
                 {
-                    this.flags |= (byte) DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal;
+                    flags |= (byte)DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal;
                 }
                 else
                 {
-                    this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal);
+                    flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal);
                 }
             }
         }
@@ -430,28 +421,20 @@ namespace System.Windows.Forms
                 Debug.Assert(value >= -1);
                 Debug.Assert(value < int.MaxValue);
 
-                this.displayIndex = value;
+                displayIndex = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Disposed"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public event EventHandler Disposed
         {
-            add
-            {
-                this.disposed += value;
-            }
-            remove
-            {
-                this.disposed -= value;
-            }
+            add => disposed += value;
+            remove => disposed -= value;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DividerWidth"]/*' />
         [
             DefaultValue(0),
             SRCategory(nameof(SR.CatLayout)),
@@ -459,17 +442,16 @@ namespace System.Windows.Forms
         ]
         public int DividerWidth
         {
-            get 
+            get
             {
-                return this.DividerThickness;
+                return DividerThickness;
             }
-            set 
+            set
             {
-                this.DividerThickness = value;
+                DividerThickness = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.FillWeight"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultFillWeight),
@@ -479,27 +461,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.fillWeight;
+                return fillWeight;
             }
             set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(FillWeight), string.Format(SR.InvalidLowBoundArgument, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(FillWeight), value, 0));
                 }
                 if (value > (float)ushort.MaxValue)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(FillWeight), string.Format(SR.InvalidHighBoundArgumentEx, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(FillWeight), value, ushort.MaxValue));
                 }
-                if (this.DataGridView != null)
+                if (DataGridView != null)
                 {
-                    this.DataGridView.OnColumnFillWeightChanging(this, value);
-                    this.fillWeight = value;
-                    this.DataGridView.OnColumnFillWeightChanged(this);
+                    DataGridView.OnColumnFillWeightChanging(this, value);
+                    fillWeight = value;
+                    DataGridView.OnColumnFillWeightChanged(this);
                 }
                 else
                 {
-                    this.fillWeight = value;
+                    fillWeight = value;
                 }
             }
         }
@@ -509,11 +491,10 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(value > 0);
-                this.fillWeight = value;
+                fillWeight = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Frozen"]/*' />
         [
             DefaultValue(false),
             RefreshProperties(RefreshProperties.All),
@@ -532,7 +513,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.HeaderCell"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -541,7 +521,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewColumnHeaderCell) base.HeaderCellCore;
+                return (DataGridViewColumnHeaderCell)base.HeaderCellCore;
             }
             set
             {
@@ -549,7 +529,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.HeaderText"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr)),
@@ -559,10 +538,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.HasHeaderCell)
+                if (HasHeaderCell)
                 {
-                    string headerValue = this.HeaderCell.Value as string;
-                    if (headerValue != null)
+                    if (HeaderCell.Value is string headerValue)
                     {
                         return headerValue;
                     }
@@ -578,21 +556,20 @@ namespace System.Windows.Forms
             }
             set
             {
-                if ((value != null || this.HasHeaderCell) &&
-                    this.HeaderCell.ValueType != null &&
-                    this.HeaderCell.ValueType.IsAssignableFrom(typeof(string)))
+                if ((value != null || HasHeaderCell) &&
+                    HeaderCell.ValueType != null &&
+                    HeaderCell.ValueType.IsAssignableFrom(typeof(string)))
                 {
-                    this.HeaderCell.Value = value;
+                    HeaderCell.Value = value;
                 }
             }
         }
 
         private bool ShouldSerializeHeaderText()
         {
-            return this.HasHeaderCell && ((DataGridViewColumnHeaderCell) this.HeaderCell).ContainsLocalValue;
+            return HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.InheritedAutoSizeMode"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -602,11 +579,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetInheritedAutoSizeMode(this.DataGridView);
+                return GetInheritedAutoSizeMode(DataGridView);
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.InheritedStyle"]/*' />
         [
             Browsable(false)
         ]
@@ -615,20 +591,20 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewCellStyle columnStyle = null;
-                Debug.Assert(this.Index > -1);
-                if (this.HasDefaultCellStyle)
+                Debug.Assert(Index > -1);
+                if (HasDefaultCellStyle)
                 {
-                    columnStyle = this.DefaultCellStyle;
+                    columnStyle = DefaultCellStyle;
                     Debug.Assert(columnStyle != null);
                 }
 
-                if (this.DataGridView == null)
+                if (DataGridView == null)
                 {
                     return columnStyle;
                 }
 
                 DataGridViewCellStyle inheritedCellStyleTmp = new DataGridViewCellStyle();
-                DataGridViewCellStyle dataGridViewStyle = this.DataGridView.DefaultCellStyle;
+                DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
                 Debug.Assert(dataGridViewStyle != null);
 
                 if (columnStyle != null && !columnStyle.BackColor.IsEmpty)
@@ -758,22 +734,21 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (this.flags & DATAGRIDVIEWCOLUMN_isBrowsableInternal) != 0;
+                return (flags & DATAGRIDVIEWCOLUMN_isBrowsableInternal) != 0;
             }
             set
             {
                 if (value)
                 {
-                    this.flags |= (byte) DATAGRIDVIEWCOLUMN_isBrowsableInternal;
+                    flags |= (byte)DATAGRIDVIEWCOLUMN_isBrowsableInternal;
                 }
                 else
                 {
-                    this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_isBrowsableInternal);
+                    flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_isBrowsableInternal);
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.IsDataBound"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -782,7 +757,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.IsDataBoundInternal;
+                return IsDataBoundInternal;
             }
         }
 
@@ -790,25 +765,24 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (this.flags & DATAGRIDVIEWCOLUMN_isDataBound) != 0;
+                return (flags & DATAGRIDVIEWCOLUMN_isDataBound) != 0;
             }
             set
             {
                 if (value)
                 {
-                    this.flags |= (byte)DATAGRIDVIEWCOLUMN_isDataBound;
+                    flags |= (byte)DATAGRIDVIEWCOLUMN_isDataBound;
                 }
                 else
                 {
-                    this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_isDataBound);
+                    flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_isDataBound);
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.MinimumWidth"]/*' />
         [
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness),
-            Localizable(true), 
+            Localizable(true),
             SRCategory(nameof(SR.CatLayout)),
             SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthDescr)),
             RefreshProperties(RefreshProperties.Repaint)
@@ -817,15 +791,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.MinimumThickness;
+                return MinimumThickness;
             }
             set
             {
-                this.MinimumThickness = value;
+                MinimumThickness = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Name"]/*' />
         [
             Browsable(false)
         ]
@@ -851,33 +824,32 @@ namespace System.Windows.Forms
                 // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged 
                 // being fired.
                 //
-                if (this.Site != null && !string.IsNullOrEmpty(this.Site.Name))
+                if (Site != null && !string.IsNullOrEmpty(Site.Name))
                 {
-                    this.name = this.Site.Name;
+                    name = Site.Name;
                 }
 
                 return name;
             }
             set
-            {                
-                string oldName = this.name;
+            {
+                string oldName = name;
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.name = string.Empty;
+                    name = string.Empty;
                 }
                 else
                 {
-                    this.name = value;
+                    name = value;
                 }
-               
-                if (this.DataGridView != null && !string.Equals(this.name, oldName,StringComparison.Ordinal))
+
+                if (DataGridView != null && !string.Equals(name, oldName, StringComparison.Ordinal))
                 {
-                    this.DataGridView.OnColumnNameChanged(this);
+                    DataGridView.OnColumnNameChanged(this);
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ReadOnly"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_ColumnReadOnlyDescr))
@@ -890,11 +862,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (this.IsDataBound &&
-                    this.DataGridView != null &&
-                    this.DataGridView.DataConnection != null &&
-                    this.boundColumnIndex != -1 && 
-                    this.DataGridView.DataConnection.DataFieldIsReadOnly(this.boundColumnIndex) &&
+                if (IsDataBound &&
+                    DataGridView != null &&
+                    DataGridView.DataConnection != null &&
+                    boundColumnIndex != -1 &&
+                    DataGridView.DataConnection.DataFieldIsReadOnly(boundColumnIndex) &&
                     !value)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly));
@@ -903,7 +875,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Resizable"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_ColumnResizableDescr))
@@ -920,7 +891,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Site"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -929,15 +899,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.site;
+                return site;
             }
             set
             {
-                this.site = value;
+                site = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.SortMode"]/*' />
         [
             DefaultValue(DataGridViewColumnSortMode.NotSortable),
             SRCategory(nameof(SR.CatBehavior)),
@@ -947,11 +916,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((this.flags & DATAGRIDVIEWCOLUMN_automaticSort) != 0x00)
+                if ((flags & DATAGRIDVIEWCOLUMN_automaticSort) != 0x00)
                 {
                     return DataGridViewColumnSortMode.Automatic;
                 }
-                else if ((this.flags & DATAGRIDVIEWCOLUMN_programmaticSort) != 0x00)
+                else if ((flags & DATAGRIDVIEWCOLUMN_programmaticSort) != 0x00)
                 {
                     return DataGridViewColumnSortMode.Programmatic;
                 }
@@ -962,46 +931,45 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != this.SortMode)
+                if (value != SortMode)
                 {
                     if (value != DataGridViewColumnSortMode.NotSortable)
                     {
-                        if (this.DataGridView != null &&
-                            !this.DataGridView.InInitialization &&
+                        if (DataGridView != null &&
+                            !DataGridView.InInitialization &&
                             value == DataGridViewColumnSortMode.Automatic &&
-                            (this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
-                            this.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
+                            (DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
+                            DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
                         {
-                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_SortModeAndSelectionModeClash, (value).ToString(), this.DataGridView.SelectionMode.ToString()));
+                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_SortModeAndSelectionModeClash, (value).ToString(), DataGridView.SelectionMode.ToString()));
                         }
                         if (value == DataGridViewColumnSortMode.Automatic)
                         {
-                            this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_programmaticSort);
-                            this.flags |= (byte)DATAGRIDVIEWCOLUMN_automaticSort;
+                            flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_programmaticSort);
+                            flags |= (byte)DATAGRIDVIEWCOLUMN_automaticSort;
                         }
                         else
                         {
-                            this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_automaticSort);
-                            this.flags |= (byte)DATAGRIDVIEWCOLUMN_programmaticSort;
+                            flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_automaticSort);
+                            flags |= (byte)DATAGRIDVIEWCOLUMN_programmaticSort;
                         }
                     }
                     else
                     {
-                        this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_automaticSort);
-                        this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOLUMN_programmaticSort);
+                        flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_automaticSort);
+                        flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_programmaticSort);
                     }
-                    if (this.DataGridView != null)
+                    if (DataGridView != null)
                     {
-                        this.DataGridView.OnColumnSortModeChanged(this);
+                        DataGridView.OnColumnSortModeChanged(this);
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ToolTipText"]/*' />
         [
             DefaultValue(""),
-            Localizable(true), 
+            Localizable(true),
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))
         ]
@@ -1009,17 +977,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.HeaderCell.ToolTipText;
+                return HeaderCell.ToolTipText;
             }
             set
             {
-                if (string.Compare(this.ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
+                if (string.Compare(ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
                 {
-                    this.HeaderCell.ToolTipText = value;
+                    HeaderCell.ToolTipText = value;
 
-                    if (this.DataGridView != null)
+                    if (DataGridView != null)
                     {
-                        this.DataGridView.OnColumnToolTipTextChanged(this);
+                        DataGridView.OnColumnToolTipTextChanged(this);
                     }
                 }
             }
@@ -1029,16 +997,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.usedFillWeight;
+                return usedFillWeight;
             }
             set
             {
                 Debug.Assert(value > 0);
-                this.usedFillWeight = value;
+                usedFillWeight = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ValueType"]/*' />
         [
             Browsable(false),
             DefaultValue(null),
@@ -1048,19 +1015,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Type) this.Properties.GetObject(PropDataGridViewColumnValueType);
+                return (Type)Properties.GetObject(PropDataGridViewColumnValueType);
             }
             set
             {
                 // what should we do when we modify the ValueType in the dataGridView column???
-                this.Properties.SetObject(PropDataGridViewColumnValueType, value);
+                Properties.SetObject(PropDataGridViewColumnValueType, value);
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Visible"]/*' />
         [
             DefaultValue(true),
-            Localizable(true), 
+            Localizable(true),
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnVisibleDescr))
         ]
@@ -1076,10 +1042,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Width"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
-            Localizable(true), 
+            Localizable(true),
             SRDescription(nameof(SR.DataGridView_ColumnWidthDescr)),
             RefreshProperties(RefreshProperties.Repaint)
         ]
@@ -1087,20 +1052,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Thickness;
+                return Thickness;
             }
             set
             {
-                this.Thickness = value;
+                Thickness = value;
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Clone"]/*' />
         public override object Clone()
         {
             // 
 
-            DataGridViewColumn dataGridViewColumn = (DataGridViewColumn) System.Activator.CreateInstance(this.GetType());
+            DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
             if (dataGridViewColumn != null)
             {
                 CloneInternal(dataGridViewColumn);
@@ -1112,53 +1076,50 @@ namespace System.Windows.Forms
         {
             base.CloneInternal(dataGridViewColumn);
 
-            dataGridViewColumn.name = this.Name;
+            dataGridViewColumn.name = Name;
             dataGridViewColumn.displayIndex = -1;
-            dataGridViewColumn.HeaderText = this.HeaderText;
-            dataGridViewColumn.DataPropertyName = this.DataPropertyName;
+            dataGridViewColumn.HeaderText = HeaderText;
+            dataGridViewColumn.DataPropertyName = DataPropertyName;
 
             // dataGridViewColumn.boundColumnConverter = columnTemplate.BoundColumnConverter;  setting the DataPropertyName should also set the bound column converter later on.
             if (dataGridViewColumn.CellTemplate != null)
             {
-                dataGridViewColumn.cellTemplate = (DataGridViewCell)this.CellTemplate.Clone();
+                dataGridViewColumn.cellTemplate = (DataGridViewCell)CellTemplate.Clone();
             }
             else
             {
                 dataGridViewColumn.cellTemplate = null;
             }
 
-            if (this.HasHeaderCell)
+            if (HasHeaderCell)
             {
-                dataGridViewColumn.HeaderCell = (DataGridViewColumnHeaderCell) this.HeaderCell.Clone();
+                dataGridViewColumn.HeaderCell = (DataGridViewColumnHeaderCell)HeaderCell.Clone();
             }
 
-            dataGridViewColumn.AutoSizeMode = this.AutoSizeMode;
-            dataGridViewColumn.SortMode = this.SortMode;
-            dataGridViewColumn.FillWeightInternal = this.FillWeight;
+            dataGridViewColumn.AutoSizeMode = AutoSizeMode;
+            dataGridViewColumn.SortMode = SortMode;
+            dataGridViewColumn.FillWeightInternal = FillWeight;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Dispose"]/*' />
-        protected override void Dispose(bool disposing) {
-            try 
+        protected override void Dispose(bool disposing)
+        {
+            try
             {
                 if (disposing)
                 {
                     // 
-                    lock(this)
+                    lock (this)
                     {
-                        if (this.site != null && this.site.Container != null)
+                        if (site != null && site.Container != null)
                         {
-                            this.site.Container.Remove(this);
+                            site.Container.Remove(this);
                         }
 
-                        if (this.disposed != null)
-                        {
-                            this.disposed(this, EventArgs.Empty);
-                        }
+                        disposed?.Invoke(this, EventArgs.Empty);
                     }
                 }
             }
-            finally 
+            finally
             {
                 base.Dispose(disposing);
             }
@@ -1166,7 +1127,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView dataGridView)
         {
-            if (dataGridView != null && this.autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
+            if (dataGridView != null && autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
             {
                 switch (dataGridView.AutoSizeColumnsMode)
                 {
@@ -1192,10 +1153,9 @@ namespace System.Windows.Forms
                         return DataGridViewAutoSizeColumnMode.None;
                 }
             }
-            return this.autoSizeMode;
+            return autoSizeMode;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.GetPreferredWidth"]/*' />
         public virtual int GetPreferredWidth(DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight)
         {
             if (autoSizeColumnMode == DataGridViewAutoSizeColumnMode.NotSet ||
@@ -1204,7 +1164,8 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_NeedColumnAutoSizingCriteria, "autoSizeColumnMode"));
             }
-            switch (autoSizeColumnMode) { 
+            switch (autoSizeColumnMode)
+            {
                 case DataGridViewAutoSizeColumnMode.NotSet:
                 case DataGridViewAutoSizeColumnMode.None:
                 case DataGridViewAutoSizeColumnMode.ColumnHeader:
@@ -1214,20 +1175,20 @@ namespace System.Windows.Forms
                 case DataGridViewAutoSizeColumnMode.DisplayedCells:
                 case DataGridViewAutoSizeColumnMode.Fill:
                     break;
-                default: 
-                    throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int) autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode)); 
-             }
+                default:
+                    throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
+            }
 
-            DataGridView dataGridView = this.DataGridView;
+            DataGridView dataGridView = DataGridView;
 
-            Debug.Assert(dataGridView == null || this.Index > -1);
+            Debug.Assert(dataGridView == null || Index > -1);
 
             if (dataGridView == null)
             {
                 return -1;
             }
 
-            DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaInternal = (DataGridViewAutoSizeColumnCriteriaInternal) autoSizeColumnMode;
+            DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaInternal = (DataGridViewAutoSizeColumnCriteriaInternal)autoSizeColumnMode;
             Debug.Assert(autoSizeColumnCriteriaInternal == DataGridViewAutoSizeColumnCriteriaInternal.Header ||
                 autoSizeColumnCriteriaInternal == DataGridViewAutoSizeColumnCriteriaInternal.AllRows ||
                 autoSizeColumnCriteriaInternal == DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows ||
@@ -1244,11 +1205,11 @@ namespace System.Windows.Forms
             {
                 if (fixedHeight)
                 {
-                    preferredCellThickness = this.HeaderCell.GetPreferredWidth(-1, dataGridView.ColumnHeadersHeight);
+                    preferredCellThickness = HeaderCell.GetPreferredWidth(-1, dataGridView.ColumnHeadersHeight);
                 }
                 else
                 {
-                    preferredCellThickness = this.HeaderCell.GetPreferredSize(-1).Width;
+                    preferredCellThickness = HeaderCell.GetPreferredSize(-1).Width;
                 }
                 if (preferredColumnThickness < preferredCellThickness)
                 {
@@ -1264,11 +1225,11 @@ namespace System.Windows.Forms
                     dataGridViewRow = dataGridView.Rows.SharedRow(rowIndex);
                     if (fixedHeight)
                     {
-                        preferredCellThickness = dataGridViewRow.Cells[this.Index].GetPreferredWidth(rowIndex, dataGridViewRow.Thickness);
+                        preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredWidth(rowIndex, dataGridViewRow.Thickness);
                     }
                     else
                     {
-                        preferredCellThickness = dataGridViewRow.Cells[this.Index].GetPreferredSize(rowIndex).Width;
+                        preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredSize(rowIndex).Width;
                     }
                     if (preferredColumnThickness < preferredCellThickness)
                     {
@@ -1287,11 +1248,11 @@ namespace System.Windows.Forms
                     dataGridViewRow = dataGridView.Rows.SharedRow(rowIndex);
                     if (fixedHeight)
                     {
-                        preferredCellThickness = dataGridViewRow.Cells[this.Index].GetPreferredWidth(rowIndex, dataGridViewRow.Thickness);
+                        preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredWidth(rowIndex, dataGridViewRow.Thickness);
                     }
                     else
                     {
-                        preferredCellThickness = dataGridViewRow.Cells[this.Index].GetPreferredSize(rowIndex).Width;
+                        preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredSize(rowIndex).Width;
                     }
                     if (preferredColumnThickness < preferredCellThickness)
                     {
@@ -1310,11 +1271,11 @@ namespace System.Windows.Forms
                         dataGridViewRow = dataGridView.Rows.SharedRow(rowIndex);
                         if (fixedHeight)
                         {
-                            preferredCellThickness = dataGridViewRow.Cells[this.Index].GetPreferredWidth(rowIndex, dataGridViewRow.Thickness);
+                            preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredWidth(rowIndex, dataGridViewRow.Thickness);
                         }
                         else
                         {
-                            preferredCellThickness = dataGridViewRow.Cells[this.Index].GetPreferredSize(rowIndex).Width;
+                            preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredSize(rowIndex).Width;
                         }
                         if (preferredColumnThickness < preferredCellThickness)
                         {
@@ -1328,14 +1289,13 @@ namespace System.Windows.Forms
             return preferredColumnThickness;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("DataGridViewColumn { Name=");
-            sb.Append(this.Name);
+            sb.Append(Name);
             sb.Append(", Index=");
-            sb.Append(this.Index.ToString(CultureInfo.CurrentCulture));
+            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
             sb.Append(" }");
             return sb.ToString();
         }

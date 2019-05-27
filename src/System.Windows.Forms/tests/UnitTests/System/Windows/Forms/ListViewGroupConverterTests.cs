@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,12 +14,13 @@ namespace System.Windows.Forms.Tests
 {
     public class ListViewGroupConverterTests
     {
+        public static TheoryData<Type, bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
-        [InlineData(typeof(string), false)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(ListViewGroup), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), false)]
         public void ListViewGroupConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
@@ -28,10 +29,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CanConvertFrom_Context_TestData()
         {
-            yield return new object [] { null, false };
-            yield return new object [] { new object(), false };
-            yield return new object [] { new ListViewItem(), true };
-            
+            yield return new object[] { null, false };
+            yield return new object[] { new object(), false };
+            yield return new object[] { new ListViewItem(), true };
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);
@@ -141,10 +142,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CanConvertTo_Context_TestData()
         {
-            yield return new object [] { null, true };
-            yield return new object [] { new object(), true };
-            yield return new object [] { new ListViewItem(), true };
-            
+            yield return new object[] { null, true };
+            yield return new object[] { new object(), true };
+            yield return new object[] { new ListViewItem(), true };
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);
@@ -257,10 +258,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetStandardValues_TestData()
         {
-            yield return new object [] { null, null };
-            yield return new object [] { new object(), null };
-            yield return new object [] { new ListViewItem(), null };
-            
+            yield return new object[] { null, null };
+            yield return new object[] { new object(), null };
+            yield return new object[] { new ListViewItem(), null };
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);

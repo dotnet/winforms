@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using Moq;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -15,11 +16,9 @@ namespace System.Windows.Forms.Tests
     public class PaddingConverterTests
     {
         [Theory]
-        [InlineData(typeof(string), true)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(Padding), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), true)]
         public void PaddingConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             var converter = new PaddingConverter();
@@ -41,6 +40,7 @@ namespace System.Windows.Forms.Tests
             var converter = new PaddingConverter();
             Assert.Equal(expected, converter.ConvertFrom(value));
             Assert.Equal(expected, converter.ConvertFrom(null, null, value));
+            Assert.Equal(expected, converter.ConvertFrom(null, CultureInfo.InvariantCulture, value));
         }
 
         [Theory]
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
         public void PaddingConverter_ConvertFrom_InvalidString_ThrowsArgumentException(string value)
         {
             var converter = new PaddingConverter();
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertFrom(value));
+            Assert.Throws<ArgumentException>("value", () => converter.ConvertFrom(value));
         }
 
         [Theory]
@@ -79,6 +79,7 @@ namespace System.Windows.Forms.Tests
             var converter = new PaddingConverter();
             Assert.Equal("1, 2, 3, 4", converter.ConvertTo(new Padding(1, 2, 3, 4), typeof(string)));
             Assert.Equal("1, 2, 3, 4", converter.ConvertTo(null, null, new Padding(1, 2, 3, 4), typeof(string)));
+            Assert.Equal("1, 2, 3, 4", converter.ConvertTo(null, CultureInfo.InvariantCulture, new Padding(1, 2, 3, 4), typeof(string)));
         }
 
         [Fact]
@@ -302,7 +303,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Bottom), 4}
                 }
             };
-    
+
             yield return new object[]
             {
                 new Dictionary<string, object>

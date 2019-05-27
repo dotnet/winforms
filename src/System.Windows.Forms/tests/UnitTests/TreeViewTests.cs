@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(tv.ImageIndexer);
             Assert.Equal(0, tv.ImageIndexer.Index);
         }
-        
+
         [Fact]
         public void TreeView_AddExistingNodeAsChild_ThrowsArgumentException()
         {

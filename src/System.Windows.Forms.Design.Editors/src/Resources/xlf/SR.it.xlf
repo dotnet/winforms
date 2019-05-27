@@ -75,7 +75,7 @@
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
         <target state="translated">Web</target>
-        <note />
+        <note>{Locked="Web"}</note>
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
@@ -125,6 +125,11 @@
       <trans-unit id="GenericOpenFile">
         <source>Open File</source>
         <target state="translated">Apri file</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MultilineStringEditorWatermark">
+        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
+        <target state="translated">Per iniziare una nuova riga, premere INVIO.\r\nPer accettare il testo, premere CTRL+INVIO.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

@@ -35,7 +35,7 @@ namespace System.Windows.Forms
 
     [SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances")]
     public delegate void DataGridViewCellMouseEventHandler(object sender, DataGridViewCellMouseEventArgs e);
-    
+
     [SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances")]
     public delegate void DataGridViewCellPaintingEventHandler(object sender, DataGridViewCellPaintingEventArgs e);
 

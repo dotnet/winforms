@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 
         public int Index { get; set; } = -1;
 
-        public string Text{ get; }
+        public string Text { get; }
 
         public Point StartingPoint { get; }
 

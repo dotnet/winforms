@@ -16,9 +16,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.replaced)
+                if (!replaced)
                 {
-                    this.replaced = true;
+                    replaced = true;
                     base.DescriptionValue = SR.GetResourceString(base.Description);
                 }
                 return base.Description;

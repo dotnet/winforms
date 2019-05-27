@@ -11,8 +11,8 @@ namespace System.Windows.Forms
     public enum GetChildAtPointSkip
     {
         None = 0x0000,
-        Invisible = 0x0001,         
-        Disabled = 0x0002,   
+        Invisible = 0x0001,
+        Disabled = 0x0002,
         Transparent = 0x0004
     }
 }

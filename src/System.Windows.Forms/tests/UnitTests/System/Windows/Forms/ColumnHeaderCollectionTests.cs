@@ -57,8 +57,10 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeaderCollection_Item_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(new ColumnHeader());
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                new ColumnHeader()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
@@ -79,8 +81,10 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeaderCollection_IListItem_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var listView = new ListView();
-            IList collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(new ColumnHeader());
+            IList collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                new ColumnHeader()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
@@ -90,8 +94,10 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeaderCollection_IListItem_Set_ThrowsNotSupportedException(int index)
         {
             var listView = new ListView();
-            IList collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(new ColumnHeader());
+            IList collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                new ColumnHeader()
+            };
             Assert.Throws<NotSupportedException>(() => collection[index] = new ColumnHeader());
         }
 
@@ -108,11 +114,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header1 = new ColumnHeader();
-            var header2 = new ColumnHeader();
-            header2.Name = "text";
+            var header2 = new ColumnHeader
+            {
+                Name = "text"
+            };
             collection.Add(header1);
             collection.Add(header2);
-            
+
             Assert.Equal(expectedIndex != -1 ? collection[expectedIndex] : null, collection[key]);
         }
 
@@ -152,53 +160,59 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeaderCollection_Add_String_Success(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeaderCollection_Add_String_Success(string text, string expectedText)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(text);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                text
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
         public static IEnumerable<object[]> Add_String_Int_TestData()
         {
-            yield return new object[] { null, -1 };
-            yield return new object[] {  "", 0 };
-            yield return new object[] { "reasonable", 1 };
+            yield return new object[] { null, -1, string.Empty };
+            yield return new object[] { string.Empty, 0, string.Empty };
+            yield return new object[] { "text", 1, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_Int_TestData))]
-        public void ColumnHeaderCollection_Add_String_Int_Success(string text, int width)
+        public void ColumnHeaderCollection_Add_String_Int_Success(string text, int width, string expectedText)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(text, width);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                { text, width }
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
 
         public static IEnumerable<object[]> Add_String_Int_HorizontalAlignment_TestData()
         {
-            yield return new object[] { null, -1, HorizontalAlignment.Left };
-            yield return new object[] {  "", 0, HorizontalAlignment.Center };
-            yield return new object[] { "reasonable", 1, HorizontalAlignment.Right };
+            yield return new object[] { null, -1, HorizontalAlignment.Left, string.Empty };
+            yield return new object[] { string.Empty, 0, HorizontalAlignment.Center, string.Empty };
+            yield return new object[] { "text", 1, HorizontalAlignment.Right, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_Int_HorizontalAlignment_TestData))]
-        public void ColumnHeaderCollection_Add_String_Int_HorizontalAlignment_Success(string text, int width, HorizontalAlignment textAlign)
+        public void ColumnHeaderCollection_Add_String_Int_HorizontalAlignment_Success(string text, int width, HorizontalAlignment textAlign, string expectedText)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(text, width, textAlign);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                { text, width, textAlign }
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(listView, header.ListView);
@@ -206,62 +220,68 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Add_String_String_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] {  "", "" };
-            yield return new object[] { "name", "text" };
+            yield return new object[] { null, null, string.Empty, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, string.Empty, string.Empty };
+            yield return new object[] { "name", "text", "name", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_String_TestData))]
-        public void ColumnHeaderCollection_Add_String_String_Success(string name, string text)
+        public void ColumnHeaderCollection_Add_String_String_Success(string name, string text, string expectedName, string expectedText)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(name, text);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                { name, text }
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
         public static IEnumerable<object[]> Add_String_String_Int_TestData()
         {
-            yield return new object[] { null, null, -1 };
-            yield return new object[] {  "", "", 0 };
-            yield return new object[] { "name", "text", 1 };
+            yield return new object[] { null, null, -1, string.Empty, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, 0, string.Empty, string.Empty };
+            yield return new object[] { "name", "text", 1, "name", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_String_Int_TestData))]
-        public void ColumnHeaderCollection_Add_String_String_Int_Success(string name, string text, int width)
+        public void ColumnHeaderCollection_Add_String_String_Int_Success(string name, string text, int width, string expectedName, string expectedText)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(name, text, width);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                { name, text, width }
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
 
         public static IEnumerable<object[]> Add_String_String_Int_HorizontalAlignment_Int_TestData()
         {
-            yield return new object[] { null, null, -1, HorizontalAlignment.Left, -1 };
-            yield return new object[] {  "", "", 0, HorizontalAlignment.Center, 0 };
-            yield return new object[] { "name", "text", 1, HorizontalAlignment.Right, 1 };
+            yield return new object[] { null, null, -1, HorizontalAlignment.Left, -1, string.Empty, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, 0, HorizontalAlignment.Center, 0, string.Empty, string.Empty };
+            yield return new object[] { "name", "text", 1, HorizontalAlignment.Right, 1, "name", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_Int_TestData))]
-        public void ColumnHeaderCollection_Add_String_String_Int_HorizontalAlignment_Int_Success(string name, string text, int width, HorizontalAlignment textAlign, int imageIndex)
+        public void ColumnHeaderCollection_Add_String_String_Int_HorizontalAlignment_Int_Success(string name, string text, int width, HorizontalAlignment textAlign, int imageIndex, string expectedName, string expectedText)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(name, text, width, textAlign, imageIndex);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                { name, text, width, textAlign, imageIndex }
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(imageIndex, header.ImageIndex);
@@ -270,24 +290,26 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Add_String_String_Int_HorizontalAlignment_String_TestData()
         {
-            yield return new object[] { null, null, -1, HorizontalAlignment.Left, null };
-            yield return new object[] {  "", "", 0, HorizontalAlignment.Center, "" };
-            yield return new object[] { "name", "text", 1, HorizontalAlignment.Right, "imageKey" };
+            yield return new object[] { null, null, -1, HorizontalAlignment.Left, null, string.Empty, string.Empty, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, 0, HorizontalAlignment.Center, string.Empty, string.Empty, string.Empty, string.Empty };
+            yield return new object[] { "name", "text", 1, HorizontalAlignment.Right, "imageKey", "name", "text", "imageKey" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_String_TestData))]
-        public void ColumnHeaderCollection_Add_String_String_Int_HorizontalAlignment_String_Success(string name, string text, int width, HorizontalAlignment textAlign, string imageKey)
+        public void ColumnHeaderCollection_Add_String_String_Int_HorizontalAlignment_String_Success(string name, string text, int width, HorizontalAlignment textAlign, string imageKey, string expectedName, string expectedText, string expectedImageKey)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(name, text, width, textAlign, imageKey);
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                { name, text, width, textAlign, imageKey }
+            };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
-            Assert.Equal(imageKey ?? string.Empty, header.ImageKey);
+            Assert.Same(expectedImageKey, header.ImageKey);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -520,7 +542,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.True(collection.Contains(header));
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(null));
@@ -531,7 +553,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(null));
         }
@@ -549,11 +571,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header1 = new ColumnHeader();
-            var header2 = new ColumnHeader();
-            header2.Name = "text";
+            var header2 = new ColumnHeader
+            {
+                Name = "text"
+            };
             collection.Add(header1);
             collection.Add(header2);
-            
+
             Assert.Equal(expected, collection.ContainsKey(key));
         }
 
@@ -562,7 +586,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.False(collection.ContainsKey("text"));
             Assert.False(collection.ContainsKey(null));
         }
@@ -574,7 +598,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.True(collection.Contains(header));
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(new object()));
@@ -586,7 +610,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             IList collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(new object()));
             Assert.False(collection.Contains(null));
@@ -599,7 +623,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.Equal(0, collection.IndexOf(header));
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(null));
@@ -610,7 +634,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(null));
         }
@@ -628,11 +652,13 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header1 = new ColumnHeader();
-            var header2 = new ColumnHeader();
-            header2.Name = "text";
+            var header2 = new ColumnHeader
+            {
+                Name = "text"
+            };
             collection.Add(header1);
             collection.Add(header2);
-            
+
             Assert.Equal(expected, collection.IndexOfKey(key));
 
             // Call again to validate caching behaviour.
@@ -645,7 +671,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.Equal(-1, collection.IndexOfKey("text"));
             Assert.Equal(-1, collection.IndexOf(null));
         }
@@ -657,7 +683,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.Equal(0, collection.IndexOf(header));
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(new object()));
@@ -669,7 +695,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             IList collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(new object()));
             Assert.Equal(-1, collection.IndexOf(null));
@@ -689,39 +715,39 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeaderCollection_Insert_String_Success(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeaderCollection_Insert_String_Success(string text, string expectedText)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, text);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
         [Theory]
         [MemberData(nameof(Add_String_Int_TestData))]
-        public void ColumnHeaderCollection_Insert_String_Int_Success(string text, int width)
+        public void ColumnHeaderCollection_Insert_String_Int_Success(string text, int width, string expectedText)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, text, width);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
 
         [Theory]
         [MemberData(nameof(Add_String_Int_HorizontalAlignment_TestData))]
-        public void ColumnHeaderCollection_Insert_String_Int_HorizontalAlignment_Success(string text, int width, HorizontalAlignment textAlign)
+        public void ColumnHeaderCollection_Insert_String_Int_HorizontalAlignment_Success(string text, int width, HorizontalAlignment textAlign, string expectedText)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, text, width, textAlign);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(listView, header.ListView);
@@ -729,41 +755,41 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(Add_String_String_TestData))]
-        public void ColumnHeaderCollection_Insert_String_String_Success(string name, string text)
+        public void ColumnHeaderCollection_Insert_String_String_Success(string name, string text, string expectedName, string expectedText)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
         [Theory]
         [MemberData(nameof(Add_String_String_Int_TestData))]
-        public void ColumnHeaderCollection_Insert_String_String_Int_Success(string name, string text, int width)
+        public void ColumnHeaderCollection_Insert_String_String_Int_Success(string name, string text, int width, string expectedName, string expectedText)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text, width);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
 
         [Theory]
         [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_Int_TestData))]
-        public void ColumnHeaderCollection_Insert_String_String_Int_HorizontalAlignment_Int_Success(string name, string text, int width, HorizontalAlignment textAlign, int imageIndex)
+        public void ColumnHeaderCollection_Insert_String_String_Int_HorizontalAlignment_Int_Success(string name, string text, int width, HorizontalAlignment textAlign, int imageIndex, string expectedName, string expectedText)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text, width, textAlign, imageIndex);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(imageIndex, header.ImageIndex);
@@ -772,17 +798,17 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_String_TestData))]
-        public void ColumnHeaderCollection_Insert_String_String_Int_HorizontalAlignment_String_Success(string name, string text, int width, HorizontalAlignment textAlign, string imageKey)
+        public void ColumnHeaderCollection_Insert_String_String_Int_HorizontalAlignment_String_Success(string name, string text, int width, HorizontalAlignment textAlign, string imageKey, string expectedName, string expectedText, string expectedImageKey)
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text, width, textAlign, imageKey);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Equal(name ?? string.Empty, header.Name);
-            Assert.Equal(text ?? string.Empty, header.Text);
+            Assert.Same(expectedName, header.Name);
+            Assert.Same(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
-            Assert.Equal(imageKey ?? string.Empty, header.ImageKey);
+            Assert.Equal(expectedImageKey, header.ImageKey);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -790,8 +816,10 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeaderCollection_Insert_NullItem_ThrowsArgumentNullException()
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(new ColumnHeader());
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                new ColumnHeader()
+            };
             Assert.Throws<ArgumentNullException>("ch", () => collection.Insert(1, (ColumnHeader)null));
         }
 
@@ -1017,8 +1045,10 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeaderCollection_RemoveAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var listView = new ListView();
-            var collection = new ListView.ColumnHeaderCollection(listView);
-            collection.Add(new ColumnHeader());
+            var collection = new ListView.ColumnHeaderCollection(listView)
+            {
+                new ColumnHeader()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
         }
 

@@ -11,10 +11,9 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// Base class for ToolStripItems that display DropDown windows.
-    /// </devdoc>
+    /// </summary>
     [Designer("System.Windows.Forms.Design.ToolStripMenuItemDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultProperty(nameof(DropDownItems))]
     public abstract class ToolStripDropDownItem : ToolStripItem
@@ -28,10 +27,9 @@ namespace System.Windows.Forms
         private static readonly object EventDropDownClosed = new object();
         private static readonly object EventDropDownItemClicked = new object();
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ToolStripDropDownItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Protected ctor so you can't create one of these without deriving from it.
-        /// </devdoc>
+        /// </summary>
         protected ToolStripDropDownItem()
         {
         }
@@ -49,15 +47,14 @@ namespace System.Windows.Forms
         {
             if (dropDownItems != null)
             {
-                this.DropDownItems.AddRange(dropDownItems);
+                DropDownItems.AddRange(dropDownItems);
             }
         }
 
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// The ToolStripDropDown that will be displayed when this item is clicked.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatData)),
@@ -113,7 +110,7 @@ namespace System.Windows.Forms
         // the area which activates the dropdown.
         internal virtual Rectangle DropDownButtonArea
         {
-            get { return this.Bounds; }
+            get { return Bounds; }
         }
 
         [Browsable(false)]
@@ -129,7 +126,7 @@ namespace System.Windows.Forms
                     if (parent != null)
                     {
                         ToolStripDropDownDirection dropDownDirection = parent.DefaultDropDownDirection;
-                        if (OppositeDropDownAlign || this.RightToLeft != parent.RightToLeft && (this.RightToLeft != RightToLeft.Inherit))
+                        if (OppositeDropDownAlign || RightToLeft != parent.RightToLeft && (RightToLeft != RightToLeft.Inherit))
                         {
                             dropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, RightToLeft);
                         }
@@ -194,27 +191,19 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownClosed"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is closed
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownClosedDecr))
         ]
         public event EventHandler DropDownClosed
         {
-            add
-            {
-                Events.AddHandler(EventDropDownClosed, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventDropDownClosed, value);
-            }
+            add => Events.AddHandler(EventDropDownClosed, value);
+            remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownLocation"]/*' />
         internal protected virtual Point DropDownLocation
         {
             get
@@ -229,46 +218,31 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\WinBarPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpening"]/*' />
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
         ]
         public event EventHandler DropDownOpening
         {
-            add
-            {
-                Events.AddHandler(EventDropDownShow, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventDropDownShow, value);
-            }
+            add => Events.AddHandler(EventDropDownShow, value);
+            remove => Events.RemoveHandler(EventDropDownShow, value);
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpened"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is opened
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))
         ]
         public event EventHandler DropDownOpened
         {
-            add
-            {
-                Events.AddHandler(EventDropDownOpened, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventDropDownOpened, value);
-            }
+            add => Events.AddHandler(EventDropDownOpened, value);
+            remove => Events.RemoveHandler(EventDropDownOpened, value);
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItems"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns the DropDown's items collection.
-        /// </devdoc>
+        /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         SRCategory(nameof(SR.CatData)),
@@ -282,24 +256,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItemClicked"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is opened
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         public event ToolStripItemClickedEventHandler DropDownItemClicked
         {
-            add
-            {
-                Events.AddHandler(EventDropDownItemClicked, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventDropDownItemClicked, value);
-            }
+            add => Events.AddHandler(EventDropDownItemClicked, value);
+            remove => Events.RemoveHandler(EventDropDownItemClicked, value);
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDownItems"]/*' />
         [Browsable(false)]
         public virtual bool HasDropDownItems
         {
@@ -310,14 +276,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDown"]/*' />
         [Browsable(false)]
         public bool HasDropDown
         {
             get { return dropDown != null; }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.Pressed"]/*' />
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Pressed
         {
@@ -346,16 +310,14 @@ namespace System.Windows.Forms
             HideDropDown();
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new ToolStripDropDownItemAccessibleObject(this);
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateDefaultDropDown"]/*' />
         protected virtual ToolStripDropDown CreateDefaultDropDown()
         {
-            // AutoGenerate a Winbar DropDown - set the property so we hook events
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
             return new ToolStripDropDown(this, true);
         }
 
@@ -366,25 +328,25 @@ namespace System.Windows.Forms
             switch (dropDownDirection)
             {
                 case ToolStripDropDownDirection.AboveLeft:
-                    offset.X = -dropDownBounds.Width + this.Width;
+                    offset.X = -dropDownBounds.Width + Width;
                     offset.Y = -dropDownBounds.Height + 1;
                     break;
                 case ToolStripDropDownDirection.AboveRight:
                     offset.Y = -dropDownBounds.Height + 1;
                     break;
                 case ToolStripDropDownDirection.BelowRight:
-                    offset.Y = this.Height - 1;
+                    offset.Y = Height - 1;
                     break;
                 case ToolStripDropDownDirection.BelowLeft:
-                    offset.X = -dropDownBounds.Width + this.Width;
-                    offset.Y = this.Height - 1;
+                    offset.X = -dropDownBounds.Width + Width;
+                    offset.Y = Height - 1;
                     break;
                 case ToolStripDropDownDirection.Right:
-                    offset.X = this.Width;
+                    offset.X = Width;
                     if (!IsOnDropDown)
                     {
                         // overlap the toplevel toolstrip
-                        offset.X -= 1;
+                        offset.X--;
                     }
                     break;
 
@@ -393,7 +355,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            Point itemScreenLocation = this.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
+            Point itemScreenLocation = TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
             dropDownBounds.Location = new Point(itemScreenLocation.X + offset.X, itemScreenLocation.Y + offset.Y);
             dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds);
             return dropDownBounds;
@@ -414,13 +376,12 @@ namespace System.Windows.Forms
         {
             OnDropDownItemClicked(e);
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.Dispose"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Make sure we unhook dropdown events.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (this.dropDown != null)
+            if (dropDown != null)
             {
                 dropDown.Opened -= new EventHandler(DropDown_Opened);
                 dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
@@ -445,7 +406,7 @@ namespace System.Windows.Forms
             dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
 
             // we should make sure we dont obscure the owner item.
-            Rectangle itemScreenBounds = new Rectangle(this.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), this.Size);
+            Rectangle itemScreenBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
 
             if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
             {
@@ -471,23 +432,20 @@ namespace System.Windows.Forms
 
 
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HideDropDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Hides the DropDown, if it is visible.  
-        /// </devdoc>
+        /// </summary>
         public void HideDropDown()
         {
             // consider - CloseEventArgs to prevent shutting down.
             OnDropDownHide(EventArgs.Empty);
 
-            if (this.dropDown != null && this.dropDown.Visible)
+            if (dropDown != null && dropDown.Visible)
             {
                 DropDown.Visible = false;
-                if (AccessibilityImprovements.Level1)
-                {
-                    AccessibilityNotifyClients(AccessibleEvents.StateChange);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange);
-                }
+
+                AccessibilityNotifyClients(AccessibleEvents.StateChange);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange);
             }
         }
 
@@ -501,14 +459,13 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnBoundsChanged"]/*' />
         protected override void OnBoundsChanged()
         {
             base.OnBoundsChanged();
             //Reset the Bounds...
-            if (this.dropDown != null && this.dropDown.Visible)
+            if (dropDown != null && dropDown.Visible)
             {
-                this.dropDown.Bounds = GetDropDownBounds(DropDownDirection);
+                dropDown.Bounds = GetDropDownBounds(DropDownDirection);
             }
         }
 
@@ -539,61 +496,47 @@ namespace System.Windows.Forms
                 DropDown.DoLayoutIfHandleCreated(new ToolStripItemEventArgs(this));
             }
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownHide"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Called as a response to HideDropDown
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDownHide(EventArgs e)
         {
-            this.Invalidate();
+            Invalidate();
 
-            EventHandler handler = (EventHandler)Events[EventDropDownHide];
-            if (handler != null)
-                handler(this, e);
+            ((EventHandler)Events[EventDropDownHide])?.Invoke(this, e);
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownShow"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Last chance to stick in the DropDown before it is shown.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDownShow(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventDropDownShow];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventDropDownShow])?.Invoke(this, e);
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownOpened"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnDropDownOpened(System.EventArgs e)
         {
             // only send the event if we're the thing that currently owns the DropDown.
 
             if (DropDown.OwnerItem == this)
             {
-                EventHandler handler = (EventHandler)Events[EventDropDownOpened];
-                if (handler != null)
-                    handler(this, e);
+                ((EventHandler)Events[EventDropDownOpened])?.Invoke(this, e);
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownClosed"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnDropDownClosed(System.EventArgs e)
         {
             // only send the event if we're the thing that currently owns the DropDown.
-            this.Invalidate();
+            Invalidate();
 
             if (DropDown.OwnerItem == this)
             {
-                EventHandler handler = (EventHandler)Events[EventDropDownClosed];
-                if (handler != null)
-                    handler(this, e);
+                ((EventHandler)Events[EventDropDownClosed])?.Invoke(this, e);
 
                 if (!DropDown.IsAutoGenerated)
                 {
@@ -605,19 +548,16 @@ namespace System.Windows.Forms
 
 
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownItemClicked"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnDropDownItemClicked(ToolStripItemClickedEventArgs e)
         {
             // only send the event if we're the thing that currently owns the DropDown.
 
             if (DropDown.OwnerItem == this)
             {
-                ToolStripItemClickedEventHandler handler = (ToolStripItemClickedEventHandler)Events[EventDropDownItemClicked];
-                if (handler != null)
-                    handler(this, e);
+                ((ToolStripItemClickedEventHandler)Events[EventDropDownItemClicked])?.Invoke(this, e);
             }
         }
 
@@ -631,7 +571,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ProcessDialogKey"]/*' />
         protected internal override bool ProcessDialogKey(Keys keyData)
         {
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -650,12 +589,9 @@ namespace System.Windows.Forms
                     if (Enabled || DesignMode)
                     {
                         // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu
-                        this.ShowDropDown();
-                        if (!AccessibilityImprovements.UseLegacyToolTipDisplay)
-                        {
-                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                        }
-                        this.DropDown.SelectNextToolStripItem(null, true);
+                        ShowDropDown();
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                        DropDown.SelectNextToolStripItem(null, true);
                     }// else eat the key
                     return true;
 
@@ -676,12 +612,9 @@ namespace System.Windows.Forms
 
                         if (Enabled || DesignMode)
                         {
-                            this.ShowDropDown();
-                            if (!AccessibilityImprovements.UseLegacyToolTipDisplay)
-                            {
-                                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                            }
-                            this.DropDown.SelectNextToolStripItem(null, true);
+                            ShowDropDown();
+                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                            DropDown.SelectNextToolStripItem(null, true);
                         } // else eat the key
                         return true;
                     }
@@ -709,10 +642,7 @@ namespace System.Windows.Forms
                     {
                         // we're walking back up the dropdown chain.
                         parent.SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
-                        if (!AccessibilityImprovements.UseLegacyToolTipDisplay)
-                        {
-                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                        }
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                         parent.SelectPreviousToolStrip();
                         return true;
                     }
@@ -760,20 +690,18 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ShowDropDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Shows the DropDown, if one is set.
-        /// </devdoc>
+        /// </summary>
         public void ShowDropDown()
         {
-            this.ShowDropDown(false);
+            ShowDropDown(false);
         }
 
         internal void ShowDropDown(bool mousePush)
         {
-            this.ShowDropDownInternal();
-            ToolStripDropDownMenu menu = this.dropDown as ToolStripDropDownMenu;
-            if (menu != null)
+            ShowDropDownInternal();
+            if (dropDown is ToolStripDropDownMenu menu)
             {
                 if (!mousePush)
                 {
@@ -786,7 +714,7 @@ namespace System.Windows.Forms
         private void ShowDropDownInternal()
         {
 
-            if (this.dropDown == null || (!this.dropDown.Visible))
+            if (dropDown == null || (!dropDown.Visible))
             {
                 // We want to show if there's no dropdown
                 // or if the dropdown is not visible.
@@ -796,29 +724,26 @@ namespace System.Windows.Forms
             // the act of setting the drop down visible the first time sets the parent
             // it seems that GetVisibleCore returns true if your parent is null.
 
-            if (this.dropDown != null && !this.dropDown.Visible)
+            if (dropDown != null && !dropDown.Visible)
             {
 
-                if (this.dropDown.IsAutoGenerated && this.DropDownItems.Count <= 0)
+                if (dropDown.IsAutoGenerated && DropDownItems.Count <= 0)
                 {
                     return;  // this is a no-op for autogenerated drop downs.
                 }
 
-                if (this.DropDown == this.ParentInternal)
+                if (DropDown == ParentInternal)
                 {
                     throw new InvalidOperationException(SR.ToolStripShowDropDownInvalidOperation);
                 }
 
-                this.dropDown.OwnerItem = this;
-                this.dropDown.Location = DropDownLocation;
-                this.dropDown.Show();
-                this.Invalidate();
+                dropDown.OwnerItem = this;
+                dropDown.Location = DropDownLocation;
+                dropDown.Show();
+                Invalidate();
 
-                if (AccessibilityImprovements.Level1)
-                {
-                    AccessibilityNotifyClients(AccessibleEvents.StateChange);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange);
-                }
+                AccessibilityNotifyClients(AccessibleEvents.StateChange);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange);
             }
         }
 
@@ -840,13 +765,13 @@ namespace System.Windows.Forms
         internal override void OnKeyboardToolTipHook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipHook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Hook(this.DropDown, toolTip);
+            KeyboardToolTipStateMachine.Instance.Hook(DropDown, toolTip);
         }
 
         internal override void OnKeyboardToolTipUnhook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipUnhook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Unhook(this.DropDown, toolTip);
+            KeyboardToolTipStateMachine.Instance.Unhook(DropDown, toolTip);
         }
 
         internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi)
@@ -903,17 +828,14 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject"]/*' />
     [System.Runtime.InteropServices.ComVisible(true)]
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
     {
-        private ToolStripDropDownItem owner;
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject"]/*' />
+        private readonly ToolStripDropDownItem owner;
         public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item)
         {
             owner = item;
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.Role"]/*' />
         public override AccessibleRole Role
         {
             get
@@ -927,11 +849,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
         public override void DoDefaultAction()
         {
-            ToolStripDropDownItem item = Owner as ToolStripDropDownItem;
-            if (item != null && item.HasDropDownItems)
+            if (Owner is ToolStripDropDownItem item && item.HasDropDownItems)
             {
                 item.ShowDropDown();
             }
@@ -944,7 +864,7 @@ namespace System.Windows.Forms
 
         internal override bool IsIAccessibleExSupported()
         {
-            if (owner != null && AccessibilityImprovements.Level1)
+            if (owner != null)
             {
                 return true;
             }
@@ -968,7 +888,7 @@ namespace System.Windows.Forms
 
         internal override object GetPropertyValue(int propertyID)
         {
-            if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
+            if (propertyID == NativeMethods.UIA_IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
             {
                 return !((ToolStripDropDown)owner.Owner).Visible;
             }
@@ -1016,24 +936,30 @@ namespace System.Windows.Forms
             // Do not expose child items when the submenu is collapsed to prevent Narrator from announcing
             // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
             // in scan mode (CAPSLOCK + Space)
-            if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+            if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed)
+            {
                 return 0;
             }
 
-            if (owner.DropDown.LayoutRequired) {
+            if (owner.DropDown.LayoutRequired)
+            {
                 LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
             }
             return owner.DropDown.AccessibilityObject.GetChildCount();
 
         }
 
-        internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child) {
-            if ((owner == null) || (owner.DropDownItems == null)) {
+        internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
+        {
+            if ((owner == null) || (owner.DropDownItems == null))
+            {
                 return -1;
             }
 
-            for (int i = 0; i < owner.DropDownItems.Count; i++) {
-                if (owner.DropDownItems[i].Available && child.Owner == owner.DropDownItems[i]) {
+            for (int i = 0; i < owner.DropDownItems.Count; i++)
+            {
+                if (owner.DropDownItems[i].Available && child.Owner == owner.DropDownItems[i])
+                {
                     return i;
                 }
             }
@@ -1045,14 +971,18 @@ namespace System.Windows.Forms
         /// Gets the number of children belonging to an accessible object.
         /// </summary>
         /// <returns>The number of children.</returns>
-        internal int GetChildFragmentCount() {
-            if ((owner == null) || (owner.DropDownItems == null)) {
+        internal int GetChildFragmentCount()
+        {
+            if ((owner == null) || (owner.DropDownItems == null))
+            {
                 return -1;
             }
 
             int count = 0;
-            for (int i = 0; i < owner.DropDownItems.Count; i++) {
-                if (owner.DropDownItems[i].Available) {
+            for (int i = 0; i < owner.DropDownItems.Count; i++)
+            {
+                if (owner.DropDownItems[i].Available)
+                {
                     count++;
                 }
             }
@@ -1060,17 +990,20 @@ namespace System.Windows.Forms
             return count;
         }
 
-        internal AccessibleObject GetChildFragment(int index) {
-            var toolStripAccessibleObject = owner.DropDown.AccessibilityObject as ToolStrip.ToolStripAccessibleObject;
-            if (toolStripAccessibleObject != null) {
+        internal AccessibleObject GetChildFragment(int index)
+        {
+            if (owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
+            {
                 return toolStripAccessibleObject.GetChildFragment(index);
             }
 
             return null;
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-            if (owner == null || owner.DropDown == null) {
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        {
+            if (owner == null || owner.DropDown == null)
+            {
                 return null;
             }
 
@@ -1078,23 +1011,23 @@ namespace System.Windows.Forms
             {
                 case UnsafeNativeMethods.NavigateDirection.FirstChild:
                     int childCount = GetChildCount();
-                    if (childCount > 0) {
+                    if (childCount > 0)
+                    {
                         return GetChildFragment(0);
                     }
 
                     return null;
                 case UnsafeNativeMethods.NavigateDirection.LastChild:
                     childCount = GetChildCount();
-                    if (childCount > 0) {
+                    if (childCount > 0)
+                    {
                         return GetChildFragment(childCount - 1);
                     }
 
                     return null;
                 case UnsafeNativeMethods.NavigateDirection.NextSibling:
                 case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                    ToolStripDropDown dropDown = owner.Owner as ToolStripDropDown;
-
-                    if (dropDown == null)
+                    if (!(owner.Owner is ToolStripDropDown dropDown))
                     {
                         break;
                     }
@@ -1108,10 +1041,11 @@ namespace System.Windows.Forms
 
                     index += direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
 
-                    if (index >= 0 && index < dropDown.Items.Count) {
-                        var item = dropDown.Items[index];
-                        var controlHostItem = item as ToolStripControlHost;
-                        if (controlHostItem != null) {
+                    if (index >= 0 && index < dropDown.Items.Count)
+                    {
+                        ToolStripItem item = dropDown.Items[index];
+                        if (item is ToolStripControlHost controlHostItem)
+                        {
                             return controlHostItem.ControlAccessibilityObject;
                         }
 

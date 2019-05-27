@@ -68,17 +68,17 @@ namespace System.Windows.Forms.Tests
         private class SubDataGridViewElement : DataGridViewElement
         {
             public new void OnDataGridViewChanged() => base.OnDataGridViewChanged();
-     
+
             public new void RaiseCellClick(DataGridViewCellEventArgs e) => base.RaiseCellClick(e);
-     
+
             public new void RaiseCellContentClick(DataGridViewCellEventArgs e) => base.RaiseCellContentClick(e);
-     
+
             public new void RaiseCellContentDoubleClick(DataGridViewCellEventArgs e) => base.RaiseCellContentDoubleClick(e);
-          
+
             public new void RaiseCellValueChanged(DataGridViewCellEventArgs e) => base.RaiseCellValueChanged(e);
-            
+
             public new void RaiseDataError(DataGridViewDataErrorEventArgs e) => base.RaiseDataError(e);
-     
+
             public new void RaiseMouseWheel(MouseEventArgs e) => base.RaiseMouseWheel(e);
         }
     }

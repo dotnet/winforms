@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ButtonInternal {
+namespace System.Windows.Forms.ButtonInternal
+{
     using System;
     using System.Collections.Specialized;
     using System.Diagnostics;
@@ -16,47 +17,57 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Runtime.Versioning;
     using Runtime.CompilerServices;
 
-    /// <devdoc>
+    /// <summary>
     ///                  PLEASE READ
     ///                  -----------
     /// This class is used for more than just Button:
     /// it's used for things that derive from ButtonBase, 
     /// parts of ToolStripItem, and parts of the DataGridView.
-    /// </devdoc>
-    internal abstract class ButtonBaseAdapter {
-        private ButtonBase control;
+    /// </summary>
+    internal abstract class ButtonBaseAdapter
+    {
+        private readonly ButtonBase control;
 
         // SystemInformation.Border3DSize + 2 pixels for focus rect
         protected static int buttonBorderSize = 4;
 
-        internal ButtonBaseAdapter(ButtonBase control) {
+        internal ButtonBaseAdapter(ButtonBase control)
+        {
             this.control = control;
         }
 
-        protected ButtonBase Control {
-            get { return this.control; }
+        protected ButtonBase Control
+        {
+            get { return control; }
         }
 
-        internal void Paint(PaintEventArgs pevent) {
-            if (Control.MouseIsDown) {
+        internal void Paint(PaintEventArgs pevent)
+        {
+            if (Control.MouseIsDown)
+            {
                 PaintDown(pevent, CheckState.Unchecked);
             }
-            else if (Control.MouseIsOver) {
+            else if (Control.MouseIsOver)
+            {
                 PaintOver(pevent, CheckState.Unchecked);
             }
-            else {
-                PaintUp(pevent, CheckState.Unchecked);  
+            else
+            {
+                PaintUp(pevent, CheckState.Unchecked);
             }
         }
 
-        internal virtual Size GetPreferredSizeCore(Size proposedSize) {
+        internal virtual Size GetPreferredSizeCore(Size proposedSize)
+        {
             // this is a shared cached graphics, therefore it does not require dispose.
-            using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics()) {
-                using (PaintEventArgs pe = new PaintEventArgs(measurementGraphics, new Rectangle())) {
+            using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics())
+            {
+                using (PaintEventArgs pe = new PaintEventArgs(measurementGraphics, new Rectangle()))
+                {
                     LayoutOptions options = Layout(pe);
                     return options.GetPreferredSizeCore(proposedSize);
                 }
-            }            
+            }
         }
 
         protected abstract LayoutOptions Layout(PaintEventArgs e);
@@ -70,31 +81,18 @@ namespace System.Windows.Forms.ButtonInternal {
         #region Accessibility Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool IsHighContrastHighlighted() {
-            return AccessibilityImprovements.Level1 && IsHighContrastHighlightedInternal();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool IsHighContrastHighlighted2() {
-            return AccessibilityImprovements.Level2 && IsHighContrastHighlightedInternal();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool IsHighContrastHighlighted3() {
-            return AccessibilityImprovements.Level3 && IsHighContrastHighlightedInternal();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool IsHighContrastHighlightedInternal() {
+        protected bool IsHighContrastHighlighted()
+        {
             return SystemInformation.HighContrast && Application.RenderWithVisualStyles &&
                 (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
         }
 
-#endregion
+        #endregion
 
         #region Drawing Helpers
 
-        internal static Color MixedColor(Color color1, Color color2) {
+        internal static Color MixedColor(Color color1, Color color2)
+        {
             byte a1 = color1.A;
             byte r1 = color1.R;
             byte g1 = color1.G;
@@ -112,13 +110,15 @@ namespace System.Windows.Forms.ButtonInternal {
 
             return Color.FromArgb(a3, r3, g3, b3);
         }
-        
-        internal static Brush CreateDitherBrush(Color color1, Color color2) {
+
+        internal static Brush CreateDitherBrush(Color color1, Color color2)
+        {
 
             // Note: Don't dispose the bitmap here. The texture brush will take ownership
             // of the bitmap. So the bitmap will get disposed by the brush's Dispose().
 
-            using (Bitmap b = new Bitmap(2, 2)) {
+            using (Bitmap b = new Bitmap(2, 2))
+            {
                 b.SetPixel(0, 0, color1);
                 b.SetPixel(0, 1, color2);
                 b.SetPixel(1, 1, color1);
@@ -128,169 +128,206 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
-        /// </devdoc>
-        internal virtual StringFormat CreateStringFormat() {
-            return ControlPaint.CreateStringFormat( Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic );
+        /// </summary>
+        internal virtual StringFormat CreateStringFormat()
+        {
+            return ControlPaint.CreateStringFormat(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
-        /// </devdoc>
-        internal virtual TextFormatFlags CreateTextFormatFlags(){
-            return ControlPaint.CreateTextFormatFlags( Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic );
+        /// </summary>
+        internal virtual TextFormatFlags CreateTextFormatFlags()
+        {
+            return ControlPaint.CreateTextFormatFlags(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
         }
 
-        internal static void DrawDitheredFill(Graphics g, Color color1, Color color2, Rectangle bounds) {
-            using (Brush brush = CreateDitherBrush(color1, color2)) {
+        internal static void DrawDitheredFill(Graphics g, Color color1, Color color2, Rectangle bounds)
+        {
+            using (Brush brush = CreateDitherBrush(color1, color2))
+            {
                 g.FillRectangle(brush, bounds);
             }
         }
 
-        protected void Draw3DBorder(Graphics g, Rectangle bounds, ColorData colors, bool raised) {
-            if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast) {
-                if (raised) {
+        protected void Draw3DBorder(Graphics g, Rectangle bounds, ColorData colors, bool raised)
+        {
+            if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
+            {
+                if (raised)
+                {
                     Draw3DBorderHighContrastRaised(g, ref bounds, colors);
                 }
-                else {
+                else
+                {
                     ControlPaint.DrawBorder(g, bounds, ControlPaint.Dark(Control.BackColor), ButtonBorderStyle.Solid);
                 }
             }
-            else {
-                if (raised) {
+            else
+            {
+                if (raised)
+                {
                     Draw3DBorderRaised(g, ref bounds, colors);
                 }
-                else {
+                else
+                {
                     Draw3DBorderNormal(g, ref bounds, colors);
                 }
             }
         }
-        
-        private void Draw3DBorderHighContrastRaised(Graphics g, ref Rectangle bounds, ColorData colors) {
-            bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
-            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast && AccessibilityImprovements.Level1;
 
-            using ( WindowsGraphics wg = WindowsGraphics.FromGraphics(g) ) {
-            
+        private void Draw3DBorderHighContrastRaised(Graphics g, ref Rectangle bounds, ColorData colors)
+        {
+            bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
+            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
+
+            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+            {
+
                 // Draw counter-clock-wise.
-                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y );  // upper inner right.
-                Point p2 = new Point(bounds.X                   , bounds.Y );  // upper left.
-                Point p3 = new Point(bounds.X                   , bounds.Y + bounds.Height - 1 );  // bottom inner left.
-                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1 );  // inner bottom right.
+                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
+                Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
+                Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
+                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
 
                 WindowsPen penTopLeft = null;
                 WindowsPen penBottomRight = null;
                 WindowsPen insetPen = null;
                 WindowsPen bottomRightInsetPen = null;
 
-                try {
+                try
+                {
                     // top + left
-                    if (disabledHighContrast) {
+                    if (disabledHighContrast)
+                    {
                         penTopLeft = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
                     }
-                    else {
+                    else
+                    {
                         penTopLeft = stockColor ? new WindowsPen(wg.DeviceContext, SystemColors.ControlLightLight) : new WindowsPen(wg.DeviceContext, colors.highlight);
                     }
                     wg.DrawLine(penTopLeft, p1, p2); // top  (right-left)
                     wg.DrawLine(penTopLeft, p2, p3); // left (up-down)
 
                     // bottom + right
-                    if (disabledHighContrast) {
+                    if (disabledHighContrast)
+                    {
                         penBottomRight = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
                     }
-                    else {
+                    else
+                    {
                         penBottomRight = stockColor ? new WindowsPen(wg.DeviceContext, SystemColors.ControlDarkDark) : new WindowsPen(wg.DeviceContext, colors.buttonShadowDark);
                     }
-                    p1.Offset(0,-1); // need to paint last pixel too.
+                    p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(penBottomRight, p3, p4);  // bottom (left-right)
                     wg.DrawLine(penBottomRight, p4, p1);  // right  (bottom-up )
 
                     // Draw inset using the background color to make the top and left lines thinner
-                    if (stockColor) {
-                        if (SystemInformation.HighContrast) {
+                    if (stockColor)
+                    {
+                        if (SystemInformation.HighContrast)
+                        {
                             insetPen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLight);
                         }
-                        else {
+                        else
+                        {
                             insetPen = new WindowsPen(wg.DeviceContext, SystemColors.Control);
                         }
                     }
-                    else {
-                        if (SystemInformation.HighContrast) {
+                    else
+                    {
+                        if (SystemInformation.HighContrast)
+                        {
                             insetPen = new WindowsPen(wg.DeviceContext, colors.highlight);
                         }
-                        else {
+                        else
+                        {
                             insetPen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
                         }
                     }
 
-                    p1.Offset(-1, 2); 
-                    p2.Offset( 1, 1);
-                    p3.Offset( 1,-1);
-                    p4.Offset(-1,-1);
+                    p1.Offset(-1, 2);
+                    p2.Offset(1, 1);
+                    p3.Offset(1, -1);
+                    p4.Offset(-1, -1);
 
                     // top + left inset
                     wg.DrawLine(insetPen, p1, p2); // top (right-left)
                     wg.DrawLine(insetPen, p2, p3); // left( up-down)
-                
+
                     // Bottom + right inset           
-                    if (disabledHighContrast) {
+                    if (disabledHighContrast)
+                    {
                         bottomRightInsetPen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
                     }
-                    else {
+                    else
+                    {
                         bottomRightInsetPen = stockColor ? new WindowsPen(wg.DeviceContext, SystemColors.ControlDark) : new WindowsPen(wg.DeviceContext, colors.buttonShadow);
                     }
-                    p1.Offset(0,-1); // need to paint last pixel too.
+                    p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(bottomRightInsetPen, p3, p4); // bottom (left-right)
                     wg.DrawLine(bottomRightInsetPen, p4, p1); // right  (bottom-up)
                 }
-                finally {
-                    if (penTopLeft != null) {
+                finally
+                {
+                    if (penTopLeft != null)
+                    {
                         penTopLeft.Dispose();
                     }
 
-                    if (penBottomRight != null) {
+                    if (penBottomRight != null)
+                    {
                         penBottomRight.Dispose();
                     }
 
-                    if (insetPen != null) {
+                    if (insetPen != null)
+                    {
                         insetPen.Dispose();
                     }
 
-                    if (bottomRightInsetPen != null) {
+                    if (bottomRightInsetPen != null)
+                    {
                         bottomRightInsetPen.Dispose();
                     }
                 }
             }
         }
-        
-        private void Draw3DBorderNormal(Graphics g, ref Rectangle bounds, ColorData colors) {
-            using( WindowsGraphics wg = WindowsGraphics.FromGraphics(g) ) {
+
+        private void Draw3DBorderNormal(Graphics g, ref Rectangle bounds, ColorData colors)
+        {
+            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+            {
 
                 // Draw counter-clock-wise.
-                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y );  // upper inner right.
-                Point p2 = new Point(bounds.X                   , bounds.Y );  // upper left.
-                Point p3 = new Point(bounds.X                   , bounds.Y + bounds.Height - 1 );  // bottom inner left.
-                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1 );  // inner bottom right.
+                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
+                Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
+                Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
+                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
 
                 // top + left
                 WindowsPen pen = new WindowsPen(wg.DeviceContext, colors.buttonShadowDark);
-                try {
+                try
+                {
                     wg.DrawLine(pen, p1, p2); // top (right-left)
                     wg.DrawLine(pen, p2, p3); // left(up-down)
                 }
-                finally {
-                    pen.Dispose();    
+                finally
+                {
+                    pen.Dispose();
                 }
-            
+
                 // bottom + right
                 pen = new WindowsPen(wg.DeviceContext, colors.highlight);
-                try {
-                    p1.Offset(0,-1); // need to paint last pixel too.
+                try
+                {
+                    p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(pen, p3, p4); // bottom(left-right)
                     wg.DrawLine(pen, p4, p1); // right (bottom-up)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
 
@@ -298,90 +335,108 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 pen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
 
-                p1.Offset(-1, 2); 
-                p2.Offset( 1, 1);
-                p3.Offset( 1,-1);
-                p4.Offset(-1,-1);
+                p1.Offset(-1, 2);
+                p2.Offset(1, 1);
+                p3.Offset(1, -1);
+                p4.Offset(-1, -1);
 
                 // top + left inset
-                try {
+                try
+                {
                     wg.DrawLine(pen, p1, p2); // top (right-left)
                     wg.DrawLine(pen, p2, p3); // left(up-down)
                 }
-                finally {
-                    pen.Dispose();    
+                finally
+                {
+                    pen.Dispose();
                 }
 
                 // bottom + right inset
-                if (colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor()) {
+                if (colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor())
+                {
                     pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLight);
                 }
-                else {
+                else
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
                 }
 
-                try {
-                    p1.Offset(0,-1); // need to paint last pixel too.
+                try
+                {
+                    p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(pen, p3, p4); // bottom(left-right)
                     wg.DrawLine(pen, p4, p1); // right (bottom-up)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
             }
         }
-        
-        private void Draw3DBorderRaised(Graphics g, ref Rectangle bounds, ColorData colors) {
-            bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
-            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast && AccessibilityImprovements.Level1;
 
-            using( WindowsGraphics wg = WindowsGraphics.FromGraphics(g) ) {
+        private void Draw3DBorderRaised(Graphics g, ref Rectangle bounds, ColorData colors)
+        {
+            bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
+            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
+
+            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+            {
 
                 // Draw counter-clock-wise.
-                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y );  // upper inner right.
-                Point p2 = new Point(bounds.X                   , bounds.Y );  // upper left.
-                Point p3 = new Point(bounds.X                   , bounds.Y + bounds.Height - 1 );  // bottom inner left.
-                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1 );  // inner bottom right.
+                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
+                Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
+                Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
+                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
 
                 // Draw counter-clock-wise.
 
                 // top + left
                 WindowsPen pen;
-                if (disabledHighContrast) {
+                if (disabledHighContrast)
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
                 }
-                else if (stockColor) {
+                else if (stockColor)
+                {
                     pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLightLight);
                 }
-                else  {
+                else
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.highlight);
                 }
 
-                try {
+                try
+                {
                     wg.DrawLine(pen, p1, p2);   // top (right-left)
                     wg.DrawLine(pen, p2, p3);   // left(up-down)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
 
                 // bottom + right
-                if (disabledHighContrast) {
+                if (disabledHighContrast)
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
                 }
-                else if (stockColor) {
+                else if (stockColor)
+                {
                     pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlDarkDark);
                 }
-                else {
+                else
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.buttonShadowDark);
                 }
 
-                try {
+                try
+                {
                     p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(pen, p3, p4);    // bottom(left-right)
                     wg.DrawLine(pen, p4, p1);    // right (bottom-up)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
 
@@ -391,114 +446,137 @@ namespace System.Windows.Forms.ButtonInternal {
                 p3.Offset(1, -1);
                 p4.Offset(-1, -1);
 
-                if (stockColor) {
-                    if (SystemInformation.HighContrast) {
+                if (stockColor)
+                {
+                    if (SystemInformation.HighContrast)
+                    {
                         pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLight);
                     }
-                    else {
+                    else
+                    {
                         pen = new WindowsPen(wg.DeviceContext, SystemColors.Control);
                     }
                 }
-                else {
+                else
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
                 }
 
                 // top + left inset
-                try {
+                try
+                {
                     wg.DrawLine(pen, p1, p2); // top (right-left)
                     wg.DrawLine(pen, p2, p3); // left(up-down)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
 
                 // Bottom + right inset                        
-                if (disabledHighContrast) {
+                if (disabledHighContrast)
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
                 }
-                else if (stockColor) {
+                else if (stockColor)
+                {
                     pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlDark);
                 }
-                else {
+                else
+                {
                     pen = new WindowsPen(wg.DeviceContext, colors.buttonShadow);
                 }
 
-                try {
+                try
+                {
                     p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(pen, p3, p4);  // bottom(left-right)
                     wg.DrawLine(pen, p4, p1);  // right (bottom-up)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a border for the in the 3D style of the popup button.
-        /// </devdoc>
-        protected internal static void Draw3DLiteBorder(Graphics g, Rectangle r, ColorData colors, bool up) {
-            using( WindowsGraphics wg = WindowsGraphics.FromGraphics(g) ) {
+        /// </summary>
+        protected internal static void Draw3DLiteBorder(Graphics g, Rectangle r, ColorData colors, bool up)
+        {
+            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+            {
 
                 // Draw counter-clock-wise.
-                Point p1 = new Point(r.Right - 1, r.Top );  // upper inner right.
-                Point p2 = new Point(r.Left     , r.Top );  // upper left.
-                Point p3 = new Point(r.Left     , r.Bottom - 1);  // bottom inner left.
+                Point p1 = new Point(r.Right - 1, r.Top);  // upper inner right.
+                Point p2 = new Point(r.Left, r.Top);  // upper left.
+                Point p3 = new Point(r.Left, r.Bottom - 1);  // bottom inner left.
                 Point p4 = new Point(r.Right - 1, r.Bottom - 1);  // inner bottom right.
 
                 // top, left
                 WindowsPen pen = up ? new WindowsPen(wg.DeviceContext, colors.highlight) : new WindowsPen(wg.DeviceContext, colors.buttonShadow);
 
-                try {
+                try
+                {
                     wg.DrawLine(pen, p1, p2); // top (right-left)
                     wg.DrawLine(pen, p2, p3); // left (top-down)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
 
                 // bottom, right
                 pen = up ? new WindowsPen(wg.DeviceContext, colors.buttonShadow) : new WindowsPen(wg.DeviceContext, colors.highlight);
 
-                try {
-                    p1.Offset(0,-1); // need to paint last pixel too.
+                try
+                {
+                    p1.Offset(0, -1); // need to paint last pixel too.
                     wg.DrawLine(pen, p3, p4); // bottom (left-right)
                     wg.DrawLine(pen, p4, p1); // right(bottom-up)
                 }
-                finally {
+                finally
+                {
                     pen.Dispose();
                 }
             }
         }
-        
-        internal static void DrawFlatBorder(Graphics g, Rectangle r, Color c) {
+
+        internal static void DrawFlatBorder(Graphics g, Rectangle r, Color c)
+        {
             ControlPaint.DrawBorder(g, r, c, ButtonBorderStyle.Solid);
         }
-        
-        /// <internalonly/>
-        /// <devdoc>
+
+        /// <summary>
         ///    <para>
         ///       Draws the flat border with specified bordersize. 
         ///       This function gets called only for Flatstyle == Flatstyle.Flat.
         ///    </para>
-        /// </devdoc>
-        internal static void DrawFlatBorderWithSize(Graphics g, Rectangle r, Color c, int size) {
+        /// </summary>
+        internal static void DrawFlatBorderWithSize(Graphics g, Rectangle r, Color c, int size)
+        {
             bool stockBorder = c.IsSystemColor;
             SolidBrush brush = null;
-            
-            if (size > 1) {
+
+            if (size > 1)
+            {
                 brush = new SolidBrush(c);
             }
-            else {
-                if (stockBorder) {
+            else
+            {
+                if (stockBorder)
+                {
                     brush = (SolidBrush)SystemBrushes.FromSystemColor(c);
                 }
-                else  {
+                else
+                {
                     brush = new SolidBrush(c);
                 }
             }
 
-            try {
+            try
+            {
                 size = System.Math.Min(size, System.Math.Min(r.Width, r.Height));
                 // ...truncate pen width to button size, to avoid overflow if border size is huge!
 
@@ -514,49 +592,60 @@ namespace System.Windows.Forms.ButtonInternal {
                 //Bottom Border
                 g.FillRectangle(brush, (r.X + size), (r.Y + r.Height - size), (r.Width - size * 2), size);
             }
-            finally {
-                if (!stockBorder && brush != null) {
+            finally
+            {
+                if (!stockBorder && brush != null)
+                {
                     brush.Dispose();
                 }
             }
         }
 
-        internal static void DrawFlatFocus(Graphics g, Rectangle r, Color c) {
-            using(WindowsGraphics wg = WindowsGraphics.FromGraphics(g)) {
-                using (WindowsPen focus = new WindowsPen(wg.DeviceContext, c))  {
+        internal static void DrawFlatFocus(Graphics g, Rectangle r, Color c)
+        {
+            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+            {
+                using (WindowsPen focus = new WindowsPen(wg.DeviceContext, c))
+                {
                     wg.DrawRectangle(focus, r);
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Draws the focus rectangle if the control has focus.
         ///       
         ///    </para>
-        /// </devdoc>
-        void DrawFocus(Graphics g, Rectangle r) {
-            if (Control.Focused && Control.ShowFocusCues) {
+        /// </summary>
+        void DrawFocus(Graphics g, Rectangle r)
+        {
+            if (Control.Focused && Control.ShowFocusCues)
+            {
                 ControlPaint.DrawFocusRectangle(g, r, Control.ForeColor, Control.BackColor);
             }
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     Draws the button's image.
-        /// </devdoc>
-        void DrawImage(Graphics graphics, LayoutData layout) {
-            if (Control.Image != null) {
+        /// </summary>
+        void DrawImage(Graphics graphics, LayoutData layout)
+        {
+            if (Control.Image != null)
+            {
                 //setup new clip region & draw
                 DrawImageCore(graphics, Control.Image, layout.imageBounds, layout.imageStart, layout);
             }
         }
 
         // here for DropDownButton
-        internal virtual void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout) {
+        internal virtual void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
+        {
             Region oldClip = graphics.Clip;
-            
-            if (!layout.options.everettButtonCompat) { // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, this.Control.Width - (2 * buttonBorderSize), this.Control.Height - (2 * buttonBorderSize));
+
+            if (!layout.options.everettButtonCompat)
+            { // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
+                Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, Control.Width - (2 * buttonBorderSize), Control.Height - (2 * buttonBorderSize));
 
                 Region newClip = oldClip.Clone();
                 newClip.Intersect(bounds);
@@ -566,65 +655,81 @@ namespace System.Windows.Forms.ButtonInternal {
                 newClip.Intersect(imageBounds);
                 graphics.Clip = newClip;
             }
-            else {
+            else
+            {
                 imageBounds.Width++;
                 imageBounds.Height++;
                 imageBounds.X = imageStart.X + 1;
                 imageBounds.Y = imageStart.Y + 1;
             }
 
-            try {
+            try
+            {
                 if (!Control.Enabled)
+                {
                     // need to specify width and height
                     ControlPaint.DrawImageDisabled(graphics, image, imageBounds, Control.BackColor, true /* unscaled image*/);
-                else {
+                }
+                else
+                {
                     graphics.DrawImage(image, imageBounds.X, imageBounds.Y, image.Width, image.Height);
                 }
             }
 
-            finally {
-                if (!layout.options.everettButtonCompat) {// FOR EVERETT COMPATIBILITY - DO NOT CHANGE                              
+            finally
+            {
+                if (!layout.options.everettButtonCompat)
+                {// FOR EVERETT COMPATIBILITY - DO NOT CHANGE                              
                     graphics.Clip = oldClip;
                 }
             }
         }
 
-        internal static void DrawDefaultBorder(Graphics g, Rectangle r, Color c, bool isDefault) {
-            if (isDefault) {
+        internal static void DrawDefaultBorder(Graphics g, Rectangle r, Color c, bool isDefault)
+        {
+            if (isDefault)
+            {
                 r.Inflate(1, 1);
 
                 Pen pen;
-                if (c.IsSystemColor) {
+                if (c.IsSystemColor)
+                {
                     pen = SystemPens.FromSystemColor(c);
                 }
-                else {
+                else
+                {
                     pen = new Pen(c);
                 }
                 g.DrawRectangle(pen, r.X, r.Y, r.Width - 1, r.Height - 1);
-                if (!c.IsSystemColor) {
+                if (!c.IsSystemColor)
+                {
                     pen.Dispose();
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws the button's text. Color c is the foreground color set with enabled/disabled state in mind.
-        /// </devdoc>
+        /// </summary>
         void DrawText(Graphics g, LayoutData layout, Color c, ColorData colors)
         {
             Rectangle r = layout.textBounds;
             bool disabledText3D = layout.options.shadowedText;
 
-            if (Control.UseCompatibleTextRendering) { // Draw text using GDI+
-                using (StringFormat stringFormat = CreateStringFormat()) {
+            if (Control.UseCompatibleTextRendering)
+            { // Draw text using GDI+
+                using (StringFormat stringFormat = CreateStringFormat())
+                {
                     // DrawString doesn't seem to draw where it says it does
-                    if ((Control.TextAlign & LayoutUtils.AnyCenter) == 0) {
+                    if ((Control.TextAlign & LayoutUtils.AnyCenter) == 0)
+                    {
                         r.X -= 1;
                     }
                     r.Width += 1;
-                    if (disabledText3D && !Control.Enabled && 
-                            (!AccessibilityImprovements.Level1 || (!colors.options.highContrast && AccessibilityImprovements.Level1))) {
-                        using (SolidBrush brush = new SolidBrush(colors.highlight)) {
+                    if (disabledText3D && !Control.Enabled && !colors.options.highContrast)
+                    {
+                        using (SolidBrush brush = new SolidBrush(colors.highlight))
+                        {
                             r.Offset(1, 1);
                             g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
 
@@ -633,31 +738,39 @@ namespace System.Windows.Forms.ButtonInternal {
                             g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
                         }
                     }
-                    else {
+                    else
+                    {
                         Brush brush;
 
-                        if (c.IsSystemColor) {
+                        if (c.IsSystemColor)
+                        {
                             brush = SystemBrushes.FromSystemColor(c);
                         }
-                        else {
+                        else
+                        {
                             brush = new SolidBrush(c);
                         }
                         g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
 
-                        if (!c.IsSystemColor) {
+                        if (!c.IsSystemColor)
+                        {
                             brush.Dispose();
                         }
                     }
                 }
             }
-            else { // Draw text using GDI (Whidbey+ feature).
+            else
+            { // Draw text using GDI (Whidbey+ feature).
                 TextFormatFlags formatFlags = CreateTextFormatFlags();
-                if (disabledText3D && !Control.Enabled && (!AccessibilityImprovements.Level1 || (!colors.options.highContrast && AccessibilityImprovements.Level1))) {
-                    if (Application.RenderWithVisualStyles) {
+                if (disabledText3D && !Control.Enabled && !colors.options.highContrast)
+                {
+                    if (Application.RenderWithVisualStyles)
+                    {
                         //don't draw chiseled text if themed as win32 app does.
                         TextRenderer.DrawText(g, Control.Text, Control.Font, r, colors.buttonShadow, formatFlags);
                     }
-                    else {
+                    else
+                    {
                         r.Offset(1, 1);
                         TextRenderer.DrawText(g, Control.Text, Control.Font, r, colors.highlight, formatFlags);
 
@@ -665,35 +778,41 @@ namespace System.Windows.Forms.ButtonInternal {
                         TextRenderer.DrawText(g, Control.Text, Control.Font, r, colors.buttonShadow, formatFlags);
                     }
                 }
-                else {
+                else
+                {
                     TextRenderer.DrawText(g, Control.Text, Control.Font, r, c, formatFlags);
                 }
             }
         }
 
-#endregion Drawing Helpers
+        #endregion Drawing Helpers
 
-#region Draw Content Helpers
+        #region Draw Content Helpers
 
         // the DataGridViewButtonCell uses this method
-        internal static void PaintButtonBackground(WindowsGraphics wg, Rectangle bounds, WindowsBrush background) {
+        internal static void PaintButtonBackground(WindowsGraphics wg, Rectangle bounds, WindowsBrush background)
+        {
             wg.FillRectangle(background, bounds);
         }
 
-        internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background) {
-            if (background == null) {
+        internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background)
+        {
+            if (background == null)
+            {
                 Control.PaintBackground(e, bounds);
             }
-            else {
+            else
+            {
                 e.Graphics.FillRectangle(background, bounds);
             }
         }
 
-        internal void PaintField(PaintEventArgs e, 
-                                 LayoutData layout, 
+        internal void PaintField(PaintEventArgs e,
+                                 LayoutData layout,
                                  ColorData colors,
-                                 Color foreColor, 
-                                 bool drawFocus) {
+                                 Color foreColor,
+                                 bool drawFocus)
+        {
 
             Graphics g = e.Graphics;
 
@@ -701,86 +820,101 @@ namespace System.Windows.Forms.ButtonInternal {
 
             DrawText(g, layout, foreColor, colors);
 
-            if (drawFocus) {
+            if (drawFocus)
+            {
                 DrawFocus(g, maxFocus);
             }
         }
-        
-        internal void PaintImage(PaintEventArgs e, LayoutData layout) {
+
+        internal void PaintImage(PaintEventArgs e, LayoutData layout)
+        {
             Graphics g = e.Graphics;
 
             DrawImage(g, layout);
         }
 
-#endregion
+        #endregion
 
-#region Color
+        #region Color
 
-        internal class ColorOptions {
+        internal class ColorOptions
+        {
             internal Color backColor;
             internal Color foreColor;
             internal bool enabled;
             internal bool highContrast;
             internal Graphics graphics;
 
-            internal ColorOptions(Graphics graphics, Color foreColor, Color backColor) {
+            internal ColorOptions(Graphics graphics, Color foreColor, Color backColor)
+            {
                 this.graphics = graphics;
                 this.backColor = backColor;
                 this.foreColor = foreColor;
                 highContrast = SystemInformation.HighContrast;
             }
 
-            internal static int Adjust255(float percentage, int value) {
+            internal static int Adjust255(float percentage, int value)
+            {
                 int v = (int)(percentage * value);
-                if (v > 255) {
+                if (v > 255)
+                {
                     return 255;
                 }
                 return v;
             }
-            
-            internal ColorData Calculate() {
-                ColorData colors = new ColorData(this);
-                
-                colors.buttonFace = backColor;
 
-                if (backColor == SystemColors.Control) {
+            internal ColorData Calculate()
+            {
+                ColorData colors = new ColorData(this)
+                {
+                    buttonFace = backColor
+                };
+
+                if (backColor == SystemColors.Control)
+                {
                     colors.buttonShadow = SystemColors.ControlDark;
                     colors.buttonShadowDark = SystemColors.ControlDarkDark;
                     colors.highlight = SystemColors.ControlLightLight;
                 }
-                else {
-                    if (!highContrast) {
+                else
+                {
+                    if (!highContrast)
+                    {
                         colors.buttonShadow = ControlPaint.Dark(backColor);
                         colors.buttonShadowDark = ControlPaint.DarkDark(backColor);
                         colors.highlight = ControlPaint.LightLight(backColor);
                     }
-                    else {
+                    else
+                    {
                         colors.buttonShadow = ControlPaint.Dark(backColor);
                         colors.buttonShadowDark = ControlPaint.LightLight(backColor);
                         colors.highlight = ControlPaint.LightLight(backColor);
                     }
                 }
-                colors.windowDisabled = (highContrast && AccessibilityImprovements.Level1) ? SystemColors.GrayText : colors.buttonShadow;
+                colors.windowDisabled = highContrast ? SystemColors.GrayText : colors.buttonShadow;
 
                 const float lowlight = .1f;
                 float adjust = 1 - lowlight;
 
-                if (colors.buttonFace.GetBrightness() < .5) {
+                if (colors.buttonFace.GetBrightness() < .5)
+                {
                     adjust = 1 + lowlight * 2;
                 }
-                colors.lowButtonFace = Color.FromArgb(Adjust255(adjust, colors.buttonFace.R), 
-                                                    Adjust255(adjust, colors.buttonFace.G), 
+                colors.lowButtonFace = Color.FromArgb(Adjust255(adjust, colors.buttonFace.R),
+                                                    Adjust255(adjust, colors.buttonFace.G),
                                                     Adjust255(adjust, colors.buttonFace.B));
 
                 adjust = 1 - lowlight;
-                if (colors.highlight.GetBrightness() < .5) {
+                if (colors.highlight.GetBrightness() < .5)
+                {
                     adjust = 1 + lowlight * 2;
                 }
-                colors.lowHighlight = Color.FromArgb(Adjust255(adjust, colors.highlight.R), 
-                                                   Adjust255(adjust, colors.highlight.G), 
+                colors.lowHighlight = Color.FromArgb(Adjust255(adjust, colors.highlight.R),
+                                                   Adjust255(adjust, colors.highlight.G),
                                                    Adjust255(adjust, colors.highlight.B));
-                
-                if (highContrast && backColor != SystemColors.Control) {
+
+                if (highContrast && backColor != SystemColors.Control)
+                {
                     colors.highlight = colors.lowHighlight;
                 }
 
@@ -796,29 +930,35 @@ namespace System.Windows.Forms.ButtonInternal {
                 colors.windowText = Color.Green;
                 / * debug */
 
-                if (colors.buttonFace.GetBrightness() < .5) {
+                if (colors.buttonFace.GetBrightness() < .5)
+                {
                     colors.constrastButtonShadow = colors.lowHighlight;
                 }
-                else {
+                else
+                {
                     colors.constrastButtonShadow = colors.buttonShadow;
                 }
-                
-                if (!enabled) {
+
+                if (!enabled)
+                {
                     colors.windowText = colors.windowDisabled;
-                    if (highContrast && AccessibilityImprovements.Level1) {
+                    if (highContrast)
+                    {
                         colors.windowFrame = colors.windowDisabled;
                         colors.buttonShadow = colors.windowDisabled;
                     }
                 }
-                else {
+                else
+                {
                     colors.windowText = colors.windowFrame;
                 }
 
-                IntPtr hdc = this.graphics.GetHdc();
+                IntPtr hdc = graphics.GetHdc();
 
                 try
                 {
-                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc)) {
+                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
+                    {
                         colors.buttonFace = wg.GetNearestColor(colors.buttonFace);
                         colors.buttonShadow = wg.GetNearestColor(colors.buttonShadow);
                         colors.buttonShadowDark = wg.GetNearestColor(colors.buttonShadowDark);
@@ -833,14 +973,15 @@ namespace System.Windows.Forms.ButtonInternal {
                 }
                 finally
                 {
-                    this.graphics.ReleaseHdc();
+                    graphics.ReleaseHdc();
                 }
 
                 return colors;
             }
         }
 
-        internal class ColorData {
+        internal class ColorData
+        {
             internal Color buttonFace;
             internal Color buttonShadow;
             internal Color buttonShadowDark;
@@ -854,16 +995,18 @@ namespace System.Windows.Forms.ButtonInternal {
 
             internal ColorOptions options;
 
-            internal ColorData(ColorOptions options) {
+            internal ColorData(ColorOptions options)
+            {
                 this.options = options;
             }
         }
 
-#endregion
+        #endregion
 
-#region Layout
+        #region Layout
 
-        internal class LayoutOptions {
+        internal class LayoutOptions
+        {
             internal Rectangle client;
             internal bool growBorderBy1PxWhenDefault;
             internal bool isDefault;
@@ -887,7 +1030,7 @@ namespace System.Windows.Forms.ButtonInternal {
             internal bool verticalText = false;
             internal bool useCompatibleTextRendering = false;
             internal bool everettButtonCompat = true;
-            internal TextFormatFlags gdiTextFormatFlags =  TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
+            internal TextFormatFlags gdiTextFormatFlags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
             internal StringFormatFlags gdipFormatFlags;
             internal StringTrimming gdipTrimming;
             internal HotkeyPrefix gdipHotkeyPrefix;
@@ -895,40 +1038,48 @@ namespace System.Windows.Forms.ButtonInternal {
             internal StringAlignment gdipLineAlignment; // vertical alignment.
             private bool disableWordWrapping;
 
-            /// <devdoc>
+            /// <summary>
             ///     We don't cache the StringFormat itself because we don't have a deterministic way of disposing it, instead
             ///     we cache the flags that make it up and create it on demand so it can be disposed by calling code.
-            /// </devdoc>
-            public StringFormat StringFormat {
-                get {
-                    StringFormat format = new StringFormat();
+            /// </summary>
+            public StringFormat StringFormat
+            {
+                get
+                {
+                    StringFormat format = new StringFormat
+                    {
+                        FormatFlags = gdipFormatFlags,
+                        Trimming = gdipTrimming,
+                        HotkeyPrefix = gdipHotkeyPrefix,
+                        Alignment = gdipAlignment,
+                        LineAlignment = gdipLineAlignment
+                    };
 
-                    format.FormatFlags   = this.gdipFormatFlags;
-                    format.Trimming      = this.gdipTrimming;
-                    format.HotkeyPrefix  = this.gdipHotkeyPrefix;
-                    format.Alignment     = this.gdipAlignment;
-                    format.LineAlignment = this.gdipLineAlignment;
-
-                    if (disableWordWrapping) {
+                    if (disableWordWrapping)
+                    {
                         format.FormatFlags |= StringFormatFlags.NoWrap;
                     }
 
                     return format;
                 }
-                set {
-                    this.gdipFormatFlags    = value.FormatFlags;
-                    this.gdipTrimming       = value.Trimming;
-                    this.gdipHotkeyPrefix   = value.HotkeyPrefix;
-                    this.gdipAlignment      = value.Alignment;
-                    this.gdipLineAlignment  = value.LineAlignment;
+                set
+                {
+                    gdipFormatFlags = value.FormatFlags;
+                    gdipTrimming = value.Trimming;
+                    gdipHotkeyPrefix = value.HotkeyPrefix;
+                    gdipAlignment = value.Alignment;
+                    gdipLineAlignment = value.LineAlignment;
                 }
             }
 
-            /// <devdoc>
-            /// </devdoc>
-            public TextFormatFlags TextFormatFlags {
-                get {
-                    if (disableWordWrapping) {
+            /// <summary>
+            /// </summary>
+            public TextFormatFlags TextFormatFlags
+            {
+                get
+                {
+                    if (disableWordWrapping)
+                    {
                         return gdiTextFormatFlags & ~TextFormatFlags.WordBreak;
                     }
 
@@ -945,12 +1096,13 @@ namespace System.Windows.Forms.ButtonInternal {
             internal int textImageInset = 2;
 
             internal Padding padding;
-            
+
             #region PreferredSize
             private static readonly int combineCheck = BitVector32.CreateMask();
             private static readonly int combineImageText = BitVector32.CreateMask(combineCheck);
 
-            private enum Composition {
+            private enum Composition
+            {
                 NoneCombined = 0x00,
                 CheckCombined = 0x01,
                 TextImageCombined = 0x02,
@@ -959,7 +1111,8 @@ namespace System.Windows.Forms.ButtonInternal {
 
             // Uses checkAlign, imageAlign, and textAlign to figure out how to compose 
             // checkSize, imageSize, and textSize into the preferredSize.
-            private Size Compose(Size checkSize, Size imageSize, Size textSize) {
+            private Size Compose(Size checkSize, Size imageSize, Size textSize)
+            {
                 Composition hComposition = GetHorizontalComposition();
                 Composition vComposition = GetVerticalComposition();
                 return new Size(
@@ -968,8 +1121,10 @@ namespace System.Windows.Forms.ButtonInternal {
                 );
             }
 
-            private int xCompose(Composition composition, int checkSize, int imageSize, int textSize) {
-                switch(composition) {
+            private int xCompose(Composition composition, int checkSize, int imageSize, int textSize)
+            {
+                switch (composition)
+                {
                     case Composition.NoneCombined:
                         return checkSize + imageSize + textSize;
                     case Composition.CheckCombined:
@@ -979,14 +1134,15 @@ namespace System.Windows.Forms.ButtonInternal {
                     case Composition.AllCombined:
                         return Math.Max(Math.Max(checkSize, imageSize), textSize);
                     default:
-                        Debug.Fail(string.Format(SR.InvalidArgument, "composition", composition.ToString()));
+                        Debug.Fail(string.Format(SR.InvalidArgument, nameof(composition), composition.ToString()));
                         return -7107;
                 }
             }
 
             // Uses checkAlign, imageAlign, and textAlign to figure out how to decompose 
             // proposedSize into just the space left over for text.
-            private Size Decompose(Size checkSize, Size imageSize, Size proposedSize) {
+            private Size Decompose(Size checkSize, Size imageSize, Size proposedSize)
+            {
                 Composition hComposition = GetHorizontalComposition();
                 Composition vComposition = GetVerticalComposition();
                 return new Size(
@@ -994,9 +1150,11 @@ namespace System.Windows.Forms.ButtonInternal {
                     xDecompose(vComposition, checkSize.Height, imageSize.Height, proposedSize.Height)
                 );
             }
-            
-            private int xDecompose(Composition composition, int checkSize, int imageSize, int proposedSize) {
-                switch(composition) {
+
+            private int xDecompose(Composition composition, int checkSize, int imageSize, int proposedSize)
+            {
+                switch (composition)
+                {
                     case Composition.NoneCombined:
                         return proposedSize - (checkSize + imageSize);
                     case Composition.CheckCombined:
@@ -1006,25 +1164,28 @@ namespace System.Windows.Forms.ButtonInternal {
                     case Composition.AllCombined:
                         return proposedSize;
                     default:
-                        Debug.Fail(string.Format(SR.InvalidArgument, "composition", composition.ToString()));
+                        Debug.Fail(string.Format(SR.InvalidArgument, nameof(composition), composition.ToString()));
                         return -7109;
                 }
             }
 
-            private Composition GetHorizontalComposition() {
+            private Composition GetHorizontalComposition()
+            {
                 BitVector32 action = new BitVector32();
 
                 // Checks reserve space horizontally if possible, so only AnyLeft/AnyRight prevents combination.
                 action[combineCheck] = checkAlign == ContentAlignment.MiddleCenter || !LayoutUtils.IsHorizontalAlignment(checkAlign);
                 action[combineImageText] = !LayoutUtils.IsHorizontalRelation(textImageRelation);
-                return (Composition) action.Data;
+                return (Composition)action.Data;
             }
 
-            internal Size GetPreferredSizeCore(Size proposedSize) {
+            internal Size GetPreferredSizeCore(Size proposedSize)
+            {
                 // Get space required for border and padding
                 //
-                int linearBorderAndPadding = borderSize*2 + paddingSize*2;
-                if(growBorderBy1PxWhenDefault) {
+                int linearBorderAndPadding = borderSize * 2 + paddingSize * 2;
+                if (growBorderBy1PxWhenDefault)
+                {
                     linearBorderAndPadding += 2;
                 }
                 Size bordersAndPadding = new Size(linearBorderAndPadding, linearBorderAndPadding);
@@ -1047,16 +1208,19 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 Size textSize = Size.Empty;
 
-                if (!string.IsNullOrEmpty(text)) {
+                if (!string.IsNullOrEmpty(text))
+                {
                     // When Button.AutoSizeMode is set to GrowOnly TableLayoutPanel expects buttons not to automatically wrap on word break. If
                     // there's enough room for the text to word-wrap then it will happen but the layout would not be adjusted to allow text wrapping.
                     // If someone has a carriage return in the text we'll honor that for preferred size, but we wont wrap based on constraints.
-                    try {
-                        this.disableWordWrapping = true;
+                    try
+                    {
+                        disableWordWrapping = true;
                         textSize = GetTextSize(proposedSize) + textImageInsetSize;
                     }
-                    finally {
-                        this.disableWordWrapping = false;
+                    finally
+                    {
+                        disableWordWrapping = false;
                     }
                 }
 
@@ -1068,38 +1232,46 @@ namespace System.Windows.Forms.ButtonInternal {
                 return requiredSize;
             }
 
-            private Composition GetVerticalComposition() {
+            private Composition GetVerticalComposition()
+            {
                 BitVector32 action = new BitVector32();
 
                 // Checks reserve space horizontally if possible, so only Top/Bottom prevents combination.
                 action[combineCheck] = checkAlign == ContentAlignment.MiddleCenter || !LayoutUtils.IsVerticalAlignment(checkAlign);
                 action[combineImageText] = !LayoutUtils.IsVerticalRelation(textImageRelation);
-                return (Composition) action.Data;
+                return (Composition)action.Data;
             }
             #endregion PreferredSize
 
-            private int FullBorderSize {
-                get {
+            private int FullBorderSize
+            {
+                get
+                {
                     int result = borderSize;
-                    if (OnePixExtraBorder) {
+                    if (OnePixExtraBorder)
+                    {
                         borderSize++;
                     }
                     return borderSize;
                 }
             }
 
-            private bool OnePixExtraBorder {
+            private bool OnePixExtraBorder
+            {
                 get { return growBorderBy1PxWhenDefault && isDefault; }
             }
 
-            internal LayoutData Layout() {
-                LayoutData layout = new LayoutData(this);
-                layout.client = this.client;
+            internal LayoutData Layout()
+            {
+                LayoutData layout = new LayoutData(this)
+                {
+                    client = client
+                };
 
                 // subtract border size from layout area
                 int fullBorderSize = FullBorderSize;
                 layout.face = Rectangle.Inflate(layout.client, -fullBorderSize, -fullBorderSize);
-                
+
                 // checkBounds, checkArea, field
                 //
                 CalcCheckmarkRectangle(layout);
@@ -1109,29 +1281,36 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 // focus
                 //
-                if (maxFocus) {
+                if (maxFocus)
+                {
                     layout.focus = layout.field;
                     layout.focus.Inflate(-1, -1);
 
                     // Adjust for padding.
-                    layout.focus = LayoutUtils.InflateRect(layout.focus, this.padding);
+                    layout.focus = LayoutUtils.InflateRect(layout.focus, padding);
                 }
-                else {
+                else
+                {
                     Rectangle textAdjusted = new Rectangle(layout.textBounds.X - 1, layout.textBounds.Y - 1,
                                                            layout.textBounds.Width + 2, layout.textBounds.Height + 3);
-                    if (imageSize != Size.Empty) {
+                    if (imageSize != Size.Empty)
+                    {
                         layout.focus = Rectangle.Union(textAdjusted, layout.imageBounds);
                     }
-                    else {
+                    else
+                    {
                         layout.focus = textAdjusted;
                     }
                 }
-                if (focusOddEvenFixup) {
-                    if (layout.focus.Height % 2 == 0) {
+                if (focusOddEvenFixup)
+                {
+                    if (layout.focus.Height % 2 == 0)
+                    {
                         layout.focus.Y++;
                         layout.focus.Height--;
                     }
-                    if (layout.focus.Width % 2 == 0) {
+                    if (layout.focus.Width % 2 == 0)
+                    {
                         layout.focus.X++;
                         layout.focus.Width--;
                     }
@@ -1140,10 +1319,13 @@ namespace System.Windows.Forms.ButtonInternal {
                 return layout;
             }
 
-            TextImageRelation RtlTranslateRelation(TextImageRelation relation) {
+            TextImageRelation RtlTranslateRelation(TextImageRelation relation)
+            {
                 // If RTL, we swap ImageBeforeText and TextBeforeImage
-                if (layoutRTL) {
-                    switch(relation) {
+                if (layoutRTL)
+                {
+                    switch (relation)
+                    {
                         case TextImageRelation.ImageBeforeText:
                             return TextImageRelation.TextBeforeImage;
                         case TextImageRelation.TextBeforeImage:
@@ -1153,19 +1335,24 @@ namespace System.Windows.Forms.ButtonInternal {
                 return relation;
             }
 
-            internal ContentAlignment RtlTranslateContent(ContentAlignment align) {
-            
-                if (layoutRTL) {
+            internal ContentAlignment RtlTranslateContent(ContentAlignment align)
+            {
+
+                if (layoutRTL)
+                {
                     ContentAlignment[][] mapping = new ContentAlignment[3][];
                     mapping[0] = new ContentAlignment[2] { ContentAlignment.TopLeft, ContentAlignment.TopRight };
                     mapping[1] = new ContentAlignment[2] { ContentAlignment.MiddleLeft, ContentAlignment.MiddleRight };
                     mapping[2] = new ContentAlignment[2] { ContentAlignment.BottomLeft, ContentAlignment.BottomRight };
-                         
-                    for(int i=0; i < 3; ++i) {
-                        if (mapping[i][0] == align) {
+
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        if (mapping[i][0] == align)
+                        {
                             return mapping[i][1];
                         }
-                        else if (mapping[i][1] == align) {
+                        else if (mapping[i][1] == align)
+                        {
                             return mapping[i][0];
                         }
                     }
@@ -1173,13 +1360,16 @@ namespace System.Windows.Forms.ButtonInternal {
                 return align;
             }
 
-            private int FullCheckSize {
-                get {
+            private int FullCheckSize
+            {
+                get
+                {
                     return checkSize + checkPaddingSize;
                 }
             }
 
-            void CalcCheckmarkRectangle(LayoutData layout) {
+            void CalcCheckmarkRectangle(LayoutData layout)
+            {
                 int checkSizeFull = FullCheckSize;
                 layout.checkBounds = new Rectangle(client.X, client.Y, checkSizeFull, checkSizeFull);
 
@@ -1190,25 +1380,32 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 layout.field = field;
 
-                if (checkSizeFull > 0) {
-                    if ((align & LayoutUtils.AnyRight) != 0) {
-                        layout.checkBounds.X = (field.X+field.Width) - layout.checkBounds.Width;
+                if (checkSizeFull > 0)
+                {
+                    if ((align & LayoutUtils.AnyRight) != 0)
+                    {
+                        layout.checkBounds.X = (field.X + field.Width) - layout.checkBounds.Width;
                     }
-                    else if ((align & LayoutUtils.AnyCenter) != 0) {
-                        layout.checkBounds.X = field.X + (field.Width - layout.checkBounds.Width)/2;
+                    else if ((align & LayoutUtils.AnyCenter) != 0)
+                    {
+                        layout.checkBounds.X = field.X + (field.Width - layout.checkBounds.Width) / 2;
                     }
 
-                    if ((align & LayoutUtils.AnyBottom) != 0) {
-                        layout.checkBounds.Y = (field.Y+field.Height)-layout.checkBounds.Height;
+                    if ((align & LayoutUtils.AnyBottom) != 0)
+                    {
+                        layout.checkBounds.Y = (field.Y + field.Height) - layout.checkBounds.Height;
                     }
-                    else if ((align & LayoutUtils.AnyTop) != 0) {
+                    else if ((align & LayoutUtils.AnyTop) != 0)
+                    {
                         layout.checkBounds.Y = field.Y + 2; // + 2: this needs to be aligned to the text (
                     }
-                    else {
-                        layout.checkBounds.Y = field.Y + (field.Height - layout.checkBounds.Height)/2;
+                    else
+                    {
+                        layout.checkBounds.Y = field.Y + (field.Height - layout.checkBounds.Height) / 2;
                     }
 
-                    switch (align) {
+                    switch (align)
+                    {
                         case ContentAlignment.TopLeft:
                         case ContentAlignment.MiddleLeft:
                         case ContentAlignment.BottomLeft:
@@ -1280,15 +1477,18 @@ namespace System.Windows.Forms.ButtonInternal {
                 /* BottomRight = */   TextImageRelation.TextAboveImage | TextImageRelation.TextBeforeImage
             };
 
-            private static TextImageRelation ImageAlignToRelation(ContentAlignment alignment) {
+            private static TextImageRelation ImageAlignToRelation(ContentAlignment alignment)
+            {
                 return _imageAlignToRelation[LayoutUtils.ContentAlignmentToIndex(alignment)];
             }
 
-            private static TextImageRelation TextAlignToRelation(ContentAlignment alignment) {
+            private static TextImageRelation TextAlignToRelation(ContentAlignment alignment)
+            {
                 return LayoutUtils.GetOppositeTextImageRelation(ImageAlignToRelation(alignment));
             }
 
-            internal void LayoutTextAndImage(LayoutData layout) {
+            internal void LayoutTextAndImage(LayoutData layout)
+            {
                 // Translate for Rtl applications.  This intentially shadows the member variables.
                 ContentAlignment imageAlign = RtlTranslateContent(this.imageAlign);
                 ContentAlignment textAlign = RtlTranslateContent(this.textAlign);
@@ -1296,25 +1496,30 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 // Figure out the maximum bounds for text & image
                 Rectangle maxBounds = Rectangle.Inflate(layout.field, -textImageInset, -textImageInset);
-                if(OnePixExtraBorder) {
+                if (OnePixExtraBorder)
+                {
                     maxBounds.Inflate(1, 1);
                 }
 
                 // Compute the final image and text bounds.
-                if(imageSize == Size.Empty || text == null || text.Length == 0 || textImageRelation == TextImageRelation.Overlay) {
+                if (imageSize == Size.Empty || text == null || text.Length == 0 || textImageRelation == TextImageRelation.Overlay)
+                {
                     // Do not worry about text/image overlaying
                     Size textSize = GetTextSize(maxBounds.Size);
 
                     // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
                     Size size = imageSize;
-                    if (layout.options.everettButtonCompat && imageSize != Size.Empty) {
+                    if (layout.options.everettButtonCompat && imageSize != Size.Empty)
+                    {
                         size = new Size(size.Width + 1, size.Height + 1);
                     }
-                    
+
                     layout.imageBounds = LayoutUtils.Align(size, maxBounds, imageAlign);
                     layout.textBounds = LayoutUtils.Align(textSize, maxBounds, textAlign);
 
-                } else {
+                }
+                else
+                {
                     // Rearrage text/image to prevent overlay.  Pack text into maxBounds - space reserved for image
                     Size maxTextSize = LayoutUtils.SubAlignedRegion(maxBounds.Size, imageSize, textImageRelation);
                     Size textSize = GetTextSize(maxTextSize);
@@ -1333,23 +1538,28 @@ namespace System.Windows.Forms.ButtonInternal {
                     // the text along the edge of the control.  If so, we can increase the space for image.
                     bool textEdge = (AnchorStyles)(TextAlignToRelation(textAlign) & textImageRelation) != AnchorStyles.None;
 
-                    if(imageEdge) {
+                    if (imageEdge)
+                    {
                         // If imageEdge, just split imageSize off of maxCombinedBounds.
-                        LayoutUtils.SplitRegion(maxCombinedBounds, imageSize, (AnchorStyles) textImageRelation, out layout.imageBounds, out layout.textBounds);
-                    } else if(textEdge) {
+                        LayoutUtils.SplitRegion(maxCombinedBounds, imageSize, (AnchorStyles)textImageRelation, out layout.imageBounds, out layout.textBounds);
+                    }
+                    else if (textEdge)
+                    {
                         // Else if textEdge, just split textSize off of maxCombinedBounds.
-                        LayoutUtils.SplitRegion(maxCombinedBounds, textSize, (AnchorStyles) LayoutUtils.GetOppositeTextImageRelation(textImageRelation), out layout.textBounds, out layout.imageBounds);
-                    } else {                        
+                        LayoutUtils.SplitRegion(maxCombinedBounds, textSize, (AnchorStyles)LayoutUtils.GetOppositeTextImageRelation(textImageRelation), out layout.textBounds, out layout.imageBounds);
+                    }
+                    else
+                    {
                         // Expand the adjacent regions to maxCombinedBounds (centered) and split the rectangle into imageBounds and textBounds.
-                        LayoutUtils.SplitRegion(combinedBounds, imageSize, (AnchorStyles) textImageRelation, out layout.imageBounds, out layout.textBounds);
-                        LayoutUtils.ExpandRegionsToFillBounds(maxCombinedBounds, (AnchorStyles) textImageRelation, ref layout.imageBounds, ref layout.textBounds);
+                        LayoutUtils.SplitRegion(combinedBounds, imageSize, (AnchorStyles)textImageRelation, out layout.imageBounds, out layout.textBounds);
+                        LayoutUtils.ExpandRegionsToFillBounds(maxCombinedBounds, (AnchorStyles)textImageRelation, ref layout.imageBounds, ref layout.textBounds);
                     }
 
                     // align text/image within their regions.
                     layout.imageBounds = LayoutUtils.Align(imageSize, layout.imageBounds, imageAlign);
                     layout.textBounds = LayoutUtils.Align(textSize, layout.textBounds, textAlign);
                 }
-                 
+
                 //Don't call "layout.imageBounds = Rectangle.Intersect(layout.imageBounds, maxBounds);"
                 // because that is a breaking change that causes images to be scaled to the dimensions of the control.
                 //adjust textBounds so that the text is still visible even if the image is larger than the button's size
@@ -1358,43 +1568,51 @@ namespace System.Windows.Forms.ButtonInternal {
                 //this is because there are some legacy code which squeezes the button so small that text will get clipped
                 //if we intersect with maxBounds. Have to do this for backward compatibility.
 
-                if (textImageRelation == TextImageRelation.TextBeforeImage || textImageRelation == TextImageRelation.ImageBeforeText) {
+                if (textImageRelation == TextImageRelation.TextBeforeImage || textImageRelation == TextImageRelation.ImageBeforeText)
+                {
                     //adjust the vertical position of textBounds so that the text doesn't fall off the boundary of the button
                     int textBottom = Math.Min(layout.textBounds.Bottom, layout.field.Bottom);
-                    layout.textBounds.Y = Math.Max(Math.Min(layout.textBounds.Y, layout.field.Y + (layout.field.Height - layout.textBounds.Height)/2), layout.field.Y);
+                    layout.textBounds.Y = Math.Max(Math.Min(layout.textBounds.Y, layout.field.Y + (layout.field.Height - layout.textBounds.Height) / 2), layout.field.Y);
                     layout.textBounds.Height = textBottom - layout.textBounds.Y;
                 }
-                if (textImageRelation == TextImageRelation.TextAboveImage || textImageRelation == TextImageRelation.ImageAboveText) {
+                if (textImageRelation == TextImageRelation.TextAboveImage || textImageRelation == TextImageRelation.ImageAboveText)
+                {
                     //adjust the horizontal position of textBounds so that the text doesn't fall off the boundary of the button
                     int textRight = Math.Min(layout.textBounds.Right, layout.field.Right);
-                    layout.textBounds.X = Math.Max(Math.Min(layout.textBounds.X, layout.field.X + (layout.field.Width - layout.textBounds.Width)/2), layout.field.X);
+                    layout.textBounds.X = Math.Max(Math.Min(layout.textBounds.X, layout.field.X + (layout.field.Width - layout.textBounds.Width) / 2), layout.field.X);
                     layout.textBounds.Width = textRight - layout.textBounds.X;
                 }
-                if (textImageRelation == TextImageRelation.ImageBeforeText && layout.imageBounds.Size.Width != 0) {
+                if (textImageRelation == TextImageRelation.ImageBeforeText && layout.imageBounds.Size.Width != 0)
+                {
                     //squeezes imageBounds.Width so that text is visible
                     layout.imageBounds.Width = Math.Max(0, Math.Min(maxBounds.Width - layout.textBounds.Width, layout.imageBounds.Width));
                     layout.textBounds.X = layout.imageBounds.X + layout.imageBounds.Width;
                 }
-                if (textImageRelation == TextImageRelation.ImageAboveText && layout.imageBounds.Size.Height != 0) {
+                if (textImageRelation == TextImageRelation.ImageAboveText && layout.imageBounds.Size.Height != 0)
+                {
                     //squeezes imageBounds.Height so that the text is visible
                     layout.imageBounds.Height = Math.Max(0, Math.Min(maxBounds.Height - layout.textBounds.Height, layout.imageBounds.Height));
                     layout.textBounds.Y = layout.imageBounds.Y + layout.imageBounds.Height;
                 }
                 //make sure that textBound is contained in layout.field
                 layout.textBounds = Rectangle.Intersect(layout.textBounds, layout.field);
-                if (hintTextUp) {
+                if (hintTextUp)
+                {
                     layout.textBounds.Y--;
                 }
-                if (textOffset) {
+                if (textOffset)
+                {
                     layout.textBounds.Offset(1, 1);
                 }
-                
+
                 // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                if (layout.options.everettButtonCompat) {
+                if (layout.options.everettButtonCompat)
+                {
                     layout.imageStart = layout.imageBounds.Location;
                     layout.imageBounds = Rectangle.Intersect(layout.imageBounds, layout.field);
                 }
-                else if (!Application.RenderWithVisualStyles) {
+                else if (!Application.RenderWithVisualStyles)
+                {
                     // Not sure why this is here, but we can't remove it, since it might break
                     // ToolStrips on non-themed machines
                     layout.textBounds.X++;
@@ -1406,18 +1624,20 @@ namespace System.Windows.Forms.ButtonInternal {
                 // If we are using GDI to measure text, then we can get into a situation, where
                 // the proposed height is ignore. In this case, we want to clip it against
                 // maxbounds.
-                if (!useCompatibleTextRendering) {
+                if (!useCompatibleTextRendering)
+                {
                     bottom = Math.Min(layout.textBounds.Bottom, maxBounds.Bottom);
                     layout.textBounds.Y = Math.Max(layout.textBounds.Y, maxBounds.Y);
                 }
-                else {
+                else
+                {
                     // If we are using GDI+ (like Everett), then use the old Everett code
                     // This ensures that we have pixel-level rendering compatibility
                     bottom = Math.Min(layout.textBounds.Bottom, layout.field.Bottom);
                     layout.textBounds.Y = Math.Max(layout.textBounds.Y, layout.field.Y);
                 }
-                layout.textBounds.Height = bottom - layout.textBounds.Y;                
-                
+                layout.textBounds.Height = bottom - layout.textBounds.Y;
+
                 //This causes a breaking change because images get shrunk to the new clipped size instead of clipped.
                 //********** bottom = Math.Min(layout.imageBounds.Bottom, maxBounds.Bottom);
                 //********** layout.imageBounds.Y = Math.Max(layout.imageBounds.Y, maxBounds.Y);
@@ -1425,20 +1645,25 @@ namespace System.Windows.Forms.ButtonInternal {
 
             }
 
-            protected virtual Size GetTextSize(Size proposedSize) {
+            protected virtual Size GetTextSize(Size proposedSize)
+            {
                 //set the Prefix field of TextFormatFlags 
                 proposedSize = LayoutUtils.FlipSizeIf(verticalText, proposedSize);
                 Size textSize = Size.Empty;
 
-                if (useCompatibleTextRendering) { // GDI+ text rendering.
-                    using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics()) {
-                        using ( StringFormat gdipStringFormat = this.StringFormat ) {
+                if (useCompatibleTextRendering)
+                { // GDI+ text rendering.
+                    using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
+                    {
+                        using (StringFormat gdipStringFormat = StringFormat)
+                        {
                             textSize = Size.Ceiling(g.MeasureString(text, font, new SizeF(proposedSize.Width, proposedSize.Height), gdipStringFormat));
                         }
                     }
                 }
-                else if (!string.IsNullOrEmpty(text)) { // GDI text rendering (Whidbey feature).
-                    textSize = TextRenderer.MeasureText(text, font, proposedSize, this.TextFormatFlags);
+                else if (!string.IsNullOrEmpty(text))
+                { // GDI text rendering (Whidbey feature).
+                    textSize = TextRenderer.MeasureText(text, font, proposedSize, TextFormatFlags);
                 }
                 //else skip calling MeasureText, it should return 0,0
 
@@ -1446,30 +1671,32 @@ namespace System.Windows.Forms.ButtonInternal {
             }
 
 #if DEBUG
-            public override string ToString() {
-                return 
-                    "{ client = " + client + "\n" + 
-                    "OnePixExtraBorder = " + OnePixExtraBorder + "\n" + 
-                    "borderSize = " + borderSize + "\n" + 
-                    "paddingSize = " + paddingSize + "\n" + 
-                    "maxFocus = " + maxFocus + "\n" + 
-                    "font = " + font + "\n" + 
-                    "text = " + text + "\n" + 
-                    "imageSize = " + imageSize + "\n" + 
-                    "checkSize = " + checkSize + "\n" + 
-                    "checkPaddingSize = " + checkPaddingSize + "\n" + 
-                    "checkAlign = " + checkAlign + "\n" + 
-                    "imageAlign = " + imageAlign + "\n" + 
-                    "textAlign = " + textAlign + "\n" + 
-                    "textOffset = " + textOffset + "\n" + 
-                    "shadowedText = " + shadowedText + "\n" + 
-                    "textImageRelation = " + textImageRelation + "\n" + 
+            public override string ToString()
+            {
+                return
+                    "{ client = " + client + "\n" +
+                    "OnePixExtraBorder = " + OnePixExtraBorder + "\n" +
+                    "borderSize = " + borderSize + "\n" +
+                    "paddingSize = " + paddingSize + "\n" +
+                    "maxFocus = " + maxFocus + "\n" +
+                    "font = " + font + "\n" +
+                    "text = " + text + "\n" +
+                    "imageSize = " + imageSize + "\n" +
+                    "checkSize = " + checkSize + "\n" +
+                    "checkPaddingSize = " + checkPaddingSize + "\n" +
+                    "checkAlign = " + checkAlign + "\n" +
+                    "imageAlign = " + imageAlign + "\n" +
+                    "textAlign = " + textAlign + "\n" +
+                    "textOffset = " + textOffset + "\n" +
+                    "shadowedText = " + shadowedText + "\n" +
+                    "textImageRelation = " + textImageRelation + "\n" +
                     "layoutRTL = " + layoutRTL + " }";
             }
 #endif            
         }
 
-        internal class LayoutData {
+        internal class LayoutData
+        {
             internal Rectangle client;
             internal Rectangle face;
             internal Rectangle checkArea;
@@ -1481,118 +1708,139 @@ namespace System.Windows.Forms.ButtonInternal {
             internal Point imageStart; // FOR EVERETT COMPATIBILITY - DO NOT CHANGE                      
             internal LayoutOptions options;
 
-            internal LayoutData(LayoutOptions options) {
+            internal LayoutData(LayoutOptions options)
+            {
                 Debug.Assert(options != null, "must have options");
                 this.options = options;
             }
         }
 
-#endregion
+        #endregion
 
-#region Layout
+        #region Layout
 
         // used by the DataGridViewButtonCell
         internal static LayoutOptions CommonLayout(Rectangle clientRectangle, Padding padding, bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
         {
-            LayoutOptions layout = new LayoutOptions();
-            layout.client             = LayoutUtils.DeflateRect(clientRectangle, padding);
-            layout.padding            = padding;
-            layout.growBorderBy1PxWhenDefault = true;
-            layout.isDefault          = isDefault;
-            layout.borderSize         = 2;
-            layout.paddingSize        = 0;
-            layout.maxFocus           = true;
-            layout.focusOddEvenFixup  = false;
-            layout.font               = font;
-            layout.text               = text;
-            layout.imageSize          = Size.Empty;
-            layout.checkSize          = 0;
-            layout.checkPaddingSize   = 0;
-            layout.checkAlign         = ContentAlignment.TopLeft;
-            layout.imageAlign         = ContentAlignment.MiddleCenter;
-            layout.textAlign          = textAlign;
-            layout.hintTextUp         = false;
-            layout.shadowedText       = !enabled;
-            layout.layoutRTL          = RightToLeft.Yes == rtl;
-            layout.textImageRelation  = TextImageRelation.Overlay;
-            layout.useCompatibleTextRendering = false;
+            LayoutOptions layout = new LayoutOptions
+            {
+                client = LayoutUtils.DeflateRect(clientRectangle, padding),
+                padding = padding,
+                growBorderBy1PxWhenDefault = true,
+                isDefault = isDefault,
+                borderSize = 2,
+                paddingSize = 0,
+                maxFocus = true,
+                focusOddEvenFixup = false,
+                font = font,
+                text = text,
+                imageSize = Size.Empty,
+                checkSize = 0,
+                checkPaddingSize = 0,
+                checkAlign = ContentAlignment.TopLeft,
+                imageAlign = ContentAlignment.MiddleCenter,
+                textAlign = textAlign,
+                hintTextUp = false,
+                shadowedText = !enabled,
+                layoutRTL = RightToLeft.Yes == rtl,
+                textImageRelation = TextImageRelation.Overlay,
+                useCompatibleTextRendering = false
+            };
             return layout;
         }
 
-        internal virtual LayoutOptions CommonLayout() {
-            LayoutOptions layout = new LayoutOptions();
-            layout.client             = LayoutUtils.DeflateRect(Control.ClientRectangle, Control.Padding);
-            layout.padding            = Control.Padding;
-            layout.growBorderBy1PxWhenDefault = true;
-            layout.isDefault          = Control.IsDefault;
-            layout.borderSize         = 2;
-            layout.paddingSize        = 0;
-            layout.maxFocus           = true;
-            layout.focusOddEvenFixup  = false;
-            layout.font               = Control.Font;
-            layout.text               = Control.Text;
-            layout.imageSize          = (Control.Image == null) ? Size.Empty : Control.Image.Size;
-            layout.checkSize          = 0;
-            layout.checkPaddingSize   = 0;
-            layout.checkAlign         = ContentAlignment.TopLeft;
-            layout.imageAlign         = Control.ImageAlign;
-            layout.textAlign          = Control.TextAlign;
-            layout.hintTextUp         = false;
-            layout.shadowedText       = !Control.Enabled;
-            layout.layoutRTL          = RightToLeft.Yes == Control.RightToLeft;
-            layout.textImageRelation  = Control.TextImageRelation;
-            layout.useCompatibleTextRendering = Control.UseCompatibleTextRendering;
+        internal virtual LayoutOptions CommonLayout()
+        {
+            LayoutOptions layout = new LayoutOptions
+            {
+                client = LayoutUtils.DeflateRect(Control.ClientRectangle, Control.Padding),
+                padding = Control.Padding,
+                growBorderBy1PxWhenDefault = true,
+                isDefault = Control.IsDefault,
+                borderSize = 2,
+                paddingSize = 0,
+                maxFocus = true,
+                focusOddEvenFixup = false,
+                font = Control.Font,
+                text = Control.Text,
+                imageSize = (Control.Image == null) ? Size.Empty : Control.Image.Size,
+                checkSize = 0,
+                checkPaddingSize = 0,
+                checkAlign = ContentAlignment.TopLeft,
+                imageAlign = Control.ImageAlign,
+                textAlign = Control.TextAlign,
+                hintTextUp = false,
+                shadowedText = !Control.Enabled,
+                layoutRTL = RightToLeft.Yes == Control.RightToLeft,
+                textImageRelation = Control.TextImageRelation,
+                useCompatibleTextRendering = Control.UseCompatibleTextRendering
+            };
 
-            if( Control.FlatStyle != FlatStyle.System ) {
-                if( layout.useCompatibleTextRendering ) {
-                    using( StringFormat format = Control.CreateStringFormat() ) {
+            if (Control.FlatStyle != FlatStyle.System)
+            {
+                if (layout.useCompatibleTextRendering)
+                {
+                    using (StringFormat format = Control.CreateStringFormat())
+                    {
                         layout.StringFormat = format;
                     }
                 }
-                else {
+                else
+                {
                     layout.gdiTextFormatFlags = Control.CreateTextFormatFlags();
                 }
             }
-            
+
             return layout;
         }
 
         // used by the DataGridViewButtonCell
-        static ColorOptions CommonRender(Graphics g, Color foreColor, Color backColor, bool enabled) {
-            ColorOptions colors = new ColorOptions(g, foreColor, backColor);
-            colors.enabled = enabled;
+        static ColorOptions CommonRender(Graphics g, Color foreColor, Color backColor, bool enabled)
+        {
+            ColorOptions colors = new ColorOptions(g, foreColor, backColor)
+            {
+                enabled = enabled
+            };
             return colors;
         }
 
-        ColorOptions CommonRender(Graphics g) {
-            ColorOptions colors = new ColorOptions(g, Control.ForeColor, Control.BackColor);
-            colors.enabled = Control.Enabled;
+        ColorOptions CommonRender(Graphics g)
+        {
+            ColorOptions colors = new ColorOptions(g, Control.ForeColor, Control.BackColor)
+            {
+                enabled = Control.Enabled
+            };
             return colors;
         }
 
-        protected ColorOptions PaintRender(Graphics g) {
+        protected ColorOptions PaintRender(Graphics g)
+        {
             return CommonRender(g);
         }
 
         // used by the DataGridViewButtonCell
-        internal static ColorOptions PaintFlatRender(Graphics g, Color foreColor, Color backColor, bool enabled) {
+        internal static ColorOptions PaintFlatRender(Graphics g, Color foreColor, Color backColor, bool enabled)
+        {
             return CommonRender(g, foreColor, backColor, enabled);
         }
 
-        protected ColorOptions PaintFlatRender(Graphics g) {
+        protected ColorOptions PaintFlatRender(Graphics g)
+        {
             return CommonRender(g);
         }
 
         // used by the DataGridViewButtonCell
-        internal static ColorOptions PaintPopupRender(Graphics g, Color foreColor, Color backColor, bool enabled) {
+        internal static ColorOptions PaintPopupRender(Graphics g, Color foreColor, Color backColor, bool enabled)
+        {
             return CommonRender(g, foreColor, backColor, enabled);
         }
 
-        protected ColorOptions PaintPopupRender(Graphics g) {
+        protected ColorOptions PaintPopupRender(Graphics g)
+        {
             return CommonRender(g);
         }
 
-#endregion
+        #endregion
 
     }
 }

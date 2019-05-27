@@ -4,8 +4,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-using System.Security;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -50,9 +48,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsChild(HandleRef hWndParent, HandleRef hwnd);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds,
             int dwWakeMask, int dwFlags);
@@ -75,10 +70,10 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
         private static extern IntPtr IntGetDC(HandleRef hWnd);
-        
+
         public static IntPtr GetDC(HandleRef hWnd)
         {
-            return System.Internal.HandleCollector.Add(IntGetDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
@@ -86,7 +81,7 @@ namespace System.Windows.Forms.Design
 
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
         {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntReleaseDC(hWnd, hDC);
         }
 
@@ -108,7 +103,11 @@ namespace System.Windows.Forms.Design
         //it'll be OK.
         public static IntPtr GetWindowLong(HandleRef hWnd, int nIndex)
         {
-            if (IntPtr.Size == 4) return GetWindowLong32(hWnd, nIndex);
+            if (IntPtr.Size == 4)
+            {
+                return GetWindowLong32(hWnd, nIndex);
+            }
+
             return GetWindowLongPtr64(hWnd, nIndex);
         }
 
@@ -131,7 +130,11 @@ namespace System.Windows.Forms.Design
         //it'll be OK.
         public static IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong)
         {
-            if (IntPtr.Size == 4) return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
+            if (IntPtr.Size == 4)
+            {
+                return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
+            }
+
             return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
         }
 
@@ -157,102 +160,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.Ole32, PreserveSig = false)]
         public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
-
-        [Flags]
-        public enum BrowseInfos
-        {
-            // Browsing for directory.
-            ReturnOnlyFSDirs = 0x0001, // For finding a folder to start document searching
-            DontGoBelowDomain = 0x0002, // For starting the Find Computer
-            StatusText = 0x0004, // Top of the dialog has 2 lines of text for BROWSEINFO.lpszTitle and one line if
-
-            // this flag is set.  Passing the message BFFM_SETSTATUSTEXTA to the hwnd can set the
-            // rest of the text.  This is not used with USENEWUI and BROWSEINFO.lpszTitle gets
-            // all three lines of text.
-            ReturnFSAncestors = 0x0008,
-            EditBox = 0x0010, // Add an editbox to the dialog
-            Validate = 0x0020, // insist on valid result (or CANCEL)
-
-            NewDialogStyle = 0x0040, // Use the new dialog layout with the ability to resize
-            // Caller needs to call OleInitialize() before using this API
-
-            UseNewUI = NewDialogStyle | EditBox,
-
-            AllowUrls = 0x0080, // Allow URLs to be displayed or entered. (Requires USENEWUI)
-
-            BrowseForComputer = 0x1000, // Browsing for Computers.
-            BrowseForPrinter = 0x2000, // Browsing for Printers
-            BrowseForEverything = 0x4000, // Browsing for Everything
-            ShowShares = 0x8000 // sharable resources displayed (remote shares, requires USENEWUI)
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class BROWSEINFO
-        {
-            public IntPtr hwndOwner; //HWND        hwndOwner;    // HWND of the owner for the dialog
-
-            public int
-                iImage; //int          iImage;                      // output var: where to return the Image index.
-
-            public IntPtr
-                lParam; //LPARAM       lParam;                      // extra info that's passed back in callbacks
-
-            public IntPtr lpfn; //BFFCALLBACK  lpfn;            // Call back pointer
-
-            public string lpszTitle; //LPCWSTR      lpszTitle;           // text to go in the banner over the tree.
-            public IntPtr pidlRoot; //LPCITEMIDLIST pidlRoot;   // Root ITEMIDLIST
-
-            // For interop purposes, send over a buffer of MAX_PATH size. 
-            public IntPtr pszDisplayName; //LPWSTR       pszDisplayName;      // Return display name of item selected.
-            public int ulFlags; //UINT         ulFlags;                     // Flags that control the return stuff
-        }
-
-        public class Shell32
-        {
-            [DllImport(ExternDll.Shell32)]
-            public static extern int SHGetSpecialFolderLocation(IntPtr hwnd, int csidl, ref IntPtr ppidl);
-            //SHSTDAPI SHGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl);
-
-            [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            public static extern bool SHGetPathFromIDList(IntPtr pidl, IntPtr pszPath);
-            //SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST pidl, LPWSTR pszPath);
-
-            [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);
-            //SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
-
-            [DllImport(ExternDll.Shell32)]
-            public static extern int SHGetMalloc([Out] [MarshalAs(UnmanagedType.LPArray)]
-                IMalloc[] ppMalloc);
-
-            //SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
-        }
-
-        [ComImport]
-        [Guid("00000002-0000-0000-c000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IMalloc
-        {
-            [PreserveSig]
-            IntPtr Alloc(int cb);
-
-            [PreserveSig]
-            IntPtr Realloc(IntPtr pv, int cb);
-
-            [PreserveSig]
-            void Free(IntPtr pv);
-
-            [PreserveSig]
-            int GetSize(IntPtr pv);
-
-            [PreserveSig]
-            int DidAlloc(IntPtr pv);
-
-            [PreserveSig]
-            void HeapMinimize();
-        }
 
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]

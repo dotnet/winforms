@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -12,9 +12,9 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the layout of a device context.
-    /// </devdoc>
+    /// </summary>
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -22,30 +22,30 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextLayout
-    {   
-        /// <devdoc>
+    {
+        /// <summary>
         ///     Right to left.
-        /// </devdoc>
+        /// </summary>
         Normal = 0x00000000,
 
-        /// <devdoc>
+        /// <summary>
         ///     Right to left. LAYOUT_RTL
-        /// </devdoc>
+        /// </summary>
         RightToLeft = 0x00000001,
 
-        /// <devdoc>
+        /// <summary>
         ///     Bottom to top. LAYOUT_BTT
-        /// </devdoc>
+        /// </summary>
         BottomToTop = 0x00000002,
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     Vertical before horizontal. LAYOUT_VBH
-        /// </devdoc>
+        /// </summary>
         VerticalBeforeHorizontal = 0x00000004,
 
-        /// <devdoc>
+        /// <summary>
         ///     Disables any reflection during BitBlt and StretchBlt operations. LAYOUT_BITMAPORIENTATIONPRESERVED
-        /// </devdoc>
+        /// </summary>
         BitmapOrientationPreserved = 0x00000008
     }
 }

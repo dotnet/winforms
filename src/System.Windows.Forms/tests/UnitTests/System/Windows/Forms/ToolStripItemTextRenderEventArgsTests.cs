@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { graphics, new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (ContentAlignment)(ContentAlignment.TopLeft - 1), TextFormatFlags.Default | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
             yield return new object[] { graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.MiddleCenter, TextFormatFlags.Default | TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
-            yield return new object[] { graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.BottomRight, TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.HidePrefix  };
+            yield return new object[] { graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.BottomRight, TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.HidePrefix };
             yield return new object[] { graphics, new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, (ContentAlignment)(-1), TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.RightToLeft | TextFormatFlags.HidePrefix };
         }
 

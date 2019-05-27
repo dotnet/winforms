@@ -11,7 +11,7 @@ namespace System.Windows.Forms.VisualStyles
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum FontProperty
     {
-    	GlyphFont = 2601
-    //		 TM_PROP(2601, TMT, GLYPHFONT,         FONT)   // the font that the glyph is drawn with
+        GlyphFont = 2601
+        //		 TM_PROP(2601, TMT, GLYPHFONT,         FONT)   // the font that the glyph is drawn with
     }
 }

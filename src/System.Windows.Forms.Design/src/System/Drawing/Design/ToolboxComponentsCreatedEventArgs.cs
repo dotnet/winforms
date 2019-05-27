@@ -12,14 +12,19 @@ namespace System.Drawing.Design
     /// </summary>
     public class ToolboxComponentsCreatedEventArgs : EventArgs
     {
+        private readonly IComponent[] _components;
+
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxComponentsCreatedEventArgs'
         /// </summary>
-        public ToolboxComponentsCreatedEventArgs(IComponent[] components) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public ToolboxComponentsCreatedEventArgs(IComponent[] components)
+        {
+            _components = components;
+        }
 
         /// <summary>
         /// An array storing the toolbox components.
         /// </summary>
-        public IComponent[] Components => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public IComponent[] Components => (IComponent[])_components?.Clone();
     }
 }

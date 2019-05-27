@@ -6,7 +6,7 @@
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <!-- to prevent using MS.NC.Platforms from SDK, which is lagging behind the version that WinForms gets from the CoreFx packages -->
   <ItemGroup>
-    <PackageReference Update="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" />
   </ItemGroup>
 
   <!-- Set code coverage properties that reference properties not available in Directory.Build.props -->
@@ -21,5 +21,19 @@
   <Target Name="GenerateCoverageResultAfterTest" Condition="'$(CollectCoverage)' == 'true'" AfterTargets="RunTests">
     <CallTarget Targets="GenerateCoverageResult" />
   </Target>
+
+  <ItemGroup>
+    <!-- Set TargetingPackVersion -->
+    <FrameworkReference Update="Microsoft.NETCore.App" 
+      Condition=" '$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">
+    <TargetingPackVersion>$(MicrosoftNETCoreAppPackageVersion)</TargetingPackVersion>
+    </FrameworkReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- If TargetFramework is not netcoreapp3.x, then reset RuntimeFrameworkVersion -->
+    <!-- TODO: /p:EnableInstallDotNetCoreRuntimes=true to endable this for tests once dotnet/arcade#2343 is in -->
+    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('netcoreapp3.'))" />
+  </PropertyGroup>
 
 </Project>

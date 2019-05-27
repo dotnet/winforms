@@ -3,14 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
-    
-    /// <include file='doc\MethodInvoker.uex' path='docs/doc[@for="MethodInvoker"]/*' />
-    /// <devdoc>
+
+    /// <summary>
     ///    <para>Represents the method that will handle the 
     ///    <see langword='Invoke '/> event for a method.</para>
-    /// </devdoc>
+    /// </summary>
     public delegate void MethodInvoker();
 }

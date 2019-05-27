@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -15,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     public class DesignerSerializationManager : IDesignerSerializationManager
     {
-        private IServiceProvider provider;
+        private readonly IServiceProvider provider;
         private ITypeResolutionService typeResolver;
         private bool searchedTypeResolver;
         private bool recycleInstances;
@@ -51,7 +50,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public DesignerSerializationManager(IServiceProvider provider)
         {
-            this.provider = provider ?? throw new ArgumentNullException("provider");
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
             preserveNames = true;
             validateRecycledTypes = true;
         }
@@ -155,14 +154,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public event EventHandler SessionCreated
         {
-            add
-            {
-                sessionCreatedEventHandler += value;
-            }
-            remove
-            {
-                sessionCreatedEventHandler -= value;
-            }
+            add => sessionCreatedEventHandler += value;
+            remove => sessionCreatedEventHandler -= value;
         }
 
         /// <summary>
@@ -170,14 +163,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public event EventHandler SessionDisposed
         {
-            add
-            {
-                sessionDisposedEventHandler += value;
-            }
-            remove
-            {
-                sessionDisposedEventHandler -= value;
-            }
+            add => sessionDisposedEventHandler += value;
+            remove => sessionDisposedEventHandler -= value;
         }
 
         /// <summary>
@@ -359,8 +346,10 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                     }
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()));
-                    ex.HelpLink = SR.SerializationManagerNoMatchingCtor;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
+                    {
+                        HelpLink = SR.SerializationManagerNoMatchingCtor
+                    };
                     throw ex;
                 }
 
@@ -412,7 +401,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (serializerType == null)
             {
-                throw new ArgumentNullException("serializerType");
+                throw new ArgumentNullException(nameof(serializerType));
             }
 
             object serializer = null;
@@ -434,9 +423,8 @@ namespace System.ComponentModel.Design.Serialization
                     AttributeCollection attributes = TypeDescriptor.GetAttributes(objectType);
                     foreach (Attribute attr in attributes)
                     {
-                        if (attr is DesignerSerializerAttribute)
+                        if (attr is DesignerSerializerAttribute da)
                         {
-                            DesignerSerializerAttribute da = (DesignerSerializerAttribute)attr;
                             string typeName = da.SerializerBaseTypeName;
 
                             // This serializer must support the correct base type or we're not interested.
@@ -446,7 +434,6 @@ namespace System.ComponentModel.Design.Serialization
                                 if (baseType == serializerType && da.SerializerTypeName != null && da.SerializerTypeName.Length > 0)
                                 {
                                     Type type = GetRuntimeType(da.SerializerTypeName);
-                                    Debug.Assert(type != null, "Type " + objectType.FullName + " has a serializer that we couldn't bind to: " + da.SerializerTypeName);
                                     if (type != null)
                                     {
                                         serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
@@ -540,7 +527,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService typeProviderService)
                 {
                     TypeDescriptionProvider typeProvider = typeProviderService.GetProvider(type);
-                    if (!typeProvider.IsSupportedType(type))
+                    if (typeProvider != null && !typeProvider.IsSupportedType(type))
                     {
                         type = null;
                     }
@@ -601,7 +588,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    serializationCompleteEventHandler?.Invoke(this, EventArgs.Empty);
+                    serializationCompleteEventHandler?.Invoke(this, e);
                 }
             }
             finally
@@ -624,7 +611,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (property == null)
             {
-                throw new ArgumentNullException("property");
+                throw new ArgumentNullException(nameof(property));
             }
             // owner can be null for static properties.
             return new WrappedPropertyDescriptor(property, owner);
@@ -687,10 +674,7 @@ namespace System.ComponentModel.Design.Serialization
                 CheckSession();
                 resolveNameEventHandler += value;
             }
-            remove
-            {
-                resolveNameEventHandler -= value;
-            }
+            remove => resolveNameEventHandler -= value;
         }
 
         /// <summary>
@@ -703,10 +687,7 @@ namespace System.ComponentModel.Design.Serialization
                 CheckSession();
                 serializationCompleteEventHandler += value;
             }
-            remove
-            {
-                serializationCompleteEventHandler -= value;
-            }
+            remove => serializationCompleteEventHandler -= value;
         }
 
         /// <summary>
@@ -735,8 +716,10 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (instancesByName != null && instancesByName.ContainsKey(name))
                 {
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name));
-                    ex.HelpLink = SR.SerializationManagerDuplicateComponentDecl;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name))
+                    {
+                        HelpLink = SR.SerializationManagerDuplicateComponentDecl
+                    };
                     throw ex;
                 }
             }
@@ -766,7 +749,7 @@ namespace System.ComponentModel.Design.Serialization
             object instance = null;
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             CheckSession();
@@ -798,7 +781,7 @@ namespace System.ComponentModel.Design.Serialization
             string name = null;
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
             CheckSession();
@@ -844,8 +827,13 @@ namespace System.ComponentModel.Design.Serialization
             while (t == null)
             {
                 t = GetType(typeName);
-                if (t == null && typeName != null && typeName.Length > 0)
+                if (t == null)
                 {
+                    if (string.IsNullOrEmpty(typeName))
+                    {
+                        break;
+                    }
+
                     int dotIndex = typeName.LastIndexOf('.');
                     if (dotIndex == -1 || dotIndex == typeName.Length - 1)
                     {
@@ -891,8 +879,15 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            if (instance == null) throw new ArgumentNullException("instance");
-            if (name == null) throw new ArgumentNullException("name");
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
 
             if (instancesByName == null)
             {
@@ -902,12 +897,12 @@ namespace System.ComponentModel.Design.Serialization
 
             if (instancesByName[name] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name));
+                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name), nameof(name));
             }
 
             if (namesByInstance[instance] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]));
+                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
             instancesByName[name] = instance;
             namesByInstance[instance] = name;
@@ -926,7 +921,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private sealed class SerializationSession : IDisposable
         {
-            private DesignerSerializationManager _serializationManager;
+            private readonly DesignerSerializationManager _serializationManager;
 
             internal SerializationSession(DesignerSerializationManager serializationManager)
             {
@@ -964,8 +959,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private sealed class WrappedPropertyDescriptor : PropertyDescriptor
         {
-            private object target;
-            private PropertyDescriptor property;
+            private readonly object target;
+            private readonly PropertyDescriptor property;
 
             internal WrappedPropertyDescriptor(PropertyDescriptor property, object target) : base(property.Name, null)
             {

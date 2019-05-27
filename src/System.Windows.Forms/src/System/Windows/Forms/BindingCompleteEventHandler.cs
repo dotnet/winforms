@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents a method that will handle the Binding Complete event.
-    /// </devdoc>
+    /// </summary>
     public delegate void BindingCompleteEventHandler(object sender, BindingCompleteEventArgs e);
 }

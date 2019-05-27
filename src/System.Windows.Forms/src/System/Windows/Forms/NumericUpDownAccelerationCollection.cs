@@ -9,26 +9,26 @@ namespace System.Windows.Forms
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    
-    /// <devdoc>
+
+    /// <summary>
     ///     Represents a SORTED collection of NumericUpDownAcceleration objects in the NumericUpDown Control.
     ///     The elements in the collection are sorted by the NumericUpDownAcceleration.Seconds property.
-    /// </devdoc>
+    /// </summary>
     [ListBindable(false)]
     public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollection<NumericUpDownAcceleration>, IEnumerable<NumericUpDownAcceleration>
     {
-        List<NumericUpDownAcceleration> items;
+        readonly List<NumericUpDownAcceleration> items;
 
 
         /// ICollection<NumericUpDownAcceleration> implementation.
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     Adds an item (NumericUpDownAcceleration object) to the ICollection.
         ///     The item is added preserving the collection sorted.
-        /// </devdoc>
+        /// </summary>
         public void Add(NumericUpDownAcceleration acceleration)
         {
-            if( acceleration == null )
+            if (acceleration == null)
             {
                 throw new ArgumentNullException(nameof(acceleration));
             }
@@ -36,75 +36,75 @@ namespace System.Windows.Forms
             // Keep the array sorted, insert in the right spot.
             int index = 0;
 
-            while( index < this.items.Count )
+            while (index < items.Count)
             {
-                if( acceleration.Seconds < this.items[index].Seconds )
+                if (acceleration.Seconds < items[index].Seconds)
                 {
                     break;
                 }
                 index++;
             }
-            this.items.Insert(index, acceleration);
+            items.Insert(index, acceleration);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes all items from the ICollection.
-        /// </devdoc>
-       public void Clear()
+        /// </summary>
+        public void Clear()
         {
-            this.items.Clear();
+            items.Clear();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the IList contains a specific value.
-        /// </devdoc>
-         public bool Contains(NumericUpDownAcceleration acceleration)
+        /// </summary>
+        public bool Contains(NumericUpDownAcceleration acceleration)
         {
-            return this.items.Contains(acceleration);
+            return items.Contains(acceleration);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Copies the elements of the ICollection to an Array, starting at a particular Array index.
-        /// </devdoc>
-         public void CopyTo(NumericUpDownAcceleration[] array, int index)
+        /// </summary>
+        public void CopyTo(NumericUpDownAcceleration[] array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     Gets the number of elements contained in the ICollection.
-        /// </devdoc>
+        /// </summary>
         public int Count
         {
-            get {return this.items.Count;}
+            get { return items.Count; }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets a value indicating whether the ICollection is read-only.
         ///     This collection property returns false always.
-        /// </devdoc>
+        /// </summary>
         public bool IsReadOnly
         {
-            get {return false;}
+            get { return false; }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes the specified item from the ICollection.
-        /// </devdoc>
+        /// </summary>
         public bool Remove(NumericUpDownAcceleration acceleration)
         {
-            return this.items.Remove(acceleration);
+            return items.Remove(acceleration);
         }
-        
+
         /// IEnumerable<NumericUpDownAcceleration> implementation.
-        
-        
-        /// <devdoc>
+
+
+        /// <summary>
         ///     Returns an enumerator that can iterate through the collection.
-        /// </devdoc>
+        /// </summary>
         IEnumerator<NumericUpDownAcceleration> IEnumerable<NumericUpDownAcceleration>.GetEnumerator()
         {
-            return this.items.GetEnumerator();
+            return items.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -113,18 +113,18 @@ namespace System.Windows.Forms
         }
 
         /// NumericUpDownAccelerationCollection methods.
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     Class constructor.
-        /// </devdoc>
+        /// </summary>
         public NumericUpDownAccelerationCollection()
         {
-            this.items = new List<NumericUpDownAcceleration>();
+            items = new List<NumericUpDownAcceleration>();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds the elements of specified array to the collection, keeping the collection sorted.
-        /// </devdoc>
+        /// </summary>
         public void AddRange(params NumericUpDownAcceleration[] accelerations)
         {
             if (accelerations == null)
@@ -145,17 +145,17 @@ namespace System.Windows.Forms
             // way we add the elements to the collection, just call Add.
             foreach (NumericUpDownAcceleration acceleration in accelerations)
             {
-                this.Add(acceleration);
+                Add(acceleration);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets (ReadOnly) the element at the specified index. In C#, this property is the indexer for 
         ///     the IList class. 
-        /// </devdoc>
+        /// </summary>
         public NumericUpDownAcceleration this[int index]
         {
-            get { return this.items[index]; }
+            get { return items[index]; }
         }
     }
 }

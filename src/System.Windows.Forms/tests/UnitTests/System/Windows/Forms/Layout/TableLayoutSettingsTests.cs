@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Layout.Tests
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<ArgumentOutOfRangeException>("ColumnCount", () => settings.ColumnCount = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.ColumnCount = -1);
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Layout.Tests
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<ArgumentOutOfRangeException>("RowCount", () => settings.RowCount = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.RowCount = -1);
         }
 
         [Theory]
@@ -132,11 +132,11 @@ namespace System.Windows.Forms.Layout.Tests
         [Theory]
         [InlineData((TableLayoutPanelGrowStyle)(TableLayoutPanelGrowStyle.FixedSize - 1))]
         [InlineData((TableLayoutPanelGrowStyle)(TableLayoutPanelGrowStyle.AddColumns + 1))]
-        public void TableLayoutSettings_GrowStyle_SetNegative_ThrowsArgumentException(TableLayoutPanelGrowStyle value)
+        public void TableLayoutSettings_GrowStyle_SetNegative_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<ArgumentException>(null, () => settings.GrowStyle = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.GrowStyle = value);
         }
 
         [Theory]
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.Layout.Tests
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             Assert.Throws<NotSupportedException>(() => settings.GetColumnSpan("control"));
         }
-        
+
         [Fact]
         public void TableLayoutSettings_GetColumnSpan_InvalidControlStub_ReturnsExpected()
         {
@@ -651,9 +651,9 @@ namespace System.Windows.Forms.Layout.Tests
 
         [Theory]
         [MemberData(nameof(EmptySettings_TestData))]
-        public void TableLayoutSettings_SetColumn_InvalidColumn_ThrowsArgumentException(TableLayoutSettings settings)
+        public void TableLayoutSettings_SetColumn_InvalidColumn_ThrowsArgumentOutOfRangeException(TableLayoutSettings settings)
         {
-            Assert.Throws<ArgumentException>(null, () => settings.SetColumn("control", -2));
+            Assert.Throws<ArgumentOutOfRangeException>("column", () => settings.SetColumn("control", -2));
         }
 
         [Fact]
@@ -663,7 +663,7 @@ namespace System.Windows.Forms.Layout.Tests
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             var columnStyle = new ColumnStyle(SizeType.Percent, 1);
             var rowStyle = new RowStyle(SizeType.Percent, 1);
-            
+
             var controlWithName = new ScrollableControl { Name = "name" };
             settings.SetColumnSpan(controlWithName, 1);
             settings.SetRowSpan(controlWithName, 2);
@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Layout.Tests
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, settings);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream));
                 Assert.Equal(columnStyle.SizeType, ((ColumnStyle)Assert.Single(result.ColumnStyles)).SizeType);
                 Assert.Equal(columnStyle.Width, ((ColumnStyle)Assert.Single(result.ColumnStyles)).Width);

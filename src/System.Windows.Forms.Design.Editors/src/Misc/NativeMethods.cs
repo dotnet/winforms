@@ -11,7 +11,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Design
 {
-    internal static class NativeMethods
+    internal static partial class NativeMethods
     {
         public static readonly HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
@@ -47,36 +47,27 @@ namespace System.Windows.Forms.Design
         // Investigate removing this if the duplicate code in OleDragDropHandler.cs is removed
         public const int HOLLOW_BRUSH = 5;
 
-        public const int WM_USER = 0x0400,
-            WM_CLOSE = 0x0010,
-            WM_GETDLGCODE = 0x0087,
-            WM_MOUSEMOVE = 0x0200,
-            WM_NOTIFY = 0x004E,
-            DLGC_WANTALLKEYS = 0x0004,
-            NM_CLICK = 0 - 0 - 2,
-            WM_REFLECT = WM_USER + 0x1C00,
-            BM_SETIMAGE = 0x00F7,
-            IMAGE_ICON = 1,
-            WM_DESTROY = 0x0002,
-            BS_ICON = 0x00000040,
-            EM_SETMARGINS = 0x00D3,
-            EC_LEFTMARGIN = 0x0001,
-            EC_RIGHTMARGIN = 0x0002,
-            IDOK = 1,
-            WM_INITDIALOG = 0x0110;
+        public const int DLGC_WANTALLKEYS = 0x0004;
+        public const int NM_CLICK = 0 - 0 - 2;
+        public const int BM_SETIMAGE = 0x00F7;
+        public const int IMAGE_ICON = 1;
+        public const int BS_ICON = 0x00000040;
+        public const int EC_LEFTMARGIN = 0x0001;
+        public const int EC_RIGHTMARGIN = 0x0002;
+        public const int IDOK = 1;
+
         public const int VK_PROCESSKEY = 0xE5;
 
-        public const int STGM_READ = 0x00000000,
-            STGM_WRITE = 0x00000001,
-            STGM_READWRITE = 0x00000002,
-            STGM_SHARE_EXCLUSIVE = 0x00000010,
-            STGM_CREATE = 0x00001000,
-            STGM_TRANSACTED = 0x00010000,
-            STGM_CONVERT = 0x00020000,
-            WM_COMMAND = 0x0111,
-            CC_FULLOPEN = 0x00000002,
-            CC_ENABLETEMPLATEHANDLE = 0x00000040,
-            STGM_DELETEONRELEASE = 0x04000000;
+        public const int STGM_READ = 0x00000000;
+        public const int STGM_WRITE = 0x00000001;
+        public const int STGM_READWRITE = 0x00000002;
+        public const int STGM_SHARE_EXCLUSIVE = 0x00000010;
+        public const int STGM_CREATE = 0x00001000;
+        public const int STGM_TRANSACTED = 0x00010000;
+        public const int STGM_CONVERT = 0x00020000;
+        public const int CC_FULLOPEN = 0x00000002;
+        public const int CC_ENABLETEMPLATEHANDLE = 0x00000040;
+        public const int STGM_DELETEONRELEASE = 0x04000000;
 
         public const int RECO_PASTE = 0x00000000; // paste from clipboard
         public const int RECO_DROP = 0x00000001; // drop
@@ -88,19 +79,31 @@ namespace System.Windows.Forms.Design
         public static extern int MultiByteToWideChar(int CodePage, int dwFlags,
             byte[] lpMultiByteStr, int cchMultiByte, char[] lpWideCharStr, int cchWideChar);
 
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendDlgItemMessage(IntPtr hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool EnableWindow(IntPtr hWnd, bool enable);
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        public static extern int GetWindowTextLength(HandleRef hWnd);
+
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
+
+        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref RECT lpRect, int nFormat);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -208,7 +211,7 @@ namespace System.Windows.Forms.Design
         [StructLayout(LayoutKind.Sequential)]
         public class TRACKMOUSEEVENT
         {
-            public readonly int cbSize = Marshal.SizeOf(typeof(TRACKMOUSEEVENT));
+            public readonly int cbSize = Marshal.SizeOf<TRACKMOUSEEVENT>();
             public readonly int dwFlags;
             public readonly int dwHoverTime = 0;
             public readonly IntPtr hwndTrack;
@@ -252,9 +255,6 @@ namespace System.Windows.Forms.Design
         public const int
             PM_NOREMOVE = 0x0000,
             PM_REMOVE = 0x0001;
-
-        public const int
-            WM_CHAR = 0x0102;
 
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
@@ -762,19 +762,6 @@ namespace System.Windows.Forms.Design
                 [In] [MarshalAs(UnmanagedType.I4)] int fShow);
 
             void RequestNewObjectLayout();
-        }
-
-        [ComVisible(true)]
-        [ComImport]
-        [Guid("B722BCC7-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDocumentSite
-        {
-            [return: MarshalAs(UnmanagedType.I4)]
-            [PreserveSig]
-            int ActivateMe(
-                [In] [MarshalAs(UnmanagedType.Interface)]
-                IOleDocumentView pViewToActivate);
         }
 
         [ComVisible(true)]
@@ -3608,294 +3595,223 @@ namespace System.Windows.Forms.Design
         public static readonly int WM_MOUSEENTER = Util.RegisterWindowMessage("WinFormsMouseEnter");
         public static readonly int HDN_ENDTRACK = HDN_ENDTRACKW;
 
-        public const int
-            DT_CALCRECT = 0x00000400,
-            WM_CAPTURECHANGED = 0x0215,
-            WM_PARENTNOTIFY = 0x0210,
-            WM_CREATE = 0x0001,
-            WM_SETREDRAW = 0x000B,
-            WM_NCACTIVATE = 0x0086,
-            WM_HSCROLL = 0x0114,
-            WM_VSCROLL = 0x0115,
-            WM_SHOWWINDOW = 0x0018,
-            WM_WINDOWPOSCHANGING = 0x0046,
-            WM_WINDOWPOSCHANGED = 0x0047,
-            WS_DISABLED = 0x08000000,
-            WS_CLIPSIBLINGS = 0x04000000,
-            WS_CLIPCHILDREN = 0x02000000,
-            WS_EX_TOOLWINDOW = 0x00000080,
-            WS_POPUP = unchecked((int)0x80000000),
-            WS_BORDER = 0x00800000,
-            CS_DROPSHADOW = 0x00020000,
-            CS_DBLCLKS = 0x0008,
-            NOTSRCCOPY = 0x00330008,
-            SRCCOPY = 0x00CC0020,
-            LVM_SETCOLUMNWIDTH = 0x1000 + 30,
-            LVM_GETHEADER = 0x1000 + 31,
-            LVM_CREATEDRAGIMAGE = 0x1000 + 33,
-            LVM_GETVIEWRECT = 0x1000 + 34,
-            LVM_GETTEXTCOLOR = 0x1000 + 35,
-            LVM_SETTEXTCOLOR = 0x1000 + 36,
-            LVM_GETTEXTBKCOLOR = 0x1000 + 37,
-            LVM_SETTEXTBKCOLOR = 0x1000 + 38,
-            LVM_GETTOPINDEX = 0x1000 + 39,
-            LVM_GETCOUNTPERPAGE = 0x1000 + 40,
-            LVM_GETORIGIN = 0x1000 + 41,
-            LVM_UPDATE = 0x1000 + 42,
-            LVM_SETITEMSTATE = 0x1000 + 43,
-            LVM_GETITEMSTATE = 0x1000 + 44,
-            LVM_GETITEMTEXTA = 0x1000 + 45,
-            LVM_GETITEMTEXTW = 0x1000 + 115,
-            LVM_SETITEMTEXTA = 0x1000 + 46,
-            LVM_SETITEMTEXTW = 0x1000 + 116,
-            LVSICF_NOINVALIDATEALL = 0x00000001,
-            LVSICF_NOSCROLL = 0x00000002,
-            LVM_SETITEMCOUNT = 0x1000 + 47,
-            LVM_SORTITEMS = 0x1000 + 48,
-            LVM_SETITEMPOSITION32 = 0x1000 + 49,
-            LVM_GETSELECTEDCOUNT = 0x1000 + 50,
-            LVM_GETITEMSPACING = 0x1000 + 51,
-            LVM_GETISEARCHSTRINGA = 0x1000 + 52,
-            LVM_GETISEARCHSTRINGW = 0x1000 + 117,
-            LVM_SETICONSPACING = 0x1000 + 53,
-            LVM_SETEXTENDEDLISTVIEWSTYLE = 0x1000 + 54,
-            LVM_GETEXTENDEDLISTVIEWSTYLE = 0x1000 + 55,
-            LVS_EX_GRIDLINES = 0x00000001,
-            HDM_HITTEST = 0x1200 + 6,
-            HDM_GETITEMRECT = 0x1200 + 7,
-            HDM_SETIMAGELIST = 0x1200 + 8,
-            HDM_GETIMAGELIST = 0x1200 + 9,
-            HDM_ORDERTOINDEX = 0x1200 + 15,
-            HDM_CREATEDRAGIMAGE = 0x1200 + 16,
-            HDM_GETORDERARRAY = 0x1200 + 17,
-            HDM_SETORDERARRAY = 0x1200 + 18,
-            HDM_SETHOTDIVIDER = 0x1200 + 19,
-            HDN_ITEMCHANGINGA = 0 - 300 - 0,
-            HDN_ITEMCHANGINGW = 0 - 300 - 20,
-            HDN_ITEMCHANGEDA = 0 - 300 - 1,
-            HDN_ITEMCHANGEDW = 0 - 300 - 21,
-            HDN_ITEMCLICKA = 0 - 300 - 2,
-            HDN_ITEMCLICKW = 0 - 300 - 22,
-            HDN_ITEMDBLCLICKA = 0 - 300 - 3,
-            HDN_ITEMDBLCLICKW = 0 - 300 - 23,
-            HDN_DIVIDERDBLCLICKA = 0 - 300 - 5,
-            HDN_DIVIDERDBLCLICKW = 0 - 300 - 25,
-            HDN_BEGINTRACKA = 0 - 300 - 6,
-            HDN_BEGINTRACKW = 0 - 300 - 26,
-            HDN_ENDTRACKA = 0 - 300 - 7,
-            HDN_ENDTRACKW = 0 - 300 - 27,
-            HDN_TRACKA = 0 - 300 - 8,
-            HDN_TRACKW = 0 - 300 - 28,
-            HDN_GETDISPINFOA = 0 - 300 - 9,
-            HDN_GETDISPINFOW = 0 - 300 - 29,
-            HDN_BEGINDRAG = 0 - 300 - 10,
-            HDN_ENDDRAG = 0 - 300 - 11,
-            HC_ACTION = 0,
-            HIST_BACK = 0,
-            HHT_ONHEADER = 0x0002,
-            HHT_ONDIVIDER = 0x0004,
-            HHT_ONDIVOPEN = 0x0008,
-            HHT_ABOVE = 0x0100,
-            HHT_BELOW = 0x0200,
-            HHT_TORIGHT = 0x0400,
-            HHT_TOLEFT = 0x0800,
-            HWND_TOP = 0,
-            HWND_BOTTOM = 1,
-            HWND_TOPMOST = -1,
-            HWND_NOTOPMOST = -2,
-            CWP_SKIPINVISIBLE = 0x0001,
-            RDW_FRAME = 0x0400,
-            WM_KILLFOCUS = 0x0008,
-            WM_STYLECHANGED = 0x007D,
-            TVM_GETITEMRECT = 0x1100 + 4,
-            TVM_GETCOUNT = 0x1100 + 5,
-            TVM_GETINDENT = 0x1100 + 6,
-            TVM_SETINDENT = 0x1100 + 7,
-            TVM_GETIMAGELIST = 0x1100 + 8,
-            TVSIL_NORMAL = 0,
-            TVSIL_STATE = 2,
-            TVM_SETIMAGELIST = 0x1100 + 9,
-            TVM_GETNEXTITEM = 0x1100 + 10,
-            TVGN_ROOT = 0x0000,
-            TV_FIRST = 0x1100,
-            TVM_SETEXTENDEDSTYLE = TV_FIRST + 44,
-            TVM_GETEXTENDEDSTYLE = TV_FIRST + 45,
-            TVS_EX_FADEINOUTEXPANDOS = 0x0040,
-            TVS_EX_DOUBLEBUFFER = 0x0004,
-            LVS_EX_DOUBLEBUFFER = 0x00010000,
-            TVHT_ONITEMICON = 0x0002,
-            TVHT_ONITEMLABEL = 0x0004,
-            TVHT_ONITEMINDENT = 0x0008,
-            TVHT_ONITEMBUTTON = 0x0010,
-            TVHT_ONITEMRIGHT = 0x0020,
-            TVHT_ONITEMSTATEICON = 0x0040,
-            TVHT_ABOVE = 0x0100,
-            TVHT_BELOW = 0x0200,
-            TVHT_TORIGHT = 0x0400,
-            TVHT_TOLEFT = 0x0800,
-            GW_HWNDFIRST = 0,
-            GW_HWNDLAST = 1,
-            GW_HWNDNEXT = 2,
-            GW_HWNDPREV = 3,
-            GW_OWNER = 4,
-            GW_CHILD = 5,
-            GW_MAX = 5,
-            GWL_HWNDPARENT = -8,
-            SB_HORZ = 0,
-            SB_VERT = 1,
-            SB_CTL = 2,
-            SB_BOTH = 3,
-            SB_LINEUP = 0,
-            SB_LINELEFT = 0,
-            SB_LINEDOWN = 1,
-            SB_LINERIGHT = 1,
-            SB_PAGEUP = 2,
-            SB_PAGELEFT = 2,
-            SB_PAGEDOWN = 3,
-            SB_PAGERIGHT = 3,
-            SB_THUMBPOSITION = 4,
-            SB_THUMBTRACK = 5,
-            SB_TOP = 6,
-            SB_LEFT = 6,
-            SB_BOTTOM = 7,
-            SB_RIGHT = 7,
-            SB_ENDSCROLL = 8,
-            MK_LBUTTON = 0x0001,
-            TVM_HITTEST = 0x1100 + 17,
-            MK_RBUTTON = 0x0002,
-            MK_SHIFT = 0x0004,
-            MK_CONTROL = 0x0008,
-            MK_MBUTTON = 0x0010,
-            MK_XBUTTON1 = 0x0020,
-            MK_XBUTTON2 = 0x0040,
-            LB_ADDSTRING = 0x0180,
-            LB_INSERTSTRING = 0x0181,
-            LB_DELETESTRING = 0x0182,
-            LB_SELITEMRANGEEX = 0x0183,
-            LB_RESETCONTENT = 0x0184,
-            LB_SETSEL = 0x0185,
-            LB_SETCURSEL = 0x0186,
-            LB_GETSEL = 0x0187,
-            LB_GETCURSEL = 0x0188,
-            LB_GETTEXT = 0x0189,
-            LB_GETTEXTLEN = 0x018A,
-            LB_GETCOUNT = 0x018B,
-            LB_SELECTSTRING = 0x018C,
-            LB_DIR = 0x018D,
-            LB_GETTOPINDEX = 0x018E,
-            LB_FINDSTRING = 0x018F,
-            LB_GETSELCOUNT = 0x0190,
-            LB_GETSELITEMS = 0x0191,
-            LB_SETTABSTOPS = 0x0192,
-            LB_GETHORIZONTALEXTENT = 0x0193,
-            LB_SETHORIZONTALEXTENT = 0x0194,
-            LB_SETCOLUMNWIDTH = 0x0195,
-            LB_ADDFILE = 0x0196,
-            LB_SETTOPINDEX = 0x0197,
-            LB_GETITEMRECT = 0x0198,
-            LB_GETITEMDATA = 0x0199,
-            LB_SETITEMDATA = 0x019A,
-            LB_SELITEMRANGE = 0x019B,
-            LB_SETANCHORINDEX = 0x019C,
-            LB_GETANCHORINDEX = 0x019D,
-            LB_SETCARETINDEX = 0x019E,
-            LB_GETCARETINDEX = 0x019F,
-            LB_SETITEMHEIGHT = 0x01A0,
-            LB_GETITEMHEIGHT = 0x01A1,
-            LB_FINDSTRINGEXACT = 0x01A2,
-            LB_SETLOCALE = 0x01A5,
-            LB_GETLOCALE = 0x01A6,
-            LB_SETCOUNT = 0x01A7,
-            LB_INITSTORAGE = 0x01A8,
-            LB_ITEMFROMPOINT = 0x01A9,
-            LB_MSGMAX = 0x01B0,
-            HTHSCROLL = 6,
-            HTVSCROLL = 7,
-            HTERROR = -2,
-            HTTRANSPARENT = -1,
-            HTNOWHERE = 0,
-            HTCLIENT = 1,
-            HTCAPTION = 2,
-            HTSYSMENU = 3,
-            HTGROWBOX = 4,
-            HTSIZE = 4,
-            PRF_NONCLIENT = 0x00000002,
-            PRF_CLIENT = 0x00000004,
-            PRF_ERASEBKGND = 0x00000008,
-            PRF_CHILDREN = 0x00000010,
-            SWP_NOSIZE = 0x0001,
-            SWP_NOMOVE = 0x0002,
-            SWP_NOZORDER = 0x0004,
-            SWP_NOREDRAW = 0x0008,
-            SWP_NOACTIVATE = 0x0010,
-            SWP_FRAMECHANGED = 0x0020,
-            SWP_SHOWWINDOW = 0x0040,
-            SWP_HIDEWINDOW = 0x0080,
-            SWP_NOCOPYBITS = 0x0100,
-            SWP_NOOWNERZORDER = 0x0200,
-            SWP_NOSENDCHANGING = 0x0400,
-            SWP_DRAWFRAME = 0x0020,
-            SWP_NOREPOSITION = 0x0200,
-            SWP_DEFERERASE = 0x2000,
-            SWP_ASYNCWINDOWPOS = 0x4000,
-            WA_INACTIVE = 0,
-            WA_ACTIVE = 1,
-            WH_MOUSE = 7,
-            WM_IME_STARTCOMPOSITION = 0x010D,
-            WM_IME_ENDCOMPOSITION = 0x10E,
-            WM_IME_COMPOSITION = 0x010F,
-            WM_ACTIVATE = 0x0006,
-            WM_NCMOUSEMOVE = 0x00A0,
-            WM_NCLBUTTONDOWN = 0x00A1,
-            WM_NCLBUTTONUP = 0x00A2,
-            WM_NCLBUTTONDBLCLK = 0x00A3,
-            WM_NCRBUTTONDOWN = 0x00A4,
-            WM_NCRBUTTONUP = 0x00A5,
-            WM_NCRBUTTONDBLCLK = 0x00A6,
-            WM_NCMBUTTONDOWN = 0x00A7,
-            WM_NCMBUTTONUP = 0x00A8,
-            WM_NCMBUTTONDBLCLK = 0x00A9,
-            WM_NCXBUTTONDOWN = 0x00AB,
-            WM_NCXBUTTONUP = 0x00AC,
-            WM_NCXBUTTONDBLCLK = 0x00AD,
-            WM_MOUSEHOVER = 0x02A1,
-            WM_MOUSELEAVE = 0x02A3,
-            WM_MOUSEFIRST = 0x0200,
-            WM_MOUSEACTIVATE = 0x0021,
-            WM_LBUTTONDOWN = 0x0201,
-            WM_LBUTTONUP = 0x0202,
-            WM_LBUTTONDBLCLK = 0x0203,
-            WM_RBUTTONDOWN = 0x0204,
-            WM_RBUTTONUP = 0x0205,
-            WM_RBUTTONDBLCLK = 0x0206,
-            WM_MBUTTONDOWN = 0x0207,
-            WM_MBUTTONUP = 0x0208,
-            WM_MBUTTONDBLCLK = 0x0209,
-            WM_NCMOUSEHOVER = 0x02A0,
-            WM_NCMOUSELEAVE = 0x02A2,
-            WM_MOUSEWHEEL = 0x020A,
-            WM_MOUSELAST = 0x020A,
-            WM_NCHITTEST = 0x0084,
-            WM_SETCURSOR = 0x0020,
-            WM_GETOBJECT = 0x003D,
-            WM_CANCELMODE = 0x001F,
-            WM_SETFOCUS = 0x0007,
-            WM_KEYFIRST = 0x0100,
-            WM_KEYDOWN = 0x0100,
-            WM_KEYUP = 0x0101,
-            WM_DEADCHAR = 0x0103,
-            WM_SYSKEYDOWN = 0x0104,
-            WM_SYSKEYUP = 0x0105,
-            WM_SYSCHAR = 0x0106,
-            WM_SYSDEADCHAR = 0x0107,
-            WM_KEYLAST = 0x0108,
-            WM_CONTEXTMENU = 0x007B,
-            WM_PAINT = 0x000F,
-            WM_PRINTCLIENT = 0x0318,
-            WM_NCPAINT = 0x0085,
-            WM_SIZE = 0x0005,
-            WM_TIMER = 0x0113,
-            WM_PRINT = 0x0317;
+        public const int DT_CALCRECT = 0x00000400;
+        public const int WS_DISABLED = 0x08000000;
+        public const int WS_CLIPSIBLINGS = 0x04000000;
+        public const int WS_CLIPCHILDREN = 0x02000000;
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
+        public const int WS_POPUP = unchecked((int)0x80000000);
+        public const int WS_BORDER = 0x00800000;
+        public const int CS_DROPSHADOW = 0x00020000;
+        public const int CS_DBLCLKS = 0x0008;
+        public const int NOTSRCCOPY = 0x00330008;
+        public const int SRCCOPY = 0x00CC0020;
+        public const int LVM_SETCOLUMNWIDTH = 0x1000 + 30;
+        public const int LVM_GETHEADER = 0x1000 + 31;
+        public const int LVM_CREATEDRAGIMAGE = 0x1000 + 33;
+        public const int LVM_GETVIEWRECT = 0x1000 + 34;
+        public const int LVM_GETTEXTCOLOR = 0x1000 + 35;
+        public const int LVM_SETTEXTCOLOR = 0x1000 + 36;
+        public const int LVM_GETTEXTBKCOLOR = 0x1000 + 37;
+        public const int LVM_SETTEXTBKCOLOR = 0x1000 + 38;
+        public const int LVM_GETTOPINDEX = 0x1000 + 39;
+        public const int LVM_GETCOUNTPERPAGE = 0x1000 + 40;
+        public const int LVM_GETORIGIN = 0x1000 + 41;
+        public const int LVM_UPDATE = 0x1000 + 42;
+        public const int LVM_SETITEMSTATE = 0x1000 + 43;
+        public const int LVM_GETITEMSTATE = 0x1000 + 44;
+        public const int LVM_GETITEMTEXTA = 0x1000 + 45;
+        public const int LVM_GETITEMTEXTW = 0x1000 + 115;
+        public const int LVM_SETITEMTEXTA = 0x1000 + 46;
+        public const int LVM_SETITEMTEXTW = 0x1000 + 116;
+        public const int LVSICF_NOINVALIDATEALL = 0x00000001;
+        public const int LVSICF_NOSCROLL = 0x00000002;
+        public const int LVM_SETITEMCOUNT = 0x1000 + 47;
+        public const int LVM_SORTITEMS = 0x1000 + 48;
+        public const int LVM_SETITEMPOSITION32 = 0x1000 + 49;
+        public const int LVM_GETSELECTEDCOUNT = 0x1000 + 50;
+        public const int LVM_GETITEMSPACING = 0x1000 + 51;
+        public const int LVM_GETISEARCHSTRINGA = 0x1000 + 52;
+        public const int LVM_GETISEARCHSTRINGW = 0x1000 + 117;
+        public const int LVM_SETICONSPACING = 0x1000 + 53;
+        public const int LVM_SETEXTENDEDLISTVIEWSTYLE = 0x1000 + 54;
+        public const int LVM_GETEXTENDEDLISTVIEWSTYLE = 0x1000 + 55;
+        public const int LVS_EX_GRIDLINES = 0x00000001;
+        public const int HDM_HITTEST = 0x1200 + 6;
+        public const int HDM_GETITEMRECT = 0x1200 + 7;
+        public const int HDM_SETIMAGELIST = 0x1200 + 8;
+        public const int HDM_GETIMAGELIST = 0x1200 + 9;
+        public const int HDM_ORDERTOINDEX = 0x1200 + 15;
+        public const int HDM_CREATEDRAGIMAGE = 0x1200 + 16;
+        public const int HDM_GETORDERARRAY = 0x1200 + 17;
+        public const int HDM_SETORDERARRAY = 0x1200 + 18;
+        public const int HDM_SETHOTDIVIDER = 0x1200 + 19;
+        public const int HDN_ITEMCHANGINGA = 0 - 300 - 0;
+        public const int HDN_ITEMCHANGINGW = 0 - 300 - 20;
+        public const int HDN_ITEMCHANGEDA = 0 - 300 - 1;
+        public const int HDN_ITEMCHANGEDW = 0 - 300 - 21;
+        public const int HDN_ITEMCLICKA = 0 - 300 - 2;
+        public const int HDN_ITEMCLICKW = 0 - 300 - 22;
+        public const int HDN_ITEMDBLCLICKA = 0 - 300 - 3;
+        public const int HDN_ITEMDBLCLICKW = 0 - 300 - 23;
+        public const int HDN_DIVIDERDBLCLICKA = 0 - 300 - 5;
+        public const int HDN_DIVIDERDBLCLICKW = 0 - 300 - 25;
+        public const int HDN_BEGINTRACKA = 0 - 300 - 6;
+        public const int HDN_BEGINTRACKW = 0 - 300 - 26;
+        public const int HDN_ENDTRACKA = 0 - 300 - 7;
+        public const int HDN_ENDTRACKW = 0 - 300 - 27;
+        public const int HDN_TRACKA = 0 - 300 - 8;
+        public const int HDN_TRACKW = 0 - 300 - 28;
+        public const int HDN_GETDISPINFOA = 0 - 300 - 9;
+        public const int HDN_GETDISPINFOW = 0 - 300 - 29;
+        public const int HDN_BEGINDRAG = 0 - 300 - 10;
+        public const int HDN_ENDDRAG = 0 - 300 - 11;
+        public const int HC_ACTION = 0;
+        public const int HIST_BACK = 0;
+        public const int HHT_ONHEADER = 0x0002;
+        public const int HHT_ONDIVIDER = 0x0004;
+        public const int HHT_ONDIVOPEN = 0x0008;
+        public const int HHT_ABOVE = 0x0100;
+        public const int HHT_BELOW = 0x0200;
+        public const int HHT_TORIGHT = 0x0400;
+        public const int HHT_TOLEFT = 0x0800;
+        public const int HWND_TOP = 0;
+        public const int HWND_BOTTOM = 1;
+        public const int HWND_TOPMOST = -1;
+        public const int HWND_NOTOPMOST = -2;
+        public const int CWP_SKIPINVISIBLE = 0x0001;
+        public const int RDW_FRAME = 0x0400;
+        public const int TVM_GETITEMRECT = 0x1100 + 4;
+        public const int TVM_GETCOUNT = 0x1100 + 5;
+        public const int TVM_GETINDENT = 0x1100 + 6;
+        public const int TVM_SETINDENT = 0x1100 + 7;
+        public const int TVM_GETIMAGELIST = 0x1100 + 8;
+        public const int TVSIL_NORMAL = 0;
+        public const int TVSIL_STATE = 2;
+        public const int TVM_SETIMAGELIST = 0x1100 + 9;
+        public const int TVM_GETNEXTITEM = 0x1100 + 10;
+        public const int TVGN_ROOT = 0x0000;
+        public const int TV_FIRST = 0x1100;
+        public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
+        public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
+        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
+        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
+        public const int LVS_EX_DOUBLEBUFFER = 0x00010000;
+        public const int TVHT_ONITEMICON = 0x0002;
+        public const int TVHT_ONITEMLABEL = 0x0004;
+        public const int TVHT_ONITEMINDENT = 0x0008;
+        public const int TVHT_ONITEMBUTTON = 0x0010;
+        public const int TVHT_ONITEMRIGHT = 0x0020;
+        public const int TVHT_ONITEMSTATEICON = 0x0040;
+        public const int TVHT_ABOVE = 0x0100;
+        public const int TVHT_BELOW = 0x0200;
+        public const int TVHT_TORIGHT = 0x0400;
+        public const int TVHT_TOLEFT = 0x0800;
+        public const int GW_HWNDFIRST = 0;
+        public const int GW_HWNDLAST = 1;
+        public const int GW_HWNDNEXT = 2;
+        public const int GW_HWNDPREV = 3;
+        public const int GW_OWNER = 4;
+        public const int GW_CHILD = 5;
+        public const int GW_MAX = 5;
+        public const int GWL_HWNDPARENT = -8;
+        public const int SB_HORZ = 0;
+        public const int SB_VERT = 1;
+        public const int SB_CTL = 2;
+        public const int SB_BOTH = 3;
+        public const int SB_LINEUP = 0;
+        public const int SB_LINELEFT = 0;
+        public const int SB_LINEDOWN = 1;
+        public const int SB_LINERIGHT = 1;
+        public const int SB_PAGEUP = 2;
+        public const int SB_PAGELEFT = 2;
+        public const int SB_PAGEDOWN = 3;
+        public const int SB_PAGERIGHT = 3;
+        public const int SB_THUMBPOSITION = 4;
+        public const int SB_THUMBTRACK = 5;
+        public const int SB_TOP = 6;
+        public const int SB_LEFT = 6;
+        public const int SB_BOTTOM = 7;
+        public const int SB_RIGHT = 7;
+        public const int SB_ENDSCROLL = 8;
+        public const int MK_LBUTTON = 0x0001;
+        public const int TVM_HITTEST = 0x1100 + 17;
+        public const int MK_RBUTTON = 0x0002;
+        public const int MK_SHIFT = 0x0004;
+        public const int MK_CONTROL = 0x0008;
+        public const int MK_MBUTTON = 0x0010;
+        public const int MK_XBUTTON1 = 0x0020;
+        public const int MK_XBUTTON2 = 0x0040;
+        public const int LB_ADDSTRING = 0x0180;
+        public const int LB_INSERTSTRING = 0x0181;
+        public const int LB_DELETESTRING = 0x0182;
+        public const int LB_SELITEMRANGEEX = 0x0183;
+        public const int LB_RESETCONTENT = 0x0184;
+        public const int LB_SETSEL = 0x0185;
+        public const int LB_SETCURSEL = 0x0186;
+        public const int LB_GETSEL = 0x0187;
+        public const int LB_GETCURSEL = 0x0188;
+        public const int LB_GETTEXT = 0x0189;
+        public const int LB_GETTEXTLEN = 0x018A;
+        public const int LB_GETCOUNT = 0x018B;
+        public const int LB_SELECTSTRING = 0x018C;
+        public const int LB_DIR = 0x018D;
+        public const int LB_GETTOPINDEX = 0x018E;
+        public const int LB_FINDSTRING = 0x018F;
+        public const int LB_GETSELCOUNT = 0x0190;
+        public const int LB_GETSELITEMS = 0x0191;
+        public const int LB_SETTABSTOPS = 0x0192;
+        public const int LB_GETHORIZONTALEXTENT = 0x0193;
+        public const int LB_SETHORIZONTALEXTENT = 0x0194;
+        public const int LB_SETCOLUMNWIDTH = 0x0195;
+        public const int LB_ADDFILE = 0x0196;
+        public const int LB_SETTOPINDEX = 0x0197;
+        public const int LB_GETITEMRECT = 0x0198;
+        public const int LB_GETITEMDATA = 0x0199;
+        public const int LB_SETITEMDATA = 0x019A;
+        public const int LB_SELITEMRANGE = 0x019B;
+        public const int LB_SETANCHORINDEX = 0x019C;
+        public const int LB_GETANCHORINDEX = 0x019D;
+        public const int LB_SETCARETINDEX = 0x019E;
+        public const int LB_GETCARETINDEX = 0x019F;
+        public const int LB_SETITEMHEIGHT = 0x01A0;
+        public const int LB_GETITEMHEIGHT = 0x01A1;
+        public const int LB_FINDSTRINGEXACT = 0x01A2;
+        public const int LB_SETLOCALE = 0x01A5;
+        public const int LB_GETLOCALE = 0x01A6;
+        public const int LB_SETCOUNT = 0x01A7;
+        public const int LB_INITSTORAGE = 0x01A8;
+        public const int LB_ITEMFROMPOINT = 0x01A9;
+        public const int LB_MSGMAX = 0x01B0;
+        public const int HTHSCROLL = 6;
+        public const int HTVSCROLL = 7;
+        public const int HTERROR = -2;
+        public const int HTTRANSPARENT = -1;
+        public const int HTNOWHERE = 0;
+        public const int HTCLIENT = 1;
+        public const int HTCAPTION = 2;
+        public const int HTSYSMENU = 3;
+        public const int HTGROWBOX = 4;
+        public const int HTSIZE = 4;
+        public const int PRF_NONCLIENT = 0x00000002;
+        public const int PRF_CLIENT = 0x00000004;
+        public const int PRF_ERASEBKGND = 0x00000008;
+        public const int PRF_CHILDREN = 0x00000010;
+        public const int SWP_NOSIZE = 0x0001;
+        public const int SWP_NOMOVE = 0x0002;
+        public const int SWP_NOZORDER = 0x0004;
+        public const int SWP_NOREDRAW = 0x0008;
+        public const int SWP_NOACTIVATE = 0x0010;
+        public const int SWP_FRAMECHANGED = 0x0020;
+        public const int SWP_SHOWWINDOW = 0x0040;
+        public const int SWP_HIDEWINDOW = 0x0080;
+        public const int SWP_NOCOPYBITS = 0x0100;
+        public const int SWP_NOOWNERZORDER = 0x0200;
+        public const int SWP_NOSENDCHANGING = 0x0400;
+        public const int SWP_DRAWFRAME = 0x0020;
+        public const int SWP_NOREPOSITION = 0x0200;
+        public const int SWP_DEFERERASE = 0x2000;
+        public const int SWP_ASYNCWINDOWPOS = 0x4000;
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();
@@ -4046,8 +3962,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)((n >> 16) & 0xffff);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }
@@ -4056,8 +3972,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)(n & 0xFFFF);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }
@@ -4404,8 +4320,7 @@ namespace System.Windows.Forms.Design
         public const int MWMO_INPUTAVAILABLE = 0x0004; // don't use MWMO_WAITALL, see ddb#176342
 
         public const int GWL_EXSTYLE = -20,
-            GWL_STYLE = -16,
-            WS_EX_LAYOUTRTL = 0x00400000;
+            GWL_STYLE = -16;
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LOGFONT
@@ -4469,75 +4384,12 @@ namespace System.Windows.Forms.Design
                     "lfFaceName=" + lfFaceName;
             }
         }
-        public sealed class CommonHandles
-        {
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Accelerator"]/*' />
-            /// <devdoc>
-            ///     Handle type for accelerator tables.
-            /// </devdoc>
-            public static readonly int Accelerator = System.Internal.HandleCollector.RegisterType("Accelerator", 80, 50);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Cursor"]/*' />
-            /// <devdoc>
-            ///     handle type for cursors.
-            /// </devdoc>
-            public static readonly int Cursor = System.Internal.HandleCollector.RegisterType("Cursor", 20, 500);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.EMF"]/*' />
-            /// <devdoc>
-            ///     Handle type for enhanced metafiles.
-            /// </devdoc>
-            public static readonly int EMF = System.Internal.HandleCollector.RegisterType("EnhancedMetaFile", 20, 500);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Find"]/*' />
-            /// <devdoc>
-            ///     Handle type for file find handles.
-            /// </devdoc>
-            public static readonly int Find = System.Internal.HandleCollector.RegisterType("Find", 0, 1000);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.GDI"]/*' />
-            /// <devdoc>
-            ///     Handle type for GDI objects.
-            /// </devdoc>
-            public static readonly int GDI = System.Internal.HandleCollector.RegisterType("GDI", 90, 50);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.HDC"]/*' />
-            /// <devdoc>
-            ///     Handle type for HDC's that count against the Win98 limit of five DC's.  HDC's
-            ///     which are not scarce, such as HDC's for bitmaps, are counted as GDIHANDLE's.
-            /// </devdoc>
-            public static readonly int HDC = System.Internal.HandleCollector.RegisterType("HDC", 100, 2); // wait for 2 dc's before collecting
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Icon"]/*' />
-            /// <devdoc>
-            ///     Handle type for icons.
-            /// </devdoc>
-            public static readonly int Icon = System.Internal.HandleCollector.RegisterType("Icon", 20, 500);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Kernel"]/*' />
-            /// <devdoc>
-            ///     Handle type for kernel objects.
-            /// </devdoc>
-            public static readonly int Kernel = System.Internal.HandleCollector.RegisterType("Kernel", 0, 1000);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Menu"]/*' />
-            /// <devdoc>
-            ///     Handle type for files.
-            /// </devdoc>
-            public static readonly int Menu = System.Internal.HandleCollector.RegisterType("Menu", 30, 1000);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Window"]/*' />
-            /// <devdoc>
-            ///     Handle type for windows.
-            /// </devdoc>
-            public static readonly int Window = System.Internal.HandleCollector.RegisterType("Window", 5, 1000);
-        }
 
 #if LEGACY
         [StructLayout(LayoutKind.Sequential)]
         public class NONCLIENTMETRICS
         {
-            public int cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS));
+            public int cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
             public int iBorderWidth = 0;
             public int iScrollWidth = 0;
             public int iScrollHeight = 0;
@@ -4567,5 +4419,7 @@ namespace System.Windows.Forms.Design
         //SendMessage(IntPtr, int, bool, IntPtr), SendMessage(IntPtr, int, IntPtr, ListViewCompareCallback),
         //SendMessageW, SendMessageA, ValidateRect(IntPtr, ref RECT), ValidateRgn(IntPtr, IntPtr)
         //COMRECT.FromXYWH, RECT.FromXYWH
+
+        public const int MAX_PATH = 260;
     }
 }

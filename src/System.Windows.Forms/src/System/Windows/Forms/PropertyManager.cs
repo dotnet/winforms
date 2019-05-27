@@ -2,204 +2,182 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel;
+using System.Collections;
 
-    using System;
-    using System.Windows.Forms;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel;
-    using System.Collections;
+namespace System.Windows.Forms
+{
+    public class PropertyManager : BindingManagerBase
+    {
+        private object _dataSource;
+        private readonly string _propName;
+        private PropertyDescriptor _propInfo;
+        private bool _bound;
 
-    /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager"]/*' />
-    public class PropertyManager : BindingManagerBase {
+        public override object Current => _dataSource;
 
-        // PropertyManager class
-        //
-
-        private object dataSource;
-        private string propName;
-        private PropertyDescriptor propInfo;
-        private bool bound;
-
-
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Current"]/*' />
-        public override object Current {
-            get {
-                return this.dataSource;
-            }
-        }
-
-        private void PropertyChanged(object sender, EventArgs ea) {
+        private void PropertyChanged(object sender, EventArgs ea)
+        {
             EndCurrentEdit();
             OnCurrentChanged(EventArgs.Empty);
         }
 
-        internal override void SetDataSource(object dataSource) {
-            if (this.dataSource != null && !string.IsNullOrEmpty(this.propName)) {
-                propInfo.RemoveValueChanged(this.dataSource, new EventHandler(PropertyChanged));
-                propInfo = null;
+        private protected override void SetDataSource(object dataSource)
+        {
+            if (_dataSource != null && !string.IsNullOrEmpty(_propName))
+            {
+                _propInfo.RemoveValueChanged(_dataSource, new EventHandler(PropertyChanged));
+                _propInfo = null;
             }
 
-            this.dataSource = dataSource;
+            _dataSource = dataSource;
 
-            if (this.dataSource != null && !string.IsNullOrEmpty(this.propName)) {
-                propInfo = TypeDescriptor.GetProperties(dataSource).Find(propName, true);
-                if (propInfo == null)
-                    throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, propName, dataSource.ToString()));
-                propInfo.AddValueChanged(dataSource, new EventHandler(PropertyChanged));
-            }
-        }
+            if (_dataSource != null && !string.IsNullOrEmpty(_propName))
+            {
+                _propInfo = TypeDescriptor.GetProperties(dataSource).Find(_propName, true);
+                if (_propInfo == null)
+                {
+                    throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource.ToString()));
+                }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.PropertyManager"]/*' />
-        public PropertyManager() {}
-
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
-                                                                                                    // it would be a breaking change.
-        ]
-        internal PropertyManager(object dataSource) : base(dataSource){}
-
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
-                                                                                                    // it would be a breaking change.
-        ]
-        internal PropertyManager(object dataSource, string propName) : base() {
-            this.propName = propName;
-            this.SetDataSource(dataSource);
-        }
-
-        internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors) {
-            return ListBindingHelper.GetListItemProperties(dataSource, listAccessors);
-        }
-
-        internal override Type BindType {
-            get {
-                return dataSource.GetType();
+                _propInfo.AddValueChanged(dataSource, new EventHandler(PropertyChanged));
             }
         }
 
-        internal override string GetListName() {
-            return TypeDescriptor.GetClassName(dataSource) + "." + propName;
+        public PropertyManager()
+        {
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.SuspendBinding"]/*' />
-        public override void SuspendBinding() {
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
+        internal PropertyManager(object dataSource) : base(dataSource)
+        {
+        }
+
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
+        internal PropertyManager(object dataSource, string propName) : base()
+        {
+            _propName = propName;
+            SetDataSource(dataSource);
+        }
+
+        internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+        {
+            return ListBindingHelper.GetListItemProperties(_dataSource, listAccessors);
+        }
+
+        internal override Type BindType => _dataSource.GetType();
+
+        internal override string GetListName()
+        {
+            return TypeDescriptor.GetClassName(_dataSource) + "." + _propName;
+        }
+
+        public override void SuspendBinding()
+        {
             EndCurrentEdit();
-            if (bound) {
-                try {
-                    bound = false;
+            if (_bound)
+            {
+                try
+                {
+                    _bound = false;
                     UpdateIsBinding();
-                } catch {
-                    bound = true;
+                }
+                catch
+                {
+                    _bound = true;
                     UpdateIsBinding();
                     throw;
                 }
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.ResumeBinding"]/*' />
-        public override void ResumeBinding() {
-            OnCurrentChanged(new EventArgs());
-            if (!bound) {
-                try {
-                    bound = true;
+        public override void ResumeBinding()
+        {
+            OnCurrentChanged(EventArgs.Empty);
+            if (!_bound)
+            {
+                try
+                {
+                    _bound = true;
                     UpdateIsBinding();
-                } catch {
-                    bound = false;
+                }
+                catch
+                {
+                    _bound = false;
                     UpdateIsBinding();
                     throw;
                 }
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.GetListName"]/*' />
-        protected internal override string GetListName(ArrayList listAccessors) {
-            return "";
-        }
+        protected internal override string GetListName(ArrayList listAccessors) => string.Empty;
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.CancelCurrentEdit"]/*' />
-        public override void CancelCurrentEdit() {
-            IEditableObject obj = this.Current as IEditableObject;
-            if (obj != null)
-                obj.CancelEdit();
+        public override void CancelCurrentEdit()
+        {
+            IEditableObject obj = Current as IEditableObject;
+            obj?.CancelEdit();
             PushData();
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.EndCurrentEdit"]/*' />
-        public override void EndCurrentEdit() {
-            bool success;
-            PullData(out success);
+        public override void EndCurrentEdit()
+        {
+            PullData(out bool success);
 
-            if (success) {
-                IEditableObject obj = this.Current as IEditableObject;
-                if (obj != null)
-                    obj.EndEdit();
+            if (success)
+            {
+                IEditableObject obj = Current as IEditableObject;
+                obj?.EndEdit();
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.UpdateIsBinding"]/*' />
-        protected override void UpdateIsBinding() {
-            for (int i = 0; i < this.Bindings.Count; i++)
-                this.Bindings[i].UpdateIsBinding();
+        protected override void UpdateIsBinding()
+        {
+            for (int i = 0; i < Bindings.Count; i++)
+            {
+                Bindings[i].UpdateIsBinding();
+            }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.OnCurrentChanged"]/*' />
-        internal protected override void OnCurrentChanged(EventArgs ea) {
+        internal protected override void OnCurrentChanged(EventArgs ea)
+        {
             PushData();
 
-            if (this.onCurrentChangedHandler != null)
-                this.onCurrentChangedHandler(this, ea);
-
-            if (this.onCurrentItemChangedHandler != null)
-                this.onCurrentItemChangedHandler(this, ea);
+            onCurrentChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.OnCurrentItemChanged"]/*' />
-        internal protected override void OnCurrentItemChanged(EventArgs ea) {
+        internal protected override void OnCurrentItemChanged(EventArgs ea)
+        {
             PushData();
 
-            if (this.onCurrentItemChangedHandler != null)
-                this.onCurrentItemChangedHandler(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
-        internal override object DataSource {
-            get {
-                return this.dataSource;
+        internal override object DataSource => _dataSource;
+
+        internal override bool IsBinding => _dataSource != null;
+
+        /// <remarks>
+        /// no op on the propertyManager
+        /// </remarks>
+        public override int Position
+        {
+            get => 0;
+            set
+            {
             }
         }
 
-        internal override bool IsBinding {
-            get {
-                return (dataSource != null);
-            }
-        }
+        public override int Count => 1;
 
-        // no op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Position"]/*' />
-        public override int Position {
-            get {
-                return 0;
-            }
-            set {
-            }
-        }
-
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Count"]/*' />
-        public override int Count {
-            get {
-                return 1;
-            }
-        }
-
-        // no-op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.AddNew"]/*' />
-        public override void AddNew() {
+        public override void AddNew()
+        {
             throw new NotSupportedException(SR.DataBindingAddNewNotSupportedOnPropertyManager);
         }
 
-        // no-op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.RemoveAt"]/*' />
-        public override void RemoveAt(int index) {
+        public override void RemoveAt(int index)
+        {
             throw new NotSupportedException(SR.DataBindingRemoveAtNotSupportedOnPropertyManager);
         }
     }

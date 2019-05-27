@@ -108,6 +108,45 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
+        internal virtual void DoProperMenuSelection(ICollection selComponents)
+        {
+            foreach (object obj in selComponents)
+            {
+                if (obj is ContextMenu cm)
+                {
+                    menuEditorService.SetMenu((Menu)obj);
+                }
+                else
+                {
+                    if (obj is MenuItem item)
+                    {
+                        //before we set the selection, we need to check if the item belongs the current menu, if not, we need to set the menu editor to the appropiate menu, then set selection
+                        MenuItem parent = item;
+                        while (parent.Parent is MenuItem)
+                        {
+                            parent = (MenuItem)parent.Parent;
+                        }
+
+                        if (menuEditorService.GetMenu() != parent.Parent)
+                        {
+                            menuEditorService.SetMenu(parent.Parent);
+                        }
+
+                        //ok, here we have the correct editor selected for this item. Now, if there's only one item selected, then let the editor service know, if there is more than one - then the selection was done through themenu editor and we don't need to tell it
+                        if (selComponents.Count == 1)
+                        {
+                            menuEditorService.SetSelection(item);
+                        }
+                    }
+                    //Here, something is selected, but the menuservice isn't interested so, we'll collapse our active menu accordingly
+                    else
+                    {
+                        menuEditorService.SetMenu(null);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         ///     Determines if a MenuEditorService has already been started.  If not,
         ///     this method will create a new instance of the service.

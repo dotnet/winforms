@@ -23,13 +23,16 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         /// Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static ResourceCodeDomSerializer GetDefault()
+        internal new static ResourceCodeDomSerializer Default
         {
-            if (s_defaultSerializer == null)
+            get
             {
-                s_defaultSerializer = new ResourceCodeDomSerializer();
+                if (s_defaultSerializer == null)
+                {
+                    s_defaultSerializer = new ResourceCodeDomSerializer();
+                }
+                return s_defaultSerializer;
             }
-            return s_defaultSerializer;
         }
 
         public override string GetTargetComponentName(CodeStatement statement, CodeExpression expression, Type type)
@@ -151,8 +154,14 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager == null) throw new ArgumentNullException("manager");
-            if (type == null) throw new ArgumentNullException("type");
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
 
             if (name != null && name.Equals(ResourceManagerName) && typeof(ResourceManager).IsAssignableFrom(type))
             {
@@ -373,7 +382,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void SerializeMetadata(IDesignerSerializationManager manager, string name, object value, bool shouldSerializeValue)
         {
-            using (TraceScope("ResourceCodeDomSerializer::SerializeMetadata"))
+            using (TraceScope("ResourceCodeDomSerializer::" + nameof(SerializeMetadata)))
             {
                 Trace("Name: {0}", name);
                 Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
@@ -387,13 +396,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void WriteResource(IDesignerSerializationManager manager, string name, object value)
         {
-            using (TraceScope("ResourceCodeDomSerializer::WriteResource"))
-            {
-                Trace("Name: {0}", name);
-                Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
-                SerializationResourceManager sm = GetResourceManager(manager);
-                sm.SetValue(manager, name, value, false, false, true, false);
-            }
+            SetValueUsingCommonTraceScope(manager, name, value, nameof(WriteResource), false, false, true, false);
         }
 
         /// <summary>
@@ -401,12 +404,18 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void WriteResourceInvariant(IDesignerSerializationManager manager, string name, object value)
         {
-            using (TraceScope("ResourceCodeDomSerializer::WriteResourceInvariant"))
+            SetValueUsingCommonTraceScope(manager, name, value, nameof(WriteResourceInvariant), true, true, true, false);
+        }
+
+        private void SetValueUsingCommonTraceScope(IDesignerSerializationManager manager, string name, object value, string calleeName,
+            bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
+        {
+            using (TraceScope("ResourceCodeDomSerializer::" + calleeName))
             {
                 Trace("Name: {0}", name);
                 Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
                 SerializationResourceManager sm = GetResourceManager(manager);
-                sm.SetValue(manager, name, value, true, true, true, false);
+                sm.SetValue(manager, name, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, applyingCachedResources);
             }
         }
 
@@ -461,8 +470,6 @@ namespace System.ComponentModel.Design.Serialization
             private Hashtable _metadata;
             private Hashtable _mergedMetadata;
             private object _rootComponent;
-            private bool _declarationAdded = false;
-            private bool _expressionAdded = false;
             private Hashtable _propertyFillAdded;
             private bool _invariantCultureResourcesDirty = false;
             private bool _metadataResourcesDirty = false;
@@ -478,20 +485,12 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             /// State the serializers use to determine if the declaration of this resource manager has been performed.  This is just per-document state we keep; we do not actually care about this value.
             /// </summary>
-            public bool DeclarationAdded
-            {
-                get => _declarationAdded;
-                set => _declarationAdded = value;
-            }
+            public bool DeclarationAdded { get; set; } = false;
 
             /// <summary>
             /// When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at diffrerent times, if the declaration was added by a cached component.
             /// </summary>
-            public bool ExpressionAdded
-            {
-                get => _expressionAdded;
-                set => _expressionAdded = value;
-            }
+            public bool ExpressionAdded { get; set; } = false;
 
             /// <summary>
             /// The language we should be localizing into.
@@ -684,7 +683,10 @@ namespace System.ComponentModel.Design.Serialization
             {
                 Debug.Assert(name != null, "name is null");
                 // If there is no parent culture, treat that as being different from the parent's resource, which results in the "normal" code path for the caller.
-                if (ReadCulture.Equals(CultureInfo.InvariantCulture)) return CompareValue.Different;
+                if (ReadCulture.Equals(CultureInfo.InvariantCulture))
+                {
+                    return CompareValue.Different;
+                }
 
                 CultureInfo culture = ReadCulture;
                 for (; ; )
@@ -695,7 +697,7 @@ namespace System.ComponentModel.Design.Serialization
                     bool contains = (rs == null) ? false : rs.ContainsKey(name);
                     if (contains)
                     {
-                        object parentValue = (rs != null) ? rs[name] : null;
+                        object parentValue = rs?[name];
                         if (parentValue == value)
                         {
                             return CompareValue.Same;
@@ -703,9 +705,13 @@ namespace System.ComponentModel.Design.Serialization
                         else if (parentValue != null)
                         {
                             if (parentValue.Equals(value))
+                            {
                                 return CompareValue.Same;
+                            }
                             else
+                            {
                                 return CompareValue.Different;
+                            }
                         }
                         else
                         {
@@ -751,7 +757,7 @@ namespace System.ComponentModel.Design.Serialization
                     if (culture == CultureInfo.InvariantCulture)
                     {
                         se = new SerializationException(
-                            
+
                             string.Format(SR.SerializerResourceExceptionInvariant, message), e);
                     }
                     else
@@ -953,7 +959,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (culture == null)
                 {
-                    throw new ArgumentNullException("culture");
+                    throw new ArgumentNullException(nameof(culture));
                 }
 
                 CultureInfo lastCulture;
@@ -1327,7 +1333,6 @@ namespace System.ComponentModel.Design.Serialization
 
             private class CodeDomResourceSet : ResourceSet
             {
-
                 public CodeDomResourceSet()
                 {
                 }

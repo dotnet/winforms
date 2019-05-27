@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Gives state information about a TreeView node. Used with owner draw. 
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum TreeNodeStates
     {

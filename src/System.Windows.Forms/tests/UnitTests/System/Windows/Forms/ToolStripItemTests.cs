@@ -72,10 +72,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_Image_EventHandler_TestData()
         {
-            EventHandler onClick = (sender, e) => {};
+            EventHandler onClick = (sender, e) => { };
 
             yield return new object[] { null, null, null };
-            yield return new object[] { "", new Bitmap(10, 10), onClick };
+            yield return new object[] { string.Empty, new Bitmap(10, 10), onClick };
             yield return new object[] { "text", new Bitmap(10, 10), onClick };
         }
 
@@ -138,16 +138,16 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_Image_EventHandler_String_TestData()
         {
-            EventHandler onClick = (sender, e) => {};
+            EventHandler onClick = (sender, e) => { };
 
-            yield return new object[] { null, null, null, null };
-            yield return new object[] { "", new Bitmap(10, 10), onClick, "" };
-            yield return new object[] { "text", new Bitmap(10, 10), onClick, "name" };
+            yield return new object[] { null, null, null, null, string.Empty };
+            yield return new object[] { string.Empty, new Bitmap(10, 10), onClick, string.Empty, string.Empty };
+            yield return new object[] { "text", new Bitmap(10, 10), onClick, "name", "name" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_Image_EventHandler_String_TestData))]
-        public void ToolStripItem_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name)
+        public void ToolStripItem_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name, string expectedName)
         {
             var item = new SubToolStripItem(text, image, onClick, name);
             Assert.NotNull(item.AccessibilityObject);
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
             Assert.Equal(MergeAction.Append, item.MergeAction);
             Assert.Equal(-1, item.MergeIndex);
-            Assert.Equal(name ?? string.Empty, item.Name);
+            Assert.Equal(expectedName, item.Name);
             Assert.Equal(ToolStripItemOverflow.AsNeeded, item.Overflow);
             Assert.Equal(Padding.Empty, item.Padding);
             Assert.Null(item.Parent);
@@ -297,10 +297,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Alignment_SetWithParent_GetReturnsExpected(ToolStripItemAlignment value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.Alignment = value;
+                Alignment = value
+            };
             Assert.Equal(value, item.Alignment);
 
             // Set same.
@@ -313,8 +315,10 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Alignment_SetWithCreatedParent_GetReturnsExpected(ToolStripItemAlignment value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
 
             item.Alignment = value;
@@ -353,10 +357,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_AllowDrop_SetWithParent_GetReturnsExpected(bool value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.AllowDrop = value;
+                AllowDrop = value
+            };
             Assert.Equal(value, item.AllowDrop);
 
             // Set same.
@@ -394,10 +400,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Anchor_SetWithParent_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.Anchor = value;
+                Anchor = value
+            };
             Assert.Equal(expected, item.Anchor);
 
             // Set same.
@@ -828,7 +836,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotEqual(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
             item.DisplayStyleChanged += handler;
@@ -1140,7 +1148,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            
+
             item.ForeColor = value;
             Assert.Equal(expected, item.ForeColor);
 
@@ -1437,10 +1445,10 @@ namespace System.Windows.Forms.Tests
         {
             foreach (Color color in new Color[] { Color.Empty, Color.Red })
             {
-            yield return new object[] { null, color };
-            yield return new object[] { new Bitmap(10, 10), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), color };
+                yield return new object[] { null, color };
+                yield return new object[] { new Bitmap(10, 10), color };
+                yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), color };
+                yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), color };
             }
         }
 
@@ -1496,12 +1504,16 @@ namespace System.Windows.Forms.Tests
             toolStripDropDown.Items.Add(toolStripDropDownItem);
             yield return new object[] { toolStripDropDownItem, true };
 
-            var toolStripParentItem = new SubToolStripItem();
-            toolStripParentItem.Parent = toolStrip;
+            var toolStripParentItem = new SubToolStripItem
+            {
+                Parent = toolStrip
+            };
             yield return new object[] { toolStripParentItem, false };
 
-            var toolStripDropDownParentItem = new SubToolStripItem();
-            toolStripDropDownParentItem.Parent = toolStripDropDown;
+            var toolStripDropDownParentItem = new SubToolStripItem
+            {
+                Parent = toolStripDropDown
+            };
             yield return new object[] { toolStripDropDownParentItem, true };
         }
 
@@ -1527,8 +1539,10 @@ namespace System.Windows.Forms.Tests
             var toolStripOverflow = new ToolStripOverflow(toolStripOverflowParent);
             yield return new object[] { toolStripOverflowParent, false };
 
-            var overflowingToolStrip = new ToolStrip();
-            overflowingToolStrip.Size = new Size(1, 2);
+            var overflowingToolStrip = new ToolStrip
+            {
+                Size = new Size(1, 2)
+            };
             var overflowingToolStripItem = new SubToolStripItem();
             overflowingToolStrip.Items.Add(overflowingToolStripItem);
             overflowingToolStrip.LayoutEngine.Layout(overflowingToolStrip, null);
@@ -1673,9 +1687,10 @@ namespace System.Windows.Forms.Tests
         {
             var owner = new ToolStrip();
             var otherOwner = new ToolStrip();
-            var item = new SubToolStripItem();
-
-            item.Owner = owner;
+            var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
             Assert.Same(owner, item.Owner);
             Assert.Same(item, Assert.Single(owner.Items));
 
@@ -1724,13 +1739,17 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { toolStripDropDownWithOwnerItemItem, toolStripDropDownWithOwnerItemOwnerItem };
 
             var toolStripParent = new ToolStrip();
-            var toolStripParentItem = new SubToolStripItem();
-            toolStripParentItem.Parent = toolStripParent;
+            var toolStripParentItem = new SubToolStripItem
+            {
+                Parent = toolStripParent
+            };
             yield return new object[] { toolStripParentItem, null };
 
             var toolStripDropDownParent = new ToolStripDropDown();
-            var toolStripDropDownParentItem = new SubToolStripItem();
-            toolStripDropDownParentItem.Parent = toolStripDropDownParent;
+            var toolStripDropDownParentItem = new SubToolStripItem
+            {
+                Parent = toolStripDropDownParent
+            };
             yield return new object[] { toolStripDropDownParentItem, null };
 
             var toolStripDropDownWithOwnerItemParentOwnerItem = new SubToolStripItem();
@@ -1738,8 +1757,10 @@ namespace System.Windows.Forms.Tests
             {
                 OwnerItem = toolStripDropDownWithOwnerItemParentOwnerItem
             };
-            var toolStripDropDownWithOwnerItemParentItem = new SubToolStripItem();
-            toolStripDropDownWithOwnerItemParentItem.Parent = toolStripDropDownWithOwnerItemParent;
+            var toolStripDropDownWithOwnerItemParentItem = new SubToolStripItem
+            {
+                Parent = toolStripDropDownWithOwnerItemParent
+            };
             yield return new object[] { toolStripDropDownWithOwnerItemParentItem, toolStripDropDownWithOwnerItemParentOwnerItem };
         }
 
@@ -1824,8 +1845,10 @@ namespace System.Windows.Forms.Tests
                 {
                     RightToLeft = rightToLeft
                 };
-                var toolStripParentItem = new SubToolStripItem();
-                toolStripParentItem.Parent = toolStripParent;
+                var toolStripParentItem = new SubToolStripItem
+                {
+                    Parent = toolStripParent
+                };
                 yield return new object[] { toolStripParentItem, expected };
             }
 
@@ -2004,37 +2027,37 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Tag_Set_GetReturnsExpected(string value)
         {
             var item = new SubToolStripItem
             {
                 Tag = value
             };
-            Assert.Equal(value, item.Tag);
+            Assert.Same(value, item.Tag);
 
             // Set same.
             item.Tag = value;
-            Assert.Equal(value, item.Tag);
+            Assert.Same(value, item.Tag);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Text_Set_GetReturnsExpected(string value)
         {
             var item = new SubToolStripItem
             {
                 Text = value
             };
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
 
             // Set same.
             item.Text = value;
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Text_SetWithOwner_GetReturnsExpected(string value)
         {
             var owner = new ToolStrip();
@@ -2042,11 +2065,11 @@ namespace System.Windows.Forms.Tests
             owner.Items.Add(item);
 
             item.Text = value;
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
 
             // Set same.
             item.Text = value;
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
         }
 
         [Fact]
@@ -2141,8 +2164,10 @@ namespace System.Windows.Forms.Tests
             {
                 TextDirection = ToolStripTextDirection.Vertical90
             };
-            var toolStripParentItem = new SubToolStripItem();
-            toolStripParentItem.Parent = toolStripParent;
+            var toolStripParentItem = new SubToolStripItem
+            {
+                Parent = toolStripParent
+            };
             yield return new object[] { toolStripParentItem, ToolStripTextDirection.Vertical90 };
 
             var toolStripOwnerParentItem = new SubToolStripItem();
@@ -2238,6 +2263,10 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
+        [InlineData((TextImageRelation)3)]
+        [InlineData((TextImageRelation)5)]
+        [InlineData((TextImageRelation)6)]
+        [InlineData((TextImageRelation)7)]
         public void ToolStripItem_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
         {
             var item = new SubToolStripItem();
@@ -2351,10 +2380,12 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_Visible_SetWithParent_GetReturnsExpected(bool value)
         {
             var parent = new ToolStrip();
-            var item = new SubToolStripItem();
-            item.Parent = parent;
+            var item = new SubToolStripItem
+            {
+                Parent = parent,
 
-            item.Visible = value;
+                Visible = value
+            };
             Assert.Equal(value, item.Visible);
 
             // Set same.
@@ -3938,8 +3969,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotNull(e);
-                Assert.NotSame(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 Assert.True(item.Pressed);
                 callCount++;
             };
@@ -3961,8 +3991,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotNull(e);
-                Assert.NotSame(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 Assert.True(item.Pressed);
                 callCount++;
             };
@@ -4101,7 +4130,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { new SubToolStripItem(), true };
             yield return new object[] { new CannotSelectToolStripItem(), false };
-            
+
             var toolStrip = new ToolStrip();
             var toolStripItem = new SubToolStripItem();
             toolStrip.Items.Add(toolStripItem);
@@ -4124,7 +4153,7 @@ namespace System.Windows.Forms.Tests
                 Parent = toolStripDropDown
             };
             yield return new object[] { toolStripDropDownParentItem, true };
-            
+
             var toolStripDropDownWithOwnerItemOwnerItem = new SubToolStripItem();
             var toolStripDropDownWithOwnerItem = new ToolStripDropDown
             {

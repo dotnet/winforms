@@ -10,38 +10,20 @@ namespace System.ComponentModel.Design
     {
         public DesignerActionItem this[int index]
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get => (DesignerActionItem)(List[index]);
+            set => List[index] = value;
         }
 
-        public int Add(DesignerActionItem value)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public int Add(DesignerActionItem value) => List.Add(value);
 
-        public bool Contains(DesignerActionItem value)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public bool Contains(DesignerActionItem value) => List.Contains(value);
 
-        public void CopyTo(DesignerActionItem[] array, int index)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public void CopyTo(DesignerActionItem[] array, int index) => List.CopyTo(array, index);
 
-        public int IndexOf(DesignerActionItem value)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public int IndexOf(DesignerActionItem value) => List.IndexOf(value);
 
-        public void Insert(int index, DesignerActionItem value)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public void Insert(int index, DesignerActionItem value) => List.Insert(index, value);
 
-        public void Remove(DesignerActionItem value)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public void Remove(DesignerActionItem value) => List.Remove(value);
     }
 }

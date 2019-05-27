@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -10,16 +10,16 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the graphics mode of a device context.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
     internal
 #endif
     enum DeviceContextGraphicsMode
-    {   
+    {
         /*
         Sets the graphics mode that is compatible with 16-bit Windows. This is the default mode. 
         If this value is specified, the application can only modify the world-to-device transform 
@@ -30,16 +30,13 @@ namespace System.Experimental.Gdi
         */
         Compatible = 1,
 
-        /*
-        Windows NT/2000/XP: Sets the advanced graphics mode that allows world transformations. This value 
-        must be specified if the application will set or modify the world transformation for the specified 
-        device context. In this mode all graphics, including text output, fully conform to the world-to-device 
-        transformation specified in the device context. 
-        Windows 95/98/Me:The GM_ADVANCED value is not supported. When playing enhanced metafiles, the system 
-        attempts to make enhanced metafiles look the same as they do on Windows NT/2000/XP. To accomplish this, 
-        the system may simulate GM_ADVANCED mode when playing specific enhanced metafile records. 
-        */
-        Advanced   = 2,
+        /// <summary>
+        /// Sets the advanced graphics mode that allows world transformations. This value must
+        /// be specified if the application will set or modify the world transformation for the
+        /// specified  device context. In this mode all graphics, including text output, fully
+        /// conform to the world-to-device transformation specified in the device context. 
+        /// </summary>
+        Advanced = 2,
 
         /*
         Resets the current world transformation by using the identity matrix. If this mode is specified, 

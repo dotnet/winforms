@@ -4,34 +4,34 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Microsoft.MSInternal", "CA905:SystemAndMicrosoftNamespacesRequireApproval", Scope="namespace", Target="System.Windows.Forms.VisualStyles")]
+[assembly: SuppressMessage("Microsoft.MSInternal", "CA905:SystemAndMicrosoftNamespacesRequireApproval", Scope = "namespace", Target = "System.Windows.Forms.VisualStyles")]
 
 namespace System.Windows.Forms.VisualStyles
 {
-    /// <devdoc>
+    /// <summary>
     /// Determines whether visual styles are enabled.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum VisualStyleState
     {
-        /// <devdoc>
+        /// <summary>
         ///  Visual styles are not enabled.
-        /// </devdoc>
+        /// </summary>
         NoneEnabled = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Visual styles enabled only for client area.
-        /// </devdoc>
+        /// </summary>
         ClientAreaEnabled = NativeMethods.STAP_ALLOW_CONTROLS,
 
-        /// <devdoc>
+        /// <summary>
         /// Visual styles enabled only for non-client area.
-        /// </devdoc>
+        /// </summary>
         NonClientAreaEnabled = NativeMethods.STAP_ALLOW_NONCLIENT,
 
-        /// <devdoc>
+        /// <summary>
         /// Visual styles enabled only for client and non-client areas. 
-        /// </devdoc>
-       ClientAndNonClientAreasEnabled = NativeMethods.STAP_ALLOW_NONCLIENT | NativeMethods.STAP_ALLOW_CONTROLS
+        /// </summary>
+        ClientAndNonClientAreasEnabled = NativeMethods.STAP_ALLOW_NONCLIENT | NativeMethods.STAP_ALLOW_CONTROLS
     }
 }

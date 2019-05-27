@@ -45,11 +45,10 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual ICollection AssociatedComponents
         {
-            get
-            {
-                return new IComponent[0];
-            }
+            get => new IComponent[0];
         }
+
+        internal virtual bool CanBeAssociatedWith(IDesigner parentDesigner) => true;
 
         /// <summary>
         /// Gets or sets a value indicating whether or not this component is being inherited.
@@ -256,10 +255,10 @@ namespace System.ComponentModel.Design
             }
         }
 
-    /// <summary>
-    /// Gets the design-time verbs supported by the component associated with the designer.
-    /// </summary>
-    public virtual DesignerVerbCollection Verbs
+        /// <summary>
+        /// Gets the design-time verbs supported by the component associated with the designer.
+        /// </summary>
+        public virtual DesignerVerbCollection Verbs
         {
             get
             {
@@ -391,7 +390,9 @@ namespace System.ComponentModel.Design
                     catch (CheckoutException cxe)
                     {
                         if (cxe == CheckoutException.Canceled)
+                        {
                             return;
+                        }
 
                         throw cxe;
                     }
@@ -456,6 +457,23 @@ namespace System.ComponentModel.Design
             }
         }
 
+        internal bool IsRootDesigner
+        {
+            get
+            {
+                Debug.Assert(_component != null,
+                    "this.component needs to be set before this method is valid.");
+
+                bool isRoot = false;
+                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                if (host != null && _component == host.RootComponent)
+                {
+                    isRoot = true;
+                }
+                return isRoot;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref='System.ComponentModel.Design.ComponentDesigner' /> class using the specified component.
         /// </summary>
@@ -488,7 +506,7 @@ namespace System.ComponentModel.Design
 
             if (isRoot || !InheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
             {
-                InitializeInheritedProperties(isRoot);
+                InitializeInheritedProperties();
             }
         }
 
@@ -521,7 +539,7 @@ namespace System.ComponentModel.Design
             }
         }
 
-        private void InitializeInheritedProperties(bool rootComponent)
+        private void InitializeInheritedProperties()
         {
             Hashtable props = new Hashtable();
             bool readOnlyInherit = (InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly));
@@ -555,7 +573,7 @@ namespace System.ComponentModel.Design
                     if (inheritedProp == null)
                     {
                         // This ia a publicly inherited component.  We replace all component properties with inherited versions that reset the default property values to those that are currently on the component.
-                        props[prop.Name] = new InheritedPropertyDescriptor(prop, _component, rootComponent);
+                        props[prop.Name] = new InheritedPropertyDescriptor(prop, _component);
                     }
                 }
             }
@@ -880,7 +898,7 @@ namespace System.ComponentModel.Design
                 {
                     if (propertyName == null)
                     {
-                        throw new ArgumentNullException("propertyName");
+                        throw new ArgumentNullException(nameof(propertyName));
                     }
 
                     // First, check to see if the name is in the given properties table
@@ -940,7 +958,7 @@ namespace System.ComponentModel.Design
             {
                 if (propertyName == null)
                 {
-                    throw new ArgumentNullException("propertyName");
+                    throw new ArgumentNullException(nameof(propertyName));
                 }
 
                 if (Contains(propertyName))

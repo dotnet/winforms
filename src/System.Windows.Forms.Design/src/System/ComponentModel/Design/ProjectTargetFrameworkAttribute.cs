@@ -7,15 +7,11 @@ namespace System.ComponentModel.Design
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct)]
     public sealed class ProjectTargetFrameworkAttribute : Attribute
     {
-        private string _targetFrameworkMoniker;
         public ProjectTargetFrameworkAttribute(string targetFrameworkMoniker)
         {
-            _targetFrameworkMoniker = targetFrameworkMoniker;
+            TargetFrameworkMoniker = targetFrameworkMoniker;
         }
 
-        public string TargetFrameworkMoniker
-        {
-            get => _targetFrameworkMoniker;
-        }
+        public string TargetFrameworkMoniker { get; }
     }
 }

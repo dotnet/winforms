@@ -43,8 +43,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
-        public void MenuItem_Ctor_String(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void MenuItem_Ctor_String(string text, string expectedText)
         {
             var menuItem = new MenuItem(text);
             Assert.False(menuItem.BarBreak);
@@ -69,20 +69,20 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Equal(text ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
         }
 
         public static IEnumerable<object[]> Ctor_String_EventHandler_TestData()
         {
             EventHandler onClick = (sender, e) => { };
-            yield return new object[] { null, null };
-            yield return new object[] { string.Empty, onClick };
-            yield return new object[] { "value", onClick };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { string.Empty, onClick, string.Empty };
+            yield return new object[] { "text", onClick, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_EventHandler_TestData))]
-        public void MenuItem_Ctor_String_EventHandler(string text, EventHandler onClick)
+        public void MenuItem_Ctor_String_EventHandler(string text, EventHandler onClick, string expectedText)
         {
             var menuItem = new MenuItem(text, onClick);
             Assert.False(menuItem.BarBreak);
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Equal(text ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
         }
 
         [Fact]
@@ -128,14 +128,14 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_String_EventHandler_Shortcut_TestData()
         {
             EventHandler onClick = (sender, e) => { };
-            yield return new object[] { null, null, Shortcut.None };
-            yield return new object[] { string.Empty, onClick, (Shortcut)(Shortcut.None - 1) };
-            yield return new object[] { "value", onClick, Shortcut.CtrlA };
+            yield return new object[] { null, null, Shortcut.None, string.Empty };
+            yield return new object[] { string.Empty, onClick, (Shortcut)(Shortcut.None - 1), string.Empty };
+            yield return new object[] { "text", onClick, Shortcut.CtrlA, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_EventHandler_Shortcut_TestData))]
-        public void MenuItem_Ctor_String_EventHandler_Shortcut(string text, EventHandler onClick, Shortcut shortcut)
+        public void MenuItem_Ctor_String_EventHandler_Shortcut(string text, EventHandler onClick, Shortcut shortcut, string expectedText)
         {
             var menuItem = new MenuItem(text, onClick, shortcut);
             Assert.False(menuItem.BarBreak);
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Equal(text ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
         }
 
         [Fact]
@@ -180,14 +180,14 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_MenuItemArray_TestData()
         {
-            yield return new object[] { null, null, false };
-            yield return new object[] { string.Empty, new MenuItem[0], false };
-            yield return new object[] { "value", new MenuItem[] { new MenuItem() }, true };
+            yield return new object[] { null, null, false, string.Empty };
+            yield return new object[] { string.Empty, new MenuItem[0], false, string.Empty };
+            yield return new object[] { "text", new MenuItem[] { new MenuItem() }, true, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_MenuItemArray_TestData))]
-        public void MenuItem_Ctor_String_MenuItemArray(string text, MenuItem[] items, bool expectedIsParent)
+        public void MenuItem_Ctor_String_MenuItemArray(string text, MenuItem[] items, bool expectedIsParent, string expectedText)
         {
             var menuItem = new MenuItem(text, items);
             Assert.False(menuItem.BarBreak);
@@ -212,7 +212,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Equal(text ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
         }
 
         public static IEnumerable<object[]> Ctor_MergeType_Int_Shortcut_String_EventHandler_EventHandler_EventHandler_MenuItemArray_TestData()
@@ -221,14 +221,14 @@ namespace System.Windows.Forms.Tests
             EventHandler onPopup = (sender, e) => { };
             EventHandler onSelect = (sender, e) => { };
 
-            yield return new object[] { (MenuMerge)(MenuMerge.Add - 1), -1, (Shortcut)(Shortcut.None - 1), null, null, null, null, null, false };
-            yield return new object[] { MenuMerge.Add, 0, Shortcut.None, string.Empty, onClick, onPopup, onSelect, new MenuItem[0], false };
-            yield return new object[] { MenuMerge.MergeItems, 1, Shortcut.CtrlA, "value", onClick, onPopup, onSelect, new MenuItem[] { new MenuItem() }, true };
+            yield return new object[] { (MenuMerge)(MenuMerge.Add - 1), -1, (Shortcut)(Shortcut.None - 1), null, null, null, null, null, false, string.Empty };
+            yield return new object[] { MenuMerge.Add, 0, Shortcut.None, string.Empty, onClick, onPopup, onSelect, new MenuItem[0], false, string.Empty };
+            yield return new object[] { MenuMerge.MergeItems, 1, Shortcut.CtrlA, "text", onClick, onPopup, onSelect, new MenuItem[] { new MenuItem() }, true, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_MergeType_Int_Shortcut_String_EventHandler_EventHandler_EventHandler_MenuItemArray_TestData))]
-        public void MenuItem_Ctor_MenuMerge_Int_Shortcut_String_EventHandler_EventHandler_EventHandler_MenuItemArray(MenuMerge mergeType, int mergeOrder, Shortcut shortcut, string text, EventHandler onClick, EventHandler onPopup, EventHandler onSelect, MenuItem[] items, bool expectedIsParent)
+        public void MenuItem_Ctor_MenuMerge_Int_Shortcut_String_EventHandler_EventHandler_EventHandler_MenuItemArray(MenuMerge mergeType, int mergeOrder, Shortcut shortcut, string text, EventHandler onClick, EventHandler onPopup, EventHandler onSelect, MenuItem[] items, bool expectedIsParent, string expectedText)
         {
             var menuItem = new MenuItem(mergeType, mergeOrder, shortcut, text, onClick, onPopup, onSelect, items);
             Assert.False(menuItem.BarBreak);
@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Equal(text ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
         }
 
         [Fact]
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_BarBreak_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -322,7 +322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_Break_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -342,7 +342,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_Checked_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -353,7 +353,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_Checked_SetWithParent_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem();
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var menu = new MainMenu(new MenuItem[] { menuItem });
-            Assert.Throws<ArgumentException>(null, () => menuItem.Checked = true);
+            Assert.Throws<ArgumentException>("value", () => menuItem.Checked = true);
             Assert.False(menuItem.Checked);
 
             menuItem.Checked = false;
@@ -378,7 +378,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItem_Checked_SetWithChildren_ThrowsArgumentException()
         {
             var menuItem = new MenuItem("text", new MenuItem[] { new MenuItem() });
-            Assert.Throws<ArgumentException>(null, () => menuItem.Checked = true);
+            Assert.Throws<ArgumentException>("value", () => menuItem.Checked = true);
             Assert.False(menuItem.Checked);
 
             menuItem.Checked = false;
@@ -395,7 +395,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_DefaultItem_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -435,7 +435,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_Enabled_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -481,11 +481,11 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var menu = new SubMenu(new MenuItem[] { menuItem });
-            Assert.Throws<ArgumentOutOfRangeException>("Index", () => menuItem.Index = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => menuItem.Index = value);
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void MenuItem_Index_SetWithoutParent_Nop(int value)
         {
             var menuItem = new MenuItem
@@ -565,7 +565,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_MdiList_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -585,7 +585,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void MenuItem_MergeOrder_Set_GetReturnsExpected(int value)
         {
             var menuItem = new MenuItem
@@ -605,7 +605,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MenuMerge), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MenuMerge))]
         public void MenuItem_MergeType_Set_GetReturnsExpected(MenuMerge value)
         {
             var menuItem = new MenuItem
@@ -625,7 +625,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MenuMerge), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MenuMerge))]
         public void MenuItem_MergeType_SetInvalid_ThrowsInvalidEnumArgumentException(MenuMerge value)
         {
             var menuItem = new MenuItem();
@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_OwnerDraw_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -674,7 +674,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_RadioCheck_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_ShowShortcut_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
@@ -703,9 +703,9 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, menuItem.ShowShortcut);
         }
-        
+
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_ShowShortcut_SetCreated_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem();
@@ -736,7 +736,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, menuItem.Shortcut);
         }
-        
+
         [Theory]
         [InlineData(Shortcut.None)]
         [InlineData(Shortcut.Ctrl0)]
@@ -768,14 +768,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
-        public void MenuItem_Text_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void MenuItem_Text_Set_GetReturnsExpected(string value, string expected)
         {
             var menuItem = new MenuItem
             {
                 Text = value
             };
-            Assert.Equal(value ?? string.Empty, menuItem.Text);
+            Assert.Same(expected, menuItem.Text);
+
+            // Set same.
+            menuItem.Text = value;
+            Assert.Same(expected, menuItem.Text);
         }
 
         [Fact]
@@ -790,8 +794,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItem_Visible_Set_GetReturnsExpected()
         {
-            var menuItem = new MenuItem();
-            menuItem.Visible = false;
+            var menuItem = new MenuItem
+            {
+                Visible = false
+            };
             Assert.False(menuItem.Visible);
 
             menuItem.Visible = true;
@@ -1016,7 +1022,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_OnPopup_Invoke_Success(bool mdiList)
         {
             var menuItem = new SubMenuItem
@@ -1064,7 +1070,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_OnPopup_InvokeWithChildren_Success(bool mdiList)
         {
             var menuItem = new SubMenuItem("text", new MenuItem[] { new MenuItem("text") { MdiList = mdiList } });
@@ -1094,7 +1100,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItem_OnPopup_MdiChildrenWithoutParent_DoesNotAddSeparator()
         {
             var menuItem = new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true };
-            
+
             menuItem.OnPopup(null);
             Assert.Equal(new string[] { "child" }, menuItem.MenuItems.Cast<MenuItem>().Select(m => m.Text));
 
@@ -1137,7 +1143,7 @@ namespace System.Windows.Forms.Tests
             formWithManyMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithManyMdiChildren, Visible = true, Text = "Form9" });
             formWithManyMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithManyMdiChildren, Visible = true, Text = "Form10" });
             yield return new object[] { new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true }, formWithManyMdiChildren.Menu, new string[] { "child", "-", "&1 Form1", "&2 Form1", "&3 Form2", "&4 Form2", "&5 Form3", "&6 Form3", "&7 Form4", "&8 Form4", "&9 Form10", "&10 Form10", "&More Windows..." } };
-            
+
             var formWithActiveMdiChildren = new SubForm { Menu = new MainMenu(), Visible = true };
             var formWithActiveMdiChildrenClient = new MdiClient();
             formWithActiveMdiChildren.Controls.Add(formWithActiveMdiChildrenClient);
@@ -1706,7 +1712,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void MenuItem_ToString_Invoke_ReturnsExpected(string text)
         {
             var menuItem = new MenuItem

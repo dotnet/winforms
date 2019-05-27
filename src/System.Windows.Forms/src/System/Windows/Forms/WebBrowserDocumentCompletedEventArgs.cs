@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnDocumentCompleted'/> event.
-    /// </devdoc>
+    /// </summary>
     public class WebBrowserDocumentCompletedEventArgs : EventArgs
     {
         private readonly Uri _url;
 
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserDocumentCompletedEventArgs'/> class.
-        /// </devdoc>
+        /// </summary>
         public WebBrowserDocumentCompletedEventArgs(Uri url)
         {
             _url = url;
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         /// Url of the Document.
-        /// </devdoc>
+        /// </summary>
         public Uri Url
         {
             get

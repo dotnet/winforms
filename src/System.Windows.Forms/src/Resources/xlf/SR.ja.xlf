@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionAccessibleName">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionItemPropDescr">
@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">Private</target>
+        <target state="translated">非公開</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="translated">False</target>
+        <target state="new">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="translated">True</target>
+        <target state="new">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -3133,8 +3133,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
-        <source>Horizontal Scroll Bar</source>
-        <target state="translated">水平スクロール バー</target>
+        <source>Horizontal</source>
+        <target state="translated">横</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3188,8 +3188,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
-        <source>Vertical Scroll Bar</source>
-        <target state="translated">垂直スクロール バー</target>
+        <source>Vertical</source>
+        <target state="translated">縦</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -6803,7 +6803,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
-        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <target state="translated">パラメーターは、型 ListViewGroup でなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8161,99 +8161,9 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ズームは 0 以上でなければなりません。負の値は許可されていません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Close">
-        <source>&amp;Close</source>
-        <target state="translated">閉じる(&amp;C)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_FourPages">
-        <source>Four pages</source>
-        <target state="translated">4 ページ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_OnePage">
-        <source>One page</source>
-        <target state="translated">1 ページ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Page">
-        <source>&amp;Page</source>
-        <target state="translated">ページ(&amp;P)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Print">
-        <source>Print</source>
-        <target state="translated">印刷</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
         <target state="translated">印刷プレビュー</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_SixPages">
-        <source>Six pages</source>
-        <target state="translated">6 ページ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ThreePages">
-        <source>Three pages</source>
-        <target state="translated">3 ページ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_TwoPages">
-        <source>Two pages</source>
-        <target state="translated">2 ページ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom">
-        <source>Zoom</source>
-        <target state="translated">ズーム</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom10">
-        <source>10%</source>
-        <target state="translated">10%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom100">
-        <source>100%</source>
-        <target state="translated">100%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom150">
-        <source>150%</source>
-        <target state="translated">150%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom200">
-        <source>200%</source>
-        <target state="translated">200%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom25">
-        <source>25%</source>
-        <target state="translated">25%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom50">
-        <source>50%</source>
-        <target state="translated">50%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom500">
-        <source>500%</source>
-        <target state="translated">500%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom75">
-        <source>75%</source>
-        <target state="translated">75%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ZoomAuto">
-        <source>Auto</source>
-        <target state="translated">自動です</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
@@ -8653,7 +8563,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
@@ -9289,173 +9199,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ScrollableControlVerticalScrollDescr">
         <source>Gets the vertical scroll bar for this ScrollableControl.</source>
         <target state="translated">この ScrollableControl に垂直スクロール バーを取得します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAboutDialog">
-        <source>Microsoft .NET Application Information</source>
-        <target state="translated">Microsoft .NET アプリケーション情報</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityApplication">
-        <source>Application</source>
-        <target state="translated">アプリケーション</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAsmNameColumn">
-        <source>Name</source>
-        <target state="translated">名前</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAssembliesTab">
-        <source>Assemblies</source>
-        <target state="translated">アセンブリ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportLabel">
-        <source>To submit a bug report, first save the report, and then click Submit. Attach the saved report to the online form.</source>
-        <target state="translated">障害報告を送信するには、まず障害報告を保存してから [送信] をクリックしてください。保存したレポートをオンライン フォームにアタッチしてください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportTab">
-        <source>Beta Bug Report</source>
-        <target state="translated">ベータ障害報告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityClose">
-        <source>&amp;Close</source>
-        <target state="translated">閉じる(&amp;C)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityCodeBaseColumn">
-        <source>CodeBase</source>
-        <target state="translated">CodeBase</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityFileVersionColumn">
-        <source>File Version</source>
-        <target state="translated">ファイル バージョン</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeAppInfo">
-        <source>Include &amp;Application Information</source>
-        <target state="translated">アプリケーション情報を含める(&amp;A)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeSysInfo">
-        <source>Include &amp;System Information</source>
-        <target state="translated">システム情報を含める(&amp;S)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityInfoTab">
-        <source>Security</source>
-        <target state="translated">セキュリティ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</source>
-        <target state="translated">ウィンドウは制限されたモードで実行中です。一部の UI 機能はセキュリティ上の理由により無効にされている可能性があります。
-
-詳細については、システム管理者またはアプリケーション作成者に相談してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMixedZone">
-        <source>Mixed Zone</source>
-        <target state="translated">混合ゾーン</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMultipleSites">
-        <source>Multiple Sites</source>
-        <target state="translated">複数のサイト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownSite">
-        <source>Unknown Site</source>
-        <target state="translated">不明なサイト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
-        <source>Unknown Zone</source>
-        <target state="translated">不明なゾーン</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveBug">
-        <source>S&amp;ave</source>
-        <target state="translated">保存(&amp;A)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveFilter">
-        <source>Xml Files (*.xml)|*.xml</source>
-        <target state="translated">Xml ファイル (*.xml)|*.xml</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBug">
-        <source>S&amp;ubmit</source>
-        <target state="translated">送信(&amp;U)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBugUrl">
-        <source>http://beta.visualstudio.net/net/sdk/feedback.asp</source>
-        <target state="translated">http://www.microsoft.com/japan/msdn/vstudio/</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchDescrColumn">
-        <source>Description</source>
-        <target state="translated">説明</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchLabel">
-        <source>Changing the switch value will affect only the currently running version of this application.</source>
-        <target state="translated">スイッチの値を変更すると、現在実行中のこのアプリケーションのバージョンのみに適用されます。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchNameColumn">
-        <source>Name</source>
-        <target state="translated">名前</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchesTab">
-        <source>Switches</source>
-        <target state="translated">スイッチ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipCaption">
-        <source>Microsoft .NET Security Warning</source>
-        <target state="translated">Microsoft .NET セキュリティ警告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipMainText">
-        <source>Never enter personal information or passwords into a window unless you can verify and trust the source of the request.</source>
-        <target state="translated">要求元を検証および信頼できない場合、個人情報またはパスワードをウィンドウに入力しないでください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipSourceInformation">
-        <source>Source: {0}</source>
-        <target state="translated">ソース: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}
-
-{1}</source>
-        <target state="translated">{0}
-
-{1}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</source>
-        <target state="translated">ウィンドウは、制限されていないモードで実行中です。メイン ウィンドウは制限されずに実行していますが、一部の機能はセキュリティ上の理由により無効にされている可能性があります。
-
-詳細については、システム管理者またはアプリケーション作成者に相談してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityVersionColumn">
-        <source>Assembly Version</source>
-        <target state="translated">アセンブリ バージョン</target>
         <note />
       </trans-unit>
       <trans-unit id="SelTabCountRange">
@@ -11536,265 +11279,6 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TreeViewVisibleCountDescr">
         <source>The number of visible nodes in the TreeView.</source>
         <target state="translated">TreeView で表示するノードの数です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerBadXml">
-        <source>XML not valid. Expecting {0} tag.</source>
-        <target state="translated">XML が有効ではありません。{0} タグが必要です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InstallTitle">
-        <source>Application Install - More Information</source>
-        <target state="translated">アプリケーションのインストール - 詳細情報</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InternetSource">
-        <source>the Internet</source>
-        <target state="translated">インターネット</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_KnownPublisher">
-        <source>This application was published by {0}. Only run applications from publishers that you trust.</source>
-        <target state="translated">このアプリケーションは {0} によって公開されました。信頼する公開元からのアプリケーションのみを実行してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalComputerSource">
-        <source>the Local Computer</source>
-        <target state="translated">ローカル コンピューター</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalNetworkSource">
-        <source>the Local Network</source>
-        <target state="translated">ローカル ネットワーク</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_Location">
-        <source>This application comes from {0}. Only run applications from locations that you trust.</source>
-        <target state="translated">このアプリケーションは、{0} にあります。信頼する場所からのアプリケーションのみを実行してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_RunTitle">
-        <source>Application Run - More Information</source>
-        <target state="translated">アプリケーションの実行 - 詳細情報</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_SafeAccess">
-        <source>This application has only limited access to your computer.</source>
-        <target state="translated">このアプリケーションは、このコンピューターへのアクセスが制限されています。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_TrustedSitesSource">
-        <source>a Trusted Site</source>
-        <target state="translated">信頼済みサイト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnknownPublisher">
-        <source>The publisher of this application cannot be verified. Only run applications from publishers that you trust.</source>
-        <target state="translated">このアプリケーションの公開元を確認できません。信頼する公開元からのアプリケーションのみを実行してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnsafeAccess">
-        <source>This application will gain access to additional resources on your computer, such as your file system or your network connection. This may put your computer at risk. Do not approve unless you trust the application's publisher.</source>
-        <target state="translated">ファイル システムまたはネットワーク接続などの、このコンピューター上の追加リソースへのアクセスがこのアプリケーションに許可されます。この許可によってコンピューターに害を及ぼす可能性があります。アプリケーションの公開元を信頼していない場合、許可しないでください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UntrustedSitesSource">
-        <source>an Untrusted Site</source>
-        <target state="translated">信頼されないサイト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithShortcut">
-        <source>This application will be installed on your computer. It will add a shortcut to your Start menu and will be added to the Add or Remove Programs list.</source>
-        <target state="translated">このアプリケーションをコンピューターにインストールします。このアプリケーションは、ショートカットをスタート メニューに追加し、[プログラムの追加と削除] の一覧に追加されます。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithoutShortcut">
-        <source>This application will be temporarily installed onto your computer. It will not be added to your Start menu or to the Add or Remove Programs list.</source>
-        <target state="translated">このアプリケーションは一時的にコンピューターにインストールされます。スタート メニューまたは [プログラムの追加と削除] の一覧には追加されません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallBlocked">
-        <source>Trust Manager Dialog - Install Blocked</source>
-        <target state="translated">信頼マネージャー ダイアログ - ブロックされたインストール</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallConfirmation">
-        <source>Trust Manager Dialog - Install Confirmation</source>
-        <target state="translated">信頼マネージャー ダイアログ - インストールの確認</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallWithElevatedPermissions">
-        <source>Trust Manager Dialog - Install with elevated permissions</source>
-        <target state="translated">信頼マネージャー ダイアログ - 引き上げられたアクセス許可でインストール</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunBlocked">
-        <source>Trust Manager Dialog - Run Blocked</source>
-        <target state="translated">信頼マネージャー ダイアログ - ブロックされた実行</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunConfirmation">
-        <source>Trust Manager Dialog - Run Confirmation</source>
-        <target state="translated">信頼マネージャー ダイアログ - 実行の確認</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunWithElevatedPermissions">
-        <source>Trust Manager Dialog - Run with elevated permissions</source>
-        <target state="translated">信頼マネージャー ダイアログ - 引き上げられたアクセス許可で実行</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_BlockedApp">
-        <source>Your administrator has blocked this application because it potentially poses a security risk to your computer.</source>
-        <target state="translated">コンピューターにセキュリティ上の問題を発生させるため、管理者がこのアプリケーションをブロックしました。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Close">
-        <source>Close</source>
-        <target state="translated">閉じる</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotInstall">
-        <source>&amp;Don't Install</source>
-        <target state="translated">インストールしない(&amp;D)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotRun">
-        <source>&amp;Don't Run</source>
-        <target state="translated">実行しない(&amp;D)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_From">
-        <source>From</source>
-        <target state="translated">提供元</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_GlobeIcon">
-        <source>Globe Icon</source>
-        <target state="translated">地球アイコン</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">アプリケーションは便利ですが、コンピューターに危害を及ぼす可能性があります。ソフトウェアの発行元を信頼できない場合、このソフトウェアをインストールしないでください。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallQuestion">
-        <source>Do you want to install this application?</source>
-        <target state="translated">このアプリケーションをインストールしますか?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallTitle">
-        <source>Application Install - Security Warning</source>
-        <target state="translated">アプリケーションのインストール - セキュリティの警告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">インターネットからのアプリケーションは便利ですが、コンピューターに危害を及ぼす可能性があります。ソフトウェアの発行元を信頼できない場合、このソフトウェアをインストールしないでください。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstalledAppBlockedWarning">
-        <source>Your security settings do not allow this application to be installed on your computer.</source>
-        <target state="translated">セキュリティ設定は、このアプリケーションがこのコンピューターにインストールされることを許可していません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformation">
-        <source>More Information...</source>
-        <target state="translated">詳細情報...</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleDescription">
-        <source>Warning text and link to get more information</source>
-        <target state="translated">警告テキスト、および詳細情報を取得するためのリンク</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
-        <source>MoreInformationLink</source>
-        <target state="translated">MoreInformationLink</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Name">
-        <source>Name</source>
-        <target state="translated">名前</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to install this application?</source>
-        <target state="translated">公開元を確認できません。
-このアプリケーションをインストールしますか?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to run this application?</source>
-        <target state="translated">公開元を確認できません。
-このアプリケーションを実行しますか?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Publisher">
-        <source>Publisher</source>
-        <target state="translated">発行者</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Run">
-        <source>&amp;Run</source>
-        <target state="translated">実行(&amp;R)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunAppBlockedWarning">
-        <source>Your security settings do not allow this application to be run on your computer.</source>
-        <target state="translated">セキュリティ設定は、このアプリケーションがこのコンピューターで実行されることを許可していません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">アプリケーションは便利ですが、コンピューターに危害を及ぼす可能性があります。ソフトウェアの発行元を信頼できない場合、このソフトウェアを実行しないでください。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunQuestion">
-        <source>Do you want to run this application?</source>
-        <target state="translated">このアプリケーションを実行しますか?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunTitle">
-        <source>Application Run - Security Warning</source>
-        <target state="translated">アプリケーションの実行 - セキュリティの警告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">インターネットからのアプリケーションは便利ですが、コンピューターに危害を及ぼす可能性があります。ソフトウェアの発行元を信頼できない場合、このソフトウェアを実行しないでください。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_UnknownPublisher">
-        <source>Unknown Publisher</source>
-        <target state="translated">不明な公開元です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleDescription">
-        <source>Warning text</source>
-        <target state="translated">警告テキスト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleName">
-        <source>WarningLabel</source>
-        <target state="translated">WarningLabel</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_HighRisk">
-        <source>{0} - High Risk</source>
-        <target state="translated">{0} - 危険度 - 高</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_LowRisk">
-        <source>{0} - Low Risk</source>
-        <target state="translated">{0} - 危険度 - 低</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_MediumRisk">
-        <source>{0} - Medium Risk</source>
-        <target state="translated">{0} - 危険度 - 中</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeLoadException">

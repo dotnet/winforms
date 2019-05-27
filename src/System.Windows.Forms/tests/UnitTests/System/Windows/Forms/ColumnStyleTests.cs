@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ColumnStyle_Ctor_NegativeWidth_ThrowsArgumentOutOfRangeException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("Size", () => new ColumnStyle(SizeType.AutoSize, -1));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => new ColumnStyle(SizeType.AutoSize, -1));
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests
             var panel = new TableLayoutPanel();
             var style = new ColumnStyle();
             panel.LayoutSettings.RowStyles.Add(style);
-            
+
             style.Width = value;
             Assert.Equal(value, style.Width);
         }
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
         public void ColumnStyle_Width_SetNegative_ThrowsArgumentOutOfRangeException()
         {
             var style = new ColumnStyle();
-            Assert.Throws<ArgumentOutOfRangeException>("Size", () => style.Width = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => style.Width = -1);
         }
     }
 }

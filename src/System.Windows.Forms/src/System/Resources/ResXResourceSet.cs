@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Resources {
+namespace System.Resources
+{
 
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -17,47 +18,47 @@ namespace System.Resources {
     using System.Collections;
     using System.Resources;
 
-    /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource set.
-    /// </devdoc>
-    public class ResXResourceSet : ResourceSet {
+    /// </summary>
+    public class ResXResourceSet : ResourceSet
+    {
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.ResXResourceSet"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a resource set for the specified file.
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped like this in Everett.
         ]
-        public ResXResourceSet(string fileName) : base(new ResXResourceReader(fileName)) {
+        public ResXResourceSet(string fileName) : base(new ResXResourceReader(fileName))
+        {
             ReadResources();
         }
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.ResXResourceSet1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a resource set for the specified stream.
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped like this in Everett.
         ]
-        public ResXResourceSet(Stream stream) : base(new ResXResourceReader(stream)) {
+        public ResXResourceSet(Stream stream) : base(new ResXResourceReader(stream))
+        {
             ReadResources();
         }
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.GetDefaultReader"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Gets the default reader type associated with this set.
-        /// </devdoc>
-        public override Type GetDefaultReader() {
+        /// </summary>
+        public override Type GetDefaultReader()
+        {
             return typeof(ResXResourceReader);
         }
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.GetDefaultWriter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Gets the default writer type associated with this set.
-        /// </devdoc>
-        public override Type GetDefaultWriter() {
+        /// </summary>
+        public override Type GetDefaultWriter()
+        {
             return typeof(ResXResourceWriter);
         }
     }

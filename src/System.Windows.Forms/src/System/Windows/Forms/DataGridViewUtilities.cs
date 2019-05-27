@@ -10,11 +10,10 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using System.Drawing.Imaging;
     using System.Windows.Forms.VisualStyles;
-    
-    /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities"]/*' />
-    /// <devdoc>
+
+    /// <summary>
     ///    <para></para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewUtilities
     {
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
@@ -28,7 +27,6 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight = 2;
         private const byte DATAGRIDVIEWROWHEADERCELL_verticalTextMargin = 1;
 
-        /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment"]/*' />
         internal static System.Drawing.ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment)
         {
             // Why isn't the DataGridView using System.Drawing.ContentAlignment?
@@ -57,9 +55,8 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment"]/*' />
-        internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(bool rightToLeft, 
-                                                                                    DataGridViewContentAlignment alignment, 
+        internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(bool rightToLeft,
+                                                                                    DataGridViewContentAlignment alignment,
                                                                                     DataGridViewTriState wrapMode)
         {
             TextFormatFlags tff;
@@ -163,10 +160,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities.GetPreferredRowHeaderSize"]/*' />
-        internal static Size GetPreferredRowHeaderSize(Graphics graphics, 
-                                                       string val, 
-                                                       DataGridViewCellStyle cellStyle, 
+        internal static Size GetPreferredRowHeaderSize(Graphics graphics,
+                                                       string val,
+                                                       DataGridViewCellStyle cellStyle,
                                                        int borderAndPaddingWidths,
                                                        int borderAndPaddingHeights,
                                                        bool showRowErrors,
@@ -180,125 +176,125 @@ namespace System.Windows.Forms
             switch (freeDimension)
             {
                 case DataGridViewFreeDimension.Width:
-                {
-                    int preferredWidth = 0, allowedHeight = constraintSize.Height - borderAndPaddingHeights;
-                    if (!string.IsNullOrEmpty(val))
                     {
-                        int maxHeight = allowedHeight - 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
-                        if (maxHeight > 0)
+                        int preferredWidth = 0, allowedHeight = constraintSize.Height - borderAndPaddingHeights;
+                        if (!string.IsNullOrEmpty(val))
                         {
-                            if (cellStyle.WrapMode == DataGridViewTriState.True)
+                            int maxHeight = allowedHeight - 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                            if (maxHeight > 0)
                             {
-                                preferredWidth = DataGridViewCell.MeasureTextWidth(graphics, val, cellStyle.Font, maxHeight, flags);
+                                if (cellStyle.WrapMode == DataGridViewTriState.True)
+                                {
+                                    preferredWidth = DataGridViewCell.MeasureTextWidth(graphics, val, cellStyle.Font, maxHeight, flags);
+                                }
+                                else
+                                {
+                                    preferredWidth = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Width;
+                                }
+                                preferredWidth += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
                             }
-                            else
+                        }
+                        if (allowedHeight >= DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight)
+                        {
+                            if (showGlyph)
                             {
-                                preferredWidth = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Width;
+                                preferredWidth += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
                             }
-                            preferredWidth += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
+                            if (showRowErrors)
+                            {
+                                preferredWidth += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                            }
                         }
+                        preferredWidth = Math.Max(preferredWidth, 1);
+                        preferredWidth += borderAndPaddingWidths;
+                        return new Size(preferredWidth, 0);
                     }
-                    if (allowedHeight >= DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight)
-                    {
-                        if (showGlyph)
-                        {
-                            preferredWidth += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
-                        }
-                        if (showRowErrors)
-                        {
-                            preferredWidth += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
-                        }
-                    }
-                    preferredWidth = Math.Max(preferredWidth, 1);
-                    preferredWidth += borderAndPaddingWidths;
-                    return new Size(preferredWidth, 0);
-                }
                 case DataGridViewFreeDimension.Height:
-                {
-                    int minHeightIcon = 1, minHeightContent = 1;
-                    int allowedWidth = constraintSize.Width - borderAndPaddingWidths;
-                    if (!string.IsNullOrEmpty(val))
                     {
-                        if (showGlyph && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
+                        int minHeightIcon = 1, minHeightContent = 1;
+                        int allowedWidth = constraintSize.Width - borderAndPaddingWidths;
+                        if (!string.IsNullOrEmpty(val))
                         {
-                            // There is enough room for the status icon
-                            minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
-                            // Status icon takes priority
-                            allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
-                        }
-                        if (showRowErrors && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
-                        {
-                            // There is enough room for the error icon
-                            minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
-                            // There is enough room for both the status and error icons
-                            allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
-                        }
-                        if (allowedWidth > 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + 
-                                           DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 
-                                           DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight)
-                        {
-                            // There is enough room for text
-                            allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + 
-                                            DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 
-                                            DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
-                            if (cellStyle.WrapMode == DataGridViewTriState.True)
+                            if (showGlyph && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
                             {
-                                minHeightContent = DataGridViewCell.MeasureTextHeight(graphics, val, cellStyle.Font, allowedWidth, flags);
+                                // There is enough room for the status icon
+                                minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
+                                // Status icon takes priority
+                                allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
                             }
-                            else
+                            if (showRowErrors && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
                             {
-                                minHeightContent = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Height;
+                                // There is enough room for the error icon
+                                minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
+                                // There is enough room for both the status and error icons
+                                allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
                             }
-                            minHeightContent += 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
-                        }
-                    }
-                    else
-                    {
-                        if ((showGlyph || showRowErrors) && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
-                        {
-                            minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
-                        }
-                    }
-                    return new Size(0, Math.Max(minHeightIcon, minHeightContent) + borderAndPaddingHeights);
-                }
-                default:
-                {
-                    if (!string.IsNullOrEmpty(val))
-                    {
-                        if (cellStyle.WrapMode == DataGridViewTriState.True)
-                        {
-                            preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, val, cellStyle.Font, 5.0F, flags);
+                            if (allowedWidth > 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
+                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
+                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight)
+                            {
+                                // There is enough room for text
+                                allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
+                                                DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
+                                                DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
+                                if (cellStyle.WrapMode == DataGridViewTriState.True)
+                                {
+                                    minHeightContent = DataGridViewCell.MeasureTextHeight(graphics, val, cellStyle.Font, allowedWidth, flags);
+                                }
+                                else
+                                {
+                                    minHeightContent = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Height;
+                                }
+                                minHeightContent += 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                            }
                         }
                         else
                         {
-                            preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags);
+                            if ((showGlyph || showRowErrors) && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
+                            {
+                                minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
+                            }
                         }
-                        preferredSize.Width += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + 
-                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 
-                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
-                        preferredSize.Height += 2*DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                        return new Size(0, Math.Max(minHeightIcon, minHeightContent) + borderAndPaddingHeights);
                     }
-                    else
+                default:
                     {
-                        preferredSize = new Size(0, 1);
+                        if (!string.IsNullOrEmpty(val))
+                        {
+                            if (cellStyle.WrapMode == DataGridViewTriState.True)
+                            {
+                                preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, val, cellStyle.Font, 5.0F, flags);
+                            }
+                            else
+                            {
+                                preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags);
+                            }
+                            preferredSize.Width += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
+                                                   DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
+                                                   DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
+                            preferredSize.Height += 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                        }
+                        else
+                        {
+                            preferredSize = new Size(0, 1);
+                        }
+                        if (showGlyph)
+                        {
+                            preferredSize.Width += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                        }
+                        if (showRowErrors)
+                        {
+                            preferredSize.Width += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                        }
+                        if (showGlyph || showRowErrors)
+                        {
+                            preferredSize.Height = Math.Max(preferredSize.Height,
+                                                            DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight);
+                        }
+                        preferredSize.Width += borderAndPaddingWidths;
+                        preferredSize.Height += borderAndPaddingHeights;
+                        return preferredSize;
                     }
-                    if (showGlyph)
-                    {
-                        preferredSize.Width += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
-                    }
-                    if (showRowErrors)
-                    {
-                        preferredSize.Width += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
-                    }
-                    if (showGlyph || showRowErrors)
-                    {
-                        preferredSize.Height = Math.Max(preferredSize.Height,
-                                                        DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight);
-                    }
-                    preferredSize.Width += borderAndPaddingWidths;
-                    preferredSize.Height += borderAndPaddingHeights;
-                    return preferredSize;
-                }
             }
         }
 
@@ -437,30 +433,30 @@ namespace System.Windows.Forms
 
         internal static bool ValidTextFormatFlags(TextFormatFlags flags)
         {
-            return (flags & ~(TextFormatFlags.Bottom | 
-                              TextFormatFlags.Default | 
-                              TextFormatFlags.EndEllipsis | 
-                              TextFormatFlags.ExpandTabs | 
-                              TextFormatFlags.ExternalLeading | 
-                              TextFormatFlags.HidePrefix | 
-                              TextFormatFlags.HorizontalCenter | 
-                              TextFormatFlags.Internal | 
-                              TextFormatFlags.Left | 
-                              TextFormatFlags.ModifyString | 
-                              TextFormatFlags.NoClipping | 
-                              TextFormatFlags.NoFullWidthCharacterBreak | 
-                              TextFormatFlags.NoPrefix | 
-                              TextFormatFlags.PathEllipsis | 
-                              TextFormatFlags.PrefixOnly | 
-                              TextFormatFlags.PreserveGraphicsClipping | 
-                              TextFormatFlags.PreserveGraphicsTranslateTransform | 
-                              TextFormatFlags.Right | 
-                              TextFormatFlags.RightToLeft | 
-                              TextFormatFlags.SingleLine | 
-                              TextFormatFlags.TextBoxControl | 
-                              TextFormatFlags.Top | 
-                              TextFormatFlags.VerticalCenter | 
-                              TextFormatFlags.WordBreak | 
+            return (flags & ~(TextFormatFlags.Bottom |
+                              TextFormatFlags.Default |
+                              TextFormatFlags.EndEllipsis |
+                              TextFormatFlags.ExpandTabs |
+                              TextFormatFlags.ExternalLeading |
+                              TextFormatFlags.HidePrefix |
+                              TextFormatFlags.HorizontalCenter |
+                              TextFormatFlags.Internal |
+                              TextFormatFlags.Left |
+                              TextFormatFlags.ModifyString |
+                              TextFormatFlags.NoClipping |
+                              TextFormatFlags.NoFullWidthCharacterBreak |
+                              TextFormatFlags.NoPrefix |
+                              TextFormatFlags.PathEllipsis |
+                              TextFormatFlags.PrefixOnly |
+                              TextFormatFlags.PreserveGraphicsClipping |
+                              TextFormatFlags.PreserveGraphicsTranslateTransform |
+                              TextFormatFlags.Right |
+                              TextFormatFlags.RightToLeft |
+                              TextFormatFlags.SingleLine |
+                              TextFormatFlags.TextBoxControl |
+                              TextFormatFlags.Top |
+                              TextFormatFlags.VerticalCenter |
+                              TextFormatFlags.WordBreak |
                               TextFormatFlags.WordEllipsis)) == 0;
         }
     }

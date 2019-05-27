@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Automation {
+namespace System.Windows.Forms.Automation
+{
 
     /// <summary>
     /// Specifies the order in which to process a notification.
     /// </summary>
-    public enum AutomationNotificationProcessing {
+    public enum AutomationNotificationProcessing
+    {
 
         /// <summary>
         /// These notifications should be presented to the user as soon as possible. 

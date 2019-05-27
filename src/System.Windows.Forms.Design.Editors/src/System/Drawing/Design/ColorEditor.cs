@@ -25,11 +25,9 @@ namespace System.Drawing.Design
         private ColorUI colorUI;
 
         /// <summary>
-        ///     Edits the given object value using the editor style
-        ///     provided by ColorEditor.GetEditStyle.
+        /// Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
         /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             object returnValue = value;
@@ -60,39 +58,34 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///     Gets the editing style of the Edit method. If the method
-        ///     is not supported, this will return UITypeEditorEditStyle.None.
+        /// Gets the editing style of the Edit method.
+        /// If the method is not supported, this will return UITypeEditorEditStyle.None.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
         }
 
         /// <summary>
-        ///     Gets a value indicating if this editor supports the painting of a representation
-        ///     of an object's value.
+        /// Gets a value indicating if this editor supports the painting of a representation
+        /// of an object's value.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
             return true;
         }
 
         /// <summary>
-        ///     Paints a representative value of the given object to the provided
-        ///     canvas. Painting should be done within the boundaries of the
-        ///     provided rectangle.
+        /// Paints a representative value of the given object to the provided canvas.
+        /// Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")] //Benign code
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
+        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
-            if (e.Value is Color)
+            if (e.Value is Color color)
             {
-                Color color = (Color)e.Value;
                 SolidBrush b = new SolidBrush(color);
                 e.Graphics.FillRectangle(b, e.Bounds);
                 b.Dispose();
@@ -145,7 +138,7 @@ namespace System.Drawing.Design
 
             public ColorPalette(ColorUI colorUI, Color[] customColors)
             {
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
@@ -169,9 +162,11 @@ namespace System.Drawing.Design
                 staticColors = new Color[CELLS - CELLS_CUSTOM];
 
                 for (int i = 0; i < staticCells.Length; i++)
+                {
                     staticColors[i] = ColorTranslator.FromOle(staticCells[i]);
+                }
 
-                this.CustomColors = customColors;
+                CustomColors = customColors;
             }
 
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -245,7 +240,10 @@ namespace System.Drawing.Design
             private Color GetColorFromCell(int index)
             {
                 if (index < CELLS - CELLS_CUSTOM)
+                {
                     return staticColors[index];
+                }
+
                 return CustomColors[index - CELLS + CELLS_CUSTOM];
             }
 
@@ -471,12 +469,13 @@ namespace System.Drawing.Design
                 {
                     g.FillRectangle(brush, ClientRectangle);
                 }
-                Rectangle rect = new Rectangle();
-
-                rect.Width = cellSizeX;
-                rect.Height = cellSizeY;
-                rect.X = marginX;
-                rect.Y = marginY;
+                Rectangle rect = new Rectangle
+                {
+                    Width = cellSizeX,
+                    Height = cellSizeY,
+                    X = marginX,
+                    Y = marginY
+                };
                 bool drawSelected = false;
 
                 for (int y = 0; y < CELLS_DOWN; y++)
@@ -813,27 +812,31 @@ namespace System.Drawing.Design
                 tabControl.TabPages.Add(systemTabPage);
                 tabControl.TabStop = false;
                 tabControl.SelectedTab = systemTabPage;
-                tabControl.SelectedIndexChanged += new EventHandler(this.OnTabControlSelChange);
+                tabControl.SelectedIndexChanged += new EventHandler(OnTabControlSelChange);
                 tabControl.Dock = DockStyle.Fill;
-                tabControl.Resize += new EventHandler(this.OnTabControlResize);
+                tabControl.Resize += new EventHandler(OnTabControlResize);
 
-                lbSystem = new ColorEditorListBox();
-                lbSystem.DrawMode = DrawMode.OwnerDrawFixed;
-                lbSystem.BorderStyle = BorderStyle.FixedSingle;
-                lbSystem.IntegralHeight = false;
-                lbSystem.Sorted = false;
-                lbSystem.Click += new EventHandler(this.OnListClick);
+                lbSystem = new ColorEditorListBox
+                {
+                    DrawMode = DrawMode.OwnerDrawFixed,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    IntegralHeight = false,
+                    Sorted = false
+                };
+                lbSystem.Click += new EventHandler(OnListClick);
                 lbSystem.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbSystem.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbSystem.Dock = DockStyle.Fill;
-                lbSystem.FontChanged += new EventHandler(this.OnFontChanged);
+                lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
-                lbCommon = new ColorEditorListBox();
-                lbCommon.DrawMode = DrawMode.OwnerDrawFixed;
-                lbCommon.BorderStyle = BorderStyle.FixedSingle;
-                lbCommon.IntegralHeight = false;
-                lbCommon.Sorted = false;
-                lbCommon.Click += new EventHandler(this.OnListClick);
+                lbCommon = new ColorEditorListBox
+                {
+                    DrawMode = DrawMode.OwnerDrawFixed,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    IntegralHeight = false,
+                    Sorted = false
+                };
+                lbCommon.Click += new EventHandler(OnListClick);
                 lbCommon.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
                 lbCommon.KeyDown += new KeyEventHandler(this.OnListKeyDown);
                 lbCommon.Dock = DockStyle.Fill;
@@ -853,7 +856,7 @@ namespace System.Drawing.Design
                 }
 
                 pal = new ColorPalette(this, CustomColors);
-                pal.Picked += new EventHandler(this.OnPalettePick);
+                pal.Picked += new EventHandler(OnPalettePick);
 
                 paletteTabPage.Controls.Add(pal);
                 systemTabPage.Controls.Add(lbSystem);
@@ -973,9 +976,14 @@ namespace System.Drawing.Design
                     {
                         int count = tabControl.TabPages.Count;
                         if (forward)
+                        {
                             sel = (sel + 1) % count;
+                        }
                         else
+                        {
                             sel = (sel + count - 1) % count;
+                        }
+
                         tabControl.SelectedTab = tabControl.TabPages[sel];
 
                         return true;
@@ -1113,13 +1121,13 @@ namespace System.Drawing.Design
             {
                 switch (msg)
                 {
-                    case NativeMethods.WM_INITDIALOG:
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                    case Interop.WindowMessages.WM_INITDIALOG:
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
                         NativeMethods.EnableWindow(hwndCtl, false);
                         NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
@@ -1128,7 +1136,7 @@ namespace System.Drawing.Design
                         NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
-                    case NativeMethods.WM_COMMAND:
+                    case Interop.WindowMessages.WM_COMMAND:
                         switch (NativeMethods.Util.LOWORD(unchecked((int)(long)wParam)))
                         {
                             case COLOR_ADD:
@@ -1141,7 +1149,7 @@ namespace System.Drawing.Design
                                 blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                NativeMethods.PostMessage(hwnd, NativeMethods.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                NativeMethods.PostMessage(hwnd, Interop.WindowMessages.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
                                 break;
                         }
                         break;

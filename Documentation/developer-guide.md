@@ -6,7 +6,7 @@ The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Follow the [Building CoreFX on Windows][corefx-windows-instructions] instructions. However, we recommend Visual Studio 2019 Preview 1.
+Follow the [Building CoreFX on Windows][corefx-windows-instructions] instructions. In particular, [Visual Studio 2019 Preview][vs-preview] is required to develop on .NET Core.
 
 Windows Forms requires the following workloads and components be selected when installing Visual Studio:
 
@@ -39,6 +39,7 @@ You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This
 [comment]: <> (URI Links)
 
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
+[vs-preview]: https://visualstudio.microsoft.com/vs/preview/
 [fork]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository
 [clone]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository
 [git-commands]: https://github.com/dotnet/corefx/wiki/git-reference

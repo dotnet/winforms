@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewRowHeightInfoNeededEventHandler handler = (sender, e) =>
             {
                 callCount++;
-                Assert.Throws<ArgumentOutOfRangeException>("Height", () => e.Height = value);
+                Assert.Throws<ArgumentOutOfRangeException>("value", () => e.Height = value);
             };
             dataGridView.RowHeightInfoNeeded += handler;
 
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewRowHeightInfoNeededEventHandler handler = (sender, e) =>
             {
                 callCount++;
-                Assert.Throws<ArgumentOutOfRangeException>("MinimumHeight", () => e.MinimumHeight = value);
+                Assert.Throws<ArgumentOutOfRangeException>("value", () => e.MinimumHeight = value);
             };
             dataGridView.RowHeightInfoNeeded += handler;
 

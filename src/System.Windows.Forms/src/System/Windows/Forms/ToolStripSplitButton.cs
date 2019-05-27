@@ -2,279 +2,298 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.Drawing;
     using System.Windows.Forms;
     using System.Drawing.Imaging;
     using System.ComponentModel;
-    using System.Windows.Forms.Design; 
+    using System.Windows.Forms.Design;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Diagnostics;
     using System.Windows.Forms.Layout;
     using System.Runtime.Versioning;
-    
-    /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton"]/*' />
+
     /// <devdoc/>
     [
     ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip),
     DefaultEvent(nameof(ButtonClick))
     ]
-    public class ToolStripSplitButton : ToolStripDropDownItem {
-        
-        private ToolStripItem                    defaultItem                =  null;
-        private ToolStripSplitButtonButton       splitButtonButton          =  null;      
-        private Rectangle                     dropDownButtonBounds       =  Rectangle.Empty;
-        private ToolStripSplitButtonButtonLayout splitButtonButtonLayout    =  null;
-        private int                           dropDownButtonWidth        =  0;
-        private int                           splitterWidth              =  1;
-        private Rectangle                     splitterBounds             =  Rectangle.Empty;
-        private byte                          openMouseId                =  0;
+    public class ToolStripSplitButton : ToolStripDropDownItem
+    {
+
+        private ToolStripItem defaultItem = null;
+        private ToolStripSplitButtonButton splitButtonButton = null;
+        private Rectangle dropDownButtonBounds = Rectangle.Empty;
+        private ToolStripSplitButtonButtonLayout splitButtonButtonLayout = null;
+        private int dropDownButtonWidth = 0;
+        private int splitterWidth = 1;
+        private Rectangle splitterBounds = Rectangle.Empty;
+        private byte openMouseId = 0;
         private long lastClickTime = 0;
 
         private const int DEFAULT_DROPDOWN_WIDTH = 11;
 
-        private static readonly object EventDefaultItemChanged                         = new object();
-        private static readonly object EventButtonClick                                = new object();
-        private static readonly object EventButtonDoubleClick                          = new object();
-        private static readonly object EventDropDownOpened                             = new object();
-        private static readonly object EventDropDownClosed                             = new object();
+        private static readonly object EventDefaultItemChanged = new object();
+        private static readonly object EventButtonClick = new object();
+        private static readonly object EventButtonDoubleClick = new object();
+        private static readonly object EventDropDownOpened = new object();
+        private static readonly object EventDropDownClosed = new object();
 
         private static bool isScalingInitialized = false;
         private static int scaledDropDownButtonWidth = DEFAULT_DROPDOWN_WIDTH;
-       
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ToolStripSplitButton"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         /// Summary of ToolStripSplitButton.
-        /// </devdoc>
-        public ToolStripSplitButton() {
+        /// </summary>
+        public ToolStripSplitButton()
+        {
             Initialize(); // all additional work should be done in Initialize
         }
-        public ToolStripSplitButton(string text):base(text,null,(EventHandler)null) {
-            Initialize(); 
+        public ToolStripSplitButton(string text) : base(text, null, (EventHandler)null)
+        {
+            Initialize();
         }
-        public ToolStripSplitButton(Image image):base(null,image,(EventHandler)null) {
-            Initialize(); 
+        public ToolStripSplitButton(Image image) : base(null, image, (EventHandler)null)
+        {
+            Initialize();
         }
-        public ToolStripSplitButton(string text, Image image):base(text,image,(EventHandler)null) {
-            Initialize(); 
+        public ToolStripSplitButton(string text, Image image) : base(text, image, (EventHandler)null)
+        {
+            Initialize();
         }
-        public ToolStripSplitButton(string text, Image image, EventHandler onClick):base(text,image,onClick) {
-            Initialize(); 
+        public ToolStripSplitButton(string text, Image image, EventHandler onClick) : base(text, image, onClick)
+        {
+            Initialize();
         }
-        public ToolStripSplitButton(string text, Image image, EventHandler onClick, string name) :base(text,image,onClick,name){
-            Initialize(); 
+        public ToolStripSplitButton(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
+        {
+            Initialize();
         }
-        public ToolStripSplitButton(string text, Image image, params ToolStripItem[] dropDownItems):base(text,image,dropDownItems) {
-            Initialize(); 
+        public ToolStripSplitButton(string text, Image image, params ToolStripItem[] dropDownItems) : base(text, image, dropDownItems)
+        {
+            Initialize();
         }
 
         [DefaultValue(true)]
-        public new bool AutoToolTip {
-            get { 
+        public new bool AutoToolTip
+        {
+            get
+            {
                 return base.AutoToolTip;
             }
-            set {
+            set
+            {
                 base.AutoToolTip = value;
             }
         }
 
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of ToolStripSplitButton.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public Rectangle ButtonBounds {
-            get {
+        public Rectangle ButtonBounds
+        {
+            get
+            {
                 //Rectangle bounds = SplitButtonButton.Bounds;
                 //bounds.Offset(this.Bounds.Location);
                 return SplitButtonButton.Bounds;
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonPressed"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of ButtonPressed.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public bool ButtonPressed {
-            get {
+        public bool ButtonPressed
+        {
+            get
+            {
                 return SplitButtonButton.Pressed;
 
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonSelected"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of ButtonPressed.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public bool ButtonSelected {
-            get {
+        public bool ButtonSelected
+        {
+            get
+            {
                 return SplitButtonButton.Selected || DropDownButtonPressed;
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the button portion of a split button is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripSplitButtonOnButtonClickDescr))
         ]
-        public event EventHandler ButtonClick {
-            add { 
-                Events.AddHandler(EventButtonClick, value); 
-            }
-            remove {
-                Events.RemoveHandler(EventButtonClick, value);
-            }
+        public event EventHandler ButtonClick
+        {
+            add => Events.AddHandler(EventButtonClick, value);
+            remove => Events.RemoveHandler(EventButtonClick, value);
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonDoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the utton portion of a split button  is double clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripSplitButtonOnButtonDoubleClickDescr))
         ]
-        public event EventHandler ButtonDoubleClick {
-            add {
-                Events.AddHandler(EventButtonDoubleClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventButtonDoubleClick, value);
-            }
+        public event EventHandler ButtonDoubleClick
+        {
+            add => Events.AddHandler(EventButtonDoubleClick, value);
+            remove => Events.RemoveHandler(EventButtonDoubleClick, value);
         }
 
 
-        protected override bool DefaultAutoToolTip {
-            get { 
-               return true; 
+        protected override bool DefaultAutoToolTip
+        {
+            get
+            {
+                return true;
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DefaultItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of DefaultItem.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(null), Browsable(false)]
-        public ToolStripItem DefaultItem {
-            get { 
-                return defaultItem; 
+        public ToolStripItem DefaultItem
+        {
+            get
+            {
+                return defaultItem;
             }
-            set { 
-                if (defaultItem != value) {
-                    OnDefaultItemChanged(new EventArgs()); 
-                    defaultItem = value; 
+            set
+            {
+                if (defaultItem != value)
+                {
+                    OnDefaultItemChanged(EventArgs.Empty);
+                    defaultItem = value;
                 }
             }
         }
-     
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DefaultItemChanged"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         /// <para>Occurs when the default item has changed</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripSplitButtonOnDefaultItemChangedDescr))
         ]
-        public event EventHandler DefaultItemChanged {
-            add { 
-                Events.AddHandler(EventDefaultItemChanged, value); 
-            }
-            remove {
-                Events.RemoveHandler(EventDefaultItemChanged, value);
-            }
+        public event EventHandler DefaultItemChanged
+        {
+            add => Events.AddHandler(EventDefaultItemChanged, value);
+            remove => Events.RemoveHandler(EventDefaultItemChanged, value);
         }
-	
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DismissWhenClicked"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         /// specifies the default behavior of these items on ToolStripDropDowns when clicked.
-        /// </devdoc>
-        internal protected override bool DismissWhenClicked {
-            get {
+        /// </summary>
+        internal protected override bool DismissWhenClicked
+        {
+            get
+            {
                 return DropDown.Visible != true;
             }
 
         }
-        
-        internal override Rectangle DropDownButtonArea {
-               get { return this.DropDownButtonBounds; }
+
+        internal override Rectangle DropDownButtonArea
+        {
+            get { return DropDownButtonBounds; }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// The bounds of the DropDown in ToolStrip coordinates.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public Rectangle DropDownButtonBounds {
-            get {
-                 return dropDownButtonBounds; 
+        public Rectangle DropDownButtonBounds
+        {
+            get
+            {
+                return dropDownButtonBounds;
             }
 
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonPressed"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of DropDownButtonBounds.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public bool DropDownButtonPressed {
-            get {
+        public bool DropDownButtonPressed
+        {
+            get
+            {
                 // 
-                return DropDown.Visible; 
+                return DropDown.Visible;
             }
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonSelected"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of DropDownButtonSelected.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public bool DropDownButtonSelected{
-            get {
-                return this.Selected; 
+        public bool DropDownButtonSelected
+        {
+            get
+            {
+                return Selected;
             }
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonWidth"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of DropDownButtonWidth.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))
         ]
-        public int DropDownButtonWidth {
-            get{ 
+        public int DropDownButtonWidth
+        {
+            get
+            {
                 return dropDownButtonWidth;
             }
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     // throw if less than 0.
-                    throw new ArgumentOutOfRangeException(nameof(DropDownButtonWidth), string.Format(SR.InvalidLowBoundArgumentEx, "DropDownButtonWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));                
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(DropDownButtonWidth), value, 0));
                 }
-            
-                if (dropDownButtonWidth != value) {
+
+                if (dropDownButtonWidth != value)
+                {
                     dropDownButtonWidth = value;
                     InvalidateSplitButtonLayout();
                     InvalidateItemLayout(PropertyNames.DropDownButtonWidth, true);
                 }
-             }
+            }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is here for serialization purposes.
-        /// </devdoc>
-        private int DefaultDropDownButtonWidth {
-            get {
+        /// </summary>
+        private int DefaultDropDownButtonWidth
+        {
+            get
+            {
                 // lets start off with a size roughly equivalent to a combobox dropdown
-                if (!isScalingInitialized) {
-                    if (DpiHelper.IsScalingRequired) {
+                if (!isScalingInitialized)
+                {
+                    if (DpiHelper.IsScalingRequired)
+                    {
                         scaledDropDownButtonWidth = DpiHelper.LogicalToDeviceUnitsX(DEFAULT_DROPDOWN_WIDTH);
-                    }                   
+                    }
                     isScalingInitialized = true;
                 }
 
@@ -282,274 +301,295 @@ namespace System.Windows.Forms {
             }
         }
 
-     
-                
+
+
         /// <summary>
         /// Just used as a convenience to help manage layout
         /// </summary>
-        private ToolStripSplitButtonButton SplitButtonButton {
-            get { 
-                if (splitButtonButton == null) { 
+        private ToolStripSplitButtonButton SplitButtonButton
+        {
+            get
+            {
+                if (splitButtonButton == null)
+                {
                     splitButtonButton = new ToolStripSplitButtonButton(this);
                 }
-                splitButtonButton.Image = this.Image;
-                splitButtonButton.Text = this.Text;
-                splitButtonButton.BackColor = this.BackColor;
-                splitButtonButton.ForeColor = this.ForeColor;
-                splitButtonButton.Font = this.Font;
-                splitButtonButton.ImageAlign = this.ImageAlign;
-                splitButtonButton.TextAlign = this.TextAlign;
-                splitButtonButton.TextImageRelation = this.TextImageRelation;
+                splitButtonButton.Image = Image;
+                splitButtonButton.Text = Text;
+                splitButtonButton.BackColor = BackColor;
+                splitButtonButton.ForeColor = ForeColor;
+                splitButtonButton.Font = Font;
+                splitButtonButton.ImageAlign = ImageAlign;
+                splitButtonButton.TextAlign = TextAlign;
+                splitButtonButton.TextImageRelation = TextImageRelation;
                 return splitButtonButton;
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of SplitButtonButtonLayout.
-        /// </devdoc>	
-        internal ToolStripItemInternalLayout SplitButtonButtonLayout {
-            get { 
+        /// </summary>	
+        internal ToolStripItemInternalLayout SplitButtonButtonLayout
+        {
+            get
+            {
                 // For preferred size caching reasons, we need to keep our two 
                 // internal layouts (button, dropdown button) in sync. 
-             
+
                 if (InternalLayout != null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
-                    && splitButtonButtonLayout == null) {
+                    && splitButtonButtonLayout == null)
+                {
                     splitButtonButtonLayout = new ToolStripSplitButtonButtonLayout(this);
                 }
                 return splitButtonButtonLayout;
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.SplitterWidth"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// the width of the separator between the default and drop down button
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ToolStripSplitButtonSplitterWidthDescr)),
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
-        internal int SplitterWidth {
-            get {
+        internal int SplitterWidth
+        {
+            get
+            {
                 return splitterWidth;
             }
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     splitterWidth = 0;
                 }
-                else {
+                else
+                {
                     splitterWidth = value;
                 }
                 InvalidateSplitButtonLayout();
             }
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.SplitterBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// the boundaries of the separator between the default and drop down button, exposed for custom
         /// painting purposes.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public Rectangle SplitterBounds {
-            get {
+        public Rectangle SplitterBounds
+        {
+            get
+            {
                 return splitterBounds;
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of CalculateLayout.
-        /// </devdoc>	
-        private void CalculateLayout() {
+        /// </summary>	
+        private void CalculateLayout()
+        {
 
             // Figure out where the DropDown image goes.
-            Rectangle dropDownButtonBounds = new Rectangle(Point.Empty, this.Size);
+            Rectangle dropDownButtonBounds = new Rectangle(Point.Empty, Size);
             Rectangle splitButtonButtonBounds = Rectangle.Empty;
-			
-           
-            dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(this.Width, DropDownButtonWidth), this.Height));
-   			
+
+
+            dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(Width, DropDownButtonWidth), Height));
+
             // Figure out the height and width of the selected item.
-            int splitButtonButtonWidth = Math.Max(0, this.Width - dropDownButtonBounds.Width);
-            int splitButtonButtonHeight = Math.Max(0, this.Height);
+            int splitButtonButtonWidth = Math.Max(0, Width - dropDownButtonBounds.Width);
+            int splitButtonButtonHeight = Math.Max(0, Height);
 
             splitButtonButtonBounds = new Rectangle(Point.Empty, new Size(splitButtonButtonWidth, splitButtonButtonHeight));
 
             // grow the selected item by one since we're overlapping the borders.
-            splitButtonButtonBounds.Width -= splitterWidth; 
+            splitButtonButtonBounds.Width -= splitterWidth;
 
-            if (this.RightToLeft == RightToLeft.No) {
+            if (RightToLeft == RightToLeft.No)
+            {
                 // the dropdown button goes on the right
-                dropDownButtonBounds.Offset(splitButtonButtonBounds.Right+splitterWidth, 0);
+                dropDownButtonBounds.Offset(splitButtonButtonBounds.Right + splitterWidth, 0);
                 splitterBounds = new Rectangle(splitButtonButtonBounds.Right, splitButtonButtonBounds.Top, splitterWidth, splitButtonButtonBounds.Height);
             }
-            else {
+            else
+            {
                 // the split button goes on the right.
-                splitButtonButtonBounds.Offset(DropDownButtonWidth+splitterWidth, 0);
+                splitButtonButtonBounds.Offset(DropDownButtonWidth + splitterWidth, 0);
                 splitterBounds = new Rectangle(dropDownButtonBounds.Right, dropDownButtonBounds.Top, splitterWidth, dropDownButtonBounds.Height);
-      
+
             }
-            
-            this.SplitButtonButton.SetBounds(splitButtonButtonBounds);
-            this.SetDropDownButtonBounds(dropDownButtonBounds);
+
+            SplitButtonButton.SetBounds(splitButtonButtonBounds);
+            SetDropDownButtonBounds(dropDownButtonBounds);
 
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripSplitButtonUiaProvider(this);
-            }
-            else if (AccessibilityImprovements.Level1) {
-                return new ToolStripSplitButtonExAccessibleObject(this);
-            }
-            else {
-                return new ToolStripSplitButtonAccessibleObject(this);
-            }
-       }
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ToolStripSplitButtonUiaProvider(this);
+        }
 
-        protected override ToolStripDropDown CreateDefaultDropDown() {
-             // AutoGenerate a Winbar DropDown - set the property so we hook events
-              return new ToolStripDropDownMenu(this, /*isAutoGenerated=*/true);
-         }
+        protected override ToolStripDropDown CreateDefaultDropDown()
+        {
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
+            return new ToolStripDropDownMenu(this, /*isAutoGenerated=*/true);
+        }
 
 
-        internal override ToolStripItemInternalLayout CreateInternalLayout() {
+        internal override ToolStripItemInternalLayout CreateInternalLayout()
+        {
             // whenever the master layout is invalidated - invalidate the splitbuttonbutton layout.
-            this.splitButtonButtonLayout = null;
+            splitButtonButtonLayout = null;
             return new ToolStripItemInternalLayout(this);
-            
+
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.GetPreferredSize"]/*' />
-        public override Size GetPreferredSize(Size constrainingSize) {
+        public override Size GetPreferredSize(Size constrainingSize)
+        {
             Size preferredSize = SplitButtonButtonLayout.GetPreferredSize(constrainingSize);
             preferredSize.Width += DropDownButtonWidth + SplitterWidth + Padding.Horizontal;
             return preferredSize;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of InvalidateSplitButtonLayout.
-        /// </devdoc>	
-        private void InvalidateSplitButtonLayout() {
-            this.splitButtonButtonLayout = null;	
+        /// </summary>	
+        private void InvalidateSplitButtonLayout()
+        {
+            splitButtonButtonLayout = null;
             CalculateLayout();
         }
 
-        private void Initialize() {           
+        private void Initialize()
+        {
             dropDownButtonWidth = DefaultDropDownButtonWidth;
             SupportsSpaceKey = true;
         }
 
-        protected internal override bool ProcessDialogKey(Keys keyData) {
-            if (Enabled && (keyData == Keys.Enter || (SupportsSpaceKey && keyData == Keys.Space))) {
-               PerformButtonClick();
-               return true;
+        protected internal override bool ProcessDialogKey(Keys keyData)
+        {
+            if (Enabled && (keyData == Keys.Enter || (SupportsSpaceKey && keyData == Keys.Space)))
+            {
+                PerformButtonClick();
+                return true;
             }
-            
+
             return base.ProcessDialogKey(keyData);
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
-        protected internal override bool ProcessMnemonic(char charCode) {
-           // checking IsMnemonic is not necessary - toolstrip does this for us          
-           PerformButtonClick();
-           return true;
+        protected internal override bool ProcessMnemonic(char charCode)
+        {
+            // checking IsMnemonic is not necessary - toolstrip does this for us          
+            PerformButtonClick();
+            return true;
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnButtonClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// called when the button portion of a split button is clicked
         /// if there is a default item, this will route the click to the default item
-        /// </devdoc>
-        protected virtual void OnButtonClick(System.EventArgs e) {
- 
-            if (DefaultItem != null) {
-                DefaultItem.FireEvent(ToolStripItemEventType.Click);
-            }
+        /// </summary>
+        protected virtual void OnButtonClick(System.EventArgs e)
+        {
 
-            EventHandler handler = (EventHandler)Events[EventButtonClick];
-            if (handler != null) handler(this, e);
- 
+            if (DefaultItem != null)
+            {
+                DefaultItem.FireEvent(ToolStripItemEventType.Click);
+            } ((EventHandler)Events[EventButtonClick])?.Invoke(this, e);
         }
-        
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnButtonDoubleClick"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         /// called when the button portion of a split button is double clicked
         /// if there is a default item, this will route the double click to the default item
-        /// </devdoc>
-        public virtual void OnButtonDoubleClick(System.EventArgs e) {
-            if (DefaultItem != null) {
+        /// </summary>
+        public virtual void OnButtonDoubleClick(System.EventArgs e)
+        {
+            if (DefaultItem != null)
+            {
                 DefaultItem.FireEvent(ToolStripItemEventType.DoubleClick);
-            }
-           
-            EventHandler handler = (EventHandler)Events[EventButtonDoubleClick];
-            if (handler != null) handler(this,e);
+            } ((EventHandler)Events[EventButtonDoubleClick])?.Invoke(this, e);
         }
 
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnDefaultItemChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
-        protected virtual void OnDefaultItemChanged(EventArgs e) {
+        /// </summary>
+        protected virtual void OnDefaultItemChanged(EventArgs e)
+        {
             InvalidateSplitButtonLayout();
-            if (CanRaiseEvents) {
-                EventHandler eh = Events[EventDefaultItemChanged] as EventHandler;
-                if (eh != null) {
+            if (CanRaiseEvents)
+            {
+                if (Events[EventDefaultItemChanged] is EventHandler eh)
+                {
                     eh(this, e);
                 }
             }
 
-        }        
+        }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnMouseDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnMouseDown.
-        /// </devdoc>
-        protected override void OnMouseDown(MouseEventArgs e) {
-		    
-            if (DropDownButtonBounds.Contains(e.Location)) {
-                if (e.Button == MouseButtons.Left) {
-                   
-                    if (!DropDown.Visible) {
+        /// </summary>
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+
+            if (DropDownButtonBounds.Contains(e.Location))
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+
+                    if (!DropDown.Visible)
+                    {
                         Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                        openMouseId = (ParentInternal == null) ? (byte)0: ParentInternal.GetMouseId();
-                        this.ShowDropDown(/*mousePress = */true);
+                        openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                        ShowDropDown(/*mousePress = */true);
                     }
                 }
             }
-            else {
+            else
+            {
                 SplitButtonButton.Push(true);
             }
 
         }
-        
-            
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnMouseUp"]/*' />
-        /// <devdoc>
+
+
+        /// <summary>
         /// Summary of OnMouseUp.
-        /// </devdoc>
-        protected override void OnMouseUp(MouseEventArgs e) {
-            if (!Enabled) {
+        /// </summary>
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (!Enabled)
+            {
                 return;
             }
-           
+
 
             SplitButtonButton.Push(false);
- 
-            if (DropDownButtonBounds.Contains(e.Location)) {
-                if (e.Button == MouseButtons.Left) {
-                    if (DropDown.Visible) {
+
+            if (DropDownButtonBounds.Contains(e.Location))
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    if (DropDown.Visible)
+                    {
                         Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                        byte closeMouseId = (ParentInternal == null) ? (byte)0: ParentInternal.GetMouseId();
-                        if (closeMouseId != openMouseId) {
+                        byte closeMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                        if (closeMouseId != openMouseId)
+                        {
                             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
                             ToolStripManager.ModalMenuFilter.CloseActiveDropDown(DropDown, ToolStripDropDownCloseReason.AppClicked);
                             Select();
-                       }
+                        }
                     }
                 }
             }
             Point clickPoint = new Point(e.X, e.Y);
-            if ((e.Button == MouseButtons.Left) && this.SplitButtonButton.Bounds.Contains(clickPoint)) {
+            if ((e.Button == MouseButtons.Left) && SplitButtonButton.Bounds.Contains(clickPoint))
+            {
                 bool shouldFireDoubleClick = false;
-                if (DoubleClickEnabled) {
+                if (DoubleClickEnabled)
+                {
                     long newTime = DateTime.Now.Ticks;
                     long deltaTicks = newTime - lastClickTime;
                     lastClickTime = newTime;
@@ -557,295 +597,357 @@ namespace System.Windows.Forms {
                     // DateTime resolution.
                     Debug.Assert(deltaTicks >= 0, "why are deltaticks less than zero? thats some mighty fast clicking");
                     // if we've seen a mouse up less than the double click time ago, we should fire.
-                    if (deltaTicks >= 0 && deltaTicks < DoubleClickTicks) {
+                    if (deltaTicks >= 0 && deltaTicks < DoubleClickTicks)
+                    {
                         shouldFireDoubleClick = true;
                     }
                 }
-                if (shouldFireDoubleClick) {
+                if (shouldFireDoubleClick)
+                {
                     OnButtonDoubleClick(EventArgs.Empty);
                     // If we actually fired DoubleClick - reset the lastClickTime.
                     lastClickTime = 0;
-                } 
-                else {
+                }
+                else
+                {
                     OnButtonClick(EventArgs.Empty);
-                }           
+                }
             }
 
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnMouseLeave"]/*' />
-        protected override void OnMouseLeave(EventArgs e) {
+        protected override void OnMouseLeave(EventArgs e)
+        {
             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
             SplitButtonButton.Push(false);
             base.OnMouseLeave(e);
         }
-      	
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         /// Summary of OnRightToLeftChanged.
-        /// </devdoc>
-        protected override void OnRightToLeftChanged(EventArgs e) {
+        /// </summary>
+        protected override void OnRightToLeftChanged(EventArgs e)
+        {
             base.OnRightToLeftChanged(e);
-            InvalidateSplitButtonLayout();			
+            InvalidateSplitButtonLayout();
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnPaint.
-        /// </devdoc>
+        /// </summary>
         /// <param name=e></param>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
+        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        {
 
-             ToolStripRenderer renderer = this.Renderer;
-             if (renderer != null) {
-                 InvalidateSplitButtonLayout();
-                 Graphics g = e.Graphics;
+            ToolStripRenderer renderer = Renderer;
+            if (renderer != null)
+            {
+                InvalidateSplitButtonLayout();
+                Graphics g = e.Graphics;
 
-                 renderer.DrawSplitButton(new ToolStripItemRenderEventArgs(g, this));
+                renderer.DrawSplitButton(new ToolStripItemRenderEventArgs(g, this));
 
-                 if ((DisplayStyle & ToolStripItemDisplayStyle.Image) != ToolStripItemDisplayStyle.None)  {   
-                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, SplitButtonButtonLayout.ImageRectangle));             
-                 }
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) != ToolStripItemDisplayStyle.None)
+                {
+                    renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, SplitButtonButtonLayout.ImageRectangle));
+                }
 
-                 if ((DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.None) {                    
-                      renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, SplitButtonButton.Text, SplitButtonButtonLayout.TextRectangle, this.ForeColor, this.Font, SplitButtonButtonLayout.TextFormat));
-                 }
-             }
-        }  
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.None)
+                {
+                    renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, SplitButtonButton.Text, SplitButtonButtonLayout.TextRectangle, ForeColor, Font, SplitButtonButtonLayout.TextFormat));
+                }
+            }
+        }
 
-        public void PerformButtonClick() {
-            if (Enabled && Available) {
+        public void PerformButtonClick()
+        {
+            if (Enabled && Available)
+            {
                 PerformClick();
                 OnButtonClick(EventArgs.Empty);
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ResetDropDownButtonWidth"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Resets the RightToLeft to be the default.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual void ResetDropDownButtonWidth() {
+        public virtual void ResetDropDownButtonWidth()
+        {
             DropDownButtonWidth = DefaultDropDownButtonWidth;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of SetDropDownBounds.
-        /// </devdoc>
-        private void SetDropDownButtonBounds(Rectangle rect) {
-            dropDownButtonBounds = rect; 
+        /// </summary>
+        private void SetDropDownButtonBounds(Rectangle rect)
+        {
+            dropDownButtonBounds = rect;
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Size'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal virtual bool ShouldSerializeDropDownButtonWidth() {
-            return  (DropDownButtonWidth != DefaultDropDownButtonWidth);
+        internal virtual bool ShouldSerializeDropDownButtonWidth()
+        {
+            return (DropDownButtonWidth != DefaultDropDownButtonWidth);
         }
-            
-        /// <devdoc>
+
+        /// <summary>
         ///  This class represents the item to the left of the dropdown [ A |v]  (e.g the "A")  
         ///  It exists so that we can use our existing methods for text and image layout
         ///  and have a place to stick certain state information like pushed and selected 
-        ///  Note since this is NOT an actual item hosted on the Winbar - it wont get things
+        ///  Note since this is NOT an actual item hosted on the ToolStrip - it wont get things
         ///  like MouseOver, wont be laid out by the ToolStrip, etc etc.  This is purely internal
         ///  convenience.
-        /// </devdoc>
-        private class ToolStripSplitButtonButton : ToolStripButton {
+        /// </summary>
+        private class ToolStripSplitButtonButton : ToolStripButton
+        {
 
-            private ToolStripSplitButton owner = null;
+            private readonly ToolStripSplitButton owner = null;
 
-            public ToolStripSplitButtonButton(ToolStripSplitButton owner) {
-                   this.owner = owner;
+            public ToolStripSplitButtonButton(ToolStripSplitButton owner)
+            {
+                this.owner = owner;
             }
 
-            public override bool Enabled {
-                get {
+            public override bool Enabled
+            {
+                get
+                {
                     return owner.Enabled;
                 }
-                set {
+                set
+                {
                     // do nothing
                 }
             }
-            
 
-            public override ToolStripItemDisplayStyle DisplayStyle {
-                get {
+
+            public override ToolStripItemDisplayStyle DisplayStyle
+            {
+                get
+                {
                     return owner.DisplayStyle;
                 }
-                set {
+                set
+                {
                     // do nothing
                 }
             }
 
-            public override Padding Padding {
-                get {
-                    return this.owner.Padding;
+            public override Padding Padding
+            {
+                get
+                {
+                    return owner.Padding;
                 }
-                set {
+                set
+                {
                     // do nothing
                 }
             }
 
-          
-            public override ToolStripTextDirection TextDirection {
-                get {
+
+            public override ToolStripTextDirection TextDirection
+            {
+                get
+                {
                     return owner.TextDirection;
                 }
             }
-            
-            
-            public override Image Image {
-                
-                
-                get {
-                    if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) {
+
+
+            public override Image Image
+            {
+
+
+                get
+                {
+                    if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image)
+                    {
                         return owner.Image;
                     }
-                    else {
+                    else
+                    {
                         return null;
                     }
                 }
-                set {
+                set
+                {
                     // do nothing
                 }
             }
 
-            public override bool Selected {
-                get {
-                    
-                    if (owner != null) {
+            public override bool Selected
+            {
+                get
+                {
+
+                    if (owner != null)
+                    {
                         return owner.Selected;
                     }
                     return base.Selected;
                 }
             }
 
-            public override string Text {
-                get {
-                    if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) {
+            public override string Text
+            {
+                get
+                {
+                    if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
+                    {
                         return owner.Text;
                     }
-                    else {
+                    else
+                    {
                         return null;
                     }
                 }
-                set {
+                set
+                {
                     // do nothing
                 }
             }
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
-        private class ToolStripSplitButtonButtonLayout : ToolStripItemInternalLayout {
+        /// </summary>
+        private class ToolStripSplitButtonButtonLayout : ToolStripItemInternalLayout
+        {
+            readonly ToolStripSplitButton owner;
 
-            ToolStripSplitButton owner;
-
-            public ToolStripSplitButtonButtonLayout(ToolStripSplitButton owner) : base(owner.SplitButtonButton) {
+            public ToolStripSplitButtonButtonLayout(ToolStripSplitButton owner) : base(owner.SplitButtonButton)
+            {
                 this.owner = owner;
             }
 
-            protected override ToolStripItem Owner {
+            protected override ToolStripItem Owner
+            {
                 get { return owner; }
             }
 
-            protected override ToolStrip ParentInternal {
-                get {
+            protected override ToolStrip ParentInternal
+            {
+                get
+                {
                     return owner.ParentInternal;
                 }
             }
-            public override Rectangle ImageRectangle {
-                get {
+            public override Rectangle ImageRectangle
+            {
+                get
+                {
                     Rectangle imageRect = base.ImageRectangle;
                     // translate to ToolStripItem coordinates
                     imageRect.Offset(owner.SplitButtonButton.Bounds.Location);
-                    return imageRect;     
+                    return imageRect;
                 }
             }
-            
-            public override Rectangle TextRectangle {
-                get {
+
+            public override Rectangle TextRectangle
+            {
+                get
+                {
                     Rectangle textRect = base.TextRectangle;
                     // translate to ToolStripItem coordinates
                     textRect.Offset(owner.SplitButtonButton.Bounds.Location);
-                    return textRect;     
+                    return textRect;
                 }
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject"]/*' />        
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
-        public class ToolStripSplitButtonAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject {
-            private ToolStripSplitButton owner;
+        public class ToolStripSplitButtonAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
+        {
+            private readonly ToolStripSplitButton owner;
 
-            public ToolStripSplitButtonAccessibleObject(ToolStripSplitButton item) : base(item) {
+            public ToolStripSplitButtonAccessibleObject(ToolStripSplitButton item) : base(item)
+            {
                 owner = item;
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
-            public override void DoDefaultAction() {
+            public override void DoDefaultAction()
+            {
                 owner.PerformButtonClick();
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripSplitButtonExAccessibleObject"]/*' /> 
-        internal class ToolStripSplitButtonExAccessibleObject: ToolStripSplitButtonAccessibleObject {
+        internal class ToolStripSplitButtonExAccessibleObject : ToolStripSplitButtonAccessibleObject
+        {
 
-            private ToolStripSplitButton ownerItem;
+            private readonly ToolStripSplitButton ownerItem;
 
             public ToolStripSplitButtonExAccessibleObject(ToolStripSplitButton item)
-                : base(item) {
+                : base(item)
+            {
                 ownerItem = item;
             }
 
-            internal override object GetPropertyValue(int propertyID) {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+            internal override object GetPropertyValue(int propertyID)
+            {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                {
                     return NativeMethods.UIA_ButtonControlTypeId;
                 }
-                else {
+                else
+                {
                     return base.GetPropertyValue(propertyID);
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (ownerItem != null) {
+            internal override bool IsIAccessibleExSupported()
+            {
+                if (ownerItem != null)
+                {
                     return true;
                 }
-                else {
+                else
+                {
                     return base.IsIAccessibleExSupported();
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId) {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId && ownerItem.HasDropDownItems) {
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId && ownerItem.HasDropDownItems)
+                {
                     return true;
                 }
-                else {
+                else
+                {
                     return base.IsPatternSupported(patternId);
                 }
             }
 
-            internal override void Expand() {
+            internal override void Expand()
+            {
                 DoDefaultAction();
             }
 
-            internal override void Collapse() {
-                if (ownerItem != null && ownerItem.DropDown != null && ownerItem.DropDown.Visible) {
+            internal override void Collapse()
+            {
+                if (ownerItem != null && ownerItem.DropDown != null && ownerItem.DropDown.Visible)
+                {
                     ownerItem.DropDown.Close();
                 }
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-                get {
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
                     return ownerItem.DropDown.Visible ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                switch (direction) {
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
+                switch (direction)
+                {
                     case UnsafeNativeMethods.NavigateDirection.FirstChild:
                         return DropDownItemsCount > 0 ? ownerItem.DropDown.Items[0].AccessibilityObject : null;
                     case UnsafeNativeMethods.NavigateDirection.LastChild:
@@ -854,12 +956,15 @@ namespace System.Windows.Forms {
                 return base.FragmentNavigate(direction);
             }
 
-            private int DropDownItemsCount {
-                get {
+            private int DropDownItemsCount
+            {
+                get
+                {
                     // Do not expose child items when the drop-down is collapsed to prevent Narrator from announcing
                     // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
                     // in scan mode (CAPSLOCK + Space)
-                    if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+                    if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed)
+                    {
                         return 0;
                     }
 
@@ -868,46 +973,54 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal class ToolStripSplitButtonUiaProvider : ToolStripDropDownItemAccessibleObject {
-            private ToolStripSplitButton _owner;
-            private ToolStripSplitButtonExAccessibleObject _accessibleObject;
+        internal class ToolStripSplitButtonUiaProvider : ToolStripDropDownItemAccessibleObject
+        {
+            private readonly ToolStripSplitButton _owner;
+            private readonly ToolStripSplitButtonExAccessibleObject _accessibleObject;
 
-            public ToolStripSplitButtonUiaProvider(ToolStripSplitButton owner) : base(owner) {
+            public ToolStripSplitButtonUiaProvider(ToolStripSplitButton owner) : base(owner)
+            {
                 _owner = owner;
                 _accessibleObject = new ToolStripSplitButtonExAccessibleObject(owner);
             }
 
-            public override void DoDefaultAction() {
+            public override void DoDefaultAction()
+            {
                 _accessibleObject.DoDefaultAction();
             }
 
-            internal override object GetPropertyValue(int propertyID) {
+            internal override object GetPropertyValue(int propertyID)
+            {
                 return _accessibleObject.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(int patternId) {
+            internal override bool IsPatternSupported(int patternId)
+            {
                 return _accessibleObject.IsPatternSupported(patternId);
             }
 
-            internal override void Expand() {
+            internal override void Expand()
+            {
                 DoDefaultAction();
             }
 
-            internal override void Collapse() {
+            internal override void Collapse()
+            {
                 _accessibleObject.Collapse();
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-                get {
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
                     return _accessibleObject.ExpandCollapseState;
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
                 return _accessibleObject.FragmentNavigate(direction);
             }
         }

@@ -11,8 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DomainUpDown_Constructor()
         {
-            var underTest = GetNewDomainUpDown();
-            
+            DomainUpDown underTest = GetNewDomainUpDown();
+
             Assert.NotNull(underTest);
             Assert.False(underTest.AllowDrop);
             Assert.False(underTest.Wrap);
@@ -25,28 +25,24 @@ namespace System.Windows.Forms.Tests
         [InlineData(3, 3, "Cowman")]
         public void DomainUpDown_SelectedIndexGetSet(int indexToSet, int indexAfterSet, string value)
         {
-            var underTest = GetNewDomainUpDown();
+            DomainUpDown underTest = GetNewDomainUpDown();
 
             underTest.SelectedIndex = indexToSet;
             Assert.Equal(indexAfterSet, underTest.SelectedIndex);
             Assert.Equal(value, underTest.SelectedItem);
         }
-        
+
         [Fact]
         public void DomainUpDown_SelectedIndex_ArgumentOutOfRangeException()
         {
-            var underTest = GetNewDomainUpDown();
-            var index = 3100;
-            var paramName = "SelectedIndex";
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => underTest.SelectedIndex = index);
-            Assert.Equal(paramName, ex.ParamName);
-            Assert.Contains($"Value of '{index}' is not valid for '{paramName}'.{Environment.NewLine}Parameter name: {paramName}", ex.Message);
+            DomainUpDown upDown = GetNewDomainUpDown();
+            Assert.Throws<ArgumentOutOfRangeException>(() => upDown.SelectedIndex = 3100);
         }
 
         [Fact]
         public void DomainUpDown_Sorted_SelectedIndexGetSet()
         {
-            var underTest = GetNewDomainUpDown(true);
+            DomainUpDown underTest = GetNewDomainUpDown(true);
 
             underTest.SelectedIndex = 3;
             Assert.Equal(3, underTest.SelectedIndex);
@@ -69,7 +65,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("", 0, -1)]
         public void DomainUpDown_MatchIndex(string search, int start, int index)
         {
-            var underTest = GetNewDomainUpDown();
+            DomainUpDown underTest = GetNewDomainUpDown();
             var expected = index;
             var actual = underTest.MatchIndex(search, false, start);
             Assert.Equal(expected, actual);
@@ -78,7 +74,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DomainUpDown_MatchIndex_NullReferenceException()
         {
-            var underTest = GetNewDomainUpDown();
+            DomainUpDown underTest = GetNewDomainUpDown();
             Assert.Throws<NullReferenceException>(() => underTest.MatchIndex(null, false, 0));
         }
 
@@ -89,7 +85,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(4, 3)]
         public void DomainUpDown_UpButton(int index, int newIndex)
         {
-            var underTest = GetNewDomainUpDown();
+            DomainUpDown underTest = GetNewDomainUpDown();
             underTest.SelectedIndex = index;
             underTest.UpButton();
             var expected = newIndex;
@@ -104,7 +100,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(4, 4)]
         public void DomainUpDown_DownButton(int index, int newIndex)
         {
-            var underTest = GetNewDomainUpDown();
+            DomainUpDown underTest = GetNewDomainUpDown();
             underTest.SelectedIndex = index;
             underTest.DownButton();
             var expected = newIndex;
@@ -112,10 +108,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
-        private DomainUpDown GetNewDomainUpDown(bool sorted = false) {
-            var domainUpDown = new DomainUpDown();
-            domainUpDown.Sorted = sorted;
-            var items = domainUpDown.Items;
+        private DomainUpDown GetNewDomainUpDown(bool sorted = false)
+        {
+            var domainUpDown = new DomainUpDown
+            {
+                Sorted = sorted
+            };
+            DomainUpDown.DomainUpDownItemCollection items = domainUpDown.Items;
             Assert.NotNull(items);
             items.Add("foo1");
             items.Add("foo2");

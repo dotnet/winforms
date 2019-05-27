@@ -2,21 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Design;
     using System.Diagnostics;
     using System.Windows.Forms.ButtonInternal;
-        
 
-    /// <include file='doc\ToolStripScrollButton.uex' path='docs/doc[@for="ToolStripScrollButton"]/*' />
-    /// <devdoc>
-    /// A non selectable winbar item
-    /// </devdoc>
-    internal class ToolStripScrollButton : ToolStripControlHost {
-        private bool up = true;
+
+    /// <summary>
+    /// A non selectable ToolStrip item
+    /// </summary>
+    internal class ToolStripScrollButton : ToolStripControlHost
+    {
+        private readonly bool up = true;
 
         [ThreadStatic]
         private static Bitmap upScrollImage;
@@ -26,78 +27,96 @@ namespace System.Windows.Forms {
 
         const int AUTOSCROLL_UPDATE = 50;
         private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
-              
+
 
         private Timer mouseDownTimer;
-        
-        public ToolStripScrollButton(bool up) : base(CreateControlInstance(up)) {
+
+        public ToolStripScrollButton(bool up) : base(CreateControlInstance(up))
+        {
             this.up = up;
         }
 
-        
-        private static Control CreateControlInstance(bool up) {
-            StickyLabel label = new StickyLabel();
-            label.ImageAlign = ContentAlignment.MiddleCenter;
-            label.Image = (up) ? UpImage : DownImage;
+
+        private static Control CreateControlInstance(bool up)
+        {
+            StickyLabel label = new StickyLabel
+            {
+                ImageAlign = ContentAlignment.MiddleCenter,
+                Image = (up) ? UpImage : DownImage
+            };
             return label;
         }
 
-         /// <devdoc>
-         /// Deriving classes can override this to configure a default size for their control.
-         /// This is more efficient than setting the size in the control's constructor.
-         /// </devdoc>
-         protected internal override Padding DefaultMargin {
-             get {
-                 return Padding.Empty;
-             }
-         }
-         protected override Padding DefaultPadding {
-             get {
-                 return Padding.Empty;
-             }
-         }
+        /// <summary>
+        /// Deriving classes can override this to configure a default size for their control.
+        /// This is more efficient than setting the size in the control's constructor.
+        /// </summary>
+        protected internal override Padding DefaultMargin
+        {
+            get
+            {
+                return Padding.Empty;
+            }
+        }
+        protected override Padding DefaultPadding
+        {
+            get
+            {
+                return Padding.Empty;
+            }
+        }
 
-         private static Image DownImage {
-            get { 
-                if (downScrollImage == null) {
-                      downScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonDown.bmp"); 
-                      downScrollImage.MakeTransparent(Color.White);
-
+        private static Image DownImage
+        {
+            get
+            {
+                if (downScrollImage == null)
+                {
+                    downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
                 }
                 return downScrollImage;
             }
         }
 
-        
-        internal StickyLabel Label {
-            get{
+
+        internal StickyLabel Label
+        {
+            get
+            {
                 return Control as StickyLabel;
             }
         }
-        
-        private static Image UpImage {
-            get { 
-                if (upScrollImage == null) {
-                      upScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonUp.bmp"); 
-                      upScrollImage.MakeTransparent(Color.White);
 
+        private static Image UpImage
+        {
+            get
+            {
+                if (upScrollImage == null)
+                {
+                    upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
                 }
                 return upScrollImage;
             }
         }
 
-        private Timer MouseDownTimer {
-            get{
-                if (mouseDownTimer == null) {
+        private Timer MouseDownTimer
+        {
+            get
+            {
+                if (mouseDownTimer == null)
+                {
                     mouseDownTimer = new Timer();
                 }
                 return mouseDownTimer;
             }
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (mouseDownTimer != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (mouseDownTimer != null)
+                {
                     mouseDownTimer.Enabled = false;
                     mouseDownTimer.Dispose();
                     mouseDownTimer = null;
@@ -105,84 +124,98 @@ namespace System.Windows.Forms {
             }
             base.Dispose(disposing);
         }
-        protected override void OnMouseDown (MouseEventArgs e) {
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
             UnsubscribeAll();
 
             base.OnMouseDown(e);
             Scroll();
-            
-            MouseDownTimer.Interval =  AUTOSCROLL_PAUSE;
+
+            MouseDownTimer.Interval = AUTOSCROLL_PAUSE;
             MouseDownTimer.Tick += new EventHandler(OnInitialAutoScrollMouseDown);
             MouseDownTimer.Enabled = true;
         }
 
-        protected override void OnMouseUp (MouseEventArgs e) {
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
             UnsubscribeAll();
             base.OnMouseUp(e);
         }
 
-        protected override void  OnMouseLeave (EventArgs e) {
+        protected override void OnMouseLeave(EventArgs e)
+        {
             UnsubscribeAll();
         }
-        private void UnsubscribeAll() {
+        private void UnsubscribeAll()
+        {
             MouseDownTimer.Enabled = false;
             MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
             MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccellerate);
         }
 
-        private void OnAutoScrollAccellerate(object sender, EventArgs e) {
+        private void OnAutoScrollAccellerate(object sender, EventArgs e)
+        {
             Scroll();
         }
-        
-        private void OnInitialAutoScrollMouseDown(object sender, EventArgs e)  {
+
+        private void OnInitialAutoScrollMouseDown(object sender, EventArgs e)
+        {
             MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
 
             Scroll();
-            MouseDownTimer.Interval =  AUTOSCROLL_UPDATE;
+            MouseDownTimer.Interval = AUTOSCROLL_UPDATE;
             MouseDownTimer.Tick += new EventHandler(OnAutoScrollAccellerate);
         }
 
-        public override Size GetPreferredSize(Size constrainingSize) {
+        public override Size GetPreferredSize(Size constrainingSize)
+        {
             Size preferredSize = Size.Empty;
             preferredSize.Height = (Label.Image != null) ? Label.Image.Height + 4 : 0;
             preferredSize.Width = (ParentInternal != null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
             return preferredSize;
         }
 
-        private void Scroll() {
-            ToolStripDropDownMenu parent = this.ParentInternal as ToolStripDropDownMenu;
-            if (parent != null && Label.Enabled) {
+        private void Scroll()
+        {
+            if (ParentInternal is ToolStripDropDownMenu parent && Label.Enabled)
+            {
                 parent.ScrollInternal(up);
             }
         }
 
-        internal class StickyLabel : Label {
+        internal class StickyLabel : Label
+        {
 
-            public StickyLabel() {
-            }
-            private bool freezeLocationChange = false;
-            
-            public bool FreezeLocationChange {
-              get { return freezeLocationChange; }
-            }
-
-            protected override void SetBoundsCore(int x,int y,int width, int height, BoundsSpecified specified) 
+            public StickyLabel()
             {
-                if (((specified & BoundsSpecified.Location) != 0) && FreezeLocationChange) {
+            }
+            private readonly bool freezeLocationChange = false;
+
+            public bool FreezeLocationChange
+            {
+                get { return freezeLocationChange; }
+            }
+
+            protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+            {
+                if (((specified & BoundsSpecified.Location) != 0) && FreezeLocationChange)
+                {
                     return;
                 }
                 base.SetBoundsCore(x, y, width, height, specified);
             }
 
-            protected override void WndProc(ref Message m) {
+            protected override void WndProc(ref Message m)
+            {
 
-                if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
+                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                {
                     // 
 
                     DefWndProc(ref m);
                     return;
                 }
-                
+
                 base.WndProc(ref m);
             }
         }

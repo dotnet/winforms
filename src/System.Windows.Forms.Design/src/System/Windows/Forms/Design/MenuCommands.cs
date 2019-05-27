@@ -7,27 +7,20 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     <para>
-    ///         This class contains command ID's and GUIDS that
-    ///         correspond
-    ///         to the host Command Bar menu layout.
-    ///     </para>
+    /// This class contains command ID's and GUIDS that correspond to the host Command Bar menu layout.
     /// </summary>
     public sealed class MenuCommands : StandardCommands
     {
         // Windows Forms specific popup menus
-        //
         private const int mnuidSelection = 0x0500;
         private const int mnuidContainer = 0x0501;
         private const int mnuidTraySelection = 0x0503;
         private const int mnuidComponentTray = 0x0506;
 
         // Windows Forms specific menu items
-        //
         private const int cmdidDesignerProperties = 0x1001;
 
         // Windows Forms specific keyboard commands
-        //
         private const int cmdidReverseCancel = 0x4001;
         private const int cmdidSetStatusText = 0x4003;
         private const int cmdidSetStatusRectangle = 0x4004;
@@ -65,26 +58,26 @@ namespace System.Windows.Forms.Design
         private const int ECMD_END_EXT = 18;
 
         /// <summary>
-        ///     This guid corresponds to the standard set of commands for the shell and office.
-        ///     This new giud is added so that the ToolStripDesigner now respond to the F2 command
-        ///     and go into InSitu Edit mode.
+        /// This guid corresponds to the standard set of commands for the shell and office.
+        /// This new giud is added so that the ToolStripDesigner now respond to the F2 command
+        /// and go into InSitu Edit mode.
         /// </summary>
         private static readonly Guid VSStandardCommandSet97 = new Guid("{5efc7975-14bc-11cf-9b2b-00aa00573819}");
 
         /// <summary>
-        ///     This guid corresponds to the menu grouping Windows Forms will use for its menus.  This is
-        ///     defined in the Windows Forms menu CTC file, but we need it here so we can define what
-        ///     context menus to use.
+        /// This guid corresponds to the menu grouping Windows Forms will use for its menus.  This is
+        /// defined in the Windows Forms menu CTC file, but we need it here so we can define what
+        /// context menus to use.
         /// </summary>
         private static readonly Guid wfMenuGroup = new Guid("{74D21312-2AEE-11d1-8BFB-00A0C90F26F7}");
 
         /// <summary>
-        ///     This guid corresponds to the Windows Forms command set.
+        /// This guid corresponds to the Windows Forms command set.
         /// </summary>
         private static readonly Guid wfCommandSet = new Guid("{74D21313-2AEE-11d1-8BFB-00A0C90F26F7}");
 
         /// <summary>
-        ///     This guid is the standard vs 2k commands for key bindings
+        /// This guid is the standard vs 2k commands for key bindings
         /// </summary>
         private static readonly Guid guidVSStd2K = new Guid("{1496A755-94DE-11D0-8C3F-00C04FC2AAE2}");
 
@@ -97,11 +90,9 @@ namespace System.Windows.Forms.Design
         public static readonly CommandID ComponentTrayMenu = new CommandID(wfMenuGroup, mnuidComponentTray);
 
         // Windows Forms commands
-
         public static readonly CommandID DesignerProperties = new CommandID(wfCommandSet, cmdidDesignerProperties);
 
-        // Windows Forms Key commands        
-
+        // Windows Forms Key commands
         public static readonly CommandID KeyCancel = new CommandID(guidVSStd2K, ECMD_CANCEL);
 
         public static readonly CommandID KeyReverseCancel = new CommandID(wfCommandSet, cmdidReverseCancel);
