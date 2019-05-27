@@ -3296,6 +3296,11 @@ namespace System.Windows.Forms
             return dataGridViewColumn.SortMode == DataGridViewColumnSortMode.Automatic && (!VirtualMode || dataGridViewColumn.IsDataBound);
         }
 
+        private bool IsSortable(DataGridViewColumn dataGridViewColumn)
+        {
+            return dataGridViewColumn.SortMode != DataGridViewColumnSortMode.NotSortable && (!VirtualMode || dataGridViewColumn.IsDataBound);
+        }
+
         // determines if a data bound cell can be validated or not
         private bool CanValidateDataBoundDataGridViewCell(DataGridViewCell dataGridViewCurrentCell)
         {
