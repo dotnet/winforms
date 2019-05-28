@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             {
                 if (text[index] == '&')
                 {
-                    str.Append("&");
+                    str.Append('&');
                 }
                 if (index < text.Length)
                 {
@@ -174,10 +174,7 @@ namespace System.Windows.Forms
             }
 
 #if DEBUG      
-            int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(null, hwnd));
-            StringBuilder sb = new StringBuilder(textLen+1);
-            UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
-    
+            string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
             Control c = Control.FromHandle(hwnd);
@@ -191,7 +188,7 @@ namespace System.Windows.Forms
                 else
                 {
                     nameOfControl += "Unknown";
-                    
+
                     // Add some extra debug info for ToolStripDropDowns.
                     if (c is ToolStripDropDown dd && dd.OwnerItem != null)
                     {
@@ -199,7 +196,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            return sb.ToString() + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
+            return windowText + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
 #else            
             return string.Empty;
 #endif
@@ -411,8 +408,8 @@ namespace System.Windows.Forms
 
         public class ArraySubsetEnumerator : IEnumerator
         {
-            private object[] _array;
-            private int _total;
+            private readonly object[] _array;
+            private readonly int _total;
             private int _current;
 
             public ArraySubsetEnumerator(object[] array, int count)
@@ -431,7 +428,7 @@ namespace System.Windows.Forms
                     _current++;
                     return true;
                 }
-                
+
                 return false;
             }
 
@@ -502,8 +499,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal class TypedControlCollection : ReadOnlyControlCollection
         {
-            private Type _typeOfControl;
-            private Control _ownerControl;
+            private readonly Type _typeOfControl;
+            private readonly Control _ownerControl;
 
             public TypedControlCollection(Control owner, Type typeOfControl, bool isReadOnly) : base(owner, isReadOnly)
             {
@@ -534,7 +531,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, _typeOfControl.Name)), value.GetType().Name);
                 }
-    
+
                 base.Add(value);
             }
         }

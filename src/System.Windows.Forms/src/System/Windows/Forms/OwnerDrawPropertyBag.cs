@@ -2,127 +2,95 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
 
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.Internal;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters;
-
-
-    /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag"]/*' />
-    /// <devdoc>
-    ///
-    ///     Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
-    /// </devdoc>
-    /// <internalonly/>
-    // 
-    [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]    
+namespace System.Windows.Forms
+{
+    /// <summary>
+    /// Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
+    /// </summary>
+    [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
     [Serializable]
-    public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable {
-        Font font = null;
-        Color foreColor = Color.Empty;
-        Color backColor = Color.Empty;
-        Control.FontHandleWrapper fontWrapper = null;
-        private static object internalSyncObject = new object();
-          /**
-         * Constructor used in deserialization
-         * Has to be protected because OwnerDrawPropertyBag is not sealed. FxCop Rule CA2229.
-         */
-        protected OwnerDrawPropertyBag(SerializationInfo info, StreamingContext context) {
-            foreach (SerializationEntry entry in info) {
-                if (entry.Name == "Font") {
-                    font = (Font) entry.Value;
+    public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
+    {
+        private Control.FontHandleWrapper _fontWrapper = null;
+        private static readonly object s_internalSyncObject = new object();
+
+        protected OwnerDrawPropertyBag(SerializationInfo info, StreamingContext context)
+        {
+            foreach (SerializationEntry entry in info)
+            {
+                if (entry.Name == "Font")
+                {
+                    Font = (Font)entry.Value;
                 }
-                else if (entry.Name =="ForeColor") {
-                    foreColor =(Color)entry.Value;
+                else if (entry.Name == "ForeColor")
+                {
+                    ForeColor = (Color)entry.Value;
                 }
-                else if (entry.Name =="BackColor") {
-                    backColor = (Color)entry.Value;
+                else if (entry.Name == "BackColor")
+                {
+                    BackColor = (Color)entry.Value;
                 }
             }
         }
 
-        internal OwnerDrawPropertyBag(){
+        internal OwnerDrawPropertyBag()
+        {
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.Font"]/*' />
-        public Font Font {
-            get { 
-                return font;
-            }
-            set {
-                font = value;
-            }
-        }
+        public Font Font { get; set; }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.ForeColor"]/*' />
-        public Color ForeColor {
-            get {
-                return foreColor;
-            }
-            set {
-                foreColor = value;
-            }
-        }
+        public Color ForeColor { get; set; }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.BackColor"]/*' />
-        public Color BackColor {
-            get {
-                return backColor;
-            }
-            set {
-                backColor = value;
-            }
-        }
+        public Color BackColor { get; set; }
 
-        internal IntPtr FontHandle {
-            get {
-                if (fontWrapper == null) {
-                    fontWrapper = new Control.FontHandleWrapper(Font);
+        internal IntPtr FontHandle
+        {
+            get
+            {
+                if (_fontWrapper == null)
+                {
+                    _fontWrapper = new Control.FontHandleWrapper(Font);
                 }
-                return fontWrapper.Handle;
+
+                return _fontWrapper.Handle;
             }
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.IsEmpty"]/*' />
-        /// <devdoc>
-        ///     Returns whether or not this property bag contains all default values (is empty)
-        /// </devdoc>
-        public virtual bool IsEmpty() {
-            return (Font == null && foreColor.IsEmpty && backColor.IsEmpty);
-        }
+        /// <summary>
+        /// Returns whether or not this property bag contains all default values (is empty)
+        /// </summary>
+        public virtual bool IsEmpty() => Font == null && ForeColor.IsEmpty && BackColor.IsEmpty;
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.Copy"]/*' />
-        /// <devdoc>
-        ///     Copies the bag. Always returns a valid ODPB object
-        /// </devdoc>
-        public static OwnerDrawPropertyBag Copy(OwnerDrawPropertyBag value) {
-            lock(internalSyncObject) {
-                OwnerDrawPropertyBag ret = new OwnerDrawPropertyBag();
-                if (value == null) return ret;
-                ret.backColor = value.backColor;
-                ret.foreColor = value.foreColor;
-                ret.Font = value.font;
-                return ret;
+        /// <summary>
+        /// Copies the bag. Always returns a valid ODPB object
+        /// </summary>
+        public static OwnerDrawPropertyBag Copy(OwnerDrawPropertyBag value)
+        {
+            lock (s_internalSyncObject)
+            {
+                var result = new OwnerDrawPropertyBag();
+                if (value == null)
+                {
+                    return result;
+                }
+
+                result.BackColor = value.BackColor;
+                result.ForeColor = value.ForeColor;
+                result.Font = value.Font;
+                return result;
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.ISerializable.GetObjectData"]/*' />
-        /// <devdoc>
-        /// ISerializable private implementation
-        /// </devdoc>
-        /// <internalonly/>
-        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
+        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+        {
             si.AddValue("BackColor", BackColor);
             si.AddValue("ForeColor", ForeColor);
             si.AddValue("Font", Font);
         }
-
     }
 }

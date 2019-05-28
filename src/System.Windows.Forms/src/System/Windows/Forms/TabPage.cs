@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
@@ -12,65 +13,67 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Text;
     using System.Windows.Forms;
-    using System.Security.Permissions;
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
     using System.Runtime.InteropServices;
     using System.Globalization;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     TabPage implements a single page of a tab control.  It is essentially
     ///     a Panel with TabItem properties.
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     Designer("System.Windows.Forms.Design.TabPageDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItem (false),
-    DesignTimeVisible (false),
-    DefaultEvent ("Click"),
-    DefaultProperty ("Text")
+    ToolboxItem(false),
+    DesignTimeVisible(false),
+    DefaultEvent("Click"),
+    DefaultProperty("Text")
     ]
-    public class TabPage : Panel {
+    public class TabPage : Panel
+    {
         private ImageList.Indexer imageIndexer;
-        private string toolTipText = "";
+        private string toolTipText = string.Empty;
         private bool enterFired = false;
         private bool leaveFired = false;
         private bool useVisualStyleBackColor = false;
 
-        
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPage"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         ///     Constructs an empty TabPage.
-        /// </devdoc>
-        public TabPage ()
-        : base() {
-            SetStyle (ControlStyles.CacheText, true);
+        /// </summary>
+        public TabPage()
+        : base()
+        {
+            SetStyle(ControlStyles.CacheText, true);
             Text = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false),
         Localizable(false)
         ]
-        public override AutoSizeMode AutoSizeMode {
-            get {
+        public override AutoSizeMode AutoSizeMode
+        {
+            get
+            {
                 return AutoSizeMode.GrowOnly;
             }
-            set {
+            set
+            {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Hide AutoSize: it doesn't make sense for this control</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
@@ -85,58 +88,57 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.BackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ControlBackColorDescr))
         ]
-        public override Color BackColor {
-            get {
+        public override Color BackColor
+        {
+            get
+            {
                 Color color = base.BackColor;
                 // If some color is Set by the user return that...
                 if (color != DefaultBackColor)
                 {
                     return color;
                 }
-                // If user has not set a color and if XP theming ON  and Parent's appearance is Normal, then return the Transparent Color....
-                TabControl parent = ParentInternal as TabControl;
-                if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal)) {
+                // If user has not set a color and if theming ON  and Parent's appearance is Normal, then return the Transparent Color....
+                if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
+                {
                     return Color.Transparent;
                 }
                 // return base.Color by default...
                 return color;
             }
-            set {
-                if (DesignMode) {
-                    if (value != Color.Empty) {
+            set
+            {
+                if (DesignMode)
+                {
+                    if (value != Color.Empty)
+                    {
                         PropertyDescriptor pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
                         Debug.Assert(pd != null);
-                        if (pd != null) {
+                        if (pd != null)
+                        {
                             pd.SetValue(this, false);
                         }
                     }
                 }
-                else {
+                else
+                {
                     UseVisualStyleBackColor = false;
                 }
 
@@ -144,411 +146,410 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.CreateControlsInstance"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the Controls collection objects. Subclasses
         ///     should not call base.CreateControlsInstance.  Our version creates a control
         ///     collection that does not support
-        /// </devdoc>
-        protected override Control.ControlCollection CreateControlsInstance () {
-            return new TabPageControlCollection (this);
+        /// </summary>
+        protected override Control.ControlCollection CreateControlsInstance()
+        {
+            return new TabPageControlCollection(this);
         }
 
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndexer"]/*' />
-        /// <internalonly/>
-        internal ImageList.Indexer ImageIndexer {
-            get {
-                if (imageIndexer == null) {
-                    imageIndexer = new ImageList.Indexer ();
+        internal ImageList.Indexer ImageIndexer
+        {
+            get
+            {
+                if (imageIndexer == null)
+                {
+                    imageIndexer = new ImageList.Indexer();
                 }
 
                 return imageIndexer;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
-        /// </devdoc>
+        /// </summary>
         [
-        TypeConverterAttribute (typeof(ImageIndexConverter)),
-        Editor ("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Localizable (true),
+        TypeConverterAttribute(typeof(ImageIndexConverter)),
+        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        DefaultValue (-1),
-        SRDescription (nameof(SR.TabItemImageIndexDescr))
+        DefaultValue(-1),
+        SRDescription(nameof(SR.TabItemImageIndexDescr))
         ]
-        public int ImageIndex {
-            get {
+        public int ImageIndex
+        {
+            get
+            {
                 return ImageIndexer.Index;
             }
-            set {
+            set
+            {
                 if (value < -1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
 
-                TabControl parent = ParentInternal as TabControl;
 
-                if (parent != null) {
-                    this.ImageIndexer.ImageList = parent.ImageList;
+                if (ParentInternal is TabControl parent)
+                {
+                    ImageIndexer.ImageList = parent.ImageList;
                 }
 
-                this.ImageIndexer.Index = value;
-                UpdateParent ();
+                ImageIndexer.Index = value;
+                UpdateParent();
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
-        /// </devdoc>
+        /// </summary>
         [
-        TypeConverterAttribute (typeof(ImageKeyConverter)),
-        Editor ("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Localizable (true),
-        DefaultValue (""),
+        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        Localizable(true),
+        DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
         SRDescription(nameof(SR.TabItemImageIndexDescr))
         ]
-        public string ImageKey {
-            get {
+        public string ImageKey
+        {
+            get
+            {
                 return ImageIndexer.Key;
             }
-            set {
-                this.ImageIndexer.Key = value;
+            set
+            {
+                ImageIndexer.Key = value;
 
-                TabControl parent = ParentInternal as TabControl;
 
-                if (parent != null) {
-                    this.ImageIndexer.ImageList = parent.ImageList;
+                if (ParentInternal is TabControl parent)
+                {
+                    ImageIndexer.ImageList = parent.ImageList;
                 }
 
-                UpdateParent ();
+                UpdateParent();
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPage1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Constructs a TabPage with text for the tab.
-        /// </devdoc>
-        public TabPage (string text) : this() {
+        /// </summary>
+        public TabPage(string text) : this()
+        {
             Text = text;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Anchor"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        public override AnchorStyles Anchor {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public override AnchorStyles Anchor
+        {
+            get
+            {
                 return base.Anchor;
             }
-            set {
+            set
+            {
                 base.Anchor = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Dock"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        public override DockStyle Dock {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public override DockStyle Dock
+        {
+            get
+            {
                 return base.Dock;
             }
-            set {
+            set
+            {
                 base.Dock = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.DockChanged"]/*' />
-        /// <internalonly/>
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public event EventHandler DockChanged {
-            add {
-                base.DockChanged += value;
-            }
-            remove {
-                base.DockChanged -= value;
-            }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler DockChanged
+        {
+            add => base.DockChanged += value;
+            remove => base.DockChanged -= value;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Enabled"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public bool Enabled {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public bool Enabled
+        {
+            get
+            {
                 return base.Enabled;
             }
-            set {
+            set
+            {
                 base.Enabled = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.EnabledChanged"]/*' />
-        /// <internalonly/>
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public event EventHandler EnabledChanged {
-            add {
-                base.EnabledChanged += value;
-            }
-            remove {
-                base.EnabledChanged -= value;
-            }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler EnabledChanged
+        {
+            add => base.EnabledChanged += value;
+            remove => base.EnabledChanged -= value;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UseVisualStyleBackColor"]/*' />
-        /// <internalonly/>
         [
-        DefaultValue (false),
+        DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.TabItemUseVisualStyleBackColorDescr))
         ]
-        public bool UseVisualStyleBackColor {
-            get {
+        public bool UseVisualStyleBackColor
+        {
+            get
+            {
                 return useVisualStyleBackColor;
             }
-            set {
+            set
+            {
                 useVisualStyleBackColor = value;
-                this.Invalidate(true);
+                Invalidate(true);
             }
         }
-        
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Location"]/*' />
-        /// <internalonly/>
+
         // Make the Location property non-browsable for the TabPages.
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public Point Location {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public Point Location
+        {
+            get
+            {
                 return base.Location;
             }
-            set {
+            set
+            {
                 base.Location = value;
             }
         }
 
-        
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.LocationChanged"]/*' />
-        /// <internalonly/>
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler LocationChanged {
-            add {
-                base.LocationChanged += value;
-            }
-            remove {
-                base.LocationChanged -= value;
-            }
+        new public event EventHandler LocationChanged
+        {
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MaximumSize"]/*' />
         [DefaultValue(typeof(Size), "0, 0")]
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        public override Size MaximumSize {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public override Size MaximumSize
+        {
             get { return base.MaximumSize; }
 
-            set { 
+            set
+            {
                 base.MaximumSize = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MinimumSize"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        public override Size MinimumSize {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public override Size MinimumSize
+        {
             get { return base.MinimumSize; }
 
-            set { 
+            set
+            {
                 base.MinimumSize = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.PreferredSize"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        public new Size PreferredSize {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public new Size PreferredSize
+        {
             get { return base.PreferredSize; }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndex"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public int TabIndex {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public int TabIndex
+        {
+            get
+            {
                 return base.TabIndex;
             }
-            set {
+            set
+            {
                 base.TabIndex = value;
             }
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
-        /// </devdoc>
-        /// <internalonly/>
-        internal override bool RenderTransparencyWithVisualStyles {
-            get {
+        /// </summary>
+        internal override bool RenderTransparencyWithVisualStyles
+        {
+            get
+            {
                 return true;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndexChanged"]/*' />
-        /// <internalonly/>
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler TabIndexChanged
+        {
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStop"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public bool TabStop {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStopChanged"]/*' />
-        /// <internalonly/>
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler TabStopChanged
+        {
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Text"]/*' />
         [
-        Localizable (true),
-        Browsable (true),
-        EditorBrowsable (EditorBrowsableState.Always)
+        Localizable(true),
+        Browsable(true),
+        EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 base.Text = value;
-                UpdateParent ();
+                UpdateParent();
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TextChanged"]/*' />
-        /// <internalonly/>
-        [Browsable (true), EditorBrowsable (EditorBrowsableState.Always)]
-        new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        new public event EventHandler TextChanged
+        {
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ToolTipText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The toolTipText for the tab, that will appear when the mouse hovers
         ///     over the tab and the TabControl's showToolTips property is true.
-        /// </devdoc>
+        /// </summary>
         [
-        DefaultValue (""),
-        Localizable (true),
-        SRDescription (nameof(SR.TabItemToolTipTextDescr))
+        DefaultValue(""),
+        Localizable(true),
+        SRDescription(nameof(SR.TabItemToolTipTextDescr))
         ]
-        public string ToolTipText {
-            get {
+        public string ToolTipText
+        {
+            get
+            {
                 return toolTipText;
             }
-            set {
-                if (value == null) {
-                    value = "";
+            set
+            {
+                if (value == null)
+                {
+                    value = string.Empty;
                 }
 
                 if (value == toolTipText)
+                {
                     return;
+                }
 
                 toolTipText = value;
-                UpdateParent ();
+                UpdateParent();
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Visible"]/*' />
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public bool Visible {
-            get {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public bool Visible
+        {
+            get
+            {
                 return base.Visible;
             }
-            set {
+            set
+            {
                 base.Visible = value;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.VisibleChanged"]/*' />
-        /// <internalonly/>
-        [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
-        new public event EventHandler VisibleChanged {
-            add {
-                base.VisibleChanged += value;
-            }
-            remove {
-                base.VisibleChanged -= value;
-            }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler VisibleChanged
+        {
+            add => base.VisibleChanged += value;
+            remove => base.VisibleChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Assigns a new parent control. Sends out the appropriate property change
         ///     notifications for properties that are affected by the change of parent.
-        /// </devdoc>
-        internal override void AssignParent (Control value) {
-            if (value != null && !(value is TabControl)) {
-                throw new ArgumentException (string.Format (SR.TABCONTROLTabPageNotOnTabControl, value.GetType ().FullName));
+        /// </summary>
+        internal override void AssignParent(Control value)
+        {
+            if (value != null && !(value is TabControl))
+            {
+                throw new ArgumentException(string.Format(SR.TABCONTROLTabPageNotOnTabControl, value.GetType().FullName));
             }
 
-            base.AssignParent (value);
+            base.AssignParent(value);
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.GetTabPageOfComponent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Given a component, this retrieves the tab page that it's parented to, or
         /// null if it's not parented to any tab page.
-        /// </devdoc>
-        public static TabPage GetTabPageOfComponent (object comp) {
-            if (!(comp is Control)) {
+        /// </summary>
+        public static TabPage GetTabPageOfComponent(object comp)
+        {
+            if (!(comp is Control))
+            {
                 return null;
             }
 
             Control c = (Control)comp;
 
-            while (c != null && !(c is TabPage)) {
+            while (c != null && !(c is TabPage))
+            {
                 c = c.ParentInternal;
             }
 
             return (TabPage)c;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.GetTCITEM"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        internal NativeMethods.TCITEM_T GetTCITEM () {
-            NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T ();
-
-            tcitem.mask = 0;
-            tcitem.pszText = null;
-            tcitem.cchTextMax = 0;
-            tcitem.lParam = IntPtr.Zero;
+        /// <summary>
+        /// </summary>
+        internal NativeMethods.TCITEM_T GetTCITEM()
+        {
+            NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T
+            {
+                mask = 0,
+                pszText = null,
+                cchTextMax = 0,
+                lParam = IntPtr.Zero
+            };
 
             string text = Text;
 
-            PrefixAmpersands (ref text);
-            if (text != null) {
+            PrefixAmpersands(ref text);
+            if (text != null)
+            {
                 tcitem.mask |= NativeMethods.TCIF_TEXT;
                 tcitem.pszText = text;
                 tcitem.cchTextMax = text.Length;
@@ -561,7 +562,8 @@ namespace System.Windows.Forms {
             return tcitem;
         }
 
-        private void PrefixAmpersands (ref string value) {
+        private void PrefixAmpersands(ref string value)
+        {
             // Due to a comctl32 problem, ampersands underline the next letter in the 
             // text string, but the accelerators don't work.
             // So in this function, we prefix ampersands with another ampersand
@@ -569,54 +571,61 @@ namespace System.Windows.Forms {
             //
             // Sanity check parameter
             //
-            if (value == null || value.Length == 0) {
+            if (value == null || value.Length == 0)
+            {
                 return;
             }
 
             // If there are no ampersands, we don't need to do anything here
             //
-            if (value.IndexOf ('&') < 0) {
+            if (value.IndexOf('&') < 0)
+            {
                 return;
             }
 
             // Insert extra ampersands
             //
-            StringBuilder newString = new StringBuilder ();
+            StringBuilder newString = new StringBuilder();
 
-            for (int i = 0; i < value.Length; ++i) {
-                if (value[i] == '&') {
-                    if (i < value.Length - 1 && value[i + 1] == '&') {
+            for (int i = 0; i < value.Length; ++i)
+            {
+                if (value[i] == '&')
+                {
+                    if (i < value.Length - 1 && value[i + 1] == '&')
+                    {
                         ++i;    // Skip the second ampersand
                     }
 
-                    newString.Append ("&&");
+                    newString.Append("&&");
                 }
-                else {
-                    newString.Append (value[i]);
+                else
+                {
+                    newString.Append(value[i]);
                 }
             }
 
-            value = newString.ToString ();
+            value = newString.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is an internal method called by the TabControl to fire the Leave event when TabControl leave occurs.
-        /// </devdoc>
-        internal void FireLeave (EventArgs e) {
+        /// </summary>
+        internal void FireLeave(EventArgs e)
+        {
             leaveFired = true;
-            OnLeave (e);
+            OnLeave(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is an internal method called by the TabControl to fire the Enter event when TabControl leave occurs.
-        /// </devdoc>
-        internal void FireEnter (EventArgs e) {
+        /// </summary>
+        internal void FireEnter(EventArgs e)
+        {
             enterFired = true;
-            OnEnter (e);
+            OnEnter(e);
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnEnter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnEnter event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -626,21 +635,21 @@ namespace System.Windows.Forms {
         ///     events on the TabPage.
         ///     TabPage should fire enter when the focus is on the TABPAGE and not when the control
         ///     within the TabPage gets Focused.
-        /// </devdoc>
-        protected override void OnEnter (EventArgs e) {
-            TabControl parent = ParentInternal as TabControl;
-
-            if (parent != null) {
-                if (enterFired) {
-                    base.OnEnter (e);
+        /// </summary>
+        protected override void OnEnter(EventArgs e)
+        {
+            if (ParentInternal is TabControl parent)
+            {
+                if (enterFired)
+                {
+                    base.OnEnter(e);
                 }
 
                 enterFired = false;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -652,22 +661,22 @@ namespace System.Windows.Forms {
         ///     within the TabPage gets Focused.
         ///     Similary the Leave should fire when the TabControl (and hence the TabPage) looses
         ///     Focus. 
-        /// </devdoc>
-        protected override void OnLeave (EventArgs e) {
-            TabControl parent = ParentInternal as TabControl;
-
-            if (parent != null) {
-                if (leaveFired) {
-                    base.OnLeave (e);
+        /// </summary>
+        protected override void OnLeave(EventArgs e)
+        {
+            if (ParentInternal is TabControl parent)
+            {
+                if (leaveFired)
+                {
+                    base.OnLeave(e);
                 }
 
                 leaveFired = false;
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnPaintBackground"]/*' />
-        protected override void OnPaintBackground (PaintEventArgs e) {
-
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
             // Utilize the TabRenderer new to Whidbey to draw the tab pages so that the
             // panels are drawn using the correct visual styles when the application supports using visual
             // styles.
@@ -675,10 +684,10 @@ namespace System.Windows.Forms {
             // Does this application utilize Visual Styles?
             // Utilize the UseVisualStyleBackColor property to determine whether or
             // not the themed background should be utilized.
-            TabControl parent = ParentInternal as TabControl;
-            if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal)) {
+            if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
+            {
 
-                Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : this.BackColor;
+                Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : BackColor;
                 Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 
 
@@ -699,92 +708,94 @@ namespace System.Windows.Forms {
 
                 // Is there a background image to paint? The TabRenderer does not currently support
                 // painting the background image on the panel, so we need to draw it ourselves.
-                if (this.BackgroundImage != null) {
+                if (BackgroundImage != null)
+                {
                     ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, bkcolor, BackgroundImageLayout, inflateRect, inflateRect, DisplayRectangle.Location);
                 }
             }
-            else {
-                base.OnPaintBackground (e);
+            else
+            {
+                base.OnPaintBackground(e);
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.SetBoundsCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     overrides main setting of our bounds so that we can control our size and that of our
         ///     TabPages...
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void SetBoundsCore (int x, int y, int width, int height, BoundsSpecified specified) {
+        /// </summary>
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
             Control parent = ParentInternal;
 
-            if (parent is TabControl && parent.IsHandleCreated) {
+            if (parent is TabControl && parent.IsHandleCreated)
+            {
                 Rectangle r = parent.DisplayRectangle;
 
                 // LayoutEngines send BoundsSpecified.None so they can know they are the ones causing the size change
                 // in the subsequent InitLayout.  We need to be careful preserve a None.
-                base.SetBoundsCore (r.X, r.Y, r.Width, r.Height, specified == BoundsSpecified.None ? BoundsSpecified.None : BoundsSpecified.All);
+                base.SetBoundsCore(r.X, r.Y, r.Width, r.Height, specified == BoundsSpecified.None ? BoundsSpecified.None : BoundsSpecified.All);
             }
-            else {
-                base.SetBoundsCore (x, y, width, height, specified);
+            else
+            {
+                base.SetBoundsCore(x, y, width, height, specified);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the Location property needs to be persisted.
-        /// </devdoc>
-        [EditorBrowsable (EditorBrowsableState.Never)]
-        private bool ShouldSerializeLocation () {
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private bool ShouldSerializeLocation()
+        {
             return Left != 0 || Top != 0;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The text property is what is returned for the TabPages default printing.
-        /// </devdoc>
-        public override string ToString () {
+        /// </summary>
+        public override string ToString()
+        {
             return "TabPage: {" + Text + "}";
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UpdateParent"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        internal void UpdateParent () {
-            TabControl parent = ParentInternal as TabControl;
-
-            if (parent != null) {
-                parent.UpdateTab (this);
+        /// <summary>
+        /// </summary>
+        internal void UpdateParent()
+        {
+            if (ParentInternal is TabControl parent)
+            {
+                parent.UpdateTab(this);
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Our control collection will throw an exception if you try to add other tab pages.
-        /// </devdoc>
+        /// </summary>
         [ComVisible(false)]
-        public class TabPageControlCollection : Control.ControlCollection {
-            /// <internalonly/>
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection.TabPageControlCollection"]/*' />
-            /// <devdoc>
+        public class TabPageControlCollection : Control.ControlCollection
+        {
+            /// <summary>
             ///      Creates a new TabPageControlCollection.
-            /// </devdoc>
-            public TabPageControlCollection (TabPage owner) : base(owner) {
+            /// </summary>
+            public TabPageControlCollection(TabPage owner) : base(owner)
+            {
             }
 
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection.Add"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Adds a child control to this control. The control becomes the last control
             ///     in the child control list. If the control is already a child of another
             ///     control it is first removed from that control.  The tab page overrides
             ///     this method to ensure that child tab pages are not added to it, as these
             ///     are illegal.
-            /// </devdoc>
-            public override void Add (Control value) {
-                if (value is TabPage) {
-                    throw new ArgumentException (string.Format (SR.TABCONTROLTabPageOnTabPage));
+            /// </summary>
+            public override void Add(Control value)
+            {
+                if (value is TabPage)
+                {
+                    throw new ArgumentException(string.Format(SR.TABCONTROLTabPageOnTabPage));
                 }
 
-                base.Add (value);
+                base.Add(value);
             }
         }
     }

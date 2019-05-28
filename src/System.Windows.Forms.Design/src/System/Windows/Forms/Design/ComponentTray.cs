@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal OleDragDropHandler oleDragDropHandler; // handler class for ole drag drop operations.
 
-        private IDesigner mainDesigner; // the designer that is associated with this tray
+        private readonly IDesigner mainDesigner; // the designer that is associated with this tray
         private IEventHandlerService eventHandlerService = null; // Event Handler service to handle keyboard and focus.
         private bool queriedTabOrder;
         private MenuCommand tabOrderCommand;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
 
         // Services that we use on a high enough frequency to merit caching.
         private IMenuCommandService menuCommandService;
-        private CommandSet privateCommandSet = null;
+        private readonly CommandSet privateCommandSet = null;
         private InheritanceUI inheritanceUI;
 
         private Point mouseDragStart = InvalidPoint; // the starting location of a drag
@@ -63,9 +63,9 @@ namespace System.Windows.Forms.Design
         private Point autoScrollPosBeforeDragging = Point.Empty;//Used to return the correct scroll pos. after a drag
 
         // Component Tray Context menu items...
-        private MenuCommand menucmdArrangeIcons = null;
-        private MenuCommand menucmdLineupIcons = null;
-        private MenuCommand menucmdLargeIcons = null;
+        private readonly MenuCommand menucmdArrangeIcons = null;
+        private readonly MenuCommand menucmdLineupIcons = null;
+        private readonly MenuCommand menucmdLargeIcons = null;
         private bool fResetAmbient = false;
         private bool fSelectionChanged = false;
         private ComponentTrayGlyphManager glyphManager;//used to manage any glyphs added to the tray
@@ -225,7 +225,9 @@ namespace System.Windows.Forms.Design
         {
             ControlCollection children = (ControlCollection)Controls;
             if (children == null)
+            {
                 return;
+            }
 
             for (int i = 0; i < children.Count; ++i)
             {
@@ -306,7 +308,9 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (t != null)
+                {
                     t.Commit();
+                }
             }
         }
 
@@ -322,14 +326,19 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (t != null)
+                {
                     t.Commit();
+                }
             }
         }
 
         private void DoLineupIcons()
         {
             if (autoArrange)
+            {
                 return;
+            }
+
             bool oldValue = autoArrange;
             autoArrange = true;
             try
@@ -367,7 +376,9 @@ namespace System.Windows.Forms.Design
                 foreach (Control ctl in controls)
                 {
                     if (!ctl.Visible)
+                    {
                         continue;
+                    }
                     // If we're auto arranging, always move the control.  If not, move the control only if it was never given a position.  This auto arranges it until the user messes with it, or until its position is saved into the resx. (if one control is no longer positioned, move all the other one as  we don't want them to go under one another)
                     if (autoArrange)
                     {
@@ -409,7 +420,9 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (t != null)
+                {
                     t.Commit();
+                }
             }
         }
 
@@ -627,7 +640,7 @@ namespace System.Windows.Forms.Design
         }
 
         bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY) => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
-        
+
         void ISelectionUIHandler.ShowContextMenu(IComponent component)
         {
             Point cur = Control.MousePosition;
@@ -658,7 +671,7 @@ namespace System.Windows.Forms.Design
         }
 
         void ISelectionUIHandler.OleDragEnter(DragEventArgs de) => GetOleDragHandler().DoOleDragEnter(de);
-        
+
         void ISelectionUIHandler.OleDragDrop(DragEventArgs de) => GetOleDragHandler().DoOleDragDrop(de);
 
         void ISelectionUIHandler.OleDragOver(DragEventArgs de) => GetOleDragHandler().DoOleDragOver(de);
@@ -743,13 +756,16 @@ namespace System.Windows.Forms.Design
             // Disallow controls to be added to the component tray.
             Type compType = host.GetType(tool.TypeName);
             if (compType == null)
+            {
                 return true;
+            }
+
             if (!compType.IsSubclassOf(typeof(Control)))
             {
                 return true;
             }
             Type designerType = GetDesignerType(compType, typeof(IDesigner));
-            return ! (typeof(ControlDesigner).IsAssignableFrom(designerType));
+            return !(typeof(ControlDesigner).IsAssignableFrom(designerType));
         }
 
         private Type GetDesignerType(Type t, Type designerBaseType)
@@ -1156,7 +1172,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <internalonly />
         /// <summary>
         /// Forces the layout of any docked or anchored child controls.
         /// </summary>
@@ -1513,7 +1528,9 @@ namespace System.Windows.Forms.Design
                     {
                         int index = controls.IndexOf(c);
                         if (index != -1)
+                        {
                             controls.RemoveAt(index);
+                        }
                     }
                 }
                 finally
@@ -1588,15 +1605,15 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_CANCELMODE:
+                case Interop.WindowMessages.WM_CANCELMODE:
                     // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any pending drag operation!
                     OnLostCapture();
                     break;
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     OnSetCursor();
                     return;
-                case NativeMethods.WM_HSCROLL:
-                case NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_HSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
                     // When we scroll, we reposition a control without causing a property change event.  Therefore, we must tell the selection UI service to sync itself.
                     base.WndProc(ref m);
                     if (selectionUISvc != null)
@@ -1604,11 +1621,11 @@ namespace System.Windows.Forms.Design
                         selectionUISvc.SyncSelection();
                     }
                     return;
-                case NativeMethods.WM_STYLECHANGED:
+                case Interop.WindowMessages.WM_STYLECHANGED:
                     // When the scroll bars first appear, we need to invalidate so we properly paint our grid.
                     Invalidate();
                     break;
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     // Pop a context menu for the composition designer.
                     int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
                     int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
@@ -1621,7 +1638,7 @@ namespace System.Windows.Forms.Design
                     }
                     OnContextMenu(x, y, true);
                     break;
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     if (glyphManager != null)
                     {
                         // Get a hit test on any glyhs that we are managing this way - we know where to route appropriate  messages
@@ -1759,7 +1776,9 @@ namespace System.Windows.Forms.Design
                 if (mouseDropLocation != InvalidPoint)
                 {
                     if (!c.Location.Equals(mouseDropLocation))
+                    {
                         c.Location = mouseDropLocation;
+                    }
                 }
                 else
                 {
@@ -2441,7 +2460,10 @@ namespace System.Windows.Forms.Design
             protected override void SetVisibleCore(bool value)
             {
                 if (value && !_tray.CanDisplayComponent(_component))
+                {
                     return;
+                }
+
                 base.SetVisibleCore(value);
             }
 
@@ -2535,11 +2557,11 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_SETCURSOR:
+                    case Interop.WindowMessages.WM_SETCURSOR:
                         // We always handle setting the cursor ourselves.
                         OnSetCursor();
                         break;
-                    case NativeMethods.WM_CONTEXTMENU:
+                    case Interop.WindowMessages.WM_CONTEXTMENU:
                         // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here, this message will be bubbled up to our parent, which would pop up a container context menu instead of our own.
                         int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
                         int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
@@ -2552,7 +2574,7 @@ namespace System.Windows.Forms.Design
                         }
                         OnContextMenu(x, y);
                         break;
-                    case NativeMethods.WM_NCHITTEST:
+                    case Interop.WindowMessages.WM_NCHITTEST:
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
@@ -2774,13 +2796,19 @@ namespace System.Windows.Forms.Design
                 int height = ((Control)o1).Height / 2;
                 // If they are at the same location, they are equal.
                 if (tcLoc1.X == tcLoc2.X && tcLoc1.Y == tcLoc2.Y)
+                {
                     return 0;
+                }
                 // Is the first control lower than the 2nd...
                 if (tcLoc1.Y + height <= tcLoc2.Y)
+                {
                     return -1;
+                }
                 // Is the 2nd control lower than the first...
                 if (tcLoc2.Y + height <= tcLoc1.Y)
+                {
                     return 1;
+                }
                 // Which control is left of the other...
                 return ((tcLoc1.X <= tcLoc2.X) ? -1 : 1);
             }

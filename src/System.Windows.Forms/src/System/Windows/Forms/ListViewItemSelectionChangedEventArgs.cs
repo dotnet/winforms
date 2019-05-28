@@ -4,15 +4,14 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// The event class that is created when the selection state of a ListViewItem is changed.
-    /// </devdoc>
+    /// </summary>
     public class ListViewItemSelectionChangedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Constructs a ListViewItemSelectionChangedEventArgs object.
-        /// </devdoc>
+        /// </summary>
         public ListViewItemSelectionChangedEventArgs(ListViewItem item, int itemIndex, bool isSelected)
         {
             Item = item;
@@ -20,19 +19,19 @@ namespace System.Windows.Forms
             IsSelected = isSelected;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The list view item whose selection changed
-        /// </devdoc>
+        /// </summary>
         public ListViewItem Item { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The list view item's index
-        /// </devdoc>
+        /// </summary>
         public int ItemIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Return true if the item is selected
-        /// </devdoc>
+        /// </summary>
         public bool IsSelected { get; }
     }
 }

@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The QueryAccessibilityHelpEventArgs is fired when AccessibleObject is providing help
     /// to accessibility applications.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
-    public class QueryAccessibilityHelpEventArgs  : EventArgs
+    public class QueryAccessibilityHelpEventArgs : EventArgs
     {
         public QueryAccessibilityHelpEventArgs()
         {

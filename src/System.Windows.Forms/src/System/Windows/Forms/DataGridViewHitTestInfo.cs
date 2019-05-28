@@ -8,8 +8,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo"]/*' />
-        public sealed class HitTestInfo 
+        public sealed class HitTestInfo
         {
             internal DataGridViewHitTestType type = DataGridViewHitTestType.None;
             //internal DataGridViewHitTestTypeCloseEdge edge = DataGridViewHitTestTypeCloseEdge.None;
@@ -22,112 +21,102 @@ namespace System.Windows.Forms
             internal int rowStart;
             internal int colStart;
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.Nowhere"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// <para>Allows the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> object to inform you the 
             ///    extent of the grid.</para>
-            /// </devdoc>
+            /// </summary>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
 
             internal HitTestInfo()
             {
-                this.type = DataGridViewHitTestType.None;
-                this.typeInternal = DataGridViewHitTestTypeInternal.None;
+                type = DataGridViewHitTestType.None;
+                typeInternal = DataGridViewHitTestTypeInternal.None;
                 //this.edge = DataGridViewHitTestTypeCloseEdge.None;
-                this.row = this.col = -1;
-                this.rowStart = this.colStart = -1;
-                this.adjacentRow = this.adjacentCol = -1;
+                row = col = -1;
+                rowStart = colStart = -1;
+                adjacentRow = adjacentCol = -1;
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.ColumnIndex"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the number of the clicked column.</para>
-            /// </devdoc>
+            /// </summary>
             public int ColumnIndex
             {
-                get 
+                get
                 {
-                    return this.col;
+                    return col;
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.RowIndex"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the
             ///       number of the clicked row.</para>
-            /// </devdoc>
+            /// </summary>
             public int RowIndex
             {
-                get 
+                get
                 {
-                    return this.row;
+                    return row;
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.ColumnX"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the left edge of the column.</para>
-            /// </devdoc>
+            /// </summary>
             public int ColumnX
             {
-                get 
+                get
                 {
-                    return this.colStart;
+                    return colStart;
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.RowY"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the top edge of the row.</para>
-            /// </devdoc>
+            /// </summary>
             public int RowY
             {
-                get 
+                get
                 {
-                    return this.rowStart;
+                    return rowStart;
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.Type"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGridView'/> control, other than the row or column, that was 
             ///    clicked.</para>
-            /// </devdoc>
+            /// </summary>
             public DataGridViewHitTestType Type
             {
-                get 
+                get
                 {
-                    return this.type;
+                    return type;
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.Equals"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Indicates whether two objects are identical.</para>
-            /// </devdoc>
-            public override bool Equals(object value) 
+            /// </summary>
+            public override bool Equals(object value)
             {
-                HitTestInfo hti = value as HitTestInfo;
-                if (hti != null) 
+                if (value is HitTestInfo hti)
                 {
-                    return (this.type == hti.type &&
-                            this.row  == hti.row &&
-                            this.col  == hti.col);
+                    return (type == hti.type &&
+                            row == hti.row &&
+                            col == hti.col);
                 }
                 return false;
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.GetHashCode"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the hash code for the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> instance.</para>
-            /// </devdoc>
+            /// </summary>
             public override int GetHashCode() => HashCode.Combine(type, row, col);
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.ToString"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the type, column number and row number.</para>
-            /// </devdoc>
-            public override string ToString() 
+            /// </summary>
+            public override string ToString()
             {
                 return "{ Type:" + type.ToString() + ", Column:" + col.ToString(CultureInfo.CurrentCulture) + ", Row:" + row.ToString(CultureInfo.CurrentCulture) + " }";
             }

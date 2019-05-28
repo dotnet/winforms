@@ -10,9 +10,9 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///     Represent the device type the context refers to.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -21,13 +21,13 @@ namespace System.Experimental.Gdi
     enum DeviceContextType
     {
         // Unknown device
-        Unknown     = 0x00,
-        
+        Unknown = 0x00,
+
         // Display DC - obtained from GetDC/GetDCEx/BeginPaint.
-        Display     = 0x01,
+        Display = 0x01,
 
         // Window DC including non-client area - obtained from GetWindowDC
-        NCWindow    = 0x02,
+        NCWindow = 0x02,
 
         // Printer DC - obtained from CreateDC.
         NamedDevice = 0x03,
@@ -36,10 +36,10 @@ namespace System.Experimental.Gdi
         Information = 0x04,
 
         // Memory dc - obtained from CreateCompatibleDC.
-        Memory      = 0x05,
+        Memory = 0x05,
 
         // Metafile dc - obtained from CreateEnhMetafile.
-        Metafile    = 0x06 // currently not supported.
+        Metafile = 0x06 // currently not supported.
     }
 }
 

@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the UpDownEvent
-    /// </devdoc>
+    /// </summary>
     public class UpDownEventArgs : EventArgs
     {
         public UpDownEventArgs(int buttonPushed)

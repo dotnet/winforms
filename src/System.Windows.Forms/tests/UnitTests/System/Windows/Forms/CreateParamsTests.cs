@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Tests
         {
             var createParams = new CreateParams
             {
-                ClassName ="className",
+                ClassName = "className",
                 Caption = "caption",
                 Style = 10,
                 ExStyle = 11,

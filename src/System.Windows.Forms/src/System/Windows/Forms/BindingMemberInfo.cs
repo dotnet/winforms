@@ -6,8 +6,8 @@ namespace System.Windows.Forms
 {
     public struct BindingMemberInfo
     {
-        private string _dataList;
-        private string _dataField;
+        private readonly string _dataList;
+        private readonly string _dataField;
 
         public BindingMemberInfo(string dataMember)
         {

@@ -498,7 +498,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 //send the actual wm_print message
-                NativeMethods.SendMessage(hWnd, NativeMethods.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -780,7 +780,9 @@ namespace System.Windows.Forms.Design
         public static ICollection FilterGenericTypes(ICollection types)
         {
             if (types == null || types.Count == 0)
+            {
                 return types;
+            }
 
             //now we get each Type and add it to the destination collection if its not a generic
             ArrayList final = new ArrayList(types.Count);

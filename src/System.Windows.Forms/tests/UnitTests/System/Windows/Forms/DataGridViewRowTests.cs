@@ -245,23 +245,33 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DefaultCellStyle_Set_TestData()
         {
-            yield return new object[] { new DataGridViewRow(), null, new DataGridViewCellStyle() };
-
             var style = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
-            var dataGridView = new DataGridView { ColumnCount = 1 };
-            dataGridView.Rows.Add(new DataGridViewRow());
-            yield return new object[] { dataGridView.Rows[0], style, style };
+
+            yield return new object[] { new DataGridViewRow(), null, new DataGridViewCellStyle() };
+            yield return new object[] { new DataGridViewRow(), style, style };
+
+            var dataGridView1 = new DataGridView { ColumnCount = 1 };
+            dataGridView1.Rows.Add(new DataGridViewRow());
+            var dataGridView2 = new DataGridView { ColumnCount = 1 };
+            dataGridView2.Rows.Add(new DataGridViewRow());
+            yield return new object[] { dataGridView1.Rows[0], null, new DataGridViewCellStyle() };
+            yield return new object[] { dataGridView2.Rows[0], style, style };
+
+            var templateDataGridView1 = new DataGridView();
+            var templateDataGridView2 = new DataGridView();
+            yield return new object[] { templateDataGridView1.RowTemplate, null, new DataGridViewCellStyle() };
+            yield return new object[] { templateDataGridView2.RowTemplate, style, style };
         }
 
         [Theory]
         [MemberData(nameof(DefaultCellStyle_Set_TestData))]
-        public void DataGridViewRow_DefaultCellStyle_Set_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
+        public void DataGridViewRow_DefaultCellStyle_SetWithNullOldValue_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
@@ -276,7 +286,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
@@ -377,7 +387,7 @@ namespace System.Windows.Forms.Tests
             row.DefaultHeaderCellType = value;
             Assert.Equal(expected, row.DefaultHeaderCellType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultHeaderCellType = value;
             Assert.Equal(expected, row.DefaultHeaderCellType);
         }
@@ -395,7 +405,7 @@ namespace System.Windows.Forms.Tests
             row.DefaultHeaderCellType = value;
             Assert.Equal(value, row.DefaultHeaderCellType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultHeaderCellType = value;
             Assert.Equal(value, row.DefaultHeaderCellType);
         }
@@ -479,7 +489,7 @@ namespace System.Windows.Forms.Tests
             row.DividerHeight = value;
             Assert.Equal(value, row.DividerHeight);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DividerHeight = value;
             Assert.Equal(value, row.DividerHeight);
         }
@@ -557,7 +567,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ErrorText_GetNeedsErrorText_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -602,37 +612,37 @@ namespace System.Windows.Forms.Tests
         {
             foreach (string value in new string[] { null, string.Empty, "reasonable" })
             {
-                yield return new object[] { new DataGridViewRow(), value };
+                yield return new object[] { new DataGridViewRow(), value, value ?? string.Empty };
 
                 var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
-                yield return new object[] { dataGridView.Rows[0], value };
+                yield return new object[] { dataGridView.Rows[0], value, value ?? string.Empty };
             }
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value)
+        public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value)
+        public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
             row.ErrorText = "value";
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
         }
 
         [Fact]
@@ -725,7 +735,7 @@ namespace System.Windows.Forms.Tests
             row.Frozen = true;
             Assert.True(row.Frozen);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Frozen = true;
             Assert.True(row.Frozen);
 
@@ -780,7 +790,7 @@ namespace System.Windows.Forms.Tests
         }
 
         public static IEnumerable<object[]> HeaderCell_Get_TestData()
-        {   
+        {
             yield return new object[] { new DataGridViewRow() };
 
             var dataGridView = new DataGridView { ColumnCount = 1 };
@@ -826,7 +836,7 @@ namespace System.Windows.Forms.Tests
             }
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.HeaderCell = value;
             if (value != null)
             {
@@ -854,7 +864,7 @@ namespace System.Windows.Forms.Tests
                 Assert.NotNull(row.HeaderCell);
             }
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.HeaderCell = value;
             if (value != null)
             {
@@ -941,7 +951,7 @@ namespace System.Windows.Forms.Tests
                 22, 0, 22
             };
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true }, 6, 1, 5 };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -983,7 +993,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewRow(), 1, 3 };
             yield return new object[] { new DataGridViewRow(), 3, 3 };
             yield return new object[] { new DataGridViewRow(), 4, 4 };
-            
+
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             yield return new object[] { dataGridView.Rows[0], 65536, 65536 };
@@ -1004,7 +1014,7 @@ namespace System.Windows.Forms.Tests
             row.Height = value;
             Assert.Equal(expected, row.Height);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Height = value;
             Assert.Equal(expected, row.Height);
         }
@@ -1095,8 +1105,8 @@ namespace System.Windows.Forms.Tests
 
                 return row;
             }
-            var font1 = SystemFonts.DefaultFont;
-            var font2 = SystemFonts.MenuFont;
+            Font font1 = SystemFonts.DefaultFont;
+            Font font2 = SystemFonts.MenuFont;
             var provider1 = new NumberFormatInfo();
             var provider2 = new NumberFormatInfo();
 
@@ -1252,7 +1262,7 @@ namespace System.Windows.Forms.Tests
                 5, 0
             };
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true }, 6, 1 };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -1293,7 +1303,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewRow(), 3, 10 };
             yield return new object[] { new DataGridViewRow(), 10, 10 };
             yield return new object[] { new DataGridViewRow(), 11, 11 };
-            
+
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             yield return new object[] { dataGridView.Rows[0], 65536, 65536 };
@@ -1308,7 +1318,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, row.MinimumHeight);
             Assert.Equal(expectedHeight, row.Height);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.MinimumHeight = value;
             Assert.Equal(value, row.MinimumHeight);
             Assert.Equal(expectedHeight, row.Height);
@@ -1391,7 +1401,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.ReadOnly);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ReadOnly_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1420,7 +1430,7 @@ namespace System.Windows.Forms.Tests
             row.ReadOnly = true;
             Assert.True(row.ReadOnly);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ReadOnly = true;
             Assert.True(row.ReadOnly);
 
@@ -1477,7 +1487,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.ReadOnly);
             Assert.Equal(2, callCount);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ReadOnly_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1504,7 +1514,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.Resizable);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Resizable_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1530,7 +1540,7 @@ namespace System.Windows.Forms.Tests
             row.Resizable = value;
             Assert.Equal(expected, row.Resizable);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Resizable = value;
             Assert.Equal(expected, row.Resizable);
         }
@@ -1605,7 +1615,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.Selected);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Selected_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1623,7 +1633,7 @@ namespace System.Windows.Forms.Tests
             row.Selected = false;
             Assert.False(row.Selected);
         }
-        
+
         [Theory]
         [InlineData(DataGridViewSelectionMode.CellSelect, false)]
         [InlineData(DataGridViewSelectionMode.FullRowSelect, true)]
@@ -1646,7 +1656,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(selected, (dataGridView.SelectedRows).Contains(row));
             Assert.Equal(selected, row.Selected);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Selected = true;
             Assert.Equal(selected, (dataGridView.SelectedRows).Contains(row));
             Assert.Equal(selected, row.Selected);
@@ -1724,7 +1734,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(row1.Selected);
             Assert.False(row2.Selected);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Selected_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1748,7 +1758,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.State);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_State_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1790,7 +1800,7 @@ namespace System.Windows.Forms.Tests
             row.Tag = value;
             Assert.Equal(value, row.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Tag = value;
             Assert.Equal(value, row.Tag);
         }
@@ -1803,7 +1813,7 @@ namespace System.Windows.Forms.Tests
             row.Tag = value;
             Assert.Equal(value, row.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Tag = value;
             Assert.Equal(value, row.Tag);
         }
@@ -1823,7 +1833,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.Visible);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Visible_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1848,7 +1858,7 @@ namespace System.Windows.Forms.Tests
             row.Visible = false;
             Assert.False(row.Visible);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Visible = false;
             Assert.False(row.Visible);
 
@@ -1904,11 +1914,11 @@ namespace System.Windows.Forms.Tests
 
             Assert.Throws<InvalidOperationException>(() => row.Visible = false);
             Assert.True(row.Visible);
-            
+
             row.Visible = true;
             Assert.True(row.Visible);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Visible_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -2490,7 +2500,7 @@ namespace System.Windows.Forms.Tests
 
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
-            var source = dataGridView.Rows[0];
+            DataGridViewRow source = dataGridView.Rows[0];
             source.ContextMenuStrip = menu;
             source.DefaultCellStyle = style;
             source.DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell);
@@ -2725,7 +2735,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetContextMenuStrip_NeedsContextMenuStrip_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -2811,7 +2821,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetErrorText_NeedsErrorText_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -2867,7 +2877,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetState_TestData()
         {
             yield return new object[] { new DataGridViewRow(), -1, DataGridViewElementStates.Visible };
-            
+
             var dataGridView = new DataGridView();
             dataGridView.Columns.Add("Column", "Text");
             dataGridView.Rows.Add(new SubDataGridViewRow());
@@ -2915,7 +2925,7 @@ namespace System.Windows.Forms.Tests
             headersInvisibleDataGridView.Rows.Add(new DataGridViewRow());
 
             yield return new object[] { headersInvisibleDataGridView.Rows[1], Rectangle.Empty, new Rectangle(1, 2, 100, 100), -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All };
-        
+
             var frozenDataGridView = new DataGridView { ColumnCount = 1 };
             frozenDataGridView.Rows.Add(new DataGridViewRow());
             frozenDataGridView.Columns[0].Frozen = true;
@@ -2925,7 +2935,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { frozenDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), 0, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, false, true, DataGridViewPaintParts.None };
             yield return new object[] { frozenDataGridView.Rows[1], new Rectangle(1000, 2000, 100, 100), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
             yield return new object[] { frozenDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
-        
+
             var leftToRightDataGridView = new DataGridView { ColumnCount = 1, RightToLeft = RightToLeft.Yes };
             leftToRightDataGridView.Rows.Add(new DataGridViewRow());
             leftToRightDataGridView.Columns[0].Frozen = true;
@@ -2935,7 +2945,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { leftToRightDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), 0, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, false, true, DataGridViewPaintParts.None };
             yield return new object[] { leftToRightDataGridView.Rows[1], new Rectangle(1000, 2000, 100, 100), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
             yield return new object[] { leftToRightDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
-        
+
             var singleVerticalBorderAddedDataGridView = new DataGridView { ColumnCount = 1, RowHeadersVisible = false };
             singleVerticalBorderAddedDataGridView.Rows.Add(new DataGridViewRow());
             singleVerticalBorderAddedDataGridView.Columns[0].Frozen = true;
@@ -2945,7 +2955,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { singleVerticalBorderAddedDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), 0, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, false, true, DataGridViewPaintParts.None };
             yield return new object[] { singleVerticalBorderAddedDataGridView.Rows[1], new Rectangle(1000, 2000, 100, 100), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
             yield return new object[] { singleVerticalBorderAddedDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
-        
+
             var singleHorizontalBorderAddedDataGridView = new DataGridView { ColumnCount = 1, ColumnHeadersVisible = false };
             singleHorizontalBorderAddedDataGridView.Rows.Add(new DataGridViewRow());
             singleHorizontalBorderAddedDataGridView.Columns[0].Frozen = true;

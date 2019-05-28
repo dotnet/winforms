@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -19,11 +17,10 @@ using System.Windows.Forms.VisualStyles;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///    Provides a generic editor for most any collection.
+    /// Provides a generic editor for most any collection.
     /// </summary>
     public class CollectionEditor : UITypeEditor
-    { 
-        private readonly Type _type;
+    {
         private Type _collectionItemType;
         private Type[] _newItemTypes;
         private ITypeDescriptorContext _currentContext;
@@ -32,85 +29,43 @@ namespace System.ComponentModel.Design
         private bool _ignoreChangingEvents;
 
         /// <summary>
-        ///       Useful for derived classes to do processing when cancelling changes
-        /// </summary>
-        protected virtual void CancelChanges()
-        {
-        }
-
-        /// <summary>
-        ///       Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
+        /// Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
         /// </summary>
         public CollectionEditor(Type type)
         {
-            _type = type;
+            CollectionType = type;
         }
 
         /// <summary>
-        ///    Gets or sets the data type of each item in the collection.
+        /// Gets or sets the data type of each item in the collection.
         /// </summary>
         protected Type CollectionItemType
         {
-            get
-            {
-                if (_collectionItemType == null)
-                {
-                    _collectionItemType = CreateCollectionItemType();
-                }
-                return _collectionItemType;
-            }
+            get => _collectionItemType ?? (_collectionItemType = CreateCollectionItemType());
         }
 
         /// <summary>
-        ///       Gets or sets the type of the collection.
+        /// Gets or sets the type of the collection.
         /// </summary>
-        protected Type CollectionType
-        {
-            get
-            {
-                return _type;
-            }
-        }
+        protected Type CollectionType { get; }
 
         /// <summary>
-        ///       Gets or sets a type descriptor that indicates the current context.
+        /// Gets or sets a type descriptor that indicates the current context.
         /// </summary>
-        protected ITypeDescriptorContext Context
-        {
-            get
-            {
-                return _currentContext;
-            }
-        }
+        protected ITypeDescriptorContext Context => _currentContext;
 
         /// <summary>
-        ///    Gets or sets the available item types that can be created for this collection.
+        /// Gets or sets the available item types that can be created for this collection.
         /// </summary>
-        protected Type[] NewItemTypes
-        {
-            get
-            {
-                if (_newItemTypes == null)
-                {
-                    _newItemTypes = CreateNewItemTypes();
-                }
-                return _newItemTypes;
-            }
-        }
+        protected Type[] NewItemTypes => _newItemTypes ?? (_newItemTypes = CreateNewItemTypes());
 
         /// <summary>
-        ///    Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
+        /// Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
         /// </summary>
-        protected virtual string HelpTopic
-        {
-            get
-            {
-                return "net.ComponentModel.CollectionEditor";
-            }
-        }
+        protected virtual string HelpTopic => "net.ComponentModel.CollectionEditor";
 
         /// <summary>
-        ///    Gets or sets a value indicating whether original members of the collection can be removed.
+        /// Gets or sets a value indicating whether original members of the collection can be removed.
         /// </summary>
         protected virtual bool CanRemoveInstance(object value)
         {
@@ -128,74 +83,55 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///    Gets or sets a value indicating whether multiple collection members can be selected.
+        /// Useful for derived classes to do processing when cancelling changes
         /// </summary>
-        protected virtual bool CanSelectMultipleInstances()
+        protected virtual void CancelChanges()
         {
-            return true;
         }
 
         /// <summary>
-        ///    Creates a new form to show the current collection.
+        /// Gets or sets a value indicating whether multiple collection members can be selected.
         /// </summary>
-        protected virtual CollectionForm CreateCollectionForm()
-        {
-            return new CollectionEditorCollectionForm(this);
-        }
+        protected virtual bool CanSelectMultipleInstances() => true;
 
         /// <summary>
-        ///       Creates a new instance of the specified collection item type.
+        /// Creates a new form to show the current collection.
+        /// </summary>
+        protected virtual CollectionForm CreateCollectionForm() => new CollectionEditorCollectionForm(this);
+
+        /// <summary>
+        /// Creates a new instance of the specified collection item type.
         /// </summary>
         protected virtual object CreateInstance(Type itemType)
         {
-            return CollectionEditor.CreateInstance(itemType, (IDesignerHost)GetService(typeof(IDesignerHost)), null);
-        }
-
-        /// <summary>
-        ///       This Function gets the object from the givem object. The input is an arrayList returned as an Object.
-        ///       The output is a arraylist which contains the individual objects that need to be created.
-        /// </summary>
-        protected virtual IList GetObjectsFromInstance(object instance)
-        {
-            ArrayList ret = new ArrayList
+            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+            if (typeof(IComponent).IsAssignableFrom(itemType) && host != null)
             {
-                instance
-            };
-            return ret;
-        }
+                IComponent instance = host.CreateComponent(itemType, null);
 
-        internal static object CreateInstance(Type itemType, IDesignerHost host, string name)
-        {
-            object instance = null;
-
-            if (typeof(IComponent).IsAssignableFrom(itemType))
-            {
-                if (host != null)
+                // Set component defaults
+                if (host.GetDesigner(instance) is IComponentInitializer init)
                 {
-                    instance = host.CreateComponent(itemType, (string)name);
+                    init.InitializeNewComponent(null);
+                }
 
-                    // Set component defaults
-                    if (host != null)
-                    {
-                        if (host.GetDesigner((IComponent)instance) is IComponentInitializer init)
-                        {
-                            init.InitializeNewComponent(null);
-                        }
-                    }
+                if (instance != null)
+                {
+                    return instance;
                 }
             }
 
-            if (instance == null)
-            {
-                instance = TypeDescriptor.CreateInstance(host, itemType, null, null);
-            }
-
-            return instance;
+            return TypeDescriptor.CreateInstance(host, itemType, null, null);
         }
 
+        /// <summary>
+        /// This Function gets the object from the givem object. The input is an arrayList returned as an Object.
+        /// The output is a arraylist which contains the individual objects that need to be created.
+        /// </summary>
+        protected virtual IList GetObjectsFromInstance(object instance) => new ArrayList { instance };
 
         /// <summary>
-        ///      Retrieves the display text for the given list item.
+        /// Retrieves the display text for the given list item.
         /// </summary>
         protected virtual string GetDisplayText(object value)
         {
@@ -210,7 +146,7 @@ namespace System.ComponentModel.Design
             if (prop != null && prop.PropertyType == typeof(string))
             {
                 text = (string)prop.GetValue(value);
-                if (text != null && text.Length > 0)
+                if (!string.IsNullOrEmpty(text))
                 {
                     return text;
                 }
@@ -220,15 +156,14 @@ namespace System.ComponentModel.Design
             if (prop != null && prop.PropertyType == typeof(string))
             {
                 text = (string)prop.GetValue(value);
-                if (text != null && text.Length > 0)
+                if (!string.IsNullOrEmpty(text))
                 {
                     return text;
                 }
             }
 
             text = TypeDescriptor.GetConverter(value).ConvertToString(value);
-
-            if (text == null || text.Length == 0)
+            if (string.IsNullOrEmpty(text))
             {
                 text = value.GetType().Name;
             }
@@ -237,7 +172,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///       Gets an instance of the data type this collection contains.
+        /// Gets an instance of the data type this collection contains.
         /// </summary>
         protected virtual Type CreateCollectionItemType()
         {
@@ -251,27 +186,22 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            Debug.Fail("Collection " + CollectionType.FullName + " contains no Item or Items property so we cannot display and edit any values");
             return typeof(object);
         }
 
         /// <summary>
-        ///       Gets the data types this collection editor can create.
+        /// Gets the data types this collection editor can create.
         /// </summary>
-        protected virtual Type[] CreateNewItemTypes()
-        {
-            return new Type[] { CollectionItemType };
-        }
+        protected virtual Type[] CreateNewItemTypes() => new Type[] { CollectionItemType };
 
         /// <summary>
-        ///       Destroys the specified instance of the object.
+        /// Destroys the specified instance of the object.
         /// </summary>
         protected virtual void DestroyInstance(object instance)
         {
             if (instance is IComponent compInstance)
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
                     host.DestroyComponent(compInstance);
                 }
@@ -280,105 +210,92 @@ namespace System.ComponentModel.Design
                     compInstance.Dispose();
                 }
             }
-            else
+            else if (instance is IDisposable dispInstance)
             {
-                if (instance is IDisposable dispInstance)
-                {
-                    dispInstance.Dispose();
-                }
+                dispInstance.Dispose();
             }
         }
 
         /// <summary>
-        ///    Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
+        /// Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider?.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                if (edSvc != null)
+                _currentContext = context;
+
+                // child modal dialog -launching in System Aware mode 
+                CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
+                ITypeDescriptorContext lastContext = _currentContext;
+                localCollectionForm.EditValue = value;
+                _ignoreChangingEvents = false;
+                _ignoreChangedEvents = false;
+                DesignerTransaction trans = null;
+
+                bool commitChange = true;
+                IComponentChangeService cs = null;
+                IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+
+                try
                 {
-                    _currentContext = context;
-
-                    // child modal dialog -launching in System Aware mode 
-                    CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
-                    ITypeDescriptorContext lastContext = _currentContext;
-                    localCollectionForm.EditValue = value;
-                    _ignoreChangingEvents = false;
-                    _ignoreChangedEvents = false;
-                    DesignerTransaction trans = null;
-
-                    bool commitChange = true;
-                    IComponentChangeService cs = null;
-                    IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-
                     try
                     {
-                        try
-                        {
-                            if (host != null)
-                            {
-                                trans = host.CreateTransaction(string.Format(SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
-                            }
-                        }
-                        catch (CheckoutException cxe)
-                        {
-                            if (cxe == CheckoutException.Canceled)
-                                return value;
+                        trans = host?.CreateTransaction(string.Format(SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
+                    }
+                    catch (CheckoutException cxe) when (cxe == CheckoutException.Canceled)
+                    {
+                        return value;
+                    }
 
-                            throw cxe;
-                        }
+                    cs = host?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                    if (cs != null)
+                    {
+                        cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                        cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
+                    }
 
-                        cs = host != null ? (IComponentChangeService)host.GetService(typeof(IComponentChangeService)) : null;
-
-                        if (cs != null)
+                    if (localCollectionForm.ShowEditorDialog(edSvc) == DialogResult.OK)
+                    {
+                        value = localCollectionForm.EditValue;
+                    }
+                    else
+                    {
+                        commitChange = false;
+                    }
+                }
+                finally
+                {
+                    localCollectionForm.EditValue = null;
+                    _currentContext = lastContext;
+                    if (trans != null)
+                    {
+                        if (commitChange)
                         {
-                            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-                            cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-                        }
-
-                        if (localCollectionForm.ShowEditorDialog(edSvc) == DialogResult.OK)
-                        {
-                            value = localCollectionForm.EditValue;
+                            trans.Commit();
                         }
                         else
                         {
-                            commitChange = false;
+                            trans.Cancel();
                         }
                     }
-                    finally
+
+                    if (cs != null)
                     {
-                        localCollectionForm.EditValue = null;
-                        _currentContext = lastContext;
-                        if (trans != null)
-                        {
-                            if (commitChange)
-                            {
-                                trans.Commit();
-                            }
-                            else
-                            {
-                                trans.Cancel();
-                            }
-                        }
-
-                        if (cs != null)
-                        {
-                            cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                            cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-                        }
-
-                        localCollectionForm.Dispose();
+                        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                        cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
                     }
+
+                    localCollectionForm.Dispose();
                 }
             }
+
             return value;
         }
 
         /// <summary>
-        ///    Gets the editing style of the Edit method.
+        /// Gets the editing style of the Edit method.
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
@@ -390,7 +307,7 @@ namespace System.ComponentModel.Design
         {
             // If the object implements IComponent, and is not sited, check with the inheritance service (if it exists) to see if this is a component
             // that is being inherited from another class. 
-            // If it is, then we do not want to place it in the collection editor.  If the inheritance service
+            // If it is, then we do not want to place it in the collection editor. If the inheritance service
             // chose not to site the component, that indicates it should be hidden from  the user.
             IInheritanceService inheritanceService = null;
             bool isInheritanceServiceInitialized = false;
@@ -404,7 +321,7 @@ namespace System.ComponentModel.Design
                         isInheritanceServiceInitialized = true;
                         if (Context != null)
                         {
-                            inheritanceService = (IInheritanceService)Context.GetService(typeof(IInheritanceService));
+                            inheritanceService = Context.GetService(typeof(IInheritanceService)) as IInheritanceService;
                         }
                     }
 
@@ -414,50 +331,39 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return false;
         }
 
         /// <summary>
-        ///    Converts the specified collection into an array of objects.
+        /// Converts the specified collection into an array of objects.
         /// </summary>
         protected virtual object[] GetItems(object editValue)
         {
-            if (editValue != null)
+            // We look to see if the value implements ICollection, and if it does, we set through that.
+            if (editValue is ICollection col)
             {
-                // We look to see if the value implements ICollection, and if it does, we set through that.
-                if (editValue is Collections.ICollection)
+                var list = new ArrayList();
+                foreach (object o in col)
                 {
-                    ArrayList list = new ArrayList();
-
-                    Collections.ICollection col = (Collections.ICollection)editValue;
-                    foreach (object o in col)
-                    {
-                        list.Add(o);
-                    }
-
-                    object[] values = new object[list.Count];
-                    list.CopyTo(values, 0);
-                    return values;
+                    list.Add(o);
                 }
+
+                object[] values = new object[list.Count];
+                list.CopyTo(values, 0);
+                return values;
             }
 
             return Array.Empty<object>();
         }
 
         /// <summary>
-        ///       Gets the requested service, if it is available.
+        /// Gets the requested service, if it is available.
         /// </summary>
-        protected object GetService(Type serviceType)
-        {
-            if (Context != null)
-            {
-                return Context.GetService(serviceType);
-            }
-            return null;
-        }
+        protected object GetService(Type serviceType) => Context?.GetService(serviceType);
 
         /// <summary>
-        ///     Reflect any change events to the instance object
+        /// Reflect any change events to the instance object
         /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
@@ -469,7 +375,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Reflect any changed events to the instance object
+        /// Reflect any changed events to the instance object
         /// </summary>
         private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
         {
@@ -481,45 +387,41 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///       Removes the item from the column header from the listview column header collection
+        /// Removes the item from the column header from the listview column header collection
         /// </summary>
         internal virtual void OnItemRemoving(object item)
         {
         }
 
         /// <summary>
-        ///       Sets the specified collection to have the specified array of items.
+        /// Sets the specified collection to have the specified array of items.
         /// </summary>
         protected virtual object SetItems(object editValue, object[] value)
         {
-            if (editValue != null)
+            // We look to see if the value implements IList, and if it does, we set through that.
+            if (editValue is IList list)
             {
-                // We look to see if the value implements IList, and if it does, we set through that.
-                Debug.Assert(editValue is Collections.IList, "editValue is not an IList");
-                if (editValue is Collections.IList list)
+                list.Clear();
+                if (value != null)
                 {
-                    list.Clear();
                     for (int i = 0; i < value.Length; i++)
                     {
                         list.Add(value[i]);
                     }
                 }
             }
+
             return editValue;
         }
 
         /// <summary>
-        ///       Called when the help button is clicked.
+        /// Called when the help button is clicked.
         /// </summary>
         protected virtual void ShowHelp()
         {
             if (GetService(typeof(IHelpService)) is IHelpService helpService)
             {
                 helpService.ShowHelpFromKeyword(HelpTopic);
-            }
-            else
-            {
-                Debug.Fail("Unable to get IHelpService.");
             }
         }
 
@@ -531,20 +433,20 @@ namespace System.ComponentModel.Design
             private bool _showSplit = false;
 
             private static bool s_isScalingInitialized = false;
-            private const int OFFSET_2PIXELS = 2;
-            private static int s_offset2X = OFFSET_2PIXELS;
-            private static int s_offset2Y = OFFSET_2PIXELS;
+            private const int Offset2Pixels = 2;
+            private static int s_offset2X = Offset2Pixels;
+            private static int s_offset2Y = Offset2Pixels;
 
-            public SplitButton()
-                : base()
+            public SplitButton() : base()
             {
                 if (!s_isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
                     {
-                        s_offset2X = DpiHelper.LogicalToDeviceUnitsX(OFFSET_2PIXELS);
-                        s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(OFFSET_2PIXELS);
+                        s_offset2X = DpiHelper.LogicalToDeviceUnitsX(Offset2Pixels);
+                        s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(Offset2Pixels);
                     }
+
                     s_isScalingInitialized = true;
                 }
             }
@@ -563,10 +465,7 @@ namespace System.ComponentModel.Design
 
             private PushButtonState State
             {
-                get
-                {
-                    return _state;
-                }
+                get => _state;
                 set
                 {
                     if (!_state.Equals(value))
@@ -594,10 +493,8 @@ namespace System.ComponentModel.Design
                 {
                     return true;
                 }
-                else
-                {
-                    return base.IsInputKey(keyData);
-                }
+
+                return base.IsInputKey(keyData);
             }
 
             protected override void OnGotFocus(EventArgs e)
@@ -622,7 +519,8 @@ namespace System.ComponentModel.Design
                 }
                 else
                 {
-                    // Fix for Dev10 bug 462144. We need to pass the unhandled characters (including Keys.Space) on to base.OnKeyDown when it's not to drop the split menu
+                    // We need to pass the unhandled characters (including Keys.Space) on
+                    // to base.OnKeyDown when it's not to drop the split menu
                     base.OnKeyDown(kevent);
                 }
             }
@@ -772,7 +670,7 @@ namespace System.ComponentModel.Design
             {
                 Point middle = new Point(Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2), Convert.ToInt32(dropDownRect.Top + dropDownRect.Height / 2));
 
-                //if the width is odd - favor pushing it over one pixel right.
+                // If the width is odd - favor pushing it over one pixel right.
                 middle.X += (dropDownRect.Width % 2);
 
                 Point[] arrow = new Point[] {
@@ -822,15 +720,14 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///      This is the collection editor's default implementation of a collection form.
+        /// This is the collection editor's default implementation of a collection form.
         /// </summary>
         private class CollectionEditorCollectionForm : CollectionForm
         {
-
-            private const int TEXT_INDENT = 1;
-            private const int PAINT_WIDTH = 20;
-            private const int PAINT_INDENT = 26;
-            private static readonly double s_lOG10 = Math.Log(10);
+            private const int TextIndent = 1;
+            private const int PaintWidth = 20;
+            private const int PaintIndent = 26;
+            private static readonly double s_log10 = Math.Log(10);
 
             private ArrayList _createdItems;
             private ArrayList _removedItems;
@@ -911,7 +808,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Adds a new element to the collection.
+            /// Adds a new element to the collection.
             /// </summary>
             private void AddButton_click(object sender, EventArgs e)
             {
@@ -919,7 +816,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Processes a click of the drop down type menu.  This creates a new instance.
+            /// Processes a click of the drop down type menu. This creates a new instance.
             /// </summary>
             private void AddDownMenu_click(object sender, EventArgs e)
             {
@@ -928,13 +825,12 @@ namespace System.ComponentModel.Design
                     CreateAndAddInstance(typeMenuItem.ItemType);
                 }
             }
-            
+
             /// <summary>
-            ///      This Function adds the individual objects to the ListBox.
+            /// This Function adds the individual objects to the ListBox.
             /// </summary>
             private void AddItems(IList instances)
             {
-
                 if (_createdItems == null)
                 {
                     _createdItems = new ArrayList();
@@ -982,7 +878,8 @@ namespace System.ComponentModel.Design
                     }
                     Items = items;
 
-                    //fringe case -- someone changes the edit value which resets the selindex, we should keep the new index.
+                    // If omeone changes the edit value which resets the selindex, we
+                    // should keep the new index.
                     if (_listbox.Items.Count > 0 && _listbox.SelectedIndex != _listbox.Items.Count - 1)
                     {
                         _listbox.ClearSelected();
@@ -1001,10 +898,10 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Determines whether removal of a specific list item should be permitted.
-            ///     Used to determine enabled/disabled state of the Remove (X) button.
-            ///     Items added after editor was opened may always be removed.
-            ///     Items that existed before editor was opened require a call to CanRemoveInstance.
+            /// Determines whether removal of a specific list item should be permitted.
+            /// Used to determine enabled/disabled state of the Remove (X) button.
+            /// Items added after editor was opened may always be removed.
+            /// Items that existed before editor was opened require a call to CanRemoveInstance.
             /// </summary>
             private bool AllowRemoveInstance(object value)
             {
@@ -1012,23 +909,16 @@ namespace System.ComponentModel.Design
                 {
                     return true;
                 }
-                else
-                {
-                    return CanRemoveInstance(value);
-                }
+
+                return CanRemoveInstance(value);
             }
 
             private int CalcItemWidth(Graphics g, ListItem item)
             {
-                int c = _listbox.Items.Count;
-                if (c < 2)
-                {
-                    c = 2;  //for c-1 should be greater than zero.
-                }
-
+                int c = Math.Max(2, _listbox.Items.Count);
                 SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                int charactersInNumber = ((int)(Math.Log((double)(c - 1)) / s_lOG10) + 1);
+                int charactersInNumber = ((int)(Math.Log((double)(c - 1)) / s_log10) + 1);
                 int w = 4 + charactersInNumber * (Font.Height / 2);
 
                 w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
@@ -1038,20 +928,19 @@ namespace System.ComponentModel.Design
                 int pic = 0;
                 if (item.Editor != null && item.Editor.GetPaintValueSupported())
                 {
-                    pic = PAINT_WIDTH + TEXT_INDENT;
+                    pic = PaintWidth + TextIndent;
                 }
                 return (int)Math.Ceiling(size.Width) + w + pic + SystemInformation.BorderSize.Width * 4;
             }
 
             /// <summary>
-            ///      Aborts changes made in the editor.
+            /// Aborts changes made in the editor.
             /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CancelButton_click(object sender, EventArgs e)
             {
                 try
                 {
-
                     _editor.CancelChanges();
 
                     if (!CollectionEditable || !_dirty)
@@ -1101,7 +990,7 @@ namespace System.ComponentModel.Design
                     }
                     else
                     {
-                        Items = new object[0];
+                        Items = Array.Empty<object>();
                     }
 
                 }
@@ -1111,9 +1000,9 @@ namespace System.ComponentModel.Design
                     DisplayError(ex);
                 }
             }
-            
+
             /// <summary>
-            ///      Performs a create instance and then adds the instance to the list box.
+            /// Performs a create instance and then adds the instance to the list box.
             /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CreateAndAddInstance(Type type)
@@ -1135,7 +1024,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Moves the selected item down one.
+            /// Moves the selected item down one.
             /// </summary>
             private void DownButton_click(object sender, EventArgs e)
             {
@@ -1145,14 +1034,19 @@ namespace System.ComponentModel.Design
                     _dirty = true;
                     int index = _listbox.SelectedIndex;
                     if (index == _listbox.Items.Count - 1)
+                    {
                         return;
+                    }
+
                     int ti = _listbox.TopIndex;
                     object itemMove = _listbox.Items[index];
                     _listbox.Items[index] = _listbox.Items[index + 1];
                     _listbox.Items[index + 1] = itemMove;
 
                     if (ti < _listbox.Items.Count - 1)
+                    {
                         _listbox.TopIndex = ti + 1;
+                    }
 
                     _listbox.ClearSelected();
                     _listbox.SelectedIndex = index + 1;
@@ -1183,10 +1077,10 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Retrieves the display text for the given list item (if any). The item determines its own display text
-            ///     through its ToString() method, which delegates to the GetDisplayText() override on the parent CollectionEditor.
-            ///     This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
-            ///     The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
+            /// Retrieves the display text for the given list item (if any). The item determines its own display text
+            /// through its ToString() method, which delegates to the GetDisplayText() override on the parent CollectionEditor.
+            /// This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
+            /// The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
             /// </summary>
             private string GetDisplayText(ListItem item)
             {
@@ -1197,14 +1091,14 @@ namespace System.ComponentModel.Design
             {
                 _listbox.KeyDown += new KeyEventHandler(Listbox_keyDown);
                 _listbox.DrawItem += new DrawItemEventHandler(Listbox_drawItem);
-                _listbox.SelectedIndexChanged += new EventHandler(Listbox_selectedIndexChanged);
-                _listbox.HandleCreated += new EventHandler(Listbox_handleCreated);
-                _upButton.Click += new EventHandler(UpButton_click);
+                _listbox.SelectedIndexChanged += new EventHandler(Listbox_SelectedIndexChanged);
+                _listbox.HandleCreated += new EventHandler(Listbox_HandleCreated);
+                _upButton.Click += new EventHandler(UpButton_Click);
                 _downButton.Click += new EventHandler(DownButton_click);
                 _propertyBrowser.PropertyValueChanged += new PropertyValueChangedEventHandler(PropertyGrid_propertyValueChanged);
                 _addButton.Click += new EventHandler(AddButton_click);
-                _removeButton.Click += new EventHandler(RemoveButton_click);
-                _okButton.Click += new EventHandler(OKButton_click);
+                _removeButton.Click += new EventHandler(RemoveButton_Click);
+                _okButton.Click += new EventHandler(OKButton_Click);
                 _cancelButton.Click += new EventHandler(CancelButton_click);
                 HelpButtonClicked += new CancelEventHandler(CollectionEditor_HelpButtonClicked);
                 HelpRequested += new HelpEventHandler(Form_HelpRequested);
@@ -1359,7 +1253,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     This draws a row of the listbox.
+            /// This draws a row of the listbox.
             /// </summary>
             private void Listbox_drawItem(object sender, DrawItemEventArgs e)
             {
@@ -1374,7 +1268,7 @@ namespace System.ComponentModel.Design
                     // We add the +4 is a fudge factor...
                     SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                    int charactersInNumber = ((int)(Math.Log((double)maxC) / s_lOG10) + 1);// Luckily, this is never called if count = 0
+                    int charactersInNumber = ((int)(Math.Log((double)maxC) / s_log10) + 1);// Luckily, this is never called if count = 0
                     int w = 4 + charactersInNumber * (Font.Height / 2);
 
                     w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
@@ -1406,11 +1300,11 @@ namespace System.ComponentModel.Design
 
                     if (item.Editor != null && item.Editor.GetPaintValueSupported())
                     {
-                        Rectangle baseVar = new Rectangle(e.Bounds.X + offset, e.Bounds.Y + 1, PAINT_WIDTH, e.Bounds.Height - 3);
+                        Rectangle baseVar = new Rectangle(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
                         g.DrawRectangle(SystemPens.ControlText, baseVar.X, baseVar.Y, baseVar.Width - 1, baseVar.Height - 1);
                         baseVar.Inflate(-1, -1);
                         item.Editor.PaintValue(item.Value, g, baseVar);
-                        offset += PAINT_INDENT + TEXT_INDENT;
+                        offset += PaintIndent + TextIndent;
                     }
 
                     StringFormat format = new StringFormat();
@@ -1423,10 +1317,7 @@ namespace System.ComponentModel.Design
 
                     finally
                     {
-                        if (format != null)
-                        {
-                            format.Dispose();
-                        }
+                        format?.Dispose();
                     }
 
                     Brush textBrush = new SolidBrush(textColor);
@@ -1440,10 +1331,7 @@ namespace System.ComponentModel.Design
 
                     finally
                     {
-                        if (textBrush != null)
-                        {
-                            textBrush.Dispose();
-                        }
+                        textBrush?.Dispose();
                     }
 
                     // Check to see if we need to change the horizontal extent of the listbox
@@ -1456,7 +1344,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Handles keypress events for the list box.
+            /// Handles keypress events for the list box.
             /// </summary>
             private void Listbox_keyDown(object sender, KeyEventArgs kevent)
             {
@@ -1472,30 +1360,29 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Event that fires when the selected list box index changes.
+            /// Event that fires when the selected list box index changes.
             /// </summary>
-            private void Listbox_selectedIndexChanged(object sender, EventArgs e)
+            private void Listbox_SelectedIndexChanged(object sender, EventArgs e)
             {
                 UpdateEnabled();
             }
 
             /// <summary>
-            ///      Event that fires when the list box's window handle is created.
+            /// Event that fires when the list box's window handle is created.
             /// </summary>
-            private void Listbox_handleCreated(object sender, EventArgs e)
+            private void Listbox_HandleCreated(object sender, EventArgs e)
             {
                 UpdateItemWidths(null);
             }
 
             /// <summary>
-            ///      Commits the changes to the editor.
+            /// Commits the changes to the editor.
             /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
-            private void OKButton_click(object sender, EventArgs e)
+            private void OKButton_Click(object sender, EventArgs e)
             {
                 try
                 {
-
                     if (!_dirty || !CollectionEditable)
                     {
                         _dirty = false;
@@ -1524,15 +1411,9 @@ namespace System.ComponentModel.Design
                         }
                         _removedItems.Clear();
                     }
-                    if (_createdItems != null)
-                    {
-                        _createdItems.Clear();
-                    }
 
-                    if (_originalItems != null)
-                    {
-                        _originalItems.Clear();
-                    }
+                    _createdItems?.Clear();
+                    _originalItems?.Clear();
 
                     _listbox.Items.Clear();
                     _dirty = false;
@@ -1545,7 +1426,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Reflect any change events to the instance object
+            /// Reflect any change events to the instance object
             /// </summary>
             private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
             {
@@ -1561,12 +1442,11 @@ namespace System.ComponentModel.Design
                         }
                     }
                 }
-
             }
 
             /// <summary>
-            ///      This is called when the value property in the CollectionForm has changed.
-            ///      In it you should update your user interface to reflect the current value.
+            /// This is called when the value property in the CollectionForm has changed.
+            /// In it you should update your user interface to reflect the current value.
             /// </summary>
             protected override void OnEditValueChanged()
             {
@@ -1623,7 +1503,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Performs the actual add of new items.  This is invoked by the add button as well as the insert key on the list box.
+            /// Performs the actual add of new items. This is invoked by the add button
+            /// as well as the insert key on the list box.
             /// </summary>
             private void PerformAdd()
             {
@@ -1631,8 +1512,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Performs a remove by deleting all items currently selected in the list box.
-            ///     This is called by the delete button as well as the delete key on the list box.
+            /// Performs a remove by deleting all items currently selected in the list box.
+            /// This is called by the delete button as well as the delete key on the list box.
             /// </summary>
             private void PerformRemove()
             {
@@ -1672,7 +1553,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      When something in the properties window changes, we update pertinent text here.
+            /// When something in the properties window changes, we update pertinent text here.
             /// </summary>
             private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
             {
@@ -1703,14 +1584,13 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Used to actually remove the items, one by one.
+            /// Used to actually remove the items, one by one.
             /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void RemoveInternal(ListItem item)
             {
                 if (item != null)
                 {
-
                     _editor.OnItemRemoving(item.Value);
 
                     _dirty = true;
@@ -1731,6 +1611,7 @@ namespace System.ComponentModel.Design
                                 {
                                     _removedItems = new ArrayList();
                                 }
+
                                 _removedItems.Add(item.Value);
                                 _listbox.Items.Remove(item);
                             }
@@ -1744,14 +1625,15 @@ namespace System.ComponentModel.Design
                             DisplayError(ex);
                         }
                     }
+
                     UpdateItemWidths(null);
                 }
             }
-            
+
             /// <summary>
-            ///      Removes the selected item.
+            /// Removes the selected item.
             /// </summary>
-            private void RemoveButton_click(object sender, EventArgs e)
+            private void RemoveButton_Click(object sender, EventArgs e)
             {
                 PerformRemove();
 
@@ -1783,26 +1665,20 @@ namespace System.ComponentModel.Design
                 }
             }
             /// <summary>
-            /// used to prevent flicker when playing with the list box selection call resume when done.
+            /// Used to prevent flicker when playing with the list box selection call resume when done.
             /// Calls to UpdateEnabled will return silently until Resume is called
             /// </summary>
-            private void SuspendEnabledUpdates()
-            {
-                _suspendEnabledCount++;
-            }
-            
+            private void SuspendEnabledUpdates() => _suspendEnabledCount++;
+
             /// <summary>
-            ///       Called to show the dialog via the IWindowsFormsEditorService 
+            /// Called to show the dialog via the IWindowsFormsEditorService 
             /// </summary>
             protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
-                IComponentChangeService cs = null;
+                IComponentChangeService cs = _editor.Context.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
                 DialogResult result = DialogResult.OK;
                 try
                 {
-
-                    cs = (IComponentChangeService)_editor.Context.GetService(typeof(IComponentChangeService));
-
                     if (cs != null)
                     {
                         cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
@@ -1810,9 +1686,7 @@ namespace System.ComponentModel.Design
 
                     // This is cached across requests, so reset the initial focus.
                     ActiveControl = _listbox;
-                    //SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.OnSysColorChange);
                     result = base.ShowEditorDialog(edSvc);
-                    //SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.OnSysColorChange);
                 }
                 finally
                 {
@@ -1821,17 +1695,20 @@ namespace System.ComponentModel.Design
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
                 }
+
                 return result;
             }
 
             /// <summary>
-            ///      Moves an item up one in the list box.
+            /// Moves an item up one in the list box.
             /// </summary>
-            private void UpButton_click(object sender, EventArgs e)
+            private void UpButton_Click(object sender, EventArgs e)
             {
                 int index = _listbox.SelectedIndex;
                 if (index == 0)
+                {
                     return;
+                }
 
                 _dirty = true;
                 try
@@ -1843,7 +1720,9 @@ namespace System.ComponentModel.Design
                     _listbox.Items[index - 1] = itemMove;
 
                     if (ti > 0)
+                    {
                         _listbox.TopIndex = ti - 1;
+                    }
 
                     _listbox.ClearSelected();
                     _listbox.SelectedIndex = index - 1;
@@ -1864,7 +1743,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Updates the set of enabled buttons.
+            /// Updates the set of enabled buttons.
             /// </summary>
             private void UpdateEnabled()
             {
@@ -1934,7 +1813,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
+            /// When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
             /// </summary>
             private void Form_Shown(object sender, EventArgs e)
             {
@@ -1942,23 +1821,22 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     This class implements a custom type descriptor that is used to provide properties for the set of selected items in the collection editor.
-            ///     It provides a single property that is equivalent to the editor's collection item type.
+            /// This class implements a custom type descriptor that is used to provide
+            /// properties for the set of selected items in the collection editor.
+            /// It provides a single property that is equivalent to the editor's collection item type.
             /// </summary>
             private class SelectionWrapper : PropertyDescriptor, ICustomTypeDescriptor
             {
-                private readonly Type _collectionType;
-                private readonly Type _collectionItemType;
                 private readonly Control _control;
                 private readonly ICollection _collection;
                 private readonly PropertyDescriptorCollection _properties;
                 private object _value;
 
-                public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection) :
-                base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
+                public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection)
+                    : base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
                 {
-                    _collectionType = collectionType;
-                    _collectionItemType = collectionItemType;
+                    ComponentType = collectionType;
+                    PropertyType = collectionItemType;
                     _control = control;
                     _collection = collection;
                     _properties = new PropertyDescriptorCollection(new PropertyDescriptor[] { this });
@@ -1966,7 +1844,7 @@ namespace System.ComponentModel.Design
                     Debug.Assert(collection.Count > 0, "We should only be wrapped if there is a selection");
                     _value = this;
 
-                    // In a multiselect case, see if the values are different.  If so, NULL our value to represent indeterminate.
+                    // In a multiselect case, see if the values are different. If so, NULL our value to represent indeterminate.
                     foreach (ListItem li in collection)
                     {
                         if (_value == this)
@@ -2005,63 +1883,39 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///       When overridden in a derived class, gets the type of the component this property is bound to.
+                /// When overridden in a derived class, gets the type of the component this property is bound to.
                 /// </summary>
-                public override Type ComponentType
-                {
-                    get
-                    {
-                        return _collectionType;
-                    }
-                }
+                public override Type ComponentType { get; }
 
                 /// <summary>
-                ///       When overridden in a derived class, gets a value indicating whether this property is read-only.
+                /// When overridden in a derived class, gets a value indicating whether this property is read-only.
                 /// </summary>
-                public override bool IsReadOnly
-                {
-                    get
-                    {
-                        return false;
-                    }
-                }
+                public override bool IsReadOnly => false;
 
                 /// <summary>
-                ///       When overridden in a derived class, gets the type of the property.
+                /// When overridden in a derived class, gets the type of the property.
                 /// </summary>
-                public override Type PropertyType
-                {
-                    get
-                    {
-                        return _collectionItemType;
-                    }
-                }
+                public override Type PropertyType { get; }
 
                 /// <summary>
-                ///    When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
+                /// When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
                 /// </summary>
-                public override bool CanResetValue(object component)
-                {
-                    return false;
-                }
+                public override bool CanResetValue(object component) => false;
 
                 /// <summary>
-                ///       When overridden in a derived class, gets the current value of the property on a component.
+                /// When overridden in a derived class, gets the current value of the property on a component.
                 /// </summary>
-                public override object GetValue(object component)
-                {
-                    return _value;
-                }
+                public override object GetValue(object component) => _value;
 
                 /// <summary>
-                ///       When overridden in a derived class, resets the value for this property of the component.
+                /// When overridden in a derived class, resets the value for this property of the component.
                 /// </summary>
                 public override void ResetValue(object component)
                 {
                 }
 
                 /// <summary>
-                ///       When overridden in a derived class, sets the value of the component to a different value.
+                /// When overridden in a derived class, sets the value of the component to a different value.
                 /// </summary>
                 public override void SetValue(object component, object value)
                 {
@@ -2076,73 +1930,52 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///       When overridden in a derived class, indicates whether the value of this property needs to be persisted.
+                /// When overridden in a derived class, indicates whether the value of this property needs to be persisted.
                 /// </summary>
-                public override bool ShouldSerializeValue(object component)
-                {
-                    return false;
-                }
+                public override bool ShouldSerializeValue(object component) => false;
 
                 /// <summary>
-                ///     Retrieves an array of member attributes for the given object.
+                /// Retrieves an array of member attributes for the given object.
                 /// </summary>
                 AttributeCollection ICustomTypeDescriptor.GetAttributes()
                 {
-                    return TypeDescriptor.GetAttributes(_collectionItemType);
+                    return TypeDescriptor.GetAttributes(PropertyType);
                 }
 
                 /// <summary>
-                ///     Retrieves the class name for this object.  If null is returned, the type name is used.
+                /// Retrieves the class name for this object. If null is returned, the type name is used.
                 /// </summary>
-                string ICustomTypeDescriptor.GetClassName()
-                {
-                    return _collectionItemType.Name;
-                }
+                string ICustomTypeDescriptor.GetClassName() => PropertyType.Name;
 
                 /// <summary>
-                ///     Retrieves the name for this object.  If null is returned, the default is used.
+                /// Retrieves the name for this object. If null is returned, the default is used.
                 /// </summary>
-                string ICustomTypeDescriptor.GetComponentName()
-                {
-                    return null;
-                }
+                string ICustomTypeDescriptor.GetComponentName() => null;
 
                 /// <summary>
-                ///      Retrieves the type converter for this object.
+                /// Retrieves the type converter for this object.
                 /// </summary>
-                TypeConverter ICustomTypeDescriptor.GetConverter()
-                {
-                    return null;
-                }
+                TypeConverter ICustomTypeDescriptor.GetConverter() => null;
 
                 /// <summary>
-                ///     Retrieves the default event.
+                /// Retrieves the default event.
                 /// </summary>
-                EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
-                {
-                    return null;
-                }
+                EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() => null;
 
                 /// <summary>
-                ///     Retrieves the default property.
+                /// Retrieves the default property.
                 /// </summary>
-                PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
-                {
-                    return this;
-                }
+                PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() => this;
 
                 /// <summary>
-                ///      Retrieves the an editor for this object.
+                /// Retrieves the an editor for this object.
                 /// </summary>
-                object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
-                {
-                    return null;
-                }
+                object ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
 
                 /// <summary>
-                ///     Retrieves an array of events that the given component instance provides.
-                ///     This may differ from the set of events the class provides.
-                ///     If the component is sited, the site may add or remove additional events.
+                /// Retrieves an array of events that the given component instance provides.
+                /// This may differ from the set of events the class provides.
+                /// If the component is sited, the site may add or remove additional events.
                 /// </summary>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
                 {
@@ -2150,10 +1983,10 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///     Retrieves an array of events that the given component instance provides.
-                ///     This may differ from the set of events the class provides.
-                ///     If the component is sited, the site may add or remove additional events.
-                ///     The returned array of events will be filtered by the given set of attributes.
+                /// Retrieves an array of events that the given component instance provides.
+                /// This may differ from the set of events the class provides.
+                /// If the component is sited, the site may add or remove additional events.
+                /// The returned array of events will be filtered by the given set of attributes.
                 /// </summary>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
                 {
@@ -2161,9 +1994,9 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///     Retrieves an array of properties that the given component instance provides.
-                ///     This may differ from the set of properties the class provides.
-                ///     If the component is sited, the site may add or remove additional properties.
+                /// Retrieves an array of properties that the given component instance provides.
+                /// This may differ from the set of properties the class provides.
+                /// If the component is sited, the site may add or remove additional properties.
                 /// </summary>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
                 {
@@ -2171,10 +2004,10 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///     Retrieves an array of properties that the given component instance provides.
-                ///     This may differ from the set of properties the class provides.
-                ///     If the component is sited, the site may add or remove additional properties.
-                ///     The returned array of properties will be filtered by the given set of attributes.
+                /// Retrieves an array of properties that the given component instance provides.
+                /// This may differ from the set of properties the class provides.
+                /// If the component is sited, the site may add or remove additional properties.
+                /// The returned array of properties will be filtered by the given set of attributes.
                 /// </summary>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
                 {
@@ -2182,10 +2015,10 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///     Retrieves the object that directly depends on this value being edited.
-                ///     This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-                ///     If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object, 
-                ///     that is the main object that exposes the properties and attributes
+                /// Retrieves the object that directly depends on this value being edited.
+                /// This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
+                /// If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object, 
+                /// that is the main object that exposes the properties and attributes
                 /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
                 {
@@ -2194,7 +2027,9 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      ListItem class.  This is a single entry in our list box.  It contains the value we're editing as well as accessors for the type converter and UI editor.
+            /// ListItem class. This is a single entry in our list box.
+            /// It contains the value we're editing as well as accessors for the type
+            // converter and UI editor.
             /// </summary>
             private class ListItem
             {
@@ -2237,10 +2072,7 @@ namespace System.ComponentModel.Design
 
                 public object Value
                 {
-                    get
-                    {
-                        return _value;
-                    }
+                    get => _value;
                     set
                     {
                         _uiTypeEditor = null;
@@ -2250,30 +2082,21 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///      Menu items we attach to the drop down menu if there are multiple types the collection editor can create.
+            /// Menu items we attach to the drop down menu if there are multiple types the collection editor can create.
             /// </summary>
             private class TypeMenuItem : ToolStripMenuItem
             {
-                readonly Type _itemType;
-
-                public TypeMenuItem(Type itemType, EventHandler handler) :
-                base(itemType.Name, null, handler)
+                public TypeMenuItem(Type itemType, EventHandler handler) : base(itemType.Name, null, handler)
                 {
-                    _itemType = itemType;
+                    ItemType = itemType;
                 }
 
-                public Type ItemType
-                {
-                    get
-                    {
-                        return _itemType;
-                    }
-                }
+                public Type ItemType { get; }
             }
         }
-        
+
         /// <summary>
-        ///      List box filled with ListItem objects representing the collection.
+        /// List box filled with ListItem objects representing the collection.
         /// </summary>
         internal class FilterListBox : ListBox
         {
@@ -2295,22 +2118,22 @@ namespace System.ComponentModel.Design
                             }
                         }
                     }
+
                     return _grid;
                 }
 
             }
 
-            // Expose the protected RefreshItem() method so that CollectionEditor can use it
-            public new void RefreshItem(int index)
-            {
-                base.RefreshItem(index);
-            }
+            /// <summary>
+            /// Expose the protected RefreshItem() method so that CollectionEditor can use it
+            /// </summary>
+            public new void RefreshItem(int index) => base.RefreshItem(index);
 
             protected override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_KEYDOWN:
+                    case Interop.WindowMessages.WM_KEYDOWN:
                         _lastKeyDown = m;
 
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
@@ -2330,12 +2153,12 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // recreate the keystroke to the newly activated window
-                                NativeMethods.SendMessage(UnsafeNativeMethods.GetFocus(), NativeMethods.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                NativeMethods.SendMessage(UnsafeNativeMethods.GetFocus(), Interop.WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
                         break;
 
-                    case NativeMethods.WM_CHAR:
+                    case Interop.WindowMessages.WM_CHAR:
 
                         if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                         {
@@ -2357,8 +2180,8 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = UnsafeNativeMethods.GetFocus();
-                            NativeMethods.SendMessage(hWnd, NativeMethods.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
-                            NativeMethods.SendMessage(hWnd, NativeMethods.WM_CHAR, m.WParam, m.LParam);
+                            NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                            NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_CHAR, m.WParam, m.LParam);
                             return;
                         }
                         break;
@@ -2370,14 +2193,11 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///       The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
+        /// The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")] //breaking change
+        [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "This would be a breaking change")]
         protected abstract class CollectionForm : Form
         {
-
-            // Manipulation of the collection.
-            //
             private readonly CollectionEditor _editor;
             private object _value;
             private short _editableState = EditableDynamic;
@@ -2385,37 +2205,25 @@ namespace System.ComponentModel.Design
             private const short EditableDynamic = 0;
             private const short EditableYes = 1;
             private const short EditableNo = 2;
-            
+
             /// <summary>
-            ///       Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
+            /// Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
-                _editor = editor;
+                _editor = editor ?? throw new ArgumentNullException(nameof(editor));
             }
-            
+
             /// <summary>
-            ///       Gets or sets the data type of each item in the collection.
+            /// Gets or sets the data type of each item in the collection.
             /// </summary>
-            protected Type CollectionItemType
-            {
-                get
-                {
-                    return _editor.CollectionItemType;
-                }
-            }
-            
+            protected Type CollectionItemType => _editor.CollectionItemType;
+
             /// <summary>
-            ///       Gets or sets the type of the collection.
+            /// Gets or sets the type of the collection.
             /// </summary>
-            protected Type CollectionType
-            {
-                get
-                {
-                    return _editor.CollectionType;
-                }
-            }
-            
+            protected Type CollectionType => _editor.CollectionType;
+
             internal virtual bool CollectionEditable
             {
                 get
@@ -2434,78 +2242,53 @@ namespace System.ComponentModel.Design
                             return !list.IsReadOnly;
                         }
                     }
+
                     return editable;
                 }
-                set
-                {
-                    if (value)
-                    {
-                        _editableState = EditableYes;
-                    }
-                    else
-                    {
-                        _editableState = EditableNo;
-                    }
-                }
+                set => _editableState = value ? EditableYes : EditableNo;
             }
-            
+
             /// <summary>
-            ///       Gets or sets a type descriptor that indicates the current context.
+            /// Gets or sets a type descriptor that indicates the current context.
             /// </summary>
-            protected ITypeDescriptorContext Context
-            {
-                get
-                {
-                    return _editor.Context;
-                }
-            }
-            
+            protected ITypeDescriptorContext Context => _editor.Context;
+
             /// <summary>
-            ///    Gets or sets the value of the item being edited.
+            /// Gets or sets the value of the item being edited.
             /// </summary>
             public object EditValue
             {
-                get
-                {
-                    return _value;
-                }
+                get => _value;
                 set
                 {
                     _value = value;
                     OnEditValueChanged();
                 }
             }
-            
+
             /// <summary>
-            ///       Gets or sets the array of items this form is to display.
+            /// Gets or sets the array of items this form is to display.
             /// </summary>
             protected object[] Items
             {
-                get
-                {
-                    return _editor.GetItems(EditValue);
-                }
+                get => _editor.GetItems(EditValue);
                 [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
                 set
                 {
                     // Request our desire to make a change.
-                    //
                     bool canChange = false;
                     try
                     {
-                        canChange = Context.OnComponentChanging();
+                        if (Context != null)
+                        {
+                            canChange = Context.OnComponentChanging();
+                        }
                     }
-                    catch (Exception ex)
+                    catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                     {
-                        if (!ClientUtils.IsCriticalException(ex))
-                        {
-                            DisplayError(ex);
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        DisplayError(ex);
                     }
+
                     if (canChange)
                     {
                         object newValue = _editor.SetItems(EditValue, value);
@@ -2513,132 +2296,102 @@ namespace System.ComponentModel.Design
                         {
                             EditValue = newValue;
                         }
+
                         Context.OnComponentChanged();
                     }
+                }
+            }
 
-                }
-            }
-            
             /// <summary>
-            ///       Gets or sets the available item types that can be created for this collection.
+            /// Gets or sets the available item types that can be created for this collection.
             /// </summary>
-            protected Type[] NewItemTypes
-            {
-                get
-                {
-                    return _editor.NewItemTypes;
-                }
-            }
-            
+            protected Type[] NewItemTypes => _editor.NewItemTypes;
+
             /// <summary>
-            ///    Gets or sets a value indicating whether original members of the collection can be removed.
+            /// Gets or sets a value indicating whether original members of the collection can be removed.
             /// </summary>
-            protected bool CanRemoveInstance(object value)
-            {
-                return _editor.CanRemoveInstance(value);
-            }
-            
+            protected bool CanRemoveInstance(object value) => _editor.CanRemoveInstance(value);
+
             /// <summary>
-            ///    Gets or sets a value indicating whether multiple collection members can be selected.
+            /// Gets or sets a value indicating whether multiple collection members can be selected.
             /// </summary>
-            protected virtual bool CanSelectMultipleInstances()
-            {
-                return _editor.CanSelectMultipleInstances();
-            }
-            
+            protected virtual bool CanSelectMultipleInstances() => _editor.CanSelectMultipleInstances();
+
             /// <summary>
-            ///       Creates a new instance of the specified collection item type.
+            /// Creates a new instance of the specified collection item type.
             /// </summary>
-            protected object CreateInstance(Type itemType)
-            {
-                return _editor.CreateInstance(itemType);
-            }
-            
+            protected object CreateInstance(Type itemType) => _editor.CreateInstance(itemType);
+
             /// <summary>
-            ///       Destroys the specified instance of the object.
+            /// Destroys the specified instance of the object.
             /// </summary>
-            protected void DestroyInstance(object instance)
-            {
-                _editor.DestroyInstance(instance);
-            }
-            
+            protected void DestroyInstance(object instance) => _editor.DestroyInstance(instance);
+
             /// <summary>
-            ///    Displays the given exception to the user.
+            /// Displays the given exception to the user.
             /// </summary>
             protected virtual void DisplayError(Exception e)
             {
-                IUIService uis = (IUIService)GetService(typeof(IUIService));
-                if (uis != null)
+                if (GetService(typeof(IUIService)) is IUIService uis)
                 {
                     uis.ShowError(e);
                 }
                 else
                 {
                     string message = e.Message;
-                    if (message == null || message.Length == 0)
+                    if (string.IsNullOrEmpty(message))
                     {
                         message = e.ToString();
                     }
+
                     RTLAwareMessageBox.Show(null, message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, 0);
                 }
             }
-            
+
             /// <summary>
-            ///       Gets the requested service, if it is available.
+            /// Gets the requested service, if it is available.
             /// </summary>
-            protected override object GetService(Type serviceType)
-            {
-                return _editor.GetService(serviceType);
-            }
-            
+            protected override object GetService(Type serviceType) => _editor.GetService(serviceType);
+
             /// <summary>
-            ///       Called to show the dialog via the IWindowsFormsEditorService
+            /// Called to show the dialog via the IWindowsFormsEditorService
             /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
+                if (edSvc == null)
+                {
+                    throw new ArgumentNullException(nameof(edSvc));
+                }
+
                 return edSvc.ShowDialog(this);
             }
-            
+
             /// <summary>
-            ///       This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
+            /// This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
             /// </summary>
             protected abstract void OnEditValueChanged();
         }
 
         internal class PropertyGridSite : ISite
         {
-
             private readonly IServiceProvider _sp;
-            private readonly IComponent _comp;
             private bool _inGetService = false;
 
             public PropertyGridSite(IServiceProvider sp, IComponent comp)
             {
                 _sp = sp;
-                _comp = comp;
+                Component = comp;
             }
 
-            /// <summary>
-            ///    When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.
-            /// </summary>
-            public IComponent Component { get { return _comp; } }
+            public IComponent Component { get; }
 
-            /// <summary>
-            /// When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.
-            /// </summary>
-            public IContainer Container { get { return null; } }
+            public IContainer Container => null;
 
-            /// <summary>
-            ///    When implemented by a class, determines whether the component is in design mode.
-            /// </summary>
-            public bool DesignMode { get { return false; } }
+            public bool DesignMode => false;
 
-            /// <summary>
-            ///    When implemented by a class, gets or sets the name of the component associated with the <see cref='System.ComponentModel.ISite'/>.
-            /// </summary>
             public string Name
             {
-                get { return null; }
+                get => null;
                 set { }
             }
 
@@ -2656,10 +2409,9 @@ namespace System.ComponentModel.Design
                         _inGetService = false;
                     }
                 }
+
                 return null;
             }
         }
     }
 }
-
-

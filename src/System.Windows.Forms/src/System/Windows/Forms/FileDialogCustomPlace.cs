@@ -2,75 +2,62 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.IO;
-using System.Security;
-using System.Security.Permissions;
-using System.Text;
-
 namespace System.Windows.Forms
 {
-//Sample Guids
-//          internal const string ComputerFolder = "0AC0837C-BBF8-452A-850D-79D08E667CA7";
-//          internal const string Favorites = "1777F761-68AD-4D8A-87BD-30B759FA33DD";
-//          internal const string Documents = "FDD39AD0-238F-46AF-ADB4-6C85480369C7";
-//          internal const string Profile = "5E6C858F-0E22-4760-9AFE-EA3317B67173";
-
+    /// <remarks>
+    /// Sample Guids
+    /// ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
+    /// Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
+    /// Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
+    /// Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
+    /// </remarks>
     public class FileDialogCustomPlace
     {
-        private string _path = "";
-        private Guid   _knownFolderGuid = Guid.Empty;
+        private string _path = string.Empty;
+        private Guid _knownFolderGuid = Guid.Empty;
 
         public FileDialogCustomPlace(string path)
         {
-            this.Path = path;
+            Path = path;
         }
 
         public FileDialogCustomPlace(Guid knownFolderGuid)
         {
-            this.KnownFolderGuid = knownFolderGuid; 
+            KnownFolderGuid = knownFolderGuid;
         }
 
         public string Path
         {
-            get
-            {
-                if (string.IsNullOrEmpty(this._path))
-                {
-                    return string.Empty;
-                }
-                return this._path;
-            }
+            get => _path ?? string.Empty;
             set
             {
-                this._path = value ?? "";
-                this._knownFolderGuid = Guid.Empty;
+                _path = value ?? string.Empty;
+                _knownFolderGuid = Guid.Empty;
             }
         }
 
         public Guid KnownFolderGuid
         {
-            get
-            {
-                return this._knownFolderGuid;
-            }
+            get => _knownFolderGuid;
             set
             {
-                this._path = string.Empty;
-                this._knownFolderGuid = value;
+                _path = string.Empty;
+                _knownFolderGuid = value;
             }
         }
 
         public override string ToString()
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} Path: {1} KnownFolderGuid: {2}", base.ToString(), this.Path, this.KnownFolderGuid);
+            return $"{base.ToString()} Path: {Path} KnownFolderGuid: {KnownFolderGuid}";
         }
 
+        /// <remarks>
+        /// This can throw in a multitude of ways if the path or Guid doesn't correspond
+        /// to an actual filesystem directory.
+        /// The caller is responsible for handling these situations.
+        /// </remarks>
         internal FileDialogNative.IShellItem GetNativePath()
         {
-            // This can throw in a multitude of ways if the path or Guid doesn't correspond
-            // to an actual filesystem directory.
-            // The Caller is responsible for handling these situations.
             string filePathString;
             if (!string.IsNullOrEmpty(_path))
             {

@@ -7,28 +7,28 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the Control.HelpRequest event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class HelpEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.HelpEventArgs'/>class.
-        /// </devdoc>
+        /// </summary>
         public HelpEventArgs(Point mousePos)
         {
             MousePos = mousePos;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the screen coordinates of the mouse pointer.
-        /// </devdoc>
+        /// </summary>
         public Point MousePos { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a value indicating whether the Help event was handled.
-        /// </devdoc>
+        /// </summary>
         public bool Handled { get; set; }
     }
 }

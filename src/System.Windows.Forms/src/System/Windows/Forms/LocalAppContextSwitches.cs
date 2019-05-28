@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.CompilerServices;
 
-    internal static class LocalAppContextSwitches {
+    internal static class LocalAppContextSwitches
+    {
         internal const string DontSupportReentrantFilterMessageSwitchName = @"Switch.System.Windows.Forms.DontSupportReentrantFilterMessage";
         internal const string DoNotSupportSelectAllShortcutInMultilineTextBoxSwitchName = @"Switch.System.Windows.Forms.DoNotSupportSelectAllShortcutInMultilineTextBox";
         internal const string DoNotLoadLatestRichEditControlSwitchName = @"Switch.System.Windows.Forms.DoNotLoadLatestRichEditControl";
@@ -23,58 +25,74 @@ namespace System.Windows.Forms {
         private static int _useLegacyImages;
         private static int _enableVisualStyleValidation;
 
-        public static bool DontSupportReentrantFilterMessage {
+        public static bool DontSupportReentrantFilterMessage
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.DontSupportReentrantFilterMessageSwitchName, ref _dontSupportReentrantFilterMessage);
             }
         }
 
-        public static bool DoNotSupportSelectAllShortcutInMultilineTextBox {
+        public static bool DoNotSupportSelectAllShortcutInMultilineTextBox
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBoxSwitchName, ref _doNotSupportSelectAllShortcutInMultilineTextBox);
             }
         }
 
-        public static bool DoNotLoadLatestRichEditControl {
+        public static bool DoNotLoadLatestRichEditControl
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.DoNotLoadLatestRichEditControlSwitchName, ref _doNotLoadLatestRichEditControl);
             }
         }
 
-        public static bool UseLegacyContextMenuStripSourceControlValue {
+        public static bool UseLegacyContextMenuStripSourceControlValue
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.UseLegacyContextMenuStripSourceControlValueSwitchName, ref _useLegacyContextMenuStripSourceControlValue);
             }
         }
 
-        public static bool UseLegacyDomainUpDownControlScrolling {
+        public static bool UseLegacyDomainUpDownControlScrolling
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.DomainUpDownUseLegacyScrollingSwitchName, ref _useLegacyDomainUpDownScrolling);
             }
         }
 
-        public static bool AllowUpdateChildControlIndexForTabControls {
+        public static bool AllowUpdateChildControlIndexForTabControls
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.AllowUpdateChildControlIndexForTabControlsSwitchName, ref _allowUpdateChildControlIndexForTabControls);
             }
         }
 
-        public static bool UseLegacyImages {
+        public static bool UseLegacyImages
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.UseLegacyImagesSwitchName, ref _useLegacyImages);
             }
         }
 
-        public static bool EnableVisualStyleValidation {
+        public static bool EnableVisualStyleValidation
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get {
+            get
+            {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.EnableVisualStyleValidationSwitchName, ref _enableVisualStyleValidation);
             }
         }

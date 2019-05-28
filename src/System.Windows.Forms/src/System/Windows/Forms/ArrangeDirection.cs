@@ -7,32 +7,32 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the direction the system uses to arrange minimized windows.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     [Flags]
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification =  "Maps to native enum")]
+    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum")]
     public enum ArrangeDirection
     {
-        /// <devdoc>
+        /// <summary>
         /// Arranges vertically, from top to bottom.
-        /// </devdoc>
+        /// </summary>
         Down = NativeMethods.ARW_DOWN,
 
-        /// <devdoc>
+        /// <summary>
         /// Arranges horizontally, from left to right.
-        /// </devdoc>
+        /// </summary>
         Left = NativeMethods.ARW_LEFT,
 
-        /// <devdoc>
+        /// <summary>
         /// Arranges horizontally, from right to left.
-        /// </devdoc>
+        /// </summary>
         Right = NativeMethods.ARW_RIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// Arranges vertically, from bottom to top.
-        /// </devdoc>
+        /// </summary>
         Up = NativeMethods.ARW_UP,
     }
 }

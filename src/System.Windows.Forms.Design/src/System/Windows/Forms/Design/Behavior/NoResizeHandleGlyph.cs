@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal class NoResizeHandleGlyph : SelectionGlyphBase
     {
-        private bool _isPrimary = false;
+        private readonly bool _isPrimary = false;
 
         /// <summary>
         /// NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.

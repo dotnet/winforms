@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                NativeMethods.SendMessage(_designer.Handle, NativeMethods.WM_NCACTIVATE, focus ? 1 : 0, 0);
+                NativeMethods.SendMessage(_designer.Handle, Interop.WindowMessages.WM_NCACTIVATE, focus ? 1 : 0, 0);
                 SafeNativeMethods.RedrawWindow(_designer.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
@@ -198,17 +198,17 @@ namespace System.Windows.Forms.Design
             switch (m.Msg)
             {
                 // Provide MouseWheel access for scrolling
-                case NativeMethods.WM_MOUSEWHEEL:
+                case Interop.WindowMessages.WM_MOUSEWHEEL:
                     // Send a message to ourselves to scroll
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        NativeMethods.SendMessage(_designerRegion.Handle, NativeMethods.WM_MOUSEWHEEL, m.WParam, m.LParam);
+                        NativeMethods.SendMessage(_designerRegion.Handle, Interop.WindowMessages.WM_MOUSEWHEEL, m.WParam, m.LParam);
                         return;
                     }
                     break;
                 // Provide keyboard access for scrolling
-                case NativeMethods.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
                     int wScrollNotify = 0;
                     int msg = 0;
                     int keycode = unchecked((int)(long)m.WParam) & 0xFFFF;
@@ -216,46 +216,46 @@ namespace System.Windows.Forms.Design
                     {
                         case Keys.Up:
                             wScrollNotify = NativeMethods.SB_LINEUP;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.Down:
                             wScrollNotify = NativeMethods.SB_LINEDOWN;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.PageUp:
                             wScrollNotify = NativeMethods.SB_PAGEUP;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.PageDown:
                             wScrollNotify = NativeMethods.SB_PAGEDOWN;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.Home:
                             wScrollNotify = NativeMethods.SB_TOP;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.End:
                             wScrollNotify = NativeMethods.SB_BOTTOM;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.Left:
                             wScrollNotify = NativeMethods.SB_LINEUP;
-                            msg = NativeMethods.WM_HSCROLL;
+                            msg = Interop.WindowMessages.WM_HSCROLL;
                             break;
                         case Keys.Right:
                             wScrollNotify = NativeMethods.SB_LINEDOWN;
-                            msg = NativeMethods.WM_HSCROLL;
+                            msg = Interop.WindowMessages.WM_HSCROLL;
                             break;
                     }
-                    if ((msg == NativeMethods.WM_VSCROLL)
-                        || (msg == NativeMethods.WM_HSCROLL))
+                    if ((msg == Interop.WindowMessages.WM_VSCROLL)
+                        || (msg == Interop.WindowMessages.WM_HSCROLL))
                     {
                         // Send a message to ourselves to scroll
                         NativeMethods.SendMessage(_designerRegion.Handle, msg, NativeMethods.Util.MAKELONG(wScrollNotify, 0), 0);
                         return;
                     }
                     break;
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     NativeMethods.SendMessage(_designer.Handle, m.Msg, m.WParam, m.LParam);
                     return;
             }
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Design
         /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
         /// </summary>
         int IOverlayService.PushOverlay(Control control) => _designerRegion.PushOverlay(control);
-        
+
         /// <summary>
         /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
         /// </summary>
@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.Msg == NativeMethods.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)NativeMethods.WM_CREATE)
+                if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)Interop.WindowMessages.WM_CREATE)
                 {
                     if (_overlayList != null)
                     {
@@ -568,11 +568,11 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
-                else if ((m.Msg == NativeMethods.WM_VSCROLL || m.Msg == NativeMethods.WM_HSCROLL) && BehaviorService != null)
+                else if ((m.Msg == Interop.WindowMessages.WM_VSCROLL || m.Msg == Interop.WindowMessages.WM_HSCROLL) && BehaviorService != null)
                 {
                     BehaviorService.SyncSelection();
                 }
-                else if ((m.Msg == NativeMethods.WM_MOUSEWHEEL))
+                else if ((m.Msg == Interop.WindowMessages.WM_MOUSEWHEEL))
                 {
                     _messageMouseWheelProcessed = false;
                     if (BehaviorService != null)

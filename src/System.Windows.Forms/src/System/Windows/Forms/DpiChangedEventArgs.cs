@@ -5,23 +5,24 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides information about a DpiChanged event.
-    /// </devdoc>
+    /// </summary>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
         /// <devdov>
         /// Parameter units are pixels(dots) per inch.
-        /// </devdoc>
+        /// </summary>
         internal DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
             DeviceDpiNew = NativeMethods.Util.SignedLOWORD(m.WParam);
             Debug.Assert(NativeMethods.Util.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
-            NativeMethods.RECT suggestedRect = (NativeMethods.RECT)UnsafeNativeMethods.PtrToStructure(m.LParam, typeof(NativeMethods.RECT));
+            NativeMethods.RECT suggestedRect = Marshal.PtrToStructure<NativeMethods.RECT>(m.LParam);
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 

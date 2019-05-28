@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Bottom), 4}
                 }
             };
-    
+
             yield return new object[]
             {
                 new Dictionary<string, object>

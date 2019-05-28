@@ -33,23 +33,23 @@ namespace System.Windows.Forms
 
             public DisplayedBandsData()
             {
-                this.firstDisplayedFrozenRow = -1;
-                this.firstDisplayedFrozenCol = -1;
-                this.firstDisplayedScrollingRow = -1;
-                this.firstDisplayedScrollingCol = -1;
-                this.lastTotallyDisplayedScrollingCol = -1;
-                this.lastDisplayedScrollingRow = -1;
-                this.lastDisplayedFrozenCol = -1;
-                this.lastDisplayedFrozenRow = -1;
-                this.oldFirstDisplayedScrollingRow = -1;
-                this.oldFirstDisplayedScrollingCol = -1;
+                firstDisplayedFrozenRow = -1;
+                firstDisplayedFrozenCol = -1;
+                firstDisplayedScrollingRow = -1;
+                firstDisplayedScrollingCol = -1;
+                lastTotallyDisplayedScrollingCol = -1;
+                lastDisplayedScrollingRow = -1;
+                lastDisplayedFrozenCol = -1;
+                lastDisplayedFrozenRow = -1;
+                oldFirstDisplayedScrollingRow = -1;
+                oldFirstDisplayedScrollingCol = -1;
             }
 
             public bool ColumnInsertionOccurred
             {
                 get
                 {
-                    return this.columnInsertionOccurred;
+                    return columnInsertionOccurred;
                 }
             }
 
@@ -57,11 +57,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.dirty;
+                    return dirty;
                 }
                 set
                 {
-                    this.dirty = value;
+                    dirty = value;
                 }
             }
 
@@ -69,10 +69,10 @@ namespace System.Windows.Forms
             {
                 set
                 {
-                    if (value != this.firstDisplayedFrozenCol)
+                    if (value != firstDisplayedFrozenCol)
                     {
                         EnsureDirtyState();
-                        this.firstDisplayedFrozenCol = value;
+                        firstDisplayedFrozenCol = value;
                     }
                 }
             }
@@ -81,10 +81,10 @@ namespace System.Windows.Forms
             {
                 set
                 {
-                    if (value != this.firstDisplayedFrozenRow)
+                    if (value != firstDisplayedFrozenRow)
                     {
                         EnsureDirtyState();
-                        this.firstDisplayedFrozenRow = value;
+                        firstDisplayedFrozenRow = value;
                     }
                 }
             }
@@ -93,14 +93,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.firstDisplayedScrollingCol;
+                    return firstDisplayedScrollingCol;
                 }
                 set
                 {
-                    if (value != this.firstDisplayedScrollingCol)
+                    if (value != firstDisplayedScrollingCol)
                     {
                         EnsureDirtyState();
-                        this.firstDisplayedScrollingCol = value;
+                        firstDisplayedScrollingCol = value;
                     }
                 }
             }
@@ -109,14 +109,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.firstDisplayedScrollingRow;
+                    return firstDisplayedScrollingRow;
                 }
                 set
                 {
-                    if (value != this.firstDisplayedScrollingRow)
+                    if (value != firstDisplayedScrollingRow)
                     {
                         EnsureDirtyState();
-                        this.firstDisplayedScrollingRow = value;
+                        firstDisplayedScrollingRow = value;
                     }
                 }
             }
@@ -125,10 +125,10 @@ namespace System.Windows.Forms
             {
                 set
                 {
-                    if (value != this.lastDisplayedFrozenCol)
+                    if (value != lastDisplayedFrozenCol)
                     {
                         EnsureDirtyState();
-                        this.lastDisplayedFrozenCol = value;
+                        lastDisplayedFrozenCol = value;
                     }
                 }
             }
@@ -137,10 +137,10 @@ namespace System.Windows.Forms
             {
                 set
                 {
-                    if (value != this.lastDisplayedFrozenRow)
+                    if (value != lastDisplayedFrozenRow)
                     {
                         EnsureDirtyState();
-                        this.lastDisplayedFrozenRow = value;
+                        lastDisplayedFrozenRow = value;
                     }
                 }
             }
@@ -149,10 +149,10 @@ namespace System.Windows.Forms
             {
                 set
                 {
-                    if (value != this.lastDisplayedScrollingRow)
+                    if (value != lastDisplayedScrollingRow)
                     {
                         EnsureDirtyState();
-                        this.lastDisplayedScrollingRow = value;
+                        lastDisplayedScrollingRow = value;
                     }
                 }
             }
@@ -161,14 +161,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.lastTotallyDisplayedScrollingCol;
+                    return lastTotallyDisplayedScrollingCol;
                 }
                 set
                 {
-                    if (value != this.lastTotallyDisplayedScrollingCol)
+                    if (value != lastTotallyDisplayedScrollingCol)
                     {
                         EnsureDirtyState();
-                        this.lastTotallyDisplayedScrollingCol = value;
+                        lastTotallyDisplayedScrollingCol = value;
                     }
                 }
             }
@@ -177,14 +177,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.numDisplayedFrozenCols;
+                    return numDisplayedFrozenCols;
                 }
                 set
                 {
-                    if (value != this.numDisplayedFrozenCols)
+                    if (value != numDisplayedFrozenCols)
                     {
                         EnsureDirtyState();
-                        this.numDisplayedFrozenCols = value;
+                        numDisplayedFrozenCols = value;
                     }
                 }
             }
@@ -193,14 +193,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.numDisplayedFrozenRows;
+                    return numDisplayedFrozenRows;
                 }
                 set
                 {
-                    if (value != this.numDisplayedFrozenRows)
+                    if (value != numDisplayedFrozenRows)
                     {
                         EnsureDirtyState();
-                        this.numDisplayedFrozenRows = value;
+                        numDisplayedFrozenRows = value;
                     }
                 }
             }
@@ -209,14 +209,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.numDisplayedScrollingRows;
+                    return numDisplayedScrollingRows;
                 }
                 set
                 {
-                    if (value != this.numDisplayedScrollingRows)
+                    if (value != numDisplayedScrollingRows)
                     {
                         EnsureDirtyState();
-                        this.numDisplayedScrollingRows = value;
+                        numDisplayedScrollingRows = value;
                     }
                 }
             }
@@ -225,14 +225,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.numDisplayedScrollingCols;
+                    return numDisplayedScrollingCols;
                 }
                 set
                 {
-                    if (value != this.numDisplayedScrollingCols)
+                    if (value != numDisplayedScrollingCols)
                     {
                         EnsureDirtyState();
-                        this.numDisplayedScrollingCols = value;
+                        numDisplayedScrollingCols = value;
                     }
                 }
             }
@@ -241,14 +241,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.numTotallyDisplayedFrozenRows;
+                    return numTotallyDisplayedFrozenRows;
                 }
                 set
                 {
-                    if (value != this.numTotallyDisplayedFrozenRows)
+                    if (value != numTotallyDisplayedFrozenRows)
                     {
                         EnsureDirtyState();
-                        this.numTotallyDisplayedFrozenRows = value;
+                        numTotallyDisplayedFrozenRows = value;
                     }
                 }
             }
@@ -257,14 +257,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.numTotallyDisplayedScrollingRows;
+                    return numTotallyDisplayedScrollingRows;
                 }
                 set
                 {
-                    if (value != this.numTotallyDisplayedScrollingRows)
+                    if (value != numTotallyDisplayedScrollingRows)
                     {
                         EnsureDirtyState();
-                        this.numTotallyDisplayedScrollingRows = value;
+                        numTotallyDisplayedScrollingRows = value;
                     }
                 }
             }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.oldFirstDisplayedScrollingCol;
+                    return oldFirstDisplayedScrollingCol;
                 }
             }
 
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.oldFirstDisplayedScrollingRow;
+                    return oldFirstDisplayedScrollingRow;
                 }
             }
 
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.oldNumDisplayedFrozenRows;
+                    return oldNumDisplayedFrozenRows;
                 }
             }
 
@@ -297,7 +297,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.oldNumDisplayedScrollingRows;
+                    return oldNumDisplayedScrollingRows;
                 }
             }
 
@@ -305,17 +305,17 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.rowInsertionOccurred;
+                    return rowInsertionOccurred;
                 }
             }
 
             public void EnsureDirtyState()
             {
-                if (!this.dirty)
+                if (!dirty)
                 {
-                    this.dirty = true;
-                    this.rowInsertionOccurred = false;
-                    this.columnInsertionOccurred = false;
+                    dirty = true;
+                    rowInsertionOccurred = false;
+                    columnInsertionOccurred = false;
                     SetOldValues();
                 }
             }
@@ -323,40 +323,40 @@ namespace System.Windows.Forms
             public void CorrectColumnIndexAfterInsertion(int columnIndex, int insertionCount)
             {
                 EnsureDirtyState();
-                if (this.oldFirstDisplayedScrollingCol != -1 && columnIndex <= this.oldFirstDisplayedScrollingCol)
+                if (oldFirstDisplayedScrollingCol != -1 && columnIndex <= oldFirstDisplayedScrollingCol)
                 {
-                    this.oldFirstDisplayedScrollingCol += insertionCount;
+                    oldFirstDisplayedScrollingCol += insertionCount;
                 }
-                this.columnInsertionOccurred = true;
+                columnInsertionOccurred = true;
             }
 
             public void CorrectRowIndexAfterDeletion(int rowIndex)
             {
                 EnsureDirtyState();
-                if (this.oldFirstDisplayedScrollingRow != -1 && rowIndex <= this.oldFirstDisplayedScrollingRow)
+                if (oldFirstDisplayedScrollingRow != -1 && rowIndex <= oldFirstDisplayedScrollingRow)
                 {
-                    this.oldFirstDisplayedScrollingRow--;
+                    oldFirstDisplayedScrollingRow--;
                 }
             }
 
             public void CorrectRowIndexAfterInsertion(int rowIndex, int insertionCount)
             {
                 EnsureDirtyState();
-                if (this.oldFirstDisplayedScrollingRow != -1 && rowIndex <= this.oldFirstDisplayedScrollingRow)
+                if (oldFirstDisplayedScrollingRow != -1 && rowIndex <= oldFirstDisplayedScrollingRow)
                 {
-                    this.oldFirstDisplayedScrollingRow += insertionCount;
+                    oldFirstDisplayedScrollingRow += insertionCount;
                 }
-                this.rowInsertionOccurred = true;
-                this.oldNumDisplayedScrollingRows += insertionCount;
-                this.oldNumDisplayedFrozenRows += insertionCount;
+                rowInsertionOccurred = true;
+                oldNumDisplayedScrollingRows += insertionCount;
+                oldNumDisplayedFrozenRows += insertionCount;
             }
 
             private void SetOldValues()
             {
-                this.oldFirstDisplayedScrollingRow = this.firstDisplayedScrollingRow;
-                this.oldFirstDisplayedScrollingCol = this.firstDisplayedScrollingCol;
-                this.oldNumDisplayedFrozenRows = this.numDisplayedFrozenRows;
-                this.oldNumDisplayedScrollingRows = this.numDisplayedScrollingRows;
+                oldFirstDisplayedScrollingRow = firstDisplayedScrollingRow;
+                oldFirstDisplayedScrollingCol = firstDisplayedScrollingCol;
+                oldNumDisplayedFrozenRows = numDisplayedFrozenRows;
+                oldNumDisplayedScrollingRows = numDisplayedScrollingRows;
             }
         }
     }

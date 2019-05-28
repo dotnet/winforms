@@ -12,9 +12,9 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the layout of a device context.
-    /// </devdoc>
+    /// </summary>
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -22,23 +22,23 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextBinaryRasterOperationFlags
-    {   
-        Black            = 1,   //  0       
-        NotMergePen      = 2,   // dpon     
-        MaskNotPen       = 3,   // dpna     
-        NotCopyPen       = 4,   // pn       
-        MaskPenNot       = 5,   // pdna     
-        Not              = 6,   // dn       
-        XorPen           = 7,   // dpx      
-        NotMaskPen       = 8,   // dpan     
-        MaskPen          = 9,   // dpa      
-        NotXorPen        = 10,  // dpxn     
-        Nop              = 11,  // d        
-        MergeNotPen      = 12,  // dpno     
-        CopyPen          = 13,  // p        
-        MergePenNot      = 14,  // pdno     
-        MergePen         = 15,  // dpo      
-        White            = 16,  //  1       
+    {
+        Black = 1,   //  0       
+        NotMergePen = 2,   // dpon     
+        MaskNotPen = 3,   // dpna     
+        NotCopyPen = 4,   // pn       
+        MaskPenNot = 5,   // pdna     
+        Not = 6,   // dn       
+        XorPen = 7,   // dpx      
+        NotMaskPen = 8,   // dpan     
+        MaskPen = 9,   // dpa      
+        NotXorPen = 10,  // dpxn     
+        Nop = 11,  // d        
+        MergeNotPen = 12,  // dpno     
+        CopyPen = 13,  // p        
+        MergePenNot = 14,  // pdno     
+        MergePen = 15,  // dpo      
+        White = 16,  //  1       
 
         // Binary raster operations.
         /*
@@ -58,6 +58,6 @@ namespace System.Experimental.Gdi
         R2_MERGEPENNOT      = 14, // PDno     
         R2_MERGEPEN         = 15, // DPo      
         R2_WHITE            = 16, //  1 
-        */     
+        */
     }
 }

@@ -125,9 +125,15 @@ namespace System.Windows.Forms.Design
             bool hasSize = (defaultValues != null && defaultValues.Contains("Size"));
 
             if (hasLocation)
+            {
                 location = (Point)defaultValues["Location"];
+            }
+
             if (hasSize)
+            {
                 size = (Size)defaultValues["Size"];
+            }
+
             if (defaultValues != null && defaultValues.Contains("Offset"))
             {
                 offset = (Size)defaultValues["Offset"];

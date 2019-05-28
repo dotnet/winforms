@@ -2,189 +2,121 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Security;
+using System.Buffers;
+using System.ComponentModel;
+using System.Drawing.Design;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
-namespace System.Windows.Forms 
+namespace System.Windows.Forms
 {
-    using System;
-    using System.IO;
-    using System.Buffers;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Security.Permissions;
-    using System.Diagnostics.CodeAnalysis;
-    using Microsoft.Win32.SafeHandles;
-
-    /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       Represents a common dialog box that allows the user to specify options for 
-    ///       selecting a folder. This class cannot be inherited.
-    ///    </para>
-    /// </devdoc>
-    [
-    DefaultEvent(nameof(HelpRequest)),
-    DefaultProperty(nameof(SelectedPath)),
-    Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, " + AssemblyRef.SystemDesign),    
-    SRDescription(nameof(SR.DescriptionFolderBrowserDialog))
-    ]
+    /// <summary>
+    /// Represents a common dialog box that allows the user to specify options for
+    /// selecting a folder. This class cannot be inherited.
+    /// </summary>
+    [DefaultEvent(nameof(HelpRequest))]
+    [DefaultProperty(nameof(SelectedPath))]
+    [Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, " + AssemblyRef.SystemDesign),]
+    [SRDescription(nameof(SR.DescriptionFolderBrowserDialog))]
     public sealed class FolderBrowserDialog : CommonDialog
     {
         // Root node of the tree view.
-        private Environment.SpecialFolder rootFolder;
-    
+        private Environment.SpecialFolder _rootFolder;
+
         // Description text to show.
-        private string descriptionText;
-    
+        private string _descriptionText;
+
         // Folder picked by the user.
-        private string selectedPath;
+        private string _selectedPath;
 
-        // Show the 'New Folder' button?
-        private bool showNewFolderButton;
-
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.FolderBrowserDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.FolderBrowserDialog'/> class.
-        ///    </para>
-        /// </devdoc>
-        public FolderBrowserDialog() 
+        /// <summary>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.FolderBrowserDialog'/> class.
+        /// </summary>
+        public FolderBrowserDialog()
         {
             Reset();
         }
 
-
         /// <summary>
         /// Gets or Sets whether the dialog will be automatically upgraded to enable new features.
         /// </summary>
-        [
-            DefaultValue(true)
-        ]
+        [DefaultValue(true)]
         public bool AutoUpgradeEnabled { get; set; } = true;
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.HelpRequest"]/*' />
-        /// <internalonly/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler HelpRequest 
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler HelpRequest
         {
-            add 
-            {
-                base.HelpRequest += value;
-            }
-            remove 
-            {
-                base.HelpRequest -= value;
-            }
+            add => base.HelpRequest += value;
+            remove => base.HelpRequest -= value;
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.ShowNewFolderButton"]/*' />
-        /// <devdoc>
-        ///     Determines if the 'New Folder' button should be exposed.
-        ///     This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown.
-        /// </devdoc>
-        [
-        Browsable(true),
-        DefaultValue(true),
-        Localizable(false),
-        SRCategory(nameof(SR.CatFolderBrowsing)),
-        SRDescription(nameof(SR.FolderBrowserDialogShowNewFolderButton))
-        ]
-        public bool ShowNewFolderButton
-        {
-            get
-            {
-                return showNewFolderButton;
-            }
-            set
-            {
-                showNewFolderButton = value;
-            }
-        }
+        /// <summary>
+        /// Determines if the 'New Folder' button should be exposed.
+        /// This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue(true)]
+        [Localizable(false)]
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
+        [SRDescription(nameof(SR.FolderBrowserDialogShowNewFolderButton))]
+        public bool ShowNewFolderButton { get; set; }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.SelectedPath"]/*' />
-        /// <devdoc>
-        ///     Gets the directory path of the folder the user picked.
-        ///     Sets the directory path of the initial folder shown in the dialog box.
-        /// </devdoc>
-        [
-        Browsable(true),
-        DefaultValue(""),
-        Editor("System.Windows.Forms.Design.SelectedPathEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Localizable(true),
-        SRCategory(nameof(SR.CatFolderBrowsing)),
-        SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))
-        ]
+        /// <summary>
+        /// Gets the directory path of the folder the user picked.
+        /// Sets the directory path of the initial folder shown in the dialog box.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue("")]
+        [Editor("System.Windows.Forms.Design.SelectedPathEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
+        [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]
         public string SelectedPath
         {
-            get
-            {
-                return selectedPath;
-            }
+            get => _selectedPath;
+            set => _selectedPath = value ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets/sets the root node of the directory tree.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue(Environment.SpecialFolder.Desktop)]
+        [Localizable(false)]
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
+        [SRDescription(nameof(SR.FolderBrowserDialogRootFolder))]
+        [TypeConverter(typeof(SpecialFolderEnumConverter))]
+        public Environment.SpecialFolder RootFolder
+        {
+            get => _rootFolder;
+            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
-                selectedPath = (value == null) ? string.Empty : value;
+                if (!Enum.IsDefined(typeof(Environment.SpecialFolder), value))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Environment.SpecialFolder));
+                }
+
+                _rootFolder = value;
             }
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.RootFolder"]/*' />
-        /// <devdoc>
-        ///     Gets/sets the root node of the directory tree.
-        /// </devdoc>
-        [
-        Browsable(true),
-        DefaultValue(System.Environment.SpecialFolder.Desktop),
-        Localizable(false),
-        SRCategory(nameof(SR.CatFolderBrowsing)),
-        SRDescription(nameof(SR.FolderBrowserDialogRootFolder)),
-        TypeConverter(typeof(SpecialFolderEnumConverter))
-        ]
-        public System.Environment.SpecialFolder RootFolder
-        {
-            get
-            {
-                return rootFolder;
-            }            
-            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]            
-            set
-            {
-                // FXCop:
-                // leaving in Enum.IsDefined because this Enum is likely to grow and we dont own it.
-                if (!Enum.IsDefined(typeof(System.Environment.SpecialFolder), value)) 
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(System.Environment.SpecialFolder));
-                }
-                rootFolder = value;
-            }
-        }
-    
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.Description"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a description to show above the folders. Here you can provide instructions for
-        ///       selecting a folder.
-        ///    </para>
-        /// </devdoc>
-        [
-        Browsable(true),
-        DefaultValue(""),
-        Localizable(true),
-        SRCategory(nameof(SR.CatFolderBrowsing)),
-        SRDescription(nameof(SR.FolderBrowserDialogDescription))
-        ]
+        /// <summary>
+        /// Gets or sets a description to show above the folders. Here you can provide
+        /// instructions for selecting a folder.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
+        [SRDescription(nameof(SR.FolderBrowserDialogDescription))]
         public string Description
         {
-            get
-            {
-                return descriptionText;
-            }
-            set
-            {
-                descriptionText = (value == null) ? string.Empty : value;
-            }
+            get => _descriptionText;
+            set => _descriptionText = value ?? string.Empty;
         }
 
         /// <summary>
@@ -193,104 +125,96 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value><see langword="true" /> to indicate that the value of the <see cref="Description" /> property is used as dialog title; <see langword="false" />
         /// to indicate the value is added as additional text to the dialog. The default is <see langword="false" />.</value>
-        [
-        Browsable(true),
-        DefaultValue(false),
-        Localizable(true),
-        SRCategory(nameof(SR.CatFolderBrowsing)),
-        Description(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))
-        ]
+        [Browsable(true)]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
+        [Description(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))]
         public bool UseDescriptionForTitle { get; set; }
 
-        internal bool UseVistaDialogInternal
+        private bool UseVistaDialogInternal
         {
-            get
-            {
-                if (AutoUpgradeEnabled)
-                {
-                    return SystemInformation.BootMode == BootMode.Normal; 
-                }
-
-                return false;
-            }
+            get => AutoUpgradeEnabled && SystemInformation.BootMode == BootMode.Normal;
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.Reset"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Resets all properties to their default values.
-        ///    </para>
-        /// </devdoc>
-        public override void Reset() 
+        /// <summary>
+        /// Resets all properties to their default values.
+        /// </summary>
+        public override void Reset()
         {
-            rootFolder = System.Environment.SpecialFolder.Desktop;
-            descriptionText = string.Empty;
-            selectedPath = string.Empty;
-            showNewFolderButton = true;
+            _rootFolder = Environment.SpecialFolder.Desktop;
+            _descriptionText = string.Empty;
+            _selectedPath = string.Empty;
+            ShowNewFolderButton = true;
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.RunDialog"]/*' />
-        /// <devdoc>
-        ///    Implements running of a folder browser dialog.
-        /// </devdoc>
-        protected override bool RunDialog(IntPtr hWndOwner) 
+        /// <summary>
+        /// Implements running of a folder browser dialog.
+        /// </summary>
+        protected override bool RunDialog(IntPtr hWndOwner)
         {
             return UseVistaDialogInternal ? RunDialogVista(hWndOwner) : RunDialogOld(hWndOwner);
         }
 
         private bool RunDialogVista(IntPtr owner)
         {
-            FileDialogNative.IFileDialog dialog = null;
+            var dialog = new FileDialogNative.NativeFileOpenDialog();
             try
             {
-                dialog = new FileDialogNative.NativeFileOpenDialog();
                 SetDialogProperties(dialog);
                 int result = dialog.Show(owner);
                 if (result < 0)
                 {
                     if ((uint)result == (uint)NativeMethods.HRESULT.ERROR_CANCELLED)
+                    {
                         return false;
+                    }
                     else
+                    {
                         throw Marshal.GetExceptionForHR(result);
+                    }
                 }
+
                 GetResult(dialog);
                 return true;
             }
             finally
             {
                 if (dialog != null)
+                {
                     Marshal.FinalReleaseComObject(dialog);
+                }
             }
         }
 
         private void SetDialogProperties(FileDialogNative.IFileDialog dialog)
         {
             // Description
-            if (!string.IsNullOrEmpty(descriptionText))
+            if (!string.IsNullOrEmpty(_descriptionText))
             {
                 if (UseDescriptionForTitle)
                 {
-                    dialog.SetTitle(descriptionText);
+                    dialog.SetTitle(_descriptionText);
                 }
                 else
                 {
                     FileDialogNative.IFileDialogCustomize customize = (FileDialogNative.IFileDialogCustomize)dialog;
-                    customize.AddText(0, descriptionText);
+                    customize.AddText(0, _descriptionText);
                 }
             }
 
             dialog.SetOptions(FileDialogNative.FOS.FOS_PICKFOLDERS | FileDialogNative.FOS.FOS_FORCEFILESYSTEM | FileDialogNative.FOS.FOS_FILEMUSTEXIST);
 
-            if (!string.IsNullOrEmpty(selectedPath))
+            if (!string.IsNullOrEmpty(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(selectedPath);
+                string parent = Path.GetDirectoryName(_selectedPath);
                 if (parent == null || !Directory.Exists(parent))
                 {
-                    dialog.SetFileName(selectedPath);
+                    dialog.SetFileName(_selectedPath);
                 }
                 else
                 {
-                    string folder = Path.GetFileName(selectedPath);
+                    string folder = Path.GetFileName(_selectedPath);
                     dialog.SetFolder(FileDialogNative.CreateItemFromParsingName(parent));
                     dialog.SetFileName(folder);
                 }
@@ -300,14 +224,13 @@ namespace System.Windows.Forms
         private void GetResult(FileDialogNative.IFileDialog dialog)
         {
             dialog.GetResult(out FileDialogNative.IShellItem item);
-            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out selectedPath);
+            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
         }
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-            CoTaskMemSafeHandle listHandle;
 
-            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, out listHandle);
+            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
             if (listHandle.IsInvalid)
             {
                 Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
@@ -320,7 +243,7 @@ namespace System.Windows.Forms
             using (listHandle)
             {
                 uint mergedOptions = Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
-                if (!showNewFolderButton)
+                if (!ShowNewFolderButton)
                 {
                     mergedOptions |= Interop.Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
                 }
@@ -338,17 +261,19 @@ namespace System.Windows.Forms
                 char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
                 try
                 {
-                    fixed (char *pDisplayName = displayName)
+                    fixed (char* pDisplayName = displayName)
                     {
-                        var bi = new Interop.Shell32.BROWSEINFO();
-                        bi.pidlRoot = listHandle;
-                        bi.hwndOwner = hWndOwner;
-                        bi.pszDisplayName = pDisplayName;
-                        bi.lpszTitle = descriptionText;
-                        bi.ulFlags = mergedOptions;
-                        bi.lpfn = callback;
-                        bi.lParam = IntPtr.Zero;
-                        bi.iImage = 0;
+                        var bi = new Interop.Shell32.BROWSEINFO
+                        {
+                            pidlRoot = listHandle,
+                            hwndOwner = hWndOwner,
+                            pszDisplayName = pDisplayName,
+                            lpszTitle = _descriptionText,
+                            ulFlags = mergedOptions,
+                            lpfn = callback,
+                            lParam = IntPtr.Zero,
+                            iImage = 0
+                        };
 
                         // Show the dialog
                         using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))
@@ -357,9 +282,9 @@ namespace System.Windows.Forms
                             {
                                 return false;
                             }
-                
+
                             // Retrieve the path from the IDList.
-                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out selectedPath);
+                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
                             GC.KeepAlive(callback);
                             return true;
                         }
@@ -372,36 +297,34 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    Callback function used to enable/disable the OK button,
-        ///    and select the initial folder.
-        /// </devdoc>
-        private int FolderBrowserDialog_BrowseCallbackProc(IntPtr hwnd,
-                                                           int msg, 
-                                                           IntPtr lParam, 
-                                                           IntPtr lpData)
+        /// <summary>
+        /// Callback function used to enable/disable the OK button,
+        /// and select the initial folder.
+        /// </summary>
+        private int FolderBrowserDialog_BrowseCallbackProc(IntPtr hwnd, int msg, IntPtr lParam, IntPtr lpData)
         {
             switch (msg)
             {
-                case NativeMethods.BFFM_INITIALIZED: 
-                    // Indicates the browse dialog box has finished initializing. The lpData value is zero. 
-                    if (selectedPath.Length != 0) 
+                case NativeMethods.BFFM_INITIALIZED:
+                    // Indicates the browse dialog box has finished initializing. The lpData value is zero.
+                    if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int) NativeMethods.BFFM_SETSELECTION, 1, selectedPath);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_SETSELECTION, 1, _selectedPath);
                     }
                     break;
-                case NativeMethods.BFFM_SELCHANGED: 
-                    // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item. 
+                case NativeMethods.BFFM_SELCHANGED:
+                    // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = Interop.Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int) NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
                     }
                     break;
             }
+
             return 0;
         }
     }

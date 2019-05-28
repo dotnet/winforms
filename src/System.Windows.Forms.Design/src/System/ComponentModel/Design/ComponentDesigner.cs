@@ -255,10 +255,10 @@ namespace System.ComponentModel.Design
             }
         }
 
-    /// <summary>
-    /// Gets the design-time verbs supported by the component associated with the designer.
-    /// </summary>
-    public virtual DesignerVerbCollection Verbs
+        /// <summary>
+        /// Gets the design-time verbs supported by the component associated with the designer.
+        /// </summary>
+        public virtual DesignerVerbCollection Verbs
         {
             get
             {
@@ -390,7 +390,9 @@ namespace System.ComponentModel.Design
                     catch (CheckoutException cxe)
                     {
                         if (cxe == CheckoutException.Canceled)
+                        {
                             return;
+                        }
 
                         throw cxe;
                     }
@@ -504,7 +506,7 @@ namespace System.ComponentModel.Design
 
             if (isRoot || !InheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
             {
-                InitializeInheritedProperties(isRoot);
+                InitializeInheritedProperties();
             }
         }
 
@@ -537,7 +539,7 @@ namespace System.ComponentModel.Design
             }
         }
 
-        private void InitializeInheritedProperties(bool rootComponent)
+        private void InitializeInheritedProperties()
         {
             Hashtable props = new Hashtable();
             bool readOnlyInherit = (InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly));
@@ -571,7 +573,7 @@ namespace System.ComponentModel.Design
                     if (inheritedProp == null)
                     {
                         // This ia a publicly inherited component.  We replace all component properties with inherited versions that reset the default property values to those that are currently on the component.
-                        props[prop.Name] = new InheritedPropertyDescriptor(prop, _component, rootComponent);
+                        props[prop.Name] = new InheritedPropertyDescriptor(prop, _component);
                     }
                 }
             }

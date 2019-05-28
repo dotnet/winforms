@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Resources {
+namespace System.Resources
+{
 
     using System.Diagnostics;
     using System.Reflection;
     using System;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
     using Microsoft.Win32;
     using System.Drawing;
     using System.IO;
@@ -19,12 +20,12 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource writer. See the text in "ResourceSchema" for more 
     ///     information.
-    /// </devdoc>
-    public class ResXResourceWriter : IResourceWriter {
+    /// </summary>
+    public class ResXResourceWriter : IResourceWriter
+    {
         internal const string TypeStr = "type";
         internal const string NameStr = "name";
         internal const string DataStr = "data";
@@ -37,12 +38,12 @@ namespace System.Resources {
         internal const string ReaderStr = "reader";
         internal const string WriterStr = "writer";
         internal const string CommentStr = "comment";
-        internal const string AssemblyStr ="assembly";
-        internal const string AliasStr= "alias" ;
+        internal const string AssemblyStr = "assembly";
+        internal const string AliasStr = "alias";
 
         private Hashtable cachedAliases;
 
-        private static TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
+        private static readonly TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
         internal static readonly string Beta2CompatSerializedObjectMimeType = "text/microsoft-urt/psuedoml-serialized/base64";
 
@@ -57,26 +58,13 @@ namespace System.Resources {
         internal static readonly string CompatBinSerializedObjectMimeType = "text/microsoft-urt/binary-serialized/base64";
         internal static readonly string CompatSoapSerializedObjectMimeType = "text/microsoft-urt/soap-serialized/base64";
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.BinSerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.SoapSerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.DefaultSerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ByteArraySerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string ByteArraySerializedObjectMimeType = "application/x-microsoft.net.object.bytearray.base64";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string ResMimeType = "text/microsoft-resx";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Version"]/*' />
         public static readonly string Version = "2.0";
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResourceSchema"]/*' />
-        /// <internalonly/>
         public static readonly string ResourceSchema = @"
     <xsd:schema id=""root"" xmlns="""" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:msdata=""urn:schemas-microsoft-com:xml-msdata"">
         <xsd:import namespace=""http://www.w3.org/XML/1998/namespace""/>
@@ -125,8 +113,7 @@ namespace System.Resources {
         </xsd:element>
         </xsd:schema>
         ";
-        
-        string fileName;
+        readonly string fileName;
         Stream stream;
         TextWriter textWriter;
         XmlTextWriter xmlTextWriter;
@@ -134,118 +121,137 @@ namespace System.Resources {
         bool hasBeenSaved;
         bool initialized;
 
-        private Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
-        
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.BasePath"]/*' />
-        /// <devdoc>
+        private readonly Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
+
+        /// <summary>
         ///     Base Path for ResXFileRefs.
-        /// </devdoc>
+        /// </summary>
         public string BasePath { get; set; }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified file.
-        /// </devdoc>
-        public ResXResourceWriter(string fileName) {
+        /// </summary>
+        public ResXResourceWriter(string fileName)
+        {
             this.fileName = fileName;
         }
-        public ResXResourceWriter(string fileName, Func<Type, string> typeNameConverter) {
+        public ResXResourceWriter(string fileName, Func<Type, string> typeNameConverter)
+        {
             this.fileName = fileName;
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified stream.
-        /// </devdoc>
-        public ResXResourceWriter(Stream stream) {
+        /// </summary>
+        public ResXResourceWriter(Stream stream)
+        {
             this.stream = stream;
         }
-        public ResXResourceWriter(Stream stream, Func<Type, string> typeNameConverter) {
+        public ResXResourceWriter(Stream stream, Func<Type, string> typeNameConverter)
+        {
             this.stream = stream;
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified TextWriter.
-        /// </devdoc>
-        public ResXResourceWriter(TextWriter textWriter) {
+        /// </summary>
+        public ResXResourceWriter(TextWriter textWriter)
+        {
             this.textWriter = textWriter;
         }
-        public ResXResourceWriter(TextWriter textWriter, Func<Type, string> typeNameConverter) {
+        public ResXResourceWriter(TextWriter textWriter, Func<Type, string> typeNameConverter)
+        {
             this.textWriter = textWriter;
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Finalize"]/*' />
-        ~ResXResourceWriter() {
+        ~ResXResourceWriter()
+        {
             Dispose(false);
         }
 
-        private void InitializeWriter() {
-            if (xmlTextWriter == null) {
+        private void InitializeWriter()
+        {
+            if (xmlTextWriter == null)
+            {
                 // 
 
                 bool writeHeaderRequired = false;
 
-                if (textWriter != null) {
+                if (textWriter != null)
+                {
                     textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                     writeHeaderRequired = true;
 
                     xmlTextWriter = new XmlTextWriter(textWriter);
                 }
-                else if (stream != null) {
+                else if (stream != null)
+                {
                     xmlTextWriter = new XmlTextWriter(stream, System.Text.Encoding.UTF8);
                 }
-                else {
+                else
+                {
                     Debug.Assert(fileName != null, "Nothing to output to");
                     xmlTextWriter = new XmlTextWriter(fileName, System.Text.Encoding.UTF8);
                 }
                 xmlTextWriter.Formatting = Formatting.Indented;
                 xmlTextWriter.Indentation = 2;
 
-                if (!writeHeaderRequired) {
+                if (!writeHeaderRequired)
+                {
                     xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
                 }
             }
-            else {
+            else
+            {
                 xmlTextWriter.WriteStartDocument();
             }
 
             xmlTextWriter.WriteStartElement("root");
-            XmlTextReader reader = new XmlTextReader(new StringReader(ResourceSchema));
-            reader.WhitespaceHandling = WhitespaceHandling.None;
+            XmlTextReader reader = new XmlTextReader(new StringReader(ResourceSchema))
+            {
+                WhitespaceHandling = WhitespaceHandling.None
+            };
             xmlTextWriter.WriteNode(reader, true);
 
-            xmlTextWriter.WriteStartElement(ResHeaderStr); {
+            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            {
                 xmlTextWriter.WriteAttributeString(NameStr, ResMimeTypeStr);
-                xmlTextWriter.WriteStartElement(ValueStr); {
+                xmlTextWriter.WriteStartElement(ValueStr);
+                {
                     xmlTextWriter.WriteString(ResMimeType);
                 }
                 xmlTextWriter.WriteEndElement();
             }
             xmlTextWriter.WriteEndElement();
-            xmlTextWriter.WriteStartElement(ResHeaderStr); {
+            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            {
                 xmlTextWriter.WriteAttributeString(NameStr, VersionStr);
-                xmlTextWriter.WriteStartElement(ValueStr); {
+                xmlTextWriter.WriteStartElement(ValueStr);
+                {
                     xmlTextWriter.WriteString(Version);
                 }
                 xmlTextWriter.WriteEndElement();
             }
             xmlTextWriter.WriteEndElement();
-            xmlTextWriter.WriteStartElement(ResHeaderStr); {
+            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            {
                 xmlTextWriter.WriteAttributeString(NameStr, ReaderStr);
-                xmlTextWriter.WriteStartElement(ValueStr); {
-                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), this.typeNameConverter));
+                xmlTextWriter.WriteStartElement(ValueStr);
+                {
+                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), typeNameConverter));
                 }
                 xmlTextWriter.WriteEndElement();
             }
             xmlTextWriter.WriteEndElement();
-            xmlTextWriter.WriteStartElement(ResHeaderStr); {
+            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            {
                 xmlTextWriter.WriteAttributeString(NameStr, WriterStr);
-                xmlTextWriter.WriteStartElement(ValueStr); {
-                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), this.typeNameConverter));
+                xmlTextWriter.WriteStartElement(ValueStr);
+                {
+                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), typeNameConverter));
                 }
                 xmlTextWriter.WriteEndElement();
             }
@@ -254,107 +260,115 @@ namespace System.Resources {
             initialized = true;
         }
 
-        private XmlWriter Writer {
-            get {
-                if (!initialized) {
+        private XmlWriter Writer
+        {
+            get
+            {
+                if (!initialized)
+                {
                     InitializeWriter();
                 }
                 return xmlTextWriter;
             }
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddAlias"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Adds aliases to the resource file...
-        /// </devdoc>
-        public virtual void AddAlias(string aliasName, AssemblyName assemblyName) {
-           if (assemblyName == null) {
-               throw new ArgumentNullException(nameof(assemblyName));
-           }
+        /// </summary>
+        public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
+        {
+            if (assemblyName == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyName));
+            }
 
-           if (cachedAliases == null) {
-               cachedAliases = new Hashtable();
-           }
+            if (cachedAliases == null)
+            {
+                cachedAliases = new Hashtable();
+            }
 
-           cachedAliases[assemblyName.FullName] = aliasName; 
-       }
+            cachedAliases[assemblyName.FullName] = aliasName;
+        }
 
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddMetadata"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
-        /// </devdoc>
-        public void AddMetadata(string name, byte[] value) {
+        /// </summary>
+        public void AddMetadata(string name, byte[] value)
+        {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddMetadata1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
-        /// </devdoc>
-        public void AddMetadata(string name, string value) {
+        /// </summary>
+        public void AddMetadata(string name, string value)
+        {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddMetadata2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
-        /// </devdoc>
-        public void AddMetadata(string name, object value) {
+        /// </summary>
+        public void AddMetadata(string name, object value)
+        {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Adds a blob resource to the resources.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void AddResource(string name, byte[] value) {
+        public void AddResource(string name, byte[] value)
+        {
             AddDataRow(DataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void AddResource(string name, object value) {
-            if (value is ResXDataNode node) {
+        public void AddResource(string name, object value)
+        {
+            if (value is ResXDataNode node)
+            {
                 AddResource(node);
             }
-            else {
+            else
+            {
                 AddDataRow(DataStr, name, value);
             }
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Adds a string resource to the resources.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void AddResource(string name, string value) {
+        public void AddResource(string name, string value)
+        {
             AddDataRow(DataStr, name, value);
         }
 
-         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Adds a string resource to the resources.
-        /// </devdoc>
-        public void AddResource(ResXDataNode node) {
+        /// </summary>
+        public void AddResource(ResXDataNode node)
+        {
             // we're modifying the node as we're adding it to the resxwriter
             // this is BAD, so we clone it. adding it to a writer doesnt change it
             // we're messing with a copy
             ResXDataNode nodeClone = node.DeepClone();
-            
+
             ResXFileRef fileRef = nodeClone.FileRef;
             string modifiedBasePath = BasePath;
-            
-            if (!string.IsNullOrEmpty(modifiedBasePath)) {
+
+            if (!string.IsNullOrEmpty(modifiedBasePath))
+            {
                 if (!modifiedBasePath.EndsWith("\\"))
                 {
                     modifiedBasePath += "\\";
@@ -366,18 +380,19 @@ namespace System.Resources {
             AddDataRow(DataStr, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a blob resource to the resources.
-        /// </devdoc>
-        private void AddDataRow(string elementName, string name, byte[] value) {
+        /// </summary>
+        private void AddDataRow(string elementName, string name, byte[] value)
+        {
             AddDataRow(elementName, name, ToBase64WrappedString(value), TypeNameWithAssembly(typeof(byte[])), null, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
-        /// </devdoc>
+        /// </summary>
         private void AddDataRow(string elementName, string name, object value)
         {
             Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "  resx: adding resource " + name);
@@ -390,98 +405,119 @@ namespace System.Resources {
                     AddDataRow(elementName, name, bytes);
                     break;
                 case ResXFileRef fileRef:
-                {
-                    ResXDataNode node = new ResXDataNode(name, fileRef, this.typeNameConverter);
-                    DataNodeInfo info = node.GetDataNodeInfo();
-                    AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
-                    break;
-                }
+                    {
+                        ResXDataNode node = new ResXDataNode(name, fileRef, typeNameConverter);
+                        DataNodeInfo info = node.GetDataNodeInfo();
+                        AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
+                        break;
+                    }
                 default:
-                {
-                    ResXDataNode node = new ResXDataNode(name, value, this.typeNameConverter);
-                    DataNodeInfo info = node.GetDataNodeInfo();
-                    AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
-                    break;
-                }
+                    {
+                        ResXDataNode node = new ResXDataNode(name, value, typeNameConverter);
+                        DataNodeInfo info = node.GetDataNodeInfo();
+                        AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
+                        break;
+                    }
             }
-        }        
+        }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a string resource to the resources.
-        /// </devdoc>
+        /// </summary>
         private void AddDataRow(string elementName, string name, string value)
         {
             // if it's a null string, set it here as a resxnullref
             string typeName =
                 value == null
-                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter)
+                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), typeNameConverter)
                     : null;
-            AddDataRow(elementName, name, value, typeName, null, null);     
+            AddDataRow(elementName, name, value, typeName, null, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a new row to the Resources table. This helper is used because
         ///     we want to always late bind to the columns for greater flexibility.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment) {
+        private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment)
+        {
             if (hasBeenSaved)
+            {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
-            
+            }
+
             string alias = null;
             if (!string.IsNullOrEmpty(type) && elementName == DataStr)
             {
                 string assemblyName = GetFullName(type);
-                if(string.IsNullOrEmpty(assemblyName)) {
-                    try {
+                if (string.IsNullOrEmpty(assemblyName))
+                {
+                    try
+                    {
                         Type typeObject = Type.GetType(type);
-                        if(typeObject == typeof(string)) {
+                        if (typeObject == typeof(string))
+                        {
                             type = null;
-                        } else if(typeObject != null) {
-                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, this.typeNameConverter));
+                        }
+                        else if (typeObject != null)
+                        {
+                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, typeNameConverter));
                             alias = GetAliasFromName(new AssemblyName(assemblyName));
                         }
-                    } catch {
                     }
-                } else {
+                    catch
+                    {
+                    }
+                }
+                else
+                {
                     alias = GetAliasFromName(new AssemblyName(GetFullName(type)));
                 }
                 //AddAssemblyRow(AssemblyStr, alias, GetFullName(type));
             }
-            
-            Writer.WriteStartElement(elementName); {
+
+            Writer.WriteStartElement(elementName);
+            {
                 Writer.WriteAttributeString(NameStr, name);
-                
-                if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(type) && elementName == DataStr) {
-                     // CHANGE: we still output version information. This might have
+
+                if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(type) && elementName == DataStr)
+                {
+                    // CHANGE: we still output version information. This might have
                     // to change in 3.2
                     string typeName = GetTypeName(type);
                     string typeValue = typeName + ", " + alias;
                     Writer.WriteAttributeString(TypeStr, typeValue);
                 }
-                else {
-                     if (type != null)
-                     {
+                else
+                {
+                    if (type != null)
+                    {
                         Writer.WriteAttributeString(TypeStr, type);
-                     }
+                    }
                 }
 
-                if (mimeType != null) {
+                if (mimeType != null)
+                {
                     Writer.WriteAttributeString(MimeTypeStr, mimeType);
                 }
-                
-                if((type == null && mimeType == null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal))) {
+
+                if ((type == null && mimeType == null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal)))
+                {
                     Writer.WriteAttributeString("xml", "space", null, "preserve");
                 }
-                
-                Writer.WriteStartElement(ValueStr); {
-                    if(!string.IsNullOrEmpty(value)) {
+
+                Writer.WriteStartElement(ValueStr);
+                {
+                    if (!string.IsNullOrEmpty(value))
+                    {
                         Writer.WriteString(value);
                     }
                 }
                 Writer.WriteEndElement();
-                if(!string.IsNullOrEmpty(comment)) {
-                    Writer.WriteStartElement(CommentStr); {
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    Writer.WriteStartElement(CommentStr);
+                    {
                         Writer.WriteString(comment);
                     }
                     Writer.WriteEndElement();
@@ -493,12 +529,15 @@ namespace System.Resources {
 
         private void AddAssemblyRow(string elementName, string alias, string name)
         {
-            Writer.WriteStartElement(elementName); {
-                if (!string.IsNullOrEmpty(alias)) {
-                      Writer.WriteAttributeString(AliasStr, alias);
+            Writer.WriteStartElement(elementName);
+            {
+                if (!string.IsNullOrEmpty(alias))
+                {
+                    Writer.WriteAttributeString(AliasStr, alias);
                 }
-            
-                if (!string.IsNullOrEmpty(name)) {
+
+                if (!string.IsNullOrEmpty(name))
+                {
                     Writer.WriteAttributeString(NameStr, name);
                 }
                 //Writer.WriteEndElement();
@@ -512,74 +551,87 @@ namespace System.Resources {
             {
                 cachedAliases = new Hashtable();
             }
-            string alias = (string)cachedAliases[assemblyName.FullName]; 
+            string alias = (string)cachedAliases[assemblyName.FullName];
             if (string.IsNullOrEmpty(alias))
             {
-                alias =  assemblyName.Name;
-                AddAlias(alias, assemblyName);               
+                alias = assemblyName.Name;
+                AddAlias(alias, assemblyName);
                 AddAssemblyRow(AssemblyStr, alias, assemblyName.FullName);
             }
             return alias;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Close"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Closes any files or streams locked by the writer.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void Close() {
+        public void Close()
+        {
             Dispose();
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Dispose"]/*' />
         // NOTE: Part of IDisposable - not protected by class level LinkDemand.
-        public virtual void Dispose() {
+        public virtual void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Dispose1"]/*' />
-        protected virtual void Dispose(bool disposing) {
-            if (disposing) {
-                if (!hasBeenSaved) {
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (!hasBeenSaved)
+                {
                     Generate();
                 }
-                if (xmlTextWriter != null) {
+                if (xmlTextWriter != null)
+                {
                     xmlTextWriter.Close();
                     xmlTextWriter = null;
                 }
-                if (stream != null) {
+                if (stream != null)
+                {
                     stream.Close();
                     stream = null;
                 }
-                if (textWriter != null) {
+                if (textWriter != null)
+                {
                     textWriter.Close();
                     textWriter = null;
                 }
             }
         }
 
-        private string GetTypeName(string typeName) {
-             int indexStart = typeName.IndexOf(",");
-             return ((indexStart == -1) ? typeName : typeName.Substring(0, indexStart));
+        private string GetTypeName(string typeName)
+        {
+            int indexStart = typeName.IndexOf(',');
+            return ((indexStart == -1) ? typeName : typeName.Substring(0, indexStart));
         }
 
-        private string GetFullName(string typeName) {
-             int indexStart = typeName.IndexOf(",");
-             if(indexStart == -1)
+        private string GetFullName(string typeName)
+        {
+            int indexStart = typeName.IndexOf(',');
+            if (indexStart == -1)
+            {
                 return null;
-             return typeName.Substring(indexStart + 2);
-        }    
+            }
 
-        static string ToBase64WrappedString(byte[] data) {
+            return typeName.Substring(indexStart + 2);
+        }
+
+        static string ToBase64WrappedString(byte[] data)
+        {
             const int lineWrap = 80;
             const string crlf = "\r\n";
             const string prefix = "        ";
             string raw = Convert.ToBase64String(data);
-            if (raw.Length > lineWrap) {
+            if (raw.Length > lineWrap)
+            {
                 StringBuilder output = new StringBuilder(raw.Length + (raw.Length / lineWrap) * 3); // word wrap on lineWrap chars, \r\n
                 int current = 0;
-                for (; current < raw.Length - lineWrap; current+=lineWrap) {
+                for (; current < raw.Length - lineWrap; current += lineWrap)
+                {
                     output.Append(crlf);
                     output.Append(prefix);
                     output.Append(raw, current, lineWrap);
@@ -590,23 +642,26 @@ namespace System.Resources {
                 output.Append(crlf);
                 return output.ToString();
             }
-            
+
             return raw;
         }
 
-        private string TypeNameWithAssembly(Type type) {
-            string result = MultitargetUtil.GetAssemblyQualifiedName(type, this.typeNameConverter);
+        private string TypeNameWithAssembly(Type type)
+        {
+            string result = MultitargetUtil.GetAssemblyQualifiedName(type, typeNameConverter);
             return result;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Generate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Writes the resources out to the file or stream.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void Generate() {
+        public void Generate()
+        {
             if (hasBeenSaved)
+            {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
+            }
 
             hasBeenSaved = true;
             Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "writing XML");

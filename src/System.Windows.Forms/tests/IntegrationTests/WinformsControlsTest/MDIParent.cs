@@ -21,8 +21,10 @@ namespace WinformsControlsTest
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Form form = new Form();
-            form.MdiParent = this;
+            Form form = new Form
+            {
+                MdiParent = this
+            };
             form.DpiChangedAfterParent += Form_DpiChangedAfterParent;
         }
 
@@ -33,9 +35,11 @@ namespace WinformsControlsTest
 
         private void newChildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form child = new MdiChild();
-            child.MdiParent = this;
-            child.WindowState = FormWindowState.Maximized;
+            Form child = new MdiChild
+            {
+                MdiParent = this,
+                WindowState = FormWindowState.Maximized
+            };
             child.Show();
         }
     }

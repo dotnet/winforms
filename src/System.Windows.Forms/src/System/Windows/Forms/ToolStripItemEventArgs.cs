@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     {
         public ToolStripItemEventArgs(ToolStripItem item)
         {
-           Item = item;
+            Item = item;
         }
 
         public ToolStripItem Item { get; }

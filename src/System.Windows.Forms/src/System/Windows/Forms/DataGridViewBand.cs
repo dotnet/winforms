@@ -10,9 +10,9 @@ using System.Text;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Identifies a band or column in the dataGridView.
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
         private static readonly int s_propContextMenuStrip = PropertyStore.CreateKey();
@@ -32,9 +32,9 @@ namespace System.Windows.Forms
         private int _bandIndex;
         internal bool _bandIsRow;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewBand'/> class.
-        /// </devdoc>
+        /// </summary>
         internal DataGridViewBand()
         {
             _propertyStore = new PropertyStore();
@@ -115,8 +115,8 @@ namespace System.Windows.Forms
                 }
 
                 if (DataGridView != null &&
-                   (style != null ^ value != null) ||
-                   (style != null && value != null && !style.Equals(DefaultCellStyle)))
+                   ((style != null ^ value != null) ||
+                   (style != null && value != null && !style.Equals(DefaultCellStyle))))
                 {
                     DataGridView.OnBandDefaultCellStyleChanged(this);
                 }
@@ -343,8 +343,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell = value as DataGridViewColumnHeaderCell;
-                            if (dataGridViewColumnHeaderCell == null)
+                            if (!(value is DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell))
                             {
                                 throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DataGridViewColumn.HeaderCell), "System.Windows.Forms.DataGridViewColumnHeaderCell"), nameof(value));
                             }
@@ -411,7 +410,7 @@ namespace System.Windows.Forms
                             throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumWidthSmallerThanOne, DataGridViewBand.MinBandThickness));
                         }
                     }
-    
+
                     if (Thickness < value)
                     {
                         // Force the new minimum width on potential auto fill column.
@@ -422,7 +421,7 @@ namespace System.Windows.Forms
 
                         Thickness = value;
                     }
-    
+
                     _minimumThickness = value;
                     DataGridView?.OnBandMinimumThicknessChanged(this);
                 }
@@ -459,7 +458,7 @@ namespace System.Windows.Forms
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(ReadOnly)));
                         }
-    
+
                         OnStateChanging(DataGridViewElementStates.ReadOnly);
                         DataGridView.SetReadOnlyRowCore(_bandIndex, value);
                     }
@@ -750,7 +749,7 @@ namespace System.Windows.Forms
                         // the 'new' row cannot be made invisble.
                         throw new InvalidOperationException(SR.DataGridViewBand_NewRowCannotBeInvisible);
                     }
-        
+
                     OnStateChanging(DataGridViewElementStates.Visible);
                     if (value)
                     {

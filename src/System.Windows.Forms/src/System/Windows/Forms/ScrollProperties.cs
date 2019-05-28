@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         internal bool _smallChangeSetExternally;
         internal bool _largeChangeSetExternally;
 
-        private ScrollableControl _parent;
+        private readonly ScrollableControl _parent;
 
         protected ScrollableControl ParentControl => _parent;
 
@@ -269,14 +269,16 @@ namespace System.Windows.Forms
         {
             if (_parent.IsHandleCreated && _visible)
             {
-                var si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
-                si.fMask = NativeMethods.SIF_ALL;
-                si.nMin = _minimum;
-                si.nMax = _maximum;
-                si.nPage = _parent.AutoScroll ? PageSize : LargeChange;
-                si.nPos = _value;
-                si.nTrackPos = 0;
+                var si = new NativeMethods.SCROLLINFO
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
+                    fMask = NativeMethods.SIF_ALL,
+                    nMin = _minimum,
+                    nMax = _maximum,
+                    nPage = _parent.AutoScroll ? PageSize : LargeChange,
+                    nPos = _value,
+                    nTrackPos = 0
+                };
                 UnsafeNativeMethods.SetScrollInfo(new HandleRef(_parent, _parent.Handle), Orientation, si, true);
             }
         }

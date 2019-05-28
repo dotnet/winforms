@@ -12,8 +12,7 @@ namespace System.Windows.Forms
         #region PInvoke General
         // If this value is used, %windows%\system32 is searched for the DLL 
         // and its dependencies. Directories in the standard search path are not searched.
-        // Windows7, Windows Server 2008 R2, Windows Vista and Windows Server 2008:
-        // This value requires KB2533623 to be installed.
+        // Windows 7: this value requires KB2533623 to be installed.
         // Windows Server 2003 and Windows XP: This value is not supported.
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
@@ -66,7 +65,6 @@ namespace System.Windows.Forms
 
         #region PInvoke DpiRelated
         // This section could go to Nativemethods.cs or Safenativemethods.cs but we have separate copies of them in each library (System.winforms, System.Design and System.Drawing).
-        // Keeping them here will reduce duplicating code but may have to take care of security warnings (if any).
         // These APIs are available starting Windows 10, version 1607 only.
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         internal static extern DpiAwarenessContext GetThreadDpiAwarenessContext();
@@ -126,13 +124,13 @@ namespace System.Windows.Forms
                 return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
             }
         }
-/*
-        // Dpi awareness context values. Matching windows values.
-        public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNAWARE = (-1);
-        public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = (-2);
-        public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = (-3);
-        public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = (-4);
-        public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNSPECIFIED = (0);*/
+        /*
+                // Dpi awareness context values. Matching windows values.
+                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNAWARE = (-1);
+                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = (-2);
+                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = (-3);
+                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = (-4);
+                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNSPECIFIED = (0);*/
         #endregion
     }
 }

@@ -891,9 +891,9 @@ namespace System.Windows.Forms.Design
                     if (_designerHost != null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        NativeMethods.SendMessage(baseComponent.Handle, NativeMethods.WM_SETREDRAW, 0, 0);
+                        NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 0, 0);
                         tb.Focus();
-                        NativeMethods.SendMessage(baseComponent.Handle, NativeMethods.WM_SETREDRAW, 1, 0);
+                        NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 1, 0);
                     }
                 }
                 finally
@@ -975,9 +975,9 @@ namespace System.Windows.Forms.Design
                 if (_designerHost != null)
                 {
                     Control baseComponent = (Control)_designerHost.RootComponent;
-                    NativeMethods.SendMessage(baseComponent.Handle, NativeMethods.WM_SETREDRAW, 0, 0);
+                    NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 0, 0);
                     designerFrame.Focus();
-                    NativeMethods.SendMessage(baseComponent.Handle, NativeMethods.WM_SETREDRAW, 1, 0);
+                    NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 1, 0);
                 }
             }
         }
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Design
             if (currentItem is ToolStripDropDownItem stripItem)
             {
                 _miniToolStrip.RightToLeft = stripItem.RightToLeft;
-                stripItem.RightToLeftChanged += new System.EventHandler(this.OnRightToLeftChanged);
+                stripItem.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
             }
             _miniToolStrip.SuspendLayout();
             _miniToolStrip.CanOverflow = false;
@@ -1486,8 +1486,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private class TemplateTextBox : TextBox
         {
-            TransparentToolStrip parent;
-            ToolStripTemplateNode owner;
+            readonly TransparentToolStrip parent;
+            readonly ToolStripTemplateNode owner;
             private const int IMEMODE = 229;
 
             public TemplateTextBox(TransparentToolStrip parent, ToolStripTemplateNode owner) : base()
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_KILLFOCUS:
+                    case Interop.WindowMessages.WM_KILLFOCUS:
                         base.WndProc(ref m);
                         IntPtr focussedWindow = (IntPtr)m.WParam;
                         if (!IsParentWindow(focussedWindow))
@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms.Design
                     // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                     // 2.Select the text of the item and right click on it
                     // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.       
-                    case NativeMethods.WM_CONTEXTMENU:
+                    case Interop.WindowMessages.WM_CONTEXTMENU:
                         owner.IsSystemContextMenuDisplayed = true;
                         base.WndProc(ref m);
                         owner.IsSystemContextMenuDisplayed = false;
@@ -1574,8 +1574,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {
-            ToolStripTemplateNode owner;
-            IComponent currentItem;
+            readonly ToolStripTemplateNode owner;
+            readonly IComponent currentItem;
 
             public TransparentToolStrip(ToolStripTemplateNode owner)
             {
@@ -1643,7 +1643,7 @@ namespace System.Windows.Forms.Design
             private bool ProcessTabKey(bool forward)
             {
                 // Give the ToolStripItem first dibs
-                ToolStripItem item = this.GetSelectedItem();
+                ToolStripItem item = GetSelectedItem();
                 if (item is ToolStripControlHost)
                 {
 
@@ -1706,7 +1706,7 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_GETOBJECT:
+                    case Interop.WindowMessages.WM_GETOBJECT:
                         if (owner._addItemButton == null)
                         {
                             // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu
@@ -1778,12 +1778,12 @@ namespace System.Windows.Forms.Design
         public class MiniToolStripRenderer : ToolStripSystemRenderer
         {
             private int state = (int)TemplateNodeSelectionState.None;
-            private Color selectedBorderColor;
-            private Color defaultBorderColor;
-            private Color dropDownMouseOverColor;
-            private Color dropDownMouseDownColor;
-            private Color toolStripBorderColor;
-            private ToolStripTemplateNode owner;
+            private readonly Color selectedBorderColor;
+            private readonly Color defaultBorderColor;
+            private readonly Color dropDownMouseOverColor;
+            private readonly Color dropDownMouseDownColor;
+            private readonly Color toolStripBorderColor;
+            private readonly ToolStripTemplateNode owner;
             private Rectangle hotRegion = Rectangle.Empty;
 
             public MiniToolStripRenderer(ToolStripTemplateNode owner) : base()

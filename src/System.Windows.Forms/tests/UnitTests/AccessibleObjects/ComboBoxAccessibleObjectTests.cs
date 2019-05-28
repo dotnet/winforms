@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [MemberData(nameof(ComboBoxAccessibleObject_TestData))]
         public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_NotNull(AccessibleObject accessibleObject)
         {
-            var firstChild = accessibleObject.FragmentNavigate(UnsafeNativeMethods.NavigateDirection.FirstChild);
+            UnsafeNativeMethods.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UnsafeNativeMethods.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
         }
     }

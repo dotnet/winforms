@@ -72,6 +72,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

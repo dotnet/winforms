@@ -328,7 +328,9 @@ namespace System.Windows.Forms.Design.Behavior
                     if (prop != null)
                     {
                         if ((bool)prop.GetValue(o))
+                        {
                             continue;
+                        }
                     }
                     components.Add(o);
                 }
@@ -606,7 +608,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                 bool needToUpdate = true;
                 // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px.  This is what should happen, but it looks bad in the designer.  To avoid the flicker we temporarily turn off painting while we do the resize.
-                UnsafeNativeMethods.SendMessage(control.Handle, NativeMethods.WM_SETREDRAW, false, /* unused = */ 0);
+                UnsafeNativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_SETREDRAW, false, /* unused = */ 0);
                 try
                 {
                     bool fRTL = false;
@@ -757,7 +759,7 @@ namespace System.Windows.Forms.Design.Behavior
                 finally
                 {
                     // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
-                    UnsafeNativeMethods.SendMessage(control.Handle, NativeMethods.WM_SETREDRAW, true, /* unused = */ 0);
+                    UnsafeNativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_SETREDRAW, true, /* unused = */ 0);
                     //update the control
                     if (needToUpdate)
                     {

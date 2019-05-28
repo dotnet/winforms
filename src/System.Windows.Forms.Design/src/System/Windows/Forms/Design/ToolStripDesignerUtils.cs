@@ -11,8 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Reflection;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 
@@ -31,7 +29,7 @@ namespace System.Windows.Forms.Design
 
         [ThreadStatic]
         private static Dictionary<Type, Bitmap> s_cachedWinformsImages;
-        private static string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
+        private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
 
         private ToolStripDesignerUtils()
         {
@@ -40,17 +38,17 @@ namespace System.Windows.Forms.Design
         #region NewItemTypeLists
         // This section controls the ordering of standard item types in all the various pieces of toolstrip designer UI.
         // ToolStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForToolStrip = 
-            new Type[]{typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar)};
+        private static readonly Type[] s_newItemTypesForToolStrip =
+            new Type[] { typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar) };
         // StatusStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForStatusStrip = 
-            new Type[]{typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton)};
+        private static readonly Type[] s_newItemTypesForStatusStrip =
+            new Type[] { typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton) };
         // MenuStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForMenuStrip = 
-            new Type[]{typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox)};
+        private static readonly Type[] s_newItemTypesForMenuStrip =
+            new Type[] { typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox) };
         // ToolStripDropDown - roughly same as menu strip.
-        private static readonly Type[] s_newItemTypesForToolStripDropDownMenu = 
-            new Type[]{typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox)};
+        private static readonly Type[] s_newItemTypesForToolStripDropDownMenu =
+            new Type[] { typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox) };
         #endregion
 
         // Get the Correct bounds for painting...
@@ -539,24 +537,16 @@ namespace System.Windows.Forms.Design
                 {
                     if (s_bitsPerPixel == 0)
                     {
-                        new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                        try
+                        foreach (Screen s in Screen.AllScreens)
                         {
-                            foreach (Screen s in Screen.AllScreens)
+                            if (s_bitsPerPixel == 0)
                             {
-                                if (s_bitsPerPixel == 0)
-                                {
-                                    s_bitsPerPixel = (short)s.BitsPerPixel;
-                                }
-                                else
-                                {
-                                    s_bitsPerPixel = (short)Math.Min(s.BitsPerPixel, s_bitsPerPixel);
-                                }
+                                s_bitsPerPixel = (short)s.BitsPerPixel;
                             }
-                        }
-                        finally
-                        {
-                            CodeAccessPermission.RevertAssert();
+                            else
+                            {
+                                s_bitsPerPixel = (short)Math.Min(s.BitsPerPixel, s_bitsPerPixel);
+                            }
                         }
                     }
                     return s_bitsPerPixel;

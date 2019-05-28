@@ -10,16 +10,16 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the layout of a device context.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
     internal
 #endif
     enum DeviceContextBackgroundMode
-    {   
+    {
         Transparent = 1,
         Opaque = 2
     }

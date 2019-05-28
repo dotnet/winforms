@@ -40,18 +40,18 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-            public void Description_Set_GetReturnsExpected(string value)
+            [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+            public void Description_Set_GetReturnsExpected(string value, string expected)
             {
                 var browser = new FolderBrowser
                 {
                     Description = value
                 };
-                Assert.Equal(value ?? string.Empty, browser.Description);
+                Assert.Same(expected, browser.Description);
 
                 // Set same.
                 browser.Description = value;
-                Assert.Equal(value ?? string.Empty, browser.Description);
+                Assert.Same(expected, browser.Description);
             }
 
             [Theory]

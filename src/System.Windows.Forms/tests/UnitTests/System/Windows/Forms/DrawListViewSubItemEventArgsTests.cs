@@ -17,8 +17,8 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { null, Rectangle.Empty, null, null, -2, -2, null, (ListViewItemStates)(ListViewItemStates.Checked - 1) };
             yield return new object[] { graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), null, -1, -1, new ColumnHeader(), ListViewItemStates.Checked };
-            yield return new object[] { graphics, new Rectangle(-1, 2, -3, -4), new ListViewItem(), new ListViewItem.ListViewSubItem(), 0, 0, new ColumnHeader(),ListViewItemStates.Focused };
-            yield return new object[] { graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), 1, 2, new ColumnHeader(),ListViewItemStates.Checked };
+            yield return new object[] { graphics, new Rectangle(-1, 2, -3, -4), new ListViewItem(), new ListViewItem.ListViewSubItem(), 0, 0, new ColumnHeader(), ListViewItemStates.Focused };
+            yield return new object[] { graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), 1, 2, new ColumnHeader(), ListViewItemStates.Checked };
         }
 
         [Theory]

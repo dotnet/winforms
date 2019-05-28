@@ -29,19 +29,17 @@ namespace System.ComponentModel.Design
             if (serviceProvider != null)
             {
                 _serviceProvider = serviceProvider;
-                IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-                host.AddService(typeof(DesignerActionService), this);
-                IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                {
+                    host.AddService(typeof(DesignerActionService), this);
+                }
+                if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
                 {
                     cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
-                _selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-                if (_selSvc == null)
-                {
-                    Debug.Fail("Either BehaviorService or ISelectionService is null, cannot continue.");
-                }
+                _selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
             }
+
             _designerActionLists = new Hashtable();
             _componentToVerbsEventHookedUp = new Hashtable();
         }
@@ -88,7 +86,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Add(IComponent comp, DesignerActionList actionList)
         {
-            Add(comp, new DesignerActionListCollection( new[] { actionList } ));
+            Add(comp, new DesignerActionListCollection(new[] { actionList }));
         }
 
         /// <summary>
@@ -142,14 +140,12 @@ namespace System.ComponentModel.Design
         {
             if (disposing && _serviceProvider != null)
             {
-                IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
                     host.RemoveService(typeof(DesignerActionService));
                 }
 
-                IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (_serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
                 {
                     cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 }
@@ -198,8 +194,7 @@ namespace System.ComponentModel.Design
 
             if (component.Site is IServiceContainer sc)
             {
-                DesignerCommandSet dcs = (DesignerCommandSet)sc.GetService(typeof(DesignerCommandSet));
-                if (dcs != null)
+                if (sc.GetService(typeof(DesignerCommandSet)) is DesignerCommandSet dcs)
                 {
                     DesignerActionListCollection pullCollection = dcs.ActionLists;
                     if (pullCollection != null)
@@ -221,6 +216,11 @@ namespace System.ComponentModel.Design
                             }
                             foreach (DesignerVerb verb in verbs)
                             {
+                                if (verb == null)
+                                {
+                                    continue;
+                                }
+
                                 if (hookupEvents)
                                 {
                                     verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design
                     {
                         foreach (DesignerActionList actionList in pullCollection)
                         {
-                            DesignerActionItemCollection collection = actionList.GetSortedActionItems();
+                            DesignerActionItemCollection collection = actionList?.GetSortedActionItems();
                             if (collection == null || collection.Count == 0)
                             {
                                 actionLists.Remove(actionList);
@@ -262,7 +262,7 @@ namespace System.ComponentModel.Design
                 try
                 {
                     _reEntrantCode = true;
-                    if (_selSvc.PrimarySelection is IComponent comp)
+                    if (_selSvc?.PrimarySelection is IComponent comp)
                     {
                         if (comp.Site is IServiceContainer sc)
                         {
@@ -307,7 +307,7 @@ namespace System.ComponentModel.Design
                 // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
                 foreach (DesignerActionList actionList in pushCollection)
                 {
-                    DesignerActionItemCollection collection = actionList.GetSortedActionItems();
+                    DesignerActionItemCollection collection = actionList?.GetSortedActionItems();
                     if (collection == null || collection.Count == 0)
                     {
                         actionLists.Remove(actionList);

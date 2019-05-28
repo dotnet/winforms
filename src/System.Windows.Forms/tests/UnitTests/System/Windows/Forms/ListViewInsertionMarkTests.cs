@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
             // Set true.
             insertionMark.AppearsAfterItem = true;
             Assert.True(insertionMark.AppearsAfterItem);
-            
+
             // Set again to test caching behaviour.
             insertionMark.AppearsAfterItem = true;
             Assert.True(insertionMark.AppearsAfterItem);
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
             // Set true.
             insertionMark.AppearsAfterItem = true;
             Assert.True(insertionMark.AppearsAfterItem);
-            
+
             // Set again to test caching behaviour.
             insertionMark.AppearsAfterItem = true;
             Assert.True(insertionMark.AppearsAfterItem);
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Tests
             ListViewInsertionMark insertionMark = listView.InsertionMark;
             insertionMark.Color = value;
             Assert.Equal(value, insertionMark.Color);
-            
+
             // Set again to test caching behaviour.
             insertionMark.Color = value;
             Assert.Equal(value, insertionMark.Color);
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Tests
             ListViewInsertionMark insertionMark = listView.InsertionMark;
             insertionMark.Color = value;
             Assert.Equal(value, insertionMark.Color);
-            
+
             // Set again to test caching behaviour.
             insertionMark.Color = value;
             Assert.Equal(value, insertionMark.Color);
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
             ListViewInsertionMark insertionMark = listView.InsertionMark;
             insertionMark.Index = value;
             Assert.Equal(value, insertionMark.Index);
-            
+
             // Set again to test caching behaviour.
             insertionMark.Index = value;
             Assert.Equal(value, insertionMark.Index);
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Tests
             ListViewInsertionMark insertionMark = listView.InsertionMark;
             insertionMark.Index = value;
             Assert.Equal(value, insertionMark.Index);
-            
+
             // Set again to test caching behaviour.
             insertionMark.Index = value;
             Assert.Equal(value, insertionMark.Index);

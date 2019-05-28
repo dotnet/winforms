@@ -7,14 +7,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class contains the information a user needs to paint ListView sub-items (Details view only).
-    /// </devdoc>
+    /// </summary>
     public class DrawListViewSubItemEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawListViewSubItemEventArgs with the given parameters.
-        /// </devdoc>
+        /// </summary>
         public DrawListViewSubItemEventArgs(Graphics graphics, Rectangle bounds, ListViewItem item,
                         ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex,
                         ColumnHeader header, ListViewItemStates itemState)
@@ -29,54 +29,54 @@ namespace System.Windows.Forms
             ItemState = itemState;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Rectangle Bounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The parent item.
-        /// </devdoc>
+        /// </summary>
         public ListViewItem Item { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The parent item.
-        /// </devdoc>
+        /// </summary>
         public ListViewItem.ListViewSubItem SubItem { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The index in the ListView of the parent item.
-        /// </devdoc>
+        /// </summary>
         public int ItemIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The column index of this sub-item.
-        /// </devdoc>
+        /// </summary>
         public int ColumnIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The header of this sub-item's column
-        /// </devdoc>
+        /// </summary>
         public ColumnHeader Header { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Miscellaneous state information pertaining to the parent item.
-        /// </devdoc>
+        /// </summary>
         public ListViewItemStates ItemState { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
-        /// </devdoc>
+        /// </summary>
         public bool DrawDefault { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the sub-item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground()
         {
             Color backColor = (ItemIndex == -1) ? Item.BackColor : SubItem.BackColor;
@@ -86,9 +86,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a focus rectangle in the given bounds, if the item has focus.
-        /// </devdoc>
+        /// </summary>
         public void DrawFocusRectangle(Rectangle bounds)
         {
             if ((ItemState & ListViewItemStates.Focused) == ListViewItemStates.Focused)
@@ -97,9 +97,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the sub-item's text (overloaded)
-        /// </devdoc>
+        /// </summary>
         public void DrawText()
         {
             // Map the ColumnHeader::TextAlign to the TextFormatFlags.
@@ -112,15 +112,15 @@ namespace System.Windows.Forms
             DrawText(flags);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the sub-item's text (overloaded) - takes a TextFormatFlags argument.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank spaces o we don't have to localize it.
         public void DrawText(TextFormatFlags flags)
         {
-            string text  = (ItemIndex == -1) ? Item.Text      : SubItem.Text;
-            Font   font  = (ItemIndex == -1) ? Item.Font      : SubItem.Font;
-            Color  color = (ItemIndex == -1) ? Item.ForeColor : SubItem.ForeColor;
+            string text = (ItemIndex == -1) ? Item.Text : SubItem.Text;
+            Font font = (ItemIndex == -1) ? Item.Font : SubItem.Font;
+            Color color = (ItemIndex == -1) ? Item.ForeColor : SubItem.ForeColor;
             int padding = TextRenderer.MeasureText(" ", font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
 
