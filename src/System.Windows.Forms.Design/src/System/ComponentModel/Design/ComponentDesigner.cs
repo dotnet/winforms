@@ -25,6 +25,9 @@ namespace System.ComponentModel.Design
         bool _settingsKeyExplicitlySet = false;
 
         private static readonly CodeMarkers s_codemarkers = CodeMarkers.Instance;
+
+        private protected const string SettingsKeyName = "SettingsKey";
+
         /// <summary>
         /// Gets the design-time actionlists supported by the component associated with the designer.
         /// </summary>
@@ -58,7 +61,7 @@ namespace System.ComponentModel.Design
             get
             {
                 InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
-                return inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited);
+                return (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited));
             }
         }
 
@@ -253,9 +256,9 @@ namespace System.ComponentModel.Design
         {
             if (Component is IPersistComponentSettings && properties != null)
             {
-                if (properties["SettingsKey"] is PropertyDescriptor prop)
+                if (properties[SettingsKeyName] is PropertyDescriptor prop)
                 {
-                    properties["SettingsKey"] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
+                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
                 }
             }
         }
@@ -643,7 +646,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (string.IsNullOrEmpty((string)ShadowProperties["SettingsKey"]))
+                if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
                 {
                     IComponent rootComponent = GetService(typeof(IDesignerHost)) is IDesignerHost host ? host.RootComponent : null;
 
@@ -653,22 +656,22 @@ namespace System.ComponentModel.Design
                         {
                             if (rootComponent != null && rootComponent != persistableComponent)
                             {
-                                ShadowProperties["SettingsKey"] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
+                                ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
                             }
                             else
                             {
-                                ShadowProperties["SettingsKey"] = Component.Site.Name;
+                                ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
-                        persistableComponent.SettingsKey = ShadowProperties["SettingsKey"] as string;
+                        persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
                 }
-                return ShadowProperties["SettingsKey"] as string;
+                return ShadowProperties[SettingsKeyName] as string;
             }
             set
             {
-                ShadowProperties["SettingsKey"] = value;
+                ShadowProperties[SettingsKeyName] = value;
                 _settingsKeyExplicitlySet = true;
                 if (Component is IPersistComponentSettings persistableComponent)
                 {
@@ -866,9 +869,9 @@ namespace System.ComponentModel.Design
         {
             if (Component is IPersistComponentSettings && properties != null)
             {
-                if (properties["SettingsKey"] is PropertyDescriptor prop)
+                if (properties[SettingsKeyName] is PropertyDescriptor prop)
                 {
-                    properties["SettingsKey"] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
+                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
                 }
             }
         }
