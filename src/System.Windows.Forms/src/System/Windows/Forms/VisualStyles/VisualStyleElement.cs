@@ -83,78 +83,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement _default;
 
-                public static VisualStyleElement Default
-                {
-                    get
-                    {
-                        if (_default == null)
-                        {
-                            _default = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return _default;
-                    }
-                }
+                public static VisualStyleElement Default => _default ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class RadioButton
@@ -165,123 +110,35 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement uncheckednormal;
 
-                public static VisualStyleElement UncheckedNormal
-                {
-                    get
-                    {
-                        if (uncheckednormal == null)
-                        {
-                            uncheckednormal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return uncheckednormal;
-                    }
-                }
+                public static VisualStyleElement UncheckedNormal => uncheckednormal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement uncheckedhot;
 
-                public static VisualStyleElement UncheckedHot
-                {
-                    get
-                    {
-                        if (uncheckedhot == null)
-                        {
-                            uncheckedhot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return uncheckedhot;
-                    }
-                }
+                public static VisualStyleElement UncheckedHot => uncheckedhot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement uncheckedpressed;
 
-                public static VisualStyleElement UncheckedPressed
-                {
-                    get
-                    {
-                        if (uncheckedpressed == null)
-                        {
-                            uncheckedpressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return uncheckedpressed;
-                    }
-                }
+                public static VisualStyleElement UncheckedPressed => uncheckedpressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement uncheckeddisabled;
 
-                public static VisualStyleElement UncheckedDisabled
-                {
-                    get
-                    {
-                        if (uncheckeddisabled == null)
-                        {
-                            uncheckeddisabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return uncheckeddisabled;
-                    }
-                }
+                public static VisualStyleElement UncheckedDisabled => uncheckeddisabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement checkednormal;
 
-                public static VisualStyleElement CheckedNormal
-                {
-                    get
-                    {
-                        if (checkednormal == null)
-                        {
-                            checkednormal = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return checkednormal;
-                    }
-                }
+                public static VisualStyleElement CheckedNormal => checkednormal ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement checkedhot;
 
-                public static VisualStyleElement CheckedHot
-                {
-                    get
-                    {
-                        if (checkedhot == null)
-                        {
-                            checkedhot = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return checkedhot;
-                    }
-                }
+                public static VisualStyleElement CheckedHot => checkedhot ??= new VisualStyleElement(className, part, 6);
 
                 private static VisualStyleElement checkedpressed;
 
-                public static VisualStyleElement CheckedPressed
-                {
-                    get
-                    {
-                        if (checkedpressed == null)
-                        {
-                            checkedpressed = new VisualStyleElement(className, part, 7);
-                        }
-
-                        return checkedpressed;
-                    }
-                }
+                public static VisualStyleElement CheckedPressed => checkedpressed ??= new VisualStyleElement(className, part, 7);
 
                 private static VisualStyleElement checkeddisabled;
 
-                public static VisualStyleElement CheckedDisabled
-                {
-                    get
-                    {
-                        if (checkeddisabled == null)
-                        {
-                            checkeddisabled = new VisualStyleElement(className, part, 8);
-                        }
-
-                        return checkeddisabled;
-                    }
-                }
+                public static VisualStyleElement CheckedDisabled => checkeddisabled ??= new VisualStyleElement(className, part, 8);
             }
 
             public static class CheckBox
@@ -292,183 +149,51 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement uncheckednormal;
 
-                public static VisualStyleElement UncheckedNormal
-                {
-                    get
-                    {
-                        if (uncheckednormal == null)
-                        {
-                            uncheckednormal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return uncheckednormal;
-                    }
-                }
+                public static VisualStyleElement UncheckedNormal => uncheckednormal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement uncheckedhot;
 
-                public static VisualStyleElement UncheckedHot
-                {
-                    get
-                    {
-                        if (uncheckedhot == null)
-                        {
-                            uncheckedhot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return uncheckedhot;
-                    }
-                }
+                public static VisualStyleElement UncheckedHot => uncheckedhot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement uncheckedpressed;
 
-                public static VisualStyleElement UncheckedPressed
-                {
-                    get
-                    {
-                        if (uncheckedpressed == null)
-                        {
-                            uncheckedpressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return uncheckedpressed;
-                    }
-                }
+                public static VisualStyleElement UncheckedPressed => uncheckedpressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement uncheckeddisabled;
 
-                public static VisualStyleElement UncheckedDisabled
-                {
-                    get
-                    {
-                        if (uncheckeddisabled == null)
-                        {
-                            uncheckeddisabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return uncheckeddisabled;
-                    }
-                }
+                public static VisualStyleElement UncheckedDisabled => uncheckeddisabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement checkednormal;
 
-                public static VisualStyleElement CheckedNormal
-                {
-                    get
-                    {
-                        if (checkednormal == null)
-                        {
-                            checkednormal = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return checkednormal;
-                    }
-                }
+                public static VisualStyleElement CheckedNormal => checkednormal ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement checkedhot;
 
-                public static VisualStyleElement CheckedHot
-                {
-                    get
-                    {
-                        if (checkedhot == null)
-                        {
-                            checkedhot = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return checkedhot;
-                    }
-                }
+                public static VisualStyleElement CheckedHot => checkedhot ??= new VisualStyleElement(className, part, 6);
 
                 private static VisualStyleElement checkedpressed;
 
-                public static VisualStyleElement CheckedPressed
-                {
-                    get
-                    {
-                        if (checkedpressed == null)
-                        {
-                            checkedpressed = new VisualStyleElement(className, part, 7);
-                        }
-
-                        return checkedpressed;
-                    }
-                }
+                public static VisualStyleElement CheckedPressed => checkedpressed ??= new VisualStyleElement(className, part, 7);
 
                 private static VisualStyleElement checkeddisabled;
 
-                public static VisualStyleElement CheckedDisabled
-                {
-                    get
-                    {
-                        if (checkeddisabled == null)
-                        {
-                            checkeddisabled = new VisualStyleElement(className, part, 8);
-                        }
-
-                        return checkeddisabled;
-                    }
-                }
+                public static VisualStyleElement CheckedDisabled => checkeddisabled ??= new VisualStyleElement(className, part, 8);
 
                 private static VisualStyleElement mixednormal;
 
-                public static VisualStyleElement MixedNormal
-                {
-                    get
-                    {
-                        if (mixednormal == null)
-                        {
-                            mixednormal = new VisualStyleElement(className, part, 9);
-                        }
-
-                        return mixednormal;
-                    }
-                }
+                public static VisualStyleElement MixedNormal => mixednormal ??= new VisualStyleElement(className, part, 9);
 
                 private static VisualStyleElement mixedhot;
 
-                public static VisualStyleElement MixedHot
-                {
-                    get
-                    {
-                        if (mixedhot == null)
-                        {
-                            mixedhot = new VisualStyleElement(className, part, 10);
-                        }
-
-                        return mixedhot;
-                    }
-                }
+                public static VisualStyleElement MixedHot => mixedhot ??= new VisualStyleElement(className, part, 10);
 
                 private static VisualStyleElement mixedpressed;
 
-                public static VisualStyleElement MixedPressed
-                {
-                    get
-                    {
-                        if (mixedpressed == null)
-                        {
-                            mixedpressed = new VisualStyleElement(className, part, 11);
-                        }
-
-                        return mixedpressed;
-                    }
-                }
+                public static VisualStyleElement MixedPressed => mixedpressed ??= new VisualStyleElement(className, part, 11);
 
                 private static VisualStyleElement mixeddisabled;
 
-                public static VisualStyleElement MixedDisabled
-                {
-                    get
-                    {
-                        if (mixeddisabled == null)
-                        {
-                            mixeddisabled = new VisualStyleElement(className, part, 12);
-                        }
-
-                        return mixeddisabled;
-                    }
-                }
+                public static VisualStyleElement MixedDisabled => mixeddisabled ??= new VisualStyleElement(className, part, 12);
             }
 
             public static class GroupBox
@@ -479,33 +204,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class UserButton
@@ -514,18 +217,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } //END BUTTON
 
@@ -540,63 +232,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             internal static class Border
@@ -612,17 +260,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 3);
-                        }
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 3);
             }
 
             internal static class ReadOnlyButton
@@ -638,17 +276,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 2);
-                        }
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 2);
             }
 
             internal static class DropDownButtonRight
@@ -665,61 +293,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-                        return normal;
-                    }
-                }
-
-                /* Unused for now
-                private static VisualStyleElement hot;
-
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-                        return hot;
-                    }
-                }
-
-                private static VisualStyleElement pressed;
-
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-                        return pressed;
-                    }
-                }
-
-                private static VisualStyleElement disabled;
-
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-                        return disabled;
-                    }
-                }
-                */
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
 
             internal static class DropDownButtonLeft
@@ -736,41 +310,8 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 2);
-                        }
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 2);
             }
-
-            /* Unused for now
-            internal static class CueBanner
-            {
-                // Paints a rectangle with sharp edges and fills it. Default edge color is black, 
-                // default fill color is white.
-                private const int part = 8;
-
-                private static VisualStyleElement normal;
-
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-                        return normal;
-                    }
-                }
-            }
-            */
         } //END COMBOBOX
 
         public static class Page
@@ -784,63 +325,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class Down
@@ -850,63 +347,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class UpHorizontal
@@ -916,63 +369,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class DownHorizontal
@@ -982,63 +391,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
         } //END PAGE
 
@@ -1053,63 +418,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class Down
@@ -1119,63 +440,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class UpHorizontal
@@ -1185,63 +462,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class DownHorizontal
@@ -1251,63 +484,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
         } //END SPIN
 
@@ -1321,243 +510,67 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement upnormal;
 
-                public static VisualStyleElement UpNormal
-                {
-                    get
-                    {
-                        if (upnormal == null)
-                        {
-                            upnormal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return upnormal;
-                    }
-                }
+                public static VisualStyleElement UpNormal => upnormal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement uphot;
 
-                public static VisualStyleElement UpHot
-                {
-                    get
-                    {
-                        if (uphot == null)
-                        {
-                            uphot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return uphot;
-                    }
-                }
+                public static VisualStyleElement UpHot => uphot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement uppressed;
 
-                public static VisualStyleElement UpPressed
-                {
-                    get
-                    {
-                        if (uppressed == null)
-                        {
-                            uppressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return uppressed;
-                    }
-                }
+                public static VisualStyleElement UpPressed => uppressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement updisabled;
 
-                public static VisualStyleElement UpDisabled
-                {
-                    get
-                    {
-                        if (updisabled == null)
-                        {
-                            updisabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return updisabled;
-                    }
-                }
+                public static VisualStyleElement UpDisabled => updisabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement downnormal;
 
-                public static VisualStyleElement DownNormal
-                {
-                    get
-                    {
-                        if (downnormal == null)
-                        {
-                            downnormal = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return downnormal;
-                    }
-                }
+                public static VisualStyleElement DownNormal => downnormal ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement downhot;
 
-                public static VisualStyleElement DownHot
-                {
-                    get
-                    {
-                        if (downhot == null)
-                        {
-                            downhot = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return downhot;
-                    }
-                }
+                public static VisualStyleElement DownHot => downhot ??= new VisualStyleElement(className, part, 6);
 
                 private static VisualStyleElement downpressed;
 
-                public static VisualStyleElement DownPressed
-                {
-                    get
-                    {
-                        if (downpressed == null)
-                        {
-                            downpressed = new VisualStyleElement(className, part, 7);
-                        }
-
-                        return downpressed;
-                    }
-                }
+                public static VisualStyleElement DownPressed => downpressed ??= new VisualStyleElement(className, part, 7);
 
                 private static VisualStyleElement downdisabled;
 
-                public static VisualStyleElement DownDisabled
-                {
-                    get
-                    {
-                        if (downdisabled == null)
-                        {
-                            downdisabled = new VisualStyleElement(className, part, 8);
-                        }
-
-                        return downdisabled;
-                    }
-                }
+                public static VisualStyleElement DownDisabled => downdisabled ??= new VisualStyleElement(className, part, 8);
 
                 private static VisualStyleElement leftnormal;
 
-                public static VisualStyleElement LeftNormal
-                {
-                    get
-                    {
-                        if (leftnormal == null)
-                        {
-                            leftnormal = new VisualStyleElement(className, part, 9);
-                        }
-
-                        return leftnormal;
-                    }
-                }
+                public static VisualStyleElement LeftNormal => leftnormal ??= new VisualStyleElement(className, part, 9);
 
                 private static VisualStyleElement lefthot;
 
-                public static VisualStyleElement LeftHot
-                {
-                    get
-                    {
-                        if (lefthot == null)
-                        {
-                            lefthot = new VisualStyleElement(className, part, 10);
-                        }
-
-                        return lefthot;
-                    }
-                }
+                public static VisualStyleElement LeftHot => lefthot ??= new VisualStyleElement(className, part, 10);
 
                 private static VisualStyleElement leftpressed;
 
-                public static VisualStyleElement LeftPressed
-                {
-                    get
-                    {
-                        if (leftpressed == null)
-                        {
-                            leftpressed = new VisualStyleElement(className, part, 11);
-                        }
-
-                        return leftpressed;
-                    }
-                }
+                public static VisualStyleElement LeftPressed => leftpressed ??= new VisualStyleElement(className, part, 11);
 
                 private static VisualStyleElement leftdisabled;
 
-                public static VisualStyleElement LeftDisabled
-                {
-                    get
-                    {
-                        if (leftdisabled == null)
-                        {
-                            leftdisabled = new VisualStyleElement(className, part, 12);
-                        }
-
-                        return leftdisabled;
-                    }
-                }
+                public static VisualStyleElement LeftDisabled => leftdisabled ??= new VisualStyleElement(className, part, 12);
 
                 private static VisualStyleElement rightnormal;
 
-                public static VisualStyleElement RightNormal
-                {
-                    get
-                    {
-                        if (rightnormal == null)
-                        {
-                            rightnormal = new VisualStyleElement(className, part, 13);
-                        }
-
-                        return rightnormal;
-                    }
-                }
+                public static VisualStyleElement RightNormal => rightnormal ??= new VisualStyleElement(className, part, 13);
 
                 private static VisualStyleElement righthot;
 
-                public static VisualStyleElement RightHot
-                {
-                    get
-                    {
-                        if (righthot == null)
-                        {
-                            righthot = new VisualStyleElement(className, part, 14);
-                        }
-
-                        return righthot;
-                    }
-                }
+                public static VisualStyleElement RightHot => righthot ??= new VisualStyleElement(className, part, 14);
 
                 private static VisualStyleElement rightpressed;
 
-                public static VisualStyleElement RightPressed
-                {
-                    get
-                    {
-                        if (rightpressed == null)
-                        {
-                            rightpressed = new VisualStyleElement(className, part, 15);
-                        }
-
-                        return rightpressed;
-                    }
-                }
+                public static VisualStyleElement RightPressed => rightpressed ??= new VisualStyleElement(className, part, 15);
 
                 private static VisualStyleElement rightdisabled;
 
-                public static VisualStyleElement RightDisabled
-                {
-                    get
-                    {
-                        if (rightdisabled == null)
-                        {
-                            rightdisabled = new VisualStyleElement(className, part, 16);
-                        }
-
-                        return rightdisabled;
-                    }
-                }
+                public static VisualStyleElement RightDisabled => rightdisabled ??= new VisualStyleElement(className, part, 16);
             }
 
             public static class ThumbButtonHorizontal
@@ -1567,63 +580,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class ThumbButtonVertical
@@ -1633,63 +602,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class RightTrackHorizontal
@@ -1699,63 +624,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class LeftTrackHorizontal
@@ -1765,63 +646,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class LowerTrackVertical
@@ -1831,63 +668,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class UpperTrackVertical
@@ -1897,63 +690,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class GripperHorizontal
@@ -1963,18 +712,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class GripperVertical
@@ -1984,18 +722,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SizeBox
@@ -2005,33 +732,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement rightalign;
 
-                public static VisualStyleElement RightAlign
-                {
-                    get
-                    {
-                        if (rightalign == null)
-                        {
-                            rightalign = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return rightalign;
-                    }
-                }
+                public static VisualStyleElement RightAlign => rightalign ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement leftalign;
 
-                public static VisualStyleElement LeftAlign
-                {
-                    get
-                    {
-                        if (leftalign == null)
-                        {
-                            leftalign = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return leftalign;
-                    }
-                }
+                public static VisualStyleElement LeftAlign => leftalign ??= new VisualStyleElement(className, part, 2);
             }
         } // END SCROLLBAR
 
@@ -2046,63 +751,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class TabItemLeftEdge
@@ -2112,63 +773,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class TabItemRightEdge
@@ -2178,63 +795,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class TabItemBothEdges
@@ -2244,18 +817,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class TopTabItem
@@ -2265,63 +827,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
             }
 
@@ -2332,63 +850,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class TopTabItemRightEdge
@@ -2398,63 +872,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
             }
 
@@ -2465,18 +895,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Pane
@@ -2486,18 +905,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
 
@@ -2508,18 +916,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
         } // END TAB
@@ -2535,18 +932,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
 
@@ -2557,48 +943,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class HeaderPin
@@ -2608,93 +961,27 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement selectednormal;
 
-                public static VisualStyleElement SelectedNormal
-                {
-                    get
-                    {
-                        if (selectednormal == null)
-                        {
-                            selectednormal = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return selectednormal;
-                    }
-                }
+                public static VisualStyleElement SelectedNormal => selectednormal ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement selectedhot;
 
-                public static VisualStyleElement SelectedHot
-                {
-                    get
-                    {
-                        if (selectedhot == null)
-                        {
-                            selectedhot = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return selectedhot;
-                    }
-                }
+                public static VisualStyleElement SelectedHot => selectedhot ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement selectedpressed;
 
-                public static VisualStyleElement SelectedPressed
-                {
-                    get
-                    {
-                        if (selectedpressed == null)
-                        {
-                            selectedpressed = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return selectedpressed;
-                    }
-                }
+                public static VisualStyleElement SelectedPressed => selectedpressed ??= new VisualStyleElement(className, part, 6);
             }
 
             public static class IEBarMenu
@@ -2704,48 +991,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class NormalGroupBackground
@@ -2755,18 +1009,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
 
@@ -2777,48 +1020,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class NormalGroupExpand
@@ -2828,48 +1038,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
 
@@ -2880,18 +1057,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
 
@@ -2902,18 +1068,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
 
@@ -2925,48 +1080,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
 
@@ -2977,48 +1099,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
 
@@ -3029,18 +1118,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
         } // END EXPLORERBAR
@@ -3056,48 +1134,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class ItemLeft
@@ -3107,48 +1152,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class ItemRight
@@ -3158,48 +1170,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class SortArrow
@@ -3209,34 +1188,12 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement sortedup;
 
-                public static VisualStyleElement SortedUp
-                {
-                    get
-                    {
-                        if (sortedup == null)
-                        {
-                            sortedup = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return sortedup;
-                    }
-                }
+                public static VisualStyleElement SortedUp => sortedup ??= new VisualStyleElement(className, part, 1);
 
 
                 private static VisualStyleElement sorteddown;
 
-                public static VisualStyleElement SortedDown
-                {
-                    get
-                    {
-                        if (sorteddown == null)
-                        {
-                            sorteddown = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return sorteddown;
-                    }
-                }
+                public static VisualStyleElement SortedDown => sorteddown ??= new VisualStyleElement(className, part, 2);
             }
         } // END HEADER
 
@@ -3251,78 +1208,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement selected;
 
-                public static VisualStyleElement Selected
-                {
-                    get
-                    {
-                        if (selected == null)
-                        {
-                            selected = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return selected;
-                    }
-                }
+                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement selectednotfocus;
 
-                public static VisualStyleElement SelectedNotFocus
-                {
-                    get
-                    {
-                        if (selectednotfocus == null)
-                        {
-                            selectednotfocus = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return selectednotfocus;
-                    }
-                }
+                public static VisualStyleElement SelectedNotFocus => selectednotfocus ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class Group
@@ -3332,18 +1234,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Detail
@@ -3353,18 +1244,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SortedDetail
@@ -3374,18 +1254,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class EmptyText
@@ -3395,18 +1264,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
         } // END LISTVIEW
@@ -3422,93 +1280,27 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement _checked;
 
-                public static VisualStyleElement Checked
-                {
-                    get
-                    {
-                        if (_checked == null)
-                        {
-                            _checked = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return _checked;
-                    }
-                }
+                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement hotchecked;
 
-                public static VisualStyleElement HotChecked
-                {
-                    get
-                    {
-                        if (hotchecked == null)
-                        {
-                            hotchecked = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return hotchecked;
-                    }
-                }
+                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
 
 
@@ -3519,18 +1311,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END MENUBAND
 
@@ -3545,48 +1326,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement selected;
 
-                public static VisualStyleElement Selected
-                {
-                    get
-                    {
-                        if (selected == null)
-                        {
-                            selected = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return selected;
-                    }
-                }
+                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement demoted;
 
-                public static VisualStyleElement Demoted
-                {
-                    get
-                    {
-                        if (demoted == null)
-                        {
-                            demoted = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return demoted;
-                    }
-                }
+                public static VisualStyleElement Demoted => demoted ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class DropDown
@@ -3596,18 +1344,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class BarItem
@@ -3617,18 +1354,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class BarDropDown
@@ -3638,18 +1364,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Chevron
@@ -3659,18 +1374,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Separator
@@ -3680,18 +1384,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END MENU
 
@@ -3706,18 +1399,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class BarVertical
@@ -3727,18 +1409,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Chunk
@@ -3748,18 +1419,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class ChunkVertical
@@ -3769,18 +1429,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END PROGRESSBAR
 
@@ -3795,18 +1444,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class GripperVertical
@@ -3816,18 +1454,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Band
@@ -3837,18 +1464,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
 
@@ -3859,48 +1475,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class ChevronVertical
@@ -3910,48 +1493,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
         } // END REBAR
 
@@ -3966,18 +1516,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class MorePrograms
@@ -3987,18 +1526,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class MoreProgramsArrow
@@ -4008,48 +1536,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class ProgList
@@ -4059,18 +1554,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class ProgListSeparator
@@ -4080,18 +1564,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class PlaceList
@@ -4101,18 +1574,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class PlaceListSeparator
@@ -4122,18 +1584,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //The verb, not the noun.  Matches "Log Off" button.
@@ -4145,18 +1596,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //The verb, not the noun.  Matches "Log Off" button.
@@ -4168,48 +1608,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class UserPicture
@@ -4219,18 +1626,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Preview
@@ -4240,18 +1636,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END STARTPANEL
 
@@ -4263,18 +1648,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, 0, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, 0, 0);
             }
 
             public static class Pane
@@ -4284,18 +1658,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class GripperPane
@@ -4305,18 +1668,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Gripper
@@ -4326,18 +1678,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END STATUS
 
@@ -4352,18 +1693,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class FlashButton
@@ -4373,18 +1703,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class FlashButtonGroupMenu
@@ -4394,18 +1713,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END TASKBAND
 
@@ -4420,18 +1728,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
         } // END TASKBARCLOCK
 
@@ -4446,18 +1743,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class BackgroundRight
@@ -4467,18 +1753,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class BackgroundTop
@@ -4488,18 +1763,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class BackgroundLeft
@@ -4509,18 +1773,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SizingBarBottom
@@ -4530,18 +1783,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SizingBarRight
@@ -4551,18 +1793,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SizingBarTop
@@ -4572,18 +1803,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SizingBarLeft
@@ -4593,18 +1813,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END TASKBAR
 
@@ -4617,18 +1826,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, 0, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, 0, 0);
             }
 
             public static class Button
@@ -4638,93 +1836,27 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement _checked;
 
-                public static VisualStyleElement Checked
-                {
-                    get
-                    {
-                        if (_checked == null)
-                        {
-                            _checked = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return _checked;
-                    }
-                }
+                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement hotchecked;
 
-                public static VisualStyleElement HotChecked
-                {
-                    get
-                    {
-                        if (hotchecked == null)
-                        {
-                            hotchecked = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return hotchecked;
-                    }
-                }
+                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
 
             public static class DropDownButton
@@ -4734,93 +1866,27 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement _checked;
 
-                public static VisualStyleElement Checked
-                {
-                    get
-                    {
-                        if (_checked == null)
-                        {
-                            _checked = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return _checked;
-                    }
-                }
+                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement hotchecked;
 
-                public static VisualStyleElement HotChecked
-                {
-                    get
-                    {
-                        if (hotchecked == null)
-                        {
-                            hotchecked = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return hotchecked;
-                    }
-                }
+                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
 
             public static class SplitButton
@@ -4830,93 +1896,27 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement _checked;
 
-                public static VisualStyleElement Checked
-                {
-                    get
-                    {
-                        if (_checked == null)
-                        {
-                            _checked = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return _checked;
-                    }
-                }
+                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement hotchecked;
 
-                public static VisualStyleElement HotChecked
-                {
-                    get
-                    {
-                        if (hotchecked == null)
-                        {
-                            hotchecked = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return hotchecked;
-                    }
-                }
+                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
 
             public static class SplitButtonDropDown
@@ -4926,93 +1926,27 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement _checked;
 
-                public static VisualStyleElement Checked
-                {
-                    get
-                    {
-                        if (_checked == null)
-                        {
-                            _checked = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return _checked;
-                    }
-                }
+                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement hotchecked;
 
-                public static VisualStyleElement HotChecked
-                {
-                    get
-                    {
-                        if (hotchecked == null)
-                        {
-                            hotchecked = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return hotchecked;
-                    }
-                }
+                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
 
             public static class SeparatorHorizontal
@@ -5022,18 +1956,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SeparatorVertical
@@ -5043,18 +1966,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
         } // END TOOLBAR
@@ -5070,33 +1982,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement link;
 
-                public static VisualStyleElement Link
-                {
-                    get
-                    {
-                        if (link == null)
-                        {
-                            link = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return link;
-                    }
-                }
+                public static VisualStyleElement Link => link ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class StandardTitle
@@ -5106,18 +1996,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Balloon
@@ -5127,33 +2006,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement link;
 
-                public static VisualStyleElement Link
-                {
-                    get
-                    {
-                        if (link == null)
-                        {
-                            link = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return link;
-                    }
-                }
+                public static VisualStyleElement Link => link ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class BalloonTitle
@@ -5163,18 +2020,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class Close
@@ -5184,48 +2030,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
         } // END TOOLTIP
 
@@ -5240,18 +2053,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
 
             public static class TrackVertical
@@ -5261,18 +2063,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
 
             public static class Thumb
@@ -5282,78 +2073,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class ThumbBottom
@@ -5363,78 +2099,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class ThumbTop
@@ -5444,78 +2125,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class ThumbVertical
@@ -5525,78 +2151,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class ThumbLeft
@@ -5606,78 +2177,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class ThumbRight
@@ -5687,78 +2203,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class Ticks
@@ -5768,18 +2229,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
 
             public static class TicksVertical
@@ -5789,18 +2239,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
         } // END TRACKBAR
 
@@ -5816,78 +2255,23 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement selected;
 
-                public static VisualStyleElement Selected
-                {
-                    get
-                    {
-                        if (selected == null)
-                        {
-                            selected = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return selected;
-                    }
-                }
+                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement selectednotfocus;
 
-                public static VisualStyleElement SelectedNotFocus
-                {
-                    get
-                    {
-                        if (selectednotfocus == null)
-                        {
-                            selectednotfocus = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return selectednotfocus;
-                    }
-                }
+                public static VisualStyleElement SelectedNotFocus => selectednotfocus ??= new VisualStyleElement(className, part, 5);
             }
 
             public static class Glyph
@@ -5896,33 +2280,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement closed;
 
-                public static VisualStyleElement Closed
-                {
-                    get
-                    {
-                        if (closed == null)
-                        {
-                            closed = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return closed;
-                    }
-                }
+                public static VisualStyleElement Closed => closed ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement opened;
 
-                public static VisualStyleElement Opened
-                {
-                    get
-                    {
-                        if (opened == null)
-                        {
-                            opened = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return opened;
-                    }
-                }
+                public static VisualStyleElement Opened => opened ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class Branch
@@ -5932,18 +2294,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END TREEVIEW
 
@@ -5957,33 +2308,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement closed;
 
-                public static VisualStyleElement Closed
-                {
-                    get
-                    {
-                        if (closed == null)
-                        {
-                            closed = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return closed;
-                    }
-                }
+                public static VisualStyleElement Closed => closed ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement opened;
 
-                public static VisualStyleElement Opened
-                {
-                    get
-                    {
-                        if (opened == null)
-                        {
-                            opened = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return opened;
-                    }
-                }
+                public static VisualStyleElement Opened => opened ??= new VisualStyleElement(className, part, 2);
             }
         } // END Explorer::Tree
 
@@ -5999,108 +2328,31 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement selected;
 
-                public static VisualStyleElement Selected
-                {
-                    get
-                    {
-                        if (selected == null)
-                        {
-                            selected = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return selected;
-                    }
-                }
+                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
                 private static VisualStyleElement focused;
 
-                public static VisualStyleElement Focused
-                {
-                    get
-                    {
-                        if (focused == null)
-                        {
-                            focused = new VisualStyleElement(className, part, 5);
-                        }
-
-                        return focused;
-                    }
-                }
+                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 5);
 
                 private static VisualStyleElement _readonly;
 
-                public static VisualStyleElement ReadOnly
-                {
-                    get
-                    {
-                        if (_readonly == null)
-                        {
-                            _readonly = new VisualStyleElement(className, part, 6);
-                        }
-
-                        return _readonly;
-                    }
-                }
+                public static VisualStyleElement ReadOnly => _readonly ??= new VisualStyleElement(className, part, 6);
 
                 private static VisualStyleElement assist;
 
-                public static VisualStyleElement Assist
-                {
-                    get
-                    {
-                        if (assist == null)
-                        {
-                            assist = new VisualStyleElement(className, part, 7);
-                        }
-
-                        return assist;
-                    }
-                }
+                public static VisualStyleElement Assist => assist ??= new VisualStyleElement(className, part, 7);
             }
 
             public static class Caret
@@ -6110,18 +2362,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END TEXTBOX
 
@@ -6136,18 +2377,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class AnimateBackground
@@ -6157,18 +2387,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END TRAYNOTIFY
 
@@ -6183,48 +2402,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class SmallCaption
@@ -6234,48 +2420,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class MinCaption
@@ -6285,48 +2438,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class SmallMinCaption
@@ -6336,48 +2456,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class MaxCaption
@@ -6387,48 +2474,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class SmallMaxCaption
@@ -6438,48 +2492,15 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
 
             public static class FrameLeft
@@ -6489,33 +2510,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class FrameRight
@@ -6525,33 +2524,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class FrameBottom
@@ -6561,33 +2538,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class SmallFrameLeft
@@ -6597,33 +2552,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class SmallFrameRight
@@ -6633,33 +2566,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class SmallFrameBottom
@@ -6669,33 +2580,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement active;
 
-                public static VisualStyleElement Active
-                {
-                    get
-                    {
-                        if (active == null)
-                        {
-                            active = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return active;
-                    }
-                }
+                public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement inactive;
 
-                public static VisualStyleElement Inactive
-                {
-                    get
-                    {
-                        if (inactive == null)
-                        {
-                            inactive = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return inactive;
-                    }
-                }
+                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
 
             public static class SysButton
@@ -6705,63 +2594,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MdiSysButton
@@ -6771,63 +2616,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MinButton
@@ -6837,63 +2638,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MdiMinButton
@@ -6903,63 +2660,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MaxButton
@@ -6969,63 +2682,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class CloseButton
@@ -7035,63 +2704,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class SmallCloseButton
@@ -7101,63 +2726,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MdiCloseButton
@@ -7167,63 +2748,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class RestoreButton
@@ -7233,63 +2770,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MdiRestoreButton
@@ -7299,63 +2792,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class HelpButton
@@ -7365,63 +2814,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class MdiHelpButton
@@ -7431,63 +2836,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class HorizontalScroll
@@ -7497,63 +2858,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class HorizontalThumb
@@ -7563,63 +2880,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class VerticalScroll
@@ -7629,63 +2902,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class VerticalThumb
@@ -7695,63 +2924,19 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 1);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
                 private static VisualStyleElement hot;
 
-                public static VisualStyleElement Hot
-                {
-                    get
-                    {
-                        if (hot == null)
-                        {
-                            hot = new VisualStyleElement(className, part, 2);
-                        }
-
-                        return hot;
-                    }
-                }
+                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
                 private static VisualStyleElement pressed;
 
-                public static VisualStyleElement Pressed
-                {
-                    get
-                    {
-                        if (pressed == null)
-                        {
-                            pressed = new VisualStyleElement(className, part, 3);
-                        }
-
-                        return pressed;
-                    }
-                }
+                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
                 private static VisualStyleElement disabled;
 
-                public static VisualStyleElement Disabled
-                {
-                    get
-                    {
-                        if (disabled == null)
-                        {
-                            disabled = new VisualStyleElement(className, part, 4);
-                        }
-
-                        return disabled;
-                    }
-                }
+                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
 
             public static class Dialog
@@ -7761,18 +2946,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class CaptionSizingTemplate
@@ -7782,18 +2956,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SmallCaptionSizingTemplate
@@ -7803,18 +2966,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class FrameLeftSizingTemplate
@@ -7824,18 +2976,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SmallFrameLeftSizingTemplate
@@ -7845,18 +2986,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //Not used as compound word here
@@ -7868,18 +2998,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //Not used as compound word here
@@ -7891,18 +3010,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class FrameBottomSizingTemplate
@@ -7912,18 +3020,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             public static class SmallFrameBottomSizingTemplate
@@ -7933,18 +3030,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 private static VisualStyleElement normal;
 
-                public static VisualStyleElement Normal
-                {
-                    get
-                    {
-                        if (normal == null)
-                        {
-                            normal = new VisualStyleElement(className, part, 0);
-                        }
-
-                        return normal;
-                    }
-                }
+                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
         } // END WINDOW
     }
