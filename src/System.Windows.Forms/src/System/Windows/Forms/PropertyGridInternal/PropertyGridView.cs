@@ -887,9 +887,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal Rectangle AccessibilityGetGridEntryBounds(GridEntry gridEntry)
         {
             int row = GetRowFromGridEntry(gridEntry);
-            if (row == -1)
+
+            if (row < 0)
             {
-                return new Rectangle(0, 0, 0, 0);
+                return Rectangle.Empty;
             }
             Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
 
@@ -897,6 +898,20 @@ namespace System.Windows.Forms.PropertyGridInternal
             //
             NativeMethods.POINT pt = new NativeMethods.POINT(rect.X, rect.Y);
             UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), pt);
+
+            Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
+
+            int propertyGridViewBottom = parent.Bottom - 1; // - 1 is PropertyGridView bottom border 
+
+            if (pt.y > propertyGridViewBottom)
+            {
+                return Rectangle.Empty;
+            }
+
+            if (pt.y + rect.Height > propertyGridViewBottom)
+            {
+                rect.Height = propertyGridViewBottom - pt.y;
+            }
 
             return new Rectangle(pt.x, pt.y, rect.Width, rect.Height);
         }
