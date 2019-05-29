@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(NativeMethods.UIA_ItemStatusPropertyId)?.ToString();
             string expectedStatus = "Sorted ascending by Some column.";
-            Assert.True(itemStatus == expectedStatus);           
+            Assert.Equal(expectedStatus, itemStatus);           
         }
     }
 }
