@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>    
-    <LangVersion>7.3</LangVersion>
     <CLSCompliant>true</CLSCompliant>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>

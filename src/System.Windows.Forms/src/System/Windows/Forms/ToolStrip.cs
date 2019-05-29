@@ -5,25 +5,21 @@
 namespace System.Windows.Forms
 {
     using System;
-    using System.Configuration;
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Windows.Forms.Layout;
     using System.ComponentModel.Design.Serialization;
-    using System.Drawing.Drawing2D;
-    using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
     using System.Globalization;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Text.RegularExpressions;
     using System.Windows.Forms.Internal;
+    using System.Windows.Forms.Layout;
     using Microsoft.Win32;
-    using System.Runtime.Versioning;
 
     /// <summary>
     /// Summary of ToolStrip.
@@ -166,23 +162,29 @@ namespace System.Windows.Forms
 #endif
 
         private delegate void BooleanMethodInvoker(bool arg);
+        internal Action<int, int> rescaleConstsCallbackDelegate;
 
         /// <summary>
         /// Summary of ToolStrip.
-        /// </summary>
-        public ToolStrip()
-        {
-            if (DpiHelper.IsScalingRequired)
-            {
+        /// </devdoc>
+        public ToolStrip() {
+            if (DpiHelper.IsPerMonitorV2Awareness) {
+                ToolStripManager.CurrentDpi = DeviceDpi;
+                defaultFont = ToolStripManager.DefaultFont;
+                iconWidth = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, DeviceDpi);
+                iconHeight = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, DeviceDpi);
+                insertionBeamWidth = DpiHelper.LogicalToDeviceUnits(INSERTION_BEAM_WIDTH, DeviceDpi);
+                scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, DeviceDpi);
+                scaledDefaultGripMargin = DpiHelper.LogicalToDeviceUnits(defaultGripMargin, DeviceDpi);
+            }
+            else if (DpiHelper.IsScalingRequired) {
                 iconWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_DIMENSION);
                 iconHeight = DpiHelper.LogicalToDeviceUnitsY(ICON_DIMENSION);
-                if (DpiHelper.IsScalingRequirementMet)
-                {
-                    insertionBeamWidth = DpiHelper.LogicalToDeviceUnitsX(INSERTION_BEAM_WIDTH);
-                    scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding);
-                    scaledDefaultGripMargin = DpiHelper.LogicalToDeviceUnits(defaultGripMargin);
-                }
+                insertionBeamWidth = DpiHelper.LogicalToDeviceUnitsX(INSERTION_BEAM_WIDTH);
+                scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding);
+                scaledDefaultGripMargin = DpiHelper.LogicalToDeviceUnits(defaultGripMargin);
             }
+
             imageScalingSize = new Size(iconWidth, iconHeight);
 
             SuspendLayout();
@@ -667,14 +669,11 @@ namespace System.Windows.Forms
         /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(100, 25);
-            }
-        }
+        /// </devdoc>
+        protected override Size DefaultSize 
+            => DpiHelper.IsPerMonitorV2Awareness ?
+               DpiHelper.LogicalToDeviceUnits(new Size(100, 25), DeviceDpi) :
+               new Size(100, 25);
 
         protected override Padding DefaultPadding
         {
@@ -3665,8 +3664,11 @@ namespace System.Windows.Forms
         internal void OnDefaultFontChanged()
         {
             defaultFont = null;
-            if (!IsFontSet())
-            {
+            if (DpiHelper.IsPerMonitorV2Awareness) {
+                ToolStripManager.CurrentDpi = DeviceDpi;
+                defaultFont = ToolStripManager.DefaultFont;
+            }
+            if (!IsFontSet()) {
                 OnFontChanged(EventArgs.Empty);
             }
         }
@@ -4294,7 +4296,52 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Selectable, TabStop);
             base.OnTabStopChanged(e);
         }
+
         /// <summary>
+        /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
+        /// Must call the base class method to get the current DPI values. This method is invoked only when 
+        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
+        /// </summary>
+        /// <param name="deviceDpiOld">Old DPI value</param>
+        /// <param name="deviceDpiNew">New DPI value</param>
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            if (DpiHelper.IsPerMonitorV2Awareness) {
+                if (deviceDpiOld != deviceDpiNew) {
+                    ToolStripManager.CurrentDpi = deviceDpiNew;
+                    defaultFont = ToolStripManager.DefaultFont;
+
+                    // We need to take care of this control.
+                    ResetScaling(deviceDpiNew);
+
+                    // We need to scale the one Grip per ToolStrip as well (if present).
+                    if (toolStripGrip != null) {
+                        toolStripGrip.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
+                    }
+
+                    // We need to delegate this "event" to the Controls/Components, which are
+                    // not directly affected by this, but need to consume.
+                    rescaleConstsCallbackDelegate?.Invoke(deviceDpiOld, deviceDpiNew);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resets the scaling (only in PerMonitorV2 scenarios). 
+        /// Do only call from code which is quirked with PerMonitorV2 quirks for the ToolStrip.
+        /// </summary>
+        /// <param name="newDpi">The new DPI passed by WmDpiChangedBeforeParent.</param>
+        internal virtual void ResetScaling(int newDpi) {
+            iconWidth = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, newDpi);
+            iconHeight = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, newDpi);
+            insertionBeamWidth = DpiHelper.LogicalToDeviceUnits(INSERTION_BEAM_WIDTH, newDpi);
+            scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
+            scaledDefaultGripMargin = DpiHelper.LogicalToDeviceUnits(defaultGripMargin, newDpi);
+            imageScalingSize = new Size(iconWidth, iconHeight);
+        }
+
+        /// <devdoc>
         /// Paints the I beam when items are being reordered
         /// </summary>
         internal void PaintInsertionMark(Graphics g)

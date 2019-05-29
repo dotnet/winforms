@@ -2450,7 +2450,10 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.Struct)]
             public LOGFONT lfStatusFont = null;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfMessageFont = null;
+            public LOGFONT  lfMessageFont = null; 
+            // Necessary since Windows Vista. 
+            // Since we are supporting >= Windows 7, this is safe to add.
+            public int iPaddedBorderWidth = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]

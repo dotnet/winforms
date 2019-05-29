@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>    
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -249,20 +249,22 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout
-        {
-            private readonly ToolStripDropDownButton ownerItem;
-            private static readonly Size dropDownArrowSizeUnscaled = new Size(5, 3);
-            private static Size dropDownArrowSize = dropDownArrowSizeUnscaled;
-            private const int DROP_DOWN_ARROW_PADDING = 2;
-            private static Padding dropDownArrowPadding = new Padding(DROP_DOWN_ARROW_PADDING);
-            private Padding scaledDropDownArrowPadding = dropDownArrowPadding;
-            private Rectangle dropDownArrowRect = Rectangle.Empty;
-
-            public ToolStripDropDownButtonInternalLayout(ToolStripDropDownButton ownerItem) : base(ownerItem)
-            {
-                if (DpiHelper.IsScalingRequired)
+        internal class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout {
+            private ToolStripDropDownButton    ownerItem;
+            private static readonly Size       dropDownArrowSizeUnscaled = new Size(5, 3);
+            private static Size                dropDownArrowSize = dropDownArrowSizeUnscaled;
+            private const int                  DROP_DOWN_ARROW_PADDING = 2;
+            private static Padding             dropDownArrowPadding = new Padding(DROP_DOWN_ARROW_PADDING);
+            private Padding                    scaledDropDownArrowPadding = dropDownArrowPadding;
+            private Rectangle                  dropDownArrowRect    = Rectangle.Empty;
+            
+            public ToolStripDropDownButtonInternalLayout(ToolStripDropDownButton ownerItem) : base(ownerItem) {
+                if (DpiHelper.IsPerMonitorV2Awareness)
                 {
+                    dropDownArrowSize = DpiHelper.LogicalToDeviceUnits(dropDownArrowSizeUnscaled, ownerItem.DeviceDpi);
+                    scaledDropDownArrowPadding = DpiHelper.LogicalToDeviceUnits(dropDownArrowPadding, ownerItem.DeviceDpi);
+                }
+                else if (DpiHelper.IsScalingRequired) {
                     // these 2 values are used to calculate size of the clickable drop down button
                     // on the right of the image/text
                     dropDownArrowSize = DpiHelper.LogicalToDeviceUnits(dropDownArrowSizeUnscaled);

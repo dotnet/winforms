@@ -208,12 +208,12 @@ namespace System.Windows.Forms
         /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(32, 19);
+        /// </devdoc>
+        protected override Size DefaultSize {
+            get {
+                return DpiHelper.IsPerMonitorV2Awareness ?
+                      DpiHelper.LogicalToDeviceUnits(new Size(32, 19), DeviceDpi) :
+                      new Size(32, 19);
             }
         }
 
@@ -730,15 +730,29 @@ namespace System.Windows.Forms
             return menuItem;
         }
 
-        protected override void Dispose(bool disposing)
+        internal override int DeviceDpi
         {
-            if (disposing)
+            get
             {
-                if (lastOwner != null)
-                {
-                    Keys shortcut = ShortcutKeys;
-                    if (shortcut != Keys.None && lastOwner.Shortcuts.ContainsKey(shortcut))
-                    {
+                return base.DeviceDpi;
+            }
+
+            // This gets called via ToolStripItem.RescaleConstantsForDpi.
+            // It's practically calling Initialize on DpiChanging with the new Dpi value.
+            set
+            {
+                base.DeviceDpi = value;
+                scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, value);
+                scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(defaultDropDownPadding, value);
+                scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(checkMarkBitmapSize, value);
+            }
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                if (lastOwner != null) {
+                    Keys shortcut = this.ShortcutKeys;
+                    if (shortcut != Keys.None && lastOwner.Shortcuts.ContainsKey(shortcut)) {
                         lastOwner.Shortcuts.Remove(shortcut);
                     }
                     lastOwner = null;

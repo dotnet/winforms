@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CLSCompliant>true</CLSCompliant>
