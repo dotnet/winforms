@@ -8,6 +8,7 @@
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <!-- For the purposes of generating code coverage as part of the build -->
