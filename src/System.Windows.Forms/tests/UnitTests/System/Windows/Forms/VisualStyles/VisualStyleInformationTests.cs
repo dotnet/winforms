@@ -26,6 +26,17 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Fact]
+        public void VisualStyleInformation_ColorScheme_Get_ReturnsDifferent()
+        {
+            string scheme = VisualStyleInformation.ColorScheme;
+            if (scheme != string.Empty)
+            {
+                Assert.NotEqual(scheme, VisualStyleInformation.Size);
+                Assert.NotEqual(scheme, VisualStyleInformation.Version);
+            }
+        }
+
+        [Fact]
         public void VisualStyleInformation_Company_Get_ReturnsExpected()
         {
             string company = VisualStyleInformation.Company;
@@ -97,6 +108,17 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Fact]
+        public void VisualStyleInformation_Size_Get_ReturnsDifferent()
+        {
+            string size = VisualStyleInformation.Size;
+            if (size != string.Empty)
+            {
+                Assert.NotEqual(size, VisualStyleInformation.ColorScheme);
+                Assert.NotEqual(size, VisualStyleInformation.Version);
+            }
+        }
+
+        [Fact]
         public void VisualStyleInformation_SupportsFlatMenus_Get_ReturnsExpected()
         {
             bool supported = VisualStyleInformation.SupportsFlatMenus;
@@ -125,6 +147,17 @@ namespace System.Windows.Forms.VisualStyles.Tests
             string version = VisualStyleInformation.Version;
             Assert.NotNull(version);
             Assert.Equal(version, VisualStyleInformation.Version);
+        }
+
+        [Fact]
+        public void VisualStyleInformation_Version_Get_ReturnsDifferent()
+        {
+            string version = VisualStyleInformation.Version;
+            if (version != string.Empty)
+            {
+                Assert.NotEqual(version, VisualStyleInformation.ColorScheme);
+                Assert.NotEqual(version, VisualStyleInformation.Size);
+            }
         }
     }
 }
