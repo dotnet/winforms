@@ -271,6 +271,9 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(surface.IsLoaded);
             Assert.Empty(surface.LoadErrors);
             Assert.True(surface.Host.Loading);
+            Assert.True(host.Loading);
+            Assert.Null(host.RootComponent);
+            Assert.Null(host.RootComponentClassName);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
 
@@ -849,19 +852,45 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignSurface_Dispose_HasHost_ThrowsInvalidOperationException()
+        public void DesignSurface_Dispose_HasLoader_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
             var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
             mockLoader
-                .Setup(l => l.BeginLoad(host))
-                .Verifiable();
+                .Setup(l => l.BeginLoad(host));
             surface.BeginLoad(mockLoader.Object);
             Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+            Assert.True(host.Loading);
 
             // Should not throw again.
             surface.Dispose();
+            Assert.True(host.Loading);
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_HasHostWithTransactions_ThrowsInvalidOperationException()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            DesignerTransaction transaction = host.CreateTransaction("Transaction1");
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+            Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+
+            // Should not throw again.
+            surface.Dispose();
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
         }
 
         [Fact]
@@ -998,6 +1027,15 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
+        [InlineData(typeof(IServiceContainer))]
+        [InlineData(typeof(ServiceContainer))]
+        public void DesignSurface_GetService_IServiceContainer_ReturnsExpected(Type serviceType)
+        {
+            var surface = new SubDesignSurface();
+            Assert.Same(surface.ServiceContainer, surface.GetService(serviceType));
+        }
+
+        [Theory]
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_GetService_GetFixedService_ReturnsExpected(Type serviceType)
         {
@@ -1010,6 +1048,15 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new DesignSurface();
             Assert.Null(surface.GetService(typeof(int)));
+        }
+
+        [Theory]
+        [MemberData(nameof(ServiceContainer_FixedService_TestData))]
+        public void DesignSurface_GetService_Disposed_ReturnsNull(Type serviceType)
+        {
+            var surface = new SubDesignSurface();
+            surface.Dispose();
+            Assert.Null(surface.GetService(serviceType));
         }
 
         [Theory]
