@@ -24,9 +24,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.VisualStyles;
     using Directory = System.IO.Directory;
 
-#if CLICKONCE
-    using System.Deployment.Internal.Isolation;
-#endif
     using System.Collections.Generic;
 
     /// <summary>
@@ -74,9 +71,6 @@ namespace System.Windows.Forms
 
         // Constant string used in Application.Restart()
         private const string IEEXEC = "ieexec.exe";
-
-        // Constant string used for accessing ClickOnce app's data directory
-        private const string CLICKONCE_APPS_DATADIRECTORY = "DataDirectory";
 
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -241,21 +235,6 @@ namespace System.Windows.Forms
         {
             get
             {
-#if CLICKONCE
-                try {
-                    if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) {
-                        string data = AppDomain.CurrentDomain.GetData(CLICKONCE_APPS_DATADIRECTORY) as string;
-                        if (data != null) {
-                            return data;
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex)) {
-                        throw;
-                    }
-                }
-#endif
                 return GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
             }
         }
@@ -448,21 +427,6 @@ namespace System.Windows.Forms
         {
             get
             {
-#if CLICKONCE
-                try {
-                    if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) {
-                        string data = AppDomain.CurrentDomain.GetData(CLICKONCE_APPS_DATADIRECTORY) as string;
-                        if (data != null) {
-                            return data;
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex)) {
-                        throw;
-                    }
-                }
-#endif
                 return GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
             }
         }
@@ -723,21 +687,6 @@ namespace System.Windows.Forms
         {
             get
             {
-#if CLICKONCE
-                try {
-                    if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) {
-                        string data = AppDomain.CurrentDomain.GetData(CLICKONCE_APPS_DATADIRECTORY) as string;
-                        if (data != null) {
-                            return data;
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex)) {
-                        throw;
-                    }
-                }
-#endif
                 return GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
             }
         }
@@ -1425,43 +1374,30 @@ namespace System.Windows.Forms
 
             if (!hrefExeCase)
             {
-#if CLICKONCE
-                if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
+                // Regular app case
+                string[] arguments = Environment.GetCommandLineArgs();
+                Debug.Assert(arguments != null && arguments.Length > 0);
+                StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
+                for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
                 {
-                    // ClickOnce app case
-                    string appFullName = System.Deployment.Application.ApplicationDeployment.CurrentDeployment.UpdatedApplicationFullName;
-                    UInt32 hostType = (UInt32) Application.ClickOnceUtility.GetHostTypeFromMetaData(appFullName);
-                    ExitInternal();
-                    UnsafeNativeMethods.CorLaunchApplication(hostType, appFullName, 0, null, 0, null, new UnsafeNativeMethods.PROCESS_INFORMATION());
+                    sb.Append('"');
+                    sb.Append(arguments[argumentIndex]);
+                    sb.Append("\" ");
                 }
-                else
-#endif
+                if (arguments.Length > 1)
                 {
-                    // Regular app case
-                    string[] arguments = Environment.GetCommandLineArgs();
-                    Debug.Assert(arguments != null && arguments.Length > 0);
-                    StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
-                    for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
-                    {
-                        sb.Append('"');
-                        sb.Append(arguments[argumentIndex]);
-                        sb.Append("\" ");
-                    }
-                    if (arguments.Length > 1)
-                    {
-                        sb.Append('"');
-                        sb.Append(arguments[arguments.Length - 1]);
-                        sb.Append('"');
-                    }
-                    ProcessStartInfo currentStartInfo = Process.GetCurrentProcess().StartInfo;
-                    currentStartInfo.FileName = Application.ExecutablePath;
-                    if (sb.Length > 0)
-                    {
-                        currentStartInfo.Arguments = sb.ToString();
-                    }
-                    ExitInternal();
-                    Process.Start(currentStartInfo);
+                    sb.Append('"');
+                    sb.Append(arguments[arguments.Length - 1]);
+                    sb.Append('"');
                 }
+                ProcessStartInfo currentStartInfo = Process.GetCurrentProcess().StartInfo;
+                currentStartInfo.FileName = Application.ExecutablePath;
+                if (sb.Length > 0)
+                {
+                    currentStartInfo.Arguments = sb.ToString();
+                }
+                ExitInternal();
+                Process.Start(currentStartInfo);
             }
         }
 
