@@ -536,11 +536,11 @@ namespace System.ComponentModel.Design
 
             public override ICollection GetCommands(string name)
             {
-                if (name == "Verbs")
+                if (name == VerbsCommand)
                 {
                     return _componentDesigner.Verbs;
                 }
-                else if (name == "ActionLists")
+                else if (name == ActionListsCommand)
                 {
                     return _componentDesigner.ActionLists;
                 }
