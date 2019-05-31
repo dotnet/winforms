@@ -25,6 +25,9 @@ namespace System.ComponentModel.Design
         bool _settingsKeyExplicitlySet = false;
 
         private static readonly CodeMarkers s_codemarkers = CodeMarkers.Instance;
+
+        private protected const string SettingsKeyName = "SettingsKey";
+
         /// <summary>
         /// Gets the design-time actionlists supported by the component associated with the designer.
         /// </summary>
@@ -57,7 +60,8 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                return !InheritanceAttribute.Equals(InheritanceAttribute.NotInherited);
+                InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+                return (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited));
             }
         }
 
@@ -72,8 +76,8 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                IComponent root = host.RootComponent;
+                IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+                IComponent root = host?.RootComponent;
                 if (root == Component)
                 {
                     return null;
@@ -95,8 +99,7 @@ namespace System.ComponentModel.Design
                 if (_inheritanceAttribute == null)
                 {
                     // Record if this component is being inherited or not.
-                    IInheritanceService inher = (IInheritanceService)GetService(typeof(IInheritanceService));
-                    if (inher != null)
+                    if (GetService(typeof(IInheritanceService)) is IInheritanceService inher)
                     {
                         _inheritanceAttribute = inher.GetInheritanceAttribute(Component);
                     }
@@ -155,21 +158,35 @@ namespace System.ComponentModel.Design
         void IDesignerFilter.PostFilterAttributes(IDictionary attributes)
         {
             // If this component is being inherited, mark it as such in the class attributes.
+            if (attributes == null)
+            {
+                return;
+            }
+
             if (attributes.Contains(typeof(InheritanceAttribute)))
             {
                 _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
             }
-            else if (!InheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
+            else
             {
-                attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
+                InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+                if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
+                {
+                    attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
+                }
             }
         }
 
         void IDesignerFilter.PostFilterEvents(IDictionary events)
         {
-
             // If this component is being privately inherited, we need to filter the events to make them read-only.
-            if (InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
+            if (events == null)
+            {
+                return;
+            }
+
+            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            if (inheritanceAttribute != null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
             {
                 EventDescriptor[] values = new EventDescriptor[events.Values.Count];
                 events.Values.CopyTo(values, 0);
@@ -177,7 +194,10 @@ namespace System.ComponentModel.Design
                 for (int i = 0; i < values.Length; i++)
                 {
                     EventDescriptor evt = values[i];
-                    events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
+                    if (evt != null)
+                    {
+                        events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
+                    }
                 }
             }
         }
@@ -234,12 +254,11 @@ namespace System.ComponentModel.Design
 
         void IDesignerFilter.PreFilterProperties(IDictionary properties)
         {
-            if (Component is IPersistComponentSettings)
+            if (Component is IPersistComponentSettings && properties != null)
             {
-                PropertyDescriptor prop = (PropertyDescriptor)properties["SettingsKey"];
-                if (prop != null)
+                if (properties[SettingsKeyName] is PropertyDescriptor prop)
                 {
-                    properties["SettingsKey"] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
+                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
                 }
             }
         }
@@ -310,8 +329,7 @@ namespace System.ComponentModel.Design
                 IComponent parent = ParentComponent;
                 if (parent != null)
                 {
-                    IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    if (host != null)
+                    if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                     {
                         return host.GetDesigner(parent);
                     }
@@ -479,32 +497,28 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void Initialize(IComponent component)
         {
-
-            Debug.Assert(component != null, "Can't create designer with no component!");
-
             _component = component;
 
             // For inherited components, save off the current values so we can compute a delta.  We also do this for the root component, but,
             // as it is ALWAYS inherited, the computation of default values favors the presence of a default value attribute over the current code value.
             bool isRoot = false;
-            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null && component == host.RootComponent)
+            if (GetService(typeof(IDesignerHost)) is IDesignerHost host && component == host.RootComponent)
             {
                 isRoot = true;
             }
 
-            if (component.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) == null)
+            if (component?.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) == null)
             {
                 sc.AddService(typeof(DesignerCommandSet), new CDDesignerCommandSet(this));
             }
 
-            IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            if (isRoot || !InheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
+            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            if (isRoot || InheritanceAttribute == null || !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
             {
                 InitializeInheritedProperties();
             }
@@ -524,11 +538,11 @@ namespace System.ComponentModel.Design
 
             public override ICollection GetCommands(string name)
             {
-                if (name.Equals("Verbs"))
+                if (name == VerbsCommand)
                 {
                     return _componentDesigner.Verbs;
                 }
-                else if (name.Equals("ActionLists"))
+                else if (name == ActionListsCommand)
                 {
                     return _componentDesigner.ActionLists;
                 }
@@ -542,7 +556,8 @@ namespace System.ComponentModel.Design
         private void InitializeInheritedProperties()
         {
             Hashtable props = new Hashtable();
-            bool readOnlyInherit = (InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly));
+            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            bool readOnlyInherit = (inheritanceAttribute != null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly));
 
             if (!readOnlyInherit)
             {
@@ -587,7 +602,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected InheritanceAttribute InvokeGetInheritanceAttribute(ComponentDesigner toInvoke)
         {
-            return toInvoke.InheritanceAttribute;
+            return toInvoke?.InheritanceAttribute;
         }
 
         /// <summary>
@@ -597,8 +612,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
                 {
                     cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 }
@@ -634,7 +648,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (string.IsNullOrEmpty((string)ShadowProperties["SettingsKey"]))
+                if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
                 {
                     IComponent rootComponent = GetService(typeof(IDesignerHost)) is IDesignerHost host ? host.RootComponent : null;
 
@@ -644,22 +658,22 @@ namespace System.ComponentModel.Design
                         {
                             if (rootComponent != null && rootComponent != persistableComponent)
                             {
-                                ShadowProperties["SettingsKey"] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
+                                ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
                             }
                             else
                             {
-                                ShadowProperties["SettingsKey"] = Component.Site.Name;
+                                ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
-                        persistableComponent.SettingsKey = ShadowProperties["SettingsKey"] as string;
+                        persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
                 }
-                return ShadowProperties["SettingsKey"] as string;
+                return ShadowProperties[SettingsKeyName] as string;
             }
             set
             {
-                ShadowProperties["SettingsKey"] = value;
+                ShadowProperties[SettingsKeyName] = value;
                 _settingsKeyExplicitlySet = true;
                 if (Component is IPersistComponentSettings persistableComponent)
                 {
@@ -709,7 +723,7 @@ namespace System.ComponentModel.Design
         [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         public virtual void OnSetComponentDefaults()
         {
-            ISite site = Component.Site;
+            ISite site = Component?.Site;
             if (site != null)
             {
                 IComponent component = Component;
@@ -745,13 +759,22 @@ namespace System.ComponentModel.Design
         {
             // If this component is being inherited, mark it as such in the class attributes.
             // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and through InheritanceAttribute directly is the same.
+            if (attributes == null)
+            {
+                return;
+            }
+
             if (attributes.Contains(typeof(InheritanceAttribute)))
             {
                 _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
             }
-            else if (!InheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
+            else
             {
-                attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
+                InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+                if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
+                {
+                    attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
+                }
             }
         }
 
@@ -760,9 +783,14 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void PostFilterEvents(IDictionary events)
         {
-
             // If this component is being privately inherited, we need to filter the events to make them read-only.
-            if (InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
+            if (events == null)
+            {
+                return;
+            }
+
+            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            if (inheritanceAttribute != null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
             {
                 EventDescriptor[] values = new EventDescriptor[events.Values.Count];
                 events.Values.CopyTo(values, 0);
@@ -770,7 +798,10 @@ namespace System.ComponentModel.Design
                 for (int i = 0; i < values.Length; i++)
                 {
                     EventDescriptor evt = values[i];
-                    events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
+                    if (evt != null)
+                    {
+                        events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
+                    }
                 }
             }
         }
@@ -838,12 +869,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void PreFilterProperties(IDictionary properties)
         {
-            if (Component is IPersistComponentSettings)
+            if (Component is IPersistComponentSettings && properties != null)
             {
-                PropertyDescriptor prop = (PropertyDescriptor)properties["SettingsKey"];
-                if (prop != null)
+                if (properties[SettingsKeyName] is PropertyDescriptor prop)
                 {
-                    properties["SettingsKey"] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
+                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
                 }
             }
         }
@@ -855,8 +885,7 @@ namespace System.ComponentModel.Design
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         protected void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
         {
-            IComponentChangeService changeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (changeSvc != null)
+            if (GetService(typeof(IComponentChangeService)) is IComponentChangeService changeSvc)
             {
                 changeSvc.OnComponentChanged(Component, member, oldValue, newValue);
             }
@@ -869,8 +898,7 @@ namespace System.ComponentModel.Design
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         protected void RaiseComponentChanging(MemberDescriptor member)
         {
-            IComponentChangeService changeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (changeSvc != null)
+            if (GetService(typeof(IComponentChangeService)) is IComponentChangeService changeSvc)
             {
                 changeSvc.OnComponentChanging(Component, member);
             }

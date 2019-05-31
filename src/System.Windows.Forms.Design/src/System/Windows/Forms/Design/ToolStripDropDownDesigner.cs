@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (string.IsNullOrEmpty((string)ShadowProperties["SettingsKey"]))
+                if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
                 {
                     if (Component is IPersistComponentSettings persistableComponent && host != null)
                     {
@@ -171,22 +171,22 @@ namespace System.Windows.Forms.Design
                             IComponent rootComponent = host.RootComponent;
                             if (rootComponent != null && rootComponent != persistableComponent)
                             {
-                                ShadowProperties["SettingsKey"] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
+                                ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
                             }
                             else
                             {
-                                ShadowProperties["SettingsKey"] = Component.Site.Name;
+                                ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
-                        persistableComponent.SettingsKey = ShadowProperties["SettingsKey"] as string;
+                        persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
                 }
-                return ShadowProperties["SettingsKey"] as string;
+                return ShadowProperties[SettingsKeyName] as string;
             }
             set
             {
-                ShadowProperties["SettingsKey"] = value;
+                ShadowProperties[SettingsKeyName] = value;
                 if (Component is IPersistComponentSettings persistableComponent)
                 {
                     persistableComponent.SettingsKey = value;
@@ -565,7 +565,7 @@ namespace System.Windows.Forms.Design
         {
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
-            string[] shadowProps = new string[] { "AutoClose", "SettingsKey", "RightToLeft", "AllowDrop" };
+            string[] shadowProps = new string[] { "AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop" };
             Attribute[] empty = new Attribute[0];
             for (int i = 0; i < shadowProps.Length; i++)
             {
