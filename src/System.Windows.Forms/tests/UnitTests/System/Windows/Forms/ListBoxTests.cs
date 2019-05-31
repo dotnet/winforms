@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BackgroundImage_SetWithHandler_CallsBackColorChanged()
+        public void BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
             var control = new ListBox();
             int callCount = 0;
