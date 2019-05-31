@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                         bool canSort = false;
                         for (int i = 0; i < owner.Columns.Count; i++)
                         {
-                            if (owner.CanSort(owner.Columns[i]))
+                            if (owner.IsSortable(owner.Columns[i]))
                             {
                                 canSort = true;
                                 break;
