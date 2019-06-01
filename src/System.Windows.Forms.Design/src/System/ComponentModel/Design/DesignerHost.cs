@@ -792,9 +792,6 @@ namespace System.ComponentModel.Design
                 while (_transactions.Count > 0)
                 {
                     DesignerTransaction trans = (DesignerTransaction)_transactions.Peek(); // it'll get pop'ed in the OnCommit for DesignerHostTransaction
-#if DEBUG
-                    Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Stack of {0}:\r\n{1}", trans.Description, ((DesignerHostTransaction)trans).CreatorStack));
-#endif
                     trans.Commit();
                 }
             }
@@ -1529,9 +1526,6 @@ namespace System.ComponentModel.Design
         private sealed class DesignerHostTransaction : DesignerTransaction
         {
             private DesignerHost _host;
-#if DEBUG
-            private readonly string _creatorStack;
-#endif
 
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)
             {
@@ -1543,33 +1537,7 @@ namespace System.ComponentModel.Design
                 _host._transactions.Push(this);
                 _host.OnTransactionOpening(EventArgs.Empty);
                 _host.OnTransactionOpened(EventArgs.Empty);
-#if DEBUG
-                _creatorStack = Environment.StackTrace;
-#endif
             }
-#if DEBUG
-            /// <summary>
-            /// Debug info that displays the stack of the creation call of this transaction.  This is useful for tracking down orphaned transactions.
-            /// </summary>
-            public string CreatorStack
-            {
-                get => _creatorStack;
-            }
-#endif
-
-#if DEBUG
-            /// <summary>
-            /// We override Dispose to handle finalization cases so we can display the stack of the transaction creator.
-            /// </summary>
-            protected override void Dispose(bool disposing)
-            {
-                base.Dispose(disposing);
-                if (!disposing)
-                {
-                    Debug.Fail("Callstack of transaction creator: " + CreatorStack);
-                }
-            }
-#endif
 
             /// <summary>
             /// User code should implement this method to perform the actual work of committing a transaction.
