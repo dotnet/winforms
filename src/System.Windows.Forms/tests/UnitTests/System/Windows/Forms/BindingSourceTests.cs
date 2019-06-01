@@ -59,66 +59,232 @@ namespace System.Windows.Forms.Tests
             Assert.Same(source.List.SyncRoot, source.SyncRoot);
         }
 
-        public static IEnumerable<object[]> Ctor_DataSource_DataMember_TestData()
+        public static IEnumerable<object[]> Ctor_Object_String_Null_TestData()
         {
-            yield return new object[] { null, null, true, true, true, false, false, false, null, typeof(BindingList<object>) };
-            yield return new object[] { null, string.Empty, true, true, true, false, false, false, null, typeof(BindingList<object>) };
-            yield return new object[] { null, "dataMember", true, true, true, false, false, false, null, typeof(BindingList<object>) };
+            yield return new object[] { null, null, typeof(BindingList<object>) };
+            yield return new object[] { null, string.Empty, typeof(BindingList<object>) };
+            yield return new object[] { null, "dataMember", typeof(BindingList<object>) };
+            var nullListDataClass = new DataClass { List = null };
+            yield return new object[] { nullListDataClass, nameof(DataClass.List), typeof(BindingList<int>) };
+            yield return new object[] { nullListDataClass, nameof(DataClass.List), typeof(BindingList<int>) };
 
+            var nullObjectDataClass = new ObjectDataClass { List = null };
+            yield return new object[] { nullObjectDataClass, nameof(ObjectDataClass.List), typeof(BindingList<object>) };
+            yield return new object[] { nullObjectDataClass, nameof(ObjectDataClass.List).ToLower(), typeof(BindingList<object>) };
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_Object_String_Null_TestData))]
+        public void Ctor_Object_String_Null(object dataSource, string dataMember, Type expectedType)
+        {
+            var source = new SubBindingSource(dataSource, dataMember);
+            Assert.True(source.AllowEdit);
+            Assert.True(source.AllowNew);
+            Assert.True(source.AllowRemove);
+            Assert.True(source.CanRaiseEvents);
+            Assert.Null(source.Container);
+            Assert.Empty(source);
+            Assert.Equal(0, source.CurrencyManager.Count);
+            Assert.Empty(source.CurrencyManager.Bindings);
+            Assert.Same(source.CurrencyManager.Bindings, source.CurrencyManager.Bindings);
+            Assert.Throws<IndexOutOfRangeException>(() => source.CurrencyManager.Current);
+            Assert.True(source.CurrencyManager.IsBindingSuspended);
+            Assert.Same(source, source.CurrencyManager.List);
+            Assert.Equal(-1, source.CurrencyManager.Position);
+            Assert.Same(source.CurrencyManager, source.CurrencyManager);
+            Assert.Null(source.Current);
+            Assert.Same(dataMember, source.DataMember);
+            Assert.Same(dataSource, source.DataSource);
+            Assert.False(source.DesignMode);
+            Assert.NotNull(source.Events);
+            Assert.Same(source.Events, source.Events);
+            Assert.Null(source.Filter);
+            Assert.True(source.IsBindingSuspended);
+            Assert.False(source.IsFixedSize);
+            Assert.False(source.IsReadOnly);
+            Assert.False(source.IsSorted);
+            Assert.False(source.IsSynchronized);
+            Assert.Empty(source.List);
+            Assert.IsType(expectedType, source.List);
+            Assert.True(source.RaiseListChangedEvents);
+            Assert.Null(source.Site);
+            Assert.Null(source.Sort);
+            Assert.Null(source.SortDescriptions);
+            Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
+            Assert.Null(source.SortProperty);
+            Assert.False(source.SupportsAdvancedSorting);
+            Assert.True(source.SupportsChangeNotification);
+            Assert.False(source.SupportsFiltering);
+            Assert.False(source.SupportsSearching);
+            Assert.False(source.SupportsSorting);
+            Assert.Same(source.List.SyncRoot, source.SyncRoot);
+        }
+
+        public static IEnumerable<object[]> Ctor_Object_String_Empty_TestData()
+        {
             foreach (string dataMember in new string[] { null, string.Empty })
             {
                 var emptyList = new List<int> { };
-                yield return new object[] { emptyList, dataMember, true, false, true, false, false, false, emptyList, emptyList.GetType() };
-
-                var nonEmptyList = new List<int> { 1, 2, 3 };
-                yield return new object[] { nonEmptyList, dataMember, true, false, true, false, false, false, nonEmptyList, nonEmptyList.GetType() };
-
-                var fixedSizeList = new FixedSizeList<int> { 1, 2, 3 };
-                yield return new object[] { fixedSizeList, dataMember, true, false, false, true, false, false, fixedSizeList, fixedSizeList.GetType() };
-
-                var readOnlyList = new ReadOnlyList<int> { 1, 2, 3 };
-                yield return new object[] { readOnlyList, dataMember, false, false, false, false, true, false, readOnlyList, readOnlyList.GetType() };
-
-                var synchronizedList = new SynchronizedList<int> { 1, 2, 3 };
-                yield return new object[] { synchronizedList, dataMember, true, false, true, false, false,true, synchronizedList, synchronizedList.GetType() };
+                yield return new object[] { emptyList, dataMember, true, false, emptyList };
 
                 var emptyArray = new int[0];
-                yield return new object[] { emptyArray, dataMember, true, false, false, true, false, false, emptyArray, emptyArray.GetType() };
-
-                var nonEmptyArray = new int[] { 1, 2, 3 };
-                yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray, nonEmptyArray.GetType() };
-
-                var emptyEnumerable = new EnumerableWrapper<int>(emptyList);
-                yield return new object[] { emptyEnumerable, dataMember, true, false, true, false, false, false, new List<int>[] { emptyList }, typeof(BindingList<EnumerableWrapper<int>>) };
-
-                var nonEmptyEnumerable = new EnumerableWrapper<int>(nonEmptyList);
-                yield return new object[] { nonEmptyEnumerable, dataMember, true, false, true, false, false, false, nonEmptyList, typeof(BindingList<int>) };
+                yield return new object[] { emptyArray, dataMember, false, true, emptyArray };
 
                 var mockEmptyListSource = new Mock<IListSource>(MockBehavior.Strict);
                 mockEmptyListSource
                     .Setup(s => s.GetList())
                     .Returns(emptyList);
-                yield return new object[] { mockEmptyListSource.Object, dataMember, true, false, true, false, false, false, emptyList, emptyList.GetType() };
+                yield return new object[] { mockEmptyListSource.Object, dataMember, true, false, emptyList };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_Object_String_Empty_TestData))]
+        public void Ctor_Object_String_Empty(object dataSource, string dataMember, bool expectedAllowRemove, bool expectedIsFixedSize, IList expected)
+        {
+            var source = new SubBindingSource(dataSource, dataMember);
+            Assert.True(source.AllowEdit);
+            Assert.False(source.AllowNew);
+            Assert.Equal(expectedAllowRemove, source.AllowRemove);
+            Assert.True(source.CanRaiseEvents);
+            Assert.Null(source.Container);
+            Assert.Equal(expected, source);
+            Assert.Equal(expected.Count, source.CurrencyManager.Count);
+            Assert.Empty(source.CurrencyManager.Bindings);
+            Assert.Same(source.CurrencyManager.Bindings, source.CurrencyManager.Bindings);
+            Assert.Throws<IndexOutOfRangeException>(() => source.CurrencyManager.Current);
+            Assert.True(source.CurrencyManager.IsBindingSuspended);
+            Assert.Same(source, source.CurrencyManager.List);
+            Assert.Equal(-1, source.CurrencyManager.Position);
+            Assert.Same(source.CurrencyManager, source.CurrencyManager);
+            Assert.Null(source.Current);
+            Assert.Same(dataMember, source.DataMember);
+            Assert.Same(dataSource, source.DataSource);
+            Assert.False(source.DesignMode);
+            Assert.NotNull(source.Events);
+            Assert.Same(source.Events, source.Events);
+            Assert.Null(source.Filter);
+            Assert.True(source.IsBindingSuspended);
+            Assert.Equal(expectedIsFixedSize, source.IsFixedSize);
+            Assert.False(source.IsReadOnly);
+            Assert.False(source.IsSorted);
+            Assert.False(source.IsSynchronized);
+            Assert.Same(expected, source.List);
+            Assert.True(source.RaiseListChangedEvents);
+            Assert.Null(source.Site);
+            Assert.Null(source.Sort);
+            Assert.Null(source.SortDescriptions);
+            Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
+            Assert.Null(source.SortProperty);
+            Assert.False(source.SupportsAdvancedSorting);
+            Assert.True(source.SupportsChangeNotification);
+            Assert.False(source.SupportsFiltering);
+            Assert.False(source.SupportsSearching);
+            Assert.False(source.SupportsSorting);
+            Assert.Same(source.List.SyncRoot, source.SyncRoot);
+        }
+
+        public static IEnumerable<object[]> Ctor_Object_String_TestData()
+        {
+            foreach (string dataMember in new string[] { null, string.Empty })
+            {
+                var nonEmptyList = new List<int> { 1, 2, 3 };
+                yield return new object[] { nonEmptyList, dataMember, true, false, true, false, false, false, nonEmptyList };
+
+                var fixedSizeList = new FixedSizeList<int> { 1, 2, 3 };
+                yield return new object[] { fixedSizeList, dataMember, true, false, false, true, false, false, fixedSizeList };
+
+                var readOnlyList = new ReadOnlyList<int> { 1, 2, 3 };
+                yield return new object[] { readOnlyList, dataMember, false, false, false, false, true, false, readOnlyList };
+
+                var synchronizedList = new SynchronizedList<int> { 1, 2, 3 };
+                yield return new object[] { synchronizedList, dataMember, true, false, true, false, false,true, synchronizedList };
+
+                var nonEmptyArray = new int[] { 1, 2, 3 };
+                yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray };
+
 
                 var mockNonEmptyListSource = new Mock<IListSource>(MockBehavior.Strict);
                 mockNonEmptyListSource
                     .Setup(s => s.GetList())
                     .Returns(nonEmptyList);
-                yield return new object[] { mockNonEmptyListSource.Object, dataMember, true, false, true, false, false, false, nonEmptyList, nonEmptyList.GetType() };
+                yield return new object[] { mockNonEmptyListSource.Object, dataMember, true, false, true, false, false, false, nonEmptyList };
             }
 
             var list = new List<int> { 1, 2, 3 };
             var listDataClass = new DataClass { List = list };
-            yield return new object[] { listDataClass, nameof(DataClass.List), true, false, true, false, false, false, list, list.GetType() };
-            yield return new object[] { listDataClass, nameof(DataClass.List).ToLower(), true, false, true, false, false, false, list, list.GetType() };
+            yield return new object[] { listDataClass, nameof(DataClass.List), true, false, true, false, false, false, list };
+            yield return new object[] { listDataClass, nameof(DataClass.List).ToLower(), true, false, true, false, false, false, list };
 
-            var nullListDataClass = new DataClass { List = null };
-            yield return new object[] { nullListDataClass, nameof(DataClass.List), true, true, true, false, false, false, null, typeof(BindingList<int>) };
-            yield return new object[] { nullListDataClass, nameof(DataClass.List), true, true, true, false, false, false, null, typeof(BindingList<int>) };
+            var mockListSource = new Mock<IListSource>(MockBehavior.Strict);
+            mockListSource
+                .Setup(s => s.GetList())
+                .Returns(list);
+            var listSourceDataClass = new ListSourceDataClass { ListSource = mockListSource.Object };
+            yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource), true, false, true, false, false, false, list };
+            yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource).ToLower(), true, false, true, false, false, false, list };
+        }
 
-            var nullObjectDataClass = new ObjectDataClass { List = null };
-            yield return new object[] { nullObjectDataClass, nameof(ObjectDataClass.List), true, true, true, false, false, false, null, typeof(BindingList<object>) };
-            yield return new object[] { nullObjectDataClass, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, null, typeof(BindingList<object>) };
+        [Theory]
+        [MemberData(nameof(Ctor_Object_String_TestData))]
+        public void Ctor_Object_String(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected)
+        {
+            var source = new SubBindingSource(dataSource, dataMember);
+            Assert.Equal(expectedAllowEdit, source.AllowEdit);
+            Assert.Equal(expectedAllowNew, source.AllowNew);
+            Assert.Equal(expectedAllowRemove, source.AllowRemove);
+            Assert.True(source.CanRaiseEvents);
+            Assert.Null(source.Container);
+            Assert.Equal(expected, source);
+            Assert.Equal(expected.Count, source.CurrencyManager.Count);
+            Assert.Empty(source.CurrencyManager.Bindings);
+            Assert.Same(source.CurrencyManager.Bindings, source.CurrencyManager.Bindings);
+            Assert.Equal(expected[0], source.CurrencyManager.Current);
+            Assert.False(source.CurrencyManager.IsBindingSuspended);
+            Assert.Same(source, source.CurrencyManager.List);
+            Assert.Equal(0, source.CurrencyManager.Position);
+            Assert.Same(source.CurrencyManager, source.CurrencyManager);
+            Assert.Equal(expected[0], source.Current);
+            Assert.Same(dataMember, source.DataMember);
+            Assert.Same(dataSource, source.DataSource);
+            Assert.False(source.DesignMode);
+            Assert.NotNull(source.Events);
+            Assert.Same(source.Events, source.Events);
+            Assert.Null(source.Filter);
+            Assert.False(source.IsBindingSuspended);
+            Assert.Equal(expectedIsFixedSize, source.IsFixedSize);
+            Assert.Equal(expectedReadOnly, source.IsReadOnly);
+            Assert.False(source.IsSorted);
+            Assert.Equal(expectedIsSynchronized, source.IsSynchronized);
+            Assert.Same(expected, source.List);
+            Assert.True(source.RaiseListChangedEvents);
+            Assert.Null(source.Site);
+            Assert.Null(source.Sort);
+            Assert.Null(source.SortDescriptions);
+            Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
+            Assert.Null(source.SortProperty);
+            Assert.False(source.SupportsAdvancedSorting);
+            Assert.True(source.SupportsChangeNotification);
+            Assert.False(source.SupportsFiltering);
+            Assert.False(source.SupportsSearching);
+            Assert.False(source.SupportsSorting);
+            Assert.Same(source.List.SyncRoot, source.SyncRoot);
+        }
+
+        public static IEnumerable<object[]> Ctor_Object_String_BindingList_TestData()
+        {
+            
+            foreach (string dataMember in new string[] { null, string.Empty })
+            {
+                var emptyList = new List<int> { };
+
+                var nonEmptyList = new List<int> { 1, 2, 3 };
+                var emptyEnumerable = new EnumerableWrapper<int>(emptyList);
+                yield return new object[] { emptyEnumerable, dataMember, true, false, true, false, false, false, new List<int>[] { emptyList }, typeof(BindingList<EnumerableWrapper<int>>) };
+
+                var nonEmptyEnumerable = new EnumerableWrapper<int>(nonEmptyList);
+                yield return new object[] { nonEmptyEnumerable, dataMember, true, false, true, false, false, false, nonEmptyList, typeof(BindingList<int>) };
+            }
 
             var o = new object();
             var objectDataClass = new ObjectDataClass { List = o };
@@ -128,19 +294,11 @@ namespace System.Windows.Forms.Tests
             var intDataClass = new ObjectDataClass { List = 1 };
             yield return new object[] { intDataClass, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
             yield return new object[] { intDataClass, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
-
-            var mockListSource = new Mock<IListSource>(MockBehavior.Strict);
-            mockListSource
-                .Setup(s => s.GetList())
-                .Returns(list);
-            var listSourceDataClass = new ListSourceDataClass { ListSource = mockListSource.Object };
-            yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource), true, false, true, false, false, false, list, list.GetType() };
-            yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource).ToLower(), true, false, true, false, false, false, list, list.GetType() };
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_DataSource_DataMember_TestData))]
-        public void Ctor_Object_String(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected, Type expectedType)
+        [MemberData(nameof(Ctor_Object_String_BindingList_TestData))]
+        public void Ctor_Object_String_BindingList(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected, Type expectedType)
         {
             var source = new SubBindingSource(dataSource, dataMember);
             Assert.Equal(expectedAllowEdit, source.AllowEdit);
@@ -148,80 +306,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedAllowRemove, source.AllowRemove);
             Assert.True(source.CanRaiseEvents);
             Assert.Null(source.Container);
-            if (expected != null)
-            {
-                Assert.Equal(expected, source);
-                Assert.Equal(expected.Count, source.CurrencyManager.Count);
-            }
-            else
-            {
-                Assert.Empty(source);
-                Assert.Equal(0, source.CurrencyManager.Count);
-            }
+            Assert.Equal(expected, source);
+            Assert.Equal(expected.Count, source.CurrencyManager.Count);
             Assert.Empty(source.CurrencyManager.Bindings);
             Assert.Same(source.CurrencyManager.Bindings, source.CurrencyManager.Bindings);
-            if (expected != null && expected.Count != 0)
-            {
-                Assert.Equal(expected[0], source.CurrencyManager.Current);
-                Assert.False(source.CurrencyManager.IsBindingSuspended);
-            }
-            else
-            {
-                Assert.Throws<IndexOutOfRangeException>(() => source.CurrencyManager.Current);
-                Assert.True(source.CurrencyManager.IsBindingSuspended);
-            }
+            Assert.Equal(expected[0], source.CurrencyManager.Current);
+            Assert.False(source.CurrencyManager.IsBindingSuspended);
             Assert.Same(source, source.CurrencyManager.List);
-            if (expected != null && expected.Count != 0)
-            {
-                Assert.Equal(0, source.CurrencyManager.Position);
-            }
-            else
-            {
-                Assert.Equal(-1, source.CurrencyManager.Position);
-            }
+            Assert.Equal(0, source.CurrencyManager.Position);
             Assert.Same(source.CurrencyManager, source.CurrencyManager);
-            if (expected != null && expected.Count != 0)
-            {
-                Assert.Equal(expected[0], source.Current);
-            }
-            else
-            {
-                Assert.Null(source.Current);
-            }
+            Assert.Equal(expected[0], source.Current);
             Assert.Same(dataMember, source.DataMember);
             Assert.Same(dataSource, source.DataSource);
             Assert.False(source.DesignMode);
             Assert.NotNull(source.Events);
             Assert.Same(source.Events, source.Events);
             Assert.Null(source.Filter);
-            if (expected != null && expected.Count != 0)
-            {
-                Assert.False(source.IsBindingSuspended);
-            }
-            else
-            {
-                Assert.True(source.IsBindingSuspended);
-            }
+            Assert.False(source.IsBindingSuspended);
             Assert.Equal(expectedIsFixedSize, source.IsFixedSize);
             Assert.Equal(expectedReadOnly, source.IsReadOnly);
             Assert.False(source.IsSorted);
             Assert.Equal(expectedIsSynchronized, source.IsSynchronized);
-            if (expected != null)
-            {
-                if (expectedType.IsGenericType && expectedType.GetGenericTypeDefinition() == typeof(BindingList<>))
-                {
-                    Assert.Equal(expected, source.List);
-                    Assert.NotSame(expected, source.List);
-                }
-                else
-                {
-                    Assert.Same(expected, source.List);
-                }
-            }
-            else
-            {
-                Assert.Empty(source.List);
-            }
+            Assert.Equal(expected, source.List);
+            Assert.NotSame(expected, source.List);
             Assert.IsType(expectedType, source.List);
             Assert.True(source.RaiseListChangedEvents);
             Assert.Null(source.Site);
@@ -239,7 +346,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
-        public void Ctor_IBindingList(string dataMember)
+        public void Ctor_Object_String_IBindingList(string dataMember)
         {
             PropertyDescriptor sortProperty = TypeDescriptor.GetProperties(typeof(DataClass))[0];
             var syncRoot = new object();
