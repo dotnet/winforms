@@ -256,7 +256,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BorderStyle_SetWithUpdateStylesHandler_CallsStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                BorderStyle = BorderStyle.Fixed3D
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -304,7 +307,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BorderStyle_SetWithInvalidatedWithHandle_CallsStyleChangedCallsInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                BorderStyle = BorderStyle.Fixed3D
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -399,7 +405,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void CheckBoxes_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                CheckBoxes = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -447,7 +456,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void CheckBoxes_SetWithUpdateStylesHandlerWithHandle_CallsStyleChangedCallsInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                CheckBoxes = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -534,7 +546,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DoubleBuffered_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new SubTreeView();
+            var treeView = new SubTreeView
+            {
+                DoubleBuffered = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -582,7 +597,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DoubleBuffered_SetWithUpdateStylesHandlerWithHandle_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new SubTreeView();
+            var treeView = new SubTreeView
+            {
+                DoubleBuffered = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -661,7 +679,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DrawMode_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new SubTreeView();
+            var treeView = new SubTreeView
+            {
+                DrawMode = TreeViewDrawMode.Normal
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -709,7 +730,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DrawMode_SetWithUpdateStylesHandlerWithHandle_DoesNotCallStyleChangedCallsInvalidated()
         {
-            var treeView = new SubTreeView();
+            var treeView = new SubTreeView
+            {
+                DrawMode = TreeViewDrawMode.Normal
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -860,7 +884,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void FullRowSelect_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                FullRowSelect = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -908,7 +935,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void FullRowSelect_SetWithUpdateStylesHandlerWithHandle_CallsStyleChangedCallsInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                FullRowSelect = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -995,7 +1025,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void HideSelection_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                HideSelection = true
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -1043,7 +1076,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void HideSelection_SetWithUpdateStylesHandlerWithHandle_CallsStyleChangedCallsInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                HideSelection = true
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -1130,7 +1166,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void HotTracking_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                HotTracking = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
@@ -1178,7 +1217,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void HotTracking_SetWithUpdateStylesHandlerWithHandle_CallsStyleChangedCallsInvalidated()
         {
-            var treeView = new TreeView();
+            var treeView = new TreeView
+            {
+                HotTracking = false
+            };
             int styleChangedCallCount = 0;
             int invalidatedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) =>
