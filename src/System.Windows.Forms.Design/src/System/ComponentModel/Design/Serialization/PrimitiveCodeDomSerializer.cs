@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -49,14 +49,14 @@ namespace System.ComponentModel.Design.Serialization
 
             if (value != null)
             {
-                if (value is string)
+                if (value is string stringValue)
                 {
-                    if (value is string stringValue && stringValue.Length > 200)
+                    if (stringValue.Length > 200)
                     {
                         expression = SerializeToResourceExpression(manager, stringValue);
                     }
                 }
-                else
+                else if (!(value is bool || value is char || value is int || value is float || value is double))
                 {
                     // Generate a cast for all other types because we won't parse them properly otherwise 
                     // because we won't know to convert them to the narrow form.
