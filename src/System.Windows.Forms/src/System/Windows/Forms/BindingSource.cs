@@ -129,7 +129,7 @@ namespace System.Windows.Forms
             container.Add(this);
         }
 
-        private bool AllowNewInternal(bool checkconstructor)
+        private bool AllowNewInternal(bool checkConstructor)
         {
             if (_disposedOrFinalized)
             {
@@ -149,13 +149,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                return IsListWriteable(checkconstructor);
+                return IsListWriteable(checkConstructor);
             }
         }
 
-        private bool IsListWriteable(bool checkconstructor)
+        private bool IsListWriteable(bool checkConstructor)
         {
-            return !List.IsReadOnly && !List.IsFixedSize && (!checkconstructor || _itemConstructor != null);
+            return !List.IsReadOnly && !List.IsFixedSize && (!checkConstructor || _itemConstructor != null);
         }
 
         [Browsable(false)]
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms
         /// Binds the BindingSource to the list specified by its DataSource and DataMember
         /// properties.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "List is cast to IEnumerable twice. Acceptible trade-off versus code clarity (this method contains *critical* logic).")]
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "List is cast to IEnumerable twice. Acceptible trade-off versus code clarity (this method contains *critical* logic).")]
         private void ResetList()
         {
             // Don't bind during initialization, since the data source may not have been initialized yet.
@@ -1122,7 +1122,7 @@ namespace System.Windows.Forms
             //
             // Note: The method below will throw an exception if a data member is specified
             // but does not correspond to a valid property on the data source.
-            object dataSourceInstance = (_dataSource is Type) ? GetListFromType(_dataSource as Type) : _dataSource;
+            object dataSourceInstance = _dataSource is Type dataSourceType ? GetListFromType(dataSourceType) : _dataSource;
             object list = ListBindingHelper.GetList(dataSourceInstance, _dataMember);
             _listExtractedFromEnumerable = false;
 
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms
             }
 
             // Bind to this list now
-            SetList(bindingList, true, true);
+            SetList(bindingList, metaDataChanged: true, applySortAndFilter: true);
         }
 
         /// <summary>
@@ -1594,12 +1594,12 @@ namespace System.Windows.Forms
         public virtual object AddNew()
         {
             // Throw if adding new items has been disabled
-            if (!AllowNewInternal(false))
+            if (!AllowNewInternal(checkConstructor: false))
             {
                 throw new InvalidOperationException(SR.BindingSourceBindingListWrapperAddToReadOnlyList);
             }
 
-            if (!AllowNewInternal(true))
+            if (!AllowNewInternal(checkConstructor: true))
             {
                 throw new InvalidOperationException(string.Format(
                     SR.BindingSourceBindingListWrapperNeedToSetAllowNew,
@@ -1689,7 +1689,7 @@ namespace System.Windows.Forms
                 // Don't let user set value to true if inner list can never support adding of items
                 // do NOT check for a default constructor because someone will set AllowNew=True
                 // when they have overridden OnAddingNew (which we cannot detect).
-                if (value == true && !_isBindingList && !IsListWriteable(false))
+                if (value == true && !_isBindingList && !IsListWriteable(checkConstructor: false))
                 {
                     throw new InvalidOperationException(SR.NoAllowNewOnReadOnlyList);
                 }
