@@ -4,7 +4,7 @@
 
 namespace System.ComponentModel.Design
 {
-    internal sealed class DesignerActionHeaderItem : DesignerActionTextItem
+    public sealed class DesignerActionHeaderItem : DesignerActionTextItem
     {
         public DesignerActionHeaderItem(string displayName) : base(displayName, displayName)
         {

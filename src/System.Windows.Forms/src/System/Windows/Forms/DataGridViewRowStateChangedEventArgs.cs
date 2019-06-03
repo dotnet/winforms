@@ -12,7 +12,7 @@ namespace System.Windows.Forms
             StateChanged = stateChanged;
         }
 
-        public DataGridViewRow Row { get;}
+        public DataGridViewRow Row { get; }
 
         public DataGridViewElementStates StateChanged { get; }
     }

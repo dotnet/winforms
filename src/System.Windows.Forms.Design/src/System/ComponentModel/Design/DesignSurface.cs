@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignSurface : IDisposable, IServiceProvider
     {
-        private IServiceProvider _parentProvider;
+        private readonly IServiceProvider _parentProvider;
         private ServiceContainer _serviceContainer;
         private DesignerHost _host;
         private ICollection _loadErrors;
@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
             {
                 if (_host == null)
                 {
-                    throw new ObjectDisposedException(this.GetType().FullName);
+                    throw new ObjectDisposedException(GetType().FullName);
                 }
                 return ((IDesignerHost)_host).Container;
             }
@@ -178,8 +178,7 @@ namespace System.ComponentModel.Design
                     throw ex;
                 }
 
-                IRootDesigner rootDesigner = ((IDesignerHost)_host).GetDesigner(rootComponent) as IRootDesigner;
-                if (rootDesigner == null)
+                if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
                 {
                     ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {
@@ -196,8 +195,10 @@ namespace System.ComponentModel.Design
                 }
 
                 // We are out of luck here.  Throw.
-                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology);
-                ex.HelpLink = SR.DesignSurfaceNoSupportedTechnology;
+                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
+                {
+                    HelpLink = SR.DesignSurfaceNoSupportedTechnology
+                };
                 throw ex;
             }
         }

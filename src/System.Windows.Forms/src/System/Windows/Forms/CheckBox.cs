@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
 
     using System.Diagnostics;
@@ -23,11 +23,10 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para> Represents a Windows
     ///       check box.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -37,11 +36,12 @@ namespace System.Windows.Forms {
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionCheckBox))
     ]
-    public class CheckBox : ButtonBase {
+    public class CheckBox : ButtonBase
+    {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
         private static readonly object EVENT_CHECKSTATECHANGED = new object();
         private static readonly object EVENT_APPEARANCECHANGED = new object();
-        static readonly ContentAlignment anyRight  = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
+        static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
         private bool autoCheck;
         private bool threeState;
@@ -57,16 +57,17 @@ namespace System.Windows.Forms {
         internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.CheckBox'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public CheckBox()
-        : base() {
+        : base()
+        {
 
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
                 flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
@@ -76,51 +77,61 @@ namespace System.Windows.Forms {
                      ControlStyles.StandardDoubleClick, false);
 
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
-        
+
             autoCheck = true;
-            TextAlign = ContentAlignment.MiddleLeft;        
-            
+            TextAlign = ContentAlignment.MiddleLeft;
+
         }
-        
-        private bool AccObjDoDefaultAction {
-            get {
-                return this.accObjDoDefaultAction;
+
+        private bool AccObjDoDefaultAction
+        {
+            get
+            {
+                return accObjDoDefaultAction;
             }
-            set {
-                this.accObjDoDefaultAction = value;
+            set
+            {
+                accObjDoDefaultAction = value;
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.Appearance"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets
         ///       or sets the value that determines the appearance of a
         ///       check box control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(Appearance.Normal),
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.CheckBoxAppearanceDescr))
         ]
-        public Appearance Appearance {
-            get {
+        public Appearance Appearance
+        {
+            get
+            {
                 return appearance;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                 }
 
-                if (appearance != value) {
-                    using (LayoutTransaction.CreateTransactionIf(AutoSize, this.ParentInternal, this, PropertyNames.Appearance)) {
+                if (appearance != value)
+                {
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
+                    {
                         appearance = value;
-                        if (OwnerDraw) {
+                        if (OwnerDraw)
+                        {
                             Refresh();
                         }
-                        else {
+                        else
+                        {
                             UpdateStyles();
                         }
                         OnAppearanceChanged(EventArgs.Empty);
@@ -129,47 +140,44 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AppearanceChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
-        public event EventHandler AppearanceChanged {
-            add {
-                Events.AddHandler(EVENT_APPEARANCECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
-            }
+        public event EventHandler AppearanceChanged
+        {
+            add => Events.AddHandler(EVENT_APPEARANCECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AutoCheck"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets a value indicating whether the <see cref='System.Windows.Forms.CheckBox.Checked'/> or <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// value and the check box's appearance are automatically
         /// changed when it is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.CheckBoxAutoCheckDescr))
         ]
-        public bool AutoCheck {
-            get {
+        public bool AutoCheck
+        {
+            get
+            {
                 return autoCheck;
             }
 
-            set {
+            set
+            {
                 autoCheck = value;
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckAlign"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       the horizontal and vertical alignment of a check box on a check box
         ///       control.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         Localizable(true),
@@ -177,37 +185,43 @@ namespace System.Windows.Forms {
         DefaultValue(ContentAlignment.MiddleLeft),
         SRDescription(nameof(SR.CheckBoxCheckAlignDescr))
         ]
-        public ContentAlignment CheckAlign {
-            get {
+        public ContentAlignment CheckAlign
+        {
+            get
+            {
                 return checkAlign;
             }
-            set {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
+            set
+            {
+                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
-                if (checkAlign != value) {
+                if (checkAlign != value)
+                {
                     checkAlign = value;
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.CheckAlign);
-                    if (OwnerDraw) {
+                    if (OwnerDraw)
+                    {
                         Invalidate();
                     }
-                    else {
+                    else
+                    {
                         UpdateStyles();
                     }
                 }
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.Checked"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets a value indicating whether the
         ///       check box
         ///       is checked.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         SettingsBindable(true),
@@ -216,23 +230,26 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.CheckBoxCheckedDescr))
         ]
-        public bool Checked {
-            get {
+        public bool Checked
+        {
+            get
+            {
                 return checkState != CheckState.Unchecked;
             }
 
-            set {
-                if (value != Checked) {
+            set
+            {
+                if (value != Checked)
+                {
                     CheckState = value ? CheckState.Checked : CheckState.Unchecked;
                 }
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets
         ///       or sets a value indicating whether the check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -240,28 +257,35 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.CheckBoxCheckStateDescr))
         ]
-        public CheckState CheckState {
-            get {
+        public CheckState CheckState
+        {
+            get
+            {
                 return checkState;
             }
 
-            set {
+            set
+            {
                 // valid values are 0-2 inclusive.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
                 }
 
-                if (checkState != value) {
-                
+                if (checkState != value)
+                {
+
                     bool oldChecked = Checked;
-                
+
                     checkState = value;
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
                     }
-                    
-                    if (oldChecked != Checked) {
+
+                    if (oldChecked != Checked)
+                    {
                         OnCheckedChanged(EventArgs.Empty);
                     }
                     OnCheckStateChanged(EventArgs.Empty);
@@ -269,56 +293,52 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+        public new event EventHandler DoubleClick
+        {
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+        public new event MouseEventHandler MouseDoubleClick
+        {
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateParams"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the information used to create the handle for the
         ///    <see cref='System.Windows.Forms.CheckBox'/>
         ///    control.
         /// </para>
-        /// </devdoc>
-        protected override CreateParams CreateParams {
-            get {
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "BUTTON";
-                if (OwnerDraw) {
+                if (OwnerDraw)
+                {
                     cp.Style |= NativeMethods.BS_OWNERDRAW;
                 }
-                else {
+                else
+                {
                     cp.Style |= NativeMethods.BS_3STATE;
-                    if (Appearance == Appearance.Button) {
+                    if (Appearance == Appearance.Button)
+                    {
                         cp.Style |= NativeMethods.BS_PUSHLIKE;
                     }
-                    
+
                     // Determine the alignment of the check box
                     //
-                    ContentAlignment align = RtlTranslateContent(CheckAlign);                              
-                    if ((int)(align & anyRight) != 0) {
+                    ContentAlignment align = RtlTranslateContent(CheckAlign);
+                    if ((int)(align & anyRight) != 0)
+                    {
                         cp.Style |= NativeMethods.BS_RIGHTBUTTON;
                     }
 
@@ -327,14 +347,15 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DefaultSize"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
-        protected override Size DefaultSize {
-            get {
+        /// </summary>
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(104, 24);
             }
         }
@@ -348,200 +369,199 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
         /// <param name="deviceDpiNew">New DPI value</param>
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
             flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
             flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
         }
 
-        internal override Size GetPreferredSizeCore(Size proposedConstraints) {
-            if (Appearance == Appearance.Button) {
+        internal override Size GetPreferredSizeCore(Size proposedConstraints)
+        {
+            if (Appearance == Appearance.Button)
+            {
                 ButtonStandardAdapter adapter = new ButtonStandardAdapter(this);
                 return adapter.GetPreferredSizeCore(proposedConstraints);
-            } 
+            }
 
-            if(FlatStyle != FlatStyle.System) {
+            if (FlatStyle != FlatStyle.System)
+            {
                 return base.GetPreferredSizeCore(proposedConstraints);
             }
 
-            Size textSize = TextRenderer.MeasureText(this.Text, this.Font);
+            Size textSize = TextRenderer.MeasureText(Text, Font);
             Size size = SizeFromClientSize(textSize);
             size.Width += flatSystemStylePaddingWidth;
             size.Height = Math.Max(size.Height + 5, flatSystemStyleMinimumHeight); // ensure minimum height to avoid truncation of check-box or text
             return size + Padding.Size;
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OverChangeRectangle"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
-        internal override Rectangle OverChangeRectangle {
-            get {
-                if (Appearance == Appearance.Button) {
+        /// <summary>
+        /// </summary>
+        internal override Rectangle OverChangeRectangle
+        {
+            get
+            {
+                if (Appearance == Appearance.Button)
+                {
                     return base.OverChangeRectangle;
                 }
-                else {
-                    if (FlatStyle == FlatStyle.Standard) {
+                else
+                {
+                    if (FlatStyle == FlatStyle.Standard)
+                    {
                         // this Rectangle will cause no Invalidation
                         // can't use Rectangle.Empty because it will cause Invalidate(ClientRectangle)
                         return new Rectangle(-1, -1, 1, 1);
                     }
-                    else {
+                    else
+                    {
                         // Popup mouseover rectangle is actually bigger than GetCheckmarkRectangle
                         return Adapter.CommonLayout().Layout().checkBounds;
                     }
                 }
             }
         }
-        
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DownChangeRectangle"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
-        internal override Rectangle DownChangeRectangle {
-            get {
-                if (Appearance == Appearance.Button || FlatStyle == FlatStyle.System) {
+
+        /// <summary>
+        /// </summary>
+        internal override Rectangle DownChangeRectangle
+        {
+            get
+            {
+                if (Appearance == Appearance.Button || FlatStyle == FlatStyle.System)
+                {
                     return base.DownChangeRectangle;
                 }
-                else {
+                else
+                {
                     // Popup mouseover rectangle is actually bigger than GetCheckmarkRectangle()
                     return Adapter.CommonLayout().Layout().checkBounds;
                 }
             }
         }
-        
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.TextAlign"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the alignment of the
         ///       text on the checkbox control.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(ContentAlignment.MiddleLeft)
         ]
-        public override ContentAlignment TextAlign {
-            get {
+        public override ContentAlignment TextAlign
+        {
+            get
+            {
                 return base.TextAlign;
             }
-            set {
+            set
+            {
                 base.TextAlign = value;
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.ThreeState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating
         ///       whether the check box will allow three check states rather than two.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.CheckBoxThreeStateDescr))
         ]
-        public bool ThreeState {
-            get {
+        public bool ThreeState
+        {
+            get
+            {
                 return threeState;
             }
-            set {
+            set
+            {
                 threeState = value;
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckedChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         ///       property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
-        public event EventHandler CheckedChanged {
-            add {
-                Events.AddHandler(EVENT_CHECKEDCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
-            }
+        public event EventHandler CheckedChanged
+        {
+            add => Events.AddHandler(EVENT_CHECKEDCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
         }
-        
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckStateChanged"]/*' />
-        /// <devdoc>
+
+        /// <summary>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         ///       property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
-        public event EventHandler CheckStateChanged {
-            add {
-                Events.AddHandler(EVENT_CHECKSTATECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CHECKSTATECHANGED, value);
-            }
+        public event EventHandler CheckStateChanged
+        {
+            add => Events.AddHandler(EVENT_CHECKSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_CHECKSTATECHANGED, value);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructs the new instance of the accessibility object for this control. Subclasses
         ///       should not call base.CreateAccessibilityObject.
         ///    </para>
-        /// </devdoc>
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        /// </summary>
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new CheckBoxAccessibleObject(this);
         }
-        
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnAppearanceChanged"]/*' />
-        protected virtual void OnAppearanceChanged(EventArgs e) {
-            EventHandler eh = Events[EVENT_APPEARANCECHANGED] as EventHandler;
-            if (eh != null) {
-                 eh(this, e);
+
+        protected virtual void OnAppearanceChanged(EventArgs e)
+        {
+            if (Events[EVENT_APPEARANCECHANGED] is EventHandler eh)
+            {
+                eh(this, e);
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnCheckedChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.CheckBox.CheckedChanged'/>
         /// event.</para>
-        /// </devdoc>
-        protected virtual void OnCheckedChanged(EventArgs e) {
+        /// </summary>
+        protected virtual void OnCheckedChanged(EventArgs e)
+        {
             // accessibility stuff
-            if (this.FlatStyle == FlatStyle.System) {
+            if (FlatStyle == FlatStyle.System)
+            {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureStart, -1);
             }
 
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
-            if (this.FlatStyle == FlatStyle.System) {
+            if (FlatStyle == FlatStyle.System)
+            {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
-            }
-
-            EventHandler handler = (EventHandler)Events[EVENT_CHECKEDCHANGED];
-            if (handler != null) handler(this,e);
+            } ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnCheckStateChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.CheckBox.CheckStateChanged'/> event.</para>
-        /// </devdoc>
-        protected virtual void OnCheckStateChanged(EventArgs e) {
-            if (OwnerDraw) {
+        /// </summary>
+        protected virtual void OnCheckStateChanged(EventArgs e)
+        {
+            if (OwnerDraw)
+            {
                 Refresh();
-            }
-            
-            EventHandler handler = (EventHandler)Events[EVENT_CHECKSTATECHANGED];
-            if (handler != null) handler(this,e);
+            } ((EventHandler)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnClick"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Fires the event indicating that the control has been clicked.
         ///       Inheriting controls should use this in favour of actually listening to
@@ -549,25 +569,31 @@ namespace System.Windows.Forms {
         ///       ensure that the event is still fired for external listeners.
         ///       
         ///    </para>
-        /// </devdoc>
-        protected override void OnClick(EventArgs e) {
-            if (autoCheck) {
-                switch (CheckState) {
+        /// </summary>
+        protected override void OnClick(EventArgs e)
+        {
+            if (autoCheck)
+            {
+                switch (CheckState)
+                {
                     case CheckState.Unchecked:
                         CheckState = CheckState.Checked;
                         break;
                     case CheckState.Checked:
-                        if (threeState) {
+                        if (threeState)
+                        {
                             CheckState = CheckState.Indeterminate;
 
                             // If the check box is clicked as a result of AccObj::DoDefaultAction
                             // then the native check box does not fire OBJ_STATE_CHANGE event when going to Indeterminate state.
                             // So the WinForms layer fires the OBJ_STATE_CHANGE event.
-                            if (this.AccObjDoDefaultAction) {
+                            if (AccObjDoDefaultAction)
+                            {
                                 AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
                             }
                         }
-                        else {
+                        else
+                        {
                             CheckState = CheckState.Unchecked;
                         }
                         break;
@@ -579,30 +605,30 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     We override this to ensure that the control's click values are set up
         ///     correctly.
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void OnHandleCreated(EventArgs e) {
+        /// </summary>
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
-            
+
             // Since this is a protected override...
             // this can be directly called in by a overriden class..
             // and the Handle need not be created... 
             // So Check for the handle
-            if (IsHandleCreated) {
+            if (IsHandleCreated)
+            {
                 SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this to ensure that press '+' or '=' checks the box,
         ///     while pressing '-' unchecks the box
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void OnKeyDown(KeyEventArgs e) {
+        /// </summary>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
             /*
             if (Enabled) {
                 if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add) {
@@ -615,25 +641,29 @@ namespace System.Windows.Forms {
             */
             base.OnKeyDown(e);
         }
-        
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnMouseUp"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
-        protected override void OnMouseUp(MouseEventArgs mevent) {
-            if (mevent.Button == MouseButtons.Left && MouseIsPressed) {
+        /// </summary>
+        protected override void OnMouseUp(MouseEventArgs mevent)
+        {
+            if (mevent.Button == MouseButtons.Left && MouseIsPressed)
+            {
                 // It's best not to have the mouse captured while running Click events
-                if (base.MouseIsDown) {
+                if (base.MouseIsDown)
+                {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle) {
+                    if (UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    {
                         //Paint in raised state...
                         ResetFlagsandPaint();
-                        if (!ValidationCancelled) {
-                            if (this.Capture) {
+                        if (!ValidationCancelled)
+                        {
+                            if (Capture)
+                            {
                                 OnClick(mevent);
                             }
                             OnMouseClick(mevent);
@@ -644,46 +674,50 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-        internal override ButtonBaseAdapter CreateFlatAdapter() {
+        internal override ButtonBaseAdapter CreateFlatAdapter()
+        {
             return new CheckBoxFlatAdapter(this);
         }
 
-        internal override ButtonBaseAdapter CreatePopupAdapter() {
+        internal override ButtonBaseAdapter CreatePopupAdapter()
+        {
             return new CheckBoxPopupAdapter(this);
         }
-            
-        internal override ButtonBaseAdapter CreateStandardAdapter() {
+
+        internal override ButtonBaseAdapter CreateStandardAdapter()
+        {
             return new CheckBoxStandardAdapter(this);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.ProcessMnemonic"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to handle mnemonics properly.
-        /// </devdoc>
-        /// <internalonly/>        
-        protected internal override bool ProcessMnemonic(char charCode) {
-            if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
-                if (FocusInternal()) {
+        /// </summary>
+        protected internal override bool ProcessMnemonic(char charCode)
+        {
+            if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect)
+            {
+                if (Focus())
+                {
                     //Paint in raised state...
                     //
                     ResetFlagsandPaint();
-                    if (!ValidationCancelled) {
+                    if (!ValidationCancelled)
+                    {
                         OnClick(EventArgs.Empty);
                     }
-                    
+
                 }
                 return true;
             }
             return false;
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Provides some interesting information for the CheckBox control in
         ///     String form.
-        /// </devdoc>
-        /// <internalonly/>
-        public override string ToString() {
+        /// </summary>
+        public override string ToString()
+        {
 
             string s = base.ToString();
             // We shouldn't need to convert the enum to int
@@ -691,49 +725,56 @@ namespace System.Windows.Forms {
             return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject"]/*' />
-        /// <internalonly/>        
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
-        public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject {
+        /// <summary>
+        /// </summary>
+        [System.Runtime.InteropServices.ComVisible(true)]
+        public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject
+        {
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject"]/*' />
-            public CheckBoxAccessibleObject(Control owner) : base(owner) {
+            public CheckBoxAccessibleObject(Control owner) : base(owner)
+            {
             }
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DefaultAction"]/*' />
-            public override string DefaultAction {
-                get {
+            public override string DefaultAction
+            {
+                get
+                {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
-                    if (defaultAction != null) {
+                    if (defaultAction != null)
+                    {
                         return defaultAction;
                     }
 
-                    if (((CheckBox)Owner).Checked) {
+                    if (((CheckBox)Owner).Checked)
+                    {
                         return SR.AccessibleActionUncheck;
                     }
-                    else {
+                    else
+                    {
                         return SR.AccessibleActionCheck;
                     }
                 }
             }
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.Role"]/*' />
-            public override AccessibleRole Role {
-                get {
+            public override AccessibleRole Role
+            {
+                get
+                {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default) {
+                    if (role != AccessibleRole.Default)
+                    {
                         return role;
                     }
                     return AccessibleRole.CheckButton;
                 }
             }
-            
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.State"]/*' />
-            public override AccessibleStates State {
-                get {
-                    switch (((CheckBox)Owner).CheckState) {
+
+            public override AccessibleStates State
+            {
+                get
+                {
+                    switch (((CheckBox)Owner).CheckState)
+                    {
                         case CheckState.Checked:
                             return AccessibleStates.Checked | base.State;
                         case CheckState.Indeterminate:
@@ -742,20 +783,25 @@ namespace System.Windows.Forms {
 
                     return base.State;
                 }
-            }                        
+            }
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DoDefaultAction"]/*' />
-            public override void DoDefaultAction() {
-                CheckBox cb = this.Owner as CheckBox;
+            public override void DoDefaultAction()
+            {
+                CheckBox cb = Owner as CheckBox;
 
-                if (cb != null) {
+                if (cb != null)
+                {
                     cb.AccObjDoDefaultAction = true;
                 }
 
-                try {
+                try
+                {
                     base.DoDefaultAction();
-                } finally {
-                    if (cb != null) {
+                }
+                finally
+                {
+                    if (cb != null)
+                    {
                         cb.AccObjDoDefaultAction = false;
                     }
                 }

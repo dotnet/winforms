@@ -4,11 +4,11 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Gives state information about a ListView item/sub-item. Used with owner draw. 
-    /// </devdoc>
+    /// </summary>
     [Flags]
-    public enum ListViewItemStates 
+    public enum ListViewItemStates
     {
         Checked = NativeMethods.CDIS_CHECKED,
         Default = NativeMethods.CDIS_DEFAULT,

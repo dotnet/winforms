@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<ContextMenuStrip>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
             var cms = new ContextMenuStrip(mockContainer.Object);

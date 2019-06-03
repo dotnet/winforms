@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
-        
+
         [Fact]
         public void ErrorProvider_ConstructorContainerControl()
         {
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
-        
+
         [Fact]
         public void ErrorProvider_ConstructorIContainer()
         {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<ErrorProvider>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new ErrorProvider(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new ErrorProvider(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
             var ep = new ErrorProvider(mockContainer.Object);

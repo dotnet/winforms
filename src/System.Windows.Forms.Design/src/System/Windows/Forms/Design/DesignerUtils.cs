@@ -780,7 +780,9 @@ namespace System.Windows.Forms.Design
         public static ICollection FilterGenericTypes(ICollection types)
         {
             if (types == null || types.Count == 0)
+            {
                 return types;
+            }
 
             //now we get each Type and add it to the destination collection if its not a generic
             ArrayList final = new ArrayList(types.Count);

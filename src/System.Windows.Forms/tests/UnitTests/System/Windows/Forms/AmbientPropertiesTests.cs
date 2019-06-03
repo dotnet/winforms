@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -19,45 +20,64 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.Empty, property.ForeColor);
         }
 
-        [Fact]
-        public void BackColor_Set_GetReturnsExpected()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        public void BackColor_Set_GetReturnsExpected(Color value)
         {
             var property = new AmbientProperties
             {
-                BackColor = Color.Red
+                BackColor = value
             };
-            Assert.Equal(Color.Red, property.BackColor);
+            Assert.Equal(value, property.BackColor);
+
+            // Set same.
+            property.BackColor = value;
+            Assert.Equal(value, property.BackColor);
         }
 
-        [Fact]
-        public void Cursor_Set_GetReturnsExpected()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        public void Cursor_Set_GetReturnsExpected(Cursor value)
         {
-            var cursor = new Cursor((IntPtr)1);
             var property = new AmbientProperties
             {
-                Cursor = cursor
+                Cursor = value
             };
-            Assert.Equal(cursor, property.Cursor);
+            Assert.Equal(value, property.Cursor);
+
+            // Set same.
+            property.Cursor = value;
+            Assert.Equal(value, property.Cursor);
         }
 
-        [Fact]
-        public void Font_Set_GetReturnsExpected()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void Font_Set_GetReturnsExpected(Font value)
         {
             var property = new AmbientProperties
             {
-                Font = SystemFonts.DefaultFont
+                Font = value
             };
-            Assert.Equal(SystemFonts.DefaultFont, property.Font);
+            Assert.Equal(value, property.Font);
+
+            // Set same.
+            property.Font = value;
+            Assert.Equal(value, property.Font);
         }
 
-        [Fact]
-        public void ForeColor_Set_GetReturnsExpected()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        public void ForeColor_Set_GetReturnsExpected(Color value)
         {
             var property = new AmbientProperties
             {
-                ForeColor = Color.Red
+                ForeColor = value
             };
-            Assert.Equal(Color.Red, property.ForeColor);
+            Assert.Equal(value, property.ForeColor);
+
+            // Set same.
+            property.ForeColor = value;
+            Assert.Equal(value, property.ForeColor);
         }
     }
 }

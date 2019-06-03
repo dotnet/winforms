@@ -68,14 +68,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TimerTimerDescr))]
         public event EventHandler Tick
         {
-            add
-            {
-                _onTimer += value;
-            }
-            remove
-            {
-                _onTimer -= value;
-            }
+            add => _onTimer += value;
+            remove => _onTimer -= value;
         }
 
         /// <summary>
@@ -223,15 +217,17 @@ namespace System.Windows.Forms
                 if (Handle == IntPtr.Zero)
                 {
                     // Create a totally vanilla invisible window just for WM_TIMER messages
-                    var cp = new CreateParams();
-                    cp.Style = 0;
-                    cp.ExStyle = 0;
-                    cp.ClassStyle = 0;
-                    cp.Caption = GetType().Name;
+                    var cp = new CreateParams
+                    {
+                        Style = 0,
+                        ExStyle = 0,
+                        ClassStyle = 0,
+                        Caption = GetType().Name,
 
-                    // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.
-                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
+                        // Message only windows are cheaper and have fewer issues than
+                        // full blown invisible windows.
+                        Parent = (IntPtr)NativeMethods.HWND_MESSAGE
+                    };
 
                     CreateHandle(cp);
                 }
@@ -247,8 +243,7 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    int pid;
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out pid);
+                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out int pid);
                     return hwndThread != SafeNativeMethods.GetCurrentThreadId();
                 }
 

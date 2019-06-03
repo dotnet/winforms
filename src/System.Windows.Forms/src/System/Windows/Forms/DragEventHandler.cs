@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.DragDrop'/>,
     /// <see cref='System.Windows.Forms.Control.DragEnter'/>, or <see cref='System.Windows.Forms.Control.DragOver'/>
     /// event of a <see cref='System.Windows.Forms.Control'/>.
-    /// </devdoc>
+    /// </summary>
     public delegate void DragEventHandler(object sender, DragEventArgs e);
 }

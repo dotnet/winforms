@@ -12,11 +12,10 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [
         ListBindable(false),
         SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewCellCollection> implementation
@@ -24,140 +23,107 @@ namespace System.Windows.Forms
     public class DataGridViewCellCollection : BaseCollection, IList
     {
         CollectionChangeEventHandler onCollectionChanged;
-        ArrayList items = new ArrayList();
-        DataGridViewRow owner = null;
+        readonly ArrayList items = new ArrayList();
+        readonly DataGridViewRow owner = null;
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.Add"]/*' />
-        /// <internalonly/>
         int IList.Add(object value)
         {
-            return this.Add((DataGridViewCell) value);            
+            return Add((DataGridViewCell)value);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.Clear"]/*' />
-        /// <internalonly/>
         void IList.Clear()
         {
-            this.Clear();
+            Clear();
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.Contains"]/*' />
-        /// <internalonly/>
         bool IList.Contains(object value)
         {
-            return this.items.Contains(value);
+            return items.Contains(value);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
         int IList.IndexOf(object value)
         {
-            return this.items.IndexOf(value);
+            return items.IndexOf(value);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.Insert"]/*' />
-        /// <internalonly/>
         void IList.Insert(int index, object value)
         {
-            this.Insert(index, (DataGridViewCell) value);
+            Insert(index, (DataGridViewCell)value);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object value)
         {
-            this.Remove((DataGridViewCell) value);
+            Remove((DataGridViewCell)value);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.RemoveAt"]/*' />
-        /// <internalonly/>
         void IList.RemoveAt(int index)
         {
-            this.RemoveAt(index);
+            RemoveAt(index);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
         bool IList.IsFixedSize
         {
-            get {return false;}
+            get { return false; }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.IsReadOnly"]/*' />
-        /// <internalonly/>
         bool IList.IsReadOnly
         {
-            get {return false;}
+            get { return false; }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index]
         {
             get { return this[index]; }
-            set { this[index] = (DataGridViewCell) value; }
+            set { this[index] = (DataGridViewCell)value; }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.ICollection.Count"]/*' />
-        /// <internalonly/>
         int ICollection.Count
         {
-            get {return this.items.Count;}
+            get { return items.Count; }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized
         {
-            get {return false;}
+            get { return false; }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot
         {
-            get {return this;}
+            get { return this; }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IEnumerable.GetEnumerator"]/*' />
-        /// <internalonly/>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.items.GetEnumerator();
+            return items.GetEnumerator();
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.DataGridViewCellCollection"]/*' />
         public DataGridViewCellCollection(DataGridViewRow dataGridViewRow)
         {
             Debug.Assert(dataGridViewRow != null);
-            this.owner = dataGridViewRow;
+            owner = dataGridViewRow;
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.List"]/*' />
         protected override ArrayList List
         {
             get
             {
-                return this.items;
+                return items;
             }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewCell with the specified index.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCell this[int index]
         {
             get
             {
-                return (DataGridViewCell) this.items[index];
+                return (DataGridViewCell)items[index];
             }
             set
             {
@@ -174,20 +140,20 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow));
                 }
-                if (this.owner.DataGridView != null)
+                if (owner.DataGridView != null)
                 {
-                    this.owner.DataGridView.OnReplacingCell(this.owner, index);
+                    owner.DataGridView.OnReplacingCell(owner, index);
                 }
 
-                DataGridViewCell oldDataGridViewCell = (DataGridViewCell) this.items[index];
-                this.items[index] = dataGridViewCell;
-                dataGridViewCell.OwningRowInternal = this.owner;
+                DataGridViewCell oldDataGridViewCell = (DataGridViewCell)items[index];
+                items[index] = dataGridViewCell;
+                dataGridViewCell.OwningRowInternal = owner;
                 dataGridViewCell.StateInternal = oldDataGridViewCell.State;
-                if (this.owner.DataGridView != null)
+                if (owner.DataGridView != null)
                 {
-                    dataGridViewCell.DataGridViewInternal = this.owner.DataGridView;
-                    dataGridViewCell.OwningColumnInternal = this.owner.DataGridView.Columns[index];
-                    this.owner.DataGridView.OnReplacedCell(this.owner, index);
+                    dataGridViewCell.DataGridViewInternal = owner.DataGridView;
+                    dataGridViewCell.OwningColumnInternal = owner.DataGridView.Columns[index];
+                    owner.DataGridView.OnReplacedCell(owner, index);
                 }
 
                 oldDataGridViewCell.DataGridViewInternal = null;
@@ -204,31 +170,30 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.this1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewCell with the specified column name.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCell this[string columnName]
         {
             get
             {
                 DataGridViewColumn dataGridViewColumn = null;
-                if (this.owner.DataGridView != null)
+                if (owner.DataGridView != null)
                 {
-                    dataGridViewColumn = this.owner.DataGridView.Columns[columnName];
+                    dataGridViewColumn = owner.DataGridView.Columns[columnName];
                 }
                 if (dataGridViewColumn == null)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), "columnName");
                 }
-                return (DataGridViewCell) this.items[dataGridViewColumn.Index];
+                return (DataGridViewCell)items[dataGridViewColumn.Index];
             }
             set
             {
                 DataGridViewColumn dataGridViewColumn = null;
-                if (this.owner.DataGridView != null)
+                if (owner.DataGridView != null)
                 {
-                    dataGridViewColumn = this.owner.DataGridView.Columns[columnName];
+                    dataGridViewColumn = owner.DataGridView.Columns[columnName];
                 }
                 if (dataGridViewColumn == null)
                 {
@@ -238,26 +203,18 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.CollectionChanged"]/*' />
         public event CollectionChangeEventHandler CollectionChanged
         {
-            add
-            {
-                this.onCollectionChanged += value;
-            }
-            remove
-            {
-                this.onCollectionChanged -= value;
-            }
+            add => onCollectionChanged += value;
+            remove => onCollectionChanged -= value;
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Add"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual int Add(DataGridViewCell dataGridViewCell)
         {
-            if (this.owner.DataGridView != null)
+            if (owner.DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView));
             }
@@ -272,9 +229,9 @@ namespace System.Windows.Forms
         internal int AddInternal(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(!dataGridViewCell.Selected);
-            int index = this.items.Add(dataGridViewCell);
-            dataGridViewCell.OwningRowInternal = this.owner;
-            DataGridView dataGridView = this.owner.DataGridView;
+            int index = items.Add(dataGridViewCell);
+            dataGridViewCell.OwningRowInternal = owner;
+            DataGridView dataGridView = owner.DataGridView;
             if (dataGridView != null && dataGridView.Columns.Count > index)
             {
                 dataGridViewCell.OwningColumnInternal = dataGridView.Columns[index];
@@ -282,8 +239,7 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
             return index;
         }
-        
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.AddRange"]/*' />
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
@@ -291,7 +247,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCells));
             }
-            if (this.owner.DataGridView != null)
+            if (owner.DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView));
             }
@@ -321,56 +277,51 @@ namespace System.Windows.Forms
                 }
             }
 
-            this.items.AddRange(dataGridViewCells);
+            items.AddRange(dataGridViewCells);
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
-                dataGridViewCell.OwningRowInternal = this.owner;
+                dataGridViewCell.OwningRowInternal = owner;
                 Debug.Assert(!dataGridViewCell.Selected);
             }
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
-        
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Clear"]/*' />
+
         public virtual void Clear()
         {
-            if (this.owner.DataGridView != null)
+            if (owner.DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView));
             }
-            foreach (DataGridViewCell dataGridViewCell in this.items)
+            foreach (DataGridViewCell dataGridViewCell in items)
             {
                 dataGridViewCell.OwningRowInternal = null;
             }
-            this.items.Clear();
+            items.Clear();
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.CopyTo"]/*' />
         public void CopyTo(DataGridViewCell[] array, int index)
         {
-            this.items.CopyTo(array, index);
+            items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Contains"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
-        /// </devdoc>
+        /// </summary>
         public virtual bool Contains(DataGridViewCell dataGridViewCell)
         {
-            int index = this.items.IndexOf(dataGridViewCell);
+            int index = items.IndexOf(dataGridViewCell);
             return index != -1;
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IndexOf"]/*' />
         public int IndexOf(DataGridViewCell dataGridViewCell)
         {
-            return this.items.IndexOf(dataGridViewCell);
+            return items.IndexOf(dataGridViewCell);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Insert"]/*' />
         public virtual void Insert(int index, DataGridViewCell dataGridViewCell)
         {
-            if (this.owner.DataGridView != null)
+            if (owner.DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView));
             }
@@ -380,17 +331,17 @@ namespace System.Windows.Forms
             }
             Debug.Assert(!dataGridViewCell.ReadOnly);
             Debug.Assert(!dataGridViewCell.Selected);
-            this.items.Insert(index, dataGridViewCell);
-            dataGridViewCell.OwningRowInternal = this.owner;
+            items.Insert(index, dataGridViewCell);
+            dataGridViewCell.OwningRowInternal = owner;
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
         }
 
         internal void InsertInternal(int index, DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(!dataGridViewCell.Selected);
-            this.items.Insert(index, dataGridViewCell);
-            dataGridViewCell.OwningRowInternal = this.owner;
-            DataGridView dataGridView = this.owner.DataGridView;
+            items.Insert(index, dataGridViewCell);
+            dataGridViewCell.OwningRowInternal = owner;
+            DataGridView dataGridView = owner.DataGridView;
             if (dataGridView != null && dataGridView.Columns.Count > index)
             {
                 dataGridViewCell.OwningColumnInternal = dataGridView.Columns[index];
@@ -398,27 +349,22 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.OnCollectionChanged"]/*' />
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
-            if (this.onCollectionChanged != null)
-            {
-                this.onCollectionChanged(this, e);
-            }
+            onCollectionChanged?.Invoke(this, e);
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Remove"]/*' />
         public virtual void Remove(DataGridViewCell cell)
         {
-            if (this.owner.DataGridView != null)
+            if (owner.DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView));
             }
             int cellIndex = -1;
-            int itemsCount = this.items.Count;
+            int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i)
             {
-                if (this.items[i] == cell) 
+                if (items[i] == cell)
                 {
                     cellIndex = i;
                     break;
@@ -434,10 +380,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.RemoveAt"]/*' />
         public virtual void RemoveAt(int index)
         {
-            if (this.owner.DataGridView != null)
+            if (owner.DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView));
             }
@@ -446,8 +391,8 @@ namespace System.Windows.Forms
 
         internal void RemoveAtInternal(int index)
         {
-            DataGridViewCell dataGridViewCell = (DataGridViewCell) this.items[index];
-            this.items.RemoveAt(index);
+            DataGridViewCell dataGridViewCell = (DataGridViewCell)items[index];
+            items.RemoveAt(index);
             dataGridViewCell.DataGridViewInternal = null;
             dataGridViewCell.OwningRowInternal = null;
             if (dataGridViewCell.ReadOnly)

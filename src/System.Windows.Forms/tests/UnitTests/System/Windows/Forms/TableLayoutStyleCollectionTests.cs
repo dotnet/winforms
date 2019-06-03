@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(style);
             Assert.Equal(style, Assert.Single(collection));
         }
-        
+
         [Fact]
         public void TableLayoutStyleCollection_Remove_Null_Nop()
         {
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Tests
             var style = new RowStyle();
             collection.Add(style);
 
-            var array = new object[] { 1, 2, 3};
+            var array = new object[] { 1, 2, 3 };
             collection.CopyTo(array, 1);
             Assert.Equal(new object[] { 1, style, 3 }, array);
         }

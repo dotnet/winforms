@@ -1506,7 +1506,7 @@ namespace System.ComponentModel.Design
         {
             private CheckBox _checkBox;
 
-            public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel): base(serviceProvider, actionPanel)
+            public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
             {
             }
 
@@ -1523,7 +1523,7 @@ namespace System.ComponentModel.Design
                 controls.Add(_checkBox);
             }
 
-            public sealed override void Focus() =>  _checkBox.Focus();
+            public sealed override void Focus() => _checkBox.Focus();
 
             public override Size LayoutControls(int top, int width, bool measureOnly)
             {
@@ -1963,7 +1963,7 @@ namespace System.ComponentModel.Design
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
                     IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(listBox, listBox.Handle));
                     IntPtr hFont = listBox.Font.ToHfont();
-                    NativeMethods.CommonHandles.GdiHandleCollector.Add();
+                    Interop.HandleCollector.Add(hFont, Interop.CommonHandles.GDI);
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     try
                     {
@@ -2199,12 +2199,17 @@ namespace System.ComponentModel.Design
                             ActivateDropDown();
                         }
                         else
+                        {
                             CloseDropDown();
+                        }
+
                         return true;
                     }
                     // Not passing Alt key event to base class to prevent  closing 'Combobox Tasks window'
                     else if ((keyData & Keys.Alt) == Keys.Alt)
+                    {
                         return true;
+                    }
                 }
                 return base.ProcessDialogKey(keyData);
             }
@@ -2447,7 +2452,7 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle),  NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
+                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
                         // Lifted directly from Form.ShowDialog()...
                         IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
@@ -2532,12 +2537,6 @@ namespace System.ComponentModel.Design
                     public static int LOWORD(int n) => n & 0xffff;
                 }
 
-                public static class CommonHandles
-                {
-                    public static HandleCollector GdiHandleCollector = new HandleCollector("GDI", 500);
-                    public static HandleCollector HdcHandleCollector = new HandleCollector("HDC", 2);
-                }
-
                 [StructLayout(LayoutKind.Sequential)]
                 public class SIZE
                 {
@@ -2605,7 +2604,7 @@ namespace System.ComponentModel.Design
                 private static extern bool IntDeleteObject(HandleRef hObject);
                 public static bool DeleteObject(HandleRef hObject)
                 {
-                    NativeMethods.CommonHandles.GdiHandleCollector.Remove();
+                    Interop.HandleCollector.Remove((IntPtr)hObject, Interop.CommonHandles.GDI);
                     return IntDeleteObject(hObject);
                 }
 
@@ -2685,15 +2684,14 @@ namespace System.ComponentModel.Design
                 private static extern IntPtr IntGetDC(HandleRef hWnd);
                 public static IntPtr GetDC(HandleRef hWnd)
                 {
-                    NativeMethods.CommonHandles.HdcHandleCollector.Add();
-                    return IntGetDC(hWnd);
+                    return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
                 }
 
                 [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
                 private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
                 public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
                 {
-                    NativeMethods.CommonHandles.HdcHandleCollector.Remove();
+                    Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
                     return IntReleaseDC(hWnd, hDC);
                 }
             }

@@ -25,22 +25,22 @@ namespace System.Drawing.Design
             Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             Bounds = bounds;
         }
-        
+
         /// <summary>
         /// <see cref="System.Drawing.Rectangle"/> outlining the area in which the painting should be done.
         /// </summary>
         public Rectangle Bounds { get; }
-        
+
         /// <summary>
         /// <see cref="System.ComponentModel.ITypeDescriptorContext"/> object for additional information about the context this value appears in.
         /// </summary>
         public ITypeDescriptorContext Context { get; }
-        
+
         /// <summary>
         /// <see cref="System.Drawing.Graphics"/> object with which painting should be done.
         /// </summary>
         public Graphics Graphics { get; }
-        
+
         /// <summary>
         /// Value to paint.
         /// </summary>

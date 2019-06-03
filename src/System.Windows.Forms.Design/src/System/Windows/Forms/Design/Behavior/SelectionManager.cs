@@ -20,8 +20,8 @@ namespace System.Windows.Forms.Design.Behavior
         private Adorner bodyAdorner;//used to track all body glyphs for each control
         private BehaviorService behaviorService;//ptr back to our BehaviorService
         private IServiceProvider serviceProvider;//standard service provider
-        private Hashtable componentToDesigner;//used for quick look up of designers related to comps
-        private Control rootComponent;//root component being designed
+        private readonly Hashtable componentToDesigner;//used for quick look up of designers related to comps
+        private readonly Control rootComponent;//root component being designed
         private ISelectionService selSvc;//we cache the selection service for perf.
         private IDesignerHost designerHost;//we cache the designerhost for perf.
         private bool needRefresh;    // do we need to refresh?

@@ -70,7 +70,7 @@
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-	<target state="new">An error occurred while processing this command.
+        <target state="translated">Error al procesar este comando.
       {0}</target>
         <note />
       </trans-unit>
@@ -206,12 +206,12 @@
       {1}
 
       Stack trace:{2}</source>
-	<target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+        <target state="translated">El control {0} produjo una excepción no controlada en el diseñador y se ha deshabilitado.
 
-      Exception:
+      Excepción:
       {1}
 
-      Stack trace:{2}</target>
+      Seguimiento de la pila: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -278,7 +278,7 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-	<target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+        <target state="translated">Error al cargar el documento. Corrija el error y, a continuación, intente volver a cargar el documento. Mensaje de error:
 
       {0}</target>
         <note />
@@ -613,6 +613,16 @@
         <target state="translated">El tipo '{0}' no tiene ninguna propiedad denominada '{1}'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">El objeto '{0}' devolvió un valor nulo para la propiedad '{1}', pero no se permite.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">Error al generar el código para la propiedad '{0}'. El error es: '{1}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
         <target state="translated">Error al leer los recursos del archivo de recursos para la referencia cultural {0}: {1}</target>
@@ -770,7 +780,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-	<target state="new">Dock:</target>
+        <target state="translated">Acoplar:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
@@ -790,12 +800,12 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_Layout">
         <source>Layout &amp;&amp; Appearance</source>
-        <target state="translated">&amp;Diseño y apariencia</target>
+        <target state="translated">Diseño y apariencia</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-	<target state="new">RenderMode:</target>
+        <target state="translated">Modo de representación:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
@@ -820,7 +830,7 @@
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-	<target state="new">Embed in ToolStripContainer</target>
+        <target state="translated">Insertar en ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">

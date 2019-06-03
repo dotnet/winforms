@@ -11,7 +11,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Design
 {
-    internal static class NativeMethods
+    internal static partial class NativeMethods
     {
         public static readonly HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         public const int EC_LEFTMARGIN = 0x0001;
         public const int EC_RIGHTMARGIN = 0x0002;
         public const int IDOK = 1;
-        
+
         public const int VK_PROCESSKEY = 0xE5;
 
         public const int STGM_READ = 0x00000000;
@@ -79,19 +79,31 @@ namespace System.Windows.Forms.Design
         public static extern int MultiByteToWideChar(int CodePage, int dwFlags,
             byte[] lpMultiByteStr, int cchMultiByte, char[] lpWideCharStr, int cchWideChar);
 
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendDlgItemMessage(IntPtr hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool EnableWindow(IntPtr hWnd, bool enable);
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        public static extern int GetWindowTextLength(HandleRef hWnd);
+
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
+
+        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref RECT lpRect, int nFormat);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3950,8 +3962,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)((n >> 16) & 0xffff);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }
@@ -3960,8 +3972,8 @@ namespace System.Windows.Forms.Design
             {
                 int i = (short)(n & 0xFFFF);
 
-                i = i << 16;
-                i = i >> 16;
+                i <<= 16;
+                i >>= 16;
 
                 return i;
             }
@@ -4371,69 +4383,6 @@ namespace System.Windows.Forms.Design
                     "lfPitchAndFamily=" + lfPitchAndFamily + ", " +
                     "lfFaceName=" + lfFaceName;
             }
-        }
-        public sealed class CommonHandles
-        {
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Accelerator"]/*' />
-            /// <devdoc>
-            ///     Handle type for accelerator tables.
-            /// </devdoc>
-            public static readonly int Accelerator = System.Internal.HandleCollector.RegisterType("Accelerator", 80, 50);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Cursor"]/*' />
-            /// <devdoc>
-            ///     handle type for cursors.
-            /// </devdoc>
-            public static readonly int Cursor = System.Internal.HandleCollector.RegisterType("Cursor", 20, 500);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.EMF"]/*' />
-            /// <devdoc>
-            ///     Handle type for enhanced metafiles.
-            /// </devdoc>
-            public static readonly int EMF = System.Internal.HandleCollector.RegisterType("EnhancedMetaFile", 20, 500);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Find"]/*' />
-            /// <devdoc>
-            ///     Handle type for file find handles.
-            /// </devdoc>
-            public static readonly int Find = System.Internal.HandleCollector.RegisterType("Find", 0, 1000);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.GDI"]/*' />
-            /// <devdoc>
-            ///     Handle type for GDI objects.
-            /// </devdoc>
-            public static readonly int GDI = System.Internal.HandleCollector.RegisterType("GDI", 90, 50);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.HDC"]/*' />
-            /// <devdoc>
-            ///     Handle type for HDC's that count against the Win98 limit of five DC's.  HDC's
-            ///     which are not scarce, such as HDC's for bitmaps, are counted as GDIHANDLE's.
-            /// </devdoc>
-            public static readonly int HDC = System.Internal.HandleCollector.RegisterType("HDC", 100, 2); // wait for 2 dc's before collecting
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Icon"]/*' />
-            /// <devdoc>
-            ///     Handle type for icons.
-            /// </devdoc>
-            public static readonly int Icon = System.Internal.HandleCollector.RegisterType("Icon", 20, 500);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Kernel"]/*' />
-            /// <devdoc>
-            ///     Handle type for kernel objects.
-            /// </devdoc>
-            public static readonly int Kernel = System.Internal.HandleCollector.RegisterType("Kernel", 0, 1000);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Menu"]/*' />
-            /// <devdoc>
-            ///     Handle type for files.
-            /// </devdoc>
-            public static readonly int Menu = System.Internal.HandleCollector.RegisterType("Menu", 30, 1000);
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Window"]/*' />
-            /// <devdoc>
-            ///     Handle type for windows.
-            /// </devdoc>
-            public static readonly int Window = System.Internal.HandleCollector.RegisterType("Window", 5, 1000);
         }
 
 #if LEGACY

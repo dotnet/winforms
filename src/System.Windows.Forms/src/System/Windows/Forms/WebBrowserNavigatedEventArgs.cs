@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnNavigated'/> event.
-    /// </devdoc>
+    /// </summary>
     public class WebBrowserNavigatedEventArgs : EventArgs
     {
         private readonly Uri _url;
 
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatedEventArgs'/> class.
-        /// </devdoc>
+        /// </summary>
         public WebBrowserNavigatedEventArgs(Uri url)
         {
             _url = url;
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         /// Url the browser navigated to.
-        /// </devdoc>
+        /// </summary>
         public Uri Url
         {
             get

@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal OleDragDropHandler oleDragDropHandler; // handler class for ole drag drop operations.
 
-        private IDesigner mainDesigner; // the designer that is associated with this tray
+        private readonly IDesigner mainDesigner; // the designer that is associated with this tray
         private IEventHandlerService eventHandlerService = null; // Event Handler service to handle keyboard and focus.
         private bool queriedTabOrder;
         private MenuCommand tabOrderCommand;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
 
         // Services that we use on a high enough frequency to merit caching.
         private IMenuCommandService menuCommandService;
-        private CommandSet privateCommandSet = null;
+        private readonly CommandSet privateCommandSet = null;
         private InheritanceUI inheritanceUI;
 
         private Point mouseDragStart = InvalidPoint; // the starting location of a drag
@@ -63,9 +63,9 @@ namespace System.Windows.Forms.Design
         private Point autoScrollPosBeforeDragging = Point.Empty;//Used to return the correct scroll pos. after a drag
 
         // Component Tray Context menu items...
-        private MenuCommand menucmdArrangeIcons = null;
-        private MenuCommand menucmdLineupIcons = null;
-        private MenuCommand menucmdLargeIcons = null;
+        private readonly MenuCommand menucmdArrangeIcons = null;
+        private readonly MenuCommand menucmdLineupIcons = null;
+        private readonly MenuCommand menucmdLargeIcons = null;
         private bool fResetAmbient = false;
         private bool fSelectionChanged = false;
         private ComponentTrayGlyphManager glyphManager;//used to manage any glyphs added to the tray
@@ -225,7 +225,9 @@ namespace System.Windows.Forms.Design
         {
             ControlCollection children = (ControlCollection)Controls;
             if (children == null)
+            {
                 return;
+            }
 
             for (int i = 0; i < children.Count; ++i)
             {
@@ -306,7 +308,9 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (t != null)
+                {
                     t.Commit();
+                }
             }
         }
 
@@ -322,14 +326,19 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (t != null)
+                {
                     t.Commit();
+                }
             }
         }
 
         private void DoLineupIcons()
         {
             if (autoArrange)
+            {
                 return;
+            }
+
             bool oldValue = autoArrange;
             autoArrange = true;
             try
@@ -367,7 +376,9 @@ namespace System.Windows.Forms.Design
                 foreach (Control ctl in controls)
                 {
                     if (!ctl.Visible)
+                    {
                         continue;
+                    }
                     // If we're auto arranging, always move the control.  If not, move the control only if it was never given a position.  This auto arranges it until the user messes with it, or until its position is saved into the resx. (if one control is no longer positioned, move all the other one as  we don't want them to go under one another)
                     if (autoArrange)
                     {
@@ -409,7 +420,9 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (t != null)
+                {
                     t.Commit();
+                }
             }
         }
 
@@ -441,17 +454,57 @@ namespace System.Windows.Forms.Design
 
         internal GlyphCollection SelectionGlyphs
         {
-            get
+            return (extendee is IComponent comp) && (TrayControl.FromComponent(comp) != null);
+        }
+
+        IComponent IOleDragClient.Component
+        {
+            get => mainDesigner.Component;
+        }
+
+        bool IOleDragClient.CanModifyComponents
+        {
+            get => true;
+        }
+
+        bool IOleDragClient.AddComponent(IComponent component, string name, bool firstAdd)
+        {
+            // the designer for controls decides what to do here
+            if (mainDesigner is IOleDragClient oleDragClient)
             {
-                if (glyphManager != null)
+                try
                 {
-                    return glyphManager.SelectionGlyphs;
+                    oleDragClient.AddComponent(component, name, firstAdd);
+                    PositionControl(TrayControl.FromComponent(component));
+                    mouseDropLocation = InvalidPoint;
+                    return true;
                 }
-                else
+                catch
                 {
-                    return null;
                 }
             }
+            else
+            {
+                // for webforms (98109) just add the component directly to the host
+                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                try
+                {
+                    if (host != null && host.Container != null)
+                    {
+                        if (host.Container.Components[name] != null)
+                        {
+                            name = null;
+                        }
+                        host.Container.Add(component, name);
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+            Debug.Fail("Don't know how to add component!");
+            return false;
         }
 
         /// <summary>
@@ -471,6 +524,8 @@ namespace System.Windows.Forms.Design
                     Invalidate(true);
                 }
             }
+            Debug.Fail("component is not IComponent");
+            return null;
         }
 
         bool IExtenderProvider.CanExtend(object extendee)
@@ -555,6 +610,7 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
+                return dragHandler;
             }
             return result;
         }
@@ -627,7 +683,7 @@ namespace System.Windows.Forms.Design
         }
 
         bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY) => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
-        
+
         void ISelectionUIHandler.ShowContextMenu(IComponent component)
         {
             Point cur = Control.MousePosition;
@@ -743,13 +799,16 @@ namespace System.Windows.Forms.Design
             // Disallow controls to be added to the component tray.
             Type compType = host.GetType(tool.TypeName);
             if (compType == null)
+            {
                 return true;
+            }
+
             if (!compType.IsSubclassOf(typeof(Control)))
             {
                 return true;
             }
             Type designerType = GetDesignerType(compType, typeof(IDesigner));
-            return ! (typeof(ControlDesigner).IsAssignableFrom(designerType));
+            return !(typeof(ControlDesigner).IsAssignableFrom(designerType));
         }
 
         private Type GetDesignerType(Type t, Type designerBaseType)
@@ -1513,7 +1572,9 @@ namespace System.Windows.Forms.Design
                     {
                         int index = controls.IndexOf(c);
                         if (index != -1)
+                        {
                             controls.RemoveAt(index);
+                        }
                     }
                 }
                 finally
@@ -1759,7 +1820,9 @@ namespace System.Windows.Forms.Design
                 if (mouseDropLocation != InvalidPoint)
                 {
                     if (!c.Location.Equals(mouseDropLocation))
+                    {
                         c.Location = mouseDropLocation;
+                    }
                 }
                 else
                 {
@@ -2441,7 +2504,10 @@ namespace System.Windows.Forms.Design
             protected override void SetVisibleCore(bool value)
             {
                 if (value && !_tray.CanDisplayComponent(_component))
+                {
                     return;
+                }
+
                 base.SetVisibleCore(value);
             }
 
@@ -2774,13 +2840,19 @@ namespace System.Windows.Forms.Design
                 int height = ((Control)o1).Height / 2;
                 // If they are at the same location, they are equal.
                 if (tcLoc1.X == tcLoc2.X && tcLoc1.Y == tcLoc2.Y)
+                {
                     return 0;
+                }
                 // Is the first control lower than the 2nd...
                 if (tcLoc1.Y + height <= tcLoc2.Y)
+                {
                     return -1;
+                }
                 // Is the 2nd control lower than the first...
                 if (tcLoc2.Y + height <= tcLoc1.Y)
+                {
                     return 1;
+                }
                 // Which control is left of the other...
                 return ((tcLoc1.X <= tcLoc2.X) ? -1 : 1);
             }

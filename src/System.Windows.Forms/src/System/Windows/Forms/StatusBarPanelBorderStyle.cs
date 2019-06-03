@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     ///   Specifies the border style of a panel on the <see cref='System.Windows.Forms.StatusBar'/>.
-    /// </devdoc>
+    /// </summary>
     public enum StatusBarPanelBorderStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// No border.
-        /// </devdoc>
+        /// </summary>
         None = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// A raised border.
-        /// </devdoc>
+        /// </summary>
         Raised = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// A sunken border.
-        /// </devdoc>
+        /// </summary>
         Sunken = 3,
     }
 }

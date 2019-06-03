@@ -22,13 +22,16 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         /// Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static CollectionCodeDomSerializer GetDefault()
+        internal new static CollectionCodeDomSerializer Default
         {
-            if (s_defaultSerializer == null)
+            get
             {
-                s_defaultSerializer = new CollectionCodeDomSerializer();
+                if (s_defaultSerializer == null)
+                {
+                    s_defaultSerializer = new CollectionCodeDomSerializer();
+                }
+                return s_defaultSerializer;
             }
-            return s_defaultSerializer;
         }
 
         /// <summary>
@@ -151,7 +154,7 @@ namespace System.ComponentModel.Design.Serialization
                 throw new ArgumentNullException(nameof(value));
             }
             object result = null;
-            using (TraceScope("CollectionCodeDomSerializer::Serialize"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
             {
                 // We serialize collections as follows:
                 //      If the collection is an array, we write out the array.
@@ -305,10 +308,25 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
-            if (originalCollection == null) throw new ArgumentNullException(nameof(originalCollection));
-            if (valuesToSerialize == null) throw new ArgumentNullException(nameof(valuesToSerialize));
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (targetType == null)
+            {
+                throw new ArgumentNullException(nameof(targetType));
+            }
+
+            if (originalCollection == null)
+            {
+                throw new ArgumentNullException(nameof(originalCollection));
+            }
+
+            if (valuesToSerialize == null)
+            {
+                throw new ArgumentNullException(nameof(valuesToSerialize));
+            }
 
             object result = null;
             bool serialized = false;
@@ -406,7 +424,7 @@ namespace System.ComponentModel.Design.Serialization
         private CodeArrayCreateExpression SerializeArray(IDesignerSerializationManager manager, Type targetType, ICollection array, ICollection valuesToSerialize)
         {
             CodeArrayCreateExpression result = null;
-            using (TraceScope("CollectionCodeDomSerializer::SerializeArray"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeArray)))
             {
                 if (((Array)array).Rank != 1)
                 {
@@ -494,7 +512,7 @@ namespace System.ComponentModel.Design.Serialization
             ICollection valuesToSerialize)
         {
             CodeStatementCollection statements = new CodeStatementCollection();
-            using (TraceScope("CollectionCodeDomSerializer::SerializeViaAdd"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeViaAdd)))
             {
                 Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
                 // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
@@ -512,9 +530,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {
@@ -582,7 +604,7 @@ namespace System.ComponentModel.Design.Serialization
             ICollection valuesToSerialize)
         {
             CodeStatementCollection statements = new CodeStatementCollection();
-            using (TraceScope("CollectionCodeDomSerializer::SerializeViaAddRange"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeViaAddRange)))
             {
                 Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
 
@@ -600,9 +622,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {

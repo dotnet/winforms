@@ -613,6 +613,16 @@
         <target state="translated">Le type '{0}' n'a pas de propriété nommée '{1}'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">L'objet '{0}' a retourné null pour la propriété '{1}' mais cela n'est pas autorisé.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">Impossible de générer le code pour la propriété '{0}'. L'erreur était : '{1}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
         <target state="translated">Erreur lors de la lecture des ressources à partir du fichier de ressources pour la culture {0} : {1}</target>
@@ -790,7 +800,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_Layout">
         <source>Layout &amp;&amp; Appearance</source>
-        <target state="translated">&amp;Disposition et apparence</target>
+        <target state="translated">Disposition et apparence</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">

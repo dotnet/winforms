@@ -11,7 +11,7 @@ namespace System.Windows.Forms.VisualStyles
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum GroupBoxState
     {
-        Normal = 1, 
-        Disabled = 2 
+        Normal = 1,
+        Disabled = 2
     }
 }

@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Enum to be used with the drawMenuGlyph function.
-    /// </devdoc>
+    /// </summary>
     public enum MenuGlyph
     {
-        /// <devdoc>
+        /// <summary>
         /// Draws a submenu arrow.
-        /// </devdoc>
+        /// </summary>
         Arrow = NativeMethods.DFCS_MENUARROW,
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a menu checkmark.
-        /// </devdoc>
+        /// </summary>
         Checkmark = NativeMethods.DFCS_MENUCHECK,
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a menu bullet.
-        /// </devdoc>
+        /// </summary>
         Bullet = NativeMethods.DFCS_MENUBULLET,
 
         Min = NativeMethods.DFCS_MENUARROW,

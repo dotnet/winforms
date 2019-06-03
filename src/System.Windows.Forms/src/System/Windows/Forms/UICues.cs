@@ -4,36 +4,36 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies UI state.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum UICues
     {
-        /// <devdoc>
+        /// <summary>
         /// Focus rectangles are shown after the change.
-        /// </devdoc>
+        /// </summary>
         ShowFocus = 0x01,
-        
-        /// <devdoc>
+
+        /// <summary>
         /// Keyboard cues are underlined after the change.
-        /// </devdoc>
+        /// </summary>
         ShowKeyboard = 0x02,
-        
+
         Shown = ShowFocus | ShowKeyboard,
-        
-        /// <devdoc>
+
+        /// <summary>
         /// The state of the focus cues has changed.
-        /// </devdoc>
+        /// </summary>
         ChangeFocus = 0x04,
-        
-        /// <devdoc>
+
+        /// <summary>
         /// The state of the keyboard cues has changed.
-        /// </devdoc>
+        /// </summary>
         ChangeKeyboard = 0x08,
-        
+
         Changed = ChangeFocus | ChangeKeyboard,
-        
+
         None = 0x00,
     }
 }

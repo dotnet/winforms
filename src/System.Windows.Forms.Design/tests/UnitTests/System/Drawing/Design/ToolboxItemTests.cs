@@ -133,20 +133,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_Company_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_Company_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 Company = value
             };
-            Assert.Same(value, item.Company);
-            Assert.Same(value, item.Properties["Company"]);
+            Assert.Same(expected, item.Company);
+            Assert.Same(expected, item.Properties["Company"]);
 
             // Set same.
             item.Company = value;
-            Assert.Same(value, item.Company);
-            Assert.Same(value, item.Properties["Company"]);
+            Assert.Same(expected, item.Company);
+            Assert.Same(expected, item.Properties["Company"]);
         }
 
         [Fact]
@@ -209,20 +209,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_Description_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_Description_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 Description = value
             };
-            Assert.Same(value, item.Description);
-            Assert.Same(value, item.Properties["Description"]);
+            Assert.Same(expected, item.Description);
+            Assert.Same(expected, item.Properties["Description"]);
 
             // Set same.
             item.Description = value;
-            Assert.Same(value, item.Description);
-            Assert.Same(value, item.Properties["Description"]);
+            Assert.Same(expected, item.Description);
+            Assert.Same(expected, item.Properties["Description"]);
         }
 
         [Fact]
@@ -233,20 +233,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_DisplayName_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_DisplayName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 DisplayName = value
             };
-            Assert.Same(value ?? string.Empty, item.DisplayName);
-            Assert.Same(value ?? string.Empty, item.Properties["DisplayName"]);
+            Assert.Same(expected, item.DisplayName);
+            Assert.Same(expected, item.Properties["DisplayName"]);
 
             // Set same.
             item.DisplayName = value;
-            Assert.Same(value ?? string.Empty, item.DisplayName);
-            Assert.Same(value ?? string.Empty, item.Properties["DisplayName"]);
+            Assert.Same(expected, item.DisplayName);
+            Assert.Same(expected, item.Properties["DisplayName"]);
         }
 
         [Fact]
@@ -272,12 +272,12 @@ namespace System.Drawing.Design.Tests
             {
                 Filter = value
             };
-            Assert.Equal(expected , item.Filter);
+            Assert.Equal(expected, item.Filter);
             Assert.Equal(expected, item.Properties["Filter"]);
 
             // Set same.
             item.Filter = value;
-            Assert.Equal(expected , item.Filter);
+            Assert.Equal(expected, item.Filter);
             Assert.Equal(expected, item.Properties["Filter"]);
         }
 
@@ -296,12 +296,12 @@ namespace System.Drawing.Design.Tests
             {
                 IsTransient = value
             };
-            Assert.Equal(value , item.IsTransient);
+            Assert.Equal(value, item.IsTransient);
             Assert.Equal(value, item.Properties["IsTransient"]);
 
             // Set same.
             item.IsTransient = value;
-            Assert.Equal(value , item.IsTransient);
+            Assert.Equal(value, item.IsTransient);
             Assert.Equal(value, item.Properties["IsTransient"]);
         }
 
@@ -344,20 +344,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_TypeName_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_TypeName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 TypeName = value
             };
-            Assert.Same(value ?? string.Empty, item.TypeName);
-            Assert.Same(value ?? string.Empty, item.Properties["TypeName"]);
+            Assert.Same(expected, item.TypeName);
+            Assert.Same(expected, item.Properties["TypeName"]);
 
             // Set same.
             item.TypeName = value;
-            Assert.Same(value ?? string.Empty, item.TypeName);
-            Assert.Same(value ?? string.Empty, item.Properties["TypeName"]);
+            Assert.Same(expected, item.TypeName);
+            Assert.Same(expected, item.Properties["TypeName"]);
         }
 
         [Fact]
@@ -490,7 +490,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null));
             mockComponentInitializer
@@ -556,7 +556,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null))
                 .Throws(new Exception());
@@ -809,7 +809,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null));
             mockComponentInitializer
@@ -875,7 +875,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null))
                 .Throws(new Exception());
@@ -1209,16 +1209,22 @@ namespace System.Drawing.Design.Tests
                 yield return new object[] { null, new AssemblyName(typeof(ToolboxItemTests).Assembly.FullName), "NoSuchType", false, null };
                 yield return new object[] { null, null, string.Empty, false, null };
 
-                var validNameWithCodeBase = new AssemblyName(typeof(int).Assembly.FullName);
-                validNameWithCodeBase.CodeBase = "System.Windows.Forms.Design.Tests.dll";
+                var validNameWithCodeBase = new AssemblyName(typeof(int).Assembly.FullName)
+                {
+                    CodeBase = "System.Windows.Forms.Design.Tests.dll"
+                };
                 yield return new object[] { null, validNameWithCodeBase, "System.Drawing.Design.Tests.ToolboxItemTests", false, null };
 
-                var invalidNameWithCodeBase = new AssemblyName("NoSuchAssembly");
-                invalidNameWithCodeBase.CodeBase = "System.Windows.Forms.Design.Tests.dll";
+                var invalidNameWithCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "System.Windows.Forms.Design.Tests.dll"
+                };
                 yield return new object[] { null, invalidNameWithCodeBase, "System.Drawing.Design.Tests.ToolboxItemTests", false, typeof(ToolboxItemTests) };
 
-                var invalidNameWithInvalidCodeBase = new AssemblyName("NoSuchAssembly");
-                invalidNameWithInvalidCodeBase.CodeBase = "AlsoNoSuchAssembly";
+                var invalidNameWithInvalidCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "AlsoNoSuchAssembly"
+                };
                 yield return new object[] { null, invalidNameWithInvalidCodeBase, "System.Drawing.Design.Tests.ToolboxItemTests", false, null };
 
                 AssemblyLoadContext.Default.Resolving += (context, name) =>
@@ -1237,12 +1243,16 @@ namespace System.Drawing.Design.Tests
                 yield return new object[] { null, new AssemblyName("ThrowBadImageFormatException"), "System.Int32", false, typeof(int) };
                 yield return new object[] { null, new AssemblyName("ThrowIOException"), "System.Int32", false, typeof(int) };
 
-                var badImageFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly");
-                badImageFormatExceptionCodeBase.CodeBase = "ThrowBadImageFormatException";
+                var badImageFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "ThrowBadImageFormatException"
+                };
                 yield return new object[] { null, badImageFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
 
-                var ioFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly");
-                ioFormatExceptionCodeBase.CodeBase = "ThrowIOException";
+                var ioFormatExceptionCodeBase = new AssemblyName("NoSuchAssembly")
+                {
+                    CodeBase = "ThrowIOException"
+                };
                 yield return new object[] { null, ioFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
             }
 
@@ -1544,7 +1554,7 @@ namespace System.Drawing.Design.Tests
             yield return new object[] { "TypeName", null, string.Empty };
             yield return new object[] { "TypeName", "value", "value" };
 
-            var filter = new ToolboxItemFilterAttribute("filter");    
+            var filter = new ToolboxItemFilterAttribute("filter");
             yield return new object[] { "Filter", null, new ToolboxItemFilterAttribute[0] };
             yield return new object[] { "Filter", new ToolboxItemFilterAttribute[0], new ToolboxItemFilterAttribute[0] };
             yield return new object[] { "Filter", new object[] { null, "value", filter, filter }, new ToolboxItemFilterAttribute[] { filter, filter } };
@@ -1637,7 +1647,7 @@ namespace System.Drawing.Design.Tests
             {
                 return base.CreateComponentsCore(host, defaultValues);
             }
-            
+
             public new object FilterPropertyValue(string propertyName, object value)
             {
                 return base.FilterPropertyValue(propertyName, value);

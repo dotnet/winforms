@@ -8,13 +8,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum SizingType 
+    public enum SizingType
     {
-    	FixedSize = 0,
-    	Stretch = 1,
-    	Tile = 2,
-    //		TM_ENUM(0, ST, TRUESIZE)
-    //		TM_ENUM(1, ST, STRETCH)
-    //		TM_ENUM(2, ST, TILE)
+        FixedSize = 0,
+        Stretch = 1,
+        Tile = 2,
+        //		TM_ENUM(0, ST, TRUESIZE)
+        //		TM_ENUM(1, ST, STRETCH)
+        //		TM_ENUM(2, ST, TILE)
     }
 }

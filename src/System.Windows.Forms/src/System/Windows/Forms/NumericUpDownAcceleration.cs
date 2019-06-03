@@ -2,14 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
-  
-    /// <devdoc>
+
+    /// <summary>
     ///    Comprises the information specifying how acceleration should be performed
     ///     on a Windows up-down control when the up/down button is pressed for certain
     ///     amount of time.
-    /// </devdoc>
+    /// </summary>
     public class NumericUpDownAcceleration
     {
         private int seconds;      // Ideally we would use UInt32 but it is not CLS-compliant.
@@ -27,19 +28,19 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException(nameof(increment), increment, SR.NumericUpDownLessThanZeroError);
             }
 
-            this.seconds   = seconds;
+            this.seconds = seconds;
             this.increment = increment;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines the amount of time for the UpDown control to wait to set the increment
         ///     step when holding the up/down button.
-        /// </devdoc>
+        /// </summary>
         public int Seconds
         {
             get
             {
-                return this.seconds;
+                return seconds;
             }
             set
             {
@@ -47,18 +48,19 @@ namespace System.Windows.Forms {
                 {
                     throw new ArgumentOutOfRangeException(nameof(seconds), value, SR.NumericUpDownLessThanZeroError);
                 }
-                this.seconds = value;
+                seconds = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines the amount to increment by.
-        /// </devdoc>
-        public decimal Increment {
+        /// </summary>
+        public decimal Increment
+        {
 
-            get 
+            get
             {
-                return this.increment;
+                return increment;
             }
 
             set
@@ -67,7 +69,7 @@ namespace System.Windows.Forms {
                 {
                     throw new ArgumentOutOfRangeException(nameof(increment), value, SR.NumericUpDownLessThanZeroError);
                 }
-                this.increment = value;
+                increment = value;
             }
         }
     }

@@ -326,14 +326,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         event EventHandler ISelectionService.SelectionChanged
         {
-            add
-            {
-                _events.AddHandler(s_eventSelectionChanged, value);
-            }
-            remove
-            {
-                _events.RemoveHandler(s_eventSelectionChanged, value);
-            }
+            add => _events.AddHandler(s_eventSelectionChanged, value);
+            remove => _events.RemoveHandler(s_eventSelectionChanged, value);
         }
 
         /// <summary>
@@ -341,14 +335,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         event EventHandler ISelectionService.SelectionChanging
         {
-            add
-            {
-                _events.AddHandler(s_eventSelectionChanging, value);
-            }
-            remove
-            {
-                _events.RemoveHandler(s_eventSelectionChanging, value);
-            }
+            add => _events.AddHandler(s_eventSelectionChanging, value);
+            remove => _events.RemoveHandler(s_eventSelectionChanging, value);
         }
 
         /// <summary>
@@ -460,7 +448,10 @@ namespace System.ComponentModel.Design
                             foreach (object comp in components)
                             {
                                 if (comp == null)
+                                {
                                     throw new ArgumentNullException(nameof(components));
+                                }
+
                                 if (object.ReferenceEquals(comp, item))
                                 {
                                     remove = false;
@@ -481,7 +472,9 @@ namespace System.ComponentModel.Design
                 foreach (object comp in components)
                 {
                     if (comp == null)
+                    {
                         throw new ArgumentNullException(nameof(components));
+                    }
 
                     if (_selection != null && _selection.Contains(comp))
                     {

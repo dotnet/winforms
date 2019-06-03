@@ -29,9 +29,9 @@ namespace System.Windows.Forms
         public DataGridViewCellStyle CellStyle { get; set; }
 
         public int ColumnIndex { get; }
-        
+
         public bool FormattingApplied { get; set; }
-        
+
         public int RowIndex { get; }
     }
 }

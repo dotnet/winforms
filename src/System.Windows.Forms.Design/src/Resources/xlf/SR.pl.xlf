@@ -613,6 +613,16 @@
         <target state="translated">Typ '{0}' nie zawiera właściwości o nazwie '{1}'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">Obiekt '{0}' zwrócił wartość zerową dla właściwości '{1}', co nie jest dozwolone.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">Generowanie kodu dla właściwości '{0}' nie powiodło się. Błąd: '{1}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
         <target state="translated">Błąd podczas odczytu zasobów z pliku zasobów dla kultury {0}: {1}</target>

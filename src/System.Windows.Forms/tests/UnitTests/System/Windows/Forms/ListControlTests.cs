@@ -758,7 +758,7 @@ namespace System.Windows.Forms.Tests
             {
                 BindingContext = context
             };
-            
+
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
@@ -795,7 +795,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DataSource = new List<int>()
             };
-            
+
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DisplayMember = "Value"
             };
-    
+
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Equal("Value", control.DisplayMember);
@@ -965,27 +965,27 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void DisplayMember_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DisplayMember_Set_GetReturnsExpected(string value, string expected)
         {
             var control = new SubListControl
             {
                 DisplayMember = value
             };
             Assert.Null(control.DataSource);
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
+            Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
+            Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataManager);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void DataMember_SetWithDisplayMember_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataMember_SetWithDisplayMember_GetReturnsExpected(string value, string expected)
         {
             var control = new SubListControl
             {
@@ -993,13 +993,13 @@ namespace System.Windows.Forms.Tests
             };
 
             control.DisplayMember = value;
-            Assert.Equal(value ?? string.Empty, control.DisplayMember);
+            Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
-            Assert.Equal(value ?? string.Empty, control.DisplayMember);
+            Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
         }
@@ -1027,23 +1027,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void DisplayMember_SetWithBindingContext_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DisplayMember_SetWithBindingContext_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
             var control = new SubListControl
             {
                 BindingContext = context
             };
-            
+
             control.DisplayMember = value;
-            Assert.Equal(value ?? string.Empty, control.DisplayMember);
+            Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
-            Assert.Equal(value ?? string.Empty, control.DisplayMember);
+            Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
         }
@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DataSource = dataSource
             };
-            
+
             control.DisplayMember = value;
             Assert.Empty(control.DisplayMember);
             Assert.Same(dataSource, control.DataSource);
@@ -1073,11 +1073,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("Value")]
-        [InlineData("value")]
-        public void DisplayMember_SetWithBindingContextWithDataSourceCanCreate_GetReturnsExpected(string value)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("Value", "Value")]
+        [InlineData("value", "value")]
+        public void DisplayMember_SetWithBindingContextWithDataSourceCanCreate_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
             var dataSource = new List<DataClass>();
@@ -1086,15 +1086,15 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DataSource = dataSource
             };
-    
+
             control.DisplayMember = value;
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Equal(dataSource, control.DataSource);
             Assert.Same(context[dataSource], control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Equal(dataSource, control.DataSource);
             Assert.Same(context[dataSource], control.DataManager);
         }
@@ -1339,23 +1339,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void FormatString_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void FormatString_Set_GetReturnsExpected(string value, string expected)
         {
             var control = new SubListControl
             {
                 FormatString = value
             };
-            Assert.Equal(value ?? string.Empty, control.FormatString);
+            Assert.Same(expected, control.FormatString);
 
             // Set same.
             control.FormatString = value;
-            Assert.Equal(value ?? string.Empty, control.FormatString);
+            Assert.Same(expected, control.FormatString);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void FormatString_SetWithFormatString_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void FormatString_SetWithFormatString_GetReturnsExpected(string value, string expected)
         {
             var control = new SubListControl
             {
@@ -1363,11 +1363,11 @@ namespace System.Windows.Forms.Tests
             };
 
             control.FormatString = value;
-            Assert.Equal(value ?? string.Empty, control.FormatString);
+            Assert.Same(expected, control.FormatString);
 
             // Set same.
             control.FormatString = value;
-            Assert.Equal(value ?? string.Empty, control.FormatString);
+            Assert.Same(expected, control.FormatString);
         }
 
         [Fact]
@@ -1539,29 +1539,29 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ValueMember_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ValueMember_Set_GetReturnsExpected(string value, string expected)
         {
             var control = new SubListControl
             {
                 ValueMember = value
             };
             Assert.Null(control.DataSource);
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
-            Assert.Same(value ?? string.Empty, control.ValueMember);
+            Assert.Same(expected, control.DisplayMember);
+            Assert.Same(expected, control.ValueMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
-            Assert.Same(value ?? string.Empty, control.ValueMember);
+            Assert.Same(expected, control.DisplayMember);
+            Assert.Same(expected, control.ValueMember);
             Assert.Null(control.DataManager);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ValueMember_SetWithDisplayMember_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ValueMember_SetWithDisplayMember_GetReturnsExpected(string value, string expected)
         {
             var control = new SubListControl
             {
@@ -1571,20 +1571,20 @@ namespace System.Windows.Forms.Tests
             control.ValueMember = value;
             Assert.Null(control.DataSource);
             Assert.Equal("DisplayMember", control.DisplayMember);
-            Assert.Same(value ?? string.Empty, control.ValueMember);
+            Assert.Same(expected, control.ValueMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Null(control.DataSource);
             Assert.Equal("DisplayMember", control.DisplayMember);
-            Assert.Same(value ?? string.Empty, control.ValueMember);
+            Assert.Same(expected, control.ValueMember);
             Assert.Null(control.DataManager);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ValueMember_SetWithBindingContext_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ValueMember_SetWithBindingContext_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
             var control = new SubListControl
@@ -1594,24 +1594,24 @@ namespace System.Windows.Forms.Tests
 
             control.ValueMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
-            Assert.Same(value ?? string.Empty, control.ValueMember);
+            Assert.Same(expected, control.DisplayMember);
+            Assert.Same(expected, control.ValueMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(value ?? string.Empty, control.DisplayMember);
-            Assert.Same(value ?? string.Empty, control.ValueMember);
+            Assert.Same(expected, control.DisplayMember);
+            Assert.Same(expected, control.ValueMember);
             Assert.Null(control.DataManager);
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("Value")]
-        [InlineData("value")]
-        public void ValueMember_SetWithBindingContextWithDataSourceCanCreate_GetReturnsExpected(string value)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("Value", "Value")]
+        [InlineData("value", "value")]
+        public void ValueMember_SetWithBindingContextWithDataSourceCanCreate_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
             var dataSource = new List<DataClass>();
@@ -1623,15 +1623,15 @@ namespace System.Windows.Forms.Tests
 
             control.ValueMember = value;
             Assert.Same(dataSource, control.DataSource);
-            Assert.Equal(value ?? string.Empty, control.DisplayMember);
-            Assert.Equal(value ?? string.Empty, control.ValueMember);
+            Assert.Equal(expected, control.DisplayMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Same(context[dataSource], control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Same(dataSource, control.DataSource);
-            Assert.Equal(value ?? string.Empty, control.DisplayMember);
-            Assert.Equal(value ?? string.Empty, control.ValueMember);
+            Assert.Equal(expected, control.DisplayMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Same(context[dataSource], control.DataManager);
         }
 
@@ -1652,11 +1652,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("Value")]
-        [InlineData("value")]
-        public void ValueMember_SetWithBindingContextWithDataSourceWithDisplayMemberCanCreate_GetReturnsExpected(string value)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("Value", "Value")]
+        [InlineData("value", "value")]
+        public void ValueMember_SetWithBindingContextWithDataSourceWithDisplayMemberCanCreate_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
             var dataSource = new List<DataClass>();
@@ -1670,14 +1670,14 @@ namespace System.Windows.Forms.Tests
             control.ValueMember = value;
             Assert.Same(dataSource, control.DataSource);
             Assert.Equal("OtherValue", control.DisplayMember);
-            Assert.Equal(value ?? string.Empty, control.ValueMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Same(context[dataSource], control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Same(dataSource, control.DataSource);
             Assert.Equal("OtherValue", control.DisplayMember);
-            Assert.Equal(value ?? string.Empty, control.ValueMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Same(context[dataSource], control.DataManager);
         }
 
@@ -1782,9 +1782,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> SelectedValue_NoMatchingValue_TestData()
         {
             yield return new object[] { new List<DataClass>(), "selected" };
-            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" }}, string.Empty };
-            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" }}, "selected" };
-            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" }}, "nosuchvalue" };
+            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, string.Empty };
+            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, "selected" };
+            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, "nosuchvalue" };
         }
 
         [Theory]
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.SelectedIndex);
             Assert.Throws<IndexOutOfRangeException>(() => control.SelectedValue);
         }
- 
+
         [Theory]
         [InlineData(Keys.Alt, false)]
         [InlineData(Keys.Alt | Keys.PageUp, false)]
@@ -2745,7 +2745,7 @@ namespace System.Windows.Forms.Tests
             public new void OnBindingContextChanged(EventArgs e) => base.OnBindingContextChanged(e);
 
             public new void OnDataSourceChanged(EventArgs e) => base.OnDataSourceChanged(e);
-            
+
             public new void OnDisplayMemberChanged(EventArgs e) => base.OnDisplayMemberChanged(e);
 
             public new void OnFormat(ListControlConvertEventArgs e) => base.OnFormat(e);

@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private static bool enableHighDpi = false;
         private static string dpiAwarenessValue = null;
         private static InterpolationMode interpolationMode = InterpolationMode.Invalid;
-        
+
         // Following quirks are not used in System.Drawing.  Making sure they light up only in the required binaries.
 #if (!DRAWING_NAMESPACE)
         private static bool isDpiHelperQuirksInitialized = false;
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
         }
 
         internal static void InitializeDpiHelperQuirks()
-        { 
+        {
             if (isDpiHelperQuirksInitialized)
             {
                 return;
@@ -159,8 +159,7 @@ namespace System.Windows.Forms
             try
             {
                 // Redstone 2 or greater, where all APIs required by this feature are available
-                if ((Environment.OSVersion.Platform == System.PlatformID.Win32NT) &&
-                        (Environment.OSVersion.Version.CompareTo(ConfigurationOptions.RS2Version) >= 0) &&
+                if ((Environment.OSVersion.Version.CompareTo(ConfigurationOptions.RS2Version) >= 0) &&
                         (IsExpectedConfigValue(ConfigurationStringConstants.DisableDpiChangedMessageHandlingKeyName, false)) &&
                         (IsDpiAwarenessValueSet()) &&
                         // The dynamic scaling features are implemented only in comclt32 v6, no point to
@@ -241,8 +240,7 @@ namespace System.Windows.Forms
         internal static bool IsExpectedConfigValue(string configurationSettingName, bool expectedValue)
         {
             string value = ConfigurationOptions.GetConfigSettingValue(configurationSettingName);
-            bool valueAsBool;
-            if (!bool.TryParse(value, out valueAsBool))
+            if (!bool.TryParse(value, out bool valueAsBool))
             {
                 // neither 'true' nor 'false' - implies 'false'
                 valueAsBool = false;
@@ -370,12 +368,12 @@ namespace System.Windows.Forms
         }
 
 #endif
-        internal static int DeviceDpi 
+        internal static int DeviceDpi
         {
-            get 
+            get
             {
                 Initialize();
-                return (int)deviceDpi; 
+                return (int)deviceDpi;
             }
         }
 
@@ -394,9 +392,9 @@ namespace System.Windows.Forms
 
         private static InterpolationMode InterpolationMode
         {
-            get 
+            get
             {
-                if (interpolationMode == InterpolationMode.Invalid) 
+                if (interpolationMode == InterpolationMode.Invalid)
                 {
                     int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
 
@@ -406,15 +404,15 @@ namespace System.Windows.Forms
                     // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
                     // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better 
                     // results because it uses less neighboring pixels.
-                    if ((dpiScalePercent % 100) == 0) 
+                    if ((dpiScalePercent % 100) == 0)
                     {
                         interpolationMode = InterpolationMode.NearestNeighbor;
-                    } 
-                    else if (dpiScalePercent < 100) 
+                    }
+                    else if (dpiScalePercent < 100)
                     {
                         interpolationMode = InterpolationMode.HighQualityBilinear;
-                    } 
-                    else 
+                    }
+                    else
                     {
                         interpolationMode = InterpolationMode.HighQualityBicubic;
                     }
@@ -448,7 +446,7 @@ namespace System.Windows.Forms
             return deviceImage;
         }
 
-        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0) 
+        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
         {
             Size deviceImageSize = DpiHelper.LogicalToDeviceUnits(logicalImage.Size, deviceDpi);
             return ScaleBitmapToSize(logicalImage, deviceImageSize);
@@ -473,9 +471,9 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">value in logical units</param>
         /// <returns>value in device units</returns>
-        public static int LogicalToDeviceUnits(int value, int devicePixels = 0) 
+        public static int LogicalToDeviceUnits(int value, int devicePixels = 0)
         {
-            if (devicePixels == 0) 
+            if (devicePixels == 0)
             {
                 return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * (double)value);
             }
@@ -489,7 +487,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">The horizontal value in logical units</param>
         /// <returns>The horizontal value in device units</returns>
-        public static int LogicalToDeviceUnitsX(int value) 
+        public static int LogicalToDeviceUnitsX(int value)
         {
             return LogicalToDeviceUnits(value, 0);
         }
@@ -500,11 +498,11 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">The vertical value in logical units</param>
         /// <returns>The vertical value in device units</returns>
-        public static int LogicalToDeviceUnitsY(int value) 
+        public static int LogicalToDeviceUnitsY(int value)
         {
             return LogicalToDeviceUnits(value, 0);
         }
-        
+
         /// <summary>
         /// Returns a new Size with the input's
         /// dimensions converted from logical units to device units.
@@ -539,7 +537,7 @@ namespace System.Windows.Forms
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public static void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap, int deviceDpi = 0)
         {
-            if (logicalBitmap == null) 
+            if (logicalBitmap == null)
             {
                 return;
             }
@@ -566,8 +564,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            Bitmap buttonBitmap = button.Image as Bitmap;
-            if (buttonBitmap == null)
+            if (!(button.Image is Bitmap buttonBitmap))
             {
                 return;
             }

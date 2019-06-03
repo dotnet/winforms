@@ -19,11 +19,8 @@ namespace System.Windows.Forms
         // Minimum supported framework version for this feature.
         private static readonly Version featureSupportedMinimumFrameworkVersion = new Version(4, 7);
 
-        // Current OS version
-        internal static Version OSVersion = Environment.OSVersion.Version;
-           
         // RS2 build number - we may need to change once we know RTM version. below is pre-RTM RS2 version.
-        internal static readonly Version RS2Version = new Version(10, 0, 14933, 0); 
+        internal static readonly Version RS2Version = new Version(10, 0, 14933, 0);
 
         static ConfigurationOptions()
         {
@@ -54,21 +51,23 @@ namespace System.Windows.Forms
             {
                 if (netFrameworkVersion == null)
                 {
-                    netFrameworkVersion = new Version(0,0,0,0);  // by default version set to 0.0.0.0
+                    netFrameworkVersion = new Version(0, 0, 0, 0);  // by default version set to 0.0.0.0
 
                     // TargetFrameworkName can be null in certain scenarios.
                     try
                     {
-                        var targetFrameworkName= AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
+                        var targetFrameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
                         if (!string.IsNullOrEmpty(targetFrameworkName))
                         {
                             var frameworkName = new FrameworkName(targetFrameworkName);
                             if (string.Equals(frameworkName.Identifier, ".NETFramework"))
+                            {
                                 netFrameworkVersion = frameworkName.Version;
+                            }
                         }
                     }
                     catch (Exception e)
-                    {   
+                    {
                         Debug.WriteLine("Exception while reading Framework version : " + e.ToString());
                     }
                 }

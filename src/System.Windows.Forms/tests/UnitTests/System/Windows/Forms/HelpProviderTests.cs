@@ -65,11 +65,11 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, provider.Tag);
+            Assert.Same(value, provider.Tag);
 
             // Set same.
             provider.Tag = value;
-            Assert.Equal(value, provider.Tag);
+            Assert.Same(value, provider.Tag);
         }
 
         public static IEnumerable<object[]> CanExtend_TestData()
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Tests
             var provider = new HelpProvider();
             Assert.Null(provider.GetHelpKeyword(new Control()));
         }
-        
+
         [Fact]
         public void HelpProvider_GetHelpKeyword_NullCtl_ThrowsArgumentNullException()
         {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
             var provider = new HelpProvider();
             Assert.Equal(HelpNavigator.AssociateIndex, provider.GetHelpNavigator(new Control()));
         }
-        
+
         [Fact]
         public void HelpProvider_GetHelpNavigator_NullCtl_ThrowsArgumentNullException()
         {
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Tests
             var provider = new HelpProvider();
             Assert.Null(provider.GetHelpString(new Control()));
         }
-        
+
         [Fact]
         public void HelpProvider_GetHelpString_NullCtl_ThrowsArgumentNullException()
         {
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Tests
             var provider = new HelpProvider();
             Assert.False(provider.GetShowHelp(new Control()));
         }
-        
+
         [Fact]
         public void HelpProvider_GetShowHelp_NullCtl_ThrowsArgumentNullException()
         {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!string.IsNullOrEmpty(keyword), provider.GetShowHelp(control));
             Assert.Equal(expectedHelpTopic, control.AccessibilityObject.GetHelpTopic(out string fileName));
             Assert.Equal(expectedFileName, fileName);
-            
+
             // Set same.
             provider.SetHelpKeyword(control, keyword);
             Assert.Same(keyword, provider.GetHelpKeyword(control));
@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!string.IsNullOrEmpty(keyword), provider.GetShowHelp(control));
             Assert.Equal(expectedFileName, fileName);
         }
-        
+
         [Fact]
         public void HelpProvider_SetHelpKeyword_NullCtl_ThrowsArgumentNullException()
         {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.Tests
             provider.SetHelpNavigator(control, navigator);
             Assert.Equal(navigator, provider.GetHelpNavigator(control));
             Assert.True(provider.GetShowHelp(control));
-            
+
             // Set same.
             provider.SetHelpNavigator(control, navigator);
             Assert.Equal(navigator, provider.GetHelpNavigator(control));
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(navigator, provider.GetHelpNavigator(control));
             Assert.True(provider.GetShowHelp(control));
         }
-        
+
         [Fact]
         public void HelpProvider_SetHelpNavigator_NullCtl_ThrowsArgumentNullException()
         {
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(helpString, provider.GetHelpString(control));
             Assert.Equal(!string.IsNullOrEmpty(helpString), provider.GetShowHelp(control));
             Assert.Equal(string.IsNullOrEmpty(helpString) ? null : helpString, control.AccessibilityObject.Help);
-            
+
             // Set same.
             provider.SetHelpString(control, helpString);
             Assert.Same(helpString, provider.GetHelpString(control));
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!string.IsNullOrEmpty(helpString), provider.GetShowHelp(control));
             Assert.Equal(string.IsNullOrEmpty(helpString) ? null : helpString, control.AccessibilityObject.Help);
         }
-        
+
         [Fact]
         public void HelpProvider_SetHelpString_NullCtl_ThrowsArgumentNullException()
         {
@@ -446,21 +446,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("HelpNamespace", fileName);
             Assert.Equal("HelpString", control.AccessibilityObject.Help);
         }
-        
+
         [Fact]
         public void HelpProvider_SetShowHelp_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
             Assert.Throws<ArgumentNullException>("key", () => provider.SetShowHelp(null, true));
         }
-        
+
         [Fact]
         public void HelpProvider_ShouldSerializeShowHelp_NoSuchControl_ReturnsFalse()
         {
             var provider = new HelpProvider();
             Assert.False(provider.ShouldSerializeShowHelp(new Control()));
         }
-        
+
         [Fact]
         public void HelpProvider_ShouldSerializeShowHelp_NullCtl_ThrowsArgumentNullException()
         {

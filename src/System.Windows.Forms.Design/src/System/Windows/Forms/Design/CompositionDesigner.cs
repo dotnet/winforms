@@ -78,7 +78,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <internalonly />
         /// <summary>
         ///     The view for this document.  The designer
         ///     should assume that the view will be shown shortly

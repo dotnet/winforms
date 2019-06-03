@@ -4,8 +4,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-using System.Security;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -50,9 +48,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsChild(HandleRef hWndParent, HandleRef hwnd);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds,
             int dwWakeMask, int dwFlags);
@@ -75,10 +70,10 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
         private static extern IntPtr IntGetDC(HandleRef hWnd);
-        
+
         public static IntPtr GetDC(HandleRef hWnd)
         {
-            return System.Internal.HandleCollector.Add(IntGetDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
@@ -86,7 +81,7 @@ namespace System.Windows.Forms.Design
 
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
         {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntReleaseDC(hWnd, hDC);
         }
 
@@ -108,7 +103,11 @@ namespace System.Windows.Forms.Design
         //it'll be OK.
         public static IntPtr GetWindowLong(HandleRef hWnd, int nIndex)
         {
-            if (IntPtr.Size == 4) return GetWindowLong32(hWnd, nIndex);
+            if (IntPtr.Size == 4)
+            {
+                return GetWindowLong32(hWnd, nIndex);
+            }
+
             return GetWindowLongPtr64(hWnd, nIndex);
         }
 
@@ -131,7 +130,11 @@ namespace System.Windows.Forms.Design
         //it'll be OK.
         public static IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong)
         {
-            if (IntPtr.Size == 4) return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
+            if (IntPtr.Size == 4)
+            {
+                return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
+            }
+
             return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
         }
 

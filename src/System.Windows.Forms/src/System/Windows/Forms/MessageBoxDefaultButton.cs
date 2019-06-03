@@ -9,22 +9,22 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxDefaultButton
     {
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the first button on the message box should be the
         /// default button.
-        /// </devdoc>
+        /// </summary>
         Button1 = 0x00000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the second button on the message box should be the
         /// default button.
-        /// </devdoc>
+        /// </summary>
         Button2 = 0x00000100,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the third button on the message box should be the
         /// default button.
-        /// </devdoc>
+        /// </summary>
         Button3 = 0x00000200,
     }
 }

@@ -8,7 +8,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal sealed class GridEntryCollection : GridItemCollection
     {
-        private GridEntry _owner;
+        private readonly GridEntry _owner;
 
         public GridEntryCollection(GridEntry owner, GridEntry[] entries) : base(entries)
         {

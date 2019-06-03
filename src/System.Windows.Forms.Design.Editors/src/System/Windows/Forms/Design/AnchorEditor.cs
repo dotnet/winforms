@@ -25,7 +25,6 @@ namespace System.Windows.Forms.Design
         /// Edits the given object value using the editor style provided by
         /// GetEditorStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             IWindowsFormsEditorService edSvc =
@@ -33,7 +32,11 @@ namespace System.Windows.Forms.Design
 
             if (edSvc != null)
             {
-                if (anchorUI == null) anchorUI = new AnchorUI(this);
+                if (anchorUI == null)
+                {
+                    anchorUI = new AnchorUI(this);
+                }
+
                 anchorUI.Start(edSvc, value);
                 edSvc.DropDownControl(anchorUI);
                 value = anchorUI.Value;
@@ -46,7 +49,6 @@ namespace System.Windows.Forms.Design
         /// <summary>>
         /// Gets the editing style of the Edit method.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
@@ -92,10 +94,26 @@ namespace System.Windows.Forms.Design
             public virtual AnchorStyles GetSelectedAnchor()
             {
                 AnchorStyles baseVar = 0;
-                if (left.GetSolid()) baseVar |= AnchorStyles.Left;
-                if (top.GetSolid()) baseVar |= AnchorStyles.Top;
-                if (bottom.GetSolid()) baseVar |= AnchorStyles.Bottom;
-                if (right.GetSolid()) baseVar |= AnchorStyles.Right;
+                if (left.GetSolid())
+                {
+                    baseVar |= AnchorStyles.Left;
+                }
+
+                if (top.GetSolid())
+                {
+                    baseVar |= AnchorStyles.Top;
+                }
+
+                if (bottom.GetSolid())
+                {
+                    baseVar |= AnchorStyles.Bottom;
+                }
+
+                if (right.GetSolid())
+                {
+                    baseVar |= AnchorStyles.Right;
+                }
+
                 return baseVar;
             }
 
@@ -191,7 +209,11 @@ namespace System.Windows.Forms.Design
 
             private void Teardown(bool saveAnchor)
             {
-                if (!saveAnchor) Value = oldAnchor;
+                if (!saveAnchor)
+                {
+                    Value = oldAnchor;
+                }
+
                 edSvc.CloseDropDown();
             }
 
@@ -235,9 +257,7 @@ namespace System.Windows.Forms.Design
 
                 public SpringControl(AnchorUI picker)
                 {
-                    if (picker == null)
-                        throw new ArgumentException();
-                    this.picker = picker;
+                    this.picker = picker ?? throw new ArgumentException();
                     TabStop = true;
                 }
 
@@ -328,6 +348,7 @@ namespace System.Windows.Forms.Design
                     if ((keyData & Keys.KeyCode) == Keys.Tab && (keyData & (Keys.Alt | Keys.Control)) == 0)
                     {
                         for (int i = 0; i < picker.tabOrder.Length; i++)
+                        {
                             if (picker.tabOrder[i] == this)
                             {
                                 i += (keyData & Keys.Shift) == 0 ? 1 : -1;
@@ -335,6 +356,7 @@ namespace System.Windows.Forms.Design
                                 picker.tabOrder[i].Focus();
                                 break;
                             }
+                        }
 
                         return true;
                     }
@@ -364,7 +386,10 @@ namespace System.Windows.Forms.Design
                         {
                             AccessibleStates state = base.State;
 
-                            if (((SpringControl)Owner).GetSolid()) state |= AccessibleStates.Selected;
+                            if (((SpringControl)Owner).GetSolid())
+                            {
+                                state |= AccessibleStates.Selected;
+                            }
 
                             return state;
                         }

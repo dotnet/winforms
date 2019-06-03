@@ -12,17 +12,17 @@ using System.Reflection;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// ListViewItemConverter is a class that can be used to convert
     /// ListViewItem objects from one data type to another.  Access this
     /// class through the TypeDescriptor.
-    /// </devdoc>
+    /// </summary>
     public class ListViewItemConverter : ExpandableObjectConverter
     {
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether this converter can convert an object to the given
         /// destination type using the context.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
@@ -33,13 +33,13 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to another type. The most common types to convert
         /// are to and from a string object. The default implementation will make a call
         /// to ToString on the object if the object is valid and if the destination
         /// type is string. If this cannot convert to the desitnation type, this will
         /// throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
             if (destinationType == null)
@@ -51,13 +51,13 @@ namespace System.Windows.Forms
             {
                 ConstructorInfo ctor;
                 // Should we use the subitem constructor?
-                for(int i = 1; i < item.SubItems.Count; ++i)
+                for (int i = 1; i < item.SubItems.Count; ++i)
                 {
                     if (item.SubItems[i].CustomStyle)
                     {
                         if (!string.IsNullOrEmpty(item.ImageKey))
                         {
-                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string)});
+                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string) });
                             Debug.Assert(ctor != null, "Expected the constructor to exist.");
                             ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                             ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int)});
+                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int) });
                             Debug.Assert(ctor != null, "Expected the constructor to exist.");
                             ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                             ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
 
                 // Convert SubItem array to string array
                 string[] subItems = new string[item.SubItems.Count];
-                for(int i=0; i < subItems.Length; ++i)
+                for (int i = 0; i < subItems.Length; ++i)
                 {
                     subItems[i] = item.SubItems[i].Text;
                 }
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
                 // Otherwise, just use the text constructor
                 ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
                 Debug.Assert(ctor != null, "Expected the constructor to exist.");
-                return new InstanceDescriptor(ctor, new object[] {null, item.Text}, true);
+                return new InstanceDescriptor(ctor, new object[] { null, item.Text }, true);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

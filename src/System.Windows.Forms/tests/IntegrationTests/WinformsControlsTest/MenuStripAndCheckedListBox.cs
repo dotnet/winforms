@@ -27,7 +27,7 @@ namespace WinformsControlsTest
         {
             currentDpiLabel.Text = $"Current scaling = {(int)Math.Round((DeviceDpi / 96.0) * 100)}%";
 
-            this.menuStrip1.SuspendLayout();
+            menuStrip1.SuspendLayout();
 
             float factor = (float)e.DeviceDpiNew / e.DeviceDpiOld;
 
@@ -43,7 +43,7 @@ namespace WinformsControlsTest
             Font f = menuStrip1.Font;
             menuStrip1.Font = new Font(f.FontFamily, f.Size * factor, f.Style);
 
-            this.menuStrip1.ResumeLayout();
+            menuStrip1.ResumeLayout();
 
         }
     }

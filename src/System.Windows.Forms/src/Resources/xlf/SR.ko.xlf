@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">가로 스크롤 막대</target>
+        <target state="translated">가로</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">세로 스크롤 막대</target>
+        <target state="translated">세로</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -5182,7 +5182,7 @@ just-in-time (JIT) debugging instead of this dialog box.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">확인</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
