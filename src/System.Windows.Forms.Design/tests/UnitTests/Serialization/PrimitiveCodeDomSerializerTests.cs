@@ -20,7 +20,13 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPrimitiveExpressionTheoryData))]
+        [InlineData(null)]
+        [InlineData(false)]
+        [InlineData("some string")]
+        [InlineData('c')]
+        [InlineData(42)]
+        [InlineData(42F)]
+        [InlineData(42.123)]
         public void PrimitiveCodeDomSerializerTests_Serialize(object input)
         {
             var manager = new DesignerSerializationManager();

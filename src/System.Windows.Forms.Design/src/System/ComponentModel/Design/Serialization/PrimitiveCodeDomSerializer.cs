@@ -47,21 +47,25 @@ namespace System.ComponentModel.Design.Serialization
 
             CodeExpression expression = new CodePrimitiveExpression(value);
 
-            if (value != null)
+            if (value == null)
             {
-                if (value is string stringValue)
+				return expression;
+			}
+			
+            if (value is string stringValue)
+            {
+                if (stringValue.Length > 200)
                 {
-                    if (stringValue.Length > 200)
-                    {
-                        expression = SerializeToResourceExpression(manager, stringValue);
-                    }
+                    expression = SerializeToResourceExpression(manager, stringValue);
                 }
-                else if (!(value is bool || value is char || value is int || value is float || value is double))
-                {
-                    // Generate a cast for all other types because we won't parse them properly otherwise 
-                    // because we won't know to convert them to the narrow form.
-                    expression = new CodeCastExpression(new CodeTypeReference(value.GetType()), expression);
-                }
+				return expression;
+            }
+                
+		    if (!(value is bool || value is char || value is int || value is float || value is double))
+            {
+                // Generate a cast for all other types because we won't parse them properly otherwise 
+                // because we won't know to convert them to the narrow form.
+                expression = new CodeCastExpression(new CodeTypeReference(value.GetType()), expression);
             }
 
             return expression;

@@ -164,6 +164,7 @@ namespace WinForms.Common.Tests
 
         // helper method to generate theory data for a span of string values
         private const string reasonable = nameof(reasonable);
+
         public static TheoryData<string> GetStringTheoryData()
         {
             var data = new TheoryData<string>
@@ -453,22 +454,6 @@ namespace WinForms.Common.Tests
         }
 
         #endregion
-
-        #region CodeDOM
-        public static TheoryData<object> GetPrimitiveExpressionTheoryData()
-        {
-            var data = new TheoryData<object>
-            {
-                false,
-                "aaa",
-                'a',
-                42,
-                42F,
-                42.123
-            };
-            return data;
-        }
-        #endregion CodeDOM
     }
 
     [Flags]
