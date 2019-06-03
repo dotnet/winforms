@@ -2274,7 +2274,7 @@ namespace System.Windows.Forms
             {
                 if (defaultFont == null)
                 {
-                    defaultFont = SystemFonts.DefaultFont;
+                    defaultFont = SystemFonts.MessageBoxFont;
                     Debug.Assert(defaultFont != null, "defaultFont wasn't set!");
                 }
 
