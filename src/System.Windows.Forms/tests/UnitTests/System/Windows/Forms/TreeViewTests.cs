@@ -1914,10 +1914,10 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(-1, 19)]
         [InlineData(0, 15)]
-        [InlineData(1, 15)]
-        [InlineData(2, 15)]
-        [InlineData(5, 15)]
-        [InlineData(6, 15)]
+        [InlineData(1, 5)]
+        [InlineData(2, 5)]
+        [InlineData(5, 5)]
+        [InlineData(6, 6)]
         [InlineData(32000, 32000)]
         public void Indent_SetWithHandle_GetReturnsExpected(int value, int expected)
         {
