@@ -163,12 +163,14 @@ namespace WinForms.Common.Tests
         }
 
         // helper method to generate theory data for a span of string values
+        private const string reasonable = nameof(reasonable);
+
         public static TheoryData<string> GetStringTheoryData()
         {
             var data = new TheoryData<string>
             {
                 string.Empty,
-                "reasonable"
+                reasonable
             };
             return data;
         }
@@ -179,7 +181,7 @@ namespace WinForms.Common.Tests
             {
                 null,
                 string.Empty,
-                "reasonable"
+                reasonable
             };
             return data;
         }
@@ -200,7 +202,7 @@ namespace WinForms.Common.Tests
             {
                 { null, string.Empty },
                 { string.Empty, string.Empty },
-                { "reasonable", "reasonable" }
+                { reasonable, reasonable }
             };
             return data;
         }
@@ -451,17 +453,7 @@ namespace WinForms.Common.Tests
             return data;
         }
 
-        public static TheoryData<Exception> GetSecurityOrCriticalException()
-        {
-            var data = new TheoryData<Exception>
-            {
-                new NullReferenceException(),
-                new SecurityException()
-            };
-            return data;
-        }
-
-        #endregion        
+        #endregion
     }
 
     [Flags]
