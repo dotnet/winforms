@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how items in a list are sorted.
-    /// </devdoc>
+    /// </summary>
     public enum SortOrder
     {
-        /// <devdoc>
+        /// <summary>
         /// The items are not sorted.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The items are sorted in ascending order.
-        /// </devdoc>
+        /// </summary>
         Ascending = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The items are sorted in descending order.
-        /// </devdoc>
+        /// </summary>
         Descending = 2,
     }
 }

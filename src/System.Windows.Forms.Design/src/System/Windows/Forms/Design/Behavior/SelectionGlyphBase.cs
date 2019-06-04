@@ -15,14 +15,14 @@ namespace System.Windows.Forms.Design.Behavior
         protected Rectangle hitBounds; // defines the bounds used for hittest - it could be different than the bounds of the glyph itself
         protected Cursor hitTestCursor; // the cursor returned if hit test is positive
         protected SelectionRules rules; // the selection rules - defining how the control can change
-       
+
         /// <summary>
         /// Standard constructor.
         /// </summary>
         internal SelectionGlyphBase(Behavior behavior) : base(behavior)
         {
         }
-     
+
         /// <summary>
         /// Read-only property describing the SelecitonRules for these Glyphs.
         /// </summary>
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => rules;
         }
-     
+
         /// <summary>
         /// Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
         /// </summary>
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => bounds;
         }
-    
+
         /// <summary>
         /// There's no paint logic on this base class.
         /// </summary>

@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
 
@@ -20,10 +20,9 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     Date/DateTime picker control
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -33,26 +32,23 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.DateTimePickerDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionDateTimePicker))
     ]
-    public class DateTimePicker : Control {
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTitleBackColor"]/*' />
-        /// <devdoc>
+    public class DateTimePicker : Control
+    {
+        /// <summary>
         ///    <para>Specifies the default title back color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultTitleBackColor = SystemColors.ActiveCaption;
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTitleForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default foreground color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultTitleForeColor = SystemColors.ActiveCaptionText;
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultMonthBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default month background color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultMonthBackColor = SystemColors.Window;
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTrailingForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default trailing forground color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultTrailingForeColor = SystemColors.GrayText;
 
         private static readonly object EVENT_FORMATCHANGED = new object();
@@ -60,74 +56,71 @@ namespace System.Windows.Forms {
         private static readonly string DateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
         private const int TIMEFORMAT_NOUPDOWN = NativeMethods.DTS_TIMEFORMAT & (~NativeMethods.DTS_UPDOWN);
-        private EventHandler                    onCloseUp;
-        private EventHandler                    onDropDown;
-        private EventHandler                    onValueChanged;
-        private EventHandler                    onRightToLeftLayoutChanged;
+        private EventHandler onCloseUp;
+        private EventHandler onDropDown;
+        private EventHandler onValueChanged;
+        private EventHandler onRightToLeftLayoutChanged;
 
         // We need to restrict the available dates because of limitations in the comctl
         // DateTime and MonthCalendar controls
         //
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MinDateTime"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the minimum date value. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MinDateTime = new DateTime(1753, 1, 1);
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MaxDateTime"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the maximum date value. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MaxDateTime = new DateTime(9998, 12, 31);
 
-        private int                             style;
-        private short                           prefHeightCache = -1;
+        private int style;
+        private short prefHeightCache = -1;
 
-        /// <devdoc>
+        /// <summary>
         ///     validTime determines whether the CheckBox in the DTP is checked.  The CheckBox is only
         ///     displayed when ShowCheckBox is true.
-        /// </devdoc>
-        /// <internalonly/>
-        private bool                            validTime = true;
+        /// </summary>
+        private bool validTime = true;
 
         // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
         // of whether or not its values have been initialised in a separate boolean.
-        private bool                            userHasSetValue = false;
-        private DateTime                        value = DateTime.Now;
-        private DateTime                        creationTime = DateTime.Now;
+        private bool userHasSetValue = false;
+        private DateTime value = DateTime.Now;
+        private DateTime creationTime = DateTime.Now;
         // Reconcile out-of-range min/max values in the property getters.
-        private DateTime                        max = DateTime.MaxValue;
-        private DateTime                        min = DateTime.MinValue;
-        private Color                           calendarForeColor = DefaultForeColor;
-        private Color                           calendarTitleBackColor = DefaultTitleBackColor;
-        private Color                           calendarTitleForeColor = DefaultTitleForeColor;
-        private Color                           calendarMonthBackground = DefaultMonthBackColor;
-        private Color                           calendarTrailingText = DefaultTrailingForeColor;
-        private Font                            calendarFont = null;
-        private FontHandleWrapper               calendarFontHandleWrapper = null;
+        private DateTime max = DateTime.MaxValue;
+        private DateTime min = DateTime.MinValue;
+        private Color calendarForeColor = DefaultForeColor;
+        private Color calendarTitleBackColor = DefaultTitleBackColor;
+        private Color calendarTitleForeColor = DefaultTitleForeColor;
+        private Color calendarMonthBackground = DefaultMonthBackColor;
+        private Color calendarTrailingText = DefaultTrailingForeColor;
+        private Font calendarFont = null;
+        private FontHandleWrapper calendarFontHandleWrapper = null;
 
         // Since there is no way to get the customFormat from the DTP, we need to
         // cache it. Also we have to track if the user wanted customFormat or
         // shortDate format (shortDate is the lack of being in Long or DateTime format
         // without a customFormat). What fun!
         //
-        private string                          customFormat;
+        private string customFormat;
 
-        private DateTimePickerFormat           format;
+        private DateTimePickerFormat format;
 
-        private bool                            rightToLeftLayout = false;
+        private bool rightToLeftLayout = false;
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DateTimePicker"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DateTimePicker'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public DateTimePicker()
-        : base() {
+        : base()
+        {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
-           
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+
             SetStyle(ControlStyles.FixedHeight, true);
 
             // Since DateTimePicker does its own mouse capturing, we do not want
@@ -141,130 +134,129 @@ namespace System.Windows.Forms {
             //
             format = DateTimePickerFormat.Long;
 
-            if (AccessibilityImprovements.Level3) {
-                SetStyle(ControlStyles.UseTextForAccessibility, false);
-            }
+            SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color BackColor {
-            get {
-                if (ShouldSerializeBackColor()) {
+        public override Color BackColor
+        {
+            get
+            {
+                if (ShouldSerializeBackColor())
+                {
                     return base.BackColor;
                 }
-                else {
+                else
+                {
                     return SystemColors.Window;
                 }
             }
-            set {
+            set
+            {
                 base.BackColor = value;
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
-            remove {
-                base.BackColorChanged -= value;
-            }
+        new public event EventHandler BackColorChanged
+        {
+            add => base.BackColorChanged += value;
+            remove => base.BackColorChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+        new public event EventHandler BackgroundImageChanged
+        {
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarForeColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarForeColorDescr))
         ]
-        public Color CalendarForeColor {
-            get {
+        public Color CalendarForeColor
+        {
+            get
+            {
                 return calendarForeColor;
             }
 
-            set {
-                if (value.IsEmpty) {
+            set
+            {
+                if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
-                if (!value.Equals(calendarForeColor)) {
+                if (!value.Equals(calendarForeColor))
+                {
                     calendarForeColor = value;
                     SetControlColor(NativeMethods.MCSC_TEXT, value);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarFont property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         AmbientValue(null),
         SRDescription(nameof(SR.DateTimePickerCalendarFontDescr))
         ]
-        public Font CalendarFont {
-            get {
-                if (calendarFont == null) {
+        public Font CalendarFont
+        {
+            get
+            {
+                if (calendarFont == null)
+                {
                     return Font;
                 }
                 return calendarFont;
             }
 
-            set {
-                if ((value == null && calendarFont != null) || (value != null && !value.Equals(calendarFont))) {
+            set
+            {
+                if ((value == null && calendarFont != null) || (value != null && !value.Equals(calendarFont)))
+                {
                     calendarFont = value;
                     calendarFontHandleWrapper = null;
                     SetControlCalendarFont();
@@ -272,14 +264,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        private IntPtr CalendarFontHandle {
-            get {
-                if (calendarFont == null) {
+        private IntPtr CalendarFontHandle
+        {
+            get
+            {
+                if (calendarFont == null)
+                {
                     Debug.Assert(calendarFontHandleWrapper == null, "font handle out of sync with Font");
                     return FontHandle;
                 }
 
-                if (calendarFontHandleWrapper == null) {
+                if (calendarFontHandleWrapper == null)
+                {
                     calendarFontHandleWrapper = new FontHandleWrapper(CalendarFont);
                 }
 
@@ -287,137 +283,162 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarTitleBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarTitleBackColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarTitleBackColorDescr))
         ]
-        public Color CalendarTitleBackColor {
-            get {
+        public Color CalendarTitleBackColor
+        {
+            get
+            {
                 return calendarTitleBackColor;
             }
 
-            set {
-                if (value.IsEmpty) {
+            set
+            {
+                if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
-                if (!value.Equals(calendarTitleBackColor)) {
+                if (!value.Equals(calendarTitleBackColor))
+                {
                     calendarTitleBackColor = value;
                     SetControlColor(NativeMethods.MCSC_TITLEBK, value);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarTitleForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarTitleForeColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarTitleForeColorDescr))
         ]
-        public Color CalendarTitleForeColor {
-            get {
+        public Color CalendarTitleForeColor
+        {
+            get
+            {
                 return calendarTitleForeColor;
             }
 
-            set {
-                if (value.IsEmpty) {
+            set
+            {
+                if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
-                if (!value.Equals(calendarTitleForeColor)) {
+                if (!value.Equals(calendarTitleForeColor))
+                {
                     calendarTitleForeColor = value;
                     SetControlColor(NativeMethods.MCSC_TITLETEXT, value);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarTrailingForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarTrailingForeColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarTrailingForeColorDescr))
         ]
-        public Color CalendarTrailingForeColor {
-            get {
+        public Color CalendarTrailingForeColor
+        {
+            get
+            {
                 return calendarTrailingText;
             }
 
-            set {
-                if (value.IsEmpty) {
+            set
+            {
+                if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
-                if (!value.Equals(calendarTrailingText)) {
+                if (!value.Equals(calendarTrailingText))
+                {
                     calendarTrailingText = value;
                     SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, value);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarMonthBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarMonthBackground property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarMonthBackgroundDescr))
         ]
-        public Color CalendarMonthBackground {
-            get {
+        public Color CalendarMonthBackground
+        {
+            get
+            {
                 return calendarMonthBackground;
             }
 
-            set {
-                if (value.IsEmpty) {
+            set
+            {
+                if (value.IsEmpty)
+                {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
-                if (!value.Equals(calendarMonthBackground)) {
+                if (!value.Equals(calendarMonthBackground))
+                {
                     calendarMonthBackground = value;
                     SetControlColor(NativeMethods.MCSC_MONTHBK, value);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Checked"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property has been set.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Bindable(true),
         SRDescription(nameof(SR.DateTimePickerCheckedDescr))
         ]
-        public bool Checked {
-            get {
+        public bool Checked
+        {
+            get
+            {
                 // the information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
-                if (this.ShowCheckBox && IsHandleCreated) {
+                if (ShowCheckBox && IsHandleCreated)
+                {
                     NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
                     int gdt = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_GETSYSTEMTIME, 0, sys);
                     return gdt == NativeMethods.GDT_VALID;
-                } else {
+                }
+                else
+                {
                     return validTime;
                 }
             }
-            set {
-                if (this.Checked != value) {
+            set
+            {
+                if (Checked != value)
+                {
                     // set the information into the win32 DateTimePicker only if ShowCheckBoxes is True
-                    if (this.ShowCheckBox && IsHandleCreated) {
-                        if (value) {
+                    if (ShowCheckBox && IsHandleCreated)
+                    {
+                        if (value)
+                        {
                             int gdt = NativeMethods.GDT_VALID;
                             NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
                             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
                         }
-                        else {
+                        else
+                        {
                             int gdt = NativeMethods.GDT_NONE;
                             NativeMethods.SYSTEMTIME sys = null;
                             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
@@ -426,7 +447,7 @@ namespace System.Windows.Forms {
                     // this.validTime is used when the DateTimePicker receives date time change notification
                     // from the Win32 control. this.validTime will be used to know when we transition from valid time to unvalid time
                     // also, validTime will be used when ShowCheckBox == false
-                    this.validTime = value;
+                    validTime = value;
                 }
             }
         }
@@ -435,23 +456,26 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        new public event EventHandler Click {
-            add { base.Click += value; }
-            remove { base.Click -= value; }
+        new public event EventHandler Click
+        {
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateParams"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the CreateParams used to create this window.
-        /// </devdoc>
-        protected override CreateParams CreateParams {
-            get {
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_DATETIMEPICK;
 
                 cp.Style |= style;
 
-                switch (format) {
+                switch (format)
+                {
                     case DateTimePickerFormat.Long:
                         cp.Style |= NativeMethods.DTS_LONGDATEFORMAT;
                         break;
@@ -466,7 +490,8 @@ namespace System.Windows.Forms {
 
                 cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true) {
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                {
                     //We want to turn on mirroring for DateTimePicker explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
@@ -477,10 +502,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CustomFormat"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the custom format.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(null),
         Localizable(true),
@@ -488,47 +512,57 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.DateTimePickerCustomFormatDescr))
         ]
-        public string CustomFormat {
-            get {
+        public string CustomFormat
+        {
+            get
+            {
                 return customFormat;
             }
 
-            set {
+            set
+            {
                 if ((value != null && !value.Equals(customFormat)) ||
-                    (value == null && customFormat != null)) {
+                    (value == null && customFormat != null))
+                {
 
                     customFormat = value;
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         if (format == DateTimePickerFormat.Custom)
+                        {
                             SendMessage(NativeMethods.DTM_SETFORMAT, 0, customFormat);
+                        }
                     }
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
-        protected override Size DefaultSize {
-            get {
+        /// </summary>
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(200, PreferredHeight);
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DoubleBuffered"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override bool DoubleBuffered {
-            get {
+        protected override bool DoubleBuffered
+        {
+            get
+            {
                 return base.DoubleBuffered;
             }
-            set {
+            set
+            {
                 base.DoubleBuffered = value;
             }
         }
@@ -537,32 +571,36 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        new public event EventHandler DoubleClick {
-            add { base.DoubleClick += value; }
-            remove { base.DoubleClick -= value; }
+        new public event EventHandler DoubleClick
+        {
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DropDownAlign"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the dropDownAlign property.  The calendar
         ///     dropDown can be aligned to the left or right of the control.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(LeftRightAlignment.Left),
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         SRDescription(nameof(SR.DateTimePickerDropDownAlignDescr))
         ]
-        public LeftRightAlignment DropDownAlign {
-            get {
-                return((style & NativeMethods.DTS_RIGHTALIGN) != 0)
+        public LeftRightAlignment DropDownAlign
+        {
+            get
+            {
+                return ((style & NativeMethods.DTS_RIGHTALIGN) != 0)
                 ? LeftRightAlignment.Right
                 : LeftRightAlignment.Left;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
                 }
 
@@ -570,57 +608,59 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color ForeColor {
-            get {
-                if (ShouldSerializeForeColor()) {
+        public override Color ForeColor
+        {
+            get
+            {
+                if (ShouldSerializeForeColor())
+                {
                     return base.ForeColor;
                 }
-                else {
+                else
+                {
                     return SystemColors.WindowText;
                 }
             }
-            set {
+            set
+            {
                 base.ForeColor = value;
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+        new public event EventHandler ForeColorChanged
+        {
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Format"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the current value of the format property. This determines the
         ///     style of format the date is displayed in.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.Repaint),
         SRDescription(nameof(SR.DateTimePickerFormatDescr))
         ]
-        public DateTimePickerFormat Format {
-            get {
+        public DateTimePickerFormat Format
+        {
+            get
+            {
                 return format;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x1, 0x2,0x4,0x8. max number of bits on at a time is 1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DateTimePickerFormat.Long, (int)DateTimePickerFormat.Custom, /*maxNumberOfBitsOn*/1))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DateTimePickerFormat));
                 }
 
-                if (format != value) {
+                if (format != value)
+                {
 
                     format = value;
                     RecreateHandle();
@@ -630,30 +670,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.FormatChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
-        public event EventHandler FormatChanged {
-            add {
-                Events.AddHandler(EVENT_FORMATCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_FORMATCHANGED, value);
-            }
+        public event EventHandler FormatChanged
+        {
+            add => Events.AddHandler(EVENT_FORMATCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_FORMATCHANGED, value);
         }
 
-        /// <include file='doc\DateTimepicker.uex' path='docs/doc[@for="DateTimepicker.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     DateTimePicker Paint.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// </summary>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+        public new event PaintEventHandler Paint
+        {
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         //Make sure the passed in minDate respects the current culture: this
@@ -686,21 +718,24 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MaxDate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the maximum date and time
         ///       selectable in the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.DateTimePickerMaxDateDescr))
         ]
-        public DateTime MaxDate {
-            get {
+        public DateTime MaxDate
+        {
+            get
+            {
                 return EffectiveMaxDate(max);
             }
-            set {
-                if (value != max) {
+            set
+            {
+                if (value != max)
+                {
                     if (value < EffectiveMinDate(min))
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDateTime(value), nameof(MinDate)));
@@ -715,39 +750,42 @@ namespace System.Windows.Forms {
 
                     //If Value (which was once valid) is suddenly greater than the max (since we just set it)
                     //then adjust this...
-                    if (Value > max) {
+                    if (Value > max)
+                    {
                         Value = max;
                     }
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MaximumDateTime"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the maximum date value. This property is read-only.</para>
-        /// </devdoc>
-        public static DateTime MaximumDateTime {
-		get {
-                 DateTime maxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
-                 if (maxSupportedDateTime.Year > MaxDateTime.Year)
-                 {
-                     return MaxDateTime;
-                 }
-                 return maxSupportedDateTime;
-             }
+        /// </summary>
+        public static DateTime MaximumDateTime
+        {
+            get
+            {
+                DateTime maxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
+                if (maxSupportedDateTime.Year > MaxDateTime.Year)
+                {
+                    return MaxDateTime;
+                }
+                return maxSupportedDateTime;
+            }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MinDate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the minimum date and time
         ///       selectable in the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.DateTimePickerMinDateDescr))
         ]
-        public DateTime MinDate {
-            get {
+        public DateTime MinDate
+        {
+            get
+            {
                 return EffectiveMinDate(min);
             }
             set
@@ -780,71 +818,78 @@ namespace System.Windows.Forms {
         // that time.  We do this even for cultures that don't use the Gregorian calendar -- we're not
         // really that worried about calendars for >250 years ago.
         //
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MinimumDateTime"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the minimum date value. This property is read-only.</para>
-        /// </devdoc>
-        public static DateTime MinimumDateTime {
-             get {
-                 DateTime minSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime;
-                 if (minSupportedDateTime.Year < 1753)
-                 {
-                     return new DateTime(1753, 1, 1);
-                 }
-                 return minSupportedDateTime;
-             }
+        /// </summary>
+        public static DateTime MinimumDateTime
+        {
+            get
+            {
+                DateTime minSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime;
+                if (minSupportedDateTime.Year < 1753)
+                {
+                    return new DateTime(1753, 1, 1);
+                }
+                return minSupportedDateTime;
+            }
         }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        new public event MouseEventHandler MouseClick {
-            add { base.MouseClick += value; }
-            remove { base.MouseClick -= value; }
+        new public event MouseEventHandler MouseClick
+        {
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        new public event MouseEventHandler MouseDoubleClick {
-            add { base.MouseDoubleClick += value; }
-            remove { base.MouseDoubleClick -= value; }
+        new public event MouseEventHandler MouseDoubleClick
+        {
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Padding Padding {
+        public new Padding Padding
+        {
             get { return base.Padding; }
-            set { base.Padding = value;}
+            set { base.Padding = value; }
         }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
+        public new event EventHandler PaddingChanged
+        {
+            add => base.PaddingChanged += value;
+            remove => base.PaddingChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.PreferredHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the preferred height of the DateTimePicker control. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
-        public int PreferredHeight {
-            get {
+        public int PreferredHeight
+        {
+            get
+            {
                 if (prefHeightCache > -1)
-                    return(int)prefHeightCache;
+                {
+                    return (int)prefHeightCache;
+                }
 
                 // Base the preferred height on the current font
                 int height = FontHeight;
@@ -857,29 +902,33 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.RightToLeftLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
-        public virtual bool RightToLeftLayout {
-            get {
+        public virtual bool RightToLeftLayout
+        {
+            get
+            {
 
                 return rightToLeftLayout;
             }
 
-            set {
-                if (value != rightToLeftLayout) {
+            set
+            {
+                if (value != rightToLeftLayout)
+                {
                     rightToLeftLayout = value;
-                    using(new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout)) {
+                    using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
+                    {
                         OnRightToLeftLayoutChanged(EventArgs.Empty);
                     }
                 }
@@ -888,117 +937,130 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ShowCheckBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether a check box is displayed to toggle the NoValueSelected property
         ///       value.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerShowNoneDescr))
         ]
-        public bool ShowCheckBox {
-            get {
-                return(style & NativeMethods.DTS_SHOWNONE) != 0;
+        public bool ShowCheckBox
+        {
+            get
+            {
+                return (style & NativeMethods.DTS_SHOWNONE) != 0;
             }
-            set {
+            set
+            {
                 SetStyleBit(value, NativeMethods.DTS_SHOWNONE);
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ShowUpDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates
         ///       whether an up-down control is used to adjust the time values.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))
         ]
-        public bool ShowUpDown {
-            get {
-                return(style & NativeMethods.DTS_UPDOWN) != 0;
+        public bool ShowUpDown
+        {
+            get
+            {
+                return (style & NativeMethods.DTS_UPDOWN) != 0;
             }
-            set {
-                if (ShowUpDown != value) {
+            set
+            {
+                if (ShowUpDown != value)
+                {
                     SetStyleBit(value, NativeMethods.DTS_UPDOWN);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Overrides Text to allow for setting of the value via a string.  Also, returns
         ///     a formatted Value when getting the text.  The DateTime class will throw
         ///     an exception if the string (value) being passed in is invalid.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 // Clause to check length
                 //
-                if (value == null || value.Length == 0) {
+                if (value == null || value.Length == 0)
+                {
                     ResetValue();
                 }
-                else {
+                else
+                {
                     Value = DateTime.Parse(value, CultureInfo.CurrentCulture);
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+        new public event EventHandler TextChanged
+        {
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Value"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the DateTime value assigned to the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Bindable(true),
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.DateTimePickerValueDescr))
         ]
-        public DateTime Value {
-            get {
+        public DateTime Value
+        {
+            get
+            {
                 //checkbox clicked, no value set - no value set state should never occur, but just in case
                 if (!userHasSetValue && validTime)
+                {
                     return creationTime;
+                }
                 else
+                {
                     return value;
+                }
             }
-            set {
-                bool valueChanged = !DateTime.Equals(this.Value, value);
+            set
+            {
+                bool valueChanged = !DateTime.Equals(Value, value);
                 // Check for value set here; if we've not set the value yet, it'll be Now, so the second
                 // part of the test will fail.
                 // So, if userHasSetValue isn't set, we don't care if the value is still the same - and we'll
                 // update anyway.
-                if (!userHasSetValue || valueChanged) {
-                    if ((value < MinDate) || (value > MaxDate)) {
+                if (!userHasSetValue || valueChanged)
+                {
+                    if ((value < MinDate) || (value > MaxDate))
+                    {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), FormatDateTime(value), $"'{nameof(MinDate)}'", $"'{nameof(MaxDate)}'"));
                     }
 
-                    string oldText = this.Text;
+                    string oldText = Text;
 
                     this.value = value;
                     userHasSetValue = true;
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         /*
                         * Make sure any changes to this code
                         * get propagated to createHandle
@@ -1008,98 +1070,88 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
                     }
 
-                    if (valueChanged) {
+                    if (valueChanged)
+                    {
                         OnValueChanged(EventArgs.Empty);
                     }
 
-                    if (!oldText.Equals(this.Text)) {
+                    if (!oldText.Equals(Text))
+                    {
                         OnTextChanged(EventArgs.Empty);
                     }
                 }
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CloseUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the dropdown calendar is dismissed and disappears.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
-        public event EventHandler CloseUp {
-            add {
-                onCloseUp += value;
-            }
-            remove {
-                onCloseUp -= value;
-            }
+        public event EventHandler CloseUp
+        {
+            add => onCloseUp += value;
+            remove => onCloseUp -= value;
         }
 
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
-            remove {
-                onRightToLeftLayoutChanged -= value;
-            }
+        public event EventHandler RightToLeftLayoutChanged
+        {
+            add => onRightToLeftLayoutChanged += value;
+            remove => onRightToLeftLayoutChanged -= value;
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ValueChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the value for the control changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
-        public event EventHandler ValueChanged {
-            add {
-                onValueChanged += value;
-            }
-            remove {
-                onValueChanged -= value;
-            }
+        public event EventHandler ValueChanged
+        {
+            add => onValueChanged += value;
+            remove => onValueChanged -= value;
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DropDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the drop down calendar is shown.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
-        public event EventHandler DropDown {
-            add {
-                onDropDown += value;
-            }
-            remove {
-                onDropDown -= value;
-            }
+        public event EventHandler DropDown
+        {
+            add => onDropDown += value;
+            remove => onDropDown -= value;
         }
-     
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
+
         /// <summary>
         /// <para>
         /// Constructs the new instance of the accessibility object for this control. Subclasses
         /// should not call base.CreateAccessibilityObject.
         /// </para>
         /// </summary>
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new DateTimePickerAccessibleObject(this);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates the physical window handle.
-        /// </devdoc>
-        protected override void CreateHandle() {
-            if (!RecreatingHandle) {
+        /// </summary>
+        protected override void CreateHandle()
+        {
+            if (!RecreatingHandle)
+            {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                        
-                try {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_DATE_CLASSES;
+
+                try
+                {
+                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    {
+                        dwICC = NativeMethods.ICC_DATE_CLASSES
+                    };
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
-                finally {
+                finally
+                {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
@@ -1108,7 +1160,8 @@ namespace System.Windows.Forms {
 
             base.CreateHandle();
 
-            if (userHasSetValue && validTime) {
+            if (userHasSetValue && validTime)
+            {
                 /*
                 * Make sure any changes to this code
                 * get propagated to setValue
@@ -1117,13 +1170,15 @@ namespace System.Windows.Forms {
                 NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
             }
-            else if (!validTime) {
+            else if (!validTime)
+            {
                 int gdt = NativeMethods.GDT_NONE;
                 NativeMethods.SYSTEMTIME sys = null;
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
             }
 
-            if (format == DateTimePickerFormat.Custom) {
+            if (format == DateTimePickerFormat.Custom)
+            {
                 SendMessage(NativeMethods.DTM_SETFORMAT, 0, customFormat);
             }
 
@@ -1133,11 +1188,11 @@ namespace System.Windows.Forms {
             SetRange();
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DestroyHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Destroys the physical window handle.
-        /// </devdoc>
-        protected override void DestroyHandle() {
+        /// </summary>
+        protected override void DestroyHandle()
+        {
             value = Value;
             base.DestroyHandle();
         }
@@ -1145,31 +1200,39 @@ namespace System.Windows.Forms {
         // Return a localized string representation of the given DateTime value.
         // Used for throwing exceptions, etc.
         //
-        private static string FormatDateTime(DateTime value) {
+        private static string FormatDateTime(DateTime value)
+        {
             return value.ToString("G", CultureInfo.CurrentCulture);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
         // constraints on their size.
-        internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight) {
-              // Lock DateTimePicker to its preferred height.
-            return base.ApplyBoundsConstraints(suggestedX,suggestedY, proposedWidth, PreferredHeight);
+        internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
+        {
+            // Lock DateTimePicker to its preferred height.
+            return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, PreferredHeight);
         }
 
-        internal override Size GetPreferredSizeCore(Size proposedConstraints) {
+        internal override Size GetPreferredSizeCore(Size proposedConstraints)
+        {
             int height = PreferredHeight;
             int width = CommonProperties.GetSpecifiedBounds(this).Width;
             return new Size(width, height);
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.IsInputKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
-        /// </devdoc>
-        protected override bool IsInputKey(Keys keyData) {
-            if ((keyData & Keys.Alt) == Keys.Alt) return false;
-            switch (keyData & Keys.KeyCode) {
+        /// </summary>
+        protected override bool IsInputKey(Keys keyData)
+        {
+            if ((keyData & Keys.Alt) == Keys.Alt)
+            {
+                return false;
+            }
+
+            switch (keyData & Keys.KeyCode)
+            {
                 case Keys.PageUp:
                 case Keys.PageDown:
                 case Keys.Home:
@@ -1179,87 +1242,80 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnCloseUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.CloseUp'/>
         /// event.</para>
-        /// </devdoc>
-        protected virtual void OnCloseUp(EventArgs eventargs) {
-            if (onCloseUp != null) onCloseUp(this, eventargs);
+        /// </summary>
+        protected virtual void OnCloseUp(EventArgs eventargs)
+        {
+            onCloseUp?.Invoke(this, eventargs);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnDropDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.DropDown'/> event.</para>
-        /// </devdoc>
-        protected virtual void OnDropDown(EventArgs eventargs) {
-            if (onDropDown != null) {
-                onDropDown(this, eventargs);
+        /// </summary>
+        protected virtual void OnDropDown(EventArgs eventargs)
+        {
+            onDropDown?.Invoke(this, eventargs);
+        }
+
+        protected virtual void OnFormatChanged(EventArgs e)
+        {
+            if (Events[EVENT_FORMATCHANGED] is EventHandler eh)
+            {
+                eh(this, e);
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFormatChanged"]/*' />
-        protected virtual void OnFormatChanged(EventArgs e) {
-            EventHandler eh = Events[EVENT_FORMATCHANGED] as EventHandler;
-            if (eh != null) {
-                 eh(this, e);
-            }
-        }
 
-
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Add/remove SystemEvents in OnHandleCreated/Destroyed for robustness</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnHandleDestroyed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Add/remove SystemEvents in OnHandleCreated/Destroyed for robustness</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnValueChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.ValueChanged'/> event.</para>
-        /// </devdoc>
-        protected virtual void OnValueChanged(EventArgs eventargs) {
-            if (onValueChanged != null) {
-                onValueChanged(this, eventargs);
-            }
+        /// </summary>
+        protected virtual void OnValueChanged(EventArgs eventargs)
+        {
+            onValueChanged?.Invoke(this, eventargs);
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
-            if (GetAnyDisposingInHierarchy()) {
+        protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
+        {
+            if (GetAnyDisposingInHierarchy())
+            {
                 return;
             }
 
-            if (RightToLeft == RightToLeft.Yes) {
+            if (RightToLeft == RightToLeft.Yes)
+            {
                 RecreateHandle();
             }
 
-            if (onRightToLeftLayoutChanged != null) {
-                 onRightToLeftLayoutChanged(this, e);
-            }
+            onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFontChanged"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    Occurs when a property for the control changes.
-        /// </devdoc>
-        protected override void OnFontChanged(EventArgs e) {
+        /// </summary>
+        protected override void OnFontChanged(EventArgs e)
+        {
             base.OnFontChanged(e);
 
             //clear the pref height cache
@@ -1267,65 +1323,76 @@ namespace System.Windows.Forms {
 
             Height = PreferredHeight;
 
-            if (calendarFont == null) {
+            if (calendarFont == null)
+            {
                 calendarFontHandleWrapper = null;
                 SetControlCalendarFont();
             }
         }
 
-        private void ResetCalendarForeColor() {
+        private void ResetCalendarForeColor()
+        {
             CalendarForeColor = DefaultForeColor;
         }
 
-        private void ResetCalendarFont() {
+        private void ResetCalendarFont()
+        {
             CalendarFont = null;
         }
 
-        private void ResetCalendarMonthBackground() {
-            CalendarMonthBackground =  DefaultMonthBackColor;
+        private void ResetCalendarMonthBackground()
+        {
+            CalendarMonthBackground = DefaultMonthBackColor;
         }
 
-        private void ResetCalendarTitleBackColor() {
+        private void ResetCalendarTitleBackColor()
+        {
             CalendarTitleBackColor = DefaultTitleBackColor;
         }
 
-        private void ResetCalendarTitleForeColor() {
+        private void ResetCalendarTitleForeColor()
+        {
             CalendarTitleBackColor = DefaultForeColor;
         }
 
-        private void ResetCalendarTrailingForeColor() {
+        private void ResetCalendarTrailingForeColor()
+        {
             CalendarTrailingForeColor = DefaultTrailingForeColor;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Resets the <see cref='System.Windows.Forms.DateTimePicker.Format'/> property to its default
         ///    value.</para>
-        /// </devdoc>
-        private void ResetFormat() {
+        /// </summary>
+        private void ResetFormat()
+        {
             Format = DateTimePickerFormat.Long;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Resets the <see cref='System.Windows.Forms.DateTimePicker.MaxDate'/> property to its default value. </para>
-        /// </devdoc>
-        private void ResetMaxDate() {
+        /// </summary>
+        private void ResetMaxDate()
+        {
             MaxDate = MaximumDateTime;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Resets the <see cref='System.Windows.Forms.DateTimePicker.MinDate'/> property to its default value. </para>
-        /// </devdoc>
-        private void ResetMinDate() {
+        /// </summary>
+        private void ResetMinDate()
+        {
             MinDate = MinimumDateTime;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Resets the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property to its default value.</para>
-        /// </devdoc>
-        private void ResetValue() {
+        /// </summary>
+        private void ResetValue()
+        {
 
             // always update on reset with ShowNone = false -- as it'll take the current time.
-            this.value = DateTime.Now;
+            value = DateTime.Now;
 
             // If ShowCheckBox = true, then userHasSetValue can be false (null value).
             // otherwise, userHasSetValue is valid...
@@ -1336,7 +1403,8 @@ namespace System.Windows.Forms {
             userHasSetValue = false;
 
             // Update the text displayed in the DateTimePicker
-            if (IsHandleCreated) {
+            if (IsHandleCreated)
+            {
                 int gdt = NativeMethods.GDT_VALID;
                 NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
@@ -1350,31 +1418,33 @@ namespace System.Windows.Forms {
             OnTextChanged(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If the handle has been created, this applies the color to the control
-        /// </devdoc>
-        /// <internalonly/>
-        private void SetControlColor(int colorIndex, Color value) {
-            if (IsHandleCreated) {
+        /// </summary>
+        private void SetControlColor(int colorIndex, Color value)
+        {
+            if (IsHandleCreated)
+            {
                 SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If the handle has been created, this applies the font to the control.
-        /// </devdoc>
-        /// <internalonly/>
-        private void SetControlCalendarFont() {
-            if (IsHandleCreated) {
+        /// </summary>
+        private void SetControlCalendarFont()
+        {
+            if (IsHandleCreated)
+            {
                 SendMessage(NativeMethods.DTM_SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Applies all the colors to the control.
-        /// </devdoc>
-        /// <internalonly/>
-        private void SetAllControlColors() {
+        /// </summary>
+        private void SetAllControlColors()
+        {
             SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
             SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
             SetControlColor(NativeMethods.MCSC_TITLEBK, calendarTitleBackColor);
@@ -1382,17 +1452,19 @@ namespace System.Windows.Forms {
             SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, calendarTrailingText);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the window handle with the min/max ranges if it has been
         ///     created.
-        /// </devdoc>
-        /// <internalonly/>
-        private void SetRange() {
+        /// </summary>
+        private void SetRange()
+        {
             SetRange(EffectiveMinDate(min), EffectiveMaxDate(max));
         }
 
-        private void SetRange(DateTime min, DateTime max) {
-            if (IsHandleCreated) {
+        private void SetRange(DateTime min, DateTime max)
+        {
+            if (IsHandleCreated)
+            {
                 int flags = 0;
 
                 NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
@@ -1420,183 +1492,209 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Turns on or off a given style bit
-        /// </devdoc>
-        /// <internalonly/>
-        private void SetStyleBit(bool flag, int bit) {
-            if (((style & bit) != 0) == flag) return;
+        /// </summary>
+        private void SetStyleBit(bool flag, int bit)
+        {
+            if (((style & bit) != 0) == flag)
+            {
+                return;
+            }
 
-            if (flag) {
+            if (flag)
+            {
                 style |= bit;
             }
-            else {
+            else
+            {
                 style &= ~bit;
             }
 
-            if (IsHandleCreated) {
+            if (IsHandleCreated)
+            {
                 RecreateHandle();
                 Invalidate();
                 Update();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarForeColor'/> property needs to be
         ///    persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeCalendarForeColor() {
+        /// </summary>
+        private bool ShouldSerializeCalendarForeColor()
+        {
             return !CalendarForeColor.Equals(DefaultForeColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarFont'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeCalendarFont() {
+        /// </summary>
+        private bool ShouldSerializeCalendarFont()
+        {
             return calendarFont != null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarTitleBackColor'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeCalendarTitleBackColor() {
+        /// </summary>
+        private bool ShouldSerializeCalendarTitleBackColor()
+        {
             return !calendarTitleBackColor.Equals(DefaultTitleBackColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarTitleForeColor'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeCalendarTitleForeColor() {
+        /// </summary>
+        private bool ShouldSerializeCalendarTitleForeColor()
+        {
             return !calendarTitleForeColor.Equals(DefaultTitleForeColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarTrailingForeColor'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeCalendarTrailingForeColor() {
+        /// </summary>
+        private bool ShouldSerializeCalendarTrailingForeColor()
+        {
             return !calendarTrailingText.Equals(DefaultTrailingForeColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarMonthBackground'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeCalendarMonthBackground() {
+        /// </summary>
+        private bool ShouldSerializeCalendarMonthBackground()
+        {
             return !calendarMonthBackground.Equals(DefaultMonthBackColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.MaxDate'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeMaxDate() {
+        /// </summary>
+        private bool ShouldSerializeMaxDate()
+        {
             return max != MaximumDateTime && max != DateTime.MaxValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.MinDate'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeMinDate() {
+        /// </summary>
+        private bool ShouldSerializeMinDate()
+        {
             return min != MinimumDateTime && min != DateTime.MinValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeValue() {
+        /// </summary>
+        private bool ShouldSerializeValue()
+        {
             return userHasSetValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.Format'/> property needs to be persisted.</para>
-        /// </devdoc>
-        private bool ShouldSerializeFormat() {
-            return(Format != DateTimePickerFormat.Long);
+        /// </summary>
+        private bool ShouldSerializeFormat()
+        {
+            return (Format != DateTimePickerFormat.Long);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the control as a string
-        /// </devdoc>
-        /// <internalonly/>
-        public override string ToString() {
+        /// </summary>
+        public override string ToString()
+        {
 
             string s = base.ToString();
             return s + ", Value: " + FormatDateTime(Value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces a repaint of the updown control if it is displayed.
-        /// </devdoc>
-        /// <internalonly/>
-        private void UpdateUpDown() {
+        /// </summary>
+        private void UpdateUpDown()
+        {
             // The upDown control doesn't repaint correctly.
             //
-            if (ShowUpDown) {
+            if (ShowUpDown)
+            {
                 EnumChildren c = new EnumChildren();
                 NativeMethods.EnumChildrenCallback cb = new NativeMethods.EnumChildrenCallback(c.enumChildren);
                 UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, Handle), cb, NativeMethods.NullHandleRef);
-                if (c.hwndFound != IntPtr.Zero) {
+                if (c.hwndFound != IntPtr.Zero)
+                {
                     SafeNativeMethods.InvalidateRect(new HandleRef(c, c.hwndFound), null, true);
                     SafeNativeMethods.UpdateWindow(new HandleRef(c, c.hwndFound));
                 }
             }
         }
 
-        private void MarshaledUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref) {
-            try {
+        private void MarshaledUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
+        {
+            try
+            {
                 //use begininvoke instead of invoke in case the destination thread is not processing messages.
-                BeginInvoke(new UserPreferenceChangedEventHandler(this.UserPreferenceChanged), new object[] { sender, pref });
+                BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), new object[] { sender, pref });
             }
             catch (InvalidOperationException) { } //if the destination thread does not exist, don't send.
         }
 
-        private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref) {
-            if (pref.Category == UserPreferenceCategory.Locale) {
-               // We need to recreate the monthcalendar handle when the locale changes, because
+        private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
+        {
+            if (pref.Category == UserPreferenceCategory.Locale)
+            {
+                // We need to recreate the monthcalendar handle when the locale changes, because
                 // the day names etc. are only updated on a handle recreate (comctl32 limitation).
                 //
                 RecreateHandle();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the DTN_CLOSEUP notification
-        /// </devdoc>
-        /// <internalonly/>
-        private void WmCloseUp(ref Message m) {
+        /// </summary>
+        private void WmCloseUp(ref Message m)
+        {
             OnCloseUp(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the DTN_DATETIMECHANGE notification
-        /// </devdoc>
-        /// <internalonly/>
-        private void WmDateTimeChange(ref Message m) {
+        /// </summary>
+        private void WmDateTimeChange(ref Message m)
+        {
             NativeMethods.NMDATETIMECHANGE nmdtc = (NativeMethods.NMDATETIMECHANGE)m.GetLParam(typeof(NativeMethods.NMDATETIMECHANGE));
             DateTime temp = value;
             bool oldvalid = validTime;
-            if (nmdtc.dwFlags != NativeMethods.GDT_NONE) {
+            if (nmdtc.dwFlags != NativeMethods.GDT_NONE)
+            {
                 validTime = true;
                 value = DateTimePicker.SysTimeToDateTime(nmdtc.st);
                 userHasSetValue = true;
             }
-            else {
+            else
+            {
                 validTime = false;
             }
-            if (value!=temp || oldvalid != validTime) {
+            if (value != temp || oldvalid != validTime)
+            {
                 OnValueChanged(EventArgs.Empty);
                 OnTextChanged(EventArgs.Empty);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the DTN_DROPDOWN notification
-        /// </devdoc>
-        /// <internalonly/>
-        private void WmDropDown(ref Message m) {
+        /// </summary>
+        private void WmDropDown(ref Message m)
+        {
 
-            if (this.RightToLeftLayout == true && this.RightToLeft == RightToLeft.Yes) {
-                IntPtr handle = SendMessage(NativeMethods.DTM_GETMONTHCAL, 0,0);
-                if (handle != IntPtr.Zero) {
+            if (RightToLeftLayout == true && RightToLeft == RightToLeft.Yes)
+            {
+                IntPtr handle = SendMessage(NativeMethods.DTM_GETMONTHCAL, 0, 0);
+                if (handle != IntPtr.Zero)
+                {
                     int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE)));
                     style |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
                     style &= ~(NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_RTLREADING);
@@ -1606,25 +1704,26 @@ namespace System.Windows.Forms {
             OnDropDown(EventArgs.Empty);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnSystemColorsChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Handles system color changes
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void OnSystemColorsChanged(EventArgs e) {
+        /// </summary>
+        protected override void OnSystemColorsChanged(EventArgs e)
+        {
             SetAllControlColors();
             base.OnSystemColorsChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_COMMAND messages reflected from the parent control.
-        /// </devdoc>
-        /// <internalonly/>
-        private void WmReflectCommand(ref Message m) {
-            if (m.HWnd == Handle) {
+        /// </summary>
+        private void WmReflectCommand(ref Message m)
+        {
+            if (m.HWnd == Handle)
+            {
 
                 NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                switch (nmhdr.code) {
+                switch (nmhdr.code)
+                {
                     case NativeMethods.DTN_CLOSEUP:
                         WmCloseUp(ref m);
                         break;
@@ -1638,16 +1737,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Overrided wndProc
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
+        /// </summary>
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    FocusInternal();
-                    if (!ValidationCancelled) {
+                    Focus();
+                    if (!ValidationCancelled)
+                    {
                         base.WndProc(ref m);
                     }
                     break;
@@ -1665,127 +1765,140 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Takes a DateTime value and returns a SYSTEMTIME struct
         ///     Note: 1 second granularity
-        /// </devdoc>
-        internal static NativeMethods.SYSTEMTIME DateTimeToSysTime(DateTime time) {
-            NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
-            sys.wYear = (short)time.Year;
-            sys.wMonth = (short)time.Month;
-            sys.wDayOfWeek = (short)time.DayOfWeek;
-            sys.wDay = (short)time.Day;
-            sys.wHour = (short)time.Hour;
-            sys.wMinute = (short)time.Minute;
-            sys.wSecond = (short)time.Second;
-            sys.wMilliseconds = 0;
+        /// </summary>
+        internal static NativeMethods.SYSTEMTIME DateTimeToSysTime(DateTime time)
+        {
+            NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+            {
+                wYear = (short)time.Year,
+                wMonth = (short)time.Month,
+                wDayOfWeek = (short)time.DayOfWeek,
+                wDay = (short)time.Day,
+                wHour = (short)time.Hour,
+                wMinute = (short)time.Minute,
+                wSecond = (short)time.Second,
+                wMilliseconds = 0
+            };
             return sys;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Takes a SYSTEMTIME struct and returns a DateTime value
         ///     Note: 1 second granularity.
-        /// </devdoc>
-        internal static DateTime SysTimeToDateTime(NativeMethods.SYSTEMTIME s) {
+        /// </summary>
+        internal static DateTime SysTimeToDateTime(NativeMethods.SYSTEMTIME s)
+        {
             return new DateTime(s.wYear, s.wMonth, s.wDay, s.wHour, s.wMinute, s.wSecond);
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        private sealed class EnumChildren {
+        /// <summary>
+        /// </summary>
+        private sealed class EnumChildren
+        {
             public IntPtr hwndFound = IntPtr.Zero;
 
-            public bool enumChildren(IntPtr hwnd, IntPtr lparam) {
+            public bool enumChildren(IntPtr hwnd, IntPtr lparam)
+            {
                 hwndFound = hwnd;
                 return true;
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject"]/*' />
-        /// <internalonly/>
         /// <summary>
         /// </summary>
         [ComVisible(true)]
-        public class DateTimePickerAccessibleObject : ControlAccessibleObject {
+        public class DateTimePickerAccessibleObject : ControlAccessibleObject
+        {
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.DateTimePickerAccessibleObject"]/*' />
-            public DateTimePickerAccessibleObject(DateTimePicker owner) : base(owner) {
+            public DateTimePickerAccessibleObject(DateTimePicker owner) : base(owner)
+            {
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.KeyboardShorcut"]/*' />
-            public override string KeyboardShortcut {
-                get {
+            public override string KeyboardShortcut
+            {
+                get
+                {
                     // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label 
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
-                    Label previousLabel = this.PreviousLabel;
+                    Label previousLabel = PreviousLabel;
 
-                    if (previousLabel != null) {
+                    if (previousLabel != null)
+                    {
                         char previousLabelMnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false /*convertToUpperCase*/);
-                        if (previousLabelMnemonic != (char) 0) {
+                        if (previousLabelMnemonic != (char)0)
+                        {
                             return "Alt+" + previousLabelMnemonic;
                         }
                     }
 
                     string baseShortcut = base.KeyboardShortcut;
-                    
-                    if ((baseShortcut == null || baseShortcut.Length == 0)) {
-                        char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(this.Owner.Text, false /*convertToUpperCase*/);
-                        if (ownerTextMnemonic != (char) 0) {
+
+                    if ((baseShortcut == null || baseShortcut.Length == 0))
+                    {
+                        char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(Owner.Text, false /*convertToUpperCase*/);
+                        if (ownerTextMnemonic != (char)0)
+                        {
                             return "Alt+" + ownerTextMnemonic;
                         }
                     }
-                        
+
                     return baseShortcut;
                 }
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.Value"]/*' />
-            public override string Value {
-                get {
+            public override string Value
+            {
+                get
+                {
                     string baseValue = base.Value;
-                    if (baseValue == null || baseValue.Length == 0) {
+                    if (baseValue == null || baseValue.Length == 0)
+                    {
                         return Owner.Text;
                     }
                     return baseValue;
                 }
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.State"]/*' />
-            public override AccessibleStates State {
-                get {
+            public override AccessibleStates State
+            {
+                get
+                {
                     AccessibleStates state = base.State;
 
-                    if(((DateTimePicker)Owner).ShowCheckBox &&
-                       ((DateTimePicker)Owner).Checked) {
-                       state |= AccessibleStates.Checked;
+                    if (((DateTimePicker)Owner).ShowCheckBox &&
+                       ((DateTimePicker)Owner).Checked)
+                    {
+                        state |= AccessibleStates.Checked;
                     }
 
                     return state;
                 }
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.Role"]/*' />
-            public override AccessibleRole Role {
-                get {
+            public override AccessibleRole Role
+            {
+                get
+                {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default) {
+                    if (role != AccessibleRole.Default)
+                    {
                         return role;
                     }
-                    return AccessibilityImprovements.Level3 ? AccessibleRole.ComboBox : AccessibleRole.DropList;
+
+                    return AccessibleRole.ComboBox;
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
+            internal override bool IsIAccessibleExSupported() => true;
 
-                return base.IsIAccessibleExSupported();
-            }
-
-            internal override object GetPropertyValue(int propertyID) {
-                switch (propertyID) {
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
                     case NativeMethods.UIA_IsTogglePatternAvailablePropertyId:
                         return IsPatternSupported(NativeMethods.UIA_TogglePatternId);
                     case NativeMethods.UIA_LocalizedControlTypePropertyId:
@@ -1795,8 +1908,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId) {
-                if (patternId == NativeMethods.UIA_TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox) {
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
+                {
                     return true;
                 }
 
@@ -1805,15 +1920,18 @@ namespace System.Windows.Forms {
 
             #region Toggle Pattern
 
-            internal override UnsafeNativeMethods.ToggleState ToggleState {
-                get {
-                    return ((DateTimePicker)Owner).Checked ? 
-                        UnsafeNativeMethods.ToggleState.ToggleState_On : 
+            internal override UnsafeNativeMethods.ToggleState ToggleState
+            {
+                get
+                {
+                    return ((DateTimePicker)Owner).Checked ?
+                        UnsafeNativeMethods.ToggleState.ToggleState_On :
                         UnsafeNativeMethods.ToggleState.ToggleState_Off;
                 }
             }
 
-            internal override void Toggle() {
+            internal override void Toggle()
+            {
                 ((DateTimePicker)Owner).Checked = !((DateTimePicker)Owner).Checked;
             }
 

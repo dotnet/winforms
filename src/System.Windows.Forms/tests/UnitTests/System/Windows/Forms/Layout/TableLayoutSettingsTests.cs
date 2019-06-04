@@ -161,7 +161,7 @@ namespace System.Windows.Forms.Layout.Tests
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             Assert.Throws<NotSupportedException>(() => settings.GetColumnSpan("control"));
         }
-        
+
         [Fact]
         public void TableLayoutSettings_GetColumnSpan_InvalidControlStub_ReturnsExpected()
         {
@@ -663,7 +663,7 @@ namespace System.Windows.Forms.Layout.Tests
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             var columnStyle = new ColumnStyle(SizeType.Percent, 1);
             var rowStyle = new RowStyle(SizeType.Percent, 1);
-            
+
             var controlWithName = new ScrollableControl { Name = "name" };
             settings.SetColumnSpan(controlWithName, 1);
             settings.SetRowSpan(controlWithName, 2);
@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Layout.Tests
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, settings);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream));
                 Assert.Equal(columnStyle.SizeType, ((ColumnStyle)Assert.Single(result.ColumnStyles)).SizeType);
                 Assert.Equal(columnStyle.Width, ((ColumnStyle)Assert.Single(result.ColumnStyles)).Width);

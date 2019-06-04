@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     public class TimerTests
     {
         [Fact]
-        public void Ctor_Default()
+        public void Timer_Ctor_Default()
         {
             var timer = new SubTimer();
             Assert.Null(timer.Container);
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Ctor_IContainer()
+        public void Timer_Ctor_IContainer()
         {
             var container = new Container();
             var timer = new SubTimer(container);
@@ -37,14 +37,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Ctor_NullContainer_ThrowsArgumentNullException()
+        public void Timer_Ctor_NullContainer_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("container", () => new Timer(null));
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Enabled_Set_GetReturnsExpected(bool value)
+        public void Timer_Enabled_Set_GetReturnsExpected(bool value)
         {
             var timer = new Timer
             {
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Enabled_SetDesignMode_GetReturnsExpected(bool value)
+        public void Timer_Enabled_SetDesignMode_GetReturnsExpected(bool value)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Enabled_SetDesignModeAfterEnabling_GetReturnsExpected(bool value)
+        public void Timer_Enabled_SetDesignModeAfterEnabling_GetReturnsExpected(bool value)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(1)]
         [InlineData(100)]
-        public void Interval_Set_GetReturnsExpected(int value)
+        public void Timer_Interval_Set_GetReturnsExpected(int value)
         {
             var timer = new Timer
             {
@@ -122,11 +122,11 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(1)]
         [InlineData(100)]
-        public void Interval_SetStarted_GetReturnsExpected(int value)
+        public void Timer_Interval_SetStarted_GetReturnsExpected(int value)
         {
             var timer = new Timer();
             timer.Start();
-            
+
             timer.Interval = value;
             Assert.Equal(value, timer.Interval);
 
@@ -138,12 +138,12 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(1)]
         [InlineData(100)]
-        public void Interval_SetStopped_GetReturnsExpected(int value)
+        public void Timer_Interval_SetStopped_GetReturnsExpected(int value)
         {
             var timer = new Timer();
             timer.Start();
             timer.Stop();
-            
+
             timer.Interval = value;
             Assert.Equal(value, timer.Interval);
 
@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(1)]
         [InlineData(100)]
-        public void Interval_SetDesignMode_GetReturnsExpected(int value)
+        public void Timer_Interval_SetDesignMode_GetReturnsExpected(int value)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(1)]
         [InlineData(100)]
-        public void Interval_SetDesignModeAfterEnabling_GetReturnsExpected(int value)
+        public void Timer_Interval_SetDesignModeAfterEnabling_GetReturnsExpected(int value)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void Interval_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
+        public void Timer_Interval_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var timer = new Timer();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => timer.Interval = value);
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void Tag_Set_GetReturnsExpected(object value)
+        public void Timer_Tag_Set_GetReturnsExpected(object value)
         {
             var timer = new Timer
             {
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void Tag_SetDesignMode_GetReturnsExpected(object value)
+        public void Timer_Tag_SetDesignMode_GetReturnsExpected(object value)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Start_Stop_Success(bool designMode)
+        public void Timer_Start_Stop_Success(bool designMode)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -259,7 +259,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Start_MultipleTimes_Success(bool designMode)
+        public void Timer_Start_MultipleTimes_Success(bool designMode)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Start again.
             timer.Start();
             Assert.True(timer.Enabled);
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Stop_Restart_Success(bool designMode)
+        public void Timer_Stop_Restart_Success(bool designMode)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Stop_MultipleTimes_Success(bool designMode)
+        public void Timer_Stop_MultipleTimes_Success(bool designMode)
         {
             var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void OnTick_Invoke_CallsTick()
+        public void Timer_OnTick_Invoke_CallsTick()
         {
             var timer = new SubTimer();
             var eventArgs = new EventArgs();
@@ -365,7 +365,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Dispose_NotStarted_Succcess()
+        public void Timer_Dispose_NotStarted_Succcess()
         {
             var timer = new Timer();
             timer.Dispose();
@@ -377,7 +377,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Dispose_Started_Succcess()
+        public void Timer_Dispose_Started_Succcess()
         {
             var timer = new Timer();
             timer.Start();
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Dispose_Stopped_Succcess()
+        public void Timer_Dispose_Stopped_Succcess()
         {
             var timer = new Timer();
             timer.Start();
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ToString_Invoke_ReturnsExpected()
+        public void Timer_ToString_Invoke_ReturnsExpected()
         {
             var timer = new Timer();
             Assert.Equal("System.Windows.Forms.Timer, Interval: 100", timer.ToString());

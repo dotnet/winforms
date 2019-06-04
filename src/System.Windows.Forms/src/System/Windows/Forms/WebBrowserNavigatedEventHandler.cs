@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Delegate to the WebBrowser Navigated event.
-    /// </devdoc>
+    /// </summary>
     public delegate void WebBrowserNavigatedEventHandler(object sender, WebBrowserNavigatedEventArgs e);
 }

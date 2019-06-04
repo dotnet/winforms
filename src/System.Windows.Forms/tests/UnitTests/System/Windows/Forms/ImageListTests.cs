@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Tests
         public void ImageList_ColorDepth_SetInvalid_ThrowsInvalidEnumArgumentException(ColorDepth value)
         {
             var list = new ImageList();
-            Assert.Throws<InvalidEnumArgumentException>("value", ()=> list.ColorDepth = value);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => list.ColorDepth = value);
         }
 
         public static IEnumerable<object[]> ImageSize_TestData()
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Tests
         public void ImageList_ImageSize_SetEmpty__ThrowsArgumentException()
         {
             var list = new ImageList();
-            Assert.Throws<ArgumentException>("value", ()=> list.ImageSize = Size.Empty);
+            Assert.Throws<ArgumentException>("value", () => list.ImageSize = Size.Empty);
         }
 
         public static IEnumerable<object[]> ImageList_SetInvalidDimension_TestData()
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Tests
         public void ImageList_ImageSize_SetInvalidWidth_ThrowsArgumentOutOfRangeException(int width)
         {
             var list = new ImageList();
-            Assert.Throws<ArgumentOutOfRangeException>("value", ()=> list.ImageSize = new Size(width, 1));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => list.ImageSize = new Size(width, 1));
         }
 
         [Theory]
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Tests
         public void ImageList_ImageSize_SetInvalidHeight_ThrowsArgumentOutOfRangeException(int width)
         {
             var list = new ImageList();
-            Assert.Throws<ArgumentOutOfRangeException>("value", ()=> list.ImageSize = new Size(width, 1));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => list.ImageSize = new Size(width, 1));
         }
     }
 }

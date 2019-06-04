@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design.Tests
             var collection = new DesignerActionItemCollection();
             Assert.Empty(collection);
         }
-        
+
         [Fact]
         public void DesignerActionItemCollection_Add_DesignerActionItem_Success()
         {
@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design.Tests
             var collection = new DesignerActionItemCollection();
             Assert.Throws<ArgumentNullException>("value", () => collection.Add(null));
         }
-        
+
         [Fact]
         public void DesignerActionItemCollection_Insert_DesignerActionItem_Success()
         {

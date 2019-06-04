@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<NotifyIcon>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new NotifyIcon(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new NotifyIcon(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
             var icon = new NotifyIcon(mockContainer.Object);

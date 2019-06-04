@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the Help event of a Control.
-    /// </devdoc>
+    /// </summary>
     public delegate void HelpEventHandler(object sender, HelpEventArgs hlpevent);
 }

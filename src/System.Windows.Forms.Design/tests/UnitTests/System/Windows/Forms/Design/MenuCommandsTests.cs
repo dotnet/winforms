@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design.Tests
             yield return new object[] { MenuCommands.SetStatusText, new CommandID(new Guid("74d21313-2aee-11d1-8bfb-00a0c90f26f7"), 16387) };
             yield return new object[] { MenuCommands.TraySelectionMenu, new CommandID(new Guid("74d21312-2aee-11d1-8bfb-00a0c90f26f7"), 1283) };
         }
-        
+
         [Theory]
         [MemberData(nameof(Commands_TestData))]
         public void MenuCommands_Commands_Get_ReturnsExected(CommandID command, CommandID expected)

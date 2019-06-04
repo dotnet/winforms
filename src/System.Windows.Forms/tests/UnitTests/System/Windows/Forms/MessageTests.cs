@@ -199,7 +199,7 @@ namespace System.Windows.Forms.Tests
                 {
                     LParam = ptr
                 };
-                var lparam = Assert.IsType<TestStruct>(message.GetLParam(typeof(TestStruct)));
+                TestStruct lparam = Assert.IsType<TestStruct>(message.GetLParam(typeof(TestStruct)));
                 Assert.Equal(1, lparam._field1);
                 Assert.Equal(2, lparam._field2);
             }

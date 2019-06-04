@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">Горизонтальная полоса прокрутки</target>
+        <target state="translated">По горизонтали</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">Вертикальная полоса прокрутки</target>
+        <target state="translated">По вертикали</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -11614,7 +11614,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="selectedIndexChangedEventDescr">
         <source>Occurs when the value of the SelectedIndex property changes.</source>
-        <target state="translated">Возникает изменении свойства SelectedIndex.</target>
+        <target state="translated">Возникает при изменении свойства SelectedIndex.</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedIndexDescr">

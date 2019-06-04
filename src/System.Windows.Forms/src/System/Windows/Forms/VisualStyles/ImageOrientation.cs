@@ -8,11 +8,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum ImageOrientation 
+    public enum ImageOrientation
     {
-    	Vertical = 0,
-    	Horizontal = 1,
-    //		TM_ENUM(0, IL, VERTICAL)
-    //		TM_ENUM(1, IL, HORIZONTAL)
+        Vertical = 0,
+        Horizontal = 1,
+        //		TM_ENUM(0, IL, VERTICAL)
+        //		TM_ENUM(1, IL, HORIZONTAL)
     }
 }

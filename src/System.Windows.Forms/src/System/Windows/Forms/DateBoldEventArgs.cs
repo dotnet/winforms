@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The month calendar control fires this event to request information about how
     /// the days within the visible months should be displayed.
-    /// </devdoc>
+    /// </summary>
     public class DateBoldEventArgs : EventArgs
     {
         internal DateBoldEventArgs(DateTime start, int size)
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         }
 
         public DateTime StartDate { get; }
-        
+
         public int Size { get; }
 
         public int[] DaysToBold { get; set; }

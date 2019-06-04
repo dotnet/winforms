@@ -4,47 +4,47 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the HTML 1.0 Help engine.
-    /// </devdoc>
+    /// </summary>
     public enum HelpNavigator
     {
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic referenced by the specified
         /// Url. This field is constant.
-        /// </devdoc>
+        /// </summary>
         Topic = unchecked((int)0x80000001),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the contents of the HTML 1.0 Help file. This field is constant.
-        /// </devdoc>
+        /// </summary>
         TableOfContents = unchecked((int)0x80000002),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the index of a specified Url. This field is constant.
-        /// </devdoc>
+        /// </summary>
         Index = unchecked((int)0x80000003),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the search page of a specified Url. This field is constant.
-        /// </devdoc>
+        /// </summary>
         Find = unchecked((int)0x80000004),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic referenced by the specified
         /// Url. This field is constant.
-        /// </devdoc>
+        /// </summary>
         AssociateIndex = unchecked((int)0x80000005),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic referenced by the specified
         /// Url. This field is constant.
-        /// </devdoc>
+        /// </summary>
         KeywordIndex = unchecked((int)0x80000006),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic ID This field is constant.
-        /// </devdoc>
+        /// </summary>
         TopicId = unchecked((int)0x80000007)
     }
 }

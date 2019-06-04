@@ -86,9 +86,11 @@ namespace System.Windows.Forms.Tests
         public void Form_ActiveMdiChildGetSet()
         {
             var form = new Form();
-            var child = new Form();
-            child.Visible = true;
-            child.Enabled = true;
+            var child = new Form
+            {
+                Visible = true,
+                Enabled = true
+            };
 
             form.ActiveMdiChildInternal = child;
 
@@ -100,9 +102,11 @@ namespace System.Windows.Forms.Tests
         public void Form_ActiveMdiChildGetSetChildNotVisible()
         {
             var form = new Form();
-            var child = new Form();
-            child.Visible = false;
-            child.Enabled = true;
+            var child = new Form
+            {
+                Visible = false,
+                Enabled = true
+            };
 
             form.ActiveMdiChildInternal = child;
 
@@ -113,9 +117,11 @@ namespace System.Windows.Forms.Tests
         public void Form_ActiveMdiChildGetSetChildNotEnabled()
         {
             var form = new Form();
-            var child = new Form();
-            child.Visible = true;
-            child.Enabled = false;
+            var child = new Form
+            {
+                Visible = true,
+                Enabled = false
+            };
 
             form.ActiveMdiChildInternal = child;
 

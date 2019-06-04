@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms.PropertyGridInternal {
+namespace System.Windows.Forms.PropertyGridInternal
+{
 
     using System.Runtime.Serialization.Formatters;
     using System.Diagnostics;
@@ -25,21 +26,26 @@ namespace System.Windows.Forms.PropertyGridInternal {
     // we never go through the property descriptor to change the value, but recreate each
     // time.
     //
-    internal class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry {
+    internal class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+    {
 
         internal ImmutablePropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyDescriptor propInfo, bool hide)
-        : base(ownerGrid, peParent, propInfo, hide) {
+        : base(ownerGrid, peParent, propInfo, hide)
+        {
         }
 
-        internal override bool IsPropertyReadOnly {
-            get {
+        internal override bool IsPropertyReadOnly
+        {
+            get
+            {
                 return ShouldRenderReadOnly;
             }
         }
 
         public override object PropertyValue
         {
-            get {
+            get
+            {
                 return base.PropertyValue;
             }
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
@@ -55,49 +61,64 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 IDictionary values = new Hashtable(props.Count);
                 object newObject = null;
 
-                for (int i = 0; i < props.Count; i++) {
-                    if (propertyInfo.Name != null && propertyInfo.Name.Equals(props[i].Name)) {
+                for (int i = 0; i < props.Count; i++)
+                {
+                    if (propertyInfo.Name != null && propertyInfo.Name.Equals(props[i].Name))
+                    {
                         values[props[i].Name] = value;
                     }
-                    else {
+                    else
+                    {
                         values[props[i].Name] = props[i].GetValue(owner);
                     }
                 }
 
-                try {
+                try
+                {
                     newObject = parentConverter.CreateInstance(parentEntry, values);
                 }
-                catch (Exception e) {
-                    if (string.IsNullOrEmpty(e.Message)) {
+                catch (Exception e)
+                {
+                    if (string.IsNullOrEmpty(e.Message))
+                    {
                         throw new TargetInvocationException(string.Format(SR.ExceptionCreatingObject,
                                                             InstanceParentGridEntry.PropertyType.FullName,
                                                             e.ToString()), e);
                     }
                     else
+                    {
                         throw; // rethrow the same exception
+                    }
                 }
 
-                if (newObject != null) {
+                if (newObject != null)
+                {
                     parentEntry.PropertyValue = newObject;
                 }
             }
         }
 
-        internal override bool NotifyValueGivenParent(object obj, int type) {
+        internal override bool NotifyValueGivenParent(object obj, int type)
+        {
             return ParentGridEntry.NotifyValue(type);
         }
 
-        public override bool ShouldRenderReadOnly {
-            get {
+        public override bool ShouldRenderReadOnly
+        {
+            get
+            {
                 return InstanceParentGridEntry.ShouldRenderReadOnly;
             }
         }
 
-        private GridEntry InstanceParentGridEntry {
-            get {
-                GridEntry parent = this.ParentGridEntry;
+        private GridEntry InstanceParentGridEntry
+        {
+            get
+            {
+                GridEntry parent = ParentGridEntry;
 
-                if (parent is CategoryGridEntry) {
+                if (parent is CategoryGridEntry)
+                {
                     parent = parent.ParentGridEntry;
                 }
 

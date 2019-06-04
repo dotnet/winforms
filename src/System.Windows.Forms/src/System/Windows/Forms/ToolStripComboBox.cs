@@ -2,55 +2,49 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing.Design;
-    using System.Collections.Specialized;
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms.Design; 
-    using System.Security;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Internal;     
-    using System.Globalization;
-    
-    /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox"]/*' />
-    /// <devdoc/>
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Windows.Forms.Design;
+
+namespace System.Windows.Forms
+{
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DefaultProperty(nameof(Items))]
-    public class ToolStripComboBox : ToolStripControlHost {
-
-
-        internal static readonly object EventDropDown                                    = new object();
-        internal static readonly object EventDropDownClosed                              = new object();
-        internal static readonly object EventDropDownStyleChanged                        = new object();
-        internal static readonly object EventSelectedIndexChanged                        = new object();
-        internal static readonly object EventSelectionChangeCommitted                    = new object();
-        internal static readonly object EventTextUpdate                                   = new object();
+    public class ToolStripComboBox : ToolStripControlHost
+    {
+        internal static readonly object EventDropDown = new object();
+        internal static readonly object EventDropDownClosed = new object();
+        internal static readonly object EventDropDownStyleChanged = new object();
+        internal static readonly object EventSelectedIndexChanged = new object();
+        internal static readonly object EventSelectionChangeCommitted = new object();
+        internal static readonly object EventTextUpdate = new object();
 
         private static readonly Padding dropDownPadding = new Padding(2);
         private static readonly Padding padding = new Padding(1, 0, 1, 0);
 
         private Padding scaledDropDownPadding = dropDownPadding;
         private Padding scaledPadding = padding;
-    
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.ToolStripComboBox"]/*' />
-        public ToolStripComboBox() : base(CreateControlInstance()) {
+
+        public ToolStripComboBox() : base(CreateControlInstance())
+        {
             ToolStripComboBoxControl combo = Control as ToolStripComboBoxControl;
             combo.Owner = this;
 
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 scaledPadding = DpiHelper.LogicalToDeviceUnits(padding);
                 scaledDropDownPadding = DpiHelper.LogicalToDeviceUnits(dropDownPadding);
             }
         }
 
 
-        public ToolStripComboBox(string name) : this() {
-            this.Name = name;
+        public ToolStripComboBox(string name) : this()
+        {
+            Name = name;
         }
 
         /// <summary>
@@ -59,34 +53,35 @@ namespace System.Windows.Forms {
         /// <returns>
         ///     The new instance of the accessibility object for this ToolStripComboBox ToolStrip item
         /// </returns>
-        protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripComboBoxAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ToolStripComboBoxAccessibleObject(this);
         }
 
         /// <summary>
         /// Defines the ToolStripComboBox AccessibleObject.
         /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]
-        internal class ToolStripComboBoxAccessibleObject : ToolStripItemAccessibleObject {
-            private ToolStripComboBox ownerItem = null;
+        internal class ToolStripComboBoxAccessibleObject : ToolStripItemAccessibleObject
+        {
+            private readonly ToolStripComboBox ownerItem = null;
 
             /// <summary>
             /// Initializes the new instance of ToolStripComboBoxAccessibleObject.
             /// </summary>
             /// <param name="ownerItem">The owning ToolStripComboBox.</param>
-            public ToolStripComboBoxAccessibleObject(ToolStripComboBox ownerItem) : base(ownerItem) {
-              this.ownerItem = ownerItem;
+            public ToolStripComboBoxAccessibleObject(ToolStripComboBox ownerItem) : base(ownerItem)
+            {
+                this.ownerItem = ownerItem;
             }
 
             /// <summary>
             /// Gets a description of the default action for an object.
             /// </summary>
-            public override string DefaultAction {
-                get {
+            public override string DefaultAction
+            {
+                get
+                {
                     // Note: empty value is provided due to this Accessible object
                     // represents the control container but not the contained ComboBox
                     // control itself.
@@ -97,22 +92,26 @@ namespace System.Windows.Forms {
             /// <summary>
             /// Performs the default action associated with this accessible object.
             /// </summary>
-            public override void DoDefaultAction() {
+            public override void DoDefaultAction()
+            {
                 // Do nothing.
             }
 
             /// <summary>
             /// Gets the role of this accessible object.
             /// </summary>
-            public override AccessibleRole Role {
-               get {
-                   AccessibleRole role = Owner.AccessibleRole;
-                   if (role != AccessibleRole.Default) {
-                       return role;
-                   }
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    AccessibleRole role = Owner.AccessibleRole;
+                    if (role != AccessibleRole.Default)
+                    {
+                        return role;
+                    }
 
-                   return AccessibleRole.ComboBox;
-               }
+                    return AccessibleRole.ComboBox;
+                }
             }
 
             /// <summary>
@@ -120,10 +119,12 @@ namespace System.Windows.Forms {
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
                 if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild) {
-                    return this.ownerItem.ComboBox.AccessibilityObject;
+                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                {
+                    return ownerItem.ComboBox.AccessibilityObject;
                 }
 
                 // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
@@ -133,26 +134,30 @@ namespace System.Windows.Forms {
             /// <summary>
             /// Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
-                get {
-                    return this.ownerItem.RootToolStrip.AccessibilityObject;
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            {
+                get
+                {
+                    return ownerItem.RootToolStrip.AccessibilityObject;
                 }
             }
         }
-      
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.ToolStripComboBox1"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public ToolStripComboBox(Control c) : base(c) {
+        public ToolStripComboBox(Control c) : base(c)
+        {
             throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
         }
 
-        private static Control CreateControlInstance() {
-            ComboBox comboBox = new ToolStripComboBoxControl();  
-            comboBox.FlatStyle = FlatStyle.Popup;
-            comboBox.Font = ToolStripManager.DefaultFont;
+        private static Control CreateControlInstance()
+        {
+            ComboBox comboBox = new ToolStripComboBoxControl
+            {
+                FlatStyle = FlatStyle.Popup,
+                Font = ToolStripManager.DefaultFont
+            };
             return comboBox;
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteCustomSource"]/*' />
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
@@ -160,31 +165,32 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource { 
+        public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource
+        {
             get { return ComboBox.AutoCompleteCustomSource; }
-            set { ComboBox.AutoCompleteCustomSource = value;}
+            set { ComboBox.AutoCompleteCustomSource = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteMode"]/*' />
         [
         DefaultValue(AutoCompleteMode.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public AutoCompleteMode AutoCompleteMode { 
+        public AutoCompleteMode AutoCompleteMode
+        {
             get { return ComboBox.AutoCompleteMode; }
-            set { ComboBox.AutoCompleteMode = value;}
+            set { ComboBox.AutoCompleteMode = value; }
         }
-        
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteSource"]/*' />
+
         [
         DefaultValue(AutoCompleteSource.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public AutoCompleteSource AutoCompleteSource { 
+        public AutoCompleteSource AutoCompleteSource
+        {
             get { return ComboBox.AutoCompleteSource; }
-            set { ComboBox.AutoCompleteSource = value;}
+            set { ComboBox.AutoCompleteSource = value; }
         }
 
         [
@@ -192,11 +198,14 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
@@ -206,164 +215,156 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.ComboBox"]/*' />
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ComboBox ComboBox {
-            get{
+        public ComboBox ComboBox
+        {
+            get
+            {
                 return Control as ComboBox;
             }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DefaultSize"]/*' />
-        protected override Size DefaultSize {
-            get {
-                return new Size(100,22);
+        protected override Size DefaultSize
+        {
+            get
+            {
+                return new Size(100, 22);
             }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DefaultMargin"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
-        protected internal override Padding DefaultMargin {
-            get {
-                if (IsOnDropDown) {
+        /// </summary>
+        protected internal override Padding DefaultMargin
+        {
+            get
+            {
+                if (IsOnDropDown)
+                {
                     return scaledDropDownPadding;
                 }
-                else {
+                else
+                {
                     return scaledPadding;
                 }
             }
         }
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick+=value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+        public new event EventHandler DoubleClick
+        {
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
-        public event EventHandler DropDown {
-            add {
-                Events.AddHandler(EventDropDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDown, value);
-            }
+        public event EventHandler DropDown
+        {
+            add => Events.AddHandler(EventDropDown, value);
+            remove => Events.RemoveHandler(EventDropDown, value);
         }
 
-         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
-        public event EventHandler DropDownClosed {
-            add {
-                Events.AddHandler(EventDropDownClosed, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownClosed, value);
-            }
+        public event EventHandler DropDownClosed
+        {
+            add => Events.AddHandler(EventDropDownClosed, value);
+            remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
-        public event EventHandler DropDownStyleChanged {
-            add {
-                Events.AddHandler(EventDropDownStyleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownStyleChanged, value);
-            }
+        public event EventHandler DropDownStyleChanged
+        {
+            add => Events.AddHandler(EventDropDownStyleChanged, value);
+            remove => Events.RemoveHandler(EventDropDownStyleChanged, value);
         }
 
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownHeight"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownHeightDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(106)
         ]
-        public int DropDownHeight { 
+        public int DropDownHeight
+        {
             get { return ComboBox.DropDownHeight; }
-            set { ComboBox.DropDownHeight = value;}
+            set { ComboBox.DropDownHeight = value; }
 
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyle"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ComboBoxStyle.DropDown),
         SRDescription(nameof(SR.ComboBoxStyleDescr)),
         RefreshPropertiesAttribute(RefreshProperties.Repaint)
         ]
-        public ComboBoxStyle DropDownStyle {
+        public ComboBoxStyle DropDownStyle
+        {
             get { return ComboBox.DropDownStyle; }
-            set { ComboBox.DropDownStyle = value;}
+            set { ComboBox.DropDownStyle = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownWidth"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))
         ]
-        public int DropDownWidth { 
+        public int DropDownWidth
+        {
             get { return ComboBox.DropDownWidth; }
-            set { ComboBox.DropDownWidth = value;}
+            set { ComboBox.DropDownWidth = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DroppedDown"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxDroppedDownDescr))
         ]
-        public bool DroppedDown { 
+        public bool DroppedDown
+        {
             get { return ComboBox.DroppedDown; }
-            set { ComboBox.DroppedDown = value;}
+            set { ComboBox.DroppedDown = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FlatStyle"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(FlatStyle.Popup),
         Localizable(true),
         SRDescription(nameof(SR.ComboBoxFlatStyleDescr))
         ]
-        public FlatStyle FlatStyle { 
+        public FlatStyle FlatStyle
+        {
             get { return ComboBox.FlatStyle; }
-            set { ComboBox.FlatStyle = value;}
+            set { ComboBox.FlatStyle = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.IntegralHeight"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
         SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))
         ]
-        public bool IntegralHeight {
+        public bool IntegralHeight
+        {
             get { return ComboBox.IntegralHeight; }
-            set { ComboBox.IntegralHeight = value;}
+            set { ComboBox.IntegralHeight = value; }
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Items"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Collection of the items contained in this ComboBox.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -371,146 +372,131 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ComboBoxItemsDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
-        public ComboBox.ObjectCollection Items {
-            get{
+        public ComboBox.ObjectCollection Items
+        {
+            get
+            {
                 return ComboBox.Items;
             }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxDropDownItems"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(8),
         Localizable(true),
         SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))
         ]
-        public int MaxDropDownItems { 
+        public int MaxDropDownItems
+        {
             get { return ComboBox.MaxDropDownItems; }
-            set { ComboBox.MaxDropDownItems = value;}
+            set { ComboBox.MaxDropDownItems = value; }
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxLength"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
         SRDescription(nameof(SR.ComboBoxMaxLengthDescr))
         ]
-        public int MaxLength {
-           get {  return ComboBox.MaxLength; }
-           set {  ComboBox.MaxLength = value; }
+        public int MaxLength
+        {
+            get { return ComboBox.MaxLength; }
+            set { ComboBox.MaxLength = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndex"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))
         ]
-        public int SelectedIndex { 
+        public int SelectedIndex
+        {
             get { return ComboBox.SelectedIndex; }
-            set { ComboBox.SelectedIndex = value;}
+            set { ComboBox.SelectedIndex = value; }
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-        public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EventSelectedIndexChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSelectedIndexChanged, value);
-            }
+        public event EventHandler SelectedIndexChanged
+        {
+            add => Events.AddHandler(EventSelectedIndexChanged, value);
+            remove => Events.RemoveHandler(EventSelectedIndexChanged, value);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedItem"]/*' />
         [
         Browsable(false),
         Bindable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectedItemDescr))
         ]
-        public object SelectedItem { 
+        public object SelectedItem
+        {
             get { return ComboBox.SelectedItem; }
-            set { ComboBox.SelectedItem = value;}
-        }  
+            set { ComboBox.SelectedItem = value; }
+        }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedText"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectedTextDescr))
         ]
-        public string SelectedText {
+        public string SelectedText
+        {
             get { return ComboBox.SelectedText; }
-            set { ComboBox.SelectedText = value;}
+            set { ComboBox.SelectedText = value; }
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionLength"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))
         ]
-        public int SelectionLength { 
+        public int SelectionLength
+        {
             get { return ComboBox.SelectionLength; }
-            set { ComboBox.SelectionLength = value;}
+            set { ComboBox.SelectionLength = value; }
         }
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionStart"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectionStartDescr))
         ]
-        public int SelectionStart { 
+        public int SelectionStart
+        {
             get { return ComboBox.SelectionStart; }
-            set { ComboBox.SelectionStart = value;}
+            set { ComboBox.SelectionStart = value; }
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Sorted"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.ComboBoxSortedDescr))
         ]
-        public bool Sorted { 
+        public bool Sorted
+        {
             get { return ComboBox.Sorted; }
-            set {ComboBox.Sorted = value;}
+            set { ComboBox.Sorted = value; }
         }
 
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.TextUpdate"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
-        public event EventHandler TextUpdate {
-            add {
-                Events.AddHandler(EventTextUpdate, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTextUpdate, value);
-            }
+        public event EventHandler TextUpdate
+        {
+            add => Events.AddHandler(EventTextUpdate, value);
+            remove => Events.RemoveHandler(EventTextUpdate, value);
         }
 
-#region WrappedMethods        
+        #region WrappedMethods        
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.BeginUpdate"]/*' />
         public void BeginUpdate() { ComboBox.BeginUpdate(); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.EndUpdate"]/*' />
         public void EndUpdate() { ComboBox.EndUpdate(); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindString"]/*' />
         public int FindString(string s) { return ComboBox.FindString(s); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindString1"]/*' />
         public int FindString(string s, int startIndex) { return ComboBox.FindString(s, startIndex); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindStringExact"]/*' />
         public int FindStringExact(string s) { return ComboBox.FindStringExact(s); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindStringExact1"]/*' />
         public int FindStringExact(string s, int startIndex) { return ComboBox.FindStringExact(s, startIndex); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.GetItemHeight"]/*' />
         public int GetItemHeight(int index) { return ComboBox.GetItemHeight(index); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Select"]/*' />
         public void Select(int start, int length) { ComboBox.Select(start, length); }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectAll"]/*' />
         public void SelectAll() { ComboBox.SelectAll(); }
 
-#endregion WrappedMethods
+        #endregion WrappedMethods
 
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.GetPreferredSize"]/*' />
-        public override Size GetPreferredSize(Size constrainingSize) {
+        public override Size GetPreferredSize(Size constrainingSize)
+        {
 
             // 
             Size preferredSize = base.GetPreferredSize(constrainingSize);
@@ -518,125 +504,142 @@ namespace System.Windows.Forms {
 
             return preferredSize;
         }
-        private void HandleDropDown(object sender, System.EventArgs e) {
+        private void HandleDropDown(object sender, System.EventArgs e)
+        {
             OnDropDown(e);
         }
-        private void HandleDropDownClosed(object sender, System.EventArgs e) {
+        private void HandleDropDownClosed(object sender, System.EventArgs e)
+        {
             OnDropDownClosed(e);
         }
 
-        private void HandleDropDownStyleChanged(object sender, System.EventArgs e) {
+        private void HandleDropDownStyleChanged(object sender, System.EventArgs e)
+        {
             OnDropDownStyleChanged(e);
         }
-        private void HandleSelectedIndexChanged(object sender, System.EventArgs e) {
+        private void HandleSelectedIndexChanged(object sender, System.EventArgs e)
+        {
             OnSelectedIndexChanged(e);
         }
-        private void HandleSelectionChangeCommitted(object sender, System.EventArgs e) {
+        private void HandleSelectionChangeCommitted(object sender, System.EventArgs e)
+        {
             OnSelectionChangeCommitted(e);
         }
-        private void HandleTextUpdate(object sender, System.EventArgs e) {
+        private void HandleTextUpdate(object sender, System.EventArgs e)
+        {
             OnTextUpdate(e);
         }
-     
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDown"]/*' />
-        protected virtual void OnDropDown(EventArgs e) {
-            if (ParentInternal != null) {
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter); 
+
+        protected virtual void OnDropDown(EventArgs e)
+        {
+            if (ParentInternal != null)
+            {
+                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
-            }            
-            RaiseEvent(EventDropDown, e);            
+            }
+            RaiseEvent(EventDropDown, e);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDown"]/*' />
-        protected virtual void OnDropDownClosed(EventArgs e) {
-            if (ParentInternal != null) {
+        protected virtual void OnDropDownClosed(EventArgs e)
+        {
+            if (ParentInternal != null)
+            {
                 // PERF, 
 
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);  
+                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.ResumeMenuMode();
             }
-            RaiseEvent(EventDropDownClosed, e);            
+            RaiseEvent(EventDropDownClosed, e);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDownStyleChanged"]/*' />
-        protected virtual void OnDropDownStyleChanged(EventArgs e) {
-            RaiseEvent(EventDropDownStyleChanged, e);            
+        protected virtual void OnDropDownStyleChanged(EventArgs e)
+        {
+            RaiseEvent(EventDropDownStyleChanged, e);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSelectedIndexChanged"]/*' />
-        protected virtual void OnSelectedIndexChanged(EventArgs e) {
-            RaiseEvent(EventSelectedIndexChanged, e);            
+        protected virtual void OnSelectedIndexChanged(EventArgs e)
+        {
+            RaiseEvent(EventSelectedIndexChanged, e);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSelectionChangeCommitted"]/*' />
-        protected virtual void OnSelectionChangeCommitted(EventArgs e) {
-            RaiseEvent(EventSelectionChangeCommitted, e);            
+        protected virtual void OnSelectionChangeCommitted(EventArgs e)
+        {
+            RaiseEvent(EventSelectionChangeCommitted, e);
         }
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnTextUpdate"]/*' />
-        protected virtual void OnTextUpdate(EventArgs e) {
-            RaiseEvent(EventTextUpdate, e);            
+        protected virtual void OnTextUpdate(EventArgs e)
+        {
+            RaiseEvent(EventTextUpdate, e);
         }
-       
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSubscribeControlEvents"]/*' />
-        protected override void OnSubscribeControlEvents(Control control) {
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null) {
+
+        protected override void OnSubscribeControlEvents(Control control)
+        {
+            if (control is ComboBox comboBox)
+            {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 // 
-                comboBox.DropDown                   += new EventHandler(HandleDropDown);
-                comboBox.DropDownClosed             += new EventHandler(HandleDropDownClosed);
-                comboBox.DropDownStyleChanged       += new EventHandler(HandleDropDownStyleChanged);
-                comboBox.SelectedIndexChanged       += new EventHandler(HandleSelectedIndexChanged);
-                comboBox.SelectionChangeCommitted   += new EventHandler(HandleSelectionChangeCommitted);
-                comboBox.TextUpdate                 += new EventHandler(HandleTextUpdate);
-            }      
-    
+                comboBox.DropDown += new EventHandler(HandleDropDown);
+                comboBox.DropDownClosed += new EventHandler(HandleDropDownClosed);
+                comboBox.DropDownStyleChanged += new EventHandler(HandleDropDownStyleChanged);
+                comboBox.SelectedIndexChanged += new EventHandler(HandleSelectedIndexChanged);
+                comboBox.SelectionChangeCommitted += new EventHandler(HandleSelectionChangeCommitted);
+                comboBox.TextUpdate += new EventHandler(HandleTextUpdate);
+            }
+
             base.OnSubscribeControlEvents(control);
         }
-      
-        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnUnsubscribeControlEvents"]/*' />
-        protected override void OnUnsubscribeControlEvents(Control control) {
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null) {
-               // Please keep this alphabetized and in sync with Unsubscribe
-               // 
-               comboBox.DropDown                   -= new EventHandler(HandleDropDown);
-               comboBox.DropDownClosed             -= new EventHandler(HandleDropDownClosed);
-               comboBox.DropDownStyleChanged       -= new EventHandler(HandleDropDownStyleChanged);
-               comboBox.SelectedIndexChanged       -= new EventHandler(HandleSelectedIndexChanged);
-               comboBox.SelectionChangeCommitted   -= new EventHandler(HandleSelectionChangeCommitted);
-               comboBox.TextUpdate                 -= new EventHandler(HandleTextUpdate);
-            }    
+
+        protected override void OnUnsubscribeControlEvents(Control control)
+        {
+            if (control is ComboBox comboBox)
+            {
+                // Please keep this alphabetized and in sync with Unsubscribe
+                // 
+                comboBox.DropDown -= new EventHandler(HandleDropDown);
+                comboBox.DropDownClosed -= new EventHandler(HandleDropDownClosed);
+                comboBox.DropDownStyleChanged -= new EventHandler(HandleDropDownStyleChanged);
+                comboBox.SelectedIndexChanged -= new EventHandler(HandleSelectedIndexChanged);
+                comboBox.SelectionChangeCommitted -= new EventHandler(HandleSelectionChangeCommitted);
+                comboBox.TextUpdate -= new EventHandler(HandleTextUpdate);
+            }
             base.OnUnsubscribeControlEvents(control);
         }
 
-        private bool ShouldSerializeDropDownWidth() {
+        private bool ShouldSerializeDropDownWidth()
+        {
             return ComboBox.ShouldSerializeDropDownWidth();
         }
 
-        internal override bool ShouldSerializeFont() {
-            return !object.Equals(this.Font, ToolStripManager.DefaultFont);
+        internal override bool ShouldSerializeFont()
+        {
+            return !object.Equals(Font, ToolStripManager.DefaultFont);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return base.ToString() + ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
         }
 
 
-        internal class ToolStripComboBoxControl : ComboBox {
-               private ToolStripComboBox owner = null;
+        internal class ToolStripComboBoxControl : ComboBox
+        {
+            private ToolStripComboBox owner = null;
 
-            public ToolStripComboBoxControl() {
-                   this.FlatStyle = FlatStyle.Popup;
-                   SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
-               }
+            public ToolStripComboBoxControl()
+            {
+                FlatStyle = FlatStyle.Popup;
+                SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
+            }
 
-            public ToolStripComboBox Owner {
+            public ToolStripComboBox Owner
+            {
                 get { return owner; }
                 set { owner = value; }
             }
 
-            private ProfessionalColorTable ColorTable {
-                get {
-                    if (Owner != null) {
-                        ToolStripProfessionalRenderer renderer = Owner.Renderer as ToolStripProfessionalRenderer;
-                        if (renderer != null) {
+            private ProfessionalColorTable ColorTable
+            {
+                get
+                {
+                    if (Owner != null)
+                    {
+                        if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
+                        {
                             return renderer.ColorTable;
                         }
                     }
@@ -650,104 +653,130 @@ namespace System.Windows.Forms {
             /// <returns>
             ///     The new instance of the accessibility object for this ToolStripComboBoxControl item
             /// </returns>
-            protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new ToolStripComboBoxControlAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
+                return new ToolStripComboBoxControlAccessibleObject(this);
             }
 
-            internal override FlatComboAdapter CreateFlatComboAdapterInstance() {
+            internal override FlatComboAdapter CreateFlatComboAdapterInstance()
+            {
                 return new ToolStripComboBoxFlatComboAdapter(this);
             }
 
-            internal class ToolStripComboBoxFlatComboAdapter : FlatComboAdapter {
+            internal class ToolStripComboBoxFlatComboAdapter : FlatComboAdapter
+            {
 
-                public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, /*smallButton=*/true) {
+                public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, /*smallButton=*/true)
+                {
                 }
 
-                private static bool UseBaseAdapter(ComboBox comboBox) {
+                private static bool UseBaseAdapter(ComboBox comboBox)
+                {
                     ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
-                    if (toolStripComboBox == null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer)) {
+                    if (toolStripComboBox == null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
+                    {
                         Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
                         return true;
                     }
                     return false;
                 }
 
-                private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl toolStripComboBoxControl) {
-                    if (toolStripComboBoxControl != null) {
+                private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl toolStripComboBoxControl)
+                {
+                    if (toolStripComboBoxControl != null)
+                    {
                         return toolStripComboBoxControl.ColorTable;
                     }
-                    return ProfessionalColors.ColorTable;                    
+                    return ProfessionalColors.ColorTable;
                 }
 
-                protected override Color GetOuterBorderColor(ComboBox comboBox) {
-                    if (UseBaseAdapter(comboBox)) {
+                protected override Color GetOuterBorderColor(ComboBox comboBox)
+                {
+                    if (UseBaseAdapter(comboBox))
+                    {
                         return base.GetOuterBorderColor(comboBox);
-                    }                            
+                    }
                     return (comboBox.Enabled) ? SystemColors.Window : GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder;
                 }
 
-                protected override Color GetPopupOuterBorderColor(ComboBox comboBox, bool focused) {
-                    if (UseBaseAdapter(comboBox)) {
+                protected override Color GetPopupOuterBorderColor(ComboBox comboBox, bool focused)
+                {
+                    if (UseBaseAdapter(comboBox))
+                    {
                         return base.GetPopupOuterBorderColor(comboBox, focused);
                     }
-                    if (!comboBox.Enabled) {
+                    if (!comboBox.Enabled)
+                    {
                         return SystemColors.ControlDark;
                     }
                     return (focused) ? GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder : SystemColors.Window;
                 }
 
-                protected override void DrawFlatComboDropDown(ComboBox comboBox, Graphics g, Rectangle dropDownRect) {
-                    if (UseBaseAdapter(comboBox)) {
-                            base.DrawFlatComboDropDown(comboBox, g, dropDownRect);
-                            return;
+                protected override void DrawFlatComboDropDown(ComboBox comboBox, Graphics g, Rectangle dropDownRect)
+                {
+                    if (UseBaseAdapter(comboBox))
+                    {
+                        base.DrawFlatComboDropDown(comboBox, g, dropDownRect);
+                        return;
                     }
 
-                    if (!comboBox.Enabled || !ToolStripManager.VisualStylesEnabled) {
+                    if (!comboBox.Enabled || !ToolStripManager.VisualStylesEnabled)
+                    {
                         g.FillRectangle(SystemBrushes.Control, dropDownRect);
                     }
-                    else {
+                    else
+                    {
                         ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
                         ProfessionalColorTable colorTable = GetColorTable(toolStripComboBox);
 
-                        if (!comboBox.DroppedDown) {
+                        if (!comboBox.DroppedDown)
+                        {
                             bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
-                            if (focused) {
-                                using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonSelectedGradientBegin, colorTable.ComboBoxButtonSelectedGradientEnd, LinearGradientMode.Vertical)) {
+                            if (focused)
+                            {
+                                using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonSelectedGradientBegin, colorTable.ComboBoxButtonSelectedGradientEnd, LinearGradientMode.Vertical))
+                                {
                                     g.FillRectangle(b, dropDownRect);
                                 }
                             }
-                            else if (toolStripComboBox.Owner.IsOnOverflow) {
-                                using (Brush b = new SolidBrush(colorTable.ComboBoxButtonOnOverflow)) {
+                            else if (toolStripComboBox.Owner.IsOnOverflow)
+                            {
+                                using (Brush b = new SolidBrush(colorTable.ComboBoxButtonOnOverflow))
+                                {
                                     g.FillRectangle(b, dropDownRect);
                                 }
                             }
-                            else {
-                                using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonGradientBegin, colorTable.ComboBoxButtonGradientEnd, LinearGradientMode.Vertical)) {
+                            else
+                            {
+                                using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonGradientBegin, colorTable.ComboBoxButtonGradientEnd, LinearGradientMode.Vertical))
+                                {
                                     g.FillRectangle(b, dropDownRect);
                                 }
                             }
                         }
-                        else {                              
-                            using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonPressedGradientBegin, colorTable.ComboBoxButtonPressedGradientEnd, LinearGradientMode.Vertical)) {
+                        else
+                        {
+                            using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonPressedGradientBegin, colorTable.ComboBoxButtonPressedGradientEnd, LinearGradientMode.Vertical))
+                            {
                                 g.FillRectangle(b, dropDownRect);
                             }
                         }
                     }
 
                     Brush brush;
-                    if (comboBox.Enabled) {
-                        if (AccessibilityImprovements.Level2 && SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled) {
+                    if (comboBox.Enabled)
+                    {
+                        if (SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled)
+                        {
                             brush = SystemBrushes.HighlightText;
                         }
-                        else {
+                        else
+                        {
                             brush = SystemBrushes.ControlText;
                         }
                     }
-                    else {
+                    else
+                    {
                         brush = SystemBrushes.GrayText;
                     }
                     Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
@@ -755,50 +784,54 @@ namespace System.Windows.Forms {
                     // if the width is odd - favor pushing it over one pixel right.
                     middle.X += (dropDownRect.Width % 2);
                     g.FillPolygon(brush, new Point[] {
-                        new Point(middle.X - FlatComboAdapter.Offset2Pixels, middle.Y - 1), 
-                        new Point(middle.X + FlatComboAdapter.Offset2Pixels + 1, middle.Y - 1), 
+                        new Point(middle.X - FlatComboAdapter.Offset2Pixels, middle.Y - 1),
+                        new Point(middle.X + FlatComboAdapter.Offset2Pixels + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + FlatComboAdapter.Offset2Pixels)
                     });
 
                 }
             }
 
-            protected override bool IsInputKey(Keys keyData) {
-                if ((keyData & Keys.Alt) == Keys.Alt) {
-                    if ((keyData & Keys.Down) == Keys.Down || (keyData & Keys.Up) == Keys.Up) {
+            protected override bool IsInputKey(Keys keyData)
+            {
+                if ((keyData & Keys.Alt) == Keys.Alt)
+                {
+                    if ((keyData & Keys.Down) == Keys.Down || (keyData & Keys.Up) == Keys.Up)
+                    {
                         return true;
                     }
                 }
                 return base.IsInputKey(keyData);
             }
 
-            protected override void OnDropDownClosed(EventArgs e) {
+            protected override void OnDropDownClosed(EventArgs e)
+            {
                 base.OnDropDownClosed(e);
                 Invalidate();
-                Update(); 
+                Update();
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
-            internal class ToolStripComboBoxControlAccessibleObject : ComboBoxUiaProvider {
+            internal class ToolStripComboBoxControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
+            {
 
-                private ComboBox.ChildAccessibleObject childAccessibleObject;
+                private readonly ComboBox.ChildAccessibleObject childAccessibleObject;
 
-                public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl) : base(toolStripComboBoxControl) {
+                public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl) : base(toolStripComboBoxControl)
+                {
                     childAccessibleObject = new ChildAccessibleObject(toolStripComboBoxControl, toolStripComboBoxControl.Handle);
                 }
 
-                internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                    switch (direction) {
+                internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+                {
+                    switch (direction)
+                    {
                         case UnsafeNativeMethods.NavigateDirection.Parent:
                         case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                         case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                            var toolStripComboBoxControl = Owner as ToolStripComboBoxControl;
-                            if (toolStripComboBoxControl != null) {
+                            if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
+                            {
                                 return toolStripComboBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                             }
                             break;
@@ -807,10 +840,12 @@ namespace System.Windows.Forms {
                     return base.FragmentNavigate(direction);
                 }
 
-                internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
-                    get {
-                        var toolStripComboBoxControl = this.Owner as ToolStripComboBoxControl;
-                        if (toolStripComboBoxControl != null) {
+                internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+                {
+                    get
+                    {
+                        if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
+                        {
                             return toolStripComboBoxControl.Owner.Owner.AccessibilityObject;
                         }
 
@@ -818,12 +853,14 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                internal override object GetPropertyValue(int propertyID) {
-                    switch (propertyID) {
+                internal override object GetPropertyValue(int propertyID)
+                {
+                    switch (propertyID)
+                    {
                         case NativeMethods.UIA_ControlTypePropertyId:
                             return NativeMethods.UIA_ComboBoxControlTypeId;
                         case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     }
 
                     return base.GetPropertyValue(propertyID);
@@ -832,7 +869,8 @@ namespace System.Windows.Forms {
                 internal override bool IsPatternSupported(int patternId)
                 {
                     if (patternId == NativeMethods.UIA_ExpandCollapsePatternId ||
-                        patternId == NativeMethods.UIA_ValuePatternId) {
+                        patternId == NativeMethods.UIA_ValuePatternId)
+                    {
                         return true;
                     }
 

@@ -4,26 +4,26 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies whether any characters in the
     /// current selection have the style or attribute.
     ///
-    /// </devdoc>
+    /// </summary>
     public enum RichTextBoxSelectionAttribute
     {
-        /// <devdoc>
+        /// <summary>
         /// Some but not all characters.
-        /// </devdoc>
+        /// </summary>
         Mixed = -1,
 
-        /// <devdoc>
+        /// <summary>
         /// No characters.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// All characters.
-        /// </devdoc>
+        /// </summary>
         All = 1,
     }
 }

@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
 
             using (var form = new System.Windows.Forms.Form())
-            using (var graphics = form.CreateGraphics())
+            using (Drawing.Graphics graphics = form.CreateGraphics())
             {
                 // GetMargins should not throw an exception.
                 // See https://github.com/dotnet/winforms/issues/526.

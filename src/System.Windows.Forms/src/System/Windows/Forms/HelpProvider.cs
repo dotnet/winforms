@@ -234,14 +234,14 @@ namespace System.Windows.Forms
         {
             if (GetShowHelp(ctl) && !_boundControls.ContainsKey(ctl))
             {
-                ctl.HelpRequested += new HelpEventHandler(this.OnControlHelp);
-                ctl.QueryAccessibilityHelp += new QueryAccessibilityHelpEventHandler(this.OnQueryAccessibilityHelp);
+                ctl.HelpRequested += new HelpEventHandler(OnControlHelp);
+                ctl.QueryAccessibilityHelp += new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
                 _boundControls[ctl] = ctl;
             }
             else if (!GetShowHelp(ctl) && _boundControls.ContainsKey(ctl))
             {
-                ctl.HelpRequested -= new HelpEventHandler(this.OnControlHelp);
-                ctl.QueryAccessibilityHelp -= new QueryAccessibilityHelpEventHandler(this.OnQueryAccessibilityHelp);
+                ctl.HelpRequested -= new HelpEventHandler(OnControlHelp);
+                ctl.QueryAccessibilityHelp -= new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
                 _boundControls.Remove(ctl);
             }
         }

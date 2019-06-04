@@ -9,59 +9,59 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     public enum SystemParameter
     {
-        /// <devdoc>
+        /// <summary>
         /// DropShadow.
-        /// </devdoc>
+        /// </summary>
         DropShadow = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Flat Menu.
-        /// </devdoc>
+        /// </summary>
         FlatMenu = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// FontSmoothingContrastMetric.
-        /// </devdoc>
+        /// </summary>
         FontSmoothingContrastMetric = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// FontSmoothingTypeMetric.
-        /// </devdoc>
+        /// </summary>
         FontSmoothingTypeMetric = 3,
 
-        /// <devdoc>
+        /// <summary>
         /// MenuFadeEnabled.
-        /// </devdoc>
+        /// </summary>
         MenuFadeEnabled = 4,
 
-        /// <devdoc>
+        /// <summary>
         /// SelectionFade.
-        /// </devdoc>
+        /// </summary>
         SelectionFade = 5,
 
-        /// <devdoc>
+        /// <summary>
         /// ToolTipAnimationMetric.
-        /// </devdoc>
+        /// </summary>
         ToolTipAnimationMetric = 6,
 
-        /// <devdoc>
+        /// <summary>
         /// UIEffects.
-        /// </devdoc>
+        /// </summary>
         UIEffects = 7,
 
-        /// <devdoc>
+        /// <summary>
         /// CaretWidthMetric.
-        /// </devdoc>
+        /// </summary>
         CaretWidthMetric = 8,
 
-        /// <devdoc>
+        /// <summary>
         /// VerticalFocusThicknessMetric.
-        /// </devdoc>
+        /// </summary>
         VerticalFocusThicknessMetric = 9,
 
-        /// <devdoc>
+        /// <summary>
         /// HorizontalFocusThicknessMetric.
-        /// </devdoc>
+        /// </summary>
         HorizontalFocusThicknessMetric = 10,
     }
 }

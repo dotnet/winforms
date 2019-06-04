@@ -10,21 +10,21 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
     internal
 #endif
     enum RegionCombineMode
-    {  
-        AND  = 1,
-        OR   = 2,
-        XOR  = 3,
+    {
+        AND = 1,
+        OR = 2,
+        XOR = 3,
         DIFF = 4,
         COPY = 5,
-        MIN  = AND,
-        MAX  = COPY
+        MIN = AND,
+        MAX = COPY
     }
 }

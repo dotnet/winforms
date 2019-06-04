@@ -4,25 +4,25 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies a value indicating whether the text appears from right to
     /// left, as when using Hebrew or Arabic fonts.
-    /// </devdoc>
+    /// </summary>
     public enum RightToLeft
     {
-        /// <devdoc>
+        /// <summary>
         /// The text reads from left to right. This is the default.
-        /// </devdoc>
+        /// </summary>
         No = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The text reads from right to left.
-        /// </devdoc>
+        /// </summary>
         Yes = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The direction the text appears in is inherited from the parent control.
-        /// </devdoc>
+        /// </summary>
         Inherit = 2
     }
 }

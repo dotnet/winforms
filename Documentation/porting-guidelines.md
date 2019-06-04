@@ -112,6 +112,10 @@ differences:
 System.PlatformNotSupportedException: 'Configuration files are not supported.'
 ```
 
+### Additional Types and Namespaces
+
+You can search for additional types which you may need in porting your apps to .NET Core on [APIs of DotNet][apisofnet]. For example, when you search for the type `System.AppDomain`, you will see that the type has been moved to `System.Runtime.Extensions` namespace starting in .NET Core 2.0.
+
 [comment]: <> (URI Links)
 
 [dotnet-blog-port-guide]: https://devblogs.microsoft.com/dotnet/how-to-port-desktop-applications-to-net-core-3-0/
@@ -124,3 +128,4 @@ System.PlatformNotSupportedException: 'Configuration files are not supported.'
 [dataviz]: https://github.com/dotnet/winforms-datavisualization
 [compat-pack]: https://docs.microsoft.com/en-us/dotnet/core/porting/windows-compat-pack
 [wcf-supported]: https://github.com/dotnet/wcf/blob/master/release-notes/SupportedFeatures-v2.1.0.md
+[apisofnet]: https://apisof.net/

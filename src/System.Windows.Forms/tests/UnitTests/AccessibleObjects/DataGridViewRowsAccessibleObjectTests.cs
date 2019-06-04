@@ -11,10 +11,11 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [Fact]
         public void DataGridViewRowsAccessibleObject_Ctor_Default()
         {
-            DataGridView dataGridView = new DataGridView();
-
-            dataGridView.RowCount = 5;
-            dataGridView.Height = 87;
+            DataGridView dataGridView = new DataGridView
+            {
+                RowCount = 5,
+                Height = 87
+            };
 
             dataGridView.Rows[0].Height = 20;
             dataGridView.Rows[1].Height = 20;

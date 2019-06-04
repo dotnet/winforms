@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<TargetException>(() => FeatureSupport.IsPresent(featureClassType.AssemblyQualifiedName, featureConstName));
             Assert.Throws<TargetException>(() => FeatureSupport.IsPresent(featureClassType.AssemblyQualifiedName, featureConstName, new Version(1, 2, 3, 4)));
         }
-        
+
         private class IFeatureSupportClass : IFeatureSupport
         {
             public bool IsPresent(object feature) => throw new NotImplementedException();
@@ -188,8 +188,8 @@ namespace System.Windows.Forms.Tests
             public static object s_zeroVersionField = new object();
             public static object s_nonZeroVersionField = new object();
 
-            private object _privateField = new object();
-            private static object s_privateField = new object();
+            private readonly object _privateField = new object();
+            private static readonly object s_privateField = new object();
         }
 
         private class NonIFeatureSupportClass

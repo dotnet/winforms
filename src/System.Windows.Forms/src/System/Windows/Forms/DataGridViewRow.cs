@@ -12,13 +12,13 @@ using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Identifies a row in the dataGridView.
-    /// </devdoc>
+    /// </summary>
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
-        private static Type s_rowType = typeof(DataGridViewRow);
+        private static readonly Type s_rowType = typeof(DataGridViewRow);
         private static readonly int s_propRowErrorText = PropertyStore.CreateKey();
         private static readonly int s_propRowAccessibilityObject = PropertyStore.CreateKey();
 
@@ -28,9 +28,9 @@ namespace System.Windows.Forms
 
         private DataGridViewCellCollection _rowCells;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewRow() : base()
         {
             _bandIsRow = true;
@@ -1107,10 +1107,10 @@ namespace System.Windows.Forms
             SetValuesInternal(values);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Constructs the new instance of the Cells collection objects. Subclasses
         /// should not call base.CreateCellsInstance.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewCellCollection CreateCellsInstance()
         {
@@ -1802,19 +1802,19 @@ namespace System.Windows.Forms
                     }
 
                     Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
-                    
+
                     int horizontalScrollBarHeight = 0;
-                    if (this.owner.DataGridView.HorizontalScrollBarVisible)
+                    if (owner.DataGridView.HorizontalScrollBarVisible)
                     {
-                        horizontalScrollBarHeight = this.owner.DataGridView.HorizontalScrollBarHeight;
+                        horizontalScrollBarHeight = owner.DataGridView.HorizontalScrollBarHeight;
                     }
 
                     Rectangle dataGridViewRect = ParentPrivate.Bounds;
 
                     int columnHeadersHeight = 0;
-                    if (this.owner.DataGridView.ColumnHeadersVisible)
+                    if (owner.DataGridView.ColumnHeadersVisible)
                     {
-                        columnHeadersHeight = this.owner.DataGridView.ColumnHeadersHeight;
+                        columnHeadersHeight = owner.DataGridView.ColumnHeadersHeight;
                     }
 
                     int rowRectBottom = rowRect.Bottom;
@@ -1823,7 +1823,7 @@ namespace System.Windows.Forms
                         rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
                     }
 
-                    
+
 
                     if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
                     {
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (AccessibilityImprovements.Level3 && runtimeId == null)
+                    if (runtimeId == null)
                     {
                         runtimeId = new int[]
                         {
@@ -1985,7 +1985,7 @@ namespace System.Windows.Forms
 
                         if (i != childCount - 1)
                         {
-                            sb.Append(";");
+                            sb.Append(';');
                         }
                     }
 
@@ -2148,7 +2148,7 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
-                    dataGridView.FocusInternal();
+                    dataGridView.Focus();
                 }
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
@@ -2192,7 +2192,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    var dataGridView = owner.DataGridView;
+                    DataGridView dataGridView = owner.DataGridView;
 
                     switch (direction)
                     {
@@ -2228,25 +2228,22 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyId)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyId)
                 {
-                    switch (propertyId)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return Name;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return Owner.DataGridView.Enabled;
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return Help ?? string.Empty;
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                            return string.Empty;
-                    }
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return Owner.DataGridView.Enabled;
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return Help ?? string.Empty;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyId);
@@ -2255,7 +2252,7 @@ namespace System.Windows.Forms
 
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
-            private DataGridViewRow owner;
+            private readonly DataGridViewRow owner;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {

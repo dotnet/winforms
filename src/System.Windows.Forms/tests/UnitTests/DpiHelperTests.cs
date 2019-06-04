@@ -26,17 +26,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, DpiHelper.LogicalToDeviceUnits(value));
         }
 
-        /// <summary>
-        /// Data for the LogicalToDeviceUnitsSize test
-        /// </summary>
-        public static TheoryData<Size> LogicalToDeviceUnitsSizeData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(LogicalToDeviceUnitsSizeData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
         public void DpiHelper_LogicalToDeviceUnitsSize(Size value)
         {
-            var expected = new Size ((int)Math.Round(value.Width * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)),
+            var expected = new Size((int)Math.Round(value.Width * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)),
                                      (int)Math.Round(value.Height * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)));
 
             Assert.Equal(expected, DpiHelper.LogicalToDeviceUnits(value));

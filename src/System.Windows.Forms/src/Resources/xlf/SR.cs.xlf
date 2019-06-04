@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">Vodorovný posuvník</target>
+        <target state="translated">Vodorovně</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">Svislý posuvník</target>
+        <target state="translated">Svisle</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -5061,7 +5061,7 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="ExDlgCancel">
         <source>Cancel</source>
-        <target state="translated">Zrušit</target>
+        <target state="translated">Storno</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">

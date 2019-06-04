@@ -6,9 +6,10 @@ internal static partial class Interop
 {
     public static partial class Libraries
     {
-        internal const string Kernel32 = "kernel32.dll";
-        internal const string Gdi32 = "gdi32.dll";
-        internal const string User32 = "user32.dll";
-        internal const string Shell32 = "shell32.dll";
+        public const string Kernel32 = "kernel32.dll";
+        public const string Gdi32 = "gdi32.dll";
+        public const string User32 = "user32.dll";
+        public const string UxTheme = "uxtheme.dll";
+        public const string Shell32 = "shell32.dll";
     }
 }

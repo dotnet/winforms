@@ -11,7 +11,7 @@ namespace System.Windows.Forms
             Value = value;
             DesiredType = desiredType;
         }
- 
+
         public object Value { get; set; }
 
         public Type DesiredType { get; }

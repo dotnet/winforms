@@ -15,13 +15,13 @@ namespace System.Windows.Forms.Design
         private bool _autoShow = false;
         private readonly ToolStripDesigner _designer;
 
-        private ChangeToolStripParentVerb _changeParentVerb = null;
-        private StandardMenuStripVerb _standardItemsVerb = null;
+        private readonly ChangeToolStripParentVerb _changeParentVerb = null;
+        private readonly StandardMenuStripVerb _standardItemsVerb = null;
 
         public ToolStripActionList(ToolStripDesigner designer) : base(designer.Component)
         {
             _toolStrip = (ToolStrip)designer.Component;
-            this._designer = designer;
+            _designer = designer;
 
             _changeParentVerb = new ChangeToolStripParentVerb(string.Format(SR.ToolStripDesignerEmbedVerb), designer);
             if (!(_toolStrip is StatusStrip))

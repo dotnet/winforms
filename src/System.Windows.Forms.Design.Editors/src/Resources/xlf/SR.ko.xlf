@@ -127,6 +127,11 @@
         <target state="translated">파일 열기</target>
         <note />
       </trans-unit>
+      <trans-unit id="MultilineStringEditorWatermark">
+        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
+        <target state="translated">새 줄을 시작하려면 &lt;Enter&gt; 키를 누릅니다.\r\n텍스트를 적용하려면 &lt;Ctrl+Enter&gt;를 누릅니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Winforms 디자이너는 이 플랫폼에서 지원되지 않습니다.</target>

@@ -220,6 +220,6 @@ internal static partial class Interop
         public const int WM_APP = unchecked((int)0x8000);
         public const int WM_USER = 0x0400;
         public const int WM_REFLECT = WM_USER + 0x1C00;
-        public const int WM_CHOOSEFONT_GETLOGFONT = (0x0400+1);
+        public const int WM_CHOOSEFONT_GETLOGFONT = (0x0400 + 1);
     }
 }

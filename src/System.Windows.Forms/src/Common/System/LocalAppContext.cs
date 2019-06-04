@@ -16,16 +16,22 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool GetCachedSwitchValue(string switchName, ref int switchValue)
         {
-            if (switchValue < 0) return false;
-            if (switchValue > 0) return true;
+            if (switchValue < 0)
+            {
+                return false;
+            }
+
+            if (switchValue > 0)
+            {
+                return true;
+            }
 
             return GetCachedSwitchValueInternal(switchName, ref switchValue);
         }
 
         private static bool GetCachedSwitchValueInternal(string switchName, ref int switchValue)
         {
-            bool isSwitchEnabled;
-            AppContext.TryGetSwitch(switchName, out isSwitchEnabled);
+            AppContext.TryGetSwitch(switchName, out bool isSwitchEnabled);
 
             if (DisableCaching)
             {
@@ -39,8 +45,7 @@ namespace System
         private static bool DisableCaching =>
             LazyInitializer.EnsureInitialized(ref s_disableCaching, ref s_isDisableCachingInitialized, ref s_syncObject, () =>
             {
-                bool isEnabled;
-                AppContext.TryGetSwitch(@"TestSwitch.LocalAppContext.DisableCaching", out isEnabled);
+                AppContext.TryGetSwitch(@"TestSwitch.LocalAppContext.DisableCaching", out bool isEnabled);
                 return isEnabled;
             });
     }

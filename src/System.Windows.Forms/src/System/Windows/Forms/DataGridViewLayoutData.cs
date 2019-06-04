@@ -43,15 +43,15 @@ namespace System.Windows.Forms
 
             public LayoutData(LayoutData src)
             {
-                this.ClientRectangle = src.ClientRectangle;
-                this.TopLeftHeader = src.TopLeftHeader;
-                this.ColumnHeaders = src.ColumnHeaders;
-                this.RowHeaders = src.RowHeaders;
-                this.Inside = src.Inside;
-                this.Data = src.Data;
-                this.ResizeBoxRect = src.ResizeBoxRect;
-                this.ColumnHeadersVisible = src.ColumnHeadersVisible;
-                this.RowHeadersVisible = src.RowHeadersVisible;
+                ClientRectangle = src.ClientRectangle;
+                TopLeftHeader = src.TopLeftHeader;
+                ColumnHeaders = src.ColumnHeaders;
+                RowHeaders = src.RowHeaders;
+                Inside = src.Inside;
+                Data = src.Data;
+                ResizeBoxRect = src.ResizeBoxRect;
+                ColumnHeadersVisible = src.ColumnHeadersVisible;
+                RowHeadersVisible = src.RowHeadersVisible;
             }
 
             public override string ToString()

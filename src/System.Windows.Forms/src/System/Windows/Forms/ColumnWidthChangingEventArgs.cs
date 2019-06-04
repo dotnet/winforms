@@ -18,14 +18,14 @@ namespace System.Windows.Forms
             NewWidth = newWidth;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the index of the column header whose width is changing
-        /// </devdoc>
+        /// </summary>
         public int ColumnIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the new width for the column header who is changing
-        /// </devdoc>
+        /// </summary>
         public int NewWidth { get; set; }
     }
 }

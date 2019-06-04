@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
             var panel = new TableLayoutPanel();
             var style = new ColumnStyle();
             panel.LayoutSettings.RowStyles.Add(style);
-            
+
             style.SizeType = value;
             Assert.Equal(value, style.SizeType);
         }

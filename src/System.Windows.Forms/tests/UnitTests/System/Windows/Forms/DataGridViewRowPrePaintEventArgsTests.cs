@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ClipBounds_TestData()
         {
             yield return new object[] { Rectangle.Empty };
-            yield return new object[] { new Rectangle(1, 2, 3 ,4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4) };
             yield return new object[] { new Rectangle(-1, -2, -3, -4) };
         }
 
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<ArgumentException>("value", () => e.PaintParts = value);
             }
         }
-        
+
         [Fact]
         public void DrawFocus_ValidRowIndex_Success()
         {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => e.DrawFocus(new Rectangle(1, 2, 3, 4), true));
             }
         }
-        
+
         [Fact]
         public void PaintCells_ValidRowIndex_Success()
         {
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => e.PaintCells(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
             }
         }
-        
+
         [Fact]
         public void PaintCellsBackground_ValidRowIndex_Success()
         {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => e.PaintCellsBackground(new Rectangle(1, 2, 3, 4), true));
             }
         }
-        
+
         [Fact]
         public void PaintCellsContent_ValidRowIndex_Success()
         {
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => e.PaintCellsContent(new Rectangle(1, 2, 3, 4)));
             }
         }
-        
+
         [Fact]
         public void PaintHeader_ValidRowIndexDataGridViewPaintParts_Success()
         {
@@ -238,7 +238,7 @@ namespace System.Windows.Forms.Tests
                 e.PaintHeader(DataGridViewPaintParts.None);
             }
         }
-        
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

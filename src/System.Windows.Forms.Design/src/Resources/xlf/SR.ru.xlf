@@ -70,7 +70,7 @@
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-	<target state="new">An error occurred while processing this command.
+        <target state="translated">Ошибка при обработке этой команды.
       {0}</target>
         <note />
       </trans-unit>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
         <source>ShowCheckMargin</source>
-	<target state="new">ShowCheckMargin</target>
+        <target state="translated">ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
@@ -186,7 +186,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
         <source>ShowImageMargin</source>
-	<target state="new">ShowImageMargin</target>
+        <target state="translated">ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
@@ -206,12 +206,12 @@
       {1}
 
       Stack trace:{2}</source>
-	<target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+        <target state="translated">Элемент управления {0} возвратил необработанное исключение в конструкторе и был отключен.
 
-      Exception:
+      Исключение:
       {1}
 
-      Stack trace:{2}</target>
+      Трассировка стека:{2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -278,7 +278,7 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-	<target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+        <target state="translated">Ошибка при загрузке документа. Исправьте ошибку и повторите загрузку. Сообщение об ошибке:
 
       {0}</target>
         <note />
@@ -613,6 +613,16 @@
         <target state="translated">Тип '{0}' не содержит свойства с именем '{1}'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">Объект '{0}' вернул для свойства '{1}' значение NULL, что не допускается.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">Ошибка при генерации кода для свойства "{0}".  Произошла следующая ошибка: '{1}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
         <target state="translated">Ошибка чтения ресурсов из файла ресурсов для культуры {0}: {1}</target>
@@ -770,7 +780,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-	<target state="new">Dock:</target>
+        <target state="translated">Закрепить:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
@@ -780,7 +790,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyle">
         <source>GripStyle:</source>
-	<target state="new">GripStyle:</target>
+        <target state="translated">Стиль захвата:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyleDesc">
@@ -795,7 +805,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-	<target state="new">RenderMode:</target>
+        <target state="translated">RenderMode:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
@@ -820,7 +830,7 @@
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-	<target state="new">Embed in ToolStripContainer</target>
+        <target state="translated">Внедрить в ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">
