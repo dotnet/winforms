@@ -6,15 +6,15 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class QueryContinueDragEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.QueryContinueDragEventArgs'/> class.
-        /// </devdoc>
+        /// </summary>
         public QueryContinueDragEventArgs(int keyState, bool escapePressed, DragAction action)
         {
             KeyState = keyState;
@@ -22,19 +22,19 @@ namespace System.Windows.Forms
             Action = action;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating the current state of the SHIFT, CTRL, and ALT keys.
-        /// </devdoc>
+        /// </summary>
         public int KeyState { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the user pressed the ESC key.
-        /// </devdoc>
+        /// </summary>
         public bool EscapePressed { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the status of a drag-and-drop operation.
-        /// </devdoc>
+        /// </summary>
         public DragAction Action { get; set; }
     }
 }

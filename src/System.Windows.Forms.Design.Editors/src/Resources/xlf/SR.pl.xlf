@@ -127,6 +127,11 @@
         <target state="translated">Otwórz plik</target>
         <note />
       </trans-unit>
+      <trans-unit id="MultilineStringEditorWatermark">
+        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
+        <target state="translated">Naciśnij klawisz Enter, aby rozpocząć nowy wiersz.\r\nNaciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Projektant formularzy systemu Windows nie jest obsługiwany na tej platformie.</target>

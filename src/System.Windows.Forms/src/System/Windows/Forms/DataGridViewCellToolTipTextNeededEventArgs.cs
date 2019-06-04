@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     public class DataGridViewCellToolTipTextNeededEventArgs : DataGridViewCellEventArgs
     {
-        internal DataGridViewCellToolTipTextNeededEventArgs(int columnIndex,  int rowIndex, string toolTipText) : base(columnIndex, rowIndex)
+        internal DataGridViewCellToolTipTextNeededEventArgs(int columnIndex, int rowIndex, string toolTipText) : base(columnIndex, rowIndex)
         {
             ToolTipText = toolTipText;
         }

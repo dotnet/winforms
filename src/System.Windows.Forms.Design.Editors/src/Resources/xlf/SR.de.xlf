@@ -127,6 +127,11 @@
         <target state="translated">Datei öffnen</target>
         <note />
       </trans-unit>
+      <trans-unit id="MultilineStringEditorWatermark">
+        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
+        <target state="translated">Drücken Sie die Eingabetaste, um eine neue Zeile zu beginnen.\r\nDrücken Sie STRG+EINGABETASTE, um Text zu übernehmen.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Der Windows Forms-Designer wird auf dieser Plattform nicht unterstützt.</target>

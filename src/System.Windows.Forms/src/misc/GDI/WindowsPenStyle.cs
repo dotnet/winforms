@@ -11,7 +11,6 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;
-    using System.Internal;
 
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
@@ -21,32 +20,32 @@ namespace System.Experimental.Gdi
 #endif
     enum WindowsPenStyle
     {
-        Solid            = 0,
-        Dash             = 1,       /* -------  */
-        Dot              = 2,       /* .......  */
-        DashDot          = 3,       /* _._._._  */
-        DashDotDot       = 4,       /* _.._.._  */
-        Null             = 5,
-        InsideFrame      = 6,
-        UserStyle        = 7,
-        Alternate        = 8,
+        Solid = 0,
+        Dash = 1,       /* -------  */
+        Dot = 2,       /* .......  */
+        DashDot = 3,       /* _._._._  */
+        DashDotDot = 4,       /* _.._.._  */
+        Null = 5,
+        InsideFrame = 6,
+        UserStyle = 7,
+        Alternate = 8,
 
         // endcap style
-        EndcapRound     = 0x00000000,
-        EndcapSquare    = 0x00000100,
-        EndcapFlat      = 0x00000200,
-        
+        EndcapRound = 0x00000000,
+        EndcapSquare = 0x00000100,
+        EndcapFlat = 0x00000200,
+
         // join style
-        JoinRound       = 0x00000000,
-        JoinBevel       = 0x00001000,
-        JoinMiter       = 0x00002000,
+        JoinRound = 0x00000000,
+        JoinBevel = 0x00001000,
+        JoinMiter = 0x00002000,
 
         // pen type style
-        Cosmetic         = 0x00000000,
-        Geometric        = 0x00010000,
+        Cosmetic = 0x00000000,
+        Geometric = 0x00010000,
 
-        Default          = 0x00000000 // Solid | EndcapRound | JoinRound | Cosmetic
-        
+        Default = 0x00000000 // Solid | EndcapRound | JoinRound | Cosmetic
+
         // (From wingdi.h)
         /* Pen Styles */
         /* Pen Styles */

@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design.Behavior
             _relatedBehavior = (ContainerSelectorBehavior)behavior;
             _glyphBounds = new Rectangle(containerBounds.X + glyphOffset, containerBounds.Y - (int)(glyphSize * .5), glyphSize, glyphSize);
         }
-       
+
         /// <summary>
         /// The bounds of this Glyph.
         /// </summary>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => _relatedBehavior;
         }
-      
+
         /// <summary>
         /// Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
         /// </summary>

@@ -6,22 +6,22 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ListView.OnItemDrag'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class ItemDragEventArgs : EventArgs
     {
         public ItemDragEventArgs(MouseButtons button) : this(button, null)
         {
         }
-        
+
         public ItemDragEventArgs(MouseButtons button, object item)
         {
             Button = button;
             Item = item;
         }
-        
+
         public MouseButtons Button { get; }
 
         public object Item { get; }

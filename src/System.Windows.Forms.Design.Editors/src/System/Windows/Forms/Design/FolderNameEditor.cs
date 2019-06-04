@@ -37,6 +37,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Retrieves the editing style of the Edit method.
+        /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
@@ -96,8 +97,7 @@ namespace System.Windows.Forms.Design
                 IntPtr hWndOwner = owner == null ? owner.Handle : UnsafeNativeMethods.GetActiveWindow();
 
                 // Get the IDL for the specific startLocation
-                CoTaskMemSafeHandle listHandle;
-                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out listHandle);
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out CoTaskMemSafeHandle listHandle);
                 if (listHandle.IsInvalid)
                 {
                     return DialogResult.Cancel;
@@ -114,17 +114,19 @@ namespace System.Windows.Forms.Design
                     char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
                     try
                     {
-                        fixed (char *pDisplayName = displayName)
+                        fixed (char* pDisplayName = displayName)
                         {
-                            var bi = new Interop.Shell32.BROWSEINFO();
-                            bi.pidlRoot = listHandle;
-                            bi.hwndOwner = hWndOwner;
-                            bi.pszDisplayName = pDisplayName;
-                            bi.lpszTitle = _descriptionText;
-                            bi.ulFlags = mergedOptions;
-                            bi.lpfn = null;
-                            bi.lParam = IntPtr.Zero;
-                            bi.iImage = 0;
+                            var bi = new Interop.Shell32.BROWSEINFO
+                            {
+                                pidlRoot = listHandle,
+                                hwndOwner = hWndOwner,
+                                pszDisplayName = pDisplayName,
+                                lpszTitle = _descriptionText,
+                                ulFlags = mergedOptions,
+                                lpfn = null,
+                                lParam = IntPtr.Zero,
+                                iImage = 0
+                            };
 
                             // Show the dialog.
                             using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))

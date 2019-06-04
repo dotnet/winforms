@@ -11,7 +11,7 @@ namespace System.Windows.Forms.VisualStyles
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum StringProperty
     {
-    	Text = 3201
-    	//TM_PROP(3201, TMT, TEXT,              STRING)
+        Text = 3201
+        //TM_PROP(3201, TMT, TEXT,              STRING)
     }
 }

@@ -87,12 +87,12 @@ namespace System.Windows.Forms.Design
                 if (selSvc.SelectionCount > 1)
                 {
                     toolStripContextMenu.GroupOrdering.Clear();
-                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties});
+                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
                 }
                 else
                 {
                     toolStripContextMenu.GroupOrdering.Clear();
-                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties});
+                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
                     toolStripContextMenu.Text = "CustomContextMenu";
                     if (toolStripItemCustomMenuItemCollection == null)
                     {
@@ -667,14 +667,14 @@ namespace System.Windows.Forms.Design
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs != null)
             {
-                cs.ComponentRename += new ComponentRenameEventHandler(this.OnComponentRename);
+                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
             //hook our SelectionService.
             selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
-                selSvc.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
         }
 
@@ -690,7 +690,10 @@ namespace System.Windows.Forms.Design
                 if (site != null && Component is ToolStripDropDownItem)
                 {
                     if (defaultValues == null)
+                    {
                         defaultValues = new Hashtable();
+                    }
+
                     defaultValues["Text"] = site.Name;
                     IComponent component = Component;
                     PropertyDescriptor pd = TypeDescriptor.GetProperties(ToolStripItem)["Text"];
@@ -763,9 +766,8 @@ namespace System.Windows.Forms.Design
             {
                 //turn off Adding and Added Transactions..
                 ToolStripDesigner.s_autoAddNewItems = false;
-                ComponentSerializationService _serializationService = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
                 SerializationStore _serializedData = null;
-                if (_serializationService != null)
+                if (GetService(typeof(ComponentSerializationService)) is ComponentSerializationService _serializationService)
                 {
                     _serializedData = _serializationService.CreateStore();
                     _serializationService.Serialize(_serializedData, Component); //notice the use of component... since we want to preserve the type.

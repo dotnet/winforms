@@ -57,13 +57,13 @@ namespace System.ComponentModel.Design
         public void Insert(int index, DesignerActionList value) => List.Insert(index, value);
 
         public int IndexOf(DesignerActionList value) => List.IndexOf(value);
-        
+
         public bool Contains(DesignerActionList value) => List.Contains(value);
-        
+
         public void Remove(DesignerActionList value) => List.Remove(value);
-        
+
         public void CopyTo(DesignerActionList[] array, int index) => List.CopyTo(array, index);
-        
+
         protected override void OnValidate(object value)
         {
             // Don't perform any validation.

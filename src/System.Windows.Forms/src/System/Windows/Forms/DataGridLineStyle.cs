@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the style of gridlines in a <see cref='System.Windows.Forms.DataGrid'/>.
-    /// </devdoc>
+    /// </summary>
     public enum DataGridLineStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// No gridlines between cells.
-        /// </devdoc>
+        /// </summary>
         None,
 
-        /// <devdoc>
+        /// <summary>
         /// Solid gridlines between cells.
-        /// </devdoc>
+        /// </summary>
         Solid
     }
 }

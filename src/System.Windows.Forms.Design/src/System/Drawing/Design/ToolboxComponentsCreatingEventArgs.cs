@@ -19,7 +19,7 @@ namespace System.Drawing.Design
         {
             DesignerHost = host;
         }
-        
+
         /// <summary>
         /// An instance of IDesignerHost that has made the creat request.
         /// This can be null if no designer host was provided to the toolbox item.

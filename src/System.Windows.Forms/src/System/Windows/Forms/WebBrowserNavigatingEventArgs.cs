@@ -6,26 +6,26 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnNavigating'/> event.
-    /// </devdoc>
+    /// </summary>
     public class WebBrowserNavigatingEventArgs : CancelEventArgs
     {
         private readonly Uri _url;
         private readonly string _targetFrameName;
-        
-        /// <devdoc>
+
+        /// <summary>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatingEventArgs'/> class.
-        /// </devdoc>
+        /// </summary>
         public WebBrowserNavigatingEventArgs(Uri url, string targetFrameName)
         {
             _url = url;
             _targetFrameName = targetFrameName;
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         /// Url the browser is navigating to.
-        /// </devdoc>
+        /// </summary>
         public Uri Url
         {
             get
@@ -33,10 +33,10 @@ namespace System.Windows.Forms
                 return _url;
             }
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         /// In case an individual frame is about to be navigated, this contains the frame name.
-        /// </devdoc>
+        /// </summary>
         public string TargetFrameName
         {
             get

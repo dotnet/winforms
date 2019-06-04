@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     public static partial class Shell32
     {
-        [DllImport(Libraries.Shell32, CharSet = CharSet.Unicode, SetLastError = false, BestFitMapping = false, ExactSpelling = true)]
+        [DllImport(Libraries.Shell32, CharSet = CharSet.Unicode, BestFitMapping = false, ExactSpelling = true)]
         public static extern int SHGetKnownFolderPath(ref Guid rfid, uint dwFlags, IntPtr hToken, out string pszPath);
     }
 }

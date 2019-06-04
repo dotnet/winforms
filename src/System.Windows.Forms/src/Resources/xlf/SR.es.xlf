@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">Barra de desplazamiento horizontal</target>
+        <target state="translated">Horizontal</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">Barra de desplazamiento vertical</target>
+        <target state="translated">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -5182,7 +5182,7 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">Aceptar</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">

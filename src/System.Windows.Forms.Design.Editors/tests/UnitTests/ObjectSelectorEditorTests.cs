@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_Constructor()
         {
-            var underTest = GetNewObjectSelectorEditor();
+            ObjectSelectorEditor underTest = GetNewObjectSelectorEditor();
 
             Assert.NotNull(underTest);
             Assert.True(underTest.EqualsToValue(null));
@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_CurrentValue()
         {
-            var underTest = GetNewObjectSelectorEditor();
+            ObjectSelectorEditor underTest = GetNewObjectSelectorEditor();
 
             underTest.SetValue("some Value");
             Assert.True(underTest.EqualsToValue("some Value"));
@@ -34,8 +34,9 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void ObjectSelectorEditor_GetEditStyle() {
-            var underTest = GetNewObjectSelectorEditor();
+        public void ObjectSelectorEditor_GetEditStyle()
+        {
+            ObjectSelectorEditor underTest = GetNewObjectSelectorEditor();
 
             Assert.Equal(UITypeEditorEditStyle.DropDown, underTest.GetEditStyle(null));
         }
@@ -43,7 +44,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_Selector()
         {
-            var underTest = GetNewSelector();
+            ObjectSelectorEditor.Selector underTest = GetNewSelector();
 
             Assert.NotNull(underTest);
             underTest.AddNode("node", "value", null);
@@ -59,7 +60,8 @@ namespace System.ComponentModel.Design.Tests
             return subObjectSelector ? new TestObjectSelectorEditor(subObjectSelector) : new TestObjectSelectorEditor();
         }
 
-        private class TestObjectSelectorEditor : ObjectSelectorEditor {
+        private class TestObjectSelectorEditor : ObjectSelectorEditor
+        {
             public TestObjectSelectorEditor()
             {
             }
@@ -68,7 +70,8 @@ namespace System.ComponentModel.Design.Tests
             }
         }
 
-        private ObjectSelectorEditor.Selector GetNewSelector() {
+        private ObjectSelectorEditor.Selector GetNewSelector()
+        {
             return new ObjectSelectorEditor.Selector(GetNewObjectSelectorEditor());
         }
     }

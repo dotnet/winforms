@@ -4,46 +4,46 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Describes the set of locations that an error icon can appear in
     /// relation to the control with the error.
-    /// </devdoc>
+    /// </summary>
     public enum ErrorIconAlignment
     {
-        /// <devdoc>
+        /// <summary>
         /// The icon appears aligned with the top of the control, and to the
         /// left of the control.
-        /// </devdoc>
+        /// </summary>
         TopLeft,
 
-        /// <devdoc>
+        /// <summary>
         /// The icon appears aligned with the top of the control, and to the
         /// right of the control.
-        /// </devdoc>
+        /// </summary>
         TopRight,
 
-        /// <devdoc>
+        /// <summary>
         /// The icon appears aligned with the middle of the control, and the
         /// left of the control.
-        /// </devdoc>
+        /// </summary>
         MiddleLeft,
 
-        /// <devdoc>
+        /// <summary>
         /// The icon appears aligned with the middle of the control, and the
         /// right of the control.
-        /// </devdoc>
+        /// </summary>
         MiddleRight,
 
-        /// <devdoc>
+        /// <summary>
         /// The icon appears aligned with the bottom of the control, and the
         /// left of the control.
-        /// </devdoc>
+        /// </summary>
         BottomLeft,
 
-        /// <devdoc>
+        /// <summary>
         /// The icon appears aligned with the bottom of the control, and the
         /// right of the control.
-        /// </devdoc>
+        /// </summary>
         BottomRight
     }
 }

@@ -10,6 +10,14 @@ We will keep issues open even if the WinForms team internally has no plans to ad
 
 You can help us streamline our response time to your feedback and ideas by filing high-quality reports.
 
+## Known Issues
+
+If you encounter an issue using the latest .NET Core 3.0 SDK, please:
+
+1. Check out the [Centralized 3.0 Preview Known Issues document][.net-core-3.0-known-issues],
+1. Explore [this repositories issues][winforms-issues], and then
+1. [Open a new issue][new-issue] if there is none.
+
 ### High-quality bug reports
 
 In general, try to be specific. Get straight to the main point. Leave additional details, options, and alternatives to the end (hint: separate them visually). Don't write long bug reports, unless you have to.
@@ -116,6 +124,9 @@ Each PR has to have reviewer approval from at least one WinForms team member who
 
 [comment]: <> (URI Links)
 
+[.net-core-3.0-known-issues]: https://github.com/dotnet/core/blob/master/release-notes/3.0/preview/3.0.0-preview-known-issues.md
+[winforms-issues]: https://github.com/dotnet/winforms/issues
+[new-issue]: https://github.com/dotnet/winforms/issues/new/choose
 [corefx-api-review-process]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md
 [corefx-api-proposal-ex]: https://github.com/dotnet/corefx/issues/271
 [labels]: https://github.com/dotnet/winforms/labels

@@ -14,8 +14,8 @@ namespace System.Windows.Forms
         private DataGridViewPaintParts _paintParts;
 
         public DataGridViewRowPrePaintEventArgs(DataGridView dataGridView,
-                                                Graphics graphics, 
-                                                Rectangle clipBounds, 
+                                                Graphics graphics,
+                                                Rectangle clipBounds,
                                                 Rectangle rowBounds,
                                                 int rowIndex,
                                                 DataGridViewElementStates rowState,
@@ -24,27 +24,14 @@ namespace System.Windows.Forms
                                                 bool isFirstDisplayedRow,
                                                 bool isLastVisibleRow)
         {
-            if (dataGridView == null)
-            {
-                throw new ArgumentNullException(nameof(dataGridView));
-            }
-            if (graphics == null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-            if (inheritedRowStyle == null)
-            {
-                throw new ArgumentNullException(nameof(inheritedRowStyle));
-            }
-
-            _dataGridView = dataGridView;
-            Graphics = graphics;
+            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             ClipBounds = clipBounds;
             RowBounds = rowBounds;
             RowIndex = rowIndex;
             State = rowState;
             ErrorText = errorText;
-            InheritedRowStyle = inheritedRowStyle;
+            InheritedRowStyle = inheritedRowStyle ?? throw new ArgumentNullException(nameof(inheritedRowStyle));
             IsFirstDisplayedRow = isFirstDisplayedRow;
             IsLastVisibleRow = isLastVisibleRow;
             _paintParts = DataGridViewPaintParts.All;
@@ -95,10 +82,10 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
             }
 
-            _dataGridView.Rows.SharedRow(RowIndex).DrawFocus(Graphics, 
-                                                             ClipBounds, 
-                                                             bounds, 
-                                                             RowIndex, 
+            _dataGridView.Rows.SharedRow(RowIndex).DrawFocus(Graphics,
+                                                             ClipBounds,
+                                                             bounds,
+                                                             RowIndex,
                                                              State,
                                                              InheritedRowStyle,
                                                              cellsPaintSelectionBackground);
@@ -134,10 +121,10 @@ namespace System.Windows.Forms
                 paintParts |= DataGridViewPaintParts.SelectionBackground;
             }
             _dataGridView.Rows.SharedRow(RowIndex).PaintCells(Graphics,
-                                                              clipBounds, 
-                                                              RowBounds, 
-                                                              RowIndex, 
-                                                              State, 
+                                                              clipBounds,
+                                                              RowBounds,
+                                                              RowIndex,
+                                                              State,
                                                               IsFirstDisplayedRow,
                                                               IsLastVisibleRow,
                                                               paintParts);
@@ -178,23 +165,23 @@ namespace System.Windows.Forms
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintHeader(Graphics,
-                                                               ClipBounds, 
-                                                               RowBounds, 
-                                                               RowIndex, 
-                                                               State, 
-                                                               IsFirstDisplayedRow, 
+                                                               ClipBounds,
+                                                               RowBounds,
+                                                               RowIndex,
+                                                               State,
+                                                               IsFirstDisplayedRow,
                                                                IsLastVisibleRow,
                                                                paintParts);
         }
 
-        internal void SetProperties(Graphics graphics, 
-                                    Rectangle clipBounds, 
-                                    Rectangle rowBounds, 
-                                    int rowIndex, 
-                                    DataGridViewElementStates rowState, 
-                                    string errorText, 
-                                    DataGridViewCellStyle inheritedRowStyle, 
-                                    bool isFirstDisplayedRow, 
+        internal void SetProperties(Graphics graphics,
+                                    Rectangle clipBounds,
+                                    Rectangle rowBounds,
+                                    int rowIndex,
+                                    DataGridViewElementStates rowState,
+                                    string errorText,
+                                    DataGridViewCellStyle inheritedRowStyle,
+                                    bool isFirstDisplayedRow,
                                     bool isLastVisibleRow)
         {
             Debug.Assert(graphics != null);

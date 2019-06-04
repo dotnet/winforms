@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>    
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +28,9 @@
     <Content Include="bitmaps\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="bitmaps\10x16_one_entry_32bit.ico">
+      <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

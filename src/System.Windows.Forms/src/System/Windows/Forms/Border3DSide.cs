@@ -6,43 +6,43 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the sides of a rectangle to apply a three-dimensional border to.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     [Flags]
     public enum Border3DSide
     {
-        /// <devdoc>
+        /// <summary>
         /// A three-dimensional border on the left edge of the control.
-        /// </devdoc>
+        /// </summary>
         Left = NativeMethods.BF_LEFT,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-dimensional border on the top edge of the rectangle.
-        /// </devdoc>
+        /// </summary>
         Top = NativeMethods.BF_TOP,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-dimensional border on the right side of the rectangle.
-        /// </devdoc>
+        /// </summary>
         Right = NativeMethods.BF_RIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-dimensional border on the bottom side of the rectangle.
-        /// </devdoc>
+        /// </summary>
         Bottom = NativeMethods.BF_BOTTOM,
 
-        /// <devdoc>
+        /// <summary>
         /// The interior of the rectangle is filled with the color defined for
         /// three-dimensional controls instead of the background color for the form.
-        /// </devdoc>
+        /// </summary>
         Middle = NativeMethods.BF_MIDDLE,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-dimensional border on all four edges and fill the middle of
         /// the rectangle with the color defeined for three-dimensional controls.
-        /// </devdoc>
-        All  = Left | Top | Right | Bottom | Middle,
+        /// </summary>
+        All = Left | Top | Right | Bottom | Middle,
     }
 }

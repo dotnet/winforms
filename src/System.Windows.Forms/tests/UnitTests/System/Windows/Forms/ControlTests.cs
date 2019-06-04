@@ -40,8 +40,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void Control_Ctor_String(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_Ctor_String(string text, string expectedText)
         {
             var control = new Control(text);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -61,21 +61,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
         }
 
         public static IEnumerable<object[]> Ctor_String_Int_Int_Int_Int()
         {
-            yield return new object[] { null, -1, -2, -3, -4 };
-            yield return new object[] { string.Empty, 0, 0, 0, 0 };
-            yield return new object[] { "Foo", 1, 2, 3, 4 };
+            yield return new object[] { null, -1, -2, -3, -4, string.Empty };
+            yield return new object[] { string.Empty, 0, 0, 0, 0, string.Empty };
+            yield return new object[] { "Text", 1, 2, 3, 4, "Text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_Int_Int_Int_Int))]
-        public void Control_ConstructorSize(string text, int left, int top, int width, int height)
+        public void Control_ConstructorSize(string text, int left, int top, int width, int height, string expectedText)
         {
             var control = new Control(text, left, top, width, height);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -95,21 +95,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { new Control(), string.Empty };
-            yield return new object[] { new Control(), "text" };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { new Control(), string.Empty, string.Empty };
+            yield return new object[] { new Control(), "text", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_Control_String_TestData))]
-        public void Control_Ctor_Control_String(Control parent, string text)
+        public void Control_Ctor_Control_String(Control parent, string text, string expectedText)
         {
             var control = new Control(parent, text);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -129,21 +129,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_Int_Int_Int_Int_TestData()
         {
-            yield return new object[] { null, null, -1, -2, -3, -4 };
-            yield return new object[] { new Control(), string.Empty, 0, 0, 0, 0 };
-            yield return new object[] { new Control(), "text", 1, 2, 3, 4 };
+            yield return new object[] { null, null, -1, -2, -3, -4, string.Empty };
+            yield return new object[] { new Control(), string.Empty, 0, 0, 0, 0, string.Empty };
+            yield return new object[] { new Control(), "text", 1, 2, 3, 4, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_Control_String_Int_Int_Int_Int_TestData))]
-        public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height)
+        public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height, string expectedText)
         {
             var control = new Control(parent, text, left, top, width, height);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
         }
@@ -214,9 +214,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TabIndexGetSetData))]
         public void Control_TabIndexGetSet(uint expected)
         {
-            var cont = new Control();
-
-            cont.TabIndex = (int)expected;
+            var cont = new Control
+            {
+                TabIndex = (int)expected
+            };
 
             Assert.Equal(expected, (uint)cont.TabIndex);
         }
@@ -231,9 +232,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TabStopGetSetData))]
         public void Control_TabStopGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.TabStop = expected;
+            var cont = new Control
+            {
+                TabStop = expected
+            };
 
             Assert.Equal(expected, cont.TabStop);
         }
@@ -248,9 +250,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TabStopInternalGetSetData))]
         public void Control_TabStopInternalGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.TabStopInternal = expected;
+            var cont = new Control
+            {
+                TabStopInternal = expected
+            };
 
             Assert.Equal(expected, cont.TabStopInternal);
         }
@@ -259,12 +262,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetChildControlsInTabOrder()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var ordered = new Control[]
             {
                 first,
@@ -279,7 +288,7 @@ namespace System.Windows.Forms.Tests
             };
             cont.Controls.AddRange(unordered);
 
-            var tabOrderedChildren = cont.GetChildControlsInTabOrder(false);
+            Control[] tabOrderedChildren = cont.GetChildControlsInTabOrder(false);
 
             Assert.Equal(ordered, tabOrderedChildren);
         }
@@ -288,12 +297,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetChildControlsInTabOrderHandlesOnly()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var unordered = new Control[]
             {
                 second,
@@ -302,7 +317,7 @@ namespace System.Windows.Forms.Tests
             };
             cont.Controls.AddRange(unordered);
 
-            var tabOrderedChildrenWithhandlesOnly = cont.GetChildControlsInTabOrder(true);
+            Control[] tabOrderedChildrenWithhandlesOnly = cont.GetChildControlsInTabOrder(true);
 
             Assert.Empty(tabOrderedChildrenWithhandlesOnly);
         }
@@ -311,12 +326,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetFirstChildControlInTabOrder()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -333,12 +354,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetFirstChildControlInTabOrderReverse()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -355,12 +382,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControl()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -377,12 +410,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControlReverse()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -399,12 +438,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControlNoNext()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -421,12 +466,18 @@ namespace System.Windows.Forms.Tests
         public void Control_GetNextControlNoNextReverse()
         {
             var cont = new Control();
-            var first = new Control();
-            first.TabIndex = 0;
-            var second = new Control();
-            second.TabIndex = 1;
-            var third = new Control();
-            third.TabIndex = 2;
+            var first = new Control
+            {
+                TabIndex = 0
+            };
+            var second = new Control
+            {
+                TabIndex = 1
+            };
+            var third = new Control
+            {
+                TabIndex = 2
+            };
             var tabOrder = new Control[]
             {
                 second,
@@ -482,9 +533,10 @@ namespace System.Windows.Forms.Tests
         public void Control_ParentGetSet()
         {
             var parent = new Control();
-            var cont = new Control();
-
-            cont.Parent = parent;
+            var cont = new Control
+            {
+                Parent = parent
+            };
 
             Assert.NotNull(cont.Parent);
             Assert.Equal(parent, cont.Parent);
@@ -494,9 +546,10 @@ namespace System.Windows.Forms.Tests
         public void Control_ParentInternalGetSet()
         {
             var parent = new Control();
-            var cont = new Control();
-
-            cont.ParentInternal = parent;
+            var cont = new Control
+            {
+                ParentInternal = parent
+            };
 
             Assert.NotNull(cont.Parent);
             Assert.Equal(parent, cont.ParentInternal);
@@ -508,7 +561,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ret = cont.GetContainerControl();
+            IContainerControl ret = cont.GetContainerControl();
 
             Assert.Null(ret);
         }
@@ -580,9 +633,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_AccessibleNameGetSet()
         {
-            var cont = new Control();
-
-            cont.AccessibleName = "Foo";
+            var cont = new Control
+            {
+                AccessibleName = "Foo"
+            };
 
             Assert.Equal("Foo", cont.AccessibleName);
         }
@@ -597,9 +651,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AccessibleRoleData))]
         public void Control_SetItemCheckState(AccessibleRole expected)
         {
-            var cont = new Control();
-
-            cont.AccessibleRole = expected;
+            var cont = new Control
+            {
+                AccessibleRole = expected
+            };
 
             Assert.Equal(expected, cont.AccessibleRole);
         }
@@ -616,7 +671,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.AccessibleRole = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.AccessibleRole = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -630,9 +685,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(IsAccessibleGetSetData))]
         public void Control_IsAccessibleGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.IsAccessible = expected;
+            var cont = new Control
+            {
+                IsAccessible = expected
+            };
 
             Assert.Equal(expected, cont.IsAccessible);
         }
@@ -645,9 +701,10 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void Control_BackColorGetSet(Color expected)
         {
-            var cont = new Control();
-
-            cont.BackColor = expected;
+            var cont = new Control
+            {
+                BackColor = expected
+            };
 
             Assert.Equal(expected, cont.BackColor);
         }
@@ -669,9 +726,10 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void Control_ForeColorGetSet(Color expected)
         {
-            var cont = new Control();
-
-            cont.ForeColor = expected;
+            var cont = new Control
+            {
+                ForeColor = expected
+            };
 
             Assert.Equal(expected, cont.ForeColor);
         }
@@ -702,9 +760,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(BackgroundImageLayoutData))]
         public void Control_BackgroundImageLayoutGetSet(ImageLayout expected)
         {
-            var cont = new Control();
-
-            cont.BackgroundImageLayout = expected;
+            var cont = new Control
+            {
+                BackgroundImageLayout = expected
+            };
 
             Assert.Equal(expected, cont.BackgroundImageLayout);
         }
@@ -721,7 +780,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.BackgroundImageLayout = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.BackgroundImageLayout = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -741,14 +800,22 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(AutoSizeGetSetData))]
-        public void Control_AutoSizeGetSet(bool expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                AutoSize = value
+            };
+            Assert.Equal(value, control.AutoSize);
 
-            cont.AutoSize = expected;
+            // Set same.
+            control.AutoSize = value;
+            Assert.Equal(value, control.AutoSize);
 
-            Assert.Equal(expected, cont.AutoSize);
+            // Set different.
+            control.AutoSize = value;
+            Assert.Equal(value, control.AutoSize);
         }
 
         [Fact]
@@ -775,25 +842,17 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
             var expectedSize = new Size(expected, expected);
 
-            var actualSize = cont.ApplySizeConstraints(expected, expected);
+            Size actualSize = cont.ApplySizeConstraints(expected, expected);
 
             Assert.Equal(expectedSize, actualSize);
         }
 
-        /// <summary>
-        /// Data for the ApplySizeConstraintsSize test
-        /// </summary>
-        public static TheoryData<Size> ApplySizeConstraintsSizeData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(ApplySizeConstraintsSizeData))]
-        public void Control_ApplySizeConstraintsSize(Size expectedSize)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_ApplySizeConstraintsSize_Invoke_ReturnsExpected(Size expectedSize)
         {
-            var cont = new Control();
-
-            var actualSize = cont.ApplySizeConstraints(expectedSize);
-
+            var control = new Control();
+            Size actualSize = control.ApplySizeConstraints(expectedSize);
             Assert.Equal(expectedSize, actualSize);
         }
 
@@ -814,28 +873,26 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
             var expectedBounds = new Rectangle(expected, expected, expected, expected);
 
-            var actualBounds = cont.ApplyBoundsConstraints(expected, expected, expected, expected);
+            Rectangle actualBounds = cont.ApplyBoundsConstraints(expected, expected, expected, expected);
 
             Assert.Equal(expectedBounds, actualBounds);
         }
 
         #endregion
 
-        /// <summary>
-        /// Data for the PaddingGetSet test
-        /// </summary>
-        public static TheoryData<Padding> PaddingGetSetData =>
-            TestHelper.GetPaddingTheoryData();
-
         [Theory]
-        [MemberData(nameof(PaddingGetSetData))]
-        public void Control_PaddingGetSet(Padding expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void Control_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Padding = value
+            };
+            Assert.Equal(expected, control.Padding);
 
-            cont.Padding = expected;
-
-            Assert.Equal(expected, cont.Padding);
+            // Set same.
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
         }
 
         /// <summary>
@@ -848,9 +905,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AnchorData))]
         public void Control_AnchorGetSet(AnchorStyles expected)
         {
-            var cont = new Control();
-
-            cont.Anchor = expected;
+            var cont = new Control
+            {
+                Anchor = expected
+            };
 
             Assert.Equal(expected, cont.Anchor);
         }
@@ -876,9 +934,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(HeightGetSetData))]
         public void Control_HeightGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Height = expected;
+            var cont = new Control
+            {
+                Height = expected
+            };
 
             Assert.Equal(expected, cont.Height);
         }
@@ -893,9 +952,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(LeftGetSetData))]
         public void Control_LeftGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Left = expected;
+            var cont = new Control
+            {
+                Left = expected
+            };
 
             Assert.Equal(expected, cont.Left);
         }
@@ -910,113 +970,106 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TopGetSetData))]
         public void Control_TopGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Top = expected;
+            var cont = new Control
+            {
+                Top = expected
+            };
 
             Assert.Equal(expected, cont.Top);
         }
 
-        /// <summary>
-        /// Data for the IsAccessibleGetSet test
-        /// </summary>
-        public static TheoryData<Point> LocationGetSetData =>
-            TestHelper.GetPointTheoryData();
-
         [Theory]
-        [MemberData(nameof(LocationGetSetData))]
-        public void Control_LocationGetSet(Point expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        public void Control_LocationGetSet(Point value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Location = value
+            };
+            Assert.Equal(value, control.Location);
 
-            cont.Location = expected;
-
-            Assert.Equal(expected, cont.Location);
+            // Set same.
+            control.Location = value;
+            Assert.Equal(value, control.Location);
         }
 
-        /// <summary>
-        /// Data for the MarginGetSet test
-        /// </summary>
-        public static TheoryData<Padding> MarginGetSetData =>
-            TestHelper.GetPaddingTheoryData();
-
         [Theory]
-        [MemberData(nameof(MarginGetSetData))]
-        public void Control_MarginGetSet(Padding expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void Control_Margin_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Margin = value
+            };
+            Assert.Equal(expected, control.Margin);
 
-            cont.Margin = expected;
-
-            Assert.Equal(expected, cont.Margin);
+            // Set same.
+            control.Margin = value;
+            Assert.Equal(expected, control.Margin);
         }
 
-        /// <summary>
-        /// Data for the MaximumSizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> MaximumSizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(MaximumSizeGetSetData))]
-        public void Control_MaximumSizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_MaximumSize_Set_GetReturnsExpected(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                MaximumSize = value
+            };
+            Assert.Equal(value, control.MaximumSize);
 
-            cont.MaximumSize = expected;
-
-            Assert.Equal(expected, cont.MaximumSize);
+            // Set same.
+            control.MaximumSize = value;
+            Assert.Equal(value, control.MaximumSize);
         }
 
-        /// <summary>
-        /// Data for the MinimumSizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> MinimumSizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(MinimumSizeGetSetData))]
-        public void Control_MinimumSizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_MinimumSize_Set_GetReturnsExpected(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                MinimumSize = value
+            };
+            Assert.Equal(value, control.MinimumSize);
 
-            cont.MinimumSize = expected;
-
-            Assert.Equal(expected, cont.MinimumSize);
+            // Set same.
+            control.MinimumSize = value;
+            Assert.Equal(value, control.MinimumSize);
         }
 
-        /// <summary>
-        /// Data for the RequiredScaling test
-        /// </summary>
-        public static TheoryData<BoundsSpecified> RequiredScalingData =>
-            CommonTestHelper.GetEnumTheoryData<BoundsSpecified>();
-
         [Theory]
-        [MemberData(nameof(RequiredScalingData))]
-        public void Control_RequiredScaling(BoundsSpecified expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
+        public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                RequiredScaling = value
+            };
+            Assert.Equal(value, control.RequiredScaling);
 
-            cont.RequiredScaling = expected;
-
-            Assert.Equal(expected, cont.RequiredScaling);
+            // Set same.
+            control.RequiredScaling = value;
+            Assert.Equal(value, control.RequiredScaling);
         }
 
-        /// <summary>
-        /// Data for the RequiredScalingEnabled test
-        /// </summary>
-        public static TheoryData<bool> RequiredScalingEnabledData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [Theory]
-        [MemberData(nameof(RequiredScalingEnabledData))]
-        public void Control_RequiredScalingEnabled(bool expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_RequiredScalingEnabled_Get_ReturnsExpected(bool value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                RequiredScalingEnabled = value
+            };
+            Assert.Equal(value, control.RequiredScalingEnabled);
 
-            cont.RequiredScalingEnabled = expected;
+            // Set same.
+            control.RequiredScalingEnabled = value;
+            Assert.Equal(value, control.RequiredScalingEnabled);
 
-            Assert.Equal(expected, cont.RequiredScalingEnabled);
+            // Set different.
+            control.RequiredScalingEnabled = !value;
+            Assert.Equal(!value, control.RequiredScalingEnabled);
         }
 
         [Theory]
@@ -1024,9 +1077,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(RightToLeft.No)]
         public void Control_RightToLeftTest(RightToLeft expected)
         {
-            var cont = new Control();
-
-            cont.RightToLeft = expected;
+            var cont = new Control
+            {
+                RightToLeft = expected
+            };
 
             Assert.Equal(expected, cont.RightToLeft);
         }
@@ -1035,8 +1089,10 @@ namespace System.Windows.Forms.Tests
         public void Control_RightToLeftInherit()
         {
             var parent = new Control();
-            var cont = new Control();
-            cont.Parent = parent;
+            var cont = new Control
+            {
+                Parent = parent
+            };
 
             parent.RightToLeft = RightToLeft.Yes;
             cont.RightToLeft = RightToLeft.Inherit;
@@ -1052,21 +1108,19 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
-        /// <summary>
-        /// Data for the SizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> SizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(SizeGetSetData))]
-        public void Control_SizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_SizeGetSet(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Size = value
+            };
+            Assert.Equal(value, control.Size);
 
-            cont.Size = expected;
-
-            Assert.Equal(expected, cont.Size);
+            // Set same.
+            control.Size = value;
+            Assert.Equal(value, control.Size);
         }
 
         /// <summary>
@@ -1079,9 +1133,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(WidthGetSetData))]
         public void Control_WidthGetSet(int expected)
         {
-            var cont = new Control();
-
-            cont.Width = expected;
+            var cont = new Control
+            {
+                Width = expected
+            };
 
             Assert.Equal(expected, cont.Width);
         }
@@ -1291,9 +1346,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(EnabledGetSetData))]
         public void Control_EnabledGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.Enabled = expected;
+            var cont = new Control
+            {
+                Enabled = expected
+            };
 
             Assert.Equal(expected, cont.Enabled);
         }
@@ -1308,9 +1364,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(VisibleGetSetData))]
         public void Control_VisibleGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.Visible = expected;
+            var cont = new Control
+            {
+                Visible = expected
+            };
 
             Assert.Equal(expected, cont.Visible);
         }
@@ -1339,8 +1396,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_Hide()
         {
-            var cont = new Control();
-            cont.Visible = true;
+            var cont = new Control
+            {
+                Visible = true
+            };
 
             cont.Hide();
 
@@ -1351,21 +1410,19 @@ namespace System.Windows.Forms.Tests
 
         #region Font
 
-        /// <summary>
-        /// Data for the FontGetSet test
-        /// </summary>
-        public static TheoryData<Font> FontGetSetData =>
-            TestHelper.GetFontTheoryData();
-
         [Theory]
-        [MemberData(nameof(FontGetSetData))]
-        public void Control_FontGetSet(Font expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void Control_FontGetSet(Font value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Font = value
+            };
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
 
-            cont.Font = expected;
-
-            Assert.Equal(expected, cont.Font);
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
         }
 
         [Theory]
@@ -1374,8 +1431,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(float.Epsilon)]
         public void Control_ScaleFont(float expected)
         {
-            var cont = new Control();
-            cont.Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f);
+            var cont = new Control
+            {
+                Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f)
+            };
 
             cont.ScaleFont(expected);
 
@@ -1386,55 +1445,79 @@ namespace System.Windows.Forms.Tests
 
         #region Name and Text
 
-        /// <summary>
-        /// Data for the WindowTextGetSet test
-        /// </summary>
-        public static TheoryData<string> WindowTextGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [Theory]
-        [MemberData(nameof(WindowTextGetSetData))]
-        public void Control_WindowTextGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_WindowText_Set_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                WindowText = value
+            };
+            Assert.Equal(value ?? string.Empty, control.WindowText);
 
-            cont.WindowText = expected;
-
-            Assert.Equal(expected, cont.WindowText);
+            // Set same.
+            control.WindowText = value;
+            Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
-        /// <summary>
-        /// Data for the NameGetSet test
-        /// </summary>
-        public static TheoryData<string> NameGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [Theory]
-        [MemberData(nameof(NameGetSetData))]
-        public void Control_NameGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_WindowText_SetWithHandle_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-            cont.Name = expected;
+            control.WindowText = value;
+            Assert.Equal(value ?? string.Empty, control.WindowText);
 
-            Assert.Equal(expected, cont.Name);
+            // Set same.
+            control.WindowText = value;
+            Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
-        /// <summary>
-        /// Data for the TextGetSet test
-        /// </summary>
-        public static TheoryData<string> TextGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Name_Set_GetReturnsExpected(string value)
+        {
+            var control = new Control
+            {
+                Name = value
+            };
+            Assert.Equal(value ?? string.Empty, control.Name);
+
+            // Set same.
+            control.Name = value;
+            Assert.Equal(value ?? string.Empty, control.Name);
+        }
 
         [Theory]
-        [MemberData(nameof(TextGetSetData))]
-        public void Control_TextGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Text_Set_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Text = value
+            };
+            Assert.Equal(value ?? string.Empty, control.Text);
 
-            cont.Text = expected;
+            // Set same.
+            control.Text = value;
+            Assert.Equal(value ?? string.Empty, control.Text);
+        }
 
-            Assert.Equal(expected, cont.Text);
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Text_SetWithHandle_GetReturnsExpected(string value)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.Text = value;
+            Assert.Equal(value ?? string.Empty, control.Text);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(value ?? string.Empty, control.Text);
         }
 
         #endregion
@@ -1451,9 +1534,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CaptureGetSetData))]
         public void Control_CaptureGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.Capture = expected;
+            var cont = new Control
+            {
+                Capture = expected
+            };
 
             Assert.Equal(expected, cont.Capture);
         }
@@ -1468,9 +1552,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CaptureInternalGetSetData))]
         public void Control_CaptureInternalGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.CaptureInternal = expected;
+            var cont = new Control
+            {
+                CaptureInternal = expected
+            };
 
             Assert.Equal(expected, cont.CaptureInternal);
         }
@@ -1491,8 +1576,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanProcessMnemonicNotEnabled()
         {
-            var cont = new Control();
-            cont.Enabled = false;
+            var cont = new Control
+            {
+                Enabled = false
+            };
 
             // act and assert
             Assert.False(cont.CanProcessMnemonic());
@@ -1501,8 +1588,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanProcessMnemonicNotVisible()
         {
-            var cont = new Control();
-            cont.Visible = false;
+            var cont = new Control
+            {
+                Visible = false
+            };
 
             // act and assert
             Assert.False(cont.CanProcessMnemonic());
@@ -1535,8 +1624,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanSelectCoreNotEnabled()
         {
-            var cont = new Control();
-            cont.Enabled = false;
+            var cont = new Control
+            {
+                Enabled = false
+            };
 
             // act and assert
             Assert.False(cont.CanSelectCore());
@@ -1545,10 +1636,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_CanSelectCoreParentNotEnabled()
         {
-            var cont = new Control();
-            cont.Enabled = true;
-            var parent = new Control();
-            parent.Enabled = false;
+            var cont = new Control
+            {
+                Enabled = true
+            };
+            var parent = new Control
+            {
+                Enabled = false
+            };
             cont.AssignParent(parent);
 
             // act and assert
@@ -1557,51 +1652,21 @@ namespace System.Windows.Forms.Tests
 
         #endregion
 
-        #region FindForm
-
         [Fact]
-        public void Control_FindForm()
+        public void Control_FindFormWithParent_ReturnsForm()
         {
-            var cont = new Control();
+            var control = new Control();
             var form = new Form();
-            cont.Parent = form;
-
-            // act and assert
-            Assert.Equal(form, cont.FindForm());
+            control.Parent = form;
+            Assert.Equal(form, control.FindForm());
         }
 
         [Fact]
-        public void Control_FindFormNot()
+        public void Control_FindFormWithoutParent_ReturnsNull()
         {
-            var cont = new Control();
-
-            // act and assert
-            Assert.NotEqual(cont, cont.FindForm());
-            // returns the control itself if not found
+            var control = new Control();
+            Assert.Null(control.FindForm());
         }
-
-        [Fact]
-        public void Control_FindFormInternal()
-        {
-            var cont = new Control();
-            var form = new Form();
-            cont.Parent = form;
-
-            // act and assert
-            Assert.Equal(form, cont.FindFormInternal());
-        }
-
-        [Fact]
-        public void Control_FindFormInternalNot()
-        {
-            var cont = new Control();
-
-            // act and assert
-            Assert.NotEqual(cont, cont.FindFormInternal());
-            // returns the control itself if not found
-        }
-
-        #endregion
 
         #region GetChildAtPoint
 
@@ -1617,7 +1682,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ret = cont.GetChildAtPoint(new Point(5, 5), skip);
+            Control ret = cont.GetChildAtPoint(new Point(5, 5), skip);
 
             Assert.Null(ret);
         }
@@ -1635,7 +1700,7 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
 
             // act & assert
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.GetChildAtPoint(new Point(5, 5), skip));
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.GetChildAtPoint(new Point(5, 5), skip));
             Assert.Equal("skipValue", ex.ParamName);
         }
 
@@ -1646,7 +1711,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var intptr = cont.Handle;
+            IntPtr intptr = cont.Handle;
 
             Assert.NotEqual(IntPtr.Zero, intptr);
         }
@@ -1656,7 +1721,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var intptr = cont.HandleInternal;
+            IntPtr intptr = cont.HandleInternal;
 
             Assert.Equal(IntPtr.Zero, intptr);
             Assert.False(cont.IsHandleCreated);
@@ -1675,7 +1740,7 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
             var mock = new Mock<IDataObject>(MockBehavior.Strict);
 
-            var ret = cont.DoDragDrop(mock.Object, expected);
+            DragDropEffects ret = cont.DoDragDrop(mock.Object, expected);
 
             Assert.Equal(DragDropEffects.None, ret);
         }
@@ -1715,9 +1780,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(UseWaitCursorGetSetData))]
         public void Control_UseWaitCursorGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.UseWaitCursor = expected;
+            var cont = new Control
+            {
+                UseWaitCursor = expected
+            };
 
             Assert.Equal(expected, cont.UseWaitCursor);
         }
@@ -1729,9 +1795,10 @@ namespace System.Windows.Forms.Tests
         // SupportsUseCompatibleTextRendering is always false
         public void Control_UseCompatibleTextRenderingIntGetSet(bool given, bool expected)
         {
-            var cont = new Control();
-
-            cont.UseCompatibleTextRenderingInt = given;
+            var cont = new Control
+            {
+                UseCompatibleTextRenderingInt = given
+            };
 
             Assert.Equal(expected, cont.UseCompatibleTextRenderingInt);
         }
@@ -1757,34 +1824,27 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AllowDropData))]
         public void Control_AllowDropGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.AllowDrop = expected;
+            var cont = new Control
+            {
+                AllowDrop = expected
+            };
 
             Assert.Equal(expected, cont.AllowDrop);
         }
 
-        /// <summary>
-        /// Data for the AutoSizeGetSet test
-        /// </summary>
-        public static TheoryData<bool> AutoSizeGetSetData =>
-            CommonTestHelper.GetBoolTheoryData();
-
-        /// <summary>
-        /// Data for the AutoScrollOffsetGetSet test
-        /// </summary>
-        public static TheoryData<Point> AutoScrollOffsetGetSetData =>
-            TestHelper.GetPointTheoryData();
-
         [Theory]
-        [MemberData(nameof(AutoScrollOffsetGetSetData))]
-        public void Control_AutoScrollOffsetGetSet(Point expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        public void Control_AutoScrollOffsetGetSet(Point value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                AutoScrollOffset = value
+            };
+            Assert.Equal(value, control.AutoScrollOffset);
 
-            cont.AutoScrollOffset = expected;
-
-            Assert.Equal(expected, cont.AutoScrollOffset);
+            // Set same.
+            control.AutoScrollOffset = value;
+            Assert.Equal(value, control.AutoScrollOffset);
         }
 
         public static IEnumerable<object[]> BindingContext_Set_TestData()
@@ -1877,9 +1937,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CausesValidationData))]
         public void Control_CausesValidationGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.CausesValidation = expected;
+            var cont = new Control
+            {
+                CausesValidation = expected
+            };
 
             Assert.Equal(expected, cont.CausesValidation);
         }
@@ -1889,28 +1950,27 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false)] // giving true cannot set to true
         public void Control_CacheTextInternalGetSet(bool given, bool expected)
         {
-            var cont = new Control();
-
-            cont.CacheTextInternal = given;
+            var cont = new Control
+            {
+                CacheTextInternal = given
+            };
 
             Assert.Equal(expected, cont.CacheTextInternal);
         }
 
-        /// <summary>
-        /// Data for the ClientSizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> ClientSizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(ClientSizeGetSetData))]
-        public void Control_ClientSizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_ClientSize_Set_GetReturnsExpected(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                ClientSize = value
+            };
+            Assert.Equal(value, control.ClientSize);
 
-            cont.ClientSize = expected;
-
-            Assert.Equal(expected, cont.ClientSize);
+            // Set same.
+            control.ClientSize = value;
+            Assert.Equal(value, control.ClientSize);
         }
 
         [Fact]
@@ -1945,9 +2005,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ValidationCancelledGetSetData))]
         public void Control_ValidationCancelledGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.ValidationCancelled = expected;
+            var cont = new Control
+            {
+                ValidationCancelled = expected
+            };
 
             Assert.Equal(expected, cont.ValidationCancelled);
         }
@@ -1962,28 +2023,27 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(IsTopMdiWindowClosingGetSetData))]
         public void Control_IsTopMdiWindowClosingGetSet(bool expected)
         {
-            var cont = new Control();
-
-            cont.IsTopMdiWindowClosing = expected;
+            var cont = new Control
+            {
+                IsTopMdiWindowClosing = expected
+            };
 
             Assert.Equal(expected, cont.IsTopMdiWindowClosing);
         }
 
-        /// <summary>
-        /// Data for the CursorGetSet test
-        /// </summary>
-        public static TheoryData<Cursor> CursorGetSetData =>
-            TestHelper.GetCursorTheoryData();
-
         [Theory]
-        [MemberData(nameof(CursorGetSetData))]
-        public void Control_CursorGetSet(Cursor expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        public void Control_Cursor_Set_GetReturnsExpected(Cursor value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Cursor = value
+            };
+            Assert.Same(value ?? Cursors.Default, control.Cursor);
 
-            cont.Cursor = expected;
-
-            Assert.Equal(expected, cont.Cursor);
+            // Set same.
+            control.Cursor = value;
+            Assert.Same(value ?? Cursors.Default, control.Cursor);
         }
 
         /// <summary>
@@ -1996,9 +2056,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DockGetSetData))]
         public void Control_DockGetSet(DockStyle expected)
         {
-            var cont = new Control();
-
-            cont.Dock = expected;
+            var cont = new Control
+            {
+                Dock = expected
+            };
 
             Assert.Equal(expected, cont.Dock);
         }

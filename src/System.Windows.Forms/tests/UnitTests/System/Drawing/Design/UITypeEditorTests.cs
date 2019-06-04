@@ -2,31 +2,55 @@
 // The .NET Foundation licenses this file to you under the MIT license.	
 // See the LICENSE file in the project root for more information.	
 
- using Xunit;	
+using Xunit;
 
- namespace System.Drawing.Design	
-{	
-    public class UITypeEditorTests	
-    {	
+namespace System.Drawing.Design
+{
+    public class UITypeEditorTests
+    {
         [Fact]
-        public void Ctor_Properties_DefaultValues()	
-        {	
-            var editor = new UITypeEditor();	
+        public void UITypeEditor_Ctor_Default()
+        {
+            var editor = new UITypeEditor();
+            Assert.False(editor.IsDropDownResizable);
+        }
 
-             using (var bm = new Bitmap(10, 10))	
-            using (var graphics = Graphics.FromImage(bm))	
-            {	
-                Assert.False(editor.IsDropDownResizable);	
-                Assert.Equal(graphics, editor.EditValue(null, graphics));	
-                Assert.Equal(graphics, editor.EditValue(null, null, graphics));	
-                Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle());	
-                Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle(null));	
-                Assert.False(editor.GetPaintValueSupported());	
-                Assert.False(editor.GetPaintValueSupported(null));	
+        [Theory]
+        [InlineData(null)]
+        [InlineData("value")]
+        public void EditValue_Invoke_ReturnsValue(object value)
+        {
+            var editor = new UITypeEditor();
+            Assert.Same(value, editor.EditValue(null, value));
+            Assert.Same(value, editor.EditValue(null, null, value));
+        }
 
-                 // nop	
-                editor.PaintValue(bm, graphics, Rectangle.Empty);	
-            }	
-        }	
-    }	
+        [Fact]
+        public void GetEditStyle_Invoke_ReturnsNone()
+        {
+            var editor = new UITypeEditor();
+            Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle());
+            Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle(null));
+        }
+
+        [Fact]
+        public void GetPaintValueSupported_Invoke_ReturnsFalse()
+        {
+            var editor = new UITypeEditor();
+            Assert.False(editor.GetPaintValueSupported());
+            Assert.False(editor.GetPaintValueSupported(null));
+        }
+
+        [Fact]
+        public void PaintValue_Invoke_Nop()
+        {
+            using (var bm = new Bitmap(10, 10))
+            using (var graphics = Graphics.FromImage(bm))
+            {
+                var editor = new UITypeEditor();
+                editor.PaintValue(null, graphics, Rectangle.Empty);
+                editor.PaintValue(new PaintValueEventArgs(null, null, graphics, Rectangle.Empty));
+            }
+        }
+    }
 }

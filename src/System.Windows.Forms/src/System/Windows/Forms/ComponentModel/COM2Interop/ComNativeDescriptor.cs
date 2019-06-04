@@ -2,59 +2,59 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop {
+namespace System.Windows.Forms.ComponentModel.Com2Interop
+{
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Collections;    
-    using System.Collections.Generic;    
+    using System.Collections;
+    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using Microsoft.Win32;
 
-    /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     Top level mapping layer between COM Object and TypeDescriptor.
     ///
-    /// </devdoc>
-    internal class ComNativeDescriptor : TypeDescriptionProvider {
-      
+    /// </summary>
+    internal class ComNativeDescriptor : TypeDescriptionProvider
+    {
+
         private static ComNativeDescriptor handler = null;
 
-        private AttributeCollection staticAttrs = new AttributeCollection(new Attribute[]{BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No});
+        private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.nativeProps"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Our collection of Object managers (Com2Properties) for native properties
-        /// </devdoc>
-        private WeakHashtable  nativeProps = new WeakHashtable();
-        
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.extendedBrowsingHandlers"]/*' />
-        /// <devdoc>
+        /// </summary>
+        private readonly WeakHashtable nativeProps = new WeakHashtable();
+
+        /// <summary>
         /// Our collection of browsing handlers, which are stateless and shared across objects.
-        /// </devdoc>
-        private Hashtable         extendedBrowsingHandlers = new Hashtable();
-        
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.clearCount"]/*' />
-        /// <devdoc>
+        /// </summary>
+        private readonly Hashtable extendedBrowsingHandlers = new Hashtable();
+
+        /// <summary>
         /// We increment this every time we look at an Object, at specified
         /// intervals, we run through the properies list to see if we should
         /// delete any.
-        /// </devdoc>
-        private int               clearCount  = 0;
-        private const  int        CLEAR_INTERVAL = 25;
+        /// </summary>
+        private int clearCount = 0;
+        private const int CLEAR_INTERVAL = 25;
 
-        internal static ComNativeDescriptor Instance {
-            get {
-                if (handler == null) {
+        internal static ComNativeDescriptor Instance
+        {
+            get
+            {
+                if (handler == null)
+                {
                     handler = new ComNativeDescriptor();
                 }
                 return handler;
             }
-        }   
+        }
 
 
         [
@@ -62,13 +62,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ]
         // called via reflection for AutomationExtender stuff. Don't delete!
         //
-        public static object GetNativePropertyValue(object component, string propertyName, ref bool succeeded) 
+        public static object GetNativePropertyValue(object component, string propertyName, ref bool succeeded)
         {
             return Instance.GetPropertyValue(component, propertyName, ref succeeded);
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     This method returns a custom type descriptor for the given type / object.  
         ///     The objectType parameter is always valid, but the instance parameter may 
         ///     be null if no instance was passed to TypeDescriptor.  The method should 
@@ -80,220 +80,260 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     if no parent provider was passed.  If a parent provider was passed, 
         ///     this method will invoke the parent provider's GetTypeDescriptor 
         ///     method.
-        /// </devdoc>
+        /// </summary>
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
         {
             return new ComTypeDescriptor(this, instance);
         }
 
-        internal string GetClassName(object component) {
+        internal string GetClassName(object component)
+        {
 
             string name = null;
 
             // does IVsPerPropretyBrowsing supply us a name?
-            if (component is NativeMethods.IVsPerPropertyBrowsing) {
-               int hr = ((NativeMethods.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-               if (NativeMethods.Succeeded(hr) && name != null) {
-                  return name;
-               }
-               // otherwise fall through...
+            if (component is NativeMethods.IVsPerPropertyBrowsing)
+            {
+                int hr = ((NativeMethods.IVsPerPropertyBrowsing)component).GetClassName(ref name);
+                if (NativeMethods.Succeeded(hr) && name != null)
+                {
+                    return name;
+                }
+                // otherwise fall through...
             }
 
-            UnsafeNativeMethods.ITypeInfo  pTypeInfo = Com2TypeInfoProcessor.FindTypeInfo(component, true);
+            UnsafeNativeMethods.ITypeInfo pTypeInfo = Com2TypeInfoProcessor.FindTypeInfo(component, true);
 
-            if (pTypeInfo == null) {
+            if (pTypeInfo == null)
+            {
                 //Debug.Fail("The current component failed to return an ITypeInfo");
                 return "";
             }
 
-            if (pTypeInfo != null) {
+            if (pTypeInfo != null)
+            {
                 string desc = null;
-                try {
+                try
+                {
                     pTypeInfo.GetDocumentation(NativeMethods.MEMBERID_NIL, ref name, ref desc, null, null);
-                    
+
                     // strip the leading underscores
-                    while (name != null && name.Length > 0 && name[0] == '_') {
+                    while (name != null && name.Length > 0 && name[0] == '_')
+                    {
                         name = name.Substring(1);
                     }
                     return name;
                 }
-                catch {
+                catch
+                {
                 }
             }
             return "";
         }
-        
-        internal TypeConverter GetConverter(object component) {
+
+        internal TypeConverter GetConverter(object component)
+        {
             return TypeDescriptor.GetConverter(typeof(IComponent));
         }
-        
-        internal object GetEditor(object component, Type baseEditorType) {
+
+        internal object GetEditor(object component, Type baseEditorType)
+        {
             return TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
         }
 
-        internal string GetName(object component) {
+        internal string GetName(object component)
+        {
 
-            if (!(component is UnsafeNativeMethods.IDispatch)) {
+            if (!(component is UnsafeNativeMethods.IDispatch))
+            {
                 return "";
             }
-            
+
             int dispid = Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)component);
-            if (dispid != NativeMethods.MEMBERID_NIL) {
+            if (dispid != NativeMethods.MEMBERID_NIL)
+            {
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
-                
-                if (success && value != null) {
+
+                if (success && value != null)
+                {
                     return value.ToString();
                 }
             }
             return "";
         }
 
-        internal object GetPropertyValue(object component, string propertyName, ref bool succeeded) {
+        internal object GetPropertyValue(object component, string propertyName, ref bool succeeded)
+        {
 
-            if (!(component is UnsafeNativeMethods.IDispatch)) {
+            if (!(component is UnsafeNativeMethods.IDispatch))
+            {
                 return null;
             }
 
             UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
-            string[] names = new string[]{propertyName};
+            string[] names = new string[] { propertyName };
             int[] dispid = new int[1];
             dispid[0] = NativeMethods.DISPID_UNKNOWN;
             Guid g = Guid.Empty;
-            try {
-               int hr = iDispatch.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), dispid);
-   
-               if (dispid[0] == NativeMethods.DISPID_UNKNOWN || NativeMethods.Failed(hr)) {
-                   return null;
-               }
+            try
+            {
+                int hr = iDispatch.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), dispid);
+
+                if (dispid[0] == NativeMethods.DISPID_UNKNOWN || NativeMethods.Failed(hr))
+                {
+                    return null;
+                }
             }
-            catch {
-                return null;   
+            catch
+            {
+                return null;
             }
             return GetPropertyValue(component, dispid[0], ref succeeded);
         }
 
-        internal object GetPropertyValue(object component, int dispid, ref bool succeeded) {
-            if (!(component is UnsafeNativeMethods.IDispatch)) {
+        internal object GetPropertyValue(object component, int dispid, ref bool succeeded)
+        {
+            if (!(component is UnsafeNativeMethods.IDispatch))
+            {
                 return null;
             }
             object[] pVarResult = new object[1];
-            if (GetPropertyValue(component, dispid, pVarResult) == NativeMethods.S_OK) {
+            if (GetPropertyValue(component, dispid, pVarResult) == NativeMethods.S_OK)
+            {
                 succeeded = true;
                 return pVarResult[0];
             }
-            else {
+            else
+            {
                 succeeded = false;
                 return null;
             }
         }
 
-        internal int GetPropertyValue(object component, int dispid, object[] retval) {
-            if (!(component is UnsafeNativeMethods.IDispatch)) {
+        internal int GetPropertyValue(object component, int dispid, object[] retval)
+        {
+            if (!(component is UnsafeNativeMethods.IDispatch))
+            {
                 return NativeMethods.E_NOINTERFACE;
             }
             UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
-            try {
+            try
+            {
                 Guid g = Guid.Empty;
                 NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
                 int hr;
 
-                try{
+                try
+                {
 
-                   hr = iDispatch.Invoke(dispid,
-                                             ref g,
-                                             SafeNativeMethods.GetThreadLCID(),
-                                             NativeMethods.DISPATCH_PROPERTYGET,
-                                             new NativeMethods.tagDISPPARAMS(),
-                                             retval,
-                                             pExcepInfo, null);
+                    hr = iDispatch.Invoke(dispid,
+                                              ref g,
+                                              SafeNativeMethods.GetThreadLCID(),
+                                              NativeMethods.DISPATCH_PROPERTYGET,
+                                              new NativeMethods.tagDISPPARAMS(),
+                                              retval,
+                                              pExcepInfo, null);
 
-                   /*if (hr != NativeMethods.S_OK){
-                     Com2PropertyDescriptor.PrintExceptionInfo(pExcepInfo);
+                    /*if (hr != NativeMethods.S_OK){
+                      Com2PropertyDescriptor.PrintExceptionInfo(pExcepInfo);
 
-                   } */
-                   if (hr == NativeMethods.DISP_E_EXCEPTION) {
-                       hr = pExcepInfo.scode;
-                   }
+                    } */
+                    if (hr == NativeMethods.DISP_E_EXCEPTION)
+                    {
+                        hr = pExcepInfo.scode;
+                    }
 
                 }
-                catch (ExternalException ex){
+                catch (ExternalException ex)
+                {
                     hr = ex.ErrorCode;
                 }
                 return hr;
             }
-            catch {
+            catch
+            {
                 //Debug.Fail(e.ToString() + " " + component.GetType().GUID.ToString() + " " + component.ToString());
             }
             return NativeMethods.E_FAIL;
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.IsNameDispId"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Checks if the given dispid matches the dispid that the Object would like to specify
         /// as its identification proeprty (Name, ID, etc).
-        /// </devdoc>
-        internal bool IsNameDispId(object obj, int dispid) {
-            if (obj == null || !obj.GetType().IsCOMObject) {
+        /// </summary>
+        internal bool IsNameDispId(object obj, int dispid)
+        {
+            if (obj == null || !obj.GetType().IsCOMObject)
+            {
                 return false;
             }
             return dispid == Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.CheckClear"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Checks all our property manages to see if any have become invalid.
-        /// </devdoc>
-        private void CheckClear(object component) {
-            
+        /// </summary>
+        private void CheckClear(object component)
+        {
+
             // walk the list every so many calls
-            if ((++clearCount % CLEAR_INTERVAL) == 0) {
-            
-               lock(nativeProps) {
-                   clearCount = 0;   
+            if ((++clearCount % CLEAR_INTERVAL) == 0)
+            {
 
-                   List<object> disposeList = null;
-                   Com2Properties entry;
+                lock (nativeProps)
+                {
+                    clearCount = 0;
 
-                   // first walk the list looking for items that need to be
-                   // cleaned out.
-                   //
-                   foreach(DictionaryEntry de in nativeProps) {
+                    List<object> disposeList = null;
+                    Com2Properties entry;
+
+                    // first walk the list looking for items that need to be
+                    // cleaned out.
+                    //
+                    foreach (DictionaryEntry de in nativeProps)
+                    {
+
                         entry = de.Value as Com2Properties;
 
-                        if (entry != null && entry.TooOld) {
-                            if (disposeList == null) {
+                        if (entry != null && entry.TooOld)
+                        {
+                            if (disposeList == null)
+                            {
                                 disposeList = new List<object>(3);
                             }
                             disposeList.Add(de.Key);
                         }
-                   }
+                    }
 
-                   // now run through the ones that are dead and dispose them.
-                   // there's going to be a very small number of these.
-                   //
-                   if (disposeList != null) {
-                       object oldKey; 
-                       for (int i = disposeList.Count - 1; i >= 0; i--) {
-                          oldKey = disposeList[i]; 
-                          entry = nativeProps[oldKey] as Com2Properties;
-                        
-                          if (entry != null) {
-                               entry.Disposed -= new EventHandler(OnPropsInfoDisposed);
-                               entry.Dispose();
-                               nativeProps.Remove(oldKey);
-                          }
-                       }
-                   }
+                    // now run through the ones that are dead and dispose them.
+                    // there's going to be a very small number of these.
+                    //
+                    if (disposeList != null)
+                    {
+                        object oldKey;
+                        for (int i = disposeList.Count - 1; i >= 0; i--)
+                        {
+                            oldKey = disposeList[i];
+                            entry = nativeProps[oldKey] as Com2Properties;
+
+                            if (entry != null)
+                            {
+                                entry.Disposed -= new EventHandler(OnPropsInfoDisposed);
+                                entry.Dispose();
+                                nativeProps.Remove(oldKey);
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.GetPropsInfo"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets the properties manager for an Object.
-        /// </devdoc>
-        private Com2Properties GetPropsInfo(object component) {
+        /// </summary>
+        private Com2Properties GetPropsInfo(object component)
+        {
             // check caches if necessary
             //
             CheckClear(component);
@@ -301,13 +341,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             // Get the property info Object
             //
             Com2Properties propsInfo = (Com2Properties)nativeProps[component];
-            
+
             // if we dont' have one, create one and set it up
             //
-            if (propsInfo == null || !propsInfo.CheckValid()) {
+            if (propsInfo == null || !propsInfo.CheckValid())
+            {
                 propsInfo = Com2TypeInfoProcessor.GetProperties(component);
-                if (propsInfo != null) {                    
-                    propsInfo.Disposed += new EventHandler(OnPropsInfoDisposed);                    
+                if (propsInfo != null)
+                {
+                    propsInfo.Disposed += new EventHandler(OnPropsInfoDisposed);
                     nativeProps.SetWeak(component, propsInfo);
                     propsInfo.AddExtendedBrowsingHandlers(extendedBrowsingHandlers);
                 }
@@ -315,252 +357,275 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return propsInfo;
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.GetAttributes"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Got attributes?
-        /// </devdoc>
-        internal AttributeCollection GetAttributes(object component) {
+        /// </summary>
+        internal AttributeCollection GetAttributes(object component)
+        {
 
             ArrayList attrs = new ArrayList();
 
-            if (component is NativeMethods.IManagedPerPropertyBrowsing) {
+            if (component is NativeMethods.IManagedPerPropertyBrowsing)
+            {
                 object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)component, NativeMethods.MEMBERID_NIL);
-                for (int i = 0; i < temp.Length; ++i) {
+                for (int i = 0; i < temp.Length; ++i)
+                {
                     attrs.Add(temp[i]);
                 }
             }
-            
-            if (Com2ComponentEditor.NeedsComponentEditor(component)) {
+
+            if (Com2ComponentEditor.NeedsComponentEditor(component))
+            {
                 EditorAttribute a = new EditorAttribute(typeof(Com2ComponentEditor), typeof(ComponentEditor));
                 attrs.Add(a);
             }
 
-            if (attrs == null || attrs.Count == 0) {
+            if (attrs == null || attrs.Count == 0)
+            {
                 return staticAttrs;
             }
-            else {
+            else
+            {
                 Attribute[] temp = new Attribute[attrs.Count];
                 attrs.CopyTo(temp, 0);
                 return new AttributeCollection(temp);
             }
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.GetDefaultProperty"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Default Property, please
-        /// </devdoc>
-        internal PropertyDescriptor GetDefaultProperty(object component) {
+        /// </summary>
+        internal PropertyDescriptor GetDefaultProperty(object component)
+        {
             CheckClear(component);
 
             Com2Properties propsInfo = GetPropsInfo(component);
-            if (propsInfo != null) {
+            if (propsInfo != null)
+            {
                 return propsInfo.DefaultProperty;
             }
             return null;
         }
 
-        internal EventDescriptorCollection GetEvents(object component) {
+        internal EventDescriptorCollection GetEvents(object component)
+        {
             return new EventDescriptorCollection(null);
         }
 
-        internal EventDescriptorCollection GetEvents(object component, Attribute[] attributes) {
+        internal EventDescriptorCollection GetEvents(object component, Attribute[] attributes)
+        {
             return new EventDescriptorCollection(null);
         }
 
-        internal EventDescriptor GetDefaultEvent(object component) {
+        internal EventDescriptor GetDefaultEvent(object component)
+        {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Props!
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
-        internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
-            
+        internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
+        {
+
             Com2Properties propsInfo = GetPropsInfo(component);
 
-            if (propsInfo == null) {
+            if (propsInfo == null)
+            {
                 return PropertyDescriptorCollection.Empty;
             }
 
-            try {
+            try
+            {
                 propsInfo.AlwaysValid = true;
                 PropertyDescriptor[] props = propsInfo.Properties;
-                
+
                 //Debug.Assert(propDescList.Count > 0, "Didn't add any properties! (propInfos=0)");
                 return new PropertyDescriptorCollection(props);
             }
-            finally {
+            finally
+            {
                 propsInfo.AlwaysValid = false;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Fired when the property info gets disposed.
-        /// </devdoc>        
-        private void OnPropsInfoDisposed(object sender, EventArgs e) {
-            Com2Properties propsInfo = sender as Com2Properties;
-
-            if (propsInfo != null) {
+        /// </summary>        
+        private void OnPropsInfoDisposed(object sender, EventArgs e)
+        {
+            if (sender is Com2Properties propsInfo)
+            {
                 propsInfo.Disposed -= new EventHandler(OnPropsInfoDisposed);
 
-                lock(nativeProps) {
+                lock (nativeProps)
+                {
 
                     // find the key
                     object key = propsInfo.TargetObject;
 
-                    if (key == null && nativeProps.ContainsValue(propsInfo)) {
+                    if (key == null && nativeProps.ContainsValue(propsInfo))
+                    {
+
                         // need to find it - the target object has probably been cleaned out
                         // of the Com2Properties object already, so we run through the
                         // hashtable looking for the value, so we know what key to remove.
                         //
-                        foreach (DictionaryEntry de in nativeProps) {
-                            if (de.Value == propsInfo) {
+                        foreach (DictionaryEntry de in nativeProps)
+                        {
+
+                            if (de.Value == propsInfo)
+                            {
                                 key = de.Key;
-                                break;                                    
+                                break;
                             }
                         }
 
-                        if (key == null)  {
+                        if (key == null)
+                        {
                             Debug.Fail("Failed to find Com2 properties key on dispose.");
                             return;
                         }
                     }
-                    
+
                     nativeProps.Remove(key);
-               }
+                }
             }
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
         /// for a generic variant.
-        /// </devdoc>
-        internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor) {
+        /// </summary>
+        internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor)
+        {
 
             object curValue = propertyValue;
-            if (curValue != null && curValue != null && !Convert.IsDBNull(curValue)){
-                  Type t = curValue.GetType();
-                  TypeConverter subConverter = TypeDescriptor.GetConverter(t);
-                  if (subConverter != null && subConverter.GetType() != typeof(TypeConverter)){
-                     currentConverter = subConverter;
-                  }
+            if (curValue != null && curValue != null && !Convert.IsDBNull(curValue))
+            {
+                Type t = curValue.GetType();
+                TypeConverter subConverter = TypeDescriptor.GetConverter(t);
+                if (subConverter != null && subConverter.GetType() != typeof(TypeConverter))
+                {
+                    currentConverter = subConverter;
+                }
                 object subEditor = TypeDescriptor.GetEditor(t, editorType);
-                  if (subEditor != null) {
-                     currentEditor = subEditor;
-                  }
+                if (subEditor != null)
+                {
+                    currentEditor = subEditor;
+                }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This type descriptor sits on top of a ComNativeDescriptor
-        /// </devdoc>
+        /// </summary>
         private sealed class ComTypeDescriptor : ICustomTypeDescriptor
         {
-            private ComNativeDescriptor         _handler;
-            private object                      _instance;
+            private readonly ComNativeDescriptor _handler;
+            private readonly object _instance;
 
-            /// <devdoc>
+            /// <summary>
             ///     Creates a new WalkingTypeDescriptor.
-            /// </devdoc>
+            /// </summary>
             internal ComTypeDescriptor(ComNativeDescriptor handler, object instance)
             {
                 _handler = handler;
                 _instance = instance;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             AttributeCollection ICustomTypeDescriptor.GetAttributes()
             {
                 return _handler.GetAttributes(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             string ICustomTypeDescriptor.GetClassName()
             {
                 return _handler.GetClassName(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             string ICustomTypeDescriptor.GetComponentName()
             {
                 return _handler.GetName(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
                 return _handler.GetConverter(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
                 return _handler.GetDefaultEvent(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
             {
                 return _handler.GetDefaultProperty(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
                 return _handler.GetEditor(_instance, editorBaseType);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
             {
                 return _handler.GetEvents(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
                 return _handler.GetEvents(_instance, attributes);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
             {
                 return _handler.GetProperties(_instance, null);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
                 return _handler.GetProperties(_instance, attributes);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
             {
                 return _instance;

@@ -6,15 +6,15 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanged'/> event.
-    /// </devdoc>
+    /// </summary>
     public class InputLanguageChangedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/> class with the
         /// specified locale and character set.
-        /// </devdoc>
+        /// </summary>
         public InputLanguageChangedEventArgs(CultureInfo culture, byte charSet)
         {
             InputLanguage = InputLanguage.FromCulture(culture);
@@ -22,35 +22,30 @@ namespace System.Windows.Forms
             CharSet = charSet;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/>class with the specified input language and
         /// character set.
-        /// </devdoc>
+        /// </summary>
         public InputLanguageChangedEventArgs(InputLanguage inputLanguage, byte charSet)
         {
-            if (inputLanguage == null)
-            {
-                throw new ArgumentNullException(nameof(inputLanguage));
-            }
-
-            InputLanguage = inputLanguage;
+            InputLanguage = inputLanguage ?? throw new ArgumentNullException(nameof(inputLanguage));
             Culture = inputLanguage.Culture;
             CharSet = charSet;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the input language.
-        /// </devdoc>
+        /// </summary>
         public InputLanguage InputLanguage { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the locale of the input language.
-        /// </devdoc>
+        /// </summary>
         public CultureInfo Culture { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the character set associated with the new input language.
-        /// </devdoc>
+        /// </summary>
         public byte CharSet { get; }
     }
 }

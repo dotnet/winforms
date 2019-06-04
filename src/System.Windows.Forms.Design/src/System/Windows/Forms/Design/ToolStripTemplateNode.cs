@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Design
             if (currentItem is ToolStripDropDownItem stripItem)
             {
                 _miniToolStrip.RightToLeft = stripItem.RightToLeft;
-                stripItem.RightToLeftChanged += new System.EventHandler(this.OnRightToLeftChanged);
+                stripItem.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
             }
             _miniToolStrip.SuspendLayout();
             _miniToolStrip.CanOverflow = false;
@@ -1486,8 +1486,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private class TemplateTextBox : TextBox
         {
-            TransparentToolStrip parent;
-            ToolStripTemplateNode owner;
+            readonly TransparentToolStrip parent;
+            readonly ToolStripTemplateNode owner;
             private const int IMEMODE = 229;
 
             public TemplateTextBox(TransparentToolStrip parent, ToolStripTemplateNode owner) : base()
@@ -1574,8 +1574,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {
-            ToolStripTemplateNode owner;
-            IComponent currentItem;
+            readonly ToolStripTemplateNode owner;
+            readonly IComponent currentItem;
 
             public TransparentToolStrip(ToolStripTemplateNode owner)
             {
@@ -1643,7 +1643,7 @@ namespace System.Windows.Forms.Design
             private bool ProcessTabKey(bool forward)
             {
                 // Give the ToolStripItem first dibs
-                ToolStripItem item = this.GetSelectedItem();
+                ToolStripItem item = GetSelectedItem();
                 if (item is ToolStripControlHost)
                 {
 
@@ -1778,12 +1778,12 @@ namespace System.Windows.Forms.Design
         public class MiniToolStripRenderer : ToolStripSystemRenderer
         {
             private int state = (int)TemplateNodeSelectionState.None;
-            private Color selectedBorderColor;
-            private Color defaultBorderColor;
-            private Color dropDownMouseOverColor;
-            private Color dropDownMouseDownColor;
-            private Color toolStripBorderColor;
-            private ToolStripTemplateNode owner;
+            private readonly Color selectedBorderColor;
+            private readonly Color defaultBorderColor;
+            private readonly Color dropDownMouseOverColor;
+            private readonly Color dropDownMouseDownColor;
+            private readonly Color toolStripBorderColor;
+            private readonly ToolStripTemplateNode owner;
             private Rectangle hotRegion = Rectangle.Empty;
 
             public MiniToolStripRenderer(ToolStripTemplateNode owner) : base()

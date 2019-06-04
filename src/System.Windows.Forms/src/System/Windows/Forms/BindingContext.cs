@@ -9,26 +9,26 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Manages the collection of System.Windows.Forms.BindingManagerBase
     /// objects for a Win Form.
-    /// </devdoc>
+    /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingContext : ICollection
     {
-        private Hashtable _listManagers;
+        private readonly Hashtable _listManagers;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the System.Windows.Forms.BindingContext class.
-        /// </devdoc>
+        /// </summary>
         public BindingContext()
         {
             _listManagers = new Hashtable();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the total number of System.Windows.Forms.BindingManagerBases objects.
-        /// </devdoc>
+        /// </summary>
         int ICollection.Count
         {
             get
@@ -38,62 +38,62 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Copies the elements of the collection into a specified array, starting
         /// at the collection index.
-        /// </devdoc>
+        /// </summary>
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
             _listManagers.CopyTo(ar, index);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an enumerator for the collection.
-        /// </devdoc>
+        /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
             ScrubWeakRefs();
             return _listManagers.GetEnumerator();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the collection is read-only.
-        /// </devdoc>
+        /// </summary>
         public bool IsReadOnly => false;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the collection is synchronized.
-        /// </devdoc>
+        /// </summary>
         bool ICollection.IsSynchronized => false;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an object to use for synchronization (thread safety).
-        /// </devdoc>
+        /// </summary>
         object ICollection.SyncRoot => null;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the System.Windows.Forms.BindingManagerBase associated with the specified
         /// data source.
-        /// </devdoc>
+        /// </summary>
         public BindingManagerBase this[object dataSource] => this[dataSource, string.Empty];
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the System.Windows.Forms.BindingManagerBase associated with the specified
         /// data source and data member.
-        /// </devdoc>
+        /// </summary>
         public BindingManagerBase this[object dataSource, string dataMember]
         {
             get => EnsureListManager(dataSource, dataMember);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Adds the listManager to the collection. An ArgumentNullException is thrown if this
         /// listManager is null. An exception is thrown if a listManager to the same target
         /// and Property as an existing listManager or if the listManager's column isn't a
         /// valid column given this DataSource.Table's schema.
         /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
@@ -120,9 +120,9 @@ namespace System.Windows.Forms
             _listManagers[GetKey(dataSource, string.Empty)] = new WeakReference(listManager, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the collection has changed.
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
@@ -140,10 +140,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the collection of any bindings.
         /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
@@ -153,24 +153,24 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the collection.
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
         protected virtual void ClearCore() => _listManagers.Clear();
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the System.Windows.Forms.BindingContext contains
         /// the specified data source.
-        /// </devdoc>
+        /// </summary>
         public bool Contains(object dataSource) => Contains(dataSource, string.Empty);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the System.Windows.Forms.BindingContext
         /// contains the specified data source and data member.
-        /// </devdoc>
+        /// </summary>
         public bool Contains(object dataSource, string dataMember)
         {
             return _listManagers.ContainsKey(GetKey(dataSource, dataMember));
@@ -183,9 +183,9 @@ namespace System.Windows.Forms
 
         internal class HashKey
         {
-            private WeakReference _wRef;
-            private int _dataSourceHashCode;
-            private string _dataMember;
+            private readonly WeakReference _wRef;
+            private readonly int _dataSourceHashCode;
+            private readonly string _dataMember;
 
             internal HashKey(object dataSource, string dataMember)
             {
@@ -213,25 +213,25 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                
+
                 return _wRef.Target == keyTarget._wRef.Target && _dataMember == keyTarget._dataMember;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This method is called whenever the collection changes. Overriders of this method
         /// should call the base implementation of this method.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs ccevent)
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given listManager from the collection.
         /// An ArgumentNullException is thrown if this listManager is null. An ArgumentException
         /// is thrown if this listManager doesn't belong to this collection.
         /// The CollectionChanged event is fired if it succeeds.
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
@@ -249,13 +249,13 @@ namespace System.Windows.Forms
             _listManagers.Remove(GetKey(dataSource, string.Empty));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Create a suitable binding manager for the specified dataSource/dataMember combination.
         /// - If one has already been created and cached by this BindingContext, return that
         ///   instead.
         /// - If the data source is an ICurrencyManagerProvider, just delegate to the data
         ///   source.
-        /// </devdoc>
+        /// </summary>
         internal BindingManagerBase EnsureListManager(object dataSource, string dataMember)
         {
             BindingManagerBase bindingManagerBase = null;
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
             else
             {
                 // Data member specified, so get data source's binding manager, and hook a 'related' binding manager to it
-                int lastDot = dataMember.LastIndexOf(".");
+                int lastDot = dataMember.LastIndexOf('.');
                 string dataPath = (lastDot == -1) ? string.Empty : dataMember.Substring(0, lastDot);
                 string dataField = dataMember.Substring(lastDot + 1);
 
@@ -360,12 +360,12 @@ namespace System.Windows.Forms
                     Binding binding = bindingManagerBase.Bindings[i];
                     if (binding.DataSource == propBinding.BindableComponent)
                     {
-                        if (propBinding.BindToObject.BindingMemberInfo.BindingMember.Equals(binding.PropertyName))
+                        if (propBinding.BindingMemberInfo.BindingMember.Equals(binding.PropertyName))
                         {
                             throw new ArgumentException(string.Format(SR.DataBindingCycle, binding.PropertyName), nameof(propBinding));
                         }
                     }
-                    else if (propBinding.BindToObject.BindingManagerBase is PropertyManager)
+                    else if (propBinding.BindingManagerBase is PropertyManager)
                     {
                         CheckPropertyBindingCycles(newBindingContext, binding);
                     }
@@ -398,11 +398,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Associates a Binding with a different BindingContext. Intended for use by components
         /// that support IBindableComponent, to update their Bindings when the value of
         /// IBindableComponent.BindingContext is changed.
-        /// </devdoc>
+        /// </summary>
         public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
         {
             if (binding == null)
@@ -420,13 +420,12 @@ namespace System.Windows.Forms
             {
                 // we need to first check for cycles before adding this binding to the collection
                 // of bindings.
-                if (binding.BindToObject.BindingManagerBase is PropertyManager)
+                if (binding.BindingManagerBase is PropertyManager)
                 {
                     CheckPropertyBindingCycles(newBindingContext, binding);
                 }
 
-                BindToObject bindTo = binding.BindToObject;
-                BindingManagerBase newManager = newBindingContext.EnsureListManager(bindTo.DataSource, bindTo.BindingMemberInfo.BindingPath);
+                BindingManagerBase newManager = newBindingContext.EnsureListManager(binding.DataSource, binding.BindingMemberInfo.BindingPath);
                 newManager.Bindings.Add(binding);
             }
         }

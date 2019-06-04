@@ -54,7 +54,7 @@ namespace System.ComponentModel.Design
             {
                 if (property.IsReadOnly)
                 {
-                    CreateReferences( string.Format(CultureInfo.CurrentCulture, "{0}.{1}", trailingName, property.Name), property.GetValue(reference), sitedComponent);
+                    CreateReferences(string.Format(CultureInfo.CurrentCulture, "{0}.{1}", trailingName, property.Name), property.GetValue(reference), sitedComponent);
                 }
             }
         }
@@ -349,9 +349,14 @@ namespace System.ComponentModel.Design
 #if DEBUG
                 Debug.Assert(sitedComponent != null, "Expected a sited component");
                 if (sitedComponent != null)
+                {
                     Debug.Assert(sitedComponent.Site != null, "Sited component is not really sited: " + sitedComponent.ToString());
+                }
+
                 if (sitedComponent != null)
+                {
                     Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) != null, "Sited component has no name: " + sitedComponent.ToString());
+                }
 #endif // DEBUG
             }
 
@@ -386,9 +391,14 @@ namespace System.ComponentModel.Design
                             _fullName = string.Empty;
 #if DEBUG
                             if (_sitedComponent != null)
+                            {
                                 Debug.Assert(_sitedComponent.Site != null, "Sited component is not really sited: " + _sitedComponent.ToString());
+                            }
+
                             if (_sitedComponent != null)
+                            {
                                 Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) != null, "Sited component has no name: " + _sitedComponent.ToString());
+                            }
 #endif // DEBUG
                         }
                     }

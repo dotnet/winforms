@@ -4,41 +4,41 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the appearance of a button.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum ButtonState
     {
-        /// <devdoc>
+        /// <summary>
         /// The button has a checked or latched appearance. Use this appearance to
         /// show that a toggle button has been pressed.
-        /// </devdoc>
+        /// </summary>
         Checked = NativeMethods.DFCS_CHECKED,
 
-        /// <devdoc>
+        /// <summary>
         /// The button has a flat, two-dimensional appearance.
-        /// </devdoc>
+        /// </summary>
         Flat = NativeMethods.DFCS_FLAT,
 
-        /// <devdoc>
+        /// <summary>
         /// The button is inactive (grayed).
-        /// </devdoc>
+        /// </summary>
         Inactive = NativeMethods.DFCS_INACTIVE,
 
-        /// <devdoc>
+        /// <summary>
         /// The button has its normal appearance (three-dimensional and not pressed).
-        /// </devdoc>
+        /// </summary>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The button is currently pressed.
-        /// </devdoc>
+        /// </summary>
         Pushed = NativeMethods.DFCS_PUSHED,
 
-        /// <devdoc>
+        /// <summary>
         /// All viable flags in the bit mask are used.
-        /// </devdoc>
+        /// </summary>
         All = Flat | Checked | Pushed | Inactive,
     }
 }

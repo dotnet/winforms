@@ -131,18 +131,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void Link_Name_SetWithoutOwner_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Link_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var link = new LinkLabel.Link
             {
                 Name = value
             };
-            Assert.Same(value ?? string.Empty, link.Name);
+            Assert.Same(expected, link.Name);
 
             // Set same.
             link.LinkData = value;
-            Assert.Same(value ?? string.Empty, link.Name);
+            Assert.Same(expected, link.Name);
         }
 
         [Theory]

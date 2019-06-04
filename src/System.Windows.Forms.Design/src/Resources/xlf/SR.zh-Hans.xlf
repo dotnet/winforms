@@ -211,13 +211,7 @@
       异常:
       {1}
 
-      堆栈跟踪:{2}
-
-
-异常:
-{1}
-
-堆栈跟踪:{2}</target>
+      堆栈跟踪:{2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -617,6 +611,16 @@
       <trans-unit id="SerializerNoSuchProperty">
         <source>The type '{0}' has no property named '{1}'.</source>
         <target state="translated">类型“{0}”没有名为“{1}”的属性。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">对象“{0}”为属性“{1}”返回空，而这是不允许的。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">属性“{0}”的代码生成失败。错误是: “{1}”</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceException">

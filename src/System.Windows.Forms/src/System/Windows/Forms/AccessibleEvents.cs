@@ -6,67 +6,67 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies events that are reported by accessible applications.</para>
-    /// </devdoc>
+    /// </summary>
 
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum AccessibleEvents
     {
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_SOUND
         /// Sent when a sound is played. Currently nothing is generating this, we
         /// are going to be cleaning up the SOUNDSENTRY feature in the control panel
         /// and will use this at that time. Applications implementing WinEvents
         /// are perfectly welcome to use it. Clients of IAccessible* will simply
         /// turn around and get back a non-visual object that describes the sound.
-        /// </devdoc>>
+        /// </summary>>
         SystemSound = 0x0001,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_ALERT
         /// Sent when an alert needs to be given to the user. MessageBoxes generate
         /// alerts for example.
-        /// </devdoc>>
+        /// </summary>>
         SystemAlert = 0x0002,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_FOREGROUND
         /// Sent when the foreground (active) window changes, even if it is changing
         /// to another window in the same thread as the previous one.
-        /// </devdoc>>
+        /// </summary>>
         SystemForeground = 0x0003,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_MENUSTART
         /// EVENT_SYSTEM_MENUEND
         /// Sent when entering into and leaving from menu mode (system, app bar, and
         /// track popups).
-        /// </devdoc>>
+        /// </summary>>
         SystemMenuStart = 0x0004,
         SystemMenuEnd = 0x0005,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_MENUPOPUPSTART
         /// EVENT_SYSTEM_MENUPOPUPEND
         /// Sent when a menu popup comes up and just before it is taken down. Note
         /// that for a call to TrackPopupMenu(), a client will see EVENT_SYSTEM_MENUSTART
         /// followed almost immediately by EVENT_SYSTEM_MENUPOPUPSTART for the popup
         /// being shown.
-        /// </devdoc>>
+        /// </summary>>
         SystemMenuPopupStart = 0x0006,
         SystemMenuPopupEnd = 0x0007,
 
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_CAPTURESTART
         /// EVENT_SYSTEM_CAPTUREEND
         /// Sent when a window takes the capture and releases the capture.
-        /// </devdoc>>
+        /// </summary>>
         SystemCaptureStart = 0x0008,
         SystemCaptureEnd = 0x0009,
 
-        /// </devdoc>>
+        /// </summary>>
         /// EVENT_SYSTEM_MOVESIZESTART
         /// EVENT_SYSTEM_MOVESIZEEND
         /// Sent when a window enters and leaves move-size dragging mode.
@@ -74,54 +74,54 @@ namespace System.Windows.Forms
         SystemMoveSizeStart = 0x000A,
         SystemMoveSizeEnd = 0x000B,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_CONTEXTHELPSTART
         /// EVENT_SYSTEM_CONTEXTHELPEND
         /// Sent when a window enters and leaves context sensitive help mode.
-        /// </devdoc>>
+        /// </summary>>
         SystemContextHelpStart = 0x000C,
         SystemContextHelpEnd = 0x000D,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_DRAGDROPSTART
         /// EVENT_SYSTEM_DRAGDROPEND
         /// Sent when a window enters and leaves drag drop mode. Note that it is up
         /// to apps and OLE to generate this, since the system doesn't know. Like
         /// EVENT_SYSTEM_SOUND, it will be a while before this is prevalent.
-        /// </devdoc>>
+        /// </summary>>
         SystemDragDropStart = 0x000E,
         SystemDragDropEnd = 0x000F,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_DIALOGSTART
         /// EVENT_SYSTEM_DIALOGEND
         /// Sent when a dialog comes up and just before it goes away.
-        /// </devdoc>>
+        /// </summary>>
         SystemDialogStart = 0x0010,
         SystemDialogEnd = 0x0011,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_SCROLLINGSTART
         /// EVENT_SYSTEM_SCROLLINGEND
         /// Sent when beginning and ending the tracking of a scrollbar in a window,
         /// and also for scrollbar controls.
-        /// </devdoc>>
+        /// </summary>>
         SystemScrollingStart = 0x0012,
         SystemScrollingEnd = 0x0013,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_SWITCHSTART
         /// EVENT_SYSTEM_SWITCHEND
         /// Sent when beginning and ending alt-tab mode with the switch window.
-        /// </devdoc>>
+        /// </summary>>
         SystemSwitchStart = 0x0014,
         SystemSwitchEnd = 0x0015,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_MINIMIZESTART
         /// EVENT_SYSTEM_MINIMIZEEND
         /// Sent when a window minimizes and just before it restores.
-        /// </devdoc>>
+        /// </summary>>
         SystemMinimizeStart = 0x0016,
         SystemMinimizeEnd = 0x0017,
 
@@ -148,26 +148,26 @@ namespace System.Windows.Forms
         //          of the child identified by the VARIANT. In other words, the
         //          child in this case is accessible but not a full object.
         //          Like a button on a titlebar which is 'small' and has no children.
-        Create =  0x8000,  // hwnd + ID + idChild is created item
+        Create = 0x8000,  // hwnd + ID + idChild is created item
         Destroy = 0x8001,  // hwnd + ID + idChild is destroyed item
-        Show =    0x8002,  // hwnd + ID + idChild is shown item
-        Hide =    0x8003,  // hwnd + ID + idChild is hidden item
+        Show = 0x8002,  // hwnd + ID + idChild is shown item
+        Hide = 0x8003,  // hwnd + ID + idChild is hidden item
         Reorder = 0x8004,  // hwnd + ID + idChild is parent of zordering children
 
-        /// <devdoc>
+        /// <summary>
         /// Minimize the number of notifications!
         /// When you are hiding a parent object, obviously all child objects are no
         /// longer visible on screen. They still have the same "visible" status,
         /// but are not truly visible. Hence do not send HIDE notifications for the
         /// children also. One implies all. The same goes for SHOW.
-        /// </devdoc>
-        Focus =           0x8005,  // hwnd + ID + idChild is focused item
-        Selection =       0x8006,  // hwnd + ID + idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
-        SelectionAdd =    0x8007,  // hwnd + ID + idChild is item added
+        /// </summary>
+        Focus = 0x8005,  // hwnd + ID + idChild is focused item
+        Selection = 0x8006,  // hwnd + ID + idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
+        SelectionAdd = 0x8007,  // hwnd + ID + idChild is item added
         SelectionRemove = 0x8008,  // hwnd + ID + idChild is item removed
         SelectionWithin = 0x8009,  // hwnd + ID + idChild is parent of changed selected items
 
-        /// <devdoc>
+        /// <summary>
         /// There is only one "focused" child item in a parent. This is the place
         /// keystrokes are going at a given moment. Hence only send a notification
         /// about where the NEW focus is going. A NEW item getting the focus already
@@ -200,15 +200,15 @@ namespace System.Windows.Forms
         ///     be faster an easier for somebody watching to just turn around and
         ///     query the container control what the new bunch of selected items
         ///     are.
-        /// </devdoc>
-        StateChange =         0x800A,  // hwnd + ID + idChild is item w/ state change
-        LocationChange =      0x800B,  // hwnd + ID + idChild is moved/sized item
-        NameChange =          0x800C,  // hwnd + ID + idChild is item w/ name change
-        DescriptionChange =   0x800D,  // hwnd + ID + idChild is item w/ desc change
-        ValueChange =         0x800E,  // hwnd + ID + idChild is item w/ value change
-        ParentChange =        0x800F,  // hwnd + ID + idChild is item w/ new parent
-        HelpChange =          0x8010,  // hwnd + ID + idChild is item w/ help change
+        /// </summary>
+        StateChange = 0x800A,  // hwnd + ID + idChild is item w/ state change
+        LocationChange = 0x800B,  // hwnd + ID + idChild is moved/sized item
+        NameChange = 0x800C,  // hwnd + ID + idChild is item w/ name change
+        DescriptionChange = 0x800D,  // hwnd + ID + idChild is item w/ desc change
+        ValueChange = 0x800E,  // hwnd + ID + idChild is item w/ value change
+        ParentChange = 0x800F,  // hwnd + ID + idChild is item w/ new parent
+        HelpChange = 0x8010,  // hwnd + ID + idChild is item w/ help change
         DefaultActionChange = 0x8011,  // hwnd + ID + idChild is item w/ def action change
-        AcceleratorChange =   0x8012,  // hwnd + ID + idChild is item w/ keybd accel change
+        AcceleratorChange = 0x8012,  // hwnd + ID + idChild is item w/ keybd accel change
     }
 }

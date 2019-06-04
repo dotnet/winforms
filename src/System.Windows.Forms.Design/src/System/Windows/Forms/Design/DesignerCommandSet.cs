@@ -9,19 +9,13 @@ namespace System.Windows.Forms.Design
 {
     public class DesignerCommandSet
     {
-        public virtual ICollection GetCommands(string name)
-        {
-            return null;
-        }
+        private protected const string VerbsCommand = "Verbs";
+        private protected const string ActionListsCommand = "ActionLists";
 
-        public DesignerVerbCollection Verbs
-        {
-            get => (DesignerVerbCollection)GetCommands("Verbs");
-        }
+        public virtual ICollection GetCommands(string name) => null;
 
-        public DesignerActionListCollection ActionLists
-        {
-            get => (DesignerActionListCollection)GetCommands("ActionLists");
-        }
+        public DesignerVerbCollection Verbs => (DesignerVerbCollection)GetCommands(VerbsCommand);
+
+        public DesignerActionListCollection ActionLists => (DesignerActionListCollection)GetCommands(ActionListsCommand);
     }
 }

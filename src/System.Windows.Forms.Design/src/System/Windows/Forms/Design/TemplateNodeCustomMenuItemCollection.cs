@@ -154,8 +154,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (parentDropDown.OwnerItem is ToolStripDropDownItem ownerItem)
                     {
-                        ToolStripMenuItemDesigner itemDesigner = designerHost.GetDesigner(ownerItem) as ToolStripMenuItemDesigner;
-                        if (itemDesigner != null)
+                        if (designerHost.GetDesigner(ownerItem) is ToolStripMenuItemDesigner itemDesigner)
                         {
                             itemDesigner.ResetGlyphs(ownerItem);
                         }

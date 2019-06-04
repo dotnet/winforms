@@ -12,27 +12,26 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
-        private static Type columnType = typeof(DataGridViewButtonColumn);
+        private static readonly Type columnType = typeof(DataGridViewButtonColumn);
 
         private string text;
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.DataGridViewButtonColumn"]/*' />
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
         ]
         public DataGridViewButtonColumn()
             : base(new DataGridViewButtonCell())
         {
-            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-            defaultCellStyle.AlignmentInternal = DataGridViewContentAlignment.MiddleCenter;
-            this.DefaultCellStyle = defaultCellStyle;
+            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+            {
+                AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
+            };
+            DefaultCellStyle = defaultCellStyle;
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -53,7 +52,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -71,7 +69,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.FlatStyle"]/*' />
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
@@ -81,37 +78,35 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.CellTemplate == null)
+                if (CellTemplate == null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
-                return ((DataGridViewButtonCell) this.CellTemplate).FlatStyle;
+                return ((DataGridViewButtonCell)CellTemplate).FlatStyle;
             }
             set
             {
-                if (this.FlatStyle != value)
+                if (FlatStyle != value)
                 {
-                    ((DataGridViewButtonCell)this.CellTemplate).FlatStyle = value;
-                    if (this.DataGridView != null)
+                    ((DataGridViewButtonCell)CellTemplate).FlatStyle = value;
+                    if (DataGridView != null)
                     {
-                        DataGridViewRowCollection dataGridViewRows = this.DataGridView.Rows;
+                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewButtonCell dataGridViewCell = dataGridViewRow.Cells[this.Index] as DataGridViewButtonCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
                             {
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
                         }
-                        this.DataGridView.OnColumnCommonChange(this.Index);
+                        DataGridView.OnColumnCommonChange(Index);
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.Text"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
@@ -121,41 +116,39 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.text;
+                return text;
             }
             set
             {
-                if (!string.Equals(value, this.text, StringComparison.Ordinal))
+                if (!string.Equals(value, text, StringComparison.Ordinal))
                 {
-                    this.text = value;
-                    if (this.DataGridView != null)
+                    text = value;
+                    if (DataGridView != null)
                     {
-                        if (this.UseColumnTextForButtonValue)
+                        if (UseColumnTextForButtonValue)
                         {
-                            this.DataGridView.OnColumnCommonChange(this.Index);
+                            DataGridView.OnColumnCommonChange(Index);
                         }
                         else
                         {
-                            DataGridViewRowCollection dataGridViewRows = this.DataGridView.Rows;
+                            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                             int rowCount = dataGridViewRows.Count;
                             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                             {
                                 DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                                DataGridViewButtonCell dataGridViewCell = dataGridViewRow.Cells[this.Index] as DataGridViewButtonCell;
-                                if (dataGridViewCell != null && dataGridViewCell.UseColumnTextForButtonValue)
+                                if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell && dataGridViewCell.UseColumnTextForButtonValue)
                                 {
-                                    this.DataGridView.OnColumnCommonChange(this.Index);
+                                    DataGridView.OnColumnCommonChange(Index);
                                     return;
                                 }
                             }
-                            this.DataGridView.InvalidateColumn(this.Index);
+                            DataGridView.InvalidateColumn(Index);
                         }
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.UseColumnTextForButtonValue"]/*' />
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
@@ -165,41 +158,39 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.CellTemplate == null)
+                if (CellTemplate == null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
-                return ((DataGridViewButtonCell)this.CellTemplate).UseColumnTextForButtonValue;
+                return ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValue;
             }
             set
             {
-                if (this.UseColumnTextForButtonValue != value)
+                if (UseColumnTextForButtonValue != value)
                 {
-                    ((DataGridViewButtonCell)this.CellTemplate).UseColumnTextForButtonValueInternal = value;
-                    if (this.DataGridView != null)
+                    ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValueInternal = value;
+                    if (DataGridView != null)
                     {
-                        DataGridViewRowCollection dataGridViewRows = this.DataGridView.Rows;
+                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewButtonCell dataGridViewCell = dataGridViewRow.Cells[this.Index] as DataGridViewButtonCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
                             {
                                 dataGridViewCell.UseColumnTextForButtonValueInternal = value;
                             }
                         }
-                        this.DataGridView.OnColumnCommonChange(this.Index);
+                        DataGridView.OnColumnCommonChange(Index);
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewButtonColumn dataGridViewColumn;
-            Type thisType = this.GetType();
+            Type thisType = GetType();
 
             if (thisType == columnType) //performance improvement
             {
@@ -207,28 +198,28 @@ namespace System.Windows.Forms
             }
             else
             {
-                dataGridViewColumn = (DataGridViewButtonColumn) System.Activator.CreateInstance(thisType);
+                dataGridViewColumn = (DataGridViewButtonColumn)System.Activator.CreateInstance(thisType);
             }
             if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
-                dataGridViewColumn.Text = this.text;
+                dataGridViewColumn.Text = text;
             }
             return dataGridViewColumn;
         }
 
         private bool ShouldSerializeDefaultCellStyle()
         {
-            if (!this.HasDefaultCellStyle)
+            if (!HasDefaultCellStyle)
             {
                 return false;
             }
 
-            DataGridViewCellStyle defaultCellStyle = this.DefaultCellStyle;
+            DataGridViewCellStyle defaultCellStyle = DefaultCellStyle;
 
-            return (!defaultCellStyle.BackColor.IsEmpty || 
+            return (!defaultCellStyle.BackColor.IsEmpty ||
                     !defaultCellStyle.ForeColor.IsEmpty ||
-                    !defaultCellStyle.SelectionBackColor.IsEmpty || 
+                    !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
@@ -237,18 +228,17 @@ namespace System.Windows.Forms
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag !=  null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.ToString"]/*' />
-        public override string ToString() 
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("DataGridViewButtonColumn { Name=");
-            sb.Append(this.Name);
+            sb.Append(Name);
             sb.Append(", Index=");
-            sb.Append(this.Index.ToString(CultureInfo.CurrentCulture));
+            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
             sb.Append(" }");
             return sb.ToString();
         }

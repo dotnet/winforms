@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">Barre de défilement horizontale</target>
+        <target state="translated">Horizontal</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">Barre de défilement verticale</target>
+        <target state="translated">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -8963,7 +8963,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="RichTextBoxIMEChange">
         <source>Occurs when the control's IME conversion status changes. (East Asian versions of OS only.)</source>
-        <target state="translated">Se produit lorsque l'état de conversion IME du contrôle change. (Uniquement pour les versions d'Extrême-Orient de l'OS.)</target>
+        <target state="translated">Se produit lorsque l'état de conversion IME du contrôle change. (Uniquement pour les versions d'Asie Est de l'OS.)</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBoxLinkClick">

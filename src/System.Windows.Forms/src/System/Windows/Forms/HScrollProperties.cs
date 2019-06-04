@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Basic Properties for VScroll.
-    /// </devdoc>
+    /// </summary>
     public class HScrollProperties : ScrollProperties
     {
 

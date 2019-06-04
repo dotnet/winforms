@@ -6,23 +6,23 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.RichTextBox.ContentsResized'/> event.
-    /// </devdoc>
+    /// </summary>
     public class ContentsResizedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ContentsResizedEventArgs'/>
         /// class.
-        /// </devdoc>
+        /// </summary>
         public ContentsResizedEventArgs(Rectangle newRectangle)
         {
             NewRectangle = newRectangle;
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         /// Represents the requested size of the <see cref='System.Windows.Forms.RichTextBox'/> control.
-        /// </devdoc>
+        /// </summary>
         public Rectangle NewRectangle { get; }
     }
 }

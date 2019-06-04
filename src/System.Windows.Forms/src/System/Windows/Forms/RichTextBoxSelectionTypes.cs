@@ -4,37 +4,37 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Defines the possible kinds selection types in a RichTextBox control.
     /// The actual vale returned by RichTextBox.getSelType() is a combination
     /// of any of the below options.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum RichTextBoxSelectionTypes
     {
-        /// <devdoc>
+        /// <summary>
         /// The current selection is empty.
-        /// </devdoc>
+        /// </summary>
         Empty = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The current selection is text only.
-        /// </devdoc>
+        /// </summary>
         Text = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The current selection contains atleast one OLE object.
-        /// </devdoc>
+        /// </summary>
         Object = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// The current selection contains more than one character.
-        /// </devdoc>
+        /// </summary>
         MultiChar = 4,
 
-        /// <devdoc>
+        /// <summary>
         /// The current selection contains more than one OLE object.
-        /// </devdoc>
+        /// </summary>
         MultiObject = 8,
     }
 }

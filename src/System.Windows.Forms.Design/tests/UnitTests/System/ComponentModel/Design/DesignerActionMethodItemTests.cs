@@ -243,7 +243,7 @@ namespace System.ComponentModel.Design.Tests
         private class SubDesignerActionList : DesignerActionList
         {
             public SubDesignerActionList() : base(null)
-            {                
+            {
             }
 
             public string CalledMethod { get; set; }

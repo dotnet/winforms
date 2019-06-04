@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     public class PropertyManager : BindingManagerBase
     {
         private object _dataSource;
-        private string _propName;
+        private readonly string _propName;
         private PropertyDescriptor _propInfo;
         private bool _bound;
 
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             OnCurrentChanged(EventArgs.Empty);
         }
 
-        internal override void SetDataSource(object dataSource)
+        private protected override void SetDataSource(object dataSource)
         {
             if (_dataSource != null && !string.IsNullOrEmpty(_propName))
             {
@@ -57,8 +57,8 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
         internal PropertyManager(object dataSource, string propName) : base()
         {
-            this._propName = propName;
-            this.SetDataSource(dataSource);
+            _propName = propName;
+            SetDataSource(dataSource);
         }
 
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
@@ -122,8 +122,7 @@ namespace System.Windows.Forms
 
         public override void EndCurrentEdit()
         {
-            bool success;
-            PullData(out success);
+            PullData(out bool success);
 
             if (success)
             {
@@ -145,14 +144,14 @@ namespace System.Windows.Forms
             PushData();
 
             onCurrentChangedHandler?.Invoke(this, ea);
-            onCurrentItemChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
         internal protected override void OnCurrentItemChanged(EventArgs ea)
         {
             PushData();
 
-            onCurrentItemChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
         internal override object DataSource => _dataSource;

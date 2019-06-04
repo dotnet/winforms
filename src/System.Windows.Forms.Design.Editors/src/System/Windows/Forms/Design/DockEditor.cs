@@ -20,12 +20,9 @@ namespace System.Windows.Forms.Design
         private DockUI dockUI;
 
         /// <summary>
-        ///     Edits the given object value using the editor style provided by
-        ///     GetEditorStyle.  A service provider is provided so that any
-        ///     required editing services can be obtained.
+        /// Edits the given object value using the editor style provided by GetEditorStyle.
+        /// A service provider is provided so that any required editing services can be obtained.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // everything in this assembly is full trust.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)
@@ -35,7 +32,11 @@ namespace System.Windows.Forms.Design
 
                 if (edSvc != null)
                 {
-                    if (dockUI == null) dockUI = new DockUI(this);
+                    if (dockUI == null)
+                    {
+                        dockUI = new DockUI(this);
+                    }
+
                     dockUI.Start(edSvc, value);
                     edSvc.DropDownControl(dockUI);
                     value = dockUI.Value;
@@ -47,11 +48,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Retrieves the editing style of the Edit method.  If the method
-        ///     is not supported, this will return None.
+        /// Retrieves the editing style of the Edit method.
+        /// If the method is not supported, this will return None.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
@@ -92,7 +91,7 @@ namespace System.Windows.Forms.Design
             // events whenever they get focus, which is bad when the user is trying
             // to tab to a specific control using the keyboard.
             private readonly ContainerPlaceholder container = new ContainerPlaceholder();
-            private DockEditor editor;
+            private readonly DockEditor editor;
             private IWindowsFormsEditorService edSvc;
             private readonly CheckBox fill = new DockEditorCheckBox();
             private readonly CheckBox left = new DockEditorCheckBox();
@@ -109,7 +108,7 @@ namespace System.Windows.Forms.Design
                 upDownOrder = new[] { top, fill, bottom, none };
                 leftRightOrder = new[] { left, fill, right };
                 tabOrder = new[] { top, left, fill, right, bottom, none };
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
@@ -127,7 +126,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     isScalingInitialized = true;
-            }
+                }
 
                 InitializeComponent();
             }
@@ -143,14 +142,30 @@ namespace System.Windows.Forms.Design
             public virtual DockStyle GetDock(CheckBox btn)
             {
                 if (top == btn)
+                {
                     return DockStyle.Top;
+                }
+
                 if (left == btn)
+                {
                     return DockStyle.Left;
+                }
+
                 if (bottom == btn)
+                {
                     return DockStyle.Bottom;
+                }
+
                 if (right == btn)
+                {
                     return DockStyle.Right;
-                if (fill == btn) return DockStyle.Fill;
+                }
+
+                if (fill == btn)
+                {
+                    return DockStyle.Fill;
+                }
+
                 return DockStyle.None;
             }
 
@@ -252,7 +267,11 @@ namespace System.Windows.Forms.Design
             private void OnClick(object sender, EventArgs eventargs)
             {
                 DockStyle val = GetDock((CheckBox)sender);
-                if (val >= 0) Value = val;
+                if (val >= 0)
+                {
+                    Value = val;
+                }
+
                 Teardown();
             }
 
@@ -262,11 +281,13 @@ namespace System.Windows.Forms.Design
 
                 // Set focus to currently selected Dock style
                 for (int i = 0; i < tabOrder.Length; i++)
+                {
                     if (tabOrder[i].Checked)
                     {
                         tabOrder[i].Focus();
                         break;
                     }
+                }
             }
 
             private void OnKeyDown(object sender, KeyEventArgs e)
@@ -282,36 +303,53 @@ namespace System.Windows.Forms.Design
                         // If we're going up or down from one of the 'sides', act like we're doing
                         // it from the center
                         if (sender == left || sender == right)
+                        {
                             sender = fill;
+                        }
 
                         maxI = upDownOrder.Length - 1;
                         for (int i = 0; i <= maxI; i++)
+                        {
                             if (upDownOrder[i] == sender)
                             {
                                 if (key == Keys.Up)
+                                {
                                     target = upDownOrder[Math.Max(i - 1, 0)];
+                                }
                                 else
+                                {
                                     target = upDownOrder[Math.Min(i + 1, maxI)];
+                                }
+
                                 break;
                             }
+                        }
 
                         break;
                     case Keys.Left:
                     case Keys.Right:
                         maxI = leftRightOrder.Length - 1;
                         for (int i = 0; i <= maxI; i++)
+                        {
                             if (leftRightOrder[i] == sender)
                             {
                                 if (key == Keys.Left)
+                                {
                                     target = leftRightOrder[Math.Max(i - 1, 0)];
+                                }
                                 else
+                                {
                                     target = leftRightOrder[Math.Min(i + 1, maxI)];
+                                }
+
                                 break;
                             }
+                        }
 
                         break;
                     case Keys.Tab:
                         for (int i = 0; i < tabOrder.Length; i++)
+                        {
                             if (tabOrder[i] == sender)
                             {
                                 i += (e.Modifiers & Keys.Shift) == 0 ? 1 : -1;
@@ -319,6 +357,7 @@ namespace System.Windows.Forms.Design
                                 target = tabOrder[i];
                                 break;
                             }
+                        }
 
                         break;
                     case Keys.Return:
@@ -330,7 +369,10 @@ namespace System.Windows.Forms.Design
 
                 e.Handled = true;
 
-                if (target != null && target != sender) target.Focus();
+                if (target != null && target != sender)
+                {
+                    target.Focus();
+                }
             }
 
             public void Start(IWindowsFormsEditorService edSvc, object value)
@@ -338,10 +380,8 @@ namespace System.Windows.Forms.Design
                 this.edSvc = edSvc;
                 Value = value;
 
-                if (value is DockStyle)
+                if (value is DockStyle dock)
                 {
-                    DockStyle dock = (DockStyle)value;
-
                     none.Checked = false;
                     top.Checked = false;
                     left.Checked = false;
