@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -36,69 +36,64 @@ namespace System.Drawing.Design
         public override void PaintValue(PaintValueEventArgs e)
         {
             string fontName = e.Value as string;
-            if (fontName != null)
+            if (string.IsNullOrWhiteSpace(fontName))
             {
-                if (fontName == "")
-                {
-                    // don't draw anything if we don't have a value.
-                    return;
-                }
+                // don't draw anything if we don't have a value.
+                return;
+            }
 
-                e.Graphics.FillRectangle(SystemBrushes.ActiveCaption, e.Bounds);
+            e.Graphics.FillRectangle(SystemBrushes.ActiveCaption, e.Bounds);
 
-                FontFamily family = null;
+            FontFamily family;
+            try
+            {
+                family = new FontFamily(fontName);
+            }
+            catch
+            {
+                // Ignore the exception if the fontName does not exist or is invalid...
+                // we just won't render a preview of the font at all
+                e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
+                return;
+            }
 
+            // Believe it or not, not all font families have a "normal" face.  Try normal, then italic, 
+            // then bold, then bold italic, then give up.
+            try
+            {
+                DrawFontSample(e, family, FontStyle.Regular);
+            }
+            catch
+            {
                 try
                 {
-                    family = new FontFamily(fontName);
+                    DrawFontSample(e, family, FontStyle.Italic);
                 }
                 catch
                 {
-                    // Ignore the exception if the fontName does not exist or is invalid...
-                    // we just won't render a preview of the font at all
-                }
-
-                if (family != null)
-                {
-                    // Believe it or not, not all font families have a "normal" face.  Try normal, then italic, 
-                    // then bold, then bold italic, then give up.
                     try
                     {
-                        DrawFontSample(e, family, FontStyle.Regular);
+                        DrawFontSample(e, family, FontStyle.Bold);
                     }
                     catch
                     {
                         try
                         {
-                            DrawFontSample(e, family, FontStyle.Italic);
+                            DrawFontSample(e, family, FontStyle.Bold | FontStyle.Italic);
                         }
                         catch
                         {
-                            try
-                            {
-                                DrawFontSample(e, family, FontStyle.Bold);
-                            }
-                            catch
-                            {
-                                try
-                                {
-                                    DrawFontSample(e, family, FontStyle.Bold | FontStyle.Italic);
-                                }
-                                catch
-                                {
-                                    // No font style we can think of is supported
-                                }
-                            }
+                            // No font style we can think of is supported
                         }
                     }
-                    finally
-                    {
-                        family.Dispose();
-                    }
                 }
-
-                e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
             }
+            finally
+            {
+                family.Dispose();
+            }
+
+            e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
         }
 
         /// <summary>
