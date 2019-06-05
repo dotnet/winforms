@@ -217,14 +217,7 @@ namespace System.Windows.Forms.Design
 
                     if (editor is WindowsFormsComponentEditor winEditor)
                     {
-                        IWin32Window parent = null;
-                        if (obj is IWin32Window)
-                        {
-#pragma warning disable 1717 // assignment to self
-                            parent = (IWin32Window)parent;
-#pragma warning restore 1717
-                        }
-                        success = winEditor.EditComponent(obj, parent);
+                        success = winEditor.EditComponent(obj, obj as IWin32Window);
                     }
                     else
                     {
