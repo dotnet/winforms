@@ -1,57 +1,36 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="FontNameEditor.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>                                                                
-//------------------------------------------------------------------------------
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
-/*
- */
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+
 namespace System.Drawing.Design
 {
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.IO;
-    using System.Globalization;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using System.Windows.Forms.ComponentModel;
-    using System.Windows.Forms.Design;
-
-    /// <internalonly/>
-    /// <include file='doc\FontNameEditor.uex' path='docs/doc[@for="FontNameEditor"]/*' />
-    /// <devdoc>
-    ///    <para>Provides an editor that paints a glyph for the font name.</para>
-    /// </devdoc>
+    /// <summary>
+    ///   Provides a <see cref="T:System.Drawing.Design.UITypeEditor" /> that paints a glyph for the font name.
+    /// </summary>
     [System.Security.SecurityCritical]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public class FontNameEditor : UITypeEditor
     {
-
-        /// <include file='doc\FontNameEditor.uex' path='docs/doc[@for="FontNameEditor.GetPaintValueSupported"]/*' />
-        /// <devdoc>
-        ///      Determines if this editor supports the painting of a representation
-        ///      of an object's value.
-        /// </devdoc>
+        /// <summary>
+        ///   Determines if this editor supports the painting of a representation of an object's value.
+        /// </summary>
+        /// <param name="context">A type descriptor context that can be used to provide additional context information.</param>
+        /// <returns>
+        ///   <see langword="true" /> as this editor supports the painting of a representation of an object's value.
+        /// </returns>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
             return true;
         }
 
-        /// <include file='doc\FontNameEditor.uex' path='docs/doc[@for="FontNameEditor.PaintValue"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Paints a representative value of the given object to the provided
-        ///       canvas. Painting should be done within the boundaries of the
-        ///       provided rectangle.
-        ///    </para>
-        /// </devdoc>
-
+        /// <summary>
+        ///   Paints a representative value of the given object to the provided canvas. 
+        ///   Painting should be done within the boundaries of the provided rectangle.
+        /// </summary>
+        /// <param name="e">What to paint and where to paint it. </param>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override void PaintValue(PaintValueEventArgs e)
@@ -122,11 +101,12 @@ namespace System.Drawing.Design
             }
         }
 
-        // Tries to render sample of text in specified font and style,
-        // throwing exception if specified font does not support that style...
-        //
+        /// <summary>
+        /// Tries to render sample of text in specified font and style,
+        /// throwing exception if specified font does not support that style...
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope")]
-        static private void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
+        private static void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
         {
             float fontSize = (float)(e.Bounds.Height / 1.2);
 
