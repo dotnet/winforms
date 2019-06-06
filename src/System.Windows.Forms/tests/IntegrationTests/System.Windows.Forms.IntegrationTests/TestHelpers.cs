@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace System.Windows.Forms.Func.Tests
 {
@@ -34,7 +36,7 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
             }
 
-            var dotnetPath = DotNetPath();
+            var dotnetPath = GetDotNetPath();
             if (!Directory.Exists(dotnetPath))
             {
                 throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
@@ -44,9 +46,7 @@ namespace System.Windows.Forms.Func.Tests
             {
                 FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'))
             };
-            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;	// required
-            // ...
-
+            startInfo.EnvironmentVariables["PATH"] = dotnetPath + ";" + startInfo.EnvironmentVariables["PATH"];
             return StartProcess(startInfo);
         }
 
@@ -82,9 +82,77 @@ namespace System.Windows.Forms.Func.Tests
         }
 
 
-        public static string DotNetPath()
+        /// <summary>
+        /// Get the path where dotnet is installed
+        /// </summary>
+        /// <returns>The full path of the folder containing the dotnet.exe</returns>
+        public static string GetDotNetPath()
         {
-            return RelativePathBackwardsUntilFind(".dotnet");
+            var dotNetPath = string.Empty;
+
+            // walk the dir tree up, looking for a .dotnet folder
+            try
+            {
+                dotNetPath = RelativePathBackwardsUntilFind(".dotnet");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                // If there is no private install, check for a machine-wide install
+                dotNetPath = GetGlobalDotNetPath();
+            }
+
+            return dotNetPath;
+        }
+
+        /// <summary>
+        /// Get the path of the globally installed dotnet that matches the version specified in the global.json
+        /// 
+        /// The file looks something like this:
+        /// 
+        /// {
+        ///   "tools": {
+        ///     "dotnet": "3.0.100-preview5-011568"
+        ///     },
+        /// 
+        /// All we care about is the dotnet entry under tools
+        /// </summary>
+        /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>
+        public static string GetGlobalDotNetPath()
+        {
+            // find the repo root
+            var gitPath = RelativePathBackwardsUntilFind(".git");
+            var repoRoot = Directory.GetParent(gitPath).FullName;
+
+            // make sure there's a global.json
+            var jsonFile = Path.Combine(repoRoot, "global.json");
+            if (!File.Exists(jsonFile))
+                throw new FileNotFoundException("global.json does not exist");
+
+            // parse the file into a json object
+            var jsonContents = File.ReadAllText(jsonFile);
+            var jsonObject = JObject.Parse(jsonContents);
+
+            var dotnetVersion = string.Empty;
+            try
+            {
+                // check if tools:dotnet is specified
+                dotnetVersion = jsonObject["tools"]["dotnet"].ToString();
+            }
+            catch
+            {
+                // no version was found, so we're done
+                throw new Exception("global.json does not contain a tools:dotnet version");
+            }
+
+            // Check to see if the matching version is installed
+            // The default install location is C:\Program Files\dotnet\sdk
+            var defaultSdkRoot = @"C:\Program Files\dotnet\sdk";
+            var sdkPath = Path.Combine(defaultSdkRoot, dotnetVersion);
+            if (!Directory.Exists(sdkPath))
+                throw new DirectoryNotFoundException($"dotnet sdk {dotnetVersion} is not installed globally");
+
+            // if we get here, there was a match
+            return sdkPath;
         }
 
         /// <summary>
