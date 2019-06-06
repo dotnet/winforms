@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -792,19 +792,21 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Assert.Single(context1), null, false };
         }
 
-        [Theory]
-        [MemberData(nameof(Equals_TestData))]
-        public void BindingContext_KeyEquals_Invoke_ReturnsExpected(DictionaryEntry entry, object other, bool expected)
-        {
-            if (other is DictionaryEntry otherEntry)
-            {
-                Assert.Equal(expected, entry.Key.Equals(otherEntry.Key));
-            }
-            else
-            {
-                Assert.Equal(expected, entry.Key.Equals(other));
-            }
-        }
+        // Commenting out this flaky test for now
+        // Tracked by https://github.com/dotnet/winforms/issues/1104
+        //[Theory]
+        //[MemberData(nameof(Equals_TestData))]
+        //public void BindingContext_KeyEquals_Invoke_ReturnsExpected(DictionaryEntry entry, object other, bool expected)
+        //{
+        //    if (other is DictionaryEntry otherEntry)
+        //    {
+        //        Assert.Equal(expected, entry.Key.Equals(otherEntry.Key));
+        //    }
+        //    else
+        //    {
+        //        Assert.Equal(expected, entry.Key.Equals(other));
+        //    }
+        //}
 
         [Fact]
         public void BindingContext_UpdateBinding_NewBindingWithoutDataMember_Success()
