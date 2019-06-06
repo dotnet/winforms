@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
             }
 
-            var dotnetPath = DotNetPath();
+            var dotnetPath = GetDotNetPath();
             if (!Directory.Exists(dotnetPath))
             {
                 throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Func.Tests
         /// Get the path where dotnet is installed
         /// </summary>
         /// <returns>The full path of the folder containing the dotnet.exe</returns>
-        public static string DotNetPath()
+        public static string GetDotNetPath()
         {
             var dotNetPath = string.Empty;
 
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Func.Tests
             catch (DirectoryNotFoundException)
             {
                 // If there is no private install, check for a machine-wide install
-                dotNetPath = GlobalDotNetPath();
+                dotNetPath = GetGlobalDotNetPath();
             }
 
             return dotNetPath;
@@ -116,8 +116,8 @@ namespace System.Windows.Forms.Func.Tests
         /// 
         /// All we care about is the dotnet entry under tools
         /// </summary>
-        /// <returns></returns>
-        public static string GlobalDotNetPath()
+        /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>
+        public static string GetGlobalDotNetPath()
         {
             // find the repo root
             var gitPath = RelativePathBackwardsUntilFind(".git");
