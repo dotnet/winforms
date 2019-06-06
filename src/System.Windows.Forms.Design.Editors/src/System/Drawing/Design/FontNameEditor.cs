@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,6 +14,14 @@ namespace System.Drawing.Design
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public class FontNameEditor : UITypeEditor
     {
+        private static readonly FontStyle[] s_FontStyles = new[]
+        {
+             FontStyle.Regular,
+             FontStyle.Italic,
+             FontStyle.Bold,
+             FontStyle.Bold | FontStyle.Italic
+        };
+
         /// <summary>
         ///   Determines if this editor supports the painting of a representation of an object's value.
         /// </summary>
@@ -42,58 +50,35 @@ namespace System.Drawing.Design
                 return;
             }
 
-            e.Graphics.FillRectangle(SystemBrushes.ActiveCaption, e.Bounds);
-
-            FontFamily family;
             try
             {
-                family = new FontFamily(fontName);
+                using (var family = new FontFamily(fontName))
+                {
+                    e.Graphics.FillRectangle(SystemBrushes.ActiveCaption, e.Bounds);
+
+                    // Believe it or not, not all font families have a "normal" face.  Try normal, then italic, 
+                    // then bold, then bold italic, then give up.
+                    foreach (var fontStyle in s_FontStyles)
+                    {
+                        try
+                        {
+                            DrawFontSample(e, family, fontStyle);
+                            break;
+                        }
+                        catch
+                        {
+                            // no-op
+                        }
+                    }
+                }
+
+                e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
             }
             catch
             {
                 // Ignore the exception if the fontName does not exist or is invalid...
                 // we just won't render a preview of the font at all
-                e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
-                return;
             }
-
-            // Believe it or not, not all font families have a "normal" face.  Try normal, then italic, 
-            // then bold, then bold italic, then give up.
-            try
-            {
-                DrawFontSample(e, family, FontStyle.Regular);
-            }
-            catch
-            {
-                try
-                {
-                    DrawFontSample(e, family, FontStyle.Italic);
-                }
-                catch
-                {
-                    try
-                    {
-                        DrawFontSample(e, family, FontStyle.Bold);
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            DrawFontSample(e, family, FontStyle.Bold | FontStyle.Italic);
-                        }
-                        catch
-                        {
-                            // No font style we can think of is supported
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                family.Dispose();
-            }
-
-            e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
         }
 
         /// <summary>
@@ -104,21 +89,9 @@ namespace System.Drawing.Design
         private static void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
         {
             float fontSize = (float)(e.Bounds.Height / 1.2);
-
-            Font font = new Font(fontFamily, fontSize, fontStyle, GraphicsUnit.Pixel);
-
-            if (font == null)
-            {
-                return;
-            }
-
-            try
+            using (var font = new Font(fontFamily, fontSize, fontStyle, GraphicsUnit.Pixel))
             {
                 e.Graphics.DrawString("abcd", font, SystemBrushes.ActiveCaptionText, e.Bounds);
-            }
-            finally
-            {
-                font.Dispose();
             }
         }
 
