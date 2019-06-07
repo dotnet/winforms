@@ -39,8 +39,6 @@ namespace System.Drawing.Design
         ///   Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         /// <param name="e">What to paint and where to paint it. </param>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override void PaintValue(PaintValueEventArgs e)
         {
             string fontName = e.Value as string;
@@ -85,7 +83,6 @@ namespace System.Drawing.Design
         /// Tries to render sample of text in specified font and style,
         /// throwing exception if specified font does not support that style...
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope")]
         private static void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
         {
             float fontSize = (float)(e.Bounds.Height / 1.2);
@@ -94,7 +91,6 @@ namespace System.Drawing.Design
                 e.Graphics.DrawString("abcd", font, SystemBrushes.ActiveCaptionText, e.Bounds);
             }
         }
-
     }
 }
 
