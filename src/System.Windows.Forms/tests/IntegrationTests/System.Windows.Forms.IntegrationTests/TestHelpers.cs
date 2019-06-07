@@ -6,10 +6,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using System.Reflection;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace System.Windows.Forms.Func.Tests
+namespace System.Windows.Forms.IntegrationTests
 {
     public class TestHelpers
     {

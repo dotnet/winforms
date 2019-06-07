@@ -4,7 +4,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Func.Tests
+namespace System.Windows.Forms.IntegrationTests
 {
     public class ExternalTestHelpers
     {

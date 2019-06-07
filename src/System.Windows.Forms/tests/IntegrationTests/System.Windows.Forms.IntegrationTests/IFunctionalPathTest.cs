@@ -4,7 +4,7 @@
 
 using System;
 
-namespace System.Windows.Forms.Func.Tests
+namespace System.Windows.Forms.IntegrationTests
 {
     public interface IFunctionalPathTest
     {
