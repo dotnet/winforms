@@ -31,7 +31,7 @@ namespace System.Windows.Forms.IntegrationTests
 
 #region Test Methods
 
-        public ScenarioResult Click1Scenario(TParams p)
+        public ScenarioResult MauiButtonTest_Click_Fires_OnClick(TParams p)
         {
             p.log.WriteLine("Pass if click event is fired");
             _button.PerformClick();
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.IntegrationTests
             return new ScenarioResult(_wasClicked);
         }
 
-        public ScenarioResult Mnumonic1Scenario(TParams p)
+        public ScenarioResult MauiButtonTest_Hotkey_Fires_OnClick(TParams p)
         {
             _wasClicked = false;
 
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.IntegrationTests
             return new ScenarioResult(_wasClicked);
         }
 
-        public ScenarioResult Mnumonic2Scenario(TParams p)
+        public ScenarioResult MauiButtonTest_Hotkey_DoesNotFire_OnClick(TParams p)
         {
             _wasClicked = false;
 
@@ -81,6 +81,6 @@ namespace System.Windows.Forms.IntegrationTests
 
 // These control what scenarios are executed by Maui, do not remove!!
 // [Scenarios]
-//@ Click1Scenario()
-//@ Mnumonic1Scenario()
-//@ Mnumonic2Scenario()
+//@ MauiButtonTest_Click_Fires_OnClick()
+//@ MauiButtonTest_Hotkey_Fires_OnClick()
+//@ MauiButtonTest_Hotkey_DoesNotFire_OnClick()

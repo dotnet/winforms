@@ -8,86 +8,90 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 
-namespace System.Windows.Forms.IntegrationTests
+namespace System.Windows.Forms.IntegrationTests.Common
 {
     public class TestHelpers
     {
+        /// <summary>
+        /// Gets the current config
+        /// </summary>
+        private static string Config
+        {
+            get
+            {
+#if DEBUG
+                return "Debug";
+#else
+                return "Release";
+#endif
+            }
+        }
 
         /// <summary>
-        /// Calls StartProcess for the ProcessStartInfo containing the bin path of this directory plus the given byPathFromBinToExe; also ensures that repo\.dotnet\dotnet.exe exists
+        /// Get the output exe path for a specified project.
+        /// Throws an exception if the path does not exist
         /// </summary>
-        /// <param name="byPathFromBinToExe">The string path to add onto the end of the bin path in order to reach the exe to run; trimed for tailing \'s</param>
-        /// <seealso cref="StartProcess(ProcessStartInfo)"/>
-        /// <seealso cref="BinPath()"/>
-        /// <seealso cref="System.Diagnostics.Process"/>
-        /// <seealso cref="System.IO.File.Exists(string)"/>
-        /// <remarks>Throws ArgumentException if string byPathFromBin is null</remarks>
-        /// <returns>The new Process</returns>
-        public static Process StartProcess(string byPathFromBinToExe)
+        /// <param name="projectName">The name of the project</param>
+        /// <returns>The exe path</returns>
+        public static string GetExePath(string projectName)
         {
-            if (byPathFromBinToExe == null)
-            {
-                throw new ArgumentNullException(nameof(byPathFromBinToExe));
-            }
+            if (string.IsNullOrEmpty(projectName))
+                throw new ArgumentNullException(nameof(projectName));
+            
+            var repoRoot = GetRepoRoot();
+            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp3.0\\{projectName}.exe");
 
-            if (!byPathFromBinToExe.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
-            {
-                throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
-            }
+            if (!File.Exists(exePath))
+                throw new FileNotFoundException("File does not exist", exePath);
+
+            return exePath;
+        }
+
+        /// <summary>
+        /// Start a process with the specified path.
+        /// Also searches for a local .dotnet folder and adds it to the path.
+        /// If a local folder is not found, searches for a machine-wide install that matches 
+        /// the version specified in the global.json.
+        /// </summary>
+        /// <param name="path">The path to the file to execute</param>
+        /// <param name="setCwd">Set the current working directory to the process path</param>
+        /// <returns>The new Process</returns>
+        public static Process StartProcess(string path, bool setCwd = false)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException("File does not exist", path);
 
             var dotnetPath = GetDotNetPath();
             if (!Directory.Exists(dotnetPath))
-            {
                 throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
+
+            var process = new Process();
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = path
+            };
+            if (setCwd)
+            {
+                startInfo.WorkingDirectory = Path.GetDirectoryName(path);
             }
-
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'))
-            };
             startInfo.EnvironmentVariables["PATH"] = dotnetPath + ";" + startInfo.EnvironmentVariables["PATH"];
-            return StartProcess(startInfo);
-        }
+            process.StartInfo = startInfo;
 
-        /// <summary>
-        /// Calls Process.Start() on the given ProcessStartInfo; waits 500 ms
-        /// </summary>
-        /// <param name="info">The info with which to start the process</param>
-        /// <seealso cref="System.Diagnostics.Process.Start()"/>
-        /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
-        /// <remarks>Throws ArgumentException if ProcessStartInfo info is null</remarks>
-        /// <returns>The new Process</returns>
-        public static Process StartProcess(ProcessStartInfo info)
-        {
-            Process process = new Process
-            {
-                StartInfo = info ?? throw new ArgumentException(nameof(info) + " must not be null.")
-            };
             process.Start();
-
             Thread.Sleep(500);
-
             return process;
         }
-
-        /// <summary>
-        /// Returns the bin directory of this project on a given machine
-        /// </summary>
-        /// <remarks>Returns the entire path of this project if the bin is not part of it</remarks>
-        /// <returns>The bin path as a string; example: example:\Project\bin\</returns>
-        public static string BinPath()
-        {
-            return RelativePathForwardTo("bin");
-        }
-
 
         /// <summary>
         /// Get the path where dotnet is installed
         /// </summary>
         /// <returns>The full path of the folder containing the dotnet.exe</returns>
-        public static string GetDotNetPath()
+        private static string GetDotNetPath()
         {
-            var dotNetPath = string.Empty;
+            string dotNetPath;
 
             // walk the dir tree up, looking for a .dotnet folder
             try
@@ -116,11 +120,10 @@ namespace System.Windows.Forms.IntegrationTests
         /// All we care about is the dotnet entry under tools
         /// </summary>
         /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>
-        public static string GetGlobalDotNetPath()
+        private static string GetGlobalDotNetPath()
         {
             // find the repo root
-            var gitPath = RelativePathBackwardsUntilFind(".git");
-            var repoRoot = Directory.GetParent(gitPath).FullName;
+            var repoRoot = GetRepoRoot();
 
             // make sure there's a global.json
             var jsonFile = Path.Combine(repoRoot, "global.json");
@@ -131,7 +134,7 @@ namespace System.Windows.Forms.IntegrationTests
             var jsonContents = File.ReadAllText(jsonFile);
             var jsonObject = JObject.Parse(jsonContents);
 
-            var dotnetVersion = string.Empty;
+            string dotnetVersion;
             try
             {
                 // check if tools:dotnet is specified
@@ -155,49 +158,22 @@ namespace System.Windows.Forms.IntegrationTests
         }
 
         /// <summary>
-        /// Returns the stop directory of this project on a given machine
+        /// Get the full path to the root of the repository
         /// </summary>
-        /// <param name="stop">The string to stop at in the path; compared all lower</param>
-        /// <seealso cref="System.AppDomain.CurrentDomain.BaseDirectory"/>
-        /// <seealso cref="System.IO.Path.DirectorySeparatorChar"/>
-        /// <seealso cref="System.IO.Path.Combine(string, string)"/>
-        /// <remarks>Returns the entire path of this project if the stop is not part of it</remarks>
-        /// <returns>The path as a string; example: example:\Project\bin\ given "bin" if bin is present in the path</returns>
-        public static string RelativePathForwardTo(string stop)
+        /// <returns>The repo root</returns>
+        private static string GetRepoRoot()
         {
-            if (string.IsNullOrEmpty(stop))
-            {
-                throw new ArgumentException(nameof(stop) + " must not be null or empty.");
-            }
-
-            string ret = string.Empty;
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            var pathParts = path.Split(Path.DirectorySeparatorChar);
-            uint i = 0;
-            while (i < pathParts.Length)
-            {
-                ret = Path.Combine(ret, pathParts[i]);
-                if (pathParts[i].Equals(stop, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    break;
-                }
-                i++;
-            }
-            return ret;
+            var gitPath = RelativePathBackwardsUntilFind(".git");
+            var repoRoot = Directory.GetParent(gitPath).FullName;
+            return repoRoot;
         }
 
         /// <summary>
         /// Looks backwards form the current executing directory until it finds a sibling directory seek, then returns the full path of that sibling
         /// </summary>
         /// <param name="seek">The sibling directory to look for</param>
-        /// <seealso cref="System.Reflection.Assembly.GetExecutingAssembly()"/>
-        /// <seealso cref="System.IO.Path.GetDirectoryName(ReadOnlySpan{char})"/>
-        /// <seealso cref="System.IO.Directory.GetDirectoryRoot(string)"/>
-        /// <seealso cref="System.IO.Directory.GetDirectories(string, string, SearchOption)"/>
-        /// <seealso cref="System.IO.Path.Combine(string, string)"/>
-        /// <seealso cref="System.IO.Directory.GetParent(string)"/>
         /// <returns>The full path of the first sibling directory by the current executing directory, away from the root</returns>
-        public static string RelativePathBackwardsUntilFind(string seek)
+        private static string RelativePathBackwardsUntilFind(string seek)
         {
             if (string.IsNullOrEmpty(seek))
             {

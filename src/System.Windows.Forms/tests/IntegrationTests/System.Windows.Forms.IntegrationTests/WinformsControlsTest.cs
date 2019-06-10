@@ -4,30 +4,25 @@
 
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml.Linq;
+using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
 
 namespace System.Windows.Forms.IntegrationTests
 {
-    public class WinformsControlsTestTests
+    public class WinformsControlsTest
     {
-        public string GetPathToTestFromBin()
+        private const string ProjectName = "WinformsControlsTest";
+        private readonly string _exePath;
+
+        public WinformsControlsTest()
         {
-            string buildType = "Release";
-
-#if DEBUG
-            buildType = "Debug";
-#endif
-
-            return "WinformsControlsTest\\" + buildType + "\\netcoreapp3.0\\WinformsControlsTest.exe";
+            _exePath = TestHelpers.GetExePath(ProjectName);
         }
 
         [Fact]
         public void WinformsControlsTest_OpenAndClose()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
 
             Assert.NotNull(process);
             Assert.NotNull(Process.GetProcessById(process.Id));
@@ -42,7 +37,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_ButtonsTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
 
             TestHelpers.PressEnterOnProcess(process);
 
@@ -57,7 +52,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_CalendarTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 1);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -89,7 +84,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_ContentAlignmentTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 3);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -104,7 +99,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_MultipleControlsTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 4);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -119,7 +114,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_DataGridViewTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 5);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -134,7 +129,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_MenusTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 6);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -149,7 +144,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_PanelsTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 7);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -164,7 +159,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_SplitterTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 8);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -179,7 +174,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_ComboBoxesTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 9);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -194,7 +189,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_MDIParentTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 10);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -209,7 +204,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_PropertyGridTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 11);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -224,7 +219,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 11);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -261,7 +256,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_DateTimePickerTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 13);
             TestHelpers.PressEnterOnProcess(process);
 
@@ -276,7 +271,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_ThreadExceptionDialogTest()
         {
-            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 15);
             TestHelpers.PressEnterOnProcess(process);
 
