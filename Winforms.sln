@@ -56,6 +56,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maui", "maui", "{8F20A905-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiButtonTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiButtonTest\MauiButtonTest.csproj", "{8AB0265C-B32D-444E-BFCB-8902FE45143A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Maui.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.Maui.IntegrationTests\System.Windows.Forms.Maui.IntegrationTests.csproj", "{87CF8481-647B-4951-8A57-468B2F0CD84B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +162,7 @@ Global
 		{088DD24C-DF6B-45F3-A8BC-592580A4B2A9} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 		{8F20A905-BD37-4D80-B8DF-FA45276FC23F} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{8AB0265C-B32D-444E-BFCB-8902FE45143A} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{87CF8481-647B-4951-8A57-468B2F0CD84B} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

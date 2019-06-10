@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
- 
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
@@ -12,7 +12,7 @@
   <ItemGroup>
     <Compile Remove="..\Common\IFunctionalPathTest.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
     <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
-    <ProjectReference Include="..\WinformsControlsTest\WinformsControlsTest.csproj" />
+    <ProjectReference Include="..\MauiTests\MauiButtonTest\MauiButtonTest.csproj" />
   </ItemGroup>
 
 </Project>

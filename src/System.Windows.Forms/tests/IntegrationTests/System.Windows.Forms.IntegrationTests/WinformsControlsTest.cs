@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.IntegrationTests
 {
-    public class WinformsControlsTestTests : IFunctionalPathTest
+    public class WinformsControlsTestTests
     {
         public string GetPathToTestFromBin()
         {
@@ -22,17 +22,6 @@ namespace System.Windows.Forms.IntegrationTests
 #endif
 
             return "WinformsControlsTest\\" + buildType + "\\netcoreapp3.0\\WinformsControlsTest.exe";
-        }
-
-        public string GetPathToMauiTestFromBin(string testName)
-        {
-            string buildType = "Release";
-
-#if DEBUG
-            buildType = "Debug";
-#endif
-
-            return $"{testName}\\{buildType}\\netcoreapp3.0\\{testName}.exe";
         }
 
         [Fact]
@@ -300,29 +289,6 @@ namespace System.Windows.Forms.IntegrationTests
             process.WaitForExit();
 
             Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsMauiTest_ButtonTest()
-        {
-            // run the maui test exe
-            var relativeExePath = GetPathToMauiTestFromBin("MauiButtonTest");
-            Process process = TestHelpers.StartProcess(relativeExePath);
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-            Assert.Equal(0, process.ExitCode);
-
-            // check the maui results.log for failures
-            var logDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var logPath = Path.Combine(logDir, "results.log");
-
-            // the log is an xml file that looks like this:
-            // <Testcase>
-            //   <FinalResults type="Pass/Fail" total="X" fail="Y">
-            var element = XElement.Load(logPath);
-            var result = element.Descendants("FinalResults").Select(x => x.Attribute("type").Value).First();
-            Assert.Equal("Pass", result);
         }
     }
 }
