@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
 using Xunit;
 
@@ -10,7 +9,6 @@ namespace System.Windows.Forms.Func.Tests
 {
     public class WinformsControlsTestTests : IFunctionalPathTest
     {
-
         public string GetPathToTestFromBin()
         {
             string buildType = "Release";
@@ -42,6 +40,7 @@ namespace System.Windows.Forms.Func.Tests
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
 
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.Buttons);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -56,7 +55,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_CalendarTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 1);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.Calendar);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -88,7 +87,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_ContentAlignmentTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 3);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.ContentAlignment);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -103,7 +102,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_MultipleControlsTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 4);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.MultipleControls);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -118,7 +117,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_DataGridViewTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 5);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.DataGridView);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -133,7 +132,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_MenusTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 6);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.Menus);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -148,7 +147,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_PanelsTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 7);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.Panels);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -163,7 +162,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_SplitterTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 8);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.Splitter);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -178,7 +177,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_ComboBoxesTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 9);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.ComboBoxes);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -193,7 +192,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_MDIParentTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 10);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.MdiPArent);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -208,7 +207,22 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_PropertyGridTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 11);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.PropertyGrid);
+            TestHelpers.PressEnterOnProcess(process);
+
+            Assert.False(process.HasExited);
+
+            process.Kill();
+            process.WaitForExit();
+
+            Assert.True(process.HasExited);
+        }
+
+        [Fact]
+        public void WinformsControlsTest_FontNameEditorTest()
+        {
+            Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.FontNameEditor);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -223,7 +237,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 11);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.PropertyGrid);
             TestHelpers.PressEnterOnProcess(process);
 
             TestHelpers.PressTabOnProcess(process);
@@ -260,7 +274,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_DateTimePickerTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 13);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.DateTimePickerButton);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);
@@ -275,7 +289,7 @@ namespace System.Windows.Forms.Func.Tests
         public void WinformsControlsTest_ThreadExceptionDialogTest()
         {
             Process process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 15);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.ThreadExceptionDialog);
             TestHelpers.PressEnterOnProcess(process);
 
             TestHelpers.PressTabsOnProcess(process, 2);
