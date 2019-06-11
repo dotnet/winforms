@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{840B70B2-4F4B-4FF0-A26F-185789625C78}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WinFormsControlsClassicTests</RootNamespace>
+    <AssemblyName>WinFormsControlsClassicTests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NonShipping>true</NonShipping>
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+    <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs">
+      <Link>Interop.WindowMessages.cs</Link>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Buttons.cs">
+      <Link>Buttons.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Buttons.Designer.cs">
+      <Link>Buttons.Designer.cs</Link>
+      <DependentUpon>Buttons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Calendar.cs">
+      <Link>Calendar.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Calendar.Designer.cs">
+      <Link>Calendar.Designer.cs</Link>
+      <DependentUpon>Calendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ComboBoxes.cs">
+      <Link>ComboBoxes.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ComboBoxes.Designer.cs">
+      <Link>ComboBoxes.Designer.cs</Link>
+      <DependentUpon>ComboBoxes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\CurrentDPILabel.cs">
+      <Link>CurrentDPILabel.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\DataGridViewHeaders.cs">
+      <Link>DataGridViewHeaders.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\DataGridViewHeaders.Designer.cs">
+      <Link>DataGridViewHeaders.Designer.cs</Link>
+      <DependentUpon>DataGridViewHeaders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\DateTimePicker.cs">
+      <Link>DateTimePicker.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\DateTimePicker.Designer.cs">
+      <Link>DateTimePicker.Designer.cs</Link>
+      <DependentUpon>DateTimePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\DesignTimeAligned.cs">
+      <Link>DesignTimeAligned.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\DesignTimeAligned.Designer.cs">
+      <Link>DesignTimeAligned.Designer.cs</Link>
+      <DependentUpon>DesignTimeAligned.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ListViewTest.cs">
+      <Link>ListViewTest.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ListViewTest.Designer.cs">
+      <Link>ListViewTest.Designer.cs</Link>
+      <DependentUpon>ListViewTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MainForm.cs">
+      <Link>MainForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MainForm.Designer.cs">
+      <Link>MainForm.Designer.cs</Link>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MdiChild.cs">
+      <Link>MdiChild.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MdiChild.Designer.cs">
+      <Link>MdiChild.Designer.cs</Link>
+      <DependentUpon>MdiChild.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MDIParent.cs">
+      <Link>MDIParent.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MDIParent.Designer.cs">
+      <Link>MDIParent.Designer.cs</Link>
+      <DependentUpon>MDIParent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MenuStripAndCheckedListBox.cs">
+      <Link>MenuStripAndCheckedListBox.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MenuStripAndCheckedListBox.Designer.cs">
+      <Link>MenuStripAndCheckedListBox.Designer.cs</Link>
+      <DependentUpon>MenuStripAndCheckedListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MultipleControls.cs">
+      <Link>MultipleControls.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\MultipleControls.Designer.cs">
+      <Link>MultipleControls.Designer.cs</Link>
+      <DependentUpon>MultipleControls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Panels.cs">
+      <Link>Panels.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Panels.Designer.cs">
+      <Link>Panels.Designer.cs</Link>
+      <DependentUpon>Panels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\PropertyGrid.cs">
+      <Link>PropertyGrid.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\PropertyGrid.Designer.cs">
+      <Link>PropertyGrid.Designer.cs</Link>
+      <DependentUpon>PropertyGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ScalingBeforeChanges.cs">
+      <Link>ScalingBeforeChanges.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ScalingBeforeChanges.Designer.cs">
+      <Link>ScalingBeforeChanges.Designer.cs</Link>
+      <DependentUpon>ScalingBeforeChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Splitter.cs">
+      <Link>Splitter.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\Splitter.Designer.cs">
+      <Link>Splitter.Designer.cs</Link>
+      <DependentUpon>Splitter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\TreeViewTest.cs">
+      <Link>TreeViewTest.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\TreeViewTest.Designer.cs">
+      <Link>TreeViewTest.Designer.cs</Link>
+      <DependentUpon>TreeViewTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\UserControls\UserControlWithFontNameEditor.cs">
+      <Link>UserControls\UserControlWithFontNameEditor.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\UserControls\UserControlWithObjectCollectionEditor.cs">
+      <Link>UserControls\UserControlWithObjectCollectionEditor.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Mocks\CollectionEditor.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="..\WinformsControlsTest\Buttons.resx">
+      <Link>Buttons.resx</Link>
+      <DependentUpon>Buttons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\Calendar.resx">
+      <Link>Calendar.resx</Link>
+      <DependentUpon>Calendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\ComboBoxes.resx">
+      <Link>ComboBoxes.resx</Link>
+      <DependentUpon>ComboBoxes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\DataGridViewHeaders.resx">
+      <Link>DataGridViewHeaders.resx</Link>
+      <DependentUpon>DataGridViewHeaders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\DesignTimeAligned.resx">
+      <Link>DesignTimeAligned.resx</Link>
+      <DependentUpon>DesignTimeAligned.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\ListViewTest.resx">
+      <Link>ListViewTest.resx</Link>
+      <DependentUpon>ListViewTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\MdiChild.resx">
+      <Link>MdiChild.resx</Link>
+      <DependentUpon>MdiChild.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\MDIParent.resx">
+      <Link>MDIParent.resx</Link>
+      <DependentUpon>MDIParent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\MenuStripAndCheckedListBox.resx">
+      <Link>MenuStripAndCheckedListBox.resx</Link>
+      <DependentUpon>MenuStripAndCheckedListBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\MultipleControls.resx">
+      <Link>MultipleControls.resx</Link>
+      <DependentUpon>MultipleControls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\Panels.resx">
+      <Link>Panels.resx</Link>
+      <DependentUpon>Panels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\PropertyGrid.resx">
+      <Link>PropertyGrid.resx</Link>
+      <DependentUpon>PropertyGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\ScalingBeforeChanges.resx">
+      <Link>ScalingBeforeChanges.resx</Link>
+      <DependentUpon>ScalingBeforeChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\Splitter.resx">
+      <Link>Splitter.resx</Link>
+      <DependentUpon>Splitter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\TreeViewTest.resx">
+      <Link>TreeViewTest.resx</Link>
+      <DependentUpon>TreeViewTest.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

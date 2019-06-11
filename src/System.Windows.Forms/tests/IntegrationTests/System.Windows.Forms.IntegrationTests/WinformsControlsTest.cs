@@ -39,6 +39,7 @@ namespace System.Windows.Forms.IntegrationTests
         {
             Process process = TestHelpers.StartProcess(_exePath);
 
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.Buttons);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);

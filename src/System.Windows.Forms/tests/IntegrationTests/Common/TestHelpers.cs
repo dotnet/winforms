@@ -270,11 +270,16 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <remarks>Throws an ArgumentException if number of times is zero; this is unlikely to be intended.</remarks>
         /// <returns>Whether or not the Tab key(s) were pressed on the process</returns>
         /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressTabsOnProcess(Process process, uint times)
+        public static bool PressTabsOnProcess(Process process, MainFormControlsTabOrder times)
+        {
+            return PressTabsOnProcess(process, (int)times);
+        }
+
+        public static bool PressTabsOnProcess(Process process, int times)
         {
             if (times == 0)
             {
-                throw new ArgumentException(nameof(times) + " may not be zero.");
+                return true;
             }
 
             string keys = string.Empty;
@@ -282,6 +287,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             {
                 keys += "{TAB}";
             }
+
             return PressOnProcess(process, keys);
         }
 
