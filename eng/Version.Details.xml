@@ -10,9 +10,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview7-27810-09">
+    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview7-27810-11">
       <Uri>https://github.com/dotnet/core-setup</Uri>
-      <Sha>46b9a81e7492405bed621d4f4b9911b848d81f3c</Sha>
+      <Sha>a95b1db9215d21926009eb95f50cde66bae10278</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
     <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-preview7.19310.7" CoherentParentDependency="Microsoft.NETCore.App">
@@ -52,14 +52,14 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Sha>e0c0765b7867600e5458d0d122cf8f4bbe2484bd</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="3.0.0-preview7.19310.1" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="3.0.0-preview7.19310.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>82222f6f39f08f0e9d5686b65afce3520cc5ecd0</Sha>
+      <Sha>a64fd279a830a91e2e687d1456ba742823176e63</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="3.0.0-preview7.19310.1" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="3.0.0-preview7.19310.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>82222f6f39f08f0e9d5686b65afce3520cc5ecd0</Sha>
+      <Sha>a64fd279a830a91e2e687d1456ba742823176e63</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
