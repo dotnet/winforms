@@ -171,12 +171,14 @@ jobs:
       #   condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
 
       # Run integration tests
+      # Tests are run with /m:1 to avoid concurrency across different assemblies
       - powershell: eng\cibuild.cmd
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs) 
           -integrationTest
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\HelixIntegration.binlog
+          /m:1
         displayName: Run Integration Tests on Helix Machine Windows.10.Amd64 (Release)
         env:
           HelixSource: $(_HelixSource)
