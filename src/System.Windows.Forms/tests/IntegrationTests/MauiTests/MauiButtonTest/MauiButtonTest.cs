@@ -6,7 +6,7 @@ using System.Threading;
 using WFCTestLib.Log;
 using ReflectTools;
 
-namespace System.Windows.Forms.Maui.IntegrationTests
+namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
     public class MauiButtonTest : ReflectBase
     {
