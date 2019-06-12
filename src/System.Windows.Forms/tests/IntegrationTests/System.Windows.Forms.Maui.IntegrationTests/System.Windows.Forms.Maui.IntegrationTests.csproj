@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MauiTests\MauiButtonTest\MauiButtonTest.csproj" />
-    <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.Common.IntegrationTests.csproj" />
+    <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -60,7 +60,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Maui.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsControlsClassicTests", "src\System.Windows.Forms\tests\IntegrationTests\WinFormsControlsClassicTests\WinFormsControlsClassicTests.csproj", "{840B70B2-4F4B-4FF0-A26F-185789625C78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Common.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.Common.IntegrationTests.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

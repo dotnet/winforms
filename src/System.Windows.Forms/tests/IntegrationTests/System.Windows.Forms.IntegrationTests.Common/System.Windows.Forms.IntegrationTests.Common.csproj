@@ -9,6 +9,7 @@
     <PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
     <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
   </ItemGroup>
 
   <ItemGroup>
