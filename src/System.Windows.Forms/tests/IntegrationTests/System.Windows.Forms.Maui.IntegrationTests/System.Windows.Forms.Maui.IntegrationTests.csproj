@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
-    <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
-    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MauiTests\MauiButtonTest\MauiButtonTest.csproj" />
     <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
