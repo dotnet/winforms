@@ -122,9 +122,6 @@ jobs:
       - powershell: eng\pre-build.ps1
         displayName: Pre-Build - Set VSO Variables
 
-      # see env vars, for debugging only, remove once the next step is working
-      - script: set
-
       # disable helix dialog handler which breaks some of our UI tests
       - script: $(HELIX_PYTHONPATH) -c "from helix_test_execution import disable_dialog_handler; disable_dialog_handler()"
         displayName: Disable dialog handler
