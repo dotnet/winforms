@@ -1,0 +1,28 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
+  </ItemGroup>
+
+  <!-- Note that all relative paths in this file are relative to the CSPROJ that is being built, NOT relative to this file -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Reference Include="GenStrings">
+      <HintPath>..\lib\GenStrings.dll</HintPath>
+    </Reference>
+    <Reference Include="WinformsTestLib">
+      <HintPath>..\lib\WinformsTestLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
