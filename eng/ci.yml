@@ -126,7 +126,7 @@ jobs:
       - script: set
 
       # disable helix dialog handler which breaks some of our UI tests
-      - script: $(HELIX_PYTHONPATH) -c 'from helix_test_execution import disable_dialog_handler; disable_dialog_handler()'
+      - script: $(HELIX_PYTHONPATH) -c from helix_test_execution import disable_dialog_handler; disable_dialog_handler()
         displayName: Disable dialog handler
 
       # Build and rename binlog
