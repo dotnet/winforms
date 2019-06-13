@@ -19,7 +19,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         Menus,
         Panels,
         Splitter,
-        MdiPArent,
+        MdiParent,
         PropertyGrid,
         ListView,
         FontNameEditor
