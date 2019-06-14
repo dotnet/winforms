@@ -28,6 +28,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
             // run the maui test exe, making sure to set the cwd of the process
             // (so the results.log gets generated in the right place)
             var process = TestHelpers.StartProcess(path, true);
+            ExternalTestHelpers.TrySetForegroundWindow(process.Handle);
             process.WaitForExit();
 
             // deserialize the results.log into a TestResult instance
