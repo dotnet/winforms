@@ -353,8 +353,7 @@ internal static partial class Interop
 
         [DllImport(Libraries.ComCtl32,
                 EntryPoint = "TaskDialogIndirect",
-                ExactSpelling = true,
-                SetLastError = true)]
+                ExactSpelling = true]
         public static extern int TaskDialogIndirect(
                 IntPtr pTaskConfig,
                 [Out] out int pnButton,
