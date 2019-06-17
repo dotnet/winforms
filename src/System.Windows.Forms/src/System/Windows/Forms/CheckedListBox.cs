@@ -1662,12 +1662,24 @@ namespace System.Windows.Forms
                 {
                     Rectangle rect = ParentCheckedListBox.GetItemRectangle(index);
 
+                    if(rect.IsEmpty)
+                    {
+                        return rect;
+                    }
+
                     // Translate rect to screen coordinates
                     //
-                    NativeMethods.POINT pt = new NativeMethods.POINT(rect.X, rect.Y);
-                    UnsafeNativeMethods.ClientToScreen(new HandleRef(ParentCheckedListBox, ParentCheckedListBox.Handle), pt);
+                    rect = ParentCheckedListBox.RectangleToScreen(rect);
+                    Rectangle visibleArea = ParentCheckedListBox.RectangleToScreen(ParentCheckedListBox.ClientRectangle);
 
-                    return new Rectangle(pt.x, pt.y, rect.Width, rect.Height);
+                    if (visibleArea.Bottom < rect.Bottom)
+                    {
+                        rect.Height = visibleArea.Bottom - rect.Top;
+                    }
+
+                    rect.Width = visibleArea.Width;
+
+                    return rect;
                 }
             }
 
