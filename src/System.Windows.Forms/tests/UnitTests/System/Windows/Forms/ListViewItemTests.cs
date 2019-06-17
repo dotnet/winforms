@@ -558,7 +558,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Same(expectedImageKey, item.ImageKey);
+            Assert.Equal(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -570,7 +570,7 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Same(expectedText, item.Text);
+            Assert.Equal(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -608,7 +608,7 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Same(expectedText, item.Text);
+            Assert.Equal(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -671,7 +671,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Same(expectedImageKey, item.ImageKey);
+            Assert.Equal(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -681,10 +681,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Same(expectedText, subItem.Text);
+            Assert.Equal(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Same(expectedText, item.Text);
+            Assert.Equal(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -719,10 +719,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Same(expectedText, subItem.Text);
+            Assert.Equal(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Same(expectedText, item.Text);
+            Assert.Equal(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -797,7 +797,7 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Same(expectedText, item.Text);
+            Assert.Equal(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -825,10 +825,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Same(expectedText, subItem.Text);
+            Assert.Equal(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Same(expectedText, item.Text);
+            Assert.Equal(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }

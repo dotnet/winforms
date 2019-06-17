@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Same(expectedText, menuItem.Text);
+            Assert.Equal(expectedText, menuItem.Text);
         }
 
         public static IEnumerable<object[]> Ctor_String_EventHandler_TestData()
@@ -775,11 +775,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, menuItem.Text);
+            Assert.Equal(expected, menuItem.Text);
 
             // Set same.
             menuItem.Text = value;
-            Assert.Same(expected, menuItem.Text);
+            Assert.Equal(expected, menuItem.Text);
         }
 
         [Fact]

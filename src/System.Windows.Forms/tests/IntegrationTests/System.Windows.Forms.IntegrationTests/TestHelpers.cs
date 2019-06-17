@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Func.Tests
             {
                 FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'))
             };
-            startInfo.EnvironmentVariables["PATH"] = dotnetPath + ";" + startInfo.EnvironmentVariables["PATH"];
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;
             return StartProcess(startInfo);
         }
 

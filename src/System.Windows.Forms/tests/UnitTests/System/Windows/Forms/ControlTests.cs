@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Same(expectedText, control.Text);
+            Assert.Equal(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
         }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Same(expectedText, control.Text);
+            Assert.Equal(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
         }

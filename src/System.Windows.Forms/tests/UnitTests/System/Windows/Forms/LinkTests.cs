@@ -138,11 +138,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, link.Name);
+            Assert.Equal(expected, link.Name);
 
             // Set same.
             link.LinkData = value;
-            Assert.Same(expected, link.Name);
+            Assert.Equal(expected, link.Name);
         }
 
         [Theory]

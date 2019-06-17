@@ -973,13 +973,13 @@ namespace System.Windows.Forms.Tests
                 DisplayMember = value
             };
             Assert.Null(control.DataSource);
-            Assert.Same(expected, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(expected, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Null(control.DataManager);
         }
 
@@ -993,13 +993,13 @@ namespace System.Windows.Forms.Tests
             };
 
             control.DisplayMember = value;
-            Assert.Same(expected, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
-            Assert.Same(expected, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
         }
@@ -1037,13 +1037,13 @@ namespace System.Windows.Forms.Tests
             };
 
             control.DisplayMember = value;
-            Assert.Same(expected, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.DisplayMember = value;
-            Assert.Same(expected, control.DisplayMember);
+            Assert.Equal(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
             Assert.Null(control.DataManager);
         }
@@ -1346,11 +1346,11 @@ namespace System.Windows.Forms.Tests
             {
                 FormatString = value
             };
-            Assert.Same(expected, control.FormatString);
+            Assert.Equal(expected, control.FormatString);
 
             // Set same.
             control.FormatString = value;
-            Assert.Same(expected, control.FormatString);
+            Assert.Equal(expected, control.FormatString);
         }
 
         [Theory]
@@ -1363,11 +1363,11 @@ namespace System.Windows.Forms.Tests
             };
 
             control.FormatString = value;
-            Assert.Same(expected, control.FormatString);
+            Assert.Equal(expected, control.FormatString);
 
             // Set same.
             control.FormatString = value;
-            Assert.Same(expected, control.FormatString);
+            Assert.Equal(expected, control.FormatString);
         }
 
         [Fact]
@@ -1547,15 +1547,15 @@ namespace System.Windows.Forms.Tests
                 ValueMember = value
             };
             Assert.Null(control.DataSource);
-            Assert.Same(expected, control.DisplayMember);
-            Assert.Same(expected, control.ValueMember);
+            Assert.Equal(expected, control.DisplayMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(expected, control.DisplayMember);
-            Assert.Same(expected, control.ValueMember);
+            Assert.Equal(expected, control.DisplayMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Null(control.DataManager);
         }
 
@@ -1571,14 +1571,14 @@ namespace System.Windows.Forms.Tests
             control.ValueMember = value;
             Assert.Null(control.DataSource);
             Assert.Equal("DisplayMember", control.DisplayMember);
-            Assert.Same(expected, control.ValueMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Null(control.DataSource);
             Assert.Equal("DisplayMember", control.DisplayMember);
-            Assert.Same(expected, control.ValueMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Null(control.DataManager);
         }
 
@@ -1594,15 +1594,15 @@ namespace System.Windows.Forms.Tests
 
             control.ValueMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(expected, control.DisplayMember);
-            Assert.Same(expected, control.ValueMember);
+            Assert.Equal(expected, control.DisplayMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Null(control.DataManager);
 
             // Set same.
             control.ValueMember = value;
             Assert.Null(control.DataSource);
-            Assert.Same(expected, control.DisplayMember);
-            Assert.Same(expected, control.ValueMember);
+            Assert.Equal(expected, control.DisplayMember);
+            Assert.Equal(expected, control.ValueMember);
             Assert.Null(control.DataManager);
         }
 
