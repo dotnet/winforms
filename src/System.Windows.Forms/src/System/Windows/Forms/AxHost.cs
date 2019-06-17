@@ -1263,48 +1263,50 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a handle for this control. This method is called by the .NET framework, this should
-        ///     not be called.
+        ///     Creates a handle for this control. This method is called by the framework, this should
+        ///     not be called directly.
         /// </summary>
         protected override void CreateHandle()
         {
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
+                return;
+            }
 
-                TransitionUpTo(OC_RUNNING);
-                if (!axState[fOwnWindow])
+            TransitionUpTo(OC_RUNNING);
+            if (!axState[fOwnWindow])
+            {
+                if (axState[fNeedOwnWindow])
                 {
-                    if (axState[fNeedOwnWindow])
-                    {
-                        Debug.Assert(!Visible, "if we were visible we would not be needing a fake window...");
-                        axState[fNeedOwnWindow] = false;
-                        axState[fFakingWindow] = true;
-                        base.CreateHandle();
-                        // note that we do not need to attach the handle because the work usually done in there
-                        // will be done in Control's wndProc on WM_CREATE...
-                    }
-                    else
-                    {
-                        TransitionUpTo(OC_INPLACE);
-                        // it is possible that we were hidden while in place activating, in which case we don't
-                        // really have a handle now because the act of hiding could have destroyed it
-                        // so, just call ourselves again recursively, and if we dont't have a handle, we will
-                        // just take the "axState[fNeedOwnWindow]" path above...
-                        if (axState[fNeedOwnWindow])
-                        {
-                            Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
-                            CreateHandle();
-                            return;
-                        }
-                    }
+                    Debug.Assert(!Visible, "if we were visible we would not be needing a fake window...");
+                    axState[fNeedOwnWindow] = false;
+                    axState[fFakingWindow] = true;
+                    base.CreateHandle();
+                    // note that we do not need to attach the handle because the work usually done in there
+                    // will be done in Control's wndProc on WM_CREATE...
                 }
                 else
                 {
-                    SetState(STATE_VISIBLE, false);
-                    base.CreateHandle();
+                    TransitionUpTo(OC_INPLACE);
+                    // it is possible that we were hidden while in place activating, in which case we don't
+                    // really have a handle now because the act of hiding could have destroyed it
+                    // so, just call ourselves again recursively, and if we dont't have a handle, we will
+                    // just take the "axState[fNeedOwnWindow]" path above...
+                    if (axState[fNeedOwnWindow])
+                    {
+                        Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
+                        CreateHandle();
+                        return;
+                    }
                 }
-                GetParentContainer().ControlCreated(this);
             }
+            else
+            {
+                SetState(STATE_VISIBLE, false);
+                base.CreateHandle();
+            }
+
+            GetParentContainer().ControlCreated(this);
         }
 
         private NativeMethods.COMRECT GetClipRect(NativeMethods.COMRECT clipRect)

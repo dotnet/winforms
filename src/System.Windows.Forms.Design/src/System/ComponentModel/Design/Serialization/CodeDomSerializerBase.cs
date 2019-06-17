@@ -730,7 +730,9 @@ namespace System.ComponentModel.Design.Serialization
 
                                 if (rhs is IConvertible ic)
                                 {
-                                    // f.FieldType is a type from the reflection (or project target) Universe, while rhs is a runtime type(exists in the visual studio framework) they need to be converted to the same universe for comparison to work. If TargetFrameworkProvider is not available, then we are working with runtime types.
+                                    // f.FieldType is a type from the reflection (or project target) universe, while rhs is a runtime type (exists in the Visual Studio framework)
+                                    // they need to be converted to the same universe for comparison to work. 
+                                    // If TargetFrameworkProvider is not available, then we are working with runtime types.
                                     Type fieldType = f.FieldType;
                                     TypeDescriptionProvider tdp = GetTargetFrameworkProviderForType(manager, fieldType);
                                     if (tdp != null)
