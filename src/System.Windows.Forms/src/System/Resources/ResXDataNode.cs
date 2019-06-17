@@ -1041,7 +1041,7 @@ namespace System.Resources
 
             if (result != null)
             {
-                // Only cache types from .Net framework  because they don't need to update.
+                // Only cache types from the shared framework  because they don't need to update.
                 // For simplicity, don't cache custom types
                 if (IsDotNetAssembly(result.Assembly.Location))
                 {

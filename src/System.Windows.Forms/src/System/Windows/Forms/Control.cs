@@ -5051,12 +5051,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a handle for this control. This method is called by the .NET.
-        ///  Inheriting classes should always call base.createHandle when
+        ///  Creates a handle for this control. This method is called by the framework, this should
+        ///  not be called directly. Inheriting classes should always call <c>base.CreateHandle()</c> when
         ///  overriding this method.
         /// </summary>
         [
-        EditorBrowsable(EditorBrowsableState.Advanced),
+        EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected virtual void CreateHandle()
         {

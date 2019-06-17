@@ -556,8 +556,8 @@ namespace System.Windows.Forms
             if (matchIndex != -1)
             {
                 // Found a match, so set the domain index accordingly
-                //In legacy (.NET framework 4.7.1 and below), we were just updating selected index but no actualy change in the spinner.
-                //with new runtime, we update the selected index and perform spinner action.
+                // In legacy (.NET Framework 4.7.1 and below), we were just updating selected index but no actualy change in the spinner.
+                // with new runtime, we update the selected index and perform spinner action.
                 if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
                 {
                     domainIndex = matchIndex;
