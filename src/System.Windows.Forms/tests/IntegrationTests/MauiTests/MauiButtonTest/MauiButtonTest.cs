@@ -74,7 +74,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(!_wasClicked);
         }
 
-        #endregion Test Methods
+#endregion Test Methods
+
     }
 }
 
