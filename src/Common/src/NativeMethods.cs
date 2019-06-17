@@ -5898,6 +5898,11 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
+
+        // TODO: Use Marshal.SetLastWin32Error(int) once that method is public,
+        // which should be safer
+        [DllImport(ExternDll.Kernel32, ExactSpelling = true)]
+        public static extern void SetLastError(int dwErrCode);
     }
 }
 
