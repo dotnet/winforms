@@ -77,6 +77,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
             {
                 startInfo.WorkingDirectory = Path.GetDirectoryName(path);
             }
+            
+            // Set the dotnet_root for the exe being launched
+            // This allows the exe to look for runtime dependencies (like the shared framework (NetCore.App))
+            // outside of the normal machine-wide install location (program files\dotnet)
             startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;
             process.StartInfo = startInfo;
 
