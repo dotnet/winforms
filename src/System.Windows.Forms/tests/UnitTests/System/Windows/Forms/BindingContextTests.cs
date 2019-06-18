@@ -767,7 +767,8 @@ namespace System.Windows.Forms.Tests
             context.OnCollectionChanged(null);
         }
 
-        public static IEnumerable<object[]> Equals_TestData()
+        [Fact]
+        public void BindingContext_KeyEquals_Invoke_ReturnsExpected()
         {
             var context1 = new BindingContext();
             var context2 = new BindingContext();
@@ -783,30 +784,19 @@ namespace System.Windows.Forms.Tests
             context3.Add(dataSource2, source1.CurrencyManager);
             context4.Add(dataSource2, source2.CurrencyManager);
 
-            yield return new object[] { Assert.Single(context1), Assert.Single(context1), true };
-            yield return new object[] { Assert.Single(context1), Assert.Single(context2), true };
-            yield return new object[] { Assert.Single(context1), Assert.Single(context3), false };
-            yield return new object[] { Assert.Single(context1), Assert.Single(context4), false };
+            DictionaryEntry entry1 = Assert.IsType<DictionaryEntry>(Assert.Single(context1));
+            DictionaryEntry entry2 = Assert.IsType<DictionaryEntry>(Assert.Single(context2));
+            DictionaryEntry entry3 = Assert.IsType<DictionaryEntry>(Assert.Single(context3));
+            DictionaryEntry entry4 = Assert.IsType<DictionaryEntry>(Assert.Single(context3));
 
-            yield return new object[] { Assert.Single(context1), new object(), false };
-            yield return new object[] { Assert.Single(context1), null, false };
+            Assert.True(entry1.Key.Equals(entry1.Key));
+            Assert.True(entry1.Key.Equals(entry2.Key));
+            Assert.False(entry1.Key.Equals(entry3.Key));
+            Assert.False(entry1.Key.Equals(entry4.Key));
+
+            Assert.False(entry1.Key.Equals(new object()));
+            Assert.False(entry1.Key.Equals(null));
         }
-
-        // Commenting out this flaky test for now
-        // Tracked by https://github.com/dotnet/winforms/issues/1104
-        //[Theory]
-        //[MemberData(nameof(Equals_TestData))]
-        //public void BindingContext_KeyEquals_Invoke_ReturnsExpected(DictionaryEntry entry, object other, bool expected)
-        //{
-        //    if (other is DictionaryEntry otherEntry)
-        //    {
-        //        Assert.Equal(expected, entry.Key.Equals(otherEntry.Key));
-        //    }
-        //    else
-        //    {
-        //        Assert.Equal(expected, entry.Key.Equals(other));
-        //    }
-        //}
 
         [Fact]
         public void BindingContext_UpdateBinding_NewBindingWithoutDataMember_Success()
