@@ -8,7 +8,6 @@ namespace System.Windows.Forms
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
     using System;
     using System.Drawing;
     using System.Windows.Forms.Internal;

@@ -21,7 +21,6 @@ namespace System.Windows.Forms
     using System.Configuration.Assemblies;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Globalization;
