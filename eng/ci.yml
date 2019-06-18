@@ -122,10 +122,6 @@ jobs:
       - powershell: eng\pre-build.ps1
         displayName: Pre-Build - Set VSO Variables
 
-      # disable helix dialog handler which breaks some of our UI tests
-      - script: $(HELIX_PYTHONPATH) -c "from helix_test_execution import disable_dialog_handler; disable_dialog_handler()"
-        displayName: Disable dialog handler
-
       # Build and rename binlog
       # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with
       #       coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
