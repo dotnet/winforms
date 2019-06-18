@@ -16,6 +16,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public MauiButtonTest(string[] args) : base(args)
         {
+            WindowState = FormWindowState.Minimized;
+            Show();
+            WindowState = FormWindowState.Normal;
+
             _button = new Button
             {
                 Text = "&Click"
