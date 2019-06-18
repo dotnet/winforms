@@ -8,20 +8,6 @@ function Get-SystemSdkPath {
     return [string][System.IO.Path]::Combine($env:ProgramFiles, 'dotnet\sdk');
 }
 
-function Set-EnvPathIfRequired {
-    param (
-      [Parameter(Mandatory=$true, Position=0)]
-      [string] $LocalSdkLocation
-    )
-
-    $localSdkInPath = $env:Path.split(";") -contains $LocalSdkLocation;
-    if ($localSdkInPath) {
-        return;
-    }
-
-    $env:Path = "$LocalSdkLocation;$env:Path"
-}
-
 function Start-ElevatedModeIfRequired {
     Param(
       [Parameter(Mandatory=$true, Position=0)]
@@ -139,9 +125,6 @@ try {
     }
 
     .\build.cmd
-
-    $localDotnetPath = (Join-Path -Path $repoPath -ChildPath '.dotnet')
-    Set-EnvPathIfRequired -LocalSdkLocation $localDotnetPath
 
     Create-SymLink -LocalSdkLocation $localSdkLocation -SystemSdkLocation $systemSdkLocation
 
