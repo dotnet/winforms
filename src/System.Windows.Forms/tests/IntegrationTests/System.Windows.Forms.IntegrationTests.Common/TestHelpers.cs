@@ -7,6 +7,7 @@ using System.Threading;
 using System.IO;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace System.Windows.Forms.IntegrationTests.Common
 {
@@ -293,6 +294,34 @@ namespace System.Windows.Forms.IntegrationTests.Common
             }
 
             return PressOnProcess(process, keys);
+        }
+
+        /// <summary>
+        /// Bring the specified form to the foreground
+        /// </summary>
+        /// <param name="form">The form</param>
+        public static void BringToForeground(Form form)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+
+            form.WindowState = FormWindowState.Minimized;
+            form.Show();
+            form.WindowState = FormWindowState.Normal;
+        }
+
+        /// <summary>
+        /// Set the culture for the current thread
+        /// </summary>
+        /// <param name="culture">The culture</param>
+        public static void SetCulture(string culture)
+        {
+            if (string.IsNullOrEmpty(culture))
+                throw new ArgumentNullException(nameof(culture));
+
+            var cultureInfo = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
         }
 
         /// <summary>

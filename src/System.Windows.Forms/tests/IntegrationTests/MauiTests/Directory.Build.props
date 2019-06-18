@@ -14,6 +14,7 @@
   <!-- Note that all relative paths in this file are relative to the CSPROJ that is being built, NOT relative to this file -->
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
     
   <ItemGroup>

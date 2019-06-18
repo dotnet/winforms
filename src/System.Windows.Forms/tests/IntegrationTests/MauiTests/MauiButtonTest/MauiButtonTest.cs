@@ -6,6 +6,7 @@ using System.Threading;
 using WFCTestLib.Log;
 using ReflectTools;
 using System.Globalization;
+using System.Windows.Forms.IntegrationTests.Common;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -16,10 +17,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public MauiButtonTest(string[] args) : base(args)
         {
-            WindowState = FormWindowState.Minimized;
-            Show();
-            WindowState = FormWindowState.Normal;
-
+            TestHelpers.BringToForeground(this);
             _button = new Button
             {
                 Text = "&Click"
@@ -31,10 +29,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public static void Main(string[] args)
         {
-            var culture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
-
+            TestHelpers.SetCulture("en-US");
             Application.Run(new MauiButtonTest(args));
         }
 
