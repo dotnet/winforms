@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -140,13 +140,13 @@ namespace System.Drawing.Design.Tests
             {
                 Company = value
             };
-            Assert.Same(expected, item.Company);
-            Assert.Same(expected, item.Properties["Company"]);
+            Assert.Equal(expected, item.Company);
+            Assert.Equal(expected, item.Properties["Company"]);
 
             // Set same.
             item.Company = value;
-            Assert.Same(expected, item.Company);
-            Assert.Same(expected, item.Properties["Company"]);
+            Assert.Equal(expected, item.Company);
+            Assert.Equal(expected, item.Properties["Company"]);
         }
 
         [Fact]
@@ -216,13 +216,13 @@ namespace System.Drawing.Design.Tests
             {
                 Description = value
             };
-            Assert.Same(expected, item.Description);
-            Assert.Same(expected, item.Properties["Description"]);
+            Assert.Equal(expected, item.Description);
+            Assert.Equal(expected, item.Properties["Description"]);
 
             // Set same.
             item.Description = value;
-            Assert.Same(expected, item.Description);
-            Assert.Same(expected, item.Properties["Description"]);
+            Assert.Equal(expected, item.Description);
+            Assert.Equal(expected, item.Properties["Description"]);
         }
 
         [Fact]
@@ -240,13 +240,13 @@ namespace System.Drawing.Design.Tests
             {
                 DisplayName = value
             };
-            Assert.Same(expected, item.DisplayName);
-            Assert.Same(expected, item.Properties["DisplayName"]);
+            Assert.Equal(expected, item.DisplayName);
+            Assert.Equal(expected, item.Properties["DisplayName"]);
 
             // Set same.
             item.DisplayName = value;
-            Assert.Same(expected, item.DisplayName);
-            Assert.Same(expected, item.Properties["DisplayName"]);
+            Assert.Equal(expected, item.DisplayName);
+            Assert.Equal(expected, item.Properties["DisplayName"]);
         }
 
         [Fact]
@@ -351,13 +351,13 @@ namespace System.Drawing.Design.Tests
             {
                 TypeName = value
             };
-            Assert.Same(expected, item.TypeName);
-            Assert.Same(expected, item.Properties["TypeName"]);
+            Assert.Equal(expected, item.TypeName);
+            Assert.Equal(expected, item.Properties["TypeName"]);
 
             // Set same.
             item.TypeName = value;
-            Assert.Same(expected, item.TypeName);
-            Assert.Same(expected, item.Properties["TypeName"]);
+            Assert.Equal(expected, item.TypeName);
+            Assert.Equal(expected, item.Properties["TypeName"]);
         }
 
         [Fact]

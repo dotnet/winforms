@@ -47,11 +47,11 @@ namespace System.Windows.Forms.Design.Tests
                 {
                     Description = value
                 };
-                Assert.Same(expected, browser.Description);
+                Assert.Equal(expected, browser.Description);
 
                 // Set same.
                 browser.Description = value;
-                Assert.Same(expected, browser.Description);
+                Assert.Equal(expected, browser.Description);
             }
 
             [Theory]

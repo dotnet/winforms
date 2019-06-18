@@ -77,7 +77,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             {
                 startInfo.WorkingDirectory = Path.GetDirectoryName(path);
             }
-            startInfo.EnvironmentVariables["PATH"] = dotnetPath + ";" + startInfo.EnvironmentVariables["PATH"];
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;
             process.StartInfo = startInfo;
 
             process.Start();

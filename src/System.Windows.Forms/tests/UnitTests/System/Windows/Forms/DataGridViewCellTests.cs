@@ -798,11 +798,11 @@ namespace System.Windows.Forms.Tests
             {
                 ToolTipText = value
             };
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
 
             // Set same.
             cell.ToolTipText = value;
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
         }
 
         [Theory]
@@ -814,11 +814,11 @@ namespace System.Windows.Forms.Tests
                 ToolTipText = "ToolTipText"
             };
             cell.ToolTipText = value;
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
 
             // Set same.
             cell.ToolTipText = value;
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
         }
 
         public static IEnumerable<object[]> Value_TestData()

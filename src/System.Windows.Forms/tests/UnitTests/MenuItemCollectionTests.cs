@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption);
             Assert.Same(menuItem, Assert.Single(collection));
-            Assert.Same(expectedText, menuItem.Text);
+            Assert.Equal(expectedText, menuItem.Text);
             Assert.Empty(menuItem.MenuItems);
             Assert.Equal(menu, menuItem.Parent);
             Assert.Equal(0, menuItem.Index);

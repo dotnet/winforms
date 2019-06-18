@@ -462,11 +462,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
 
             // Set same.
             subItem.Name = value;
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
         }
 
         [Theory]
@@ -477,11 +477,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
 
             // Set same.
             subItem.Name = value;
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
         }
 
         [Theory]
@@ -508,11 +508,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
 
             // Set same.
             subItem.Text = value;
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
         }
 
         [Theory]
@@ -523,11 +523,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
 
             // Set same.
             subItem.Text = value;
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
         }
 
         public static IEnumerable<object[]> ResetStyle_Owner_TestData()
