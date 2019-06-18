@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
                 text
             };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -235,8 +235,8 @@ namespace System.Windows.Forms.Tests
                 { name, text }
             };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -257,8 +257,8 @@ namespace System.Windows.Forms.Tests
                 { name, text, width }
             };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
@@ -280,8 +280,8 @@ namespace System.Windows.Forms.Tests
                 { name, text, width, textAlign, imageIndex }
             };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(imageIndex, header.ImageIndex);
@@ -305,11 +305,11 @@ namespace System.Windows.Forms.Tests
                 { name, text, width, textAlign, imageKey }
             };
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
-            Assert.Same(expectedImageKey, header.ImageKey);
+            Assert.Equal(expectedImageKey, header.ImageKey);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, text);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -734,7 +734,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, text, width);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
@@ -747,7 +747,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, text, width, textAlign);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(listView, header.ListView);
@@ -761,8 +761,8 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(listView, header.ListView);
         }
 
@@ -774,8 +774,8 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text, width);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(listView, header.ListView);
         }
@@ -788,8 +788,8 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text, width, textAlign, imageIndex);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(imageIndex, header.ImageIndex);
@@ -804,8 +804,8 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             collection.Insert(0, name, text, width, textAlign, imageKey);
             ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
-            Assert.Same(expectedName, header.Name);
-            Assert.Same(expectedText, header.Text);
+            Assert.Equal(expectedName, header.Name);
+            Assert.Equal(expectedText, header.Text);
             Assert.Equal(width, header.Width);
             Assert.Equal(textAlign, header.TextAlign);
             Assert.Equal(expectedImageKey, header.ImageKey);

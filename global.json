@@ -4,7 +4,10 @@
     "vs": {
       "version": "16.0"
     },
-    "xcopy-msbuild": "16.0.0-rc1-alpha"
+    "xcopy-msbuild": "16.0.0-rc1-alpha",
+    "runtimes": {
+      "dotnet": ["$(MicrosoftNETCoreAppPackageVersion)"]
+    }
   },
   "sdk": {
     "version": "3.0.100-preview5-011568"
@@ -12,6 +15,6 @@
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19315.2",
     "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.19315.2",
-    "Microsoft.NET.Sdk.IL": "3.0.0-preview6.19280.1"
+    "Microsoft.NET.Sdk.IL": "3.0.0-preview7.19313.1"
   }
 }

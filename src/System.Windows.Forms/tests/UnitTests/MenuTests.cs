@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
             {
                 Site = Mock.Of<ISite>(s => s.Name == name)
             };
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
         }
 
         [Theory]
@@ -153,11 +153,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
 
             // Set same.
             menu.Name = value;
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
         }
 
         [Theory]
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
                 Site = Mock.Of<ISite>(),
                 Name = value
             };
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
             Assert.Equal(value?.Length == 0 ? null : value, menu.Site.Name);
         }
 

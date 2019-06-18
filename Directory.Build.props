@@ -41,9 +41,4 @@
     <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppPackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">$(MicrosoftNETCoreAppPackageVersion)</RuntimeFrameworkVersion>
-  </PropertyGroup>
-
 </Project>
