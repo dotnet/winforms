@@ -45,4 +45,4 @@ Guide](Documentation/contributing.md).
 
 [comment]: <> (URI Links)
 
-[core-roadmap]: roadmap.md
+[core-roadmap]: https://github.com/dotnet/core/blob/master/roadmap.md
