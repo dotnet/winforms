@@ -1074,7 +1074,7 @@ namespace System.ComponentModel.Design.Tests
 
         private class DisposingDesigner : Designer
         {
-            public static EventHandler Disposed;
+            public static EventHandler Disposed = null;
 
             protected override void Dispose(bool disposing)
             {
