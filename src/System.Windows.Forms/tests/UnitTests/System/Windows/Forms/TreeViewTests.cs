@@ -2010,18 +2010,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ItemHeight_Set_TestData))]
-        public void ItemHeight_SetWithHandle_GetReturnsExpected(int value, int expected)
+        [InlineData(-1)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(32766)]
+        public void ItemHeight_SetWithHandle_GetReturnsExpected(int value)
         {
             var treeView = new TreeView();
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
 
             treeView.ItemHeight = value;
-            Assert.Equal(expected, treeView.ItemHeight);
+            Assert.True(treeView.ItemHeight > 0);
 
             // Set same.
             treeView.ItemHeight = value;
-            Assert.Equal(expected, treeView.ItemHeight);
+            Assert.True(treeView.ItemHeight > 0);
         }
 
         [Theory]
