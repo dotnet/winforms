@@ -10,8 +10,7 @@
   <PropertyGroup>
     <IncludeDotNetCli>true</IncludeDotNetCli>
     <DotNetCliPackageType>sdk</DotNetCliPackageType>
-    <!-- Set to match global.json.tools.dotnet by pre-build.ps1 -->
-    <DotNetCliVersion>$(DotNetCliVersion)</DotNetCliVersion>
+    <DotNetCliVersion>$(RuntimeFrameworkVersion)</DotNetCliVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,7 +21,6 @@
 
   <PropertyGroup>
     <EnableXUnitReporter>true</EnableXUnitReporter>
-    <!-- Set by ci-helix-test.yml -->
     <XUnitPublishTargetFramework>$(XUnitPublishTargetFramework)</XUnitPublishTargetFramework>
     <XUnitRuntimeTargetFramework>$(XUnitRuntimeTargetFramework)</XUnitRuntimeTargetFramework>
     <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
@@ -35,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Set by ci-helix-test.yml -->
     <XUnitProject Include="$(XUnitProjects)" />
   </ItemGroup>
 
