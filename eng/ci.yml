@@ -175,7 +175,7 @@ jobs:
       - powershell: eng\cibuild.cmd
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs) 
-          -integrationTest
+          -test
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\HelixIntegration.binlog
           /m:1
