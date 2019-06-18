@@ -4,6 +4,23 @@ Param(
   [Parameter(ValueFromRemainingArguments=$true)][String[]]$properties
 )
 
+function Get-SystemSdkPath {
+    return [string][System.IO.Path]::Combine($env:ProgramFiles, 'dotnet\sdk');
+}
+
+function Set-EnvPathIfRequired {
+    param (
+      [Parameter(Mandatory=$true, Position=0)]
+      [string] $LocalSdkLocation
+    )
+
+    $localSdkInPath = $env:Path.split(";") -contains $LocalSdkLocation;
+    if ($localSdkInPath) {
+        return;
+    }
+
+    $env:Path = "$LocalSdkLocation;$env:Path"
+}
 
 function Start-ElevatedModeIfRequired {
     Param(
@@ -79,7 +96,7 @@ function Invoke-FullCleanup {
     Stop-Process -Name 'dotnet' -Force -ErrorAction Ignore
     Stop-Process -Name 'MSBuild' -Force -ErrorAction Ignore
 
-    Get-ChildItem -Path "C:\Program Files\dotnet\sdk" -Filter $SdkVersion | `
+    Get-ChildItem -Path $(Get-SystemSdkPath) -Filter $SdkVersion | `
         ForEach-Object {
             $path = $_.FullName
             Write-Host "Removing $path";
@@ -107,13 +124,13 @@ try {
     $repoPath = $PSScriptRoot;
     Push-Location $repoPath;
 
-    $localDotnetPath = (Join-Path -Path $repoPath -ChildPath '.dotnet\sdk')
+    $localSdkPath = (Join-Path -Path $repoPath -ChildPath '.dotnet\sdk')
 
     # Detect the require version of SDK and see if we have it already
     $globalJson = Get-Content -Raw -Path global.json | ConvertFrom-Json
     $sdkVersion = [string]$globalJson.sdk.version
-    $localSdkLocation = [System.IO.Path]::Combine($localDotnetPath, $sdkVersion);
-    $systemSdkLocation = [string][System.IO.Path]::Combine('C:\Program Files\dotnet\sdk', $sdkVersion);
+    $localSdkLocation = [System.IO.Path]::Combine($localSdkPath, $sdkVersion);
+    $systemSdkLocation = [string][System.IO.Path]::Combine($(Get-SystemSdkPath), $sdkVersion);
 
     Start-ElevatedModeIfRequired -IsFullCleanRequested $FullClean.ToBool() -LocalSdkLocation $localSdkLocation -SystemSdkLocation $systemSdkLocation
 
@@ -123,7 +140,8 @@ try {
 
     .\build.cmd
 
-    $env:Path = "$localDotnetPath;$env:Path"
+    $localDotnetPath = (Join-Path -Path $repoPath -ChildPath '.dotnet')
+    Set-EnvPathIfRequired -LocalSdkLocation $localDotnetPath
 
     Create-SymLink -LocalSdkLocation $localSdkLocation -SystemSdkLocation $systemSdkLocation
 
