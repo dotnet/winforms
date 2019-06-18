@@ -5,6 +5,7 @@
 using System.Threading;
 using WFCTestLib.Log;
 using ReflectTools;
+using System.Globalization;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -26,6 +27,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public static void Main(string[] args)
         {
+            var culture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
             Application.Run(new MauiButtonTest(args));
         }
 
