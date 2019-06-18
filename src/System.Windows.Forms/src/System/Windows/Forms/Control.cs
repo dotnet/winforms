@@ -8280,7 +8280,6 @@ namespace System.Windows.Forms
 
         protected virtual void OnAutoSizeChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventAutoSizeChanged] is EventHandler eh)
             {
                 eh(this, e);
@@ -8290,7 +8289,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8333,7 +8331,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8362,7 +8359,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageLayoutChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8379,7 +8375,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Properties.GetObject(PropBindings) != null)
             {
                 UpdateBindings();
@@ -8406,7 +8401,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCausesValidationChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventCausesValidation] is EventHandler eh)
             {
                 eh(this, e);
@@ -8428,7 +8422,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventContextMenu] is EventHandler eh)
             {
                 eh(this, e);
@@ -8438,7 +8431,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuStripChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventContextMenuStrip] is EventHandler eh)
             {
                 eh(this, e);
@@ -8448,7 +8440,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCursorChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventCursor] is EventHandler eh)
             {
                 eh(this, e);
@@ -8470,7 +8461,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventDock] is EventHandler eh)
             {
                 eh(this, e);
@@ -8485,7 +8475,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnabledChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8529,7 +8518,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             // bail if disposing
             //
             if (GetAnyDisposingInHierarchy())
@@ -8579,7 +8567,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8608,7 +8595,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8651,7 +8637,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             Color backColor = Properties.GetColor(PropBackColor);
             if (backColor.IsEmpty)
             {
@@ -8662,14 +8647,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackgroundImageChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             OnBackgroundImageChanged(e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Properties.GetObject(PropBindingManager) == null)
             {
                 OnBindingContextChanged(e);
@@ -8679,7 +8662,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Properties.GetObject(PropCursor) == null)
             {
                 OnCursorChanged(e);
@@ -8689,7 +8671,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentEnabledChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetState(STATE_ENABLED))
             {
                 OnEnabledChanged(e);
@@ -8699,7 +8680,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Properties.GetObject(PropFont) == null)
             {
                 OnFontChanged(e);
@@ -8757,7 +8737,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             Color foreColor = Properties.GetColor(PropForeColor);
             if (foreColor.IsEmpty)
             {
@@ -8768,7 +8747,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (!Properties.ContainsInteger(PropRightToLeft) || ((RightToLeft)Properties.GetInteger(PropRightToLeft)) == RightToLeft.Inherit)
             {
                 OnRightToLeftChanged(e);
@@ -8778,7 +8756,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetState(STATE_VISIBLE))
             {
                 OnVisibleChanged(e);
@@ -8813,7 +8790,6 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(e));
             }
-            Contract.EndContractBlock();
 
             if (GetStyle(ControlStyles.UserPaint))
             {
@@ -8864,7 +8840,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabIndexChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventTabIndex] is EventHandler eh)
             {
                 eh(this, e);
@@ -8874,7 +8849,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabStopChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventTabStop] is EventHandler eh)
             {
                 eh(this, e);
@@ -8884,7 +8858,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventText] is EventHandler eh)
             {
                 eh(this, e);
@@ -8899,7 +8872,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnVisibleChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             bool visible = Visible;
             if (visible)
             {
@@ -8945,7 +8917,6 @@ namespace System.Windows.Forms
 
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
             if (controlsCollection != null)
             {
@@ -8962,7 +8933,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventParent] is EventHandler eh)
             {
                 eh(this, e);
@@ -8983,14 +8953,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClick(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventClick])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClientSizeChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventClientSize] is EventHandler eh)
             {
                 eh(this, e);
@@ -9003,7 +8971,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlAdded(ControlEventArgs e)
         {
-            Contract.Requires(e != null);
             ((ControlEventHandler)Events[EventControlAdded])?.Invoke(this, e);
         }
 
@@ -9013,7 +8980,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlRemoved(ControlEventArgs e)
         {
-            Contract.Requires(e != null);
             ((ControlEventHandler)Events[EventControlRemoved])?.Invoke(this, e);
         }
 
@@ -9033,7 +8999,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleCreated(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (IsHandleCreated)
             {
                 // Setting fonts is for some reason incredibly expensive.
@@ -9157,7 +9122,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLocationChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             OnMove(EventArgs.Empty);
 
             if (Events[EventLocation] is EventHandler eh)
@@ -9175,7 +9139,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleDestroyed(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventHandleDestroyed])?.Invoke(this, e);
 
             UpdateReflectParent(false);
@@ -9235,7 +9198,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDoubleClick(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventDoubleClick])?.Invoke(this, e);
         }
 
@@ -9251,7 +9213,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragEnter(DragEventArgs drgevent)
         {
-            Contract.Requires(drgevent != null);
             ((DragEventHandler)Events[EventDragEnter])?.Invoke(this, drgevent);
         }
 
@@ -9262,7 +9223,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragOver(DragEventArgs drgevent)
         {
-            Contract.Requires(drgevent != null);
             ((DragEventHandler)Events[EventDragOver])?.Invoke(this, drgevent);
         }
 
@@ -9273,7 +9233,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragLeave(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventDragLeave])?.Invoke(this, e);
         }
 
@@ -9284,7 +9243,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragDrop(DragEventArgs drgevent)
         {
-            Contract.Requires(drgevent != null);
             ((DragEventHandler)Events[EventDragDrop])?.Invoke(this, drgevent);
         }
 
@@ -9296,14 +9254,12 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs gfbevent)
         {
-            Contract.Requires(gfbevent != null);
             ((GiveFeedbackEventHandler)Events[EventGiveFeedback])?.Invoke(this, gfbevent);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventEnter])?.Invoke(this, e);
         }
 
@@ -9326,7 +9282,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGotFocus(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (IsActiveX)
             {
                 ActiveXOnFocus(true);
@@ -9370,7 +9325,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInvalidated(InvalidateEventArgs e)
         {
-            Contract.Requires(e != null);
             // Ask the site to change the view...
             if (IsActiveX)
             {
@@ -9397,7 +9351,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
-            Contract.Requires(e != null);
             ((KeyEventHandler)Events[EventKeyDown])?.Invoke(this, e);
         }
 
@@ -9407,7 +9360,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyPress(KeyPressEventArgs e)
         {
-            Contract.Requires(e != null);
             ((KeyPressEventHandler)Events[EventKeyPress])?.Invoke(this, e);
         }
 
@@ -9417,7 +9369,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
-            Contract.Requires(e != null);
             ((KeyEventHandler)Events[EventKeyUp])?.Invoke(this, e);
         }
 
@@ -9431,7 +9382,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLayout(LayoutEventArgs levent)
         {
-            Contract.Requires(levent != null);
             // Ask the site to change the view...
             if (IsActiveX)
             {
@@ -9474,7 +9424,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLeave(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventLeave])?.Invoke(this, e);
         }
 
@@ -9494,7 +9443,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLostFocus(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (IsActiveX)
             {
                 ActiveXOnFocus(false);
@@ -9503,7 +9451,6 @@ namespace System.Windows.Forms
 
         protected virtual void OnMarginChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventMarginChanged])?.Invoke(this, e);
         }
 
@@ -9513,7 +9460,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDoubleClick(MouseEventArgs e)
         {
-            Contract.Requires(e != null);
             ((MouseEventHandler)Events[EventMouseDoubleClick])?.Invoke(this, e);
         }
 
@@ -9523,7 +9469,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseClick(MouseEventArgs e)
         {
-            Contract.Requires(e != null);
             ((MouseEventHandler)Events[EventMouseClick])?.Invoke(this, e);
         }
 
@@ -9533,7 +9478,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseCaptureChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventMouseCaptureChanged])?.Invoke(this, e);
         }
 
@@ -9543,7 +9487,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDown(MouseEventArgs e)
         {
-            Contract.Requires(e != null);
             ((MouseEventHandler)Events[EventMouseDown])?.Invoke(this, e);
         }
 
@@ -9553,7 +9496,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseEnter(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventMouseEnter])?.Invoke(this, e);
         }
 
@@ -9563,7 +9505,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseLeave(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventMouseLeave])?.Invoke(this, e);
         }
 
@@ -9581,7 +9522,6 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnDpiChangedBeforeParent(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventDpiChangedBeforeParent])?.Invoke(this, e);
         }
 
@@ -9599,7 +9539,6 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnDpiChangedAfterParent(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventDpiChangedAfterParent])?.Invoke(this, e);
         }
 
@@ -9609,7 +9548,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseHover(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventMouseHover])?.Invoke(this, e);
         }
 
@@ -9619,7 +9557,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseMove(MouseEventArgs e)
         {
-            Contract.Requires(e != null);
             ((MouseEventHandler)Events[EventMouseMove])?.Invoke(this, e);
         }
 
@@ -9629,7 +9566,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseUp(MouseEventArgs e)
         {
-            Contract.Requires(e != null);
             ((MouseEventHandler)Events[EventMouseUp])?.Invoke(this, e);
         }
 
@@ -9639,7 +9575,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseWheel(MouseEventArgs e)
         {
-            Contract.Requires(e != null);
             ((MouseEventHandler)Events[EventMouseWheel])?.Invoke(this, e);
         }
 
@@ -9649,7 +9584,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMove(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventMove])?.Invoke(this, e);
 
             if (RenderTransparent)
@@ -9665,13 +9599,11 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaint(PaintEventArgs e)
         {
-            Contract.Requires(e != null);
             ((PaintEventHandler)Events[EventPaint])?.Invoke(this, e);
         }
 
         protected virtual void OnPaddingChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetStyle(ControlStyles.ResizeRedraw))
             {
                 Invalidate();
@@ -9687,7 +9619,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaintBackground(PaintEventArgs pevent)
         {
-            Contract.Requires(pevent != null);
             // We need the true client rectangle as clip rectangle causes
             // problems on "Windows Classic" theme.  
             NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -9699,7 +9630,6 @@ namespace System.Windows.Forms
         // Transparent control support
         private void OnParentInvalidated(InvalidateEventArgs e)
         {
-            Contract.Requires(e != null);
             if (!RenderTransparent)
             {
                 return;
@@ -9731,7 +9661,6 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent)
         {
-            Contract.Requires(qcdevent != null);
             ((QueryContinueDragEventHandler)Events[EventQueryContinueDrag])?.Invoke(this, qcdevent);
         }
 
@@ -9741,7 +9670,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRegionChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (Events[EventRegionChanged] is EventHandler eh)
             {
                 eh(this, e);
@@ -9754,7 +9682,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResize(EventArgs e)
         {
-            Contract.Requires(e != null);
             if ((controlStyle & ControlStyles.ResizeRedraw) == ControlStyles.ResizeRedraw
                 || GetState(STATE_EXCEPTIONWHILEPAINTING))
             {
@@ -9773,14 +9700,12 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
-            Contract.Requires(e != null);
             ((PreviewKeyDownEventHandler)Events[EventPreviewKeyDown])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSizeChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             OnResize(EventArgs.Empty);
 
             if (Events[EventSize] is EventHandler eh)
@@ -9796,7 +9721,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnChangeUICues(UICuesEventArgs e)
         {
-            Contract.Requires(e != null);
             ((UICuesEventHandler)Events[EventChangeUICues])?.Invoke(this, e);
         }
 
@@ -9807,7 +9731,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnStyleChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventStyleChanged])?.Invoke(this, e);
         }
 
@@ -9818,7 +9741,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
             if (controlsCollection != null)
             {
@@ -9842,7 +9764,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidating(CancelEventArgs e)
         {
-            Contract.Requires(e != null);
             ((CancelEventHandler)Events[EventValidating])?.Invoke(this, e);
         }
 
@@ -9852,7 +9773,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e)
         {
-            Contract.Requires(e != null);
             ((EventHandler)Events[EventValidated])?.Invoke(this, e);
         }
 
