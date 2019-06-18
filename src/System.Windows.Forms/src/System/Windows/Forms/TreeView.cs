@@ -633,7 +633,7 @@ namespace System.Windows.Forms
 
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, 0));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, 0));
                 }
 
                 if (ImageIndexer.Index != value)
@@ -716,7 +716,7 @@ namespace System.Windows.Forms
                     {
                         SendMessage(NativeMethods.TVM_SETIMAGELIST, 0,
                                     value == null ? IntPtr.Zero : value.Handle);
-                        if (StateImageList != null && StateImageList.Images.Count > 0)
+                        if (StateImageList != null && StateImageList.Images.Count > 0 && internalStateImageList != null)
                         {
                             SetStateImageList(internalStateImageList.Handle);
                         }
