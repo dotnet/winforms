@@ -1531,13 +1531,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Retrieves a Rectangle object which describes the bounding rectangle
         ///     around an item in the list.  If the item in question is not visible,
-        ///     the rectangle will be outside the visible portion of the control.
+        ///     the rectangle will be empty.
         /// </summary>
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
             NativeMethods.RECT rect = new NativeMethods.RECT();
-            SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect);
+            int LBM_Result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
+
+            if (LBM_Result == 0)
+            {
+                return Rectangle.Empty;
+            }
+
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
