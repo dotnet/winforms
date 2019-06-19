@@ -130,43 +130,45 @@ namespace System.Windows.Forms
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (_disposed)
             {
-                // We cannot do anything from the finalizer thread since we have
-                // resoures that must only be accessed from the GUI thread.
-                if (disposing && _opened)
-                {
-                    // Check if the current window procedure is the correct one.
-                    // We need to explicitely clear the last Win32 error and then
-                    // retrieve it, to check if the call succeeded.
-                    NativeMethods.SetLastError(0);
-                    IntPtr currentWindowProcedure = UnsafeNativeMethods.GetWindowLong(
-                            new HandleRef(this, _handle),
-                            NativeMethods.GWL_WNDPROC);
-                    if (currentWindowProcedure == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
-                        throw new Win32Exception();
-
-                    if (currentWindowProcedure != _windowProcDelegatePtr)
-                        throw new InvalidOperationException(
-                                "The current window procedure is not the expected one.");
-
-                    // Undo the subclassing by restoring the original window
-                    // procedure.
-                    NativeMethods.SetLastError(0);
-                    if (UnsafeNativeMethods.SetWindowLong(
-                            new HandleRef(this, _handle),
-                            NativeMethods.GWL_WNDPROC,
-                            new HandleRef(null, _originalWindowProc)) == IntPtr.Zero &&
-                            Marshal.GetLastWin32Error() != 0)
-                        throw new Win32Exception();
-
-                    // Ensure to keep the delegate alive up to the point after we
-                    // have undone the subclassing.
-                    KeepCallbackDelegateAlive();
-                }
-
-                _disposed = true;
+                return;
             }
+
+            // We cannot do anything from the finalizer thread since we have
+            // resoures that must only be accessed from the GUI thread.
+            if (disposing && _opened)
+            {
+                // Check if the current window procedure is the correct one.
+                // We need to explicitely clear the last Win32 error and then
+                // retrieve it, to check if the call succeeded.
+                NativeMethods.SetLastError(0);
+                IntPtr currentWindowProcedure = UnsafeNativeMethods.GetWindowLong(
+                        new HandleRef(this, _handle),
+                        NativeMethods.GWL_WNDPROC);
+                if (currentWindowProcedure == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
+                    throw new Win32Exception();
+
+                if (currentWindowProcedure != _windowProcDelegatePtr)
+                    throw new InvalidOperationException(
+                            "The current window procedure is not the expected one.");
+
+                // Undo the subclassing by restoring the original window
+                // procedure.
+                NativeMethods.SetLastError(0);
+                if (UnsafeNativeMethods.SetWindowLong(
+                        new HandleRef(this, _handle),
+                        NativeMethods.GWL_WNDPROC,
+                        new HandleRef(null, _originalWindowProc)) == IntPtr.Zero &&
+                        Marshal.GetLastWin32Error() != 0)
+                    throw new Win32Exception();
+
+                // Ensure to keep the delegate alive up to the point after we
+                // have undone the subclassing.
+                KeepCallbackDelegateAlive();
+            }
+
+            _disposed = true;
         }
 
         protected virtual void WndProc(ref Message m)

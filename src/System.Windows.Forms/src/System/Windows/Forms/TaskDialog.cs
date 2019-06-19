@@ -651,11 +651,9 @@ namespace System.Windows.Forms
                     {
                         return _resultButton.Value.button;
                     }
-                    else
-                    {
-                        return _boundPage.GetBoundButtonByID(resultButtonID) ??
-                            CreatePlaceholderButton((TaskDialogResult)resultButtonID);
-                    }
+                    
+                    return _boundPage.GetBoundButtonByID(resultButtonID) ??
+                        CreatePlaceholderButton((TaskDialogResult)resultButtonID);
                 }
                 finally
                 {

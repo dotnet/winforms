@@ -115,106 +115,106 @@ namespace System.Windows.Forms
                             radioButton._checked = radioButton == this;
                         }
                     }
+
+                    return;
                 }
-                else
+
+                // Unchecking a radio button is not possible in the task dialog.
+                // TODO: Should we throw only if the new value is different than the
+                // old one?
+                if (!value)
                 {
-                    // Unchecking a radio button is not possible in the task dialog.
-                    // TODO: Should we throw only if the new value is different than the
-                    // old one?
-                    if (!value)
-                    {
-                        throw new InvalidOperationException(
-                            "Cannot uncheck a radio button while it is bound to a task dialog.");
-                    }
+                    throw new InvalidOperationException(
+                        "Cannot uncheck a radio button while it is bound to a task dialog.");
+                }
 
-                    // Note: We do not allow to set the "Checked" property of any
-                    // radio button of the current task dialog while we are within
-                    // the TDN_RADIO_BUTTON_CLICKED notification handler. This is
-                    // because the logic of the task dialog is such that the radio
-                    // button will be selected AFTER the callback returns (not
-                    // before it is called), at least when the event is caused by
-                    // code sending the TDM_CLICK_RADIO_BUTTON message. This is
-                    // mentioned in the documentation for TDM_CLICK_RADIO_BUTTON:
-                    // "The specified radio button ID is sent to the
-                    // TaskDialogCallbackProc callback function as part of a
-                    // TDN_RADIO_BUTTON_CLICKED notification code. After the
-                    // callback function returns, the radio button will be
-                    // selected."
-                    // 
-                    // While we handle this by ignoring the
-                    // TDN_RADIO_BUTTON_CLICKED notification when it is caused by
-                    // sending a TDM_CLICK_RADIO_BUTTON message, and then raising
-                    // the events after the notification handler returned, this
-                    // still seems to cause problems for TDN_RADIO_BUTTON_CLICKED
-                    // notifications initially caused by the user clicking the radio
-                    // button in the UI.
-                    // 
-                    // For example, consider a scenario with two radio buttons
-                    // [ID 1 and 2], and the user added an event handler to
-                    // automatically select the first radio button (ID 1) when the
-                    // second one (ID 2) is selected in the UI.
-                    // This means the stack will then look as follows:
-                    // Show() ->
-                    // Callback: TDN_RADIO_BUTTON_CLICKED [ID 2] ->
-                    // SendMessage: TDM_CLICK_RADIO_BUTTON [ID 1] ->
-                    // Callback: TDN_RADIO_BUTTON_CLICKED [ID 1]
-                    //
-                    // However, when the initial TDN_RADIO_BUTTON_CLICKED handler
-                    // (ID 2) returns, the task dialog again calls the handler for
-                    // ID 1 (which wouldn't be a problem), and then again calls it
-                    // for ID 2, which is unexpected (and it doesn't seem that we
-                    // can prevent this by returning S_FALSE in the notification
-                    // handler). Additionally, after that it even seems we get an
-                    // endless loop of TDN_RADIO_BUTTON_CLICKED notifications even
-                    // when we don't send any further messages to the dialog.
-                    // See:
-                    // https://gist.github.com/kpreisser/c9d07225d801783c4b5fed0fac563469
-                    if (BoundPage.BoundTaskDialog.RadioButtonClickedStackCount > 0)
-                    {
-                        throw new InvalidOperationException(
-                            $"Cannot set the " +
-                            $"{nameof(TaskDialogRadioButton)}.{nameof(Checked)} " +
-                            $"property from within the " +
-                            $"{nameof(TaskDialogRadioButton)}.{nameof(CheckedChanged)} " +
-                            $"event of one of the radio buttons of the current task dialog.");
-                    }
+                // Note: We do not allow to set the "Checked" property of any
+                // radio button of the current task dialog while we are within
+                // the TDN_RADIO_BUTTON_CLICKED notification handler. This is
+                // because the logic of the task dialog is such that the radio
+                // button will be selected AFTER the callback returns (not
+                // before it is called), at least when the event is caused by
+                // code sending the TDM_CLICK_RADIO_BUTTON message. This is
+                // mentioned in the documentation for TDM_CLICK_RADIO_BUTTON:
+                // "The specified radio button ID is sent to the
+                // TaskDialogCallbackProc callback function as part of a
+                // TDN_RADIO_BUTTON_CLICKED notification code. After the
+                // callback function returns, the radio button will be
+                // selected."
+                // 
+                // While we handle this by ignoring the
+                // TDN_RADIO_BUTTON_CLICKED notification when it is caused by
+                // sending a TDM_CLICK_RADIO_BUTTON message, and then raising
+                // the events after the notification handler returned, this
+                // still seems to cause problems for TDN_RADIO_BUTTON_CLICKED
+                // notifications initially caused by the user clicking the radio
+                // button in the UI.
+                // 
+                // For example, consider a scenario with two radio buttons
+                // [ID 1 and 2], and the user added an event handler to
+                // automatically select the first radio button (ID 1) when the
+                // second one (ID 2) is selected in the UI.
+                // This means the stack will then look as follows:
+                // Show() ->
+                // Callback: TDN_RADIO_BUTTON_CLICKED [ID 2] ->
+                // SendMessage: TDM_CLICK_RADIO_BUTTON [ID 1] ->
+                // Callback: TDN_RADIO_BUTTON_CLICKED [ID 1]
+                //
+                // However, when the initial TDN_RADIO_BUTTON_CLICKED handler
+                // (ID 2) returns, the task dialog again calls the handler for
+                // ID 1 (which wouldn't be a problem), and then again calls it
+                // for ID 2, which is unexpected (and it doesn't seem that we
+                // can prevent this by returning S_FALSE in the notification
+                // handler). Additionally, after that it even seems we get an
+                // endless loop of TDN_RADIO_BUTTON_CLICKED notifications even
+                // when we don't send any further messages to the dialog.
+                // See:
+                // https://gist.github.com/kpreisser/c9d07225d801783c4b5fed0fac563469
+                if (BoundPage.BoundTaskDialog.RadioButtonClickedStackCount > 0)
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot set the " +
+                        $"{nameof(TaskDialogRadioButton)}.{nameof(Checked)} " +
+                        $"property from within the " +
+                        $"{nameof(TaskDialogRadioButton)}.{nameof(CheckedChanged)} " +
+                        $"event of one of the radio buttons of the current task dialog.");
+                }
 
-                    // Click the radio button which will (recursively) raise the
-                    // TDN_RADIO_BUTTON_CLICKED notification. However, we ignore
-                    // the notification and then raise the events afterwards - see
-                    // above.
-                    _ignoreRadioButtonClickedNotification = true;
-                    try
-                    {
-                        BoundPage.BoundTaskDialog.ClickRadioButton(_radioButtonID);
-                    }
-                    finally
-                    {
-                        _ignoreRadioButtonClickedNotification = false;
-                    }
+                // Click the radio button which will (recursively) raise the
+                // TDN_RADIO_BUTTON_CLICKED notification. However, we ignore
+                // the notification and then raise the events afterwards - see
+                // above.
+                _ignoreRadioButtonClickedNotification = true;
+                try
+                {
+                    BoundPage.BoundTaskDialog.ClickRadioButton(_radioButtonID);
+                }
+                finally
+                {
+                    _ignoreRadioButtonClickedNotification = false;
+                }
 
-                    // Now raise the events.
-                    // Note: We also increment the stack count here to prevent
-                    // navigating the dialog and setting the Checked property
-                    // within the event handlers here even though this would work
-                    // correctly for the native API (as we are not in the
-                    // TDN_RADIO_BUTTON_CLICKED notification), because we are
-                    // raising two events (Unchecked+Checked), and when the
-                    // second event is called, the dialog might already be
-                    // navigated or another radio button may have been checked.
-                    TaskDialog boundTaskDialog = BoundPage.BoundTaskDialog;
-                    checked
-                    {
-                        boundTaskDialog.RadioButtonClickedStackCount++;
-                    }
-                    try
-                    {
-                        HandleRadioButtonClicked();
-                    }
-                    finally
-                    {
-                        boundTaskDialog.RadioButtonClickedStackCount--;
-                    }
+                // Now raise the events.
+                // Note: We also increment the stack count here to prevent
+                // navigating the dialog and setting the Checked property
+                // within the event handlers here even though this would work
+                // correctly for the native API (as we are not in the
+                // TDN_RADIO_BUTTON_CLICKED notification), because we are
+                // raising two events (Unchecked+Checked), and when the
+                // second event is called, the dialog might already be
+                // navigated or another radio button may have been checked.
+                TaskDialog boundTaskDialog = BoundPage.BoundTaskDialog;
+                checked
+                {
+                    boundTaskDialog.RadioButtonClickedStackCount++;
+                }
+                try
+                {
+                    HandleRadioButtonClicked();
+                }
+                finally
+                {
+                    boundTaskDialog.RadioButtonClickedStackCount--;
                 }
             }
         }
@@ -261,25 +261,27 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (!_checked)
+            if (_checked)
             {
-                _checked = true;
-
-                // Before raising the CheckedChanged event for the current button,
-                // uncheck the other radio buttons and call their events (there
-                // should be no more than one other button that is already checked).
-                foreach (TaskDialogRadioButton radioButton in BoundPage.RadioButtons)
-                {
-                    if (radioButton != this && radioButton._checked)
-                    {
-                        radioButton._checked = false;
-                        radioButton.OnCheckedChanged(EventArgs.Empty);
-                    }
-                }
-
-                // Finally, call the event for the current button.
-                OnCheckedChanged(EventArgs.Empty);
+                return;
             }
+
+            _checked = true;
+
+            // Before raising the CheckedChanged event for the current button,
+            // uncheck the other radio buttons and call their events (there
+            // should be no more than one other button that is already checked).
+            foreach (TaskDialogRadioButton radioButton in BoundPage.RadioButtons)
+            {
+                if (radioButton != this && radioButton._checked)
+                {
+                    radioButton._checked = false;
+                    radioButton.OnCheckedChanged(EventArgs.Empty);
+                }
+            }
+
+            // Finally, call the event for the current button.
+            OnCheckedChanged(EventArgs.Empty);
         }
 
         private protected override void UnbindCore()

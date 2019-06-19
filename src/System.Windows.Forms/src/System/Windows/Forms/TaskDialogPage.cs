@@ -611,14 +611,12 @@ namespace System.Windows.Forms
             {
                 if (button.DefaultButton)
                 {
-                    if (!foundDefaultButton)
-                    {
-                        foundDefaultButton = true;
-                    }
-                    else
+                    if (foundDefaultButton)
                     {
                         throw new InvalidOperationException("Only one button can be set as default button.");
                     }
+
+                    foundDefaultButton = true;
                 }
             }
 
@@ -643,14 +641,12 @@ namespace System.Windows.Forms
 
                 if (button.Checked)
                 {
-                    if (!foundCheckedRadioButton)
-                    {
-                        foundCheckedRadioButton = true;
-                    }
-                    else
+                    if (foundCheckedRadioButton)
                     {
                         throw new InvalidOperationException("Only one radio button can be set as checked.");
                     }
+
+                    foundCheckedRadioButton = true;
                 }
             }
         }
