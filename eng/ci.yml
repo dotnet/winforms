@@ -46,17 +46,6 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
-        # needed for helix jobs
-        - name: _TestHelixAgentPool
-          value: 'Windows.10.Amd64.ClientRS5.Open'
-        - name: _HelixSource
-          value: ${{ parameters.repoName }}/$(Build.SourceBranch)
-        - name: _HelixToken
-          value: ''
-        - name: _HelixCreator
-          value: ${{ parameters.repoName }}
-
-
         # Override some values if we're building internally (not public)
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
@@ -70,8 +59,6 @@ jobs:
             value: true
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
-          # DotNet-HelixApi-Access provides: HelixApiAccessToken
-          - group: DotNet-HelixApi-Access
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
@@ -91,16 +78,6 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
-          # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
-          - name: _TestHelixAgentPool
-            value: 'Windows.10.Amd64.ClientRS5'
-          - name: _HelixSource
-            value: official/${{ parameters.repoName }}/$(Build.SourceBranch)
-          - name: _HelixToken
-            value: '$(HelixApiAccessToken)' # from DotNet-HelixApi-Access group
-          - name: _HelixCreator
-            value: '' #if _HelixToken is set, Creator must be empty
-
       strategy:
         matrix:
           Build_Debug:
@@ -118,89 +95,49 @@ jobs:
       - checkout: self
         clean: true
 
-      # Set VSO Variable(s)
-      - powershell: eng\pre-build.ps1
-        displayName: Pre-Build - Set VSO Variables
-
       # Build and rename binlog
-      # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with
-      #       coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
-      #       https://github.com/tonerdo/coverlet/issues/363.
+      # The /p:Coverage argument is passed here since some build properties change to accommodate running with
+      # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
+      # https://github.com/tonerdo/coverlet/issues/363.
       - script: eng\cibuild.cmd
           -restore
+          -build
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-          -build
           /p:Coverage=$(_Coverage)
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog          
         displayName: Build
 
-    # Run Unit Tests
-        # this should no longer be necessary once Helix is ready to report back code coverage
-        # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
+      # Run Unit Tests
+      # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
       - script: eng\cibuild.cmd
+          -test
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-          -test
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
           /p:Coverage=$(_Coverage)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
           /m:1
         displayName: Run Unit Tests
-        #condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      # Disable Helix tests for now
-      # There are certain tests that break on helix machines that don't break locally. This change is to get us unblocked.
-      # - powershell: eng\cibuild.cmd
-      #     -configuration $(_BuildConfig)
-      #     $(_OfficialBuildIdArgs) 
-      #     -test
-      #     -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
-      #     /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\HelixUnit.binlog
-      #   displayName: Run Unit Tests on Helix Machine (Release)
-      #   env:
-      #     HelixSource: $(_HelixSource)
-      #     HelixType: 'tests/unit'
-      #     HelixBuild: $(Build.BuildNumber)
-      #     HelixTargetQueues: $(_TestHelixAgentPool)
-      #     HelixAccessToken: $(_HelixToken)              # only defined for internal CI
-      #     Creator: $(_HelixCreator)
-      #     XUnitProjects: '..\src\**\*.Tests.csproj'     # the test projects blob
-      #     XUnitPublishTargetFramework: netcoreapp3.0
-      #     XUnitRuntimeTargetFramework: netcoreapp2.0
-      #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      #   condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
-
-      # Run integration tests
-      # Tests are run with /m:1 to avoid concurrency across different assemblies
-      - powershell: eng\cibuild.cmd
-          -configuration $(_BuildConfig)
-          $(_OfficialBuildIdArgs) 
-          -test
-          -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\HelixIntegration.binlog
-          /m:1
-        displayName: Run Integration Tests on Helix Machine Windows.10.Amd64 (Release)
-        env:
-          HelixSource: $(_HelixSource)
-          HelixType: 'tests/integration'
-          HelixBuild: $(Build.BuildNumber)
-          HelixTargetQueues: $(_TestHelixAgentPool)
-          HelixAccessToken: $(_HelixToken)              # only defined for internal CI
-          Creator: $(_HelixCreator)
-          XUnitProjects: '..\src\**\*.IntegrationTests.csproj'     # the test projects blob
-          XUnitPublishTargetFramework: netcoreapp3.0
-          XUnitRuntimeTargetFramework: netcoreapp2.0
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-        condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
-
-      # Create Nuget package, sign, and publish; and rename binlog
+      # Run Integration Tests
+      # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
+      # UI race conditions
       - script: eng\cibuild.cmd
-          -restore
+          -integrationTest
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+          /m:1
+        displayName: Run Integration Tests
+
+      # Create Nuget package, sign, and publish
+      - script: eng\cibuild.cmd
+          -restore
           -pack
           -sign $(_SignArgs)
           -publish $(_PublishArgs)
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
         displayName: Pack, Sign, and Publish
 
