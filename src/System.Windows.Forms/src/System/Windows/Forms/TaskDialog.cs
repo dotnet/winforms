@@ -380,7 +380,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// When setting this property to <c>true</c> and then showing the dialog, it
-        /// causes the dialog to net set itself as foreground window. This means that
+        /// causes the dialog to not set itself as foreground window. This means that
         /// if currently none of the application's windows has focus, the task dialog
         /// doesn't try to "steal" focus (which otherwise can result in the task dialog
         /// window being activated, or the taskbar button for the window flashing
