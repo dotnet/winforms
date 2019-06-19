@@ -631,8 +631,8 @@ namespace System.Windows.Forms
                     int returnValue = Interop.TaskDialog.TaskDialogIndirect(
                         ptrTaskDialogConfig,
                         out int resultButtonID,
-                        out int resultRadioButtonID,
-                        out bool resultCheckBoxChecked);
+                        out _,
+                        out _);
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
