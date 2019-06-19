@@ -17,7 +17,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public MauiButtonTest(string[] args) : base(args)
         {
-            TestHelpers.BringToForeground(this);
+            this.BringToForeground();
             _button = new Button
             {
                 Text = "&Click"
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public static void Main(string[] args)
         {
-            TestHelpers.SetCulture("en-US");
+            Thread.CurrentThread.SetCulture("en-US");
             Application.Run(new MauiButtonTest(args));
         }
 

@@ -11,7 +11,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms.IntegrationTests.Common
 {
-    public class TestHelpers
+    public static class TestHelpers
     {
         /// <summary>
         /// Gets the current config
@@ -300,7 +300,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// Bring the specified form to the foreground
         /// </summary>
         /// <param name="form">The form</param>
-        public static void BringToForeground(Form form)
+        public static void BringToForeground(this Form form)
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
@@ -314,12 +314,12 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// Set the culture for the current thread
         /// </summary>
         /// <param name="culture">The culture</param>
-        public static void SetCulture(string culture)
+        public static void SetCulture(this Thread thread, string culture)
         {
             if (string.IsNullOrEmpty(culture))
                 throw new ArgumentNullException(nameof(culture));
 
-            var cultureInfo = new CultureInfo("en-US");
+            var cultureInfo = new CultureInfo(culture);
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
         }

@@ -13,7 +13,7 @@ namespace WinformsControlsTest
     {
         public MainForm()
         {
-            TestHelpers.BringToForeground(this);
+            this.BringToForeground();
             InitializeComponent();
         }
 
