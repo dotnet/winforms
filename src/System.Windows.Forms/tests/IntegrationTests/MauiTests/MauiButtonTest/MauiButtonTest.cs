@@ -33,8 +33,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.Run(new MauiButtonTest(args));
         }
 
-#region Test Methods
-
         [Scenario(true)]
         public ScenarioResult Click_Fires_OnClick(TParams p)
         {
@@ -80,8 +78,5 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return new ScenarioResult(!_wasClicked);
         }
-
-#endregion Test Methods
-
     }
 }

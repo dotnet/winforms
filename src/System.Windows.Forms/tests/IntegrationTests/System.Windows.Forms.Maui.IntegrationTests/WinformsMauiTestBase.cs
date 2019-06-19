@@ -41,7 +41,24 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <summary>
         /// The test result, exposed to the derived classes
         /// </summary>
-        protected TestResult TestResult { get => s_testResult; }
+        protected static TestResult TestResult { get => s_testResult; }
+
+        /// <summary>
+        /// Scenario theory data, used to drive unit tests in derived classes
+        /// </summary>
+        public static TheoryData<string> ScenarioTheoryData
+        {
+            get
+            {
+                var data = new TheoryData<string>();
+                foreach (var scenarioName in TestResult.ScenarioGroup.Scenarios.Select(x => x.Name))
+                {
+                    data.Add(scenarioName);
+                }
+
+                return data;
+            }
+        }
 
         public WinformsMauiTestBase()
         {
@@ -52,6 +69,8 @@ namespace System.Windows.Forms.Maui.IntegrationTests
                 {
                     var exePath = TestHelpers.GetExePath(MauiProjectName);
                     s_testResult = s_testRunner.RunTest(exePath);
+                    Assert.NotNull(TestResult);
+                    Assert.NotNull(TestResult.ScenarioGroup);
                 }
             }
         }
@@ -63,8 +82,6 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <param name="scenarioName">The name of the scenario</param>
         protected void ValidateScenarioPassed(string scenarioName)
         {
-            Assert.NotNull(TestResult);
-            Assert.NotNull(TestResult.ScenarioGroup);
             var scenario = TestResult.ScenarioGroup.Scenarios.SingleOrDefault(x => x.Name == scenarioName);
             Assert.NotNull(scenario);
             Assert.NotNull(scenario.Result);

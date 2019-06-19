@@ -10,8 +10,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// This class runs a maui executable, which contains one or more scenarios.
     /// We want to be able to represent each scenario as a seperate xUnit test, but it's not
     /// possible to run them independently. The workaround is to have a MauiTestRunner execute all
-    /// the scenarios once and store the results, then each xUnit test just parses the results
-    /// it cares about and asserts appropriately.
+    /// the scenarios once and store the results, then feed the scenario names in as member data.
     /// </summary>
     public class WinformsMauiButtonTest : WinformsMauiTestBase
     {
@@ -24,9 +23,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         protected override string MauiProjectName { get => ProjectName; }
 
         [Theory]
-        [InlineData("Click_Fires_OnClick()")]
-        [InlineData("Hotkey_Fires_OnClick()")]
-        [InlineData("Hotkey_DoesNotFire_OnClick()")]
+        [MemberData(nameof(ScenarioTheoryData))]
         public void WinformsMauiTest_ButtonTest(string scenarioName)
         {
             ValidateScenarioPassed(scenarioName);
