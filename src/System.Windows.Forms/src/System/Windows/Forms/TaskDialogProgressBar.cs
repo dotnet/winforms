@@ -25,7 +25,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogProgressBar()
-            : base()
         {
         }
 
@@ -58,10 +57,12 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 if (BoundPage != null && value == TaskDialogProgressBarState.None)
+                {
                     throw new InvalidOperationException(
-                            "Cannot remove the progress bar while the task dialog is shown.");
+                        "Cannot remove the progress bar while the task dialog is shown.");
+                }
 
-                //// TODO: Verify the enum value is actually valid
+                // TODO: Verify the enum value is actually valid
 
                 TaskDialogProgressBarState previousState = _state;
                 _state = value;
@@ -81,7 +82,9 @@ namespace System.Windows.Forms
                             // first need to set the state to "Normal"; otherwise
                             // the marquee will not show.
                             if (newStateIsMarquee && previousState != TaskDialogProgressBarState.Normal)
+                            {
                                 taskDialog.SetProgressBarState(Interop.TaskDialog.PBST_NORMAL);
+                            }
 
                             taskDialog.SwitchProgressBarMode(newStateIsMarquee);
                         }
@@ -90,8 +93,8 @@ namespace System.Windows.Forms
                         if (newStateIsMarquee)
                         {
                             taskDialog.SetProgressBarMarquee(
-                                    _state == TaskDialogProgressBarState.Marquee,
-                                    _marqueeSpeed);
+                                _state == TaskDialogProgressBarState.Marquee,
+                                _marqueeSpeed);
                         }
                         else
                         {
@@ -101,11 +104,8 @@ namespace System.Windows.Forms
                             {
                                 // Also need to set the other properties after switching
                                 // the mode.
-                                taskDialog.SetProgressBarRange(
-                                        _minimum,
-                                        _maximum);
-                                taskDialog.SetProgressBarPosition(
-                                        _value);
+                                taskDialog.SetProgressBarRange(_minimum, _maximum);
+                                taskDialog.SetProgressBarPosition(_value);
 
                                 // We need to set the position a second time to work
                                 // reliably if the state is not "Normal".
@@ -116,8 +116,9 @@ namespace System.Windows.Forms
                                 // is non-Normal."
                                 // Apparently, this bug is still present in Win10 V1803.
                                 if (_state != TaskDialogProgressBarState.Normal)
-                                    taskDialog.SetProgressBarPosition(
-                                            _value);
+                                {
+                                    taskDialog.SetProgressBarPosition(_value);
+                                }
                             }
                         }
                     }
@@ -146,7 +147,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0 || value > ushort.MaxValue)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value));
+                }
 
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
@@ -155,9 +158,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarRange(
-                            value,
-                            _maximum);
+                    BoundPage.BoundTaskDialog.SetProgressBarRange(value, _maximum);
                 }
 
                 _minimum = value;
@@ -177,7 +178,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0 || value > ushort.MaxValue)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value));
+                }
 
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
@@ -186,9 +189,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarRange(
-                            _minimum,
-                            value);
+                    BoundPage.BoundTaskDialog.SetProgressBarRange(_minimum, value);
                 }
 
                 _maximum = value;
@@ -208,7 +209,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0 || value > ushort.MaxValue)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value));
+                }
 
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
@@ -217,8 +220,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarPosition(
-                            value);
+                    BoundPage.BoundTaskDialog.SetProgressBarPosition(value);
                 }
 
                 _value = value;
@@ -246,7 +248,9 @@ namespace System.Windows.Forms
                     // We only update the TaskDialog if the current state is a
                     // marquee progress bar.
                     if (BoundPage != null && ProgressBarStateIsMarquee(_state))
+                    {
                         State = _state;
+                    }
                 }
                 catch
                 {
@@ -261,11 +265,10 @@ namespace System.Windows.Forms
             get => base.IsCreatable && _state != TaskDialogProgressBarState.None;
         }
 
-        private static bool ProgressBarStateIsMarquee(
-                TaskDialogProgressBarState state)
+        private static bool ProgressBarStateIsMarquee(TaskDialogProgressBarState state)
         {
             return state == TaskDialogProgressBarState.Marquee ||
-                    state == TaskDialogProgressBarState.MarqueePaused;
+                state == TaskDialogProgressBarState.MarqueePaused;
         }
 
         private static int GetNativeProgressBarState(
@@ -289,9 +292,13 @@ namespace System.Windows.Forms
             TaskDialogFlags flags = base.BindCore();
 
             if (ProgressBarStateIsMarquee(_state))
+            {
                 flags |= TaskDialogFlags.TDF_SHOW_MARQUEE_PROGRESS_BAR;
+            }
             else
+            {
                 flags |= TaskDialogFlags.TDF_SHOW_PROGRESS_BAR;
+            }
 
             return flags;
         }
@@ -305,17 +312,15 @@ namespace System.Windows.Forms
             else if (_state != TaskDialogProgressBarState.MarqueePaused)
             {
                 State = _state;
-                BoundPage.BoundTaskDialog.SetProgressBarRange(
-                        _minimum,
-                        _maximum);
-                BoundPage.BoundTaskDialog.SetProgressBarPosition(
-                        _value);
+                BoundPage.BoundTaskDialog.SetProgressBarRange(_minimum, _maximum);
+                BoundPage.BoundTaskDialog.SetProgressBarPosition(_value);
 
                 // See comment in property "State" for why we need to set
                 // the position it twice.
                 if (_state != TaskDialogProgressBarState.Normal)
-                    BoundPage.BoundTaskDialog.SetProgressBarPosition(
-                            _value);
+                {
+                    BoundPage.BoundTaskDialog.SetProgressBarPosition(_value);
+                }
             }
         }
     }

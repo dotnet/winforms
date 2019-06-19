@@ -21,7 +21,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogCustomButton()
-            : base()
         {
         }
 
@@ -116,9 +115,11 @@ namespace System.Windows.Forms
             string text = _text?.Replace("\r\n", "\r").Replace("\n", "\r");
 
             if ((page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinks ||
-                    page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon) &&
-                    text != null && _descriptionText != null)
+                page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon) &&
+                text != null && _descriptionText != null)
+            {
                 text += '\n' + _descriptionText;
+            }
 
             return text;
         }

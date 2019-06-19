@@ -15,7 +15,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         internal TaskDialogClosingEventArgs(TaskDialogButton closeButton)
-            : base()
         {
             CloseButton = closeButton;
         }

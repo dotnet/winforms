@@ -24,7 +24,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogCheckBox()
-            : base()
         {
         }
 
@@ -77,8 +76,7 @@ namespace System.Windows.Forms
                     // Click the checkbox which should cause a call to
                     // HandleCheckBoxClicked(), where we will update the checked
                     // state.
-                    BoundPage.BoundTaskDialog.ClickCheckBox(
-                            value);
+                    BoundPage.BoundTaskDialog.ClickCheckBox(value);
                 }
             }
         }
@@ -96,9 +94,7 @@ namespace System.Windows.Forms
             DenyIfNotBoundOrWaitingForInitialization();
             DenyIfBoundAndNotCreated();
 
-            BoundPage.BoundTaskDialog.ClickCheckBox(
-                    _checked,
-                    true);
+            BoundPage.BoundTaskDialog.ClickCheckBox(_checked, true);
         }
 
         /// <summary>
@@ -125,7 +121,9 @@ namespace System.Windows.Forms
             TaskDialogFlags flags = base.BindCore();
 
             if (_checked)
+            {
                 flags |= TaskDialogFlags.TDF_VERIFICATION_FLAG_CHECKED;
+            }
 
             return flags;
         }

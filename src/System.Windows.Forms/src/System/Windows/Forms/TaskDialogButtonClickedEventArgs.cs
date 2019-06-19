@@ -13,7 +13,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         internal TaskDialogButtonClickedEventArgs()
-            : base()
         {
         }
 

@@ -10,12 +10,10 @@ namespace System.Windows.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class TaskDialogCustomButtonCollection
-        : Collection<TaskDialogCustomButton>
+    public class TaskDialogCustomButtonCollection : Collection<TaskDialogCustomButton>
     {
         // HashSet to detect duplicate items.
-        private readonly HashSet<TaskDialogCustomButton> _itemSet =
-                new HashSet<TaskDialogCustomButton>();
+        private readonly HashSet<TaskDialogCustomButton> _itemSet = new HashSet<TaskDialogCustomButton>();
 
         private TaskDialogPage _boundPage;
 
@@ -23,7 +21,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogCustomButtonCollection()
-            : base()
         {
         }
 
@@ -69,7 +66,10 @@ namespace System.Windows.Forms
                 // First, add the new item (which will throw if it is a duplicate entry),
                 // then remove the old one.
                 if (!_itemSet.Add(item))
+                {
                     throw new ArgumentException();
+                }
+
                 _itemSet.Remove(oldItem);
 
                 oldItem.Collection = null;
@@ -92,7 +92,9 @@ namespace System.Windows.Forms
             DenyIfHasOtherCollection(item);
 
             if (!_itemSet.Add(item))
+            {
                 throw new ArgumentException();
+            }
 
             item.Collection = this;
             base.InsertItem(index, item);
@@ -124,7 +126,9 @@ namespace System.Windows.Forms
             _boundPage?.DenyIfBound();
 
             foreach (TaskDialogCustomButton button in this)
+            {
                 button.Collection = null;
+            }
 
             _itemSet.Clear();
             base.ClearItems();
@@ -133,8 +137,7 @@ namespace System.Windows.Forms
         private void DenyIfHasOtherCollection(TaskDialogCustomButton item)
         {
             if (item.Collection != null && item.Collection != this)
-                throw new InvalidOperationException(
-                        "This control is already part of a different collection.");
+                throw new InvalidOperationException("This control is already part of a different collection.");
         }
     }
 }

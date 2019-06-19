@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     internal class TaskDialogStandardIconContainer : TaskDialogIcon
     {
         public TaskDialogStandardIconContainer(TaskDialogStandardIcon icon)
-            : base()
         {
             Icon = icon;
         }

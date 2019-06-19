@@ -25,12 +25,10 @@ namespace System.Windows.Forms
                     case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                         base.WndProc(ref m);
 
-                        ref NativeMethods.WINDOWPOS windowPos =
-                                ref *(NativeMethods.WINDOWPOS*)m.LParam;
+                        ref NativeMethods.WINDOWPOS windowPos = ref *(NativeMethods.WINDOWPOS*)m.LParam;
 
-                        if ((windowPos.flags & NativeMethods.SWP_SHOWWINDOW) ==
-                                NativeMethods.SWP_SHOWWINDOW &&
-                                !_processedShowWindowMessage)
+                        if ((windowPos.flags & NativeMethods.SWP_SHOWWINDOW) == NativeMethods.SWP_SHOWWINDOW &&
+                            !_processedShowWindowMessage)
                         {
                             _processedShowWindowMessage = true;
 

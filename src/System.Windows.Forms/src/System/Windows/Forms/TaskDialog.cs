@@ -29,8 +29,7 @@ namespace System.Windows.Forms
     /// that contains a dependency to Microsoft.Windows.Common-Controls (6.0.0.0),
     /// and the thread needs to use the single-threaded apartment (STA) model.
     /// </remarks>
-    public partial class TaskDialog
-        : IWin32Window
+    public partial class TaskDialog : IWin32Window
     {
         /// <summary>
         /// A self-defined window message that we post to the task dialog when
@@ -61,8 +60,7 @@ namespace System.Windows.Forms
         /// might want to send when they also subclassed the dialog window, although
         /// that should be unlikely.
         /// </remarks>
-        private const int ContinueButtonClickHandlingMessage =
-                Interop.WindowMessages.WM_APP + 0x3FFF;
+        private const int ContinueButtonClickHandlingMessage = Interop.WindowMessages.WM_APP + 0x3FFF;
 
         /// <summary>
         /// The delegate for the callback handler (that calls
@@ -261,22 +259,21 @@ namespace System.Windows.Forms
             // function, and then identify the actual TaskDialog instance by using a
             // GCHandle in the reference data field (like an object pointer).
             s_callbackProcDelegate = (hWnd, notification, wParam, lParam, referenceData) =>
-                    ((TaskDialog)GCHandle.FromIntPtr(referenceData).Target)
-                    .HandleTaskDialogCallback(hWnd, notification, wParam, lParam);
+                ((TaskDialog)GCHandle.FromIntPtr(referenceData).Target).HandleTaskDialogCallback(hWnd, notification, wParam, lParam);
 
-            s_callbackProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(
-                    s_callbackProcDelegate);
+            s_callbackProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate);
         }
 
         /// <summary>
         /// 
         /// </summary>
         public TaskDialog()
-            : base()
         {
             // TaskDialog is only supported on Windows.
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
                 throw new PlatformNotSupportedException();
+            }
 
             // Set default properties.
             _startupLocation = TaskDialogStartupLocation.CenterParent;
@@ -288,8 +285,7 @@ namespace System.Windows.Forms
         public TaskDialog(TaskDialogPage page)
             : this()
         {
-            _page = page ??
-                    throw new ArgumentNullException(nameof(page));
+            _page = page ?? throw new ArgumentNullException(nameof(page));
         }
 
         /// <summary>
@@ -337,11 +333,15 @@ namespace System.Windows.Forms
             set
             {
                 if (value == null)
+                {
                     throw new ArgumentNullException(nameof(value));
+                }
                 // TODO: Maybe ignore the set call if the value is the same
                 // (but we currently also don't do that for other properties).
                 //if (value == _page)
+                //{
                 //    return;
+                //}
 
                 if (DialogIsShown)
                 {
@@ -453,11 +453,11 @@ namespace System.Windows.Forms
         /// <param name="icon"></param>
         /// <returns></returns>
         public static TaskDialogResult Show(
-                string text,
-                string instruction = null,
-                string title = null,
-                TaskDialogButtons buttons = TaskDialogButtons.OK,
-                TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
+            string text,
+            string instruction = null,
+            string title = null,
+            TaskDialogButtons buttons = TaskDialogButtons.OK,
+            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
             return Show(IntPtr.Zero, text, instruction, title, buttons, icon);
         }
@@ -473,12 +473,12 @@ namespace System.Windows.Forms
         /// <param name="icon"></param>
         /// <returns></returns>
         public static TaskDialogResult Show(
-                IWin32Window owner,
-                string text,
-                string instruction = null,
-                string title = null,
-                TaskDialogButtons buttons = TaskDialogButtons.OK,
-                TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
+            IWin32Window owner,
+            string text,
+            string instruction = null,
+            string title = null,
+            TaskDialogButtons buttons = TaskDialogButtons.OK,
+            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
             return Show(owner.Handle, text, instruction, title, buttons, icon);
         }
@@ -497,12 +497,12 @@ namespace System.Windows.Forms
         /// <param name="icon"></param>
         /// <returns></returns>
         public static TaskDialogResult Show(
-                IntPtr hwndOwner,
-                string text,
-                string instruction = null,
-                string title = null,
-                TaskDialogButtons buttons = TaskDialogButtons.OK,
-                TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
+            IntPtr hwndOwner,
+            string text,
+            string instruction = null,
+            string title = null,
+            TaskDialogButtons buttons = TaskDialogButtons.OK,
+            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
             var dialog = new TaskDialog(new TaskDialogPage()
             {
@@ -530,12 +530,10 @@ namespace System.Windows.Forms
             // In that case the "Help" button would close the dialog, so we
             // return true.
             return !(button is TaskDialogStandardButton standardButton &&
-                    standardButton.IsCreated &&
-                    standardButton.Result == TaskDialogResult.Help);
+                standardButton.IsCreated && standardButton.Result == TaskDialogResult.Help);
         }
 
-        private static TaskDialogStandardButton CreatePlaceholderButton(
-                TaskDialogResult result)
+        private static TaskDialogStandardButton CreatePlaceholderButton(TaskDialogResult result)
         {
             // TODO: Maybe bind the button so that the user
             // cannot change the properties, like it is the
@@ -567,7 +565,7 @@ namespace System.Windows.Forms
         /// controls until this method returns.
         /// </remarks>
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
-        public TaskDialogButton Show(System.Windows.Forms.IWin32Window owner)
+        public TaskDialogButton Show(IWin32Window owner)
         {
             return Show(owner.Handle);
         }
@@ -588,8 +586,7 @@ namespace System.Windows.Forms
             // Recursive Show() is not possible because a TaskDialog instance can only
             // represent a single native dialog.
             if (DialogIsShown)
-                throw new InvalidOperationException(
-                        $"This {nameof(TaskDialog)} instance is already being shown.");
+                throw new InvalidOperationException($"This {nameof(TaskDialog)} instance is already being shown.");
 
             Page.Validate();
 
@@ -601,45 +598,48 @@ namespace System.Windows.Forms
 
                 // Bind the page and allocate the memory.
                 BindPageAndAllocateConfig(
-                        _page,
-                        hwndOwner,
-                        _startupLocation,
-                        _doNotSetForeground,
-                        out IntPtr ptrToFree,
-                        out IntPtr ptrTaskDialogConfig);
+                    _page,
+                    hwndOwner,
+                    _startupLocation,
+                    _doNotSetForeground,
+                    out IntPtr ptrToFree,
+                    out IntPtr ptrTaskDialogConfig);
+
                 _boundPage = _page;
                 try
                 {
-                    //// Note: When an uncaught exception occurs in the callback or a
-                    //// WndProc handler, the CLR will manipulate the managed stack
-                    //// ("unwind") so that it doesn't contain the transition to and
-                    //// from native code. However, the TaskDialog still calls our
-                    //// callback when the message loop continues, but as we already
-                    //// freed the GCHandle, a NRE will occur (or other memory access
-                    //// problems because the callback delegate for the subclassed
-                    //// WndProc might already have been freed).
-                    ////
-                    //// Therefore, we neeed to catch all exceptions in the
-                    //// native -> managed transition, and when one occurs, call
-                    //// Application.OnThreadException().
-                    ////
-                    //// Note: The same issue can occur when using a message box with
-                    //// WPF or WinForms: If you do MessageBox.Show() wrapped in a
-                    //// try/catch on a button click, and before calling .Show() create
-                    //// and start a timer which stops and throws an exception on its
-                    //// Tick event, the application will crash with an
-                    //// AccessViolationException as soon as you close the MessageBox.
+                    // Note: When an uncaught exception occurs in the callback or a
+                    // WndProc handler, the CLR will manipulate the managed stack
+                    // ("unwind") so that it doesn't contain the transition to and
+                    // from native code. However, the TaskDialog still calls our
+                    // callback when the message loop continues, but as we already
+                    // freed the GCHandle, a NRE will occur (or other memory access
+                    // problems because the callback delegate for the subclassed
+                    // WndProc might already have been freed).
+                    //
+                    // Therefore, we neeed to catch all exceptions in the
+                    // native -> managed transition, and when one occurs, call
+                    // Application.OnThreadException().
+                    //
+                    // Note: The same issue can occur when using a message box with
+                    // WPF or WinForms: If you do MessageBox.Show() wrapped in a
+                    // try/catch on a button click, and before calling .Show() create
+                    // and start a timer which stops and throws an exception on its
+                    // Tick event, the application will crash with an
+                    // AccessViolationException as soon as you close the MessageBox.
 
                     int returnValue = Interop.TaskDialog.TaskDialogIndirect(
-                            ptrTaskDialogConfig,
-                            out int resultButtonID,
-                            out int resultRadioButtonID,
-                            out bool resultCheckBoxChecked);
+                        ptrTaskDialogConfig,
+                        out int resultButtonID,
+                        out int resultRadioButtonID,
+                        out bool resultCheckBoxChecked);
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
                     if (returnValue < 0)
+                    {
                         Marshal.ThrowExceptionForHR(returnValue);
+                    }
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed
@@ -648,10 +648,14 @@ namespace System.Windows.Forms
                     // priorly raising the TDN_BUTTON_CLICKED notification.
                     // Therefore, in that case we need to retrieve the button ourselves.
                     if (resultButtonID == _resultButton?.buttonID)
+                    {
                         return _resultButton.Value.button;
+                    }
                     else
+                    {
                         return _boundPage.GetBoundButtonByID(resultButtonID) ??
-                                CreatePlaceholderButton((TaskDialogResult)resultButtonID);
+                            CreatePlaceholderButton((TaskDialogResult)resultButtonID);
+                    }
                 }
                 finally
                 {
@@ -695,7 +699,9 @@ namespace System.Windows.Forms
                     // If we started navigating the dialog but navigation wasn't
                     // successful, we also need to unbind the new pages.
                     foreach (TaskDialogPage page in _waitingNavigationPages)
+                    {
                         page.Unbind();
+                    }
 
                     _waitingNavigationPages.Clear();
 
@@ -722,7 +728,7 @@ namespace System.Windows.Forms
             }
         }
 
-        //// Messages that can be sent to the dialog while it is being shown.
+        // Messages that can be sent to the dialog while it is being shown.
 
         /// <summary>
         /// Closes the shown task dialog with a 
@@ -757,9 +763,9 @@ namespace System.Windows.Forms
         internal void SwitchProgressBarMode(bool marqueeProgressBar)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_SET_MARQUEE_PROGRESS_BAR,
-                    marqueeProgressBar ? 1 : 0,
-                    IntPtr.Zero);
+                TaskDialogMessage.TDM_SET_MARQUEE_PROGRESS_BAR,
+                marqueeProgressBar ? 1 : 0,
+                IntPtr.Zero);
         }
 
         /// <summary>
@@ -774,12 +780,14 @@ namespace System.Windows.Forms
         internal void SetProgressBarMarquee(bool enableMarquee, int animationSpeed = 0)
         {
             if (animationSpeed < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(animationSpeed));
+            }
 
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_SET_PROGRESS_BAR_MARQUEE,
-                    enableMarquee ? 1 : 0,
-                    (IntPtr)animationSpeed);
+                TaskDialogMessage.TDM_SET_PROGRESS_BAR_MARQUEE,
+                enableMarquee ? 1 : 0,
+                (IntPtr)animationSpeed);
         }
 
         /// <summary>
@@ -793,9 +801,13 @@ namespace System.Windows.Forms
         internal unsafe void SetProgressBarRange(int min, int max)
         {
             if (min < 0 || min > ushort.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(min));
+            }
             if (max < 0 || max > ushort.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(max));
+            }
 
             // Note: The MAKELPARAM macro converts the value to an unsigned int
             // before converting it to a pointer, so we should do the same.
@@ -806,9 +818,9 @@ namespace System.Windows.Forms
             var param = (IntPtr)(void*)unchecked((uint)(min | (max << 0x10)));
 
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_SET_PROGRESS_BAR_RANGE,
-                    0,
-                    param);
+                TaskDialogMessage.TDM_SET_PROGRESS_BAR_RANGE,
+                0,
+                param);
         }
 
         /// <summary>
@@ -818,12 +830,14 @@ namespace System.Windows.Forms
         internal void SetProgressBarPosition(int pos)
         {
             if (pos < 0 || pos > ushort.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(pos));
+            }
 
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_SET_PROGRESS_BAR_POS,
-                    pos,
-                    IntPtr.Zero);
+                TaskDialogMessage.TDM_SET_PROGRESS_BAR_POS,
+                pos,
+                IntPtr.Zero);
         }
 
         /// <summary>
@@ -833,9 +847,9 @@ namespace System.Windows.Forms
         internal void SetProgressBarState(int state)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_SET_PROGRESS_BAR_STATE,
-                    state,
-                    IntPtr.Zero);
+                TaskDialogMessage.TDM_SET_PROGRESS_BAR_STATE,
+                state,
+                IntPtr.Zero);
         }
 
         /// <summary>
@@ -847,41 +861,41 @@ namespace System.Windows.Forms
         internal void ClickCheckBox(bool isChecked, bool focus = false)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_CLICK_VERIFICATION,
-                    isChecked ? 1 : 0,
-                    (IntPtr)(focus ? 1 : 0));
+                TaskDialogMessage.TDM_CLICK_VERIFICATION,
+                isChecked ? 1 : 0,
+                (IntPtr)(focus ? 1 : 0));
         }
 
         internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_SET_BUTTON_ELEVATION_REQUIRED_STATE,
-                    buttonID,
-                    (IntPtr)(requiresElevation ? 1 : 0));
+                TaskDialogMessage.TDM_SET_BUTTON_ELEVATION_REQUIRED_STATE,
+                buttonID,
+                (IntPtr)(requiresElevation ? 1 : 0));
         }
 
         internal void SetButtonEnabled(int buttonID, bool enable)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_ENABLE_BUTTON,
-                    buttonID,
-                    (IntPtr)(enable ? 1 : 0));
+                TaskDialogMessage.TDM_ENABLE_BUTTON,
+                buttonID,
+                (IntPtr)(enable ? 1 : 0));
         }
 
         internal void SetRadioButtonEnabled(int radioButtonID, bool enable)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_ENABLE_RADIO_BUTTON,
-                    radioButtonID,
-                    (IntPtr)(enable ? 1 : 0));
+                TaskDialogMessage.TDM_ENABLE_RADIO_BUTTON,
+                radioButtonID,
+                (IntPtr)(enable ? 1 : 0));
         }
 
         internal void ClickButton(int buttonID)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_CLICK_BUTTON,
-                    buttonID,
-                    IntPtr.Zero);
+                TaskDialogMessage.TDM_CLICK_BUTTON,
+                buttonID,
+                IntPtr.Zero);
         }
 
         internal void ClickCancelButton()
@@ -894,23 +908,21 @@ namespace System.Windows.Forms
             // handles for controls of both the previous and new page exist during
             // that time).
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_CLICK_BUTTON,
-                    (int)TaskDialogResult.Cancel,
-                    IntPtr.Zero,
-                    false);
+                TaskDialogMessage.TDM_CLICK_BUTTON,
+                (int)TaskDialogResult.Cancel,
+                IntPtr.Zero,
+                false);
         }
 
         internal void ClickRadioButton(int radioButtonID)
         {
             SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_CLICK_RADIO_BUTTON,
-                    radioButtonID,
-                    IntPtr.Zero);
+                TaskDialogMessage.TDM_CLICK_RADIO_BUTTON,
+                radioButtonID,
+                IntPtr.Zero);
         }
 
-        internal void UpdateTextElement(
-                TaskDialogTextElement element,
-                string text)
+        internal void UpdateTextElement(TaskDialogTextElement element, string text)
         {
             DenyIfDialogNotUpdatable();
 
@@ -922,10 +934,7 @@ namespace System.Windows.Forms
                 // Note: SetElementText will resize the dialog while UpdateElementText
                 // will not (which would lead to clipped controls), so we use the
                 // former.
-                SendTaskDialogMessage(
-                        TaskDialogMessage.TDM_SET_ELEMENT_TEXT,
-                        (int)element,
-                        textPtr);
+                SendTaskDialogMessage(TaskDialogMessage.TDM_SET_ELEMENT_TEXT, (int)element, textPtr);
             }
             finally
             {
@@ -935,19 +944,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UpdateIconElement(
-                TaskDialogIconElement element,
-                IntPtr icon)
+        internal void UpdateIconElement(TaskDialogIconElement element, IntPtr icon)
         {
             // Note: Updating the icon doesn't cause the task dialog to update
             // its size. For example, if you initially didn't specify an icon
             // but later want to set one, the dialog contents might get clipped.
             // To fix this, we might want to call UpdateSize() that forces the
             // task dialog to update its size.
-            SendTaskDialogMessage(
-                    TaskDialogMessage.TDM_UPDATE_ICON,
-                    (int)element,
-                    icon);
+            SendTaskDialogMessage(TaskDialogMessage.TDM_UPDATE_ICON, (int)element, icon);
         }
 
         internal void UpdateTitle(string title)
@@ -967,7 +971,9 @@ namespace System.Windows.Forms
             // We could replicate the Task Dialog behavior by also using the
             // executable's name as title if the string is null or empty.
             if (Interop.User32.SetWindowTextW(new HandleRef(this, _hwndDialog), title) == 0)
+            {
                 Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+            }
         }
 
         /// <summary>
@@ -1007,10 +1013,10 @@ namespace System.Windows.Forms
         }
 
         private int HandleTaskDialogCallback(
-                IntPtr hWnd,
-                TaskDialogNotification notification,
-                IntPtr wParam,
-                IntPtr lParam)
+            IntPtr hWnd,
+            TaskDialogNotification notification,
+            IntPtr wParam,
+            IntPtr lParam)
         {
             // Set the hWnd as this may be the first time that we get it.
             bool isFirstNotification = _hwndDialog == IntPtr.Zero;
@@ -1030,13 +1036,12 @@ namespace System.Windows.Forms
                     case TaskDialogNotification.TDN_CREATED:
                         _boundPage.ApplyInitialization();
 
-                        //// Note: If the user navigates the dialog within the Opened event
-                        //// and then runs the message loop, the Created and Destroyed events
-                        //// for the original page would never be called (because the callback
-                        //// would raise the Created event for the new page from the
-                        //// TDN_NAVIGATED notification and then the Opened event returns),
-                        //// but we consider this to be OK.
-
+                        // Note: If the user navigates the dialog within the Opened event
+                        // and then runs the message loop, the Created and Destroyed events
+                        // for the original page would never be called (because the callback
+                        // would raise the Created event for the new page from the
+                        // TDN_NAVIGATED notification and then the Opened event returns),
+                        // but we consider this to be OK.
                         if (!_raisedOpened)
                         {
                             _raisedOpened = true;
@@ -1059,8 +1064,7 @@ namespace System.Windows.Forms
                     case TaskDialogNotification.TDN_NAVIGATED:
                         // Indicate to the ButtonClicked handlers currently on the stack
                         // that we received the TDN_NAVIGATED notification.
-                        _buttonClickNavigationCounter.navigationIndex =
-                                _buttonClickNavigationCounter.stackCount;
+                        _buttonClickNavigationCounter.navigationIndex = _buttonClickNavigationCounter.stackCount;
 
                         // We can now unbind the previous page and then switch to the
                         // new page.
@@ -1081,11 +1085,11 @@ namespace System.Windows.Forms
                         break;
 
                     case TaskDialogNotification.TDN_DESTROYED:
-                        //// Note: When multiple dialogs are shown (so Show() will occur
-                        //// multiple times in the call stack) and a previously opened
-                        //// dialog is closed, the Destroyed notification for the closed
-                        //// dialog will only occur after the newer dialogs are also
-                        //// closed.
+                        // Note: When multiple dialogs are shown (so Show() will occur
+                        // multiple times in the call stack) and a previously opened
+                        // dialog is closed, the Destroyed notification for the closed
+                        // dialog will only occur after the newer dialogs are also
+                        // closed.
                         try
                         {
                             // Only raise the destroyed/closed events if the corresponding
@@ -1136,16 +1140,20 @@ namespace System.Windows.Forms
                         // native task dialog - see the remarks of the 
                         // "ContinueButtonClickHandlingMessage" for more information.
                         if (_ignoreButtonClickedNotifications)
+                        {
                             return Interop.HRESULT.S_FALSE;
+                        }
 
                         // Post the message, and then set the flag to ignore further
                         // notifications until we receive the posted message.
                         if (!UnsafeNativeMethods.PostMessage(
-                                new HandleRef(this, hWnd),
-                                ContinueButtonClickHandlingMessage,
-                                IntPtr.Zero,
-                                IntPtr.Zero))
+                            new HandleRef(this, hWnd),
+                            ContinueButtonClickHandlingMessage,
+                            IntPtr.Zero,
+                            IntPtr.Zero))
+                        {
                             throw new InvalidOperationException("Could not send message."); // TODO: Exception type
+                        }
 
                         _ignoreButtonClickedNotifications = true;
 
@@ -1186,15 +1194,17 @@ namespace System.Windows.Forms
                                 // (and applying the previous ButtonID and RadioButtonID
                                 // as results).
                                 if (_buttonClickNavigationCounter.navigationIndex >=
-                                        _buttonClickNavigationCounter.stackCount)
+                                    _buttonClickNavigationCounter.stackCount)
+                                {
                                     handlerResult = false;
+                                }
                             }
                             finally
                             {
                                 _buttonClickNavigationCounter.stackCount--;
                                 _buttonClickNavigationCounter.navigationIndex = Math.Min(
-                                        _buttonClickNavigationCounter.navigationIndex,
-                                        _buttonClickNavigationCounter.stackCount);
+                                    _buttonClickNavigationCounter.navigationIndex,
+                                    _buttonClickNavigationCounter.stackCount);
                             }
                         }
 
@@ -1222,8 +1232,7 @@ namespace System.Windows.Forms
                                 // return that instance after TaskDialogIndirect() returns.
                                 if (button == null)
                                 {
-                                    button = CreatePlaceholderButton(
-                                            (TaskDialogResult)buttonID);
+                                    button = CreatePlaceholderButton((TaskDialogResult)buttonID);
                                 }
 
                                 // The button would close the dialog, so raise the event.
@@ -1234,18 +1243,17 @@ namespace System.Windows.Forms
 
                                 // Cache the result button if we return S_OK.
                                 if (handlerResult)
+                                {
                                     _resultButton = (button, buttonID);
+                                }
                             }
                         }
 
-                        return handlerResult ?
-                                Interop.HRESULT.S_OK :
-                                Interop.HRESULT.S_FALSE;
+                        return handlerResult ? Interop.HRESULT.S_OK : Interop.HRESULT.S_FALSE;
 
                     case TaskDialogNotification.TDN_RADIO_BUTTON_CLICKED:
                         int radioButtonID = (int)wParam;
-                        TaskDialogRadioButton radioButton =
-                                _boundPage.GetBoundRadioButtonByID(radioButtonID);
+                        TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID);
 
                         checked
                         {
@@ -1263,13 +1271,11 @@ namespace System.Windows.Forms
                         break;
 
                     case TaskDialogNotification.TDN_EXPANDO_BUTTON_CLICKED:
-                        _boundPage.Expander.HandleExpandoButtonClicked(
-                                wParam != IntPtr.Zero);
+                        _boundPage.Expander.HandleExpandoButtonClicked(wParam != IntPtr.Zero);
                         break;
 
                     case TaskDialogNotification.TDN_VERIFICATION_CLICKED:
-                        _boundPage.CheckBox.HandleCheckBoxClicked(
-                                wParam != IntPtr.Zero);
+                        _boundPage.CheckBox.HandleCheckBoxClicked(wParam != IntPtr.Zero);
                         break;
 
                     case TaskDialogNotification.TDN_HELP:
@@ -1322,26 +1328,31 @@ namespace System.Windows.Forms
             // https://github.com/dotnet/winforms/issues/146#issuecomment-466784079
             // and https://gist.github.com/kpreisser/4990c29ccad7fe3c4e932d3a2833c91f
             if (RadioButtonClickedStackCount > 0)
+            {
                 throw new InvalidOperationException(
-                        $"Cannot navigate the dialog from within the " +
-                        $"{nameof(TaskDialogRadioButton)}.{nameof(TaskDialogRadioButton.CheckedChanged)} " +
-                        $"event of one of the radio buttons of the current task dialog.");
+                    $"Cannot navigate the dialog from within the " +
+                    $"{nameof(TaskDialogRadioButton)}.{nameof(TaskDialogRadioButton.CheckedChanged)} " +
+                    $"event of one of the radio buttons of the current task dialog.");
+            }
 
             // Don't allow to navigate the dialog if called from an event handler
             // (TaskDialogPage.Destroyed) that is raised from within this method.
             if (_isInNavigate)
+            {
                 throw new InvalidOperationException(
-                        "Cannot navigate the dialog from an event handler that is" +
-                        "called from within navigation.");
+                    "Cannot navigate the dialog from an event handler that is" +
+                    "called from within navigation.");
+            }
 
             // Don't allow navigation of the dialog window is already closed (and
             // therefore has set a result button), because that would result in
             // weird/undefined behavior (e.g. returning IDCANCEL (2) as button
             // result even though a different button has already been set as result).
-            const string dialogAlreadyClosedMesssage =
-                    "Cannot navigate the dialog when it has already closed.";
+            const string dialogAlreadyClosedMesssage = "Cannot navigate the dialog when it has already closed.";
             if (_resultButton != null)
+            {
                 throw new InvalidOperationException(dialogAlreadyClosedMesssage);
+            }
 
             _isInNavigate = true;
             try
@@ -1364,7 +1375,9 @@ namespace System.Windows.Forms
                     // TODO: Another option would be to disallow button clicks while
                     // within the event handler.
                     if (_resultButton != null)
+                    {
                         throw new InvalidOperationException(dialogAlreadyClosedMesssage);
+                    }
 
                     // Also, we need to validate the page again. For example, the user
                     // might change the properties of the new page or its controls
@@ -1397,12 +1410,12 @@ namespace System.Windows.Forms
                 // instruction during that time, these changes would be lost when
                 // the TDN_NAVIGATED notification occurs).
                 BindPageAndAllocateConfig(
-                        page,
-                        IntPtr.Zero,
-                        startupLocation: default,
-                        doNotSetForeground: false,
-                        out IntPtr ptrToFree,
-                        out IntPtr ptrTaskDialogConfig);
+                    page,
+                    IntPtr.Zero,
+                    startupLocation: default,
+                    doNotSetForeground: false,
+                    out IntPtr ptrToFree,
+                    out IntPtr ptrTaskDialogConfig);
                 try
                 {
                     // Enqueue the page before sending the message. This ensures
@@ -1418,10 +1431,10 @@ namespace System.Windows.Forms
                         // returns with an error code; but this will not be
                         // noticeable in the SendMessage() return value.
                         SendTaskDialogMessage(
-                                TaskDialogMessage.TDM_NAVIGATE_PAGE,
-                                0,
-                                ptrTaskDialogConfig,
-                                checkWaitingForNavigation: false);
+                            TaskDialogMessage.TDM_NAVIGATE_PAGE,
+                            0,
+                            ptrTaskDialogConfig,
+                            checkWaitingForNavigation: false);
                     }
                     catch
                     {
@@ -1434,7 +1447,9 @@ namespace System.Windows.Forms
                         {
                             TaskDialogPage element = _waitingNavigationPages.Dequeue();
                             if (element != page)
+                            {
                                 _waitingNavigationPages.Enqueue(element);
+                            }
                         }
                         throw;
                     }
@@ -1459,28 +1474,32 @@ namespace System.Windows.Forms
         }
 
         private unsafe void BindPageAndAllocateConfig(
-                TaskDialogPage page,
-                IntPtr hwndOwner,
-                TaskDialogStartupLocation startupLocation,
-                bool doNotSetForeground,
-                out IntPtr ptrToFree,
-                out IntPtr ptrTaskDialogConfig)
+            TaskDialogPage page,
+            IntPtr hwndOwner,
+            TaskDialogStartupLocation startupLocation,
+            bool doNotSetForeground,
+            out IntPtr ptrToFree,
+            out IntPtr ptrTaskDialogConfig)
         {
             page.Bind(
-                    this,
-                    out TaskDialogFlags flags,
-                    out TaskDialogButtons standardButtonFlags,
-                    out IntPtr iconValue,
-                    out IntPtr footerIconValue,
-                    out int defaultButtonID,
-                    out int defaultRadioButtonID);
+                this,
+                out TaskDialogFlags flags,
+                out TaskDialogButtons standardButtonFlags,
+                out IntPtr iconValue,
+                out IntPtr footerIconValue,
+                out int defaultButtonID,
+                out int defaultRadioButtonID);
 
             try
             {
                 if (startupLocation == TaskDialogStartupLocation.CenterParent)
+                {
                     flags |= TaskDialogFlags.TDF_POSITION_RELATIVE_TO_WINDOW;
+                }
                 if (doNotSetForeground)
+                {
                     flags |= TaskDialogFlags.TDF_NO_SET_FOREGROUND;
+                }
 
                 checked
                 {
@@ -1516,7 +1535,9 @@ namespace System.Windows.Forms
                         // Strings in buttons array
                         Align(ref sizeToAllocate, sizeof(char));
                         for (int i = 0; i < page.CustomButtons.Count; i++)
+                        {
                             sizeToAllocate += SizeOfString(page.CustomButtons[i].GetResultingText());
+                        }
                     }
 
                     // Radio buttons array
@@ -1529,7 +1550,9 @@ namespace System.Windows.Forms
                         // Strings in radio buttons array
                         Align(ref sizeToAllocate, sizeof(char));
                         for (int i = 0; i < page.RadioButtons.Count; i++)
+                        {
                             sizeToAllocate += SizeOfString(page.RadioButtons[i].Text);
+                        }
                     }
 
                     // Allocate the memory block. We add additional bytes to ensure we can
@@ -1623,7 +1646,9 @@ namespace System.Windows.Forms
                         IntPtr MarshalString(string str)
                         {
                             if (str == null)
+                            {
                                 return IntPtr.Zero;
+                            }
 
                             fixed (char* strPtr = str)
                             {
@@ -1633,11 +1658,7 @@ namespace System.Windows.Forms
                                 // string, so we don't need to copy a NUL character
                                 // separately.
                                 long bytesToCopy = SizeOfString(str);
-                                Buffer.MemoryCopy(
-                                        strPtr,
-                                        currentPtr,
-                                        bytesToCopy,
-                                        bytesToCopy);
+                                Buffer.MemoryCopy(strPtr, currentPtr, bytesToCopy, bytesToCopy);
 
                                 var ptrToReturn = currentPtr;
                                 currentPtr += bytesToCopy;
@@ -1651,10 +1672,12 @@ namespace System.Windows.Forms
                         throw;
                     }
 
-                    void Align(ref byte* currentPtr, int? alignment = null)
+                    static void Align(ref byte* currentPtr, int? alignment = null)
                     {
                         if (alignment <= 0)
+                        {
                             throw new ArgumentOutOfRangeException(nameof(alignment));
+                        }
 
                         // Align the pointer to the next align size. If not specified,
                         // we will use the pointer (register) size.
@@ -1662,17 +1685,21 @@ namespace System.Windows.Forms
                         // TODO: Use nuint (System.UIntN) once available to avoid the
                         // separate code for 32-bit and 64-bit pointer sizes.
                         if (IntPtr.Size == 8)
+                        {
                             // Disable incorrect IDE warning as the latter cast is
                             // actually not redundant.
                             // See: https://github.com/dotnet/roslyn/issues/20617
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
                             currentPtr = (byte*)(((ulong)currentPtr + add) & ~(ulong)add);
 #pragma warning restore IDE0004 // Remove Unnecessary Cast
+                        }
                         else
+                        {
                             currentPtr = (byte*)(((uint)currentPtr + add) & ~add);
+                        }
                     }
 
-                    long SizeOfString(string str)
+                    static long SizeOfString(string str)
                     {
                         return str == null ? 0 : ((long)str.Length + 1) * sizeof(char);
                     }
@@ -1690,7 +1717,9 @@ namespace System.Windows.Forms
         private void SubclassWindow()
         {
             if (_windowSubclassHandler != null)
+            {
                 throw new InvalidOperationException();
+            }
 
             // Subclass the window.
             _windowSubclassHandler = new WindowSubclassHandler(this);
@@ -1720,16 +1749,19 @@ namespace System.Windows.Forms
         private void DenyIfBound()
         {
             if (_boundPage != null)
+            {
                 throw new InvalidOperationException(
-                        "Cannot set this property or call this method while the " +
-                        "task dialog is shown.");
+                    "Cannot set this property or call this method while the " +
+                    "task dialog is shown.");
+            }
         }
 
         private void DenyIfDialogNotUpdatable(bool checkWaitingForNavigation = true)
         {
             if (!HandleAvailable)
-                throw new InvalidOperationException(
-                        "Can only update the state of a task dialog while it is shown.");
+            {
+                throw new InvalidOperationException("Can only update the state of a task dialog while it is shown.");
+            }
 
             // When we wait for the navigated event to occur, also don't allow to
             // update the dialog because that could produce an unexpected state
@@ -1741,11 +1773,13 @@ namespace System.Windows.Forms
             // the layout) so that the user can close the dialog even though we are
             // waiting for the navigation to finish.
             if (_waitingNavigationPages.Count > 0 && checkWaitingForNavigation)
+            {
                 throw new InvalidOperationException(
-                        "Cannot manipulate the task dialog immediately after navigating it. " +
-                        $"Please wait for the " +
-                        $"{nameof(TaskDialogPage)}.{nameof(TaskDialogPage.Created)} " +
-                        $"event of the next page to occur.");
+                    "Cannot manipulate the task dialog immediately after navigating it. " +
+                    $"Please wait for the " +
+                    $"{nameof(TaskDialogPage)}.{nameof(TaskDialogPage.Created)} " +
+                    $"event of the next page to occur.");
+            }
         }
 
         /// <summary>
@@ -1758,22 +1792,22 @@ namespace System.Windows.Forms
         }
 
         private void SendTaskDialogMessage(
-                TaskDialogMessage message,
-                int wParam,
-                IntPtr lParam,
-                bool checkWaitingForNavigation = true)
+            TaskDialogMessage message,
+            int wParam,
+            IntPtr lParam,
+            bool checkWaitingForNavigation = true)
         {
             DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
             UnsafeNativeMethods.SendMessage(
-                    new HandleRef(this, _hwndDialog),
-                    (int)message,
-                    // Note: When a negative 32-bit integer is converted to a
-                    // 64-bit pointer, the high dword will be set to 0xFFFFFFFF.
-                    // This is consistent with the conversion from int to
-                    // WPARAM (in C) as shown in the Task Dialog documentation.
-                    (IntPtr)wParam,
-                    lParam);
+                new HandleRef(this, _hwndDialog),
+                (int)message,
+                // Note: When a negative 32-bit integer is converted to a
+                // 64-bit pointer, the high dword will be set to 0xFFFFFFFF.
+                // This is consistent with the conversion from int to
+                // WPARAM (in C) as shown in the Task Dialog documentation.
+                (IntPtr)wParam,
+                lParam);
         }
 
         /// <summary>
@@ -1786,9 +1820,7 @@ namespace System.Windows.Forms
             // causes the size/layout to be updated).
             // We use the MainInstruction because it cannot contain hyperlinks
             // (and therefore there is no risk that one of the links loses focus).
-            UpdateTextElement(
-                    TaskDialogTextElement.TDE_MAIN_INSTRUCTION,
-                    _boundPage.Instruction);
+            UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, _boundPage.Instruction);
         }
     }
 }

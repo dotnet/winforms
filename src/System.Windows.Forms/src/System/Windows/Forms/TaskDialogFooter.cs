@@ -23,7 +23,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogFooter()
-            : base()
         {
         }
 
@@ -53,9 +52,7 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                BoundPage?.BoundTaskDialog.UpdateTextElement(
-                        TaskDialogTextElement.TDE_FOOTER,
-                        value);
+                BoundPage?.BoundTaskDialog.UpdateTextElement(TaskDialogTextElement.TDE_FOOTER, value);
 
                 _text = value;
             }
@@ -78,22 +75,19 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
 
-                (IntPtr iconValue, bool? iconIsFromHandle) =
-                        TaskDialogPage.GetIconValue(value);
+                (IntPtr iconValue, bool? iconIsFromHandle) = TaskDialogPage.GetIconValue(value);
 
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
                 // throw in such a case.
-                if (BoundPage != null &&
-                        iconIsFromHandle != null &&
-                        iconIsFromHandle != _boundIconIsFromHandle)
+                if (BoundPage != null && iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
+                {
                     throw new InvalidOperationException(
-                            "Cannot update the icon from a handle icon type to a " +
-                            "non-handle icon type, and vice versa.");
+                        "Cannot update the icon from a handle icon type to a " +
+                        "non-handle icon type, and vice versa.");
+                }
 
-                BoundPage?.BoundTaskDialog.UpdateIconElement(
-                        TaskDialogIconElement.TDIE_ICON_FOOTER,
-                        iconValue);
+                BoundPage?.BoundTaskDialog.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_FOOTER, iconValue);
 
                 _icon = value;
             }
@@ -126,11 +120,12 @@ namespace System.Windows.Forms
         {
             TaskDialogFlags flags = base.BindCore();
 
-            _boundIconIsFromHandle = TaskDialogPage.GetIconValue(_icon).iconIsFromHandle
-                    ?? false;
+            _boundIconIsFromHandle = TaskDialogPage.GetIconValue(_icon).iconIsFromHandle ?? false;
 
             if (_boundIconIsFromHandle)
+            {
                 flags |= TaskDialogFlags.TDF_USE_HICON_FOOTER;
+            }
 
             return flags;
         }

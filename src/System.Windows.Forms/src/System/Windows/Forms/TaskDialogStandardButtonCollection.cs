@@ -10,8 +10,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class TaskDialogStandardButtonCollection
-        : KeyedCollection<TaskDialogResult, TaskDialogStandardButton>
+    public class TaskDialogStandardButtonCollection : KeyedCollection<TaskDialogResult, TaskDialogStandardButton>
     {
         private TaskDialogPage _boundPage;
 
@@ -19,7 +18,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogStandardButtonCollection()
-            : base()
         {
         }
 
@@ -34,7 +32,9 @@ namespace System.Windows.Forms
 
             // Get the button results for the flags.
             foreach (TaskDialogResult result in GetResultsForButtonFlags(buttons))
+            {
                 collection.Add(new TaskDialogStandardButton(result));
+            }
 
             return collection;
         }
@@ -49,8 +49,7 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         /// <param name="buttons"></param>
-        internal static IEnumerable<TaskDialogResult> GetResultsForButtonFlags(
-                TaskDialogButtons buttons)
+        internal static IEnumerable<TaskDialogResult> GetResultsForButtonFlags(TaskDialogButtons buttons)
         {
             // Note: The order in which we yield the results is the order in which
             // the task dialog actually displays the buttons.
@@ -91,9 +90,7 @@ namespace System.Windows.Forms
             return button;
         }
 
-        internal void HandleKeyChange(
-                TaskDialogStandardButton button,
-                TaskDialogResult newKey)
+        internal void HandleKeyChange(TaskDialogStandardButton button, TaskDialogResult newKey)
         {
             ChangeItemKey(button, newKey);
         }
@@ -174,15 +171,19 @@ namespace System.Windows.Forms
             _boundPage?.DenyIfBound();
 
             foreach (TaskDialogStandardButton button in this)
+            {
                 button.Collection = null;
+            }
+
             base.ClearItems();
         }
 
         private void DenyIfHasOtherCollection(TaskDialogStandardButton item)
         {
             if (item.Collection != null && item.Collection != this)
-                throw new InvalidOperationException(
-                        "This control is already part of a different collection.");
+            {
+                throw new InvalidOperationException("This control is already part of a different collection.");
+            }
         }
     }
 }

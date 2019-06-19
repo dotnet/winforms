@@ -260,9 +260,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                _boundTaskDialog?.UpdateTextElement(
-                        TaskDialogTextElement.TDE_MAIN_INSTRUCTION,
-                        value);
+                _boundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, value);
 
                 _instruction = value;
             }
@@ -282,9 +280,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                _boundTaskDialog?.UpdateTextElement(
-                        TaskDialogTextElement.TDE_CONTENT,
-                        value);
+                _boundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_CONTENT, value);
 
                 _text = value;
             }
@@ -311,16 +307,15 @@ namespace System.Windows.Forms
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
                 // throw in such a case.
-                if (_boundTaskDialog != null &&
-                        iconIsFromHandle != null &&
-                        iconIsFromHandle != _boundIconIsFromHandle)
+                if (_boundTaskDialog != null && iconIsFromHandle != null &&
+                    iconIsFromHandle != _boundIconIsFromHandle)
+                {
                     throw new InvalidOperationException(
-                            "Cannot update the icon from a handle icon type to a " +
-                            "non-handle icon type, and vice versa.");
+                        "Cannot update the icon from a handle icon type to a " +
+                        "non-handle icon type, and vice versa.");
+                }
 
-                _boundTaskDialog?.UpdateIconElement(
-                        TaskDialogIconElement.TDIE_ICON_MAIN,
-                        iconValue);
+                _boundTaskDialog?.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_MAIN, iconValue);
 
                 _icon = value;
             }
@@ -338,7 +333,9 @@ namespace System.Windows.Forms
             set
             {
                 if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value));
+                }
 
                 DenyIfBound();
 
@@ -474,8 +471,7 @@ namespace System.Windows.Forms
             return string.IsNullOrEmpty(str) || str[0] == '\0';
         }
 
-        internal static (IntPtr iconValue, bool? iconIsFromHandle) GetIconValue(
-                TaskDialogIcon icon)
+        internal static (IntPtr iconValue, bool? iconIsFromHandle) GetIconValue(TaskDialogIcon icon)
         {
             IntPtr iconValue = default;
             bool? iconIsFromHandle = null;
@@ -500,27 +496,35 @@ namespace System.Windows.Forms
         internal void DenyIfBound()
         {
             if (_boundTaskDialog != null)
+            {
                 throw new InvalidOperationException(
-                        "Cannot set this property or call this method while the " +
-                        "page is bound to a task dialog.");
+                    "Cannot set this property or call this method while the " +
+                    "page is bound to a task dialog.");
+            }
         }
 
         internal void DenyIfWaitingForInitialization()
         {
             if (WaitingForInitialization)
+            {
                 throw new InvalidOperationException(
-                        $"Navigation of the task dialog did not complete yet. " +
-                        $"Please wait for the " +
-                        $"{nameof(TaskDialogPage)}.{nameof(Created)} event to occur.");
+                    $"Navigation of the task dialog did not complete yet. " +
+                    $"Please wait for the " +
+                    $"{nameof(TaskDialogPage)}.{nameof(Created)} event to occur.");
+            }
         }
 
         internal TaskDialogButton GetBoundButtonByID(int buttonID)
         {
             if (_boundTaskDialog == null)
+            {
                 throw new InvalidOperationException();
+            }
 
             if (buttonID == 0)
+            {
                 return null;
+            }
 
             // Check if the button is part of the custom buttons.
             var button = null as TaskDialogButton;
@@ -535,7 +539,9 @@ namespace System.Windows.Forms
                 // the caller might not know if such a button exists.
                 var result = (TaskDialogResult)buttonID;
                 if (_standardButtons.Contains(result))
+                {
                     button = _standardButtons[result];
+                }
             }
 
             return button;
@@ -544,64 +550,75 @@ namespace System.Windows.Forms
         internal TaskDialogRadioButton GetBoundRadioButtonByID(int buttonID)
         {
             if (_boundTaskDialog == null)
+            {
                 throw new InvalidOperationException();
+            }
 
-            if (buttonID == 0)
-                return null;
-
-            return _radioButtons[buttonID - RadioButtonStartID];
+            return buttonID == 0 ? null : _radioButtons[buttonID - RadioButtonStartID];
         }
 
         internal void Validate()
         {
-            //// Before assigning button IDs etc., check if the button configs are OK.
-            //// This needs to be done before clearing the old button IDs and assigning
-            //// the new ones, because it is possible to use the same button
-            //// instances after a dialog has been created for Navigate(), where need to
-            //// do the check, then release the old buttons, then assign the new
-            //// buttons.
+            // Before assigning button IDs etc., check if the configuration is valid.
+            // This needs to be done before clearing the old button IDs and assigning
+            // the new ones, because it is possible to use the same button
+            // instances after a dialog has been created for Navigate(), where need to
+            // do the check, then release the old buttons, then assign the new
+            // buttons.
 
-            // Check that this page instance is not already bound to a
-            // TaskDialog instance.
+            // Check that this page instance is not already bound to a TaskDialog instance.
             if (_boundTaskDialog != null)
+            {
                 throw new InvalidOperationException(
-                        $"This {nameof(TaskDialogPage)} instance is already bound to " +
-                        $"a {nameof(TaskDialog)} instance.");
+                    $"This {nameof(TaskDialogPage)} instance is already bound to " +
+                    $"a {nameof(TaskDialog)} instance.");
+            }
 
             // We also need to validate the controls since they could also be assigned to
             // another (bound) TaskDialogPage at the same time.
             // Access the collections using the property to ensure they exist.
             if (StandardButtons.BoundPage != null ||
-                    CustomButtons.BoundPage != null ||
-                    RadioButtons.BoundPage != null ||
-                    _checkBox?.BoundPage != null ||
-                    _expander?.BoundPage != null ||
-                    _footer?.BoundPage != null ||
-                    _progressBar?.BoundPage != null)
+                CustomButtons.BoundPage != null ||
+                RadioButtons.BoundPage != null ||
+                _checkBox?.BoundPage != null ||
+                _expander?.BoundPage != null ||
+                _footer?.BoundPage != null ||
+                _progressBar?.BoundPage != null)
+            {
                 throw new InvalidOperationException();
+            }
 
             foreach (TaskDialogControl control in (StandardButtons as IEnumerable<TaskDialogControl>)
-                    .Concat(CustomButtons)
-                    .Concat(RadioButtons))
+                .Concat(CustomButtons)
+                .Concat(RadioButtons))
+            {
                 if (control.BoundPage != null)
+                {
                     throw new InvalidOperationException();
+                }
+            }
 
             if (CustomButtons.Count > int.MaxValue - CustomButtonStartID + 1 ||
-                     RadioButtons.Count > int.MaxValue - RadioButtonStartID + 1)
+                RadioButtons.Count > int.MaxValue - RadioButtonStartID + 1)
+            {
                 throw new InvalidOperationException(
-                        "Too many custom buttons or radio buttons have been added.");
+                    "Too many custom buttons or radio buttons have been added.");
+            }
 
             bool foundDefaultButton = false;
             foreach (TaskDialogButton button in (StandardButtons as IEnumerable<TaskDialogButton>)
-                    .Concat(CustomButtons))
+                .Concat(CustomButtons))
             {
                 if (button.DefaultButton)
                 {
                     if (!foundDefaultButton)
+                    {
                         foundDefaultButton = true;
+                    }
                     else
-                        throw new InvalidOperationException(
-                                "Only one button can be set as default button.");
+                    {
+                        throw new InvalidOperationException("Only one button can be set as default button.");
+                    }
                 }
             }
 
@@ -611,41 +628,48 @@ namespace System.Windows.Forms
             foreach (TaskDialogCustomButton button in _customButtons)
             {
                 if (!button.IsCreatable)
-                    throw new InvalidOperationException(
-                            "The text of a custom button must not be null or empty.");
+                {
+                    throw new InvalidOperationException("The text of a custom button must not be null or empty.");
+                }
             }
 
             bool foundCheckedRadioButton = false;
             foreach (TaskDialogRadioButton button in _radioButtons)
             {
                 if (!button.IsCreatable)
-                    throw new InvalidOperationException(
-                            "The text of a radio button must not be null or empty.");
+                {
+                    throw new InvalidOperationException("The text of a radio button must not be null or empty.");
+                }
 
                 if (button.Checked)
                 {
                     if (!foundCheckedRadioButton)
+                    {
                         foundCheckedRadioButton = true;
+                    }
                     else
-                        throw new InvalidOperationException(
-                                "Only one radio button can be set as checked.");
+                    {
+                        throw new InvalidOperationException("Only one radio button can be set as checked.");
+                    }
                 }
             }
         }
 
         internal void Bind(
-                TaskDialog owner,
-                out TaskDialogFlags flags,
-                out TaskDialogButtons buttonFlags,
-                out IntPtr iconValue,
-                out IntPtr footerIconValue,
-                out int defaultButtonID,
-                out int defaultRadioButtonID)
+            TaskDialog owner,
+            out TaskDialogFlags flags,
+            out TaskDialogButtons buttonFlags,
+            out IntPtr iconValue,
+            out IntPtr footerIconValue,
+            out int defaultButtonID,
+            out int defaultRadioButtonID)
         {
             if (_boundTaskDialog != null)
+            {
                 throw new InvalidOperationException();
+            }
 
-            //// This method assumes Validate() has already been called.
+            // This method assumes Validate() has already been called.
 
             _boundTaskDialog = owner;
             flags = _flags;
@@ -654,16 +678,22 @@ namespace System.Windows.Forms
             (iconValue, _boundIconIsFromHandle) = (localIconValue, iconIsFromHandle ?? false);
 
             if (_boundIconIsFromHandle)
+            {
                 flags |= TaskDialogFlags.TDF_USE_HICON_MAIN;
+            }
 
             // Only specify the command link flags if there actually are custom buttons;
             // otherwise the dialog will not work.
             if (_customButtons.Count > 0)
             {
                 if (_customButtonStyle == TaskDialogCustomButtonStyle.CommandLinks)
+                {
                     flags |= TaskDialogFlags.TDF_USE_COMMAND_LINKS;
+                }
                 else if (_customButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon)
+                {
                     flags |= TaskDialogFlags.TDF_USE_COMMAND_LINKS_NO_ICON;
+                }
             }
 
             TaskDialogStandardButtonCollection standardButtons = StandardButtons;
@@ -688,7 +718,9 @@ namespace System.Windows.Forms
                     buttonFlags |= standardButton.GetButtonFlag();
 
                     if (standardButton.DefaultButton && defaultButtonID == 0)
+                    {
                         defaultButtonID = standardButton.ButtonID;
+                    }
                 }
             }
 
@@ -700,7 +732,9 @@ namespace System.Windows.Forms
                 if (customButton.IsCreated)
                 {
                     if (customButton.DefaultButton && defaultButtonID == 0)
+                    {
                         defaultButtonID = customButton.ButtonID;
+                    }
                 }
             }
 
@@ -713,47 +747,71 @@ namespace System.Windows.Forms
                 if (radioButton.IsCreated)
                 {
                     if (radioButton.Checked && defaultRadioButtonID == 0)
+                    {
                         defaultRadioButtonID = radioButton.RadioButtonID;
+                    }
                     else if (radioButton.Checked)
+                    {
                         radioButton.Checked = false;
+                    }
                 }
             }
 
             if (defaultRadioButtonID == 0)
+            {
                 flags |= TaskDialogFlags.TDF_NO_DEFAULT_RADIO_BUTTON;
+            }
 
             if (_checkBox != null)
+            {
                 flags |= _checkBox.Bind(this);
+            }
 
             if (_expander != null)
+            {
                 flags |= _expander.Bind(this);
+            }
 
             if (_footer != null)
+            {
                 flags |= _footer.Bind(this, out footerIconValue);
+            }
             else
+            {
                 footerIconValue = default;
+            }
 
             if (_progressBar != null)
+            {
                 flags |= _progressBar.Bind(this);
+            }
         }
 
         internal void Unbind()
         {
             if (_boundTaskDialog == null)
+            {
                 throw new InvalidOperationException();
+            }
 
             TaskDialogStandardButtonCollection standardButtons = StandardButtons;
             TaskDialogCustomButtonCollection customButtons = CustomButtons;
             TaskDialogRadioButtonCollection radioButtons = RadioButtons;
 
             foreach (TaskDialogStandardButton standardButton in standardButtons)
+            {
                 standardButton.Unbind();
+            }
 
             foreach (TaskDialogCustomButton customButton in customButtons)
+            {
                 customButton.Unbind();
+            }
 
             foreach (TaskDialogRadioButton radioButton in radioButtons)
+            {
                 radioButton.Unbind();
+            }
 
             standardButtons.BoundPage = null;
             customButtons.BoundPage = null;
@@ -771,18 +829,26 @@ namespace System.Windows.Forms
         internal void ApplyInitialization()
         {
             if (_appliedInitialization)
+            {
                 throw new InvalidOperationException();
+            }
 
             _appliedInitialization = true;
 
             foreach (TaskDialogStandardButton button in StandardButtons)
+            {
                 button.ApplyInitialization();
+            }
 
             foreach (TaskDialogCustomButton button in CustomButtons)
+            {
                 button.ApplyInitialization();
+            }
 
             foreach (TaskDialogRadioButton button in RadioButtons)
+            {
                 button.ApplyInitialization();
+            }
 
             _checkBox?.ApplyInitialization();
             _expander?.ApplyInitialization();
@@ -836,9 +902,13 @@ namespace System.Windows.Forms
             DenyIfBound();
 
             if (value)
+            {
                 _flags |= flag;
+            }
             else
+            {
                 _flags &= ~flag;
+            }
         }
     }
 }

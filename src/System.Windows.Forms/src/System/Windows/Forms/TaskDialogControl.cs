@@ -13,7 +13,6 @@ namespace System.Windows.Forms
     {
         // Disallow inheritance by specifying a private protected constructor.
         private protected TaskDialogControl()
-            : base()
         {
         }
 
@@ -53,8 +52,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogFlags Bind(TaskDialogPage page)
         {
-            BoundPage = page ??
-                    throw new ArgumentNullException(nameof(page));
+            BoundPage = page ?? throw new ArgumentNullException(nameof(page));
 
             // Use the current value of IsCreatable to determine if the control is
             // created. This is important because IsCreatable can change while the
@@ -67,7 +65,9 @@ namespace System.Windows.Forms
         internal void Unbind()
         {
             if (IsCreated)
+            {
                 UnbindCore();
+            }
 
             IsCreated = false;
             BoundPage = null;
@@ -80,7 +80,9 @@ namespace System.Windows.Forms
         {
             // Only apply the initialization if the control is actually created.
             if (IsCreated)
+            {
                 ApplyInitializationCore();
+            }
         }
 
         /// <summary>
@@ -132,14 +134,17 @@ namespace System.Windows.Forms
             DenyIfWaitingForInitialization();
 
             if (BoundPage == null)
-                throw new InvalidOperationException(
-                        "This control is not currently bound to a task dialog.");
+            {
+                throw new InvalidOperationException("This control is not currently bound to a task dialog.");
+            }
         }
 
         private protected void DenyIfBoundAndNotCreated()
         {
             if (BoundPage != null && !IsCreated)
+            {
                 throw new InvalidOperationException("The control has not been created.");
+            }
         }
     }
 }

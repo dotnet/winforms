@@ -14,7 +14,6 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="hyperlink"></param>
         internal TaskDialogHyperlinkClickedEventArgs(string hyperlink)
-            : base()
         {
             Hyperlink = hyperlink;
         }

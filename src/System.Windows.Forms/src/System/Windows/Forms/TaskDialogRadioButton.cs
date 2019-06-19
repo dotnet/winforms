@@ -33,7 +33,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogRadioButton()
-            : base()
         {
         }
 
@@ -63,9 +62,7 @@ namespace System.Windows.Forms
                 // Check if we can update the button.
                 if (CanUpdate())
                 {
-                    BoundPage.BoundTaskDialog.SetRadioButtonEnabled(
-                            _radioButtonID,
-                            value);
+                    BoundPage.BoundTaskDialog.SetRadioButtonEnabled(_radioButtonID, value);
                 }
 
                 _enabled = value;
@@ -114,7 +111,9 @@ namespace System.Windows.Forms
                     if (_collection != null && value)
                     {
                         foreach (TaskDialogRadioButton radioButton in _collection)
+                        {
                             radioButton._checked = radioButton == this;
+                        }
                     }
                 }
                 else
@@ -123,8 +122,10 @@ namespace System.Windows.Forms
                     // TODO: Should we throw only if the new value is different than the
                     // old one?
                     if (!value)
+                    {
                         throw new InvalidOperationException(
-                                "Cannot uncheck a radio button while it is bound to a task dialog.");
+                            "Cannot uncheck a radio button while it is bound to a task dialog.");
+                    }
 
                     // Note: We do not allow to set the "Checked" property of any
                     // radio button of the current task dialog while we are within
@@ -169,12 +170,14 @@ namespace System.Windows.Forms
                     // See:
                     // https://gist.github.com/kpreisser/c9d07225d801783c4b5fed0fac563469
                     if (BoundPage.BoundTaskDialog.RadioButtonClickedStackCount > 0)
+                    {
                         throw new InvalidOperationException(
-                                $"Cannot set the " +
-                                $"{nameof(TaskDialogRadioButton)}.{nameof(Checked)} " +
-                                $"property from within the " +
-                                $"{nameof(TaskDialogRadioButton)}.{nameof(CheckedChanged)} " +
-                                $"event of one of the radio buttons of the current task dialog.");
+                            $"Cannot set the " +
+                            $"{nameof(TaskDialogRadioButton)}.{nameof(Checked)} " +
+                            $"property from within the " +
+                            $"{nameof(TaskDialogRadioButton)}.{nameof(CheckedChanged)} " +
+                            $"event of one of the radio buttons of the current task dialog.");
+                    }
 
                     // Click the radio button which will (recursively) raise the
                     // TDN_RADIO_BUTTON_CLICKED notification. However, we ignore
@@ -183,8 +186,7 @@ namespace System.Windows.Forms
                     _ignoreRadioButtonClickedNotification = true;
                     try
                     {
-                        BoundPage.BoundTaskDialog.ClickRadioButton(
-                                _radioButtonID);
+                        BoundPage.BoundTaskDialog.ClickRadioButton(_radioButtonID);
                     }
                     finally
                     {
@@ -255,7 +257,9 @@ namespace System.Windows.Forms
             // Check if we need to ignore the notification when it is caused by
             // sending the TDM_CLICK_RADIO_BUTTON message.
             if (_ignoreRadioButtonClickedNotification)
+            {
                 return;
+            }
 
             if (!_checked)
             {
@@ -289,7 +293,9 @@ namespace System.Windows.Forms
         {
             // Re-set the properties so they will make the necessary calls.
             if (!_enabled)
+            {
                 Enabled = _enabled;
+            }
         }
 
         private bool CanUpdate()

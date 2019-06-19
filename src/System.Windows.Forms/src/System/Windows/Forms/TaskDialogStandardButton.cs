@@ -27,12 +27,12 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         /// <param name="result"></param>
-        public TaskDialogStandardButton(
-                TaskDialogResult result)
-            : base()
+        public TaskDialogStandardButton(TaskDialogResult result)
         {
             if (!IsValidStandardButtonResult(result))
+            {
                 throw new ArgumentOutOfRangeException(nameof(result));
+            }
 
             _result = result;
         }
@@ -48,15 +48,15 @@ namespace System.Windows.Forms
             set
             {
                 if (!IsValidStandardButtonResult(value))
+                {
                     throw new ArgumentOutOfRangeException(nameof(value));
+                }
 
                 DenyIfBound();
 
                 // If we are part of a StandardButtonCollection, we must now notify it
                 // that we changed our result.
-                Collection?.HandleKeyChange(
-                        this,
-                        value);
+                Collection?.HandleKeyChange(this, value);
 
                 // If this was successful or we are not part of a collection,
                 // we can now set the result.
@@ -105,8 +105,7 @@ namespace System.Windows.Forms
             set => base.Collection = value;
         }
 
-        private static TaskDialogButtons GetButtonFlagForResult(
-                TaskDialogResult result)
+        private static TaskDialogButtons GetButtonFlagForResult(TaskDialogResult result)
         {
             switch (result)
             {
@@ -137,8 +136,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool IsValidStandardButtonResult(
-                TaskDialogResult result)
+        private static bool IsValidStandardButtonResult(TaskDialogResult result)
         {
             return GetButtonFlagForResult(result) != default;
         }

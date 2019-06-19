@@ -34,7 +34,6 @@ namespace System.Windows.Forms
 
         // Disallow inheritance by specifying a private protected constructor.
         private protected TaskDialogButton()
-            : base()
         {
         }
 
@@ -55,9 +54,7 @@ namespace System.Windows.Forms
                 // Check if we can update the button.
                 if (CanUpdate())
                 {
-                    BoundPage.BoundTaskDialog.SetButtonEnabled(
-                            ButtonID,
-                            value);
+                    BoundPage.BoundTaskDialog.SetButtonEnabled(ButtonID, value);
                 }
 
                 _enabled = value;
@@ -80,9 +77,7 @@ namespace System.Windows.Forms
 
                 if (CanUpdate())
                 {
-                    BoundPage.BoundTaskDialog.SetButtonElevationRequiredState(
-                            ButtonID,
-                            value);
+                    BoundPage.BoundTaskDialog.SetButtonElevationRequiredState(ButtonID, value);
                 }
 
                 _elevationRequired = value;
@@ -108,7 +103,9 @@ namespace System.Windows.Forms
                 if (_collection != null && value)
                 {
                     foreach (TaskDialogButton button in _collection)
+                    {
                         button._defaultButton = button == this;
+                    }
                 }
             }
         }
@@ -153,9 +150,13 @@ namespace System.Windows.Forms
         {
             // Re-set the properties so they will make the necessary calls.
             if (!_enabled)
+            {
                 Enabled = _enabled;
+            }
             if (_elevationRequired)
+            {
                 ElevationRequired = _elevationRequired;
+            }
         }
 
         private protected void OnClick(TaskDialogButtonClickedEventArgs e)

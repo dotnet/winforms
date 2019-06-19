@@ -31,7 +31,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         public TaskDialogExpander()
-            : base()
         {
         }
 
@@ -62,8 +61,8 @@ namespace System.Windows.Forms
 
                 // Update the text if we are bound.
                 BoundPage?.BoundTaskDialog.UpdateTextElement(
-                        TaskDialogTextElement.TDE_EXPANDED_INFORMATION,
-                        value);
+                    TaskDialogTextElement.TDE_EXPANDED_INFORMATION,
+                    value);
 
                 _text = value;
             }
@@ -159,9 +158,13 @@ namespace System.Windows.Forms
             TaskDialogFlags flags = base.BindCore();
 
             if (_expanded)
+            {
                 flags |= TaskDialogFlags.TDF_EXPANDED_BY_DEFAULT;
+            }
             if (_expandFooterArea)
+            {
                 flags |= TaskDialogFlags.TDF_EXPAND_FOOTER_AREA;
+            }
 
             return flags;
         }

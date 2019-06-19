@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     public static class TaskDialog
     {
-        //// Progress Bar states (taken from CommCtrl.h)
+        // Progress Bar states (taken from CommCtrl.h)
 
         public const int PBST_NORMAL = 0x0001;
 
@@ -17,7 +17,7 @@ internal static partial class Interop
 
         public const int PBST_PAUSED = 0x0003;
 
-        //// Dialog Box Command IDs (taken from WinUser.h)
+        // Dialog Box Command IDs (taken from WinUser.h)
 
         public const int IDOK = 1;
 
@@ -41,8 +41,8 @@ internal static partial class Interop
 
         public const int IDCONTINUE = 11;
 
-        //// Note: The TaskDialog declarations (including quoted comments)
-        //// were taken from CommCtrl.h.
+        // Note: The TaskDialog declarations (including quoted comments)
+        // were taken from CommCtrl.h.
 
         [Flags]
         public enum TASKDIALOG_FLAGS : int
@@ -265,9 +265,9 @@ internal static partial class Interop
             /// </summary>
             TDCBF_CLOSE_BUTTON = 0x00000020,
 
-            //// Note: The following values are not documented, but have been tested
-            //// to work correctly on every version of Windows that supports the
-            //// Task Dialog.
+            // Note: The following values are not documented, but have been tested
+            // to work correctly on every version of Windows that supports the
+            // Task Dialog.
 
             /// <summary>
             /// "selected control return value IDABORT"
