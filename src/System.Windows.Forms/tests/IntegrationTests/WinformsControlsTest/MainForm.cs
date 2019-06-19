@@ -5,6 +5,7 @@
 using System;
 using System.Windows.Forms;
 using WinformsControlsTest.UserControls;
+using System.Windows.Forms.IntegrationTests.Common;
 
 namespace WinformsControlsTest
 {
@@ -12,6 +13,7 @@ namespace WinformsControlsTest
     {
         public MainForm()
         {
+            this.BringToForeground();
             InitializeComponent();
         }
 

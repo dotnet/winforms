@@ -1,0 +1,44 @@
+<!-- Copy of eng/common/helixpublish.proj -->
+<Project Sdk="Microsoft.DotNet.Helix.Sdk" DefaultTargets="Test">
+
+  <PropertyGroup>
+    <!-- Set by ci-helix-test.yml -->
+    <HelixBuild>$(HelixBuild)</HelixBuild>
+    <HelixBuild Condition="'$(HelixBuild)' == ''">123460.01</HelixBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeDotNetCli>true</IncludeDotNetCli>
+    <DotNetCliPackageType>sdk</DotNetCliPackageType>
+    <DotNetCliVersion>$(RuntimeFrameworkVersion)</DotNetCliVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TestRunNamePrefix>$(AGENT_JOBNAME)</TestRunNamePrefix>
+    <!-- True by default because of System.AccessToken presence -->
+    <!-- EnableAzurePipelinesReporter>true</EnableAzurePipelinesReporter --> 
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableXUnitReporter>true</EnableXUnitReporter>
+    <XUnitPublishTargetFramework>$(XUnitPublishTargetFramework)</XUnitPublishTargetFramework>
+    <XUnitRuntimeTargetFramework>$(XUnitRuntimeTargetFramework)</XUnitRuntimeTargetFramework>
+    <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <HelixCorrelationPayload Include="$(CorrelationPayloadDirectory)">
+      <PayloadDirectory>%(Identity)</PayloadDirectory>
+    </HelixCorrelationPayload>
+  </ItemGroup>
+
+  <ItemGroup>
+    <XUnitProject Include="$(XUnitProjects)" />
+  </ItemGroup>
+
+  <!-- Useless stuff to make Arcade SDK happy -->
+  <PropertyGroup>
+    <Language>msbuild</Language>
+  </PropertyGroup>
+  <Target Name="Pack"/>
+</Project>

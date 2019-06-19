@@ -59,5 +59,6 @@
   <PropertyGroup>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
+    <NewtonsoftJsonVersion>9.0.1</NewtonsoftJsonVersion>
   </PropertyGroup>
 </Project>

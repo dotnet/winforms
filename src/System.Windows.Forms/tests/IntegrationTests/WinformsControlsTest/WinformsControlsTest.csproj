@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
