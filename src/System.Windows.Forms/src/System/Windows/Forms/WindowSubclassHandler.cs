@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
@@ -64,7 +65,15 @@ namespace System.Windows.Forms
                 Debug.Assert(hWnd == _handle);
 
                 var m = Message.Create(hWnd, msg, wParam, lParam);
-                WndProc(ref m);
+                try
+                {
+                    WndProc(ref m);
+                }
+                catch (Exception ex)
+                {
+                    HandleWndProcException(ex);
+                }
+
                 return m.Result;
             };
 
@@ -160,8 +169,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual void WndProc(
-                ref Message m)
+        protected virtual void WndProc(ref Message m)
         {
             // Call the original window procedure to process the message.
             if (_originalWindowProc != IntPtr.Zero)
@@ -173,6 +181,12 @@ namespace System.Windows.Forms
                         m.WParam,
                         m.LParam);
             }
+        }
+
+        protected virtual void HandleWndProcException(Exception ex)
+        {
+            // By default, we simply rethrow the exception.
+            ExceptionDispatchInfo.Capture(ex).Throw();
         }
     }
 }

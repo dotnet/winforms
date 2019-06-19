@@ -20,47 +20,45 @@ namespace System.Windows.Forms
 
             protected override unsafe void WndProc(ref Message m)
             {
-                try
+                switch (m.Msg)
                 {
-                    switch (m.Msg)
-                    {
-                        case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
-                            base.WndProc(ref m);
+                    case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                        base.WndProc(ref m);
 
-                            ref NativeMethods.WINDOWPOS windowPos =
-                                    ref *(NativeMethods.WINDOWPOS*)m.LParam;
+                        ref NativeMethods.WINDOWPOS windowPos =
+                                ref *(NativeMethods.WINDOWPOS*)m.LParam;
 
-                            if ((windowPos.flags & NativeMethods.SWP_SHOWWINDOW) ==
-                                    NativeMethods.SWP_SHOWWINDOW &&
-                                    !_processedShowWindowMessage)
-                            {
-                                _processedShowWindowMessage = true;
+                        if ((windowPos.flags & NativeMethods.SWP_SHOWWINDOW) ==
+                                NativeMethods.SWP_SHOWWINDOW &&
+                                !_processedShowWindowMessage)
+                        {
+                            _processedShowWindowMessage = true;
 
-                                // The task dialog window has been shown for the first time.
-                                _taskDialog.OnShown(EventArgs.Empty);
-                            }
+                            // The task dialog window has been shown for the first time.
+                            _taskDialog.OnShown(EventArgs.Empty);
+                        }
 
-                            break;
+                        break;
 
-                        case ContinueButtonClickHandlingMessage:
-                            // We received the message which we posted earlier when
-                            // handling a TDN_BUTTON_CLICKED notification, so we should
-                            // no longer ignore such notifications.
-                            // We do not forward the message to the base class.
-                            _taskDialog._ignoreButtonClickedNotifications = false;
+                    case ContinueButtonClickHandlingMessage:
+                        // We received the message which we posted earlier when
+                        // handling a TDN_BUTTON_CLICKED notification, so we should
+                        // no longer ignore such notifications.
+                        // We do not forward the message to the base class.
+                        _taskDialog._ignoreButtonClickedNotifications = false;
 
-                            break;
+                        break;
 
-                        default:
-                            base.WndProc(ref m);
-                            break;
-                    }
+                    default:
+                        base.WndProc(ref m);
+                        break;
                 }
-                catch (Exception ex)
-                {
-                    // Handle the exception.
-                    _taskDialog.HandleCallbackException(ex);
-                }
+            }
+
+            protected override void HandleWndProcException(Exception ex)
+            {
+                // Handle the exception.
+                _taskDialog.HandleCallbackException(ex);
             }
         }
     }
