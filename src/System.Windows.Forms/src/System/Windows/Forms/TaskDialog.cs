@@ -265,7 +265,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref='TaskDialog'/> class.
         /// </summary>
         public TaskDialog()
         {
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref='TaskDialog'/> class using the specified task dialog page.
         /// </summary>
         public TaskDialog(TaskDialogPage page)
             : this()
