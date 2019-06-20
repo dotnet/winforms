@@ -7832,8 +7832,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">설명 창</target>
+        <source>Description</source>
+        <target state="needs-review-translation">설명 창</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">도구 모음</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">도구 모음</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">

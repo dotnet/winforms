@@ -7832,8 +7832,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Volet Description</target>
+        <source>Description</source>
+        <target state="needs-review-translation">Volet Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Barre d'outils</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">Barre d'outils</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">

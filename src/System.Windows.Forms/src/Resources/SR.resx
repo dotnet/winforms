@@ -4719,7 +4719,7 @@ Stack trace where the illegal operation occurred was:
     <value>Indicates whether the panel should have a border.</value>
   </data>
   <data name="PBRSDocCommentPaneTitle" xml:space="preserve">
-    <value>Description Pane</value>
+    <value>Description</value>
   </data>
   <data name="PBRSErrorInvalidPropertyValue" xml:space="preserve">
     <value>Property value is not valid.</value>
@@ -5250,7 +5250,7 @@ Stack trace where the illegal operation occurred was:
     <value>PropertyGrid</value>
   </data>
   <data name="PropertyGridToolbarAccessibleName" xml:space="preserve">
-    <value>ToolBar</value>
+    <value>PropertyGrid</value>
   </data>
   <data name="PropertyGridToolbarVisibleDesc" xml:space="preserve">
     <value>Sets whether to display the ToolBar at the top of the PropertyGrid.</value>

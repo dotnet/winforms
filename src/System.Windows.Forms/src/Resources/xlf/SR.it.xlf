@@ -7832,8 +7832,8 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Riquadro descrizione</target>
+        <source>Description</source>
+        <target state="needs-review-translation">Riquadro descrizione</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Barra degli strumenti</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">Barra degli strumenti</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">

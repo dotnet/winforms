@@ -7832,8 +7832,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Okienko opisu</target>
+        <source>Description</source>
+        <target state="needs-review-translation">Okienko opisu</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Element ToolBar</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">Element ToolBar</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">

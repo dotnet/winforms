@@ -7832,8 +7832,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Beschreibungsbereich</target>
+        <source>Description</source>
+        <target state="needs-review-translation">Beschreibungsbereich</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Symbolleiste</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">Symbolleiste</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
