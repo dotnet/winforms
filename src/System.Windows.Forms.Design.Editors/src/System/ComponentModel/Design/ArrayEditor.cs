@@ -10,7 +10,6 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class ArrayEditor : CollectionEditor
     {
-
         /// <summary>
         /// Initializes a new instance of <see cref='System.ComponentModel.Design.ArrayEditor'/> 
         /// using the specified type for the array.
@@ -22,12 +21,11 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Gets or sets the data type this collection contains.
         /// </summary>
-        protected override Type CreateCollectionItemType() => CollectionType.GetElementType();
+        protected override Type CreateCollectionItemType() => CollectionType?.GetElementType();
 
         /// <summary>
         /// Gets the items in the array.
         /// </summary>
-        /// <param name="editValue"></param>
         protected override object[] GetItems(object editValue)
         {
             if (editValue is Array valueArray)
@@ -36,10 +34,8 @@ namespace System.ComponentModel.Design
                 Array.Copy(valueArray, items, items.Length);
                 return items;
             }
-            else
-            {
-                return new object[0];
-            }
+
+            return Array.Empty<object>();
         }
 
         /// <summary>
@@ -49,10 +45,16 @@ namespace System.ComponentModel.Design
         {
             if (editValue is Array || editValue == null)
             {
+                if (value == null)
+                {
+                    return null;
+                }
+
                 Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
                 Array.Copy(value, newArray, value.Length);
                 return newArray;
             }
+
             return editValue;
         }
     }
