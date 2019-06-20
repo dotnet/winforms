@@ -33,7 +33,7 @@ Guide](Documentation/contributing.md).
 * Fix existing scaling bugs in Per Monitor DPI aware applications
 * Add a new “clean" way of calculating location/size information in PMA mode.
 * Make new projects be per monitor aware
-* Add Edge browser control
+* Add Chromium-based Edge browser control
 * Improve accessibility support for some missing UIA interfaces
 * Improve performance of WinForms runtime
 
