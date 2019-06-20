@@ -2,30 +2,38 @@
 // The .NET Foundation licenses this file to you under the MIT license.	
 // See the LICENSE file in the project root for more information.	
 
+using System.Collections.Generic;
+using System.ComponentModel;
+using Moq;
 using Xunit;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design.Tests
 {
     public class PaintValueEventArgsTests
     {
-        [Fact]
-        public void Ctor_Throws_ArgumentNullException()
+        public static IEnumerable<object[]> Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle_TestData()
         {
-            AssertExtensions.Throws<ArgumentNullException>("graphics", () => new PaintValueEventArgs(null, new object(), null, Rectangle.Empty));
+            var image = new Bitmap (10, 10);
+            Graphics graphics = Graphics.FromImage(image);
+            yield return new object[] { null, null, graphics, Rectangle.Empty };
+            yield return new object[] { new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, new object(), graphics, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle_TestData))]
+        public void PaintValueEventArgs_Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle(ITypeDescriptorContext context, object value, Graphics graphics, Rectangle bounds)
+        {
+            var e = new PaintValueEventArgs(context, value, graphics, bounds);
+            Assert.Same(context, e.Context);
+            Assert.Same(value, e.Value);
+            Assert.Same(graphics, e.Graphics);
+            Assert.Equal(bounds, e.Bounds);
         }
 
         [Fact]
-        public void Ctor_PropertiesAssignedCorrectly()
+        public void PaintValueEventArgs_Ctor_NullGraphics_ThrowsArgumentNullException()
         {
-            using (var bm = new Bitmap(20, 20))
-            using (var graphics = Graphics.FromImage(bm))
-            {
-                var paintValueEventArgs = new PaintValueEventArgs(null, bm, graphics, Rectangle.Empty);
-                Assert.Null(paintValueEventArgs.Context);
-                Assert.Equal(bm, paintValueEventArgs.Value);
-                Assert.Equal(graphics, paintValueEventArgs.Graphics);
-                Assert.Equal(Rectangle.Empty, Rectangle.Empty);
-            }
+            AssertExtensions.Throws<ArgumentNullException>("graphics", () => new PaintValueEventArgs(null, new object(), null, Rectangle.Empty));
         }
     }
 }
