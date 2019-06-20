@@ -14,6 +14,7 @@ namespace System.Drawing.Design
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public class FontNameEditor : UITypeEditor
     {
+        private const float ScaleFactor = 1.5f;
         private static readonly FontStyle[] s_FontStyles = new[]
         {
              FontStyle.Regular,
@@ -69,8 +70,6 @@ namespace System.Drawing.Design
                         }
                     }
                 }
-
-                e.Graphics.DrawLine(SystemPens.WindowFrame, e.Bounds.Right, e.Bounds.Y, e.Bounds.Right, e.Bounds.Bottom);
             }
             catch
             {
@@ -85,10 +84,14 @@ namespace System.Drawing.Design
         /// </summary>
         private static void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
         {
-            float fontSize = (float)(e.Bounds.Height / 1.2);
+            float fontSize = e.Bounds.Height / ScaleFactor;
             using (var font = new Font(fontFamily, fontSize, fontStyle, GraphicsUnit.Pixel))
             {
-                e.Graphics.DrawString("abcd", font, SystemBrushes.ActiveCaptionText, e.Bounds);
+                var sf = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.NoFontFallback)
+                {
+                    LineAlignment = StringAlignment.Far 
+                };
+                e.Graphics.DrawString("abcd", font, SystemBrushes.ActiveCaptionText, e.Bounds, sf);
             }
         }
     }
