@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// Note: Clicking this button will not close the dialog, but will raise the
-        /// <see cref="TaskDialogPage.Help"/> event.
+        /// <see cref="TaskDialogPage.HelpRequest"/> event.
         /// </remarks>
         Help = Interop.TaskDialog.IDHELP,
 

@@ -1280,7 +1280,7 @@ namespace System.Windows.Forms
                         break;
 
                     case TaskDialogNotification.TDN_HELP:
-                        _boundPage.OnHelp(EventArgs.Empty);
+                        _boundPage.OnHelpRequest(EventArgs.Empty);
                         break;
                 }
             }

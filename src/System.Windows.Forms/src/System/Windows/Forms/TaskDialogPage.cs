@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         /// Occurs when the user presses F1 while the task dialog has focus, or when the
         /// user clicks the <see cref="TaskDialogButtons.Help"/> button.
         /// </summary>
-        public event EventHandler Help;
+        public event EventHandler HelpRequest;
 
         /// <summary>
         /// 
@@ -874,9 +874,9 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         /// <param name="e"></param>
-        internal protected void OnHelp(EventArgs e)
+        internal protected void OnHelpRequest(EventArgs e)
         {
-            Help?.Invoke(this, e);
+            HelpRequest?.Invoke(this, e);
         }
 
         /// <summary>
