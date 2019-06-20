@@ -801,17 +801,21 @@ namespace System.Windows.Forms
 
             _appliedInitialization = true;
 
-            foreach (TaskDialogStandardButton button in StandardButtons)
+            TaskDialogStandardButtonCollection standardButtons = StandardButtons;
+            TaskDialogCustomButtonCollection customButtons = CustomButtons;
+            TaskDialogRadioButtonCollection radioButtons = RadioButtons;
+
+            foreach (TaskDialogStandardButton button in standardButtons)
             {
                 button.ApplyInitialization();
             }
 
-            foreach (TaskDialogCustomButton button in CustomButtons)
+            foreach (TaskDialogCustomButton button in customButtons)
             {
                 button.ApplyInitialization();
             }
 
-            foreach (TaskDialogRadioButton button in RadioButtons)
+            foreach (TaskDialogRadioButton button in radioButtons)
             {
                 button.ApplyInitialization();
             }
