@@ -52,7 +52,8 @@ namespace System.Windows.Forms
         /// further (valid) <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
         /// notifications are processed.
         /// 
-        /// See: https://gist.github.com/kpreisser/335fde8934da1e0c150fe71ee5ead433
+        /// See documentation/repro in
+        /// /Documentation/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
         /// 
         /// Note: We use a WM_APP message with a high value (WM_USER is not
         /// appropriate as it is private to the control class), in order to avoid
@@ -1172,8 +1173,10 @@ namespace System.Windows.Forms
                             // navigation; these would also be set as result of the dialog),
                             // probably because this scenario isn't an expected usage of
                             // the native TaskDialog.
-                            // See:
-                            // https://gist.github.com/kpreisser/61e01d3d99cf63d92d0c5e1379af3119
+                            // 
+                            // See documentation/repro in
+                            // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInButtonClicked.md
+                            // 
                             // To fix the memory access problems, we simply always return
                             // S_FALSE when the callback received a TDN_NAVIGATED
                             // notification within the Button.Click event handler.
@@ -1315,16 +1318,15 @@ namespace System.Windows.Forms
             // seem to correctly handle this (e.g. when running the message loop
             // after navigation, an AccessViolationException would occur after
             // the handler returns).
-            // Note: Actually, the problem is when we receive a
-            // TDN_NAVIGATED notification within a TDN_RADIO_BUTTON_CLICKED
-            // notification (due to running the message loop there), but we can
-            // only prevent this by not allowing to send the TDM_NAVIGATE_PAGE
-            // message here (and then disallow to send any
-            // TDM_CLICK_RADIO_BUTTON messages until we receive the TDN_NAVIGATED
-            // notification).
+            // Note: Actually, the problem is when we receive a TDN_NAVIGATED
+            // notification within a TDN_RADIO_BUTTON_CLICKED notification (due
+            // to running the message loop there), but we can only prevent this
+            // by not allowing to send the TDM_NAVIGATE_PAGE message here
+            // (and then disallow to send any TDM_CLICK_RADIO_BUTTON messages
+            // until we receive the TDN_NAVIGATED notification).
             // See:
             // https://github.com/dotnet/winforms/issues/146#issuecomment-466784079
-            // and https://gist.github.com/kpreisser/4990c29ccad7fe3c4e932d3a2833c91f
+            // and /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInRadioButtonClicked.md
             if (RadioButtonClickedStackCount > 0)
             {
                 throw new InvalidOperationException(

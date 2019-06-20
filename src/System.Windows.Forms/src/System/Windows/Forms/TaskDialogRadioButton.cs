@@ -168,8 +168,11 @@ namespace System.Windows.Forms
                 // handler). Additionally, after that it even seems we get an
                 // endless loop of TDN_RADIO_BUTTON_CLICKED notifications even
                 // when we don't send any further messages to the dialog.
-                // See:
-                // https://gist.github.com/kpreisser/c9d07225d801783c4b5fed0fac563469
+                // See documentation/repro in
+                // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_InfiniteLoop.md
+                //
+                // See also:
+                // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_WeirdBehavior.md
                 if (BoundPage.BoundTaskDialog.RadioButtonClickedStackCount > 0)
                 {
                     throw new InvalidOperationException(
