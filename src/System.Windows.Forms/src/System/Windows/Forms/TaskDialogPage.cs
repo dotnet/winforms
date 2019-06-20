@@ -559,13 +559,6 @@ namespace System.Windows.Forms
 
         internal void Validate()
         {
-            // Before assigning button IDs etc., check if the configuration is valid.
-            // This needs to be done before clearing the old button IDs and assigning
-            // the new ones, because it is possible to use the same button
-            // instances after a dialog has been created for Navigate(), where need to
-            // do the check, then release the old buttons, then assign the new
-            // buttons.
-
             // Check that this page instance is not already bound to a TaskDialog instance.
             if (_boundTaskDialog != null)
             {
@@ -574,28 +567,28 @@ namespace System.Windows.Forms
                     $"a {nameof(TaskDialog)} instance.");
             }
 
-            // We also need to validate the controls since they could also be assigned to
-            // another (bound) TaskDialogPage at the same time.
+            // We also need to check the controls (and collections) since they could also be
+            // bound to a TaskDialogPage at the same time.
             // Access the collections using the property to ensure they exist.
             if (StandardButtons.BoundPage != null ||
                 CustomButtons.BoundPage != null ||
-                RadioButtons.BoundPage != null ||
-                _checkBox?.BoundPage != null ||
-                _expander?.BoundPage != null ||
-                _footer?.BoundPage != null ||
-                _progressBar?.BoundPage != null)
+                RadioButtons.BoundPage != null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(
+                    $"One of the collections of this {nameof(TaskDialogPage)} is already bound to a " +
+                    $"{nameof(TaskDialog)} instance.");
             }
 
-            foreach (TaskDialogControl control in (StandardButtons as IEnumerable<TaskDialogControl>)
-                .Concat(CustomButtons)
-                .Concat(RadioButtons))
+            if (StandardButtons.Concat<TaskDialogControl>(CustomButtons).Concat(RadioButtons)
+                .Append(_checkBox)
+                .Append(_expander)
+                .Append(_footer)
+                .Append(_progressBar)
+                .Any(c => c.BoundPage != null))
             {
-                if (control.BoundPage != null)
-                {
-                    throw new InvalidOperationException();
-                }
+                throw new InvalidOperationException(
+                    $"One of the controls of this {nameof(TaskDialogPage)} is already bound to a " +
+                    $"{nameof(TaskDialog)} instance.");
             }
 
             if (CustomButtons.Count > int.MaxValue - CustomButtonStartID + 1 ||
@@ -605,49 +598,26 @@ namespace System.Windows.Forms
                     "Too many custom buttons or radio buttons have been added.");
             }
 
-            bool foundDefaultButton = false;
-            foreach (TaskDialogButton button in (StandardButtons as IEnumerable<TaskDialogButton>)
-                .Concat(CustomButtons))
+            if (StandardButtons.Concat<TaskDialogButton>(CustomButtons).Where(e => e.DefaultButton).Count() > 1)
             {
-                if (button.DefaultButton)
-                {
-                    if (foundDefaultButton)
-                    {
-                        throw new InvalidOperationException("Only one button can be set as default button.");
-                    }
-
-                    foundDefaultButton = true;
-                }
+                throw new InvalidOperationException("Only a single button can be set as default button.");
             }
 
-            // For custom and radio buttons, we need to ensure the strings are
-            // not null or empty, as otherwise an error would occur when
-            // showing/navigating the dialog.
-            foreach (TaskDialogCustomButton button in _customButtons)
+            if (_radioButtons.Where(e => e.Checked).Count() > 1)
             {
-                if (!button.IsCreatable)
-                {
-                    throw new InvalidOperationException("The text of a custom button must not be null or empty.");
-                }
+                throw new InvalidOperationException("Only a single radio button can be set as checked.");
             }
 
-            bool foundCheckedRadioButton = false;
-            foreach (TaskDialogRadioButton button in _radioButtons)
+            // For custom and radio buttons, we need to ensure the strings are not null or empty,
+            // as otherwise an error would occur when showing/navigating the dialog.
+            if (_customButtons.Any(e => !e.IsCreatable))
             {
-                if (!button.IsCreatable)
-                {
-                    throw new InvalidOperationException("The text of a radio button must not be null or empty.");
-                }
+                throw new InvalidOperationException("The text of a custom button must not be null or empty.");
+            }
 
-                if (button.Checked)
-                {
-                    if (foundCheckedRadioButton)
-                    {
-                        throw new InvalidOperationException("Only one radio button can be set as checked.");
-                    }
-
-                    foundCheckedRadioButton = true;
-                }
+            if (_radioButtons.Any(e => !e.IsCreatable))
+            {
+                throw new InvalidOperationException("The text of a radio button must not be null or empty.");
             }
         }
 
