@@ -344,7 +344,7 @@ namespace System.Windows.Forms
                 //    return;
                 //}
 
-                if (DialogIsShown)
+                if (IsShown)
                 {
                     // Try to navigate the dialog. This will validate the new page
                     // and assign it only if it is OK.
@@ -406,7 +406,7 @@ namespace System.Windows.Forms
         /// Gets a value that indicates whether <see cref="Show(IntPtr)"/> is
         /// currently being called.
         /// </summary>
-        internal bool DialogIsShown
+        internal bool IsShown
         {
             get => _instanceHandlePtr != IntPtr.Zero;
         }
@@ -417,12 +417,12 @@ namespace System.Windows.Forms
         /// property.
         /// </summary>
         /// <remarks>
-        /// This property can only be <c>true</c> if <see cref="DialogIsShown"/> is
+        /// This property can only be <c>true</c> if <see cref="IsShown"/> is
         /// also <c>true</c>. However, normally this property should be equivalent
-        /// to <see cref="DialogIsShown"/>, because when showing the dialog, the
+        /// to <see cref="IsShown"/>, because when showing the dialog, the
         /// callback should have been called setting the handle.
         /// </remarks>
-        internal bool HandleAvailable
+        internal bool IsHandleCreated
         {
             get => _hwndDialog != IntPtr.Zero;
         }
@@ -586,7 +586,7 @@ namespace System.Windows.Forms
         {
             // Recursive Show() is not possible because a TaskDialog instance can only
             // represent a single native dialog.
-            if (DialogIsShown)
+            if (IsShown)
                 throw new InvalidOperationException($"This {nameof(TaskDialog)} instance is already being shown.");
 
             Page.Validate();
@@ -1758,7 +1758,7 @@ namespace System.Windows.Forms
 
         private void DenyIfDialogNotUpdatable(bool checkWaitingForNavigation = true)
         {
-            if (!HandleAvailable)
+            if (!IsHandleCreated)
             {
                 throw new InvalidOperationException("Can only update the state of a task dialog while it is shown.");
             }
