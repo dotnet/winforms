@@ -5,7 +5,6 @@
 using System.Threading;
 using WFCTestLib.Log;
 using ReflectTools;
-using System.Globalization;
 using System.Windows.Forms.IntegrationTests.Common;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests

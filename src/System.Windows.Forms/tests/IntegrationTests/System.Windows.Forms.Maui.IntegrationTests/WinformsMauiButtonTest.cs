@@ -11,22 +11,27 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// We want to be able to represent each scenario as a seperate xUnit test, but it's not
     /// possible to run them independently. The workaround is to have a MauiTestRunner execute all
     /// the scenarios once and store the results, then feed the scenario names in as member data.
+    /// 
+    /// The only trick is that MemberData is resolved before any constructors are called. This means
+    /// our scenario names will not be available yet. The solution to this is to create a custom 
+    /// MemberDataAttribute which executes custom code before returning the expected data. 
+    /// See CustomMemberDataAttribute.cs for more info.
     /// </summary>
     public class WinformsMauiButtonTest : WinformsMauiTestBase
     {
-        private const string ProjectName = "MauiButtonTest";
+        public const string ProjectName = "MauiButtonTest";
 
-        /// <summary>
-        /// The project name, used to build the path to the maui executable
-        /// Derived classes must override this to match their project names
-        /// </summary>
-        protected override string MauiProjectName { get => ProjectName; }
+        static WinformsMauiButtonTest()
+        {
+            // run the test to get the results in the base class
+            RunMauiTest(ProjectName);
+        }
 
         [Theory]
-        [MemberData(nameof(ScenarioTheoryData))]
+        [CustomMemberData(nameof(GetScenarioTheoryData), ProjectName)]
         public void WinformsMauiTest_ButtonTest(string scenarioName)
         {
-            ValidateScenarioPassed(scenarioName);
+            ValidateScenarioPassed(ProjectName, scenarioName);
         }
     }
 }

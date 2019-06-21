@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
@@ -23,66 +25,58 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         private static readonly MauiTestRunner s_testRunner = new MauiTestRunner();
 
         /// <summary>
-        /// The test results, again static because we only want one
+        /// The test results, indexed by project name
         /// </summary>
-        private static TestResult s_testResult;
+        private static Dictionary<string, TestResult> s_testResults = new Dictionary<string, TestResult>();
 
         /// <summary>
-        /// The lock object, used to make sure we only run once in case tests are running concurrently
+        /// Run the maui test for the specified project name and store
+        /// the results for later
         /// </summary>
-        private static readonly object s_lock = new object();
-
-        /// <summary>
-        /// The project name, used to build the path to the maui executable
-        /// Derived classes must override this to match their project names
-        /// </summary>
-        protected abstract string MauiProjectName { get; }
-
-        /// <summary>
-        /// The test result, exposed to the derived classes
-        /// </summary>
-        protected static TestResult TestResult { get => s_testResult; }
-
-        /// <summary>
-        /// Scenario theory data, used to drive unit tests in derived classes
-        /// </summary>
-        public static TheoryData<string> ScenarioTheoryData
+        /// <param name="projectName">The name of the project to run</param>
+        protected static void RunMauiTest(string projectName)
         {
-            get
-            {
-                var data = new TheoryData<string>();
-                foreach (var scenarioName in TestResult.ScenarioGroup.Scenarios.Select(x => x.Name))
-                {
-                    data.Add(scenarioName);
-                }
+            if (string.IsNullOrEmpty(projectName))
+                throw new ArgumentNullException(nameof(projectName));
 
-                return data;
-            }
+            var exePath = TestHelpers.GetExePath(projectName);
+            var result = s_testRunner.RunTest(exePath);
+            Assert.NotNull(result);
+            Assert.NotNull(result.ScenarioGroup);
+
+            s_testResults[projectName] = result;
         }
 
-        public WinformsMauiTestBase()
+        /// <summary>
+        /// Get the scenario theory data, used to drive unit tests in derived classes
+        /// </summary>
+        /// <param name="projectName">The name of the project</param>
+        /// <returns>The theory data</returns>
+        public static TheoryData<string> GetScenarioTheoryData(string projectName)
         {
-            // if we have no results, execute the tests
-            lock (s_lock)
+            var data = new TheoryData<string>();
+
+            s_testResults.TryGetValue(projectName, out var testResult);
+            if (testResult == null)
+                return null;
+
+            foreach (var scenarioName in testResult.ScenarioGroup.Scenarios.Select(x => x.Name))
             {
-                if (s_testResult == null)
-                {
-                    var exePath = TestHelpers.GetExePath(MauiProjectName);
-                    s_testResult = s_testRunner.RunTest(exePath);
-                    Assert.NotNull(TestResult);
-                    Assert.NotNull(TestResult.ScenarioGroup);
-                }
+                data.Add(scenarioName);
             }
+
+            return data;
         }
 
         /// <summary>
         /// Validate a specified scenario passed.
         /// The derived classes will call this with their scenario names
         /// </summary>
+        /// <param name="projectName">The name of the maui project</param>
         /// <param name="scenarioName">The name of the scenario</param>
-        protected void ValidateScenarioPassed(string scenarioName)
+        protected void ValidateScenarioPassed(string projectName, string scenarioName)
         {
-            var scenario = TestResult.ScenarioGroup.Scenarios.SingleOrDefault(x => x.Name == scenarioName);
+            var scenario = s_testResults[projectName].ScenarioGroup.Scenarios.SingleOrDefault(x => x.Name == scenarioName);
             Assert.NotNull(scenario);
             Assert.NotNull(scenario.Result);
             Assert.Equal("Pass", scenario.Result.Type);
