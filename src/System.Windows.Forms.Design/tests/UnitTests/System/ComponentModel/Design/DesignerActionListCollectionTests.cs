@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> Ctor_DesignerActionListArray_TestData()
         {
-            yield return new object[] { new DesignerActionList[0] };
+            yield return new object[] { Array.Empty<DesignerActionList>() };
             yield return new object[] { new DesignerActionList[] { new DesignerActionList(null), null } };
         }
 

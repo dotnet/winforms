@@ -106,7 +106,7 @@ namespace System.ComponentModel.Design
                 {
                     return _loadErrors;
                 }
-                return new object[0];
+                return Array.Empty<object>();
             }
         }
 
@@ -325,10 +325,10 @@ namespace System.ComponentModel.Design
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
-            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(new Type[0]);
+            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
             if (ctor != null)
             {
-                instance = TypeDescriptor.CreateInstance(this, type, new Type[0], new object[0]);
+                instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
             }
             else
             {

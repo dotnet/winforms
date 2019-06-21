@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new Form[0];
+                    return Array.Empty<Form>();
                 }
             }
         }

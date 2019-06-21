@@ -2367,11 +2367,11 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // No instance descriptor. See if we can get to a public constructor that takes no arguments
-            ConstructorInfo ctor = GetReflectionTypeHelper(manager, value).GetConstructor(new Type[0]);
+            ConstructorInfo ctor = GetReflectionTypeHelper(manager, value).GetConstructor(Array.Empty<Type>());
             if (ctor != null)
             {
                 isComplete = false;
-                return new CodeObjectCreateExpression(TypeDescriptor.GetClassName(value), new CodeExpression[0]);
+                return new CodeObjectCreateExpression(TypeDescriptor.GetClassName(value), Array.Empty<CodeExpression>());
             }
             // Nothing worked.
             return null;

@@ -474,7 +474,7 @@ namespace System.Windows.Forms
 
             if (document == null)
             {
-                pageInfo = new PreviewPageInfo[0];
+                pageInfo = Array.Empty<PreviewPageInfo>();
             }
             else
             {

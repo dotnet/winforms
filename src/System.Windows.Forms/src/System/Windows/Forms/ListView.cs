@@ -7150,7 +7150,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new int[0].GetEnumerator();
+                    return Array.Empty<int>().GetEnumerator();
                 }
             }
         }
@@ -7487,7 +7487,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new ListViewItem[0].GetEnumerator();
+                    return Array.Empty<ListViewItem>().GetEnumerator();
                 }
             }
 
@@ -7784,7 +7784,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new int[0].GetEnumerator();
+                    return Array.Empty<int>().GetEnumerator();
                 }
             }
 
@@ -7871,7 +7871,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            return new ListViewItem[0];
+                            return Array.Empty<ListViewItem>();
                         }
                     }
                 }
@@ -8144,7 +8144,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new ListViewItem[0].GetEnumerator();
+                    return Array.Empty<ListViewItem>().GetEnumerator();
                 }
             }
 
@@ -8826,7 +8826,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new ColumnHeader[0].GetEnumerator();
+                    return Array.Empty<ColumnHeader>().GetEnumerator();
                 }
             }
         }

@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    comps = new object[0];
+                    comps = Array.Empty<object>();
                 }
 
                 if (comps.Length == 0)

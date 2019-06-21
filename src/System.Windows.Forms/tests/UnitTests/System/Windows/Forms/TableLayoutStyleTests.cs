@@ -59,10 +59,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ConvertTo_TestData()
         {
-            yield return new object[] { new RowStyle(SizeType.AutoSize, 1), typeof(RowStyle).GetConstructor(new Type[0]), new object[0] };
+            yield return new object[] { new RowStyle(SizeType.AutoSize, 1), typeof(RowStyle).GetConstructor(Array.Empty<Type>()), Array.Empty<object>() };
             yield return new object[] { new RowStyle(SizeType.Absolute, 1), typeof(RowStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Absolute, 1f } };
             yield return new object[] { new RowStyle(SizeType.Percent, 1), typeof(RowStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Percent, 1f } };
-            yield return new object[] { new ColumnStyle(SizeType.AutoSize, 1), typeof(ColumnStyle).GetConstructor(new Type[0]), new object[0] };
+            yield return new object[] { new ColumnStyle(SizeType.AutoSize, 1), typeof(ColumnStyle).GetConstructor(Array.Empty<Type>()), Array.Empty<object>() };
             yield return new object[] { new ColumnStyle(SizeType.Absolute, 1), typeof(ColumnStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Absolute, 1f } };
             yield return new object[] { new ColumnStyle(SizeType.Percent, 1), typeof(ColumnStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Percent, 1f } };
         }

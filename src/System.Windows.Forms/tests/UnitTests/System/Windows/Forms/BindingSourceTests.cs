@@ -127,7 +127,7 @@ namespace System.Windows.Forms.Tests
                 var emptyList = new List<int> { };
                 yield return new object[] { emptyList, dataMember, true, false, emptyList };
 
-                var emptyArray = new int[0];
+                var emptyArray = Array.Empty<int>();
                 yield return new object[] { emptyArray, dataMember, false, true, emptyArray };
 
                 var mockEmptyListSource = new Mock<IListSource>(MockBehavior.Strict);

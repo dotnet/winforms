@@ -244,7 +244,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             internal bool arraysFetched;
             //private bool                 standardValuesQueried;
 
-            public Com2IPerPropertyBrowsingEnum(Com2PropertyDescriptor targetObject, Com2IPerPropertyBrowsingHandler handler, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(new string[0], new object[0], allowUnknowns)
+            public Com2IPerPropertyBrowsingEnum(Com2PropertyDescriptor targetObject, Com2IPerPropertyBrowsingHandler handler, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(Array.Empty<string>(), Array.Empty<object>(), allowUnknowns)
             {
                 target = targetObject;
                 nameMarshaller = names;
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 catch (Exception ex)
                 {
-                    base.PopulateArrays(new string[0], new object[0]);
+                    base.PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
                     Debug.Fail("Failed to build IPerPropertyBrowsing editor. " + ex.GetType().Name + ", " + ex.Message);
                 }
             }

@@ -835,8 +835,8 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> GetItems_TestData()
         {
-            yield return new object[] { null, new object[0] };
-            yield return new object[] { new object(), new object[0] };
+            yield return new object[] { null, Array.Empty<object>() };
+            yield return new object[] { new object(), Array.Empty<object>() };
             yield return new object[] { new int[] { 1, 2, 3 }, new object[] { 1, 2, 3, } };
             yield return new object[] { new ArrayList { 1, 2, 3 }, new object[] { 1, 2, 3, } };
         }
@@ -917,20 +917,20 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> SetItems_TestData()
         {
             yield return new object[] { null, new object[] { 1, 2, 3 }, null };
-            yield return new object[] { null, new object[0], null };
+            yield return new object[] { null, Array.Empty<object>(), null };
             yield return new object[] { null, null, null };
 
             var o = new object();
             yield return new object[] { o, new object[] { 1, 2, 3 }, o };
-            yield return new object[] { o, new object[0], o };
+            yield return new object[] { o, Array.Empty<object>(), o };
             yield return new object[] { o, null, o };
 
-            yield return new object[] { new int[] { 1, 2, 3 }, new object[0], new object[] { 0, 0, 0 } };
+            yield return new object[] { new int[] { 1, 2, 3 }, Array.Empty<object>(), new object[] { 0, 0, 0 } };
             yield return new object[] { new int[] { 1, 2, 3 }, null, new object[] { 0, 0, 0 } };
 
             yield return new object[] { new ArrayList { 1, 2, 3 }, new object[] { 1 }, new object[] { 1 } };
-            yield return new object[] { new ArrayList { 1, 2, 3 }, new object[0], new object[0] };
-            yield return new object[] { new ArrayList { 1, 2, 3 }, null, new object[0] };
+            yield return new object[] { new ArrayList { 1, 2, 3 }, Array.Empty<object>(), Array.Empty<object>() };
+            yield return new object[] { new ArrayList { 1, 2, 3 }, null, Array.Empty<object>() };
         }
 
         [Theory]

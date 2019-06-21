@@ -17,7 +17,7 @@ namespace System.Drawing.Design.Tests
         public static IEnumerable<object[]> CreateExtensionsString_TestData()
         {
             yield return new object[] { null, ",", null };
-            yield return new object[] { new string[0], ",", null };
+            yield return new object[] { Array.Empty<string>(), ",", null };
             yield return new object[] { new string[] { "a", "b", "c" }, ",", "*.a,*.b,*.c" };
             yield return new object[] { new string[] { "a", "b", "c" }, "", "*.a*.b*.c" };
             yield return new object[] { new string[] { "a", "b", "c" }, null, "*.a*.b*.c" };

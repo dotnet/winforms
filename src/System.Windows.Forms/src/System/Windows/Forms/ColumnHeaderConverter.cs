@@ -78,10 +78,10 @@ namespace System.Windows.Forms
 
                 if (id == null)
                 {
-                    ctor = t.GetConstructor(new Type[0]);
+                    ctor = t.GetConstructor(Array.Empty<Type>());
                     if (ctor != null)
                     {
-                        return new InstanceDescriptor(ctor, new object[0], false);
+                        return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                     }
                     else
                     {

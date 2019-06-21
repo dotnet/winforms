@@ -725,7 +725,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (shouldClear)
             {
-                MethodInfo clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, new Type[0], null);
+                MethodInfo clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, Array.Empty<Type>(), null);
                 if (clearMethod == null || !MethodSupportsSerialization(clearMethod))
                 {
                     shouldClear = false;

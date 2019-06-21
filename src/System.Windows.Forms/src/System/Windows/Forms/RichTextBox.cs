@@ -1422,7 +1422,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int[] selTabs = new int[0];
+                int[] selTabs = Array.Empty<int>();
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT

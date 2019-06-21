@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_String_Color_Color_Font_ListViewGroup_TestData()
         {
             yield return new object[] { null, null, Color.Empty, Color.Empty, null, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
-            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { Array.Empty<string>(), null, Color.Empty, Color.Empty, null, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { null }, string.Empty, Color.Empty, Color.Empty, null, new ListViewGroup(), string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), "imageKey", Color.Blue, Color.Red, "text" };
         }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_Int_Color_Color_Font_ListViewGroup_TestData()
         {
             yield return new object[] { null, -1, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
-            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { Array.Empty<string>(), 0, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, "text" };
         }
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_String_Color_Color_Font_TestData()
         {
             yield return new object[] { null, null, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
-            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { Array.Empty<string>(), null, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { null }, string.Empty, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, "imageKey", Color.Blue, Color.Red, "text" };
         }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_Int_Color_Color_Font_TestData()
         {
             yield return new object[] { null, -1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
-            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { Array.Empty<string>(), 0, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, "text" };
         }
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_String_ListViewGroup_TestData()
         {
             yield return new object[] { null, null, null, string.Empty, string.Empty };
-            yield return new object[] { new string[0], null, null, string.Empty, string.Empty };
+            yield return new object[] { Array.Empty<string>(), null, null, string.Empty, string.Empty };
             yield return new object[] { new string[] { null }, string.Empty, new ListViewGroup(), string.Empty, string.Empty };
             yield return new object[] { new string[] { "text" }, "imageKey", new ListViewGroup(), "imageKey", "text" };
         }
@@ -314,7 +314,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_Int_ListViewGroup_TestData()
         {
             yield return new object[] { null, -1, null, string.Empty };
-            yield return new object[] { new string[0], 0, null, string.Empty };
+            yield return new object[] { Array.Empty<string>(), 0, null, string.Empty };
             yield return new object[] { new string[] { null }, 1, new ListViewGroup(), string.Empty };
             yield return new object[] { new string[] { "text" }, 2, new ListViewGroup(), "text" };
         }
@@ -502,7 +502,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_ListViewGroup_TestData()
         {
             yield return new object[] { null, null, string.Empty };
-            yield return new object[] { new string[0], null, string.Empty };
+            yield return new object[] { Array.Empty<string>(), null, string.Empty };
             yield return new object[] { new string[] { null }, new ListViewGroup(), string.Empty };
             yield return new object[] { new string[] { "text" }, new ListViewGroup(), "text" };
         }
@@ -540,7 +540,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_String_TestData()
         {
             yield return new object[] { null, null, string.Empty, string.Empty };
-            yield return new object[] { new string[0], null, string.Empty, string.Empty };
+            yield return new object[] { Array.Empty<string>(), null, string.Empty, string.Empty };
             yield return new object[] { new string[] { null }, string.Empty, string.Empty, string.Empty };
             yield return new object[] { new string[] { "text" }, "imageKey", "imageKey", "text" };
         }
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_Int_TestData()
         {
             yield return new object[] { null, -1, string.Empty };
-            yield return new object[] { new string[0], 0, string.Empty };
+            yield return new object[] { Array.Empty<string>(), 0, string.Empty };
             yield return new object[] { new string[] { null }, 1, string.Empty };
             yield return new object[] { new string[] { "text" }, 2, "text" };
         }
@@ -767,7 +767,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_StringArray_TestData()
         {
             yield return new object[] { null, string.Empty };
-            yield return new object[] { new string[0], string.Empty };
+            yield return new object[] { Array.Empty<string>(), string.Empty };
             yield return new object[] { new string[] { null }, string.Empty };
             yield return new object[] { new string[] { "text" }, "text" };
         }

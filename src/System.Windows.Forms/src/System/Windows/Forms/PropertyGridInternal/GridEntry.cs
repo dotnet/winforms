@@ -1386,7 +1386,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    childCollection = new GridEntryCollection(this, new GridEntry[0]);
+                    childCollection = new GridEntryCollection(this, Array.Empty<GridEntry>());
                 }
                 return false;
             }
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    childCollection = new GridEntryCollection(this, new GridEntry[0]);
+                    childCollection = new GridEntryCollection(this, Array.Empty<GridEntry>());
                 }
 
                 if (InternalExpanded)
@@ -2039,7 +2039,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 values.CopyTo(valueArray, 0);
                 return valueArray;
             }
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         public override int GetHashCode()

@@ -2746,7 +2746,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new TabPage[0].GetEnumerator();
+                    return Array.Empty<TabPage>().GetEnumerator();
                 }
             }
 

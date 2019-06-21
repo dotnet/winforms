@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms.Design
             object[] selection = null;
             if (components == null)
             {
-                return new object[0];
+                return Array.Empty<object>();
             }
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
@@ -1165,7 +1165,7 @@ namespace System.Windows.Forms.Design
                 }
                 selection = (object[])list.ToArray();
             }
-            return selection ?? (new object[0]);
+            return selection ?? (Array.Empty<object>());
         }
 
         /// <summary>

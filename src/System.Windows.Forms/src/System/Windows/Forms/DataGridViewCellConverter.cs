@@ -34,10 +34,10 @@ namespace System.Windows.Forms
 
             if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewCell cell)
             {
-                ConstructorInfo ctor = cell.GetType().GetConstructor(new Type[0]);
+                ConstructorInfo ctor = cell.GetType().GetConstructor(Array.Empty<Type>());
                 if (ctor != null)
                 {
-                    return new InstanceDescriptor(ctor, new object[0], false);
+                    return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                 }
             }
 

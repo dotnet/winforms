@@ -174,7 +174,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new StandardValuesCollection(new object[0]);
+                return new StandardValuesCollection(Array.Empty<object>());
             }
         }
 

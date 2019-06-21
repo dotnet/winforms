@@ -2224,7 +2224,7 @@ namespace System.Windows.Forms.Design
                "AllowDrop",
                "AllowItemReorder"
             };
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];

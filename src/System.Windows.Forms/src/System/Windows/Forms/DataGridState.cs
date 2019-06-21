@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         public object DataSource = null;
         public string DataMember = null;
         public CurrencyManager ListManager = null;
-        public DataGridRow[] DataGridRows = new DataGridRow[0];
+        public DataGridRow[] DataGridRows = Array.Empty<DataGridRow>();
         public DataGrid DataGrid;
         public int DataGridRowsLength = 0;
         public GridColumnStylesCollection GridColumnStyles = null;

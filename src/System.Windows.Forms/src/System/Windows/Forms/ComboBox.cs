@@ -1096,7 +1096,7 @@ namespace System.Windows.Forms
                 return strings;
 
             }
-            return new string[0];
+            return Array.Empty<string>();
         }
 
 

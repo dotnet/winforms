@@ -232,7 +232,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else
                     {
-                        baseAttrs = new Attribute[0];
+                        baseAttrs = Array.Empty<Attribute>();
                     }
                 }
 

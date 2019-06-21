@@ -48,7 +48,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual ICollection AssociatedComponents
         {
-            get => new IComponent[0];
+            get => Array.Empty<IComponent>();
         }
 
         internal virtual bool CanBeAssociatedWith(IDesigner parentDesigner) => true;
@@ -258,7 +258,7 @@ namespace System.ComponentModel.Design
             {
                 if (properties[SettingsKeyName] is PropertyDescriptor prop)
                 {
-                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
+                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, Array.Empty<Attribute>());
                 }
             }
         }
@@ -318,7 +318,7 @@ namespace System.ComponentModel.Design
 
                     return designers;
                 }
-                return new object[0];
+                return Array.Empty<object>();
             }
         }
 
@@ -873,7 +873,7 @@ namespace System.ComponentModel.Design
             {
                 if (properties[SettingsKeyName] is PropertyDescriptor prop)
                 {
-                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, new Attribute[0]);
+                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, Array.Empty<Attribute>());
                 }
             }
         }

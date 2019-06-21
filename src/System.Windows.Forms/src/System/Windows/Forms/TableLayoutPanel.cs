@@ -335,7 +335,7 @@ namespace System.Windows.Forms
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             if (containerInfo.Columns == null)
             {
-                return new int[0];
+                return Array.Empty<int>();
             }
 
             int[] cw = new int[containerInfo.Columns.Length];
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             if (containerInfo.Rows == null)
             {
-                return new int[0];
+                return Array.Empty<int>();
             }
 
             int[] rh = new int[containerInfo.Rows.Length];

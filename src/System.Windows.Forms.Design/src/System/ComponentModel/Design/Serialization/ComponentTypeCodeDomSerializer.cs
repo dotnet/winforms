@@ -105,7 +105,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            return new CodeMemberMethod[0];
+            return Array.Empty<CodeMemberMethod>();
         }
     }
 }

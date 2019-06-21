@@ -1229,7 +1229,7 @@ namespace System.Windows.Forms
                 _itemConstructor = _itemType.GetConstructor(BindingFlags.Public |
                                                                     BindingFlags.Instance |
                                                                     BindingFlags.CreateInstance,
-                                                                    null, new Type[0], null);
+                                                                    null, Array.Empty<Type>(), null);
             }
 
             // Wire stuff up to the new list

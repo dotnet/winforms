@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new byte[0];
+                    return Array.Empty<byte>();
                 }
             }
 

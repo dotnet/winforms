@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         /*
         public static IEnumerable<object[]> GetItemProperties_Parameterless_TestData()
         {
-            yield return new object[] { new PropertyManager(), new string[0] };
+            yield return new object[] { new PropertyManager(), Array.Empty<string>() };
 
             var singleContext = new BindingContext();
             yield return new object[] { singleContext[new DataSource()], new string[] { "Property" } };
@@ -74,8 +74,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetItemProperties_DataSourcesAndListAccessors_TestData()
         {
-            yield return new object[] { new PropertyManager(), null, null, new string[0] };
-            yield return new object[] { new PropertyManager(), new ArrayList(), new ArrayList(), new string[0] };
+            yield return new object[] { new PropertyManager(), null, null, Array.Empty<string>() };
+            yield return new object[] { new PropertyManager(), new ArrayList(), new ArrayList(), Array.Empty<string>() };
 
             var singleContext = new BindingContext();
             yield return new object[] { singleContext[new DataSource()], null, null, new string[] { "Property" } };
