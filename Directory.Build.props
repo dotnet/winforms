@@ -5,6 +5,7 @@
   <Import Project="eng\FacadeAssemblies.props" />
 
   <PropertyGroup>
+    <Product>Microsoft® .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>

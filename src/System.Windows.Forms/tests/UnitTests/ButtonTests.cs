@@ -175,6 +175,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void Button_ProductName()
+        {
+            var button = new Button();
+
+            Assert.Equal("Microsoft® .NET", button.ProductName);
+        }
+
         // helper method to generate data for the GetPreferredSizeCore test
         private static TheoryData<Button, Size, Size> GetPreferredSizeCoreTestData()
         {
