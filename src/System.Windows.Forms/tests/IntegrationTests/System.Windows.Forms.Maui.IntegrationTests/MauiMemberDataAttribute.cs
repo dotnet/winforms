@@ -10,7 +10,7 @@ using Xunit.Sdk;
 namespace System.Windows.Forms.Maui.IntegrationTests
 {
     /// <summary>
-    /// This is a custom xUnit memberdata attribute which allows us to execute arbitrary code
+    /// This is a custom xUnit memberdata attribute which allows us to execute code
     /// before the data is resolved. It's needed because we want to read scenario names from
     /// test results while still being able to use memberdata to parameterize the xUnit test,
     /// but the normal MemberData attribute resolves before anything else (even the constructor)
@@ -20,34 +20,44 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// </summary>
     [DataDiscoverer("Xunit.Sdk.MemberDataDiscoverer", "xunit.core")]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class CustomMemberDataAttribute : MemberDataAttributeBase
+    public class MauiMemberDataAttribute : MemberDataAttributeBase
     {
         /// <summary>
-        /// Constructor, just passes values through to the base class
+        /// The name of the maui test project to run
         /// </summary>
-        /// <param name="memberName">The name of the member holding the data</param>
-        /// <param name="parameters">Additional params</param>
-        public CustomMemberDataAttribute(string memberName, params object[] parameters)
-        : base(memberName, parameters)
+        private string _projectName;
+
+        // don't pass anything to the base class because we don't need it
+        public MauiMemberDataAttribute(string projectName)
+        : base(null, null)
         {
+            _projectName = projectName;
         }
 
         /// <summary>
         /// This is the method that actually returns the data that will be parameterized into the
-        /// xUnit test method
+        /// xUnit test method. We actually don't use the base class logic at all, we just run the maui
+        /// test, get the scenarios, and return them.
         /// </summary>
         /// <param name="testMethod">MethodInfo of the method being decorated</param>
         /// <returns>The test data</returns>
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
-            // get the type (class) containing the decorated method
-            var type = MemberType ?? testMethod.ReflectedType;
+            // run the maui test so the scenario names are available
+            MauiTestHelper.RunMauiTest(_projectName);
 
-            // run the class constructor, which is static
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+            // get the scenarios
+            var scenarios = MauiTestHelper.GetScenarios(_projectName);
 
-            // return data like normal from the base class
-            return base.GetData(testMethod);
+            // convert the data to the expected format
+            var data = new List<object[]>();
+            foreach (var scenario in scenarios)
+            {
+                var objArray = new object[] { scenario };
+                data.Add(objArray);
+            }
+
+            return data;
         }
 
         /// <summary>
@@ -58,18 +68,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <returns>The item as an object array</returns>
         protected override object[] ConvertDataItem(MethodInfo testMethod, object item)
         {
-            if (item == null)
-            {
-                return null;
-            }
-
-            var array = item as object[];
-            if (array == null)
-            {
-                throw new ArgumentException(
-                        $"Property {MemberName} on {MemberType ?? testMethod.ReflectedType} yielded an item that is not an object[]");
-            }
-            return array;
+            throw new NotImplementedException();
         }
     }
 }
