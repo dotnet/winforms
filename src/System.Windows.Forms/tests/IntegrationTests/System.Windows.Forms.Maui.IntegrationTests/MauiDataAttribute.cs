@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// </summary>
     [DataDiscoverer("Xunit.Sdk.MemberDataDiscoverer", "xunit.core")]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class MauiMemberDataAttribute : MemberDataAttributeBase
+    public class MauiDataAttribute : MemberDataAttributeBase
     {
         /// <summary>
         /// The name of the maui test project to run
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         private string _projectName;
 
         // don't pass anything to the base class because we don't need it
-        public MauiMemberDataAttribute(string projectName)
+        public MauiDataAttribute(string projectName)
         : base(null, null)
         {
             _projectName = projectName;
