@@ -21,7 +21,8 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Gets or sets the data type this collection contains.
         /// </summary>
-        protected override Type CreateCollectionItemType() => CollectionType?.GetElementType();
+        protected override Type CreateCollectionItemType()
+            => CollectionType?.GetElementType();
 
         /// <summary>
         /// Gets the items in the array.
@@ -43,19 +44,18 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected override object SetItems(object editValue, object[] value)
         {
-            if (editValue is Array || editValue == null)
+            if (editValue != null && !(editValue is Array))
             {
-                if (value == null)
-                {
-                    return null;
-                }
-
-                Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
-                Array.Copy(value, newArray, value.Length);
-                return newArray;
+                return editValue;
+            }
+            if (value == null)
+            {
+                return null;
             }
 
-            return editValue;
+            Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
+            Array.Copy(value, newArray, value.Length);
+            return newArray;
         }
     }
 }
