@@ -629,11 +629,33 @@ namespace System.Windows.Forms
                     // Tick event, the application will crash with an
                     // AccessViolationException as soon as you close the MessageBox.
 
-                    int returnValue = Interop.TaskDialog.TaskDialogIndirect(
-                        ptrTaskDialogConfig,
-                        out int resultButtonID,
-                        out _,
-                        out _);
+                    // Activate a theming scope to that the task dialog works without
+                    // having to explicitely provide an application manifest that enables
+                    // common controls v6 (provided that Application.EnableVisualStyles()
+                    // was called earlier).
+                    IntPtr themingCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                    int returnValue, resultButtonID;
+                    try
+                    {
+                        returnValue = Interop.TaskDialog.TaskDialogIndirect(
+                            ptrTaskDialogConfig,
+                            out resultButtonID,
+                            out _,
+                            out _);
+                    }
+                    catch (EntryPointNotFoundException ex)
+                    {
+                        throw new InvalidOperationException(
+                            $"You need to call {nameof(Application)}.{nameof(Application.EnableVisualStyles)}() " +
+                            $"before showing the task dialog. Alternatively, you can use an application manifest " +
+                            $"that enables Microsoft.Windows.Common-Controls 6.0.0.0.",
+                            ex);
+                    }
+                    finally
+                    {
+                        // Revert the theming scope.
+                        UnsafeNativeMethods.ThemingScope.Deactivate(themingCookie);
+                    }
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
@@ -652,7 +674,7 @@ namespace System.Windows.Forms
                     {
                         return _resultButton.Value.button;
                     }
-                    
+
                     return _boundPage.GetBoundButtonByID(resultButtonID) ??
                         CreatePlaceholderButton((TaskDialogResult)resultButtonID);
                 }
