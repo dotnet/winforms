@@ -29,11 +29,8 @@ Fixes #
 
 ## Accessibility testing  <!-- Remove this section if PR does not change UI -->
 
-<!-- 
-     If you added/modified UI you will need to show us that 
-     Accessibility Insights Fast Pass run is clean
-     
-     You can get Accessibility Insights tool from https://accessibilityinsights.io/
+<!--
+Microsoft prioritizes making our products accessible. WinForms has a key role in allowing developers to create accessible apps. When submitting a change which impacts UI in any way, including adding new UI or modifying existing controls the developer needs to run the [Accessibility Insights](https://accessibilityinsights.io/) tool and verify that there are no changes or regressions. The developer should run the [Fast Pass](https://accessibilityinsights.io/docs/en/web/getstarted/fastpass) over the impacted control(s) and provide a snapshot of the passing results along with before/after snapshots of the UI.
   -->
 
 
