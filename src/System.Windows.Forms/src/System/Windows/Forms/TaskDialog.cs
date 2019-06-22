@@ -629,10 +629,10 @@ namespace System.Windows.Forms
                     // Tick event, the application will crash with an
                     // AccessViolationException as soon as you close the MessageBox.
 
-                    // Activate a theming scope to that the task dialog works without
-                    // having to explicitely provide an application manifest that enables
-                    // common controls v6 (provided that Application.EnableVisualStyles()
-                    // was called earlier).
+                    // Activate a theming scope so that the task dialog works without
+                    // having to use an application manifest that enables common controls
+                    // v6 (provided that Application.EnableVisualStyles() was called
+                    // earlier).
                     IntPtr themingCookie = UnsafeNativeMethods.ThemingScope.Activate();
                     int returnValue, resultButtonID;
                     try

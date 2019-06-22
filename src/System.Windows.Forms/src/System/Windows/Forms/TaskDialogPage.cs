@@ -377,11 +377,12 @@ namespace System.Windows.Forms
         /// event.
         /// 
         /// Note: Enabling this setting causes the <c>"&amp;"</c> character to be
-        /// interpreted as prefix for a access key character (mnemonic).
+        /// interpreted as prefix for an access key character (mnemonic) if at least
+        /// one link is used.
         /// 
         /// Note: When you enable this setting and you want to display a text
-        /// without interpreting links, you must replace the <c>"&lt;"</c>
-        /// character with a string like <c>"&lt;&lt;a&gt;&lt;/a&gt;"</c>.
+        /// without interpreting links, you must replace the strings <c>"&lt;a"</c>
+        /// and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
         /// </remarks>
         public bool EnableHyperlinks
         {
