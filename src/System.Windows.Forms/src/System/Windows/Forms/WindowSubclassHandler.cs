@@ -99,11 +99,8 @@ namespace System.Windows.Forms
             // Replace the existing window procedure with our one
             // ("instance subclassing").
             // We need to explicitely clear the last Win32 error and then retrieve
-            // it, to check if the call succeeded.
-            // TODO: Use Marshal.SetLastWin32Error() once that method is public,
-            // because that should be safer as when we manually use p/invoke
-            // there is a risk that the error code we set is overridden again
-            // by the CLR.
+            // it, to check if the call succeeded, because if the function returns null
+            // but it succeeded, it doesn't necessarily set the last Win32 error to 0.
             NativeMethods.SetLastError(0);
             _originalWindowProc = UnsafeNativeMethods.SetWindowLong(
                     new HandleRef(this, _handle),
@@ -140,8 +137,6 @@ namespace System.Windows.Forms
             if (disposing && _opened)
             {
                 // Check if the current window procedure is the correct one.
-                // We need to explicitely clear the last Win32 error and then
-                // retrieve it, to check if the call succeeded.
                 NativeMethods.SetLastError(0);
                 IntPtr currentWindowProcedure = UnsafeNativeMethods.GetWindowLong(
                         new HandleRef(this, _handle),

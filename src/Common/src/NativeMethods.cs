@@ -5899,8 +5899,14 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
 
-        // TODO: Use Marshal.SetLastWin32Error(int) once that method is public,
-        // which should be safer
+        // Note: Calling this method might not be safe because we don't know if the CLR
+        // calls other native methods that would overwrite the last error that we have
+        // set by calling this method.
+        // (This is needed for some function which may return 0 even if they succeeded,
+        // but also don't ncessarily set the last Win32 error to 0 in that case.)
+        // 
+        // Ideally, we would need to find a way to tell the CLR to call SetLastError(0)
+        // by itself (when doing p/invoke) before calling the native method.
         [DllImport(ExternDll.Kernel32, ExactSpelling = true)]
         public static extern void SetLastError(int dwErrCode);
     }
