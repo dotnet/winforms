@@ -759,6 +759,11 @@ namespace System.Windows.Forms
         /// To close the dialog with a different result, call the
         /// <see cref="TaskDialogButton.PerformClick"/> method of the
         /// <see cref="TaskDialogButton"/> which you want to set as result.
+        /// 
+        /// Note: This method can be called while the dialog is waiting for
+        /// navigation to complete (whereas <see cref="TaskDialogButton.PerformClick"/>
+        /// would throw in that case), and that when calling this method, the
+        /// <see cref="TaskDialogButton.Click"/> event will not be raised.
         /// </remarks>
         public void Close()
         {
