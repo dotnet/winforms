@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 
 namespace System.Windows.Forms
@@ -62,7 +64,18 @@ namespace System.Windows.Forms
                         "Cannot remove the progress bar while the task dialog is shown.");
                 }
 
-                // TODO: Verify the enum value is actually valid
+                // Verify that the enum value is actually valid.
+                if (!ClientUtils.IsEnumValid(
+                    value,
+                    (int)value,
+                    (int)TaskDialogProgressBarState.Normal,
+                    (int)TaskDialogProgressBarState.None))
+                {
+                    throw new InvalidEnumArgumentException(
+                        nameof(value),
+                        (int)value,
+                        typeof(TaskDialogProgressBarState));
+                }
 
                 TaskDialogProgressBarState previousState = _state;
                 _state = value;
