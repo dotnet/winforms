@@ -538,34 +538,37 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            _wheelDelta += e.Delta;
-
-            bool scrolled = false;
-
-            while (Math.Abs(_wheelDelta) >= NativeMethods.WHEEL_DELTA)
+            if (e != null)
             {
-                if (_wheelDelta > 0)
+                _wheelDelta += e.Delta;
+
+                bool scrolled = false;
+
+                while (Math.Abs(_wheelDelta) >= NativeMethods.WHEEL_DELTA)
                 {
-                    _wheelDelta -= NativeMethods.WHEEL_DELTA;
-                    DoScroll(ScrollEventType.SmallDecrement);
-                    scrolled = true;
+                    if (_wheelDelta > 0)
+                    {
+                        _wheelDelta -= NativeMethods.WHEEL_DELTA;
+                        DoScroll(ScrollEventType.SmallDecrement);
+                        scrolled = true;
+                    }
+                    else
+                    {
+                        _wheelDelta += NativeMethods.WHEEL_DELTA;
+                        DoScroll(ScrollEventType.SmallIncrement);
+                        scrolled = true;
+                    }
                 }
-                else
+
+                if (scrolled)
                 {
-                    _wheelDelta += NativeMethods.WHEEL_DELTA;
-                    DoScroll(ScrollEventType.SmallIncrement);
-                    scrolled = true;
+                    DoScroll(ScrollEventType.EndScroll);
                 }
-            }
 
-            if (scrolled)
-            {
-                DoScroll(ScrollEventType.EndScroll);
-            }
-
-            if (e is HandledMouseEventArgs mouseEventArgs)
-            {
-                mouseEventArgs.Handled = true;
+                if (e is HandledMouseEventArgs mouseEventArgs)
+                {
+                    mouseEventArgs.Handled = true;
+                }
             }
 
             // The base implementation should be called before the implementation above,

@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                 //valid values are -1 to 0xb
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImeMode.Inherit, (int)ImeMode.OnHalf))
                 {
-                    throw new InvalidEnumArgumentException("ImeMode", (int)value, typeof(ImeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImeMode));
                 }
 
                 ImeMode oldImeMode = CachedImeMode;
