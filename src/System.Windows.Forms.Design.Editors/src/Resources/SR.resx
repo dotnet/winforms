@@ -212,6 +212,7 @@
     <value>RTL_False</value>
   </data>
   <data name="MultilineStringEditorWatermark" xml:space="preserve">
-    <value>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</value>
+    <value>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</value>
   </data>
 </root>
