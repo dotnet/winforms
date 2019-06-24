@@ -3191,7 +3191,8 @@ namespace System.Windows.Forms
             return returnedValue;
         }
 
-        protected override bool ProcessKeyEventArgs(ref Message m) {
+        protected override bool ProcessKeyEventArgs(ref Message m)
+        {
             if (AutoCompleteMode != AutoCompleteMode.None &&
                 AutoCompleteSource == AutoCompleteSource.ListItems &&
                 DropDownStyle == ComboBoxStyle.DropDownList &&
@@ -4164,6 +4165,10 @@ namespace System.Windows.Forms
                             {
                                 (_owner.AccessibilityObject as ComboBoxAccessibleObject).SetComboBoxItemFocus();
                             }
+                        }
+                        else
+                        {
+                            _owner.ChildWndProc(ref m);
                         }
                         break;
                     default:
