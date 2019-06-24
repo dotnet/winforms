@@ -9,7 +9,8 @@
     <!-- Additional sources required for restore of PackageReferences -->
     <RestoreSources>
       $(RestoreSources);
-      https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json
+      https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json;
+      https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json;
     </RestoreSources>
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->

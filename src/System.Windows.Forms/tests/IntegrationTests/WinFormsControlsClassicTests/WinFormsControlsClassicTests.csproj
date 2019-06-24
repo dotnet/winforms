@@ -17,7 +17,15 @@
     <NonShipping>true</NonShipping>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
+  
+  <!-- Useless stuff to make Arcade SDK happy -->
+  <PropertyGroup>
+    <Language>msbuild</Language>
+  </PropertyGroup>
+  <Target Name="Pack"/>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>bin\WinFormsControlsClassicTests.xml</DocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,6 +48,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>bin\WinFormsControlsClassicTests.xml</DocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -58,6 +73,15 @@
   <ItemGroup>
     <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs">
       <Link>Interop.WindowMessages.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\ExternalTestHelpers.cs">
+      <Link>ExternalTestHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\MainFormControlsTabOrder.cs">
+      <Link>MainFormControlsTabOrder.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\TestHelpers.cs">
+      <Link>TestHelpers.cs</Link>
     </Compile>
     <Compile Include="..\WinformsControlsTest\Buttons.cs">
       <Link>Buttons.cs</Link>
@@ -285,6 +309,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>9.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
