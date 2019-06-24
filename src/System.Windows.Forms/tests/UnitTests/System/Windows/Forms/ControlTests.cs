@@ -2064,6 +2064,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.Dock);
         }
 
+        [Fact]
+        public void Button_ProductNameGet()
+        {
+            var control = new Control();
+
+            Assert.Equal("Microsoft® .NET", control.ProductName);
+        }
+
         #endregion
 
     }
