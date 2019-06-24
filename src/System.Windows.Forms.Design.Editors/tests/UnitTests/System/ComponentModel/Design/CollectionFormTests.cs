@@ -58,7 +58,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> Items_Set_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new object[0] };
+            yield return new object[] { Array.Empty<object>() };
             yield return new object[] { new object[] { 1, 2, 3 } };
         }
 
@@ -205,16 +205,16 @@ namespace System.ComponentModel.Design.Tests
             form.OnEditValueChangedCallCount = 0;
 
             form.Items = value;
-            Assert.Equal(value ?? new object[0], form.EditValue);
-            Assert.Equal(value ?? new object[0], form.Items);
+            Assert.Equal(value ?? Array.Empty<object>(), form.EditValue);
+            Assert.Equal(value ?? Array.Empty<object>(), form.Items);
             Assert.Equal(0, form.OnEditValueChangedCallCount);
             mockContext.Verify(c => c.OnComponentChanging(), Times.Once());
             mockContext.Verify(c => c.OnComponentChanged(), Times.Once());
 
             // Set same.
             form.Items = value;
-            Assert.Equal(value ?? new object[0], form.EditValue);
-            Assert.Equal(value ?? new object[0], form.Items);
+            Assert.Equal(value ?? Array.Empty<object>(), form.EditValue);
+            Assert.Equal(value ?? Array.Empty<object>(), form.Items);
             Assert.Equal(0, form.OnEditValueChangedCallCount);
             mockContext.Verify(c => c.OnComponentChanging(), Times.Exactly(2));
             mockContext.Verify(c => c.OnComponentChanged(), Times.Exactly(2));

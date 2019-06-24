@@ -2560,7 +2560,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new Link[0].GetEnumerator();
+                    return Array.Empty<Link>().GetEnumerator();
                 }
             }
 

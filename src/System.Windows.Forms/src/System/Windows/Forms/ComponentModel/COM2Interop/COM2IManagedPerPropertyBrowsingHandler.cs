@@ -67,7 +67,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (hr != NativeMethods.S_OK || cItems == 0)
             {
-                return new Attribute[0];
+                return Array.Empty<Attribute>();
             }
 
             ArrayList attrs = new ArrayList();
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
             if (attrTypeNames.Length != varParams.Length)
             {
-                return new Attribute[0];
+                return Array.Empty<Attribute>();
             }
 
             // get the types
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
         }
 

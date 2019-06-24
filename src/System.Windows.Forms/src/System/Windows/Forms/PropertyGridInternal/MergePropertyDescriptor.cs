@@ -553,7 +553,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    return new object[0].GetEnumerator();
+                    return Array.Empty<object>().GetEnumerator();
                 }
             }
 
@@ -571,7 +571,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (items.Length != newCollection.Count)
                 {
-                    items = new object[0];
+                    items = Array.Empty<object>();
                     return false;
                 }
 
@@ -582,7 +582,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (((newItems[i] == null) != (items[i] == null)) ||
                         (items[i] != null && !items[i].Equals(newItems[i])))
                     {
-                        items = new object[0];
+                        items = Array.Empty<object>();
                         return false;
                     }
 

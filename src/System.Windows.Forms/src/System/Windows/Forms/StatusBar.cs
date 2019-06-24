@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new StatusBarPanel[0].GetEnumerator();
+                    return Array.Empty<StatusBarPanel>().GetEnumerator();
                 }
             }
         }

@@ -363,7 +363,7 @@ namespace System.ComponentModel.Design
                 _selection.CopyTo(selectedValues, 0);
                 return selectedValues;
             }
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace System.ComponentModel.Design
             // We always want to allow NULL arrays coming in.
             if (components == null)
             {
-                components = new object[0];
+                components = Array.Empty<object>();
             }
             // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifer keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)

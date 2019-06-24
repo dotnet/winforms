@@ -1679,7 +1679,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         internal sealed class ContainerInfo
         {
-            private static readonly Strip[] emptyStrip = new Strip[0];
+            private static readonly Strip[] emptyStrip = Array.Empty<Strip>();
 
             private static readonly int stateValid = BitVector32.CreateMask();
             private static readonly int stateChildInfoValid = BitVector32.CreateMask(stateValid);
@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms.Layout
                         }
                         _state[stateChildInfoValid] = true;
                     }
-                    return _childInfo ?? (new LayoutInfo[0]);
+                    return _childInfo ?? (Array.Empty<LayoutInfo>());
                 }
             }
 

@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new List<int>() };
-            yield return new object[] { new int[0] };
+            yield return new object[] { Array.Empty<int>() };
 
             var mockSource = new Mock<IListSource>(MockBehavior.Strict);
             mockSource
@@ -946,7 +946,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
-                control.DataSource = new int[0];
+                control.DataSource = Array.Empty<int>();
                 callCount++;
             };
             control.DataSourceChanged += handler;

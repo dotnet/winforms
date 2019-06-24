@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design.Tests
         {
             yield return new object[] { null, null, null };
             var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
-            yield return new object[] { mockContext.Object, new object(), new Attribute[0] };
+            yield return new object[] { mockContext.Object, new object(), Array.Empty<Attribute>() };
         }
 
         [Theory]

@@ -4279,7 +4279,7 @@ namespace System.Windows.Forms
 
             MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
             {
-                return new MethodInfo[0];
+                return Array.Empty<MethodInfo>();
             }
 
             FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
@@ -4289,7 +4289,7 @@ namespace System.Windows.Forms
 
             FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
             {
-                return new FieldInfo[0];
+                return Array.Empty<FieldInfo>();
             }
 
             PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
@@ -4304,17 +4304,17 @@ namespace System.Windows.Forms
 
             PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
             {
-                return new PropertyInfo[0];
+                return Array.Empty<PropertyInfo>();
             }
 
             MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
             {
-                return new MemberInfo[0];
+                return Array.Empty<MemberInfo>();
             }
 
             MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
             {
-                return new MemberInfo[0];
+                return Array.Empty<MemberInfo>();
             }
 
             object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
@@ -5778,7 +5778,7 @@ namespace System.Windows.Forms
 
             MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
             {
-                return new MethodInfo[0];
+                return Array.Empty<MethodInfo>();
             }
 
             FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
@@ -5788,7 +5788,7 @@ namespace System.Windows.Forms
 
             FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
             {
-                return new FieldInfo[0];
+                return Array.Empty<FieldInfo>();
             }
 
             PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
@@ -5803,17 +5803,17 @@ namespace System.Windows.Forms
 
             PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
             {
-                return new PropertyInfo[0];
+                return Array.Empty<PropertyInfo>();
             }
 
             MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
             {
-                return new MemberInfo[0];
+                return Array.Empty<MemberInfo>();
             }
 
             MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
             {
-                return new MemberInfo[0];
+                return Array.Empty<MemberInfo>();
             }
 
             object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
@@ -6008,7 +6008,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                ctls = new Control[0];
+                                ctls = Array.Empty<Control>();
                             }
                             ctl = null;
                             break;
@@ -6992,7 +6992,7 @@ namespace System.Windows.Forms
 
                 FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
                 {
-                    return new FieldInfo[0];
+                    return Array.Empty<FieldInfo>();
                 }
 
                 PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
@@ -7182,7 +7182,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return new byte[0];
+                        return Array.Empty<byte>();
                     }
                 }
 
@@ -8160,7 +8160,7 @@ namespace System.Windows.Forms
             private Int32CAMarshaler valueMarshaller;
             private bool arraysFetched;
 
-            public AxPerPropertyBrowsingEnum(AxPropertyDescriptor targetObject, AxHost owner, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(new string[0], new object[0], allowUnknowns)
+            public AxPerPropertyBrowsingEnum(AxPropertyDescriptor targetObject, AxHost owner, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(Array.Empty<string>(), Array.Empty<object>(), allowUnknowns)
             {
                 target = targetObject;
                 nameMarshaller = names;

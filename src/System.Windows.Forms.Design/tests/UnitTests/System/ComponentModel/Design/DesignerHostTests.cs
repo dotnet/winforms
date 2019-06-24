@@ -1801,7 +1801,7 @@ namespace System.ComponentModel.Design.Tests
             var collection = new ComponentCollection(new Component[] { new Component() });
             var mockFilterService = new Mock<ContainerFilterService>(MockBehavior.Strict);
             mockFilterService
-                .Setup(f => f.FilterComponents(new ComponentCollection(new IComponent[0])))
+                .Setup(f => f.FilterComponents(new ComponentCollection(Array.Empty<IComponent>())))
                 .Returns(collection);
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
             mockServiceProvider
@@ -2681,7 +2681,7 @@ namespace System.ComponentModel.Design.Tests
             var surface = new SubDesignSurface();
             IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
             Assert.Equal(typeof(IDesignerHost).GetMethod(nameof(IDesignerHost.Activate)), reflect.GetMethod(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
-            Assert.Equal(typeof(IDesignerHost).GetMethod(nameof(IDesignerHost.Activate)), reflect.GetMethod(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], new ParameterModifier[0]));
+            Assert.Equal(typeof(IDesignerHost).GetMethod(nameof(IDesignerHost.Activate)), reflect.GetMethod(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, Array.Empty<Type>(), Array.Empty<ParameterModifier>()));
         }
 
         [Fact]
@@ -2698,7 +2698,7 @@ namespace System.ComponentModel.Design.Tests
             var surface = new SubDesignSurface();
             IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
             Assert.Equal(typeof(IDesignerHost).GetProperty(nameof(IDesignerHost.Container)), reflect.GetProperty(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
-            Assert.Equal(typeof(IDesignerHost).GetProperty(nameof(IDesignerHost.Container)), reflect.GetProperty(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, typeof(IContainer), new Type[0], new ParameterModifier[0]));
+            Assert.Equal(typeof(IDesignerHost).GetProperty(nameof(IDesignerHost.Container)), reflect.GetProperty(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, typeof(IContainer), Array.Empty<Type>(), Array.Empty<ParameterModifier>()));
         }
 
         [Fact]
@@ -2714,7 +2714,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
-            Assert.Equal(surface.Host.Container, reflect.InvokeMember(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty, null, surface.Host, new object[0], new ParameterModifier[0], null, new string[0]));
+            Assert.Equal(surface.Host.Container, reflect.InvokeMember(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty, null, surface.Host, Array.Empty<object>(), Array.Empty<ParameterModifier>(), null, Array.Empty<string>()));
         }
 
         private class SubDesignSurface : DesignSurface

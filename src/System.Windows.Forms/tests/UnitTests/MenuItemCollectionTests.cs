@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_IList_Properties_ReturnsExpected()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
             Assert.False(collection.IsFixedSize);
             Assert.False(collection.IsReadOnly);
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void MenuItemCollection_Add_String_Success(string caption, string expectedText)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption);
             Assert.Same(menuItem, Assert.Single(collection));
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Add_StringEventHandler_TestData))]
         public void MenuItemCollection_Add_StringEventHandler_Success(string caption, EventHandler onClick, string expectedText)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption, onClick);
             Assert.Same(menuItem, Assert.Single(collection));
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Add_StringMenuItemArray_TestData()
         {
             yield return new object[] { null, null, string.Empty };
-            yield return new object[] { string.Empty, new MenuItem[0], string.Empty };
+            yield return new object[] { string.Empty, Array.Empty<MenuItem>(), string.Empty };
             yield return new object[] { "caption", new MenuItem[] { new MenuItem() }, "caption" };
         }
 
@@ -79,12 +79,12 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Add_StringMenuItemArray_TestData))]
         public void MenuItemCollection_Add_StringMenuItemArray_Success(string caption, MenuItem[] items, string expectedText)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption, items);
             Assert.Same(menuItem, Assert.Single(collection));
             Assert.Same(expectedText, menuItem.Text);
-            Assert.Equal(items ?? new MenuItem[0], menuItem.MenuItems.Cast<MenuItem>());
+            Assert.Equal(items ?? Array.Empty<MenuItem>(), menuItem.MenuItems.Cast<MenuItem>());
             Assert.Equal(menu, menuItem.Parent);
             Assert.Equal(0, menuItem.Index);
         }
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_MenuItem_Success()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
 
             var menuItem1 = new MenuItem("text1");
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_IndexMenuItem_Success()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
 
             var menuItem1 = new MenuItem("text1");
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_SelfMenuItem_Nop()
         {
-            var menuItem = new MenuItem("text", new MenuItem[0]);
+            var menuItem = new MenuItem("text", Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menuItem);
             Assert.Empty(collection);
         }
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem1 = new MenuItem();
             var menuItem2 = new MenuItem();
-            var parent = new MenuItem("text", new MenuItem[0]);
+            var parent = new MenuItem("text", Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(parent)
             {
                 menuItem1,
@@ -177,9 +177,9 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_AlreadyInDifferentCollection_Success()
         {
-            var oldParent = new MenuItem("text", new MenuItem[0]);
+            var oldParent = new MenuItem("text", Array.Empty<MenuItem>());
             var oldCollection = new Menu.MenuItemCollection(oldParent);
-            var newParent = new MenuItem("text", new MenuItem[0]);
+            var newParent = new MenuItem("text", Array.Empty<MenuItem>());
             var newCollection = new Menu.MenuItemCollection(newParent);
 
             var menuItem = new MenuItem();
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_MenuItemToCreatedMenu_Success()
         {
-            using (var menu = new SubMenu(new MenuItem[0]))
+            using (var menu = new SubMenu(Array.Empty<MenuItem>()))
             {
                 Assert.NotEqual(IntPtr.Zero, menu.Handle);
 
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotEqual(IntPtr.Zero, otherMenu.Handle);
 
-                var menu = new SubMenu(new MenuItem[0]);
+                var menu = new SubMenu(Array.Empty<MenuItem>());
                 var collection = new Menu.MenuItemCollection(menu);
 
                 Assert.Equal(0, collection.Add(menuItem));
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_NullMenuItem_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentNullException>("item", () => collection.Add((MenuItem)null));
             Assert.Throws<ArgumentNullException>("item", () => collection.Add(0, null));
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_SelfWithParent_ThrowsArgumentException()
         {
-            var menuItem = new MenuItem("text", new MenuItem[0]);
+            var menuItem = new MenuItem("text", Array.Empty<MenuItem>());
             var parent = new MenuItem("parent", new MenuItem[] { menuItem });
             var collection = new Menu.MenuItemCollection(menuItem);
             Assert.Throws<ArgumentException>("item", () => collection.Add(menuItem));
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(1)]
         public void MenuItemCollection_Add_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Add(index, new MenuItem()));
         }
@@ -282,7 +282,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItemCollection_Add_AlreadyInCollection_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var menuItem = new MenuItem();
-            var parent = new MenuItem("text", new MenuItem[0]);
+            var parent = new MenuItem("text", Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(parent)
             {
                 menuItem
@@ -293,7 +293,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Add_IListMenuItem_Success()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
 
             var menuItem1 = new MenuItem("text1");
@@ -318,14 +318,14 @@ namespace System.Windows.Forms.Tests
         [InlineData(null)]
         public void MenuItemCollection_Add_IListNotMenuItem_ThrowsArgumentException(object value)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentException>("value", () => collection.Add(value));
         }
 
         public static IEnumerable<object[]> AddRange_TestData()
         {
-            yield return new object[] { new MenuItem[0] };
+            yield return new object[] { Array.Empty<MenuItem>() };
             yield return new object[] { new MenuItem[] { new MenuItem(), new MenuItem() } };
         }
 
@@ -333,7 +333,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AddRange_TestData))]
         public void MenuItemCollection_AddRange_Invoke_Success(MenuItem[] items)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             collection.AddRange(items);
             Assert.Equal(items.Length, collection.Count);
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_AddRange_NullItems_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentNullException>("items", () => collection.AddRange(null));
         }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_AddRange_NullValueInItems_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentNullException>("item", () => collection.AddRange(new MenuItem[] { null }));
         }
@@ -390,7 +390,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItemCollection_CopyTo_NotEmpty_Success()
         {
             var menuItem = new MenuItem();
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu)
             {
                 menuItem
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_CopyTo_Empty_Nop()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             var array = new object[] { 1, 2, 3 };
             collection.CopyTo(array, 1);
@@ -437,7 +437,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Contains_IListNotMenuItem_ReturnsMinusOne()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
             Assert.False(collection.Contains("value"));
         }
@@ -457,8 +457,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Find_TestData()
         {
-            yield return new object[] { new MenuItem[] { new MenuItem() }, "noSuchKey", false, new MenuItem[0] };
-            yield return new object[] { new MenuItem[] { new MenuItem() }, "noSuchKey", true, new MenuItem[0] };
+            yield return new object[] { new MenuItem[] { new MenuItem() }, "noSuchKey", false, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { new MenuItem() }, "noSuchKey", true, Array.Empty<MenuItem>() };
 
             foreach (bool searchAllChildren in new bool[] { true, false })
             {
@@ -469,14 +469,14 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { new MenuItem[] { menuItem1, menuItem2, menuItem3 }, "name", searchAllChildren, new MenuItem[] { menuItem1, menuItem2 } };
             }
 
-            yield return new object[] { new MenuItem[] { new MenuItem { Name = "name" } }, "noSuchName", true, new MenuItem[0] };
-            yield return new object[] { new MenuItem[] { new MenuItem { Name = "name" } }, "noSuchName", false, new MenuItem[0] };
-            yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name2" } }) { Name = "name" }, }, "noSuchName", true, new MenuItem[0] };
-            yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name2" } }) { Name = "name" }, }, "noSuchName", false, new MenuItem[0] };
+            yield return new object[] { new MenuItem[] { new MenuItem { Name = "name" } }, "noSuchName", true, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { new MenuItem { Name = "name" } }, "noSuchName", false, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name2" } }) { Name = "name" }, }, "noSuchName", true, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name2" } }) { Name = "name" }, }, "noSuchName", false, Array.Empty<MenuItem>() };
 
             var menuItemChild = new MenuItem { Name = "name" };
             yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { menuItemChild }) }, "name", true, new MenuItem[] { menuItemChild } };
-            yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name" } }) }, "name", false, new MenuItem[0] };
+            yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name" } }) }, "name", false, Array.Empty<MenuItem>() };
         }
 
         [Theory]
@@ -493,7 +493,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("")]
         public void MenuItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             var collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
         }
@@ -525,7 +525,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_IndexOf_IListNotMenuItem_ReturnsMinusOne()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
             Assert.Equal(-1, collection.IndexOf("value"));
         }
@@ -550,7 +550,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItemCollection_Insert_IListInvoke_Success()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
 
             var menuItem1 = new MenuItem("text1");
@@ -575,7 +575,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(null)]
         public void MenuItemCollection_Insert_IListNotMenuItem_ThrowsArgumentException(object value)
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             IList collection = new Menu.MenuItemCollection(menu);
             Assert.Throws<ArgumentException>("value", () => collection.Insert(0, value));
         }

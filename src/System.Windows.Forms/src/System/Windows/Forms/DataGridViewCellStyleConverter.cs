@@ -50,8 +50,8 @@ namespace System.Windows.Forms
 
             if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewCellStyle)
             {
-                ConstructorInfo ctor = value.GetType().GetConstructor(new Type[0]);
-                return new InstanceDescriptor(ctor, new object[0], false);
+                ConstructorInfo ctor = value.GetType().GetConstructor(Array.Empty<Type>());
+                return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

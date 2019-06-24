@@ -646,7 +646,7 @@ namespace System.ComponentModel.Design.Serialization
                     PropertyDescriptor[] propArray;
                     if (propObject == null)
                     {
-                        propArray = new PropertyDescriptor[0];
+                        propArray = Array.Empty<PropertyDescriptor>();
                     }
                     else
                     {

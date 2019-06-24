@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Design
                             continue;
                         }
                         // Check if we have public constructor...
-                        ConstructorInfo ctor = t.GetConstructor(new Type[0]);
+                        ConstructorInfo ctor = t.GetConstructor(Array.Empty<Type>());
                         if (ctor == null)
                         {
                             continue;
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Design
                 }
             }
             s_customToolStripItemCount = 0;
-            return new Type[0];
+            return Array.Empty<Type>();
         }
 
         /// <summary> 

@@ -16719,7 +16719,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new Rectangle[0];
+                return Array.Empty<Rectangle>();
             }
         }
 
@@ -18854,7 +18854,7 @@ namespace System.Windows.Forms
 
                             MethodInfo method = typeof(SystemEvents).GetMethod("Shutdown",
                                                                                 BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                                null, new Type[0], new ParameterModifier[0]);
+                                                                                null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
                             Debug.Assert(method != null, "No Shutdown method on SystemEvents");
                             if (method != null)
                             {
@@ -18924,7 +18924,7 @@ namespace System.Windows.Forms
 
                         MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
                                                                             BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                            null, new Type[0], new ParameterModifier[0]);
+                                                                            null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
                         Debug.Assert(method != null, "No Startup method on SystemEvents");
                         if (method != null)
                         {

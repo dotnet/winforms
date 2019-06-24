@@ -307,7 +307,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (_errors == null)
                     {
-                        _errors = new object[0];
+                        _errors = Array.Empty<object>();
                     }
 
                     object[] errors = new object[_errors.Count];

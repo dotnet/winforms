@@ -43,7 +43,7 @@ namespace System.ComponentModel.Design.Tests
             var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
             mockSet
                 .Setup(s => s.GetCommands("Verbs"))
-                .Returns(new object[0]);
+                .Returns(Array.Empty<object>());
             Assert.Throws<InvalidCastException>(() => mockSet.Object.Verbs);
         }
 
@@ -64,7 +64,7 @@ namespace System.ComponentModel.Design.Tests
             var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
             mockSet
                 .Setup(s => s.GetCommands("ActionLists"))
-                .Returns(new object[0]);
+                .Returns(Array.Empty<object>());
             Assert.Throws<InvalidCastException>(() => mockSet.Object.ActionLists);
         }
     }

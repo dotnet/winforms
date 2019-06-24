@@ -47,8 +47,8 @@ namespace System.Windows.Forms
         // our array of viewTabs
         private bool viewTabsDirty = true;
         private bool drawFlatToolBar = false;
-        private PropertyTab[] viewTabs = new PropertyTab[0];
-        private PropertyTabScope[] viewTabScopes = new PropertyTabScope[0];
+        private PropertyTab[] viewTabs = Array.Empty<PropertyTab>();
+        private PropertyTabScope[] viewTabScopes = Array.Empty<PropertyTabScope>();
         private Hashtable viewTabProps;
 
         // the tab view buttons
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                 {
-                    SelectedObjects = new object[0];
+                    SelectedObjects = Array.Empty<object>();
                 }
                 else
                 {
@@ -1325,7 +1325,7 @@ namespace System.Windows.Forms
 
                         if (value == null)
                         {
-                            currentObjects = new object[0];
+                            currentObjects = Array.Empty<object>();
                         }
                         else
                         {
@@ -1501,7 +1501,7 @@ namespace System.Windows.Forms
             {
                 if (currentObjects == null)
                 {
-                    return new object[0];
+                    return Array.Empty<object>();
                 }
                 return (object[])currentObjects.Clone();
             }
@@ -2694,7 +2694,7 @@ namespace System.Windows.Forms
 
             if (objs == null || objs.Length == 0)
             {
-                return new Type[0];
+                return Array.Empty<Type>();
             }
 
             Type[] tabTypes = new Type[5];
@@ -2704,7 +2704,7 @@ namespace System.Windows.Forms
 
             if (tabAttr == null)
             {
-                return new Type[0];
+                return Array.Empty<Type>();
             }
 
             // filter out all the types of the current scope
@@ -2726,7 +2726,7 @@ namespace System.Windows.Forms
 
             if (types == 0)
             {
-                return new Type[0];
+                return Array.Empty<Type>();
             }
 
             bool found;
@@ -2740,7 +2740,7 @@ namespace System.Windows.Forms
                 if (tabAttr == null)
                 {
                     // if this guy has no tabs at all, we can fail right now
-                    return new Type[0];
+                    return Array.Empty<Type>();
                 }
 
                 // make sure this guy has all the items in the array,
@@ -4408,7 +4408,7 @@ namespace System.Windows.Forms
                 // clear the component refs of the tabs
                 for (int i = 0; i < viewTabs.Length; i++)
                 {
-                    viewTabs[i].Components = new object[0];
+                    viewTabs[i].Components = Array.Empty<object>();
                 }
             }
         }
@@ -5162,7 +5162,7 @@ namespace System.Windows.Forms
 
                 if (peMain == null)
                 {
-                    currentPropEntries = new GridEntryCollection(null, new GridEntry[0]);
+                    currentPropEntries = new GridEntryCollection(null, Array.Empty<GridEntry>());
                     gridView.ClearProps();
                     return;
                 }
@@ -5652,7 +5652,7 @@ namespace System.Windows.Forms
             {
                 if (owner == null)
                 {
-                    return new PropertyTab[0].GetEnumerator();
+                    return Array.Empty<PropertyTab>().GetEnumerator();
                 }
 
                 return owner.viewTabs.GetEnumerator();

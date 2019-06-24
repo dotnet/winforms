@@ -60,10 +60,10 @@ namespace System.Windows.Forms
 
                 // public DataGridViewColumn()
                 // 
-                ctor = dataGridViewColumn.GetType().GetConstructor(new Type[0]);
+                ctor = dataGridViewColumn.GetType().GetConstructor(Array.Empty<Type>());
                 if (ctor != null)
                 {
-                    return new InstanceDescriptor(ctor, new object[0], false);
+                    return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                 }
             }
 

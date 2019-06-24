@@ -397,7 +397,7 @@ namespace System.ComponentModel.Design.Serialization
                     return new CodeMemberMethod[] { ctor };
                 }
             }
-            return new CodeMemberMethod[0];
+            return Array.Empty<CodeMemberMethod>();
         }
 
         /// <summary>

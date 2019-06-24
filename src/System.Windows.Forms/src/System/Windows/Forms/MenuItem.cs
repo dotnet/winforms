@@ -1079,7 +1079,7 @@ namespace System.Windows.Forms
             }
             if (forms == null)
             {
-                forms = new Form[0];
+                forms = Array.Empty<Form>();
             }
 
             return forms;

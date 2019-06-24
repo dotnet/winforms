@@ -229,7 +229,7 @@ namespace System.Windows.Forms
             {
                 string[] fullPaths = FileNames;
                 if (null == fullPaths || 0 == fullPaths.Length)
-                { return new string[0]; }
+                { return Array.Empty<string>(); }
                 string[] safePaths = new string[fullPaths.Length];
                 for (int i = 0; i < safePaths.Length; ++i)
                 {

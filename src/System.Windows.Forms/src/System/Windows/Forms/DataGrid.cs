@@ -131,7 +131,7 @@ namespace System.Windows.Forms
         // ui state
         //
         // Don't use dataGridRows, use the accessor!!!
-        private DataGridRow[] dataGridRows = new DataGridRow[0];
+        private DataGridRow[] dataGridRows = Array.Empty<DataGridRow>();
         private int dataGridRowsLength = 0;
 
         // for toolTip
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms
 
             if (listManager == null)
             {
-                SetDataGridRows(new DataGridRow[0], 0);
+                SetDataGridRows(Array.Empty<DataGridRow>(), 0);
                 return;
             }
 
