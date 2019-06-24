@@ -34,6 +34,9 @@ namespace System.Windows.Forms.Maui.IntegrationTests
             if (string.IsNullOrEmpty(projectName))
                 throw new ArgumentNullException(nameof(projectName));
 
+            if (s_testResults.ContainsKey(projectName))
+                throw new InvalidOperationException($"Maui test for {projectName} has already run. Please double-check the project name in your test class.");
+
             var exePath = TestHelpers.GetExePath(projectName);
             var result = s_testRunner.RunTest(exePath);
             Assert.NotNull(result);

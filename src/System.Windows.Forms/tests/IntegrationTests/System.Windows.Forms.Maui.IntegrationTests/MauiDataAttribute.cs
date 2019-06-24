@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Xunit;
 using Xunit.Sdk;
@@ -28,8 +29,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         private string _projectName;
 
         // don't pass anything to the base class because we don't need it
-        public MauiDataAttribute(string projectName)
-        : base(null, null)
+        public MauiDataAttribute(string projectName) : base(null, null)
         {
             _projectName = projectName;
         }
@@ -50,14 +50,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
             var scenarios = MauiTestHelper.GetScenarios(_projectName);
 
             // convert the data to the expected format
-            var data = new List<object[]>();
-            foreach (var scenario in scenarios)
-            {
-                var objArray = new object[] { scenario };
-                data.Add(objArray);
-            }
-
-            return data;
+            return scenarios.Select(x => new object[] { x });
         }
 
         /// <summary>
