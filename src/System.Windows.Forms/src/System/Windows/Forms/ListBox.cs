@@ -24,6 +24,7 @@ namespace System.Windows.Forms
     using System.Drawing;
     using Microsoft.Win32;
     using System.Text;
+    using System.Collections.Generic;
 
     /// <summary>
     ///
@@ -55,7 +56,7 @@ namespace System.Windows.Forms
     DefaultBindingProperty(nameof(SelectedValue)),
     SRDescription(nameof(SR.DescriptionListBox))
     ]
-    public class ListBox : ListControl
+    public partial class ListBox : ListControl
     {
         /// <summary>
         ///     while doing a search, if no matches are found, this is returned
@@ -105,6 +106,19 @@ namespace System.Windows.Forms
         //in this case we should always use the cachedValue instead of the currently set value. 
         //We need to change this in the count as well as SelectedIndex code where we access the SelectionMode.
         private bool selectionModeChanging = false;
+
+
+        /// <summary>
+        ///     This field stores focused ListBox item Accessible object before focus changing. 
+        ///     Used in FocusedItemIsChanged method.
+        /// </summary>
+        private AccessibleObject focusedItem;
+
+        /// <summary>
+        ///     This field stores current items count. 
+        ///     Used in ItemsCountIsChanged method.
+        /// </summary>
+        private int itemsCount = 0;
 
         /// <summary>
         ///     This value stores the array of custom tabstops in the listbox. the array should be populated by
@@ -717,6 +731,17 @@ namespace System.Windows.Forms
             }
         }
 
+        private bool ItemsCountIsChanged()
+        {
+            if (Items.Count == itemsCount)
+            {
+                return false;
+            }
+
+            itemsCount = Items.Count;
+            return true;
+        }
+
         // Computes the maximum width of all items in the ListBox
         //
         internal virtual int MaxItemWidth
@@ -1150,6 +1175,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1401,6 +1428,15 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///     constructs the new instance of the accessibility object for this control. Subclasses
+        ///     should not call base.CreateAccessibilityObject.
+        /// </summary>
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ListBoxAccessibleObject(this);
+        }
+
         protected virtual ObjectCollection CreateItemCollection()
         {
             return new ObjectCollection(this);
@@ -1494,6 +1530,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///     Shows whether the focused item has changed when calling OnSelectedIndexChanged event.
+        /// </summary>
+        private bool FocusedItemIsChanged()
+        {
+            if (focusedItem == AccessibilityObject.GetFocused())
+            {
+                return false;
+            }
+
+            focusedItem = AccessibilityObject.GetFocused();
+            return true;
+        }
+
+        /// <summary>
         ///     Returns the height of the given item in a list box. The index parameter
         ///     is ignored if drawMode is not OwnerDrawVariable.
         /// </summary>
@@ -1537,9 +1587,9 @@ namespace System.Windows.Forms
         {
             CheckIndex(index);
             NativeMethods.RECT rect = new NativeMethods.RECT();
-            int LBM_Result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
+            int result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
 
-            if (LBM_Result == 0)
+            if (result == 0)
             {
                 return Rectangle.Empty;
             }
@@ -1623,7 +1673,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adds the given item to the native combo box.  This asserts if the handle hasn't been
+        ///     Adds the given item to the native List box.  This asserts if the handle hasn't been
         ///     created.
         /// </summary>
         private int NativeAdd(object item)
@@ -1649,7 +1699,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Clears the contents of the combo box.
+        ///     Clears the contents of the List box.
         /// </summary>
         private void NativeClear()
         {
@@ -1669,7 +1719,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Inserts the given item to the native combo box at the index.  This asserts if the handle hasn't been
+        ///     Inserts the given item to the native List box at the index.  This asserts if the handle hasn't been
         ///     created or if the resulting insert index doesn't match the passed in index.
         /// </summary>
         private int NativeInsert(int index, object item)
@@ -1799,6 +1849,26 @@ namespace System.Windows.Forms
             base.OnChangeUICues(e);
         }
 
+        internal bool HasKeyboardFocus { get; set; }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            AccessibleObject item = AccessibilityObject.GetFocused();
+
+            if (item != null)
+            {
+                HasKeyboardFocus = false;
+                item.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+            else
+            {
+                HasKeyboardFocus = true;
+                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+
+            base.OnGotFocus(e);
+        }
+
         /// <summary>
         ///     Actually goes and fires the drawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -1819,7 +1889,6 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-
 
             //for getting the current Locale to set the Scrollbars...
             //
@@ -1908,7 +1977,6 @@ namespace System.Windows.Forms
             UpdateFontCache();
         }
 
-
         /// <summary>
         ///    <para>We override this so we can re-create the handle if the parent has changed.</para>
         /// </summary>
@@ -1946,6 +2014,23 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
+            if (Focused && FocusedItemIsChanged())
+            {
+                var focused = AccessibilityObject.GetFocused();
+                if (focused == AccessibilityObject.GetSelected())
+                {
+                    focused?.RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
+                }
+                focused?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+            else
+            {
+                if (ItemsCountIsChanged())
+                {
+                    AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                }
+            }
+
             base.OnSelectedIndexChanged(e);
 
             // set the position in the dataSource, if there is any
@@ -2175,12 +2260,6 @@ namespace System.Windows.Forms
             {
                 if (DataSource is ICurrencyManagerProvider)
                 {
-                    // Everett ListControl's had a 
-
-
-
-
-
                     selectedValueChangedFired = false;
                 }
 
@@ -2447,7 +2526,6 @@ namespace System.Windows.Forms
                         }
                     }
 
-
                     OnDrawItem(new DrawItemEventArgs(g, Font, bounds, dis.itemID, (DrawItemState)dis.itemState, ForeColor, BackColor));
                 }
                 finally
@@ -2533,13 +2611,10 @@ namespace System.Windows.Forms
                     bool captured = Capture;
                     if (captured && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
                     {
-
-
                         if (!doubleClickFired && !ValidationCancelled)
                         {
                             OnClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                             OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-
                         }
                         else
                         {
@@ -2550,7 +2625,6 @@ namespace System.Windows.Forms
                             {
                                 OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                                 OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-
                             }
                         }
                     }
@@ -2642,6 +2716,8 @@ namespace System.Windows.Forms
             {
                 this.listControl = listControl;
             }
+
+            internal IReadOnlyList<Entry> Entries => entries;
 
             /// <summary>
             ///     The version of this array.  This number changes with each
@@ -3017,7 +3093,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///     This is a single entry in our item array.
             /// </summary>
-            private class Entry
+            internal class Entry
             {
                 public object item;
                 public int state;
@@ -3162,6 +3238,7 @@ namespace System.Windows.Forms
                 AddRange(value);
             }
 
+            /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.Count"]/*' />
             /// <summary>
             ///     Retrieves the number of items.
             /// </summary>
@@ -3225,7 +3302,7 @@ namespace System.Windows.Forms
             ///     added to the end of the existing list of items. For a sorted List box,
             ///     the item is inserted into the list according to its sorted position.
             ///     The item's toString() method is called to obtain the string that is
-            ///     displayed in the combo box.
+            ///     displayed in the List box.
             ///     A SystemException occurs if there is insufficient space available to
             ///     store the new item.
             /// </summary>
@@ -3308,7 +3385,6 @@ namespace System.Windows.Forms
                 return index;
             }
 
-
             int IList.Add(object item)
             {
                 return Add(item);
@@ -3328,7 +3404,6 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(ICollection items)
             {
-
                 if (items == null)
                 {
                     throw new ArgumentNullException(nameof(items));
@@ -3462,11 +3537,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds an item to the combo box. For an unsorted combo box, the item is
-            ///     added to the end of the existing list of items. For a sorted combo box,
+            ///     Adds an item to the List box. For an unsorted List box, the item is
+            ///     added to the end of the existing list of items. For a sorted List box,
             ///     the item is inserted into the list according to its sorted position.
             ///     The item's toString() method is called to obtain the string that is
-            ///     displayed in the combo box.
+            ///     displayed in the List box.
             ///     A SystemException occurs if there is insufficient space available to
             ///     store the new item.
             /// </summary>
@@ -3484,7 +3559,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(item));
                 }
 
-                // If the combo box is sorted, then nust treat this like an add
+                // If the List box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
                 //
                 if (owner.sorted)
@@ -4432,7 +4507,6 @@ namespace System.Windows.Forms
                 }
             }
 
-
             public bool IsReadOnly
             {
                 get
@@ -4590,4 +4664,3 @@ namespace System.Windows.Forms
         }
     }
 }
-
