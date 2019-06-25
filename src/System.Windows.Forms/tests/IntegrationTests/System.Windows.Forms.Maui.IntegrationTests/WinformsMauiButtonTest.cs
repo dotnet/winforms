@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// </summary>
     public class WinformsMauiButtonTest
     {
-        public const string ProjectName = "MauiButtonTest";
+        private const string ProjectName = "MauiButtonTest";
 
         [Theory]
         [MauiData(ProjectName)]
