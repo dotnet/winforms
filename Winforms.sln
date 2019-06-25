@@ -57,6 +57,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiButtonTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiButtonTest\MauiButtonTest.csproj", "{8AB0265C-B32D-444E-BFCB-8902FE45143A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Maui.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.Maui.IntegrationTests\System.Windows.Forms.Maui.IntegrationTests.csproj", "{87CF8481-647B-4951-8A57-468B2F0CD84B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A} = {8AB0265C-B32D-444E-BFCB-8902FE45143A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsControlsClassicTests", "src\System.Windows.Forms\tests\IntegrationTests\WinFormsControlsClassicTests\WinFormsControlsClassicTests.csproj", "{840B70B2-4F4B-4FF0-A26F-185789625C78}"
 EndProject

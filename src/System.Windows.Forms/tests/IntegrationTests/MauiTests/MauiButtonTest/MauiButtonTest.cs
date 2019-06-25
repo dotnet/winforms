@@ -5,7 +5,6 @@
 using System.Threading;
 using WFCTestLib.Log;
 using ReflectTools;
-using System.Globalization;
 using System.Windows.Forms.IntegrationTests.Common;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
@@ -32,8 +31,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Thread.CurrentThread.SetCulture("en-US");
             Application.Run(new MauiButtonTest(args));
         }
-
-#region Test Methods
 
         [Scenario(true)]
         public ScenarioResult Click_Fires_OnClick(TParams p)
@@ -80,8 +77,5 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return new ScenarioResult(!_wasClicked);
         }
-
-#endregion Test Methods
-
     }
 }

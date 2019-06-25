@@ -80,11 +80,24 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     [Serializable()]
     public class Scenario
     {
+        private string _name;
+
         [XmlAttribute("method")]
         public string Method { get; set; }
 
+        // strip the parens from the name
         [XmlAttribute("name")]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (value.EndsWith("()"))
+                {
+                    _name = value.Remove(value.Length - 2);
+                }
+            }
+        }
 
         [XmlElement()]
         public Result Result { get; set; }
