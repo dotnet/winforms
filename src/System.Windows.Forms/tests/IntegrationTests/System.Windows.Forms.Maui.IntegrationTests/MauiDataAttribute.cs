@@ -31,8 +31,15 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         // don't pass anything to the base class because we don't need it
         public MauiDataAttribute(string projectName) : base(null, null)
         {
-            DisableDiscoveryEnumeration = true;
             _projectName = projectName;
+
+            // This makes it so visual studio doesn't try to populate the test explorer
+            // with each maui scenario before the tests are actually executed.
+            // This is important because once the data is retrieved before the tests are run,
+            // it will never be updated again unless you do a full clean/rebuild.
+            // So if you add a scenario to a maui test, for example, the new scenario won't show
+            // up in the test explorer.
+            DisableDiscoveryEnumeration = true;
         }
 
         /// <summary>
