@@ -31,6 +31,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         // don't pass anything to the base class because we don't need it
         public MauiDataAttribute(string projectName) : base(null, null)
         {
+            DisableDiscoveryEnumeration = true;
             _projectName = projectName;
         }
 
