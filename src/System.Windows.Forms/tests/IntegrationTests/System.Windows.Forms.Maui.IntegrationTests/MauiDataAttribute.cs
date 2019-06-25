@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     public class MauiDataAttribute : MemberDataAttributeBase
     {
         /// <summary>
-        /// The name of the maui test project to run
+        /// The name of the maui test project to get scenarios for
         /// </summary>
         private string _projectName;
 
@@ -36,16 +36,13 @@ namespace System.Windows.Forms.Maui.IntegrationTests
 
         /// <summary>
         /// This is the method that actually returns the data that will be parameterized into the
-        /// xUnit test method. We actually don't use the base class logic at all, we just run the maui
-        /// test, get the scenarios, and return them.
+        /// xUnit test method. We actually don't use the base class logic at all, 
+        /// we just get the scenarios for the specified project name and return them.
         /// </summary>
         /// <param name="testMethod">MethodInfo of the method being decorated</param>
         /// <returns>The test data</returns>
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
-            // run the maui test so the scenario names are available
-            MauiTestHelper.RunMauiTest(_projectName);
-
             // get the scenarios
             var scenarios = MauiTestHelper.GetScenarios(_projectName);
 
