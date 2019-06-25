@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <summary>
         /// The name of the maui test project to get scenarios for
         /// </summary>
-        private string _projectName;
+        private readonly string _projectName;
 
         // don't pass anything to the base class because we don't need it
         public MauiDataAttribute(string projectName) : base(null, null)
