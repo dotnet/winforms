@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         private const string ProjectName = "MauiButtonTest";
 
         [Theory]
-        [MauiData(ProjectName)]
+        [MauiData(ProjectName, DisableDiscoveryEnumeration = true)]
         public void MauiButtonTest(string scenarioName)
         {
             MauiTestHelper.ValidateScenarioPassed(ProjectName, scenarioName);
