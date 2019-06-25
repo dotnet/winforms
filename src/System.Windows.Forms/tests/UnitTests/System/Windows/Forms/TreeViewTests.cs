@@ -64,6 +64,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(treeView.Text);
             Assert.Null(treeView.TopNode);
             Assert.Null(treeView.TreeViewNodeSorter);
+            Assert.True(treeView.Visible);
             Assert.Equal(0, treeView.VisibleCount);
         }
 
