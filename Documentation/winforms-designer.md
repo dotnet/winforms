@@ -67,7 +67,7 @@ dotnet build
 
 Always repeat the following steps when inserting a new Form or a new UserControl:
 
-1. In the Classing Framework project, open the project's context menu, and click *Add New Item*.
+1. In the classic Framework project, open the project's context menu, and click *Add New Item*.
 
     ![add-new-form][add-new-form]
 
