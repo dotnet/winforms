@@ -7,7 +7,6 @@ using Accessibility;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-
 namespace System.Windows.Forms
 {
     public partial class ListBox
@@ -33,11 +32,8 @@ namespace System.Windows.Forms
                 _systemIAccessible = owningAccessibleObject.GetSystemIAccessibleInternal();
             }
 
-            #region Private properties
             private int CurrentIndex => Array.IndexOf(_owningListBox.Items.InnerArray.Entries as Array, _itemEntry);
-            #endregion
 
-            #region Internal properties
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
 
             internal override bool IsItemSelected
@@ -67,9 +63,7 @@ namespace System.Windows.Forms
                     return runtimeId;
                 }
             }
-            #endregion
 
-            #region Public properties
             /// <summary>
             /// Gets the ListBox Item bounds.
             /// </summary>
@@ -145,9 +139,7 @@ namespace System.Windows.Forms
                     return state |= (AccessibleStates)(_systemIAccessible.get_accState(GetChildId()));
                 }
             }
-            #endregion
 
-            #region Internal methods
             internal override void AddToSelection()
             {
                 SelectItem();
@@ -307,9 +299,7 @@ namespace System.Windows.Forms
                 RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
                 SelectItem();
             }
-            #endregion
 
-            #region Public methods
             public override void Select(AccessibleSelection flags)
             {
                 try
@@ -326,7 +316,6 @@ namespace System.Windows.Forms
                     // the ArgumentException and fail silently.
                 }
             }
-            #endregion
         }
     }
 }

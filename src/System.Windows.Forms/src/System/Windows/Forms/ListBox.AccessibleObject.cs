@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-
 namespace System.Windows.Forms
 {
     public partial class ListBox
@@ -35,7 +34,6 @@ namespace System.Windows.Forms
                 _systemIAccessible = GetSystemIAccessibleInternal();
             }
 
-            #region Internal properties
             internal override Rectangle BoundingRectangle => _owningListBox.GetToolNativeScreenRectangle();
 
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot => this;
@@ -64,9 +62,7 @@ namespace System.Windows.Forms
                     return runtimeId;
                 }
             }
-            #endregion
 
-            #region Public properties
             public override AccessibleStates State
             {
                 get
@@ -81,9 +77,7 @@ namespace System.Windows.Forms
                     return state;
                 }
             }
-            #endregion
 
-            #region Internal methods
             /// <summary>
             /// Return the child object at the given screen coordinates.
             /// </summary>
@@ -224,9 +218,7 @@ namespace System.Windows.Forms
             {
                 Value = newValue;
             }
-            #endregion
 
-            #region Public methods
             public override AccessibleObject GetChild(int index)
             {
                 if (index < 0 || index >= _owningListBox.Items.Count)
@@ -295,7 +287,6 @@ namespace System.Windows.Forms
 
                 return null;
             }
-            #endregion
         }
     }
 }

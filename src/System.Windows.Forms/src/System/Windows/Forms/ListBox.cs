@@ -2023,12 +2023,9 @@ namespace System.Windows.Forms
                 }
                 focused?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
             }
-            else
+            else if (ItemsCountIsChanged())
             {
-                if (ItemsCountIsChanged())
-                {
-                    AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                }
+                AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
             }
 
             base.OnSelectedIndexChanged(e);
@@ -3238,7 +3235,6 @@ namespace System.Windows.Forms
                 AddRange(value);
             }
 
-            /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.Count"]/*' />
             /// <summary>
             ///     Retrieves the number of items.
             /// </summary>
