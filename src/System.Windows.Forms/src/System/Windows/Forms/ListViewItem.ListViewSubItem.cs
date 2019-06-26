@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     public partial class ListViewItem
     {
-        // TODO: add serializable reasoning (@Devendar)
+        // [Serializable] necessary why??? (@Devendar)
 
         [TypeConverterAttribute(typeof(ListViewSubItemConverter))]
         [ToolboxItem(false)]
@@ -21,19 +21,18 @@ namespace System.Windows.Forms
         [Serializable]
         public class ListViewSubItem
         {
-
             [NonSerialized]
             internal ListViewItem owner;
 
-            private string text;
+            private string _text;
 
             [OptionalField(VersionAdded = 2)]
-            private string name = null;
+            private string _name = null;
 
-            private SubItemStyle style;
+            private SubItemStyle _style;
 
             [OptionalField(VersionAdded = 2)]
-            private object userData;
+            private object _userData;
 
             public ListViewSubItem()
             {
@@ -42,14 +41,14 @@ namespace System.Windows.Forms
             public ListViewSubItem(ListViewItem owner, string text)
             {
                 this.owner = owner;
-                this.text = text;
+                this._text = text ?? string.Empty;
             }
 
             public ListViewSubItem(ListViewItem owner, string text, Color foreColor, Color backColor, Font font)
             {
                 this.owner = owner;
-                this.text = text;
-                style = new SubItemStyle
+                this._text = text ?? string.Empty;
+                _style = new SubItemStyle
                 {
                     foreColor = foreColor,
                     backColor = backColor,
@@ -60,30 +59,22 @@ namespace System.Windows.Forms
 
             public Color BackColor
             {
-                get
-                {
-                    if (style != null && style.backColor != Color.Empty)
-                    {
-                        return style.backColor;
-                    }
-
-                    if (owner != null && owner.listView != null)
-                    {
-                        return owner.listView.BackColor;
-                    }
-
-                    return SystemColors.Window;
-                }
+                get => _style != null && _style.backColor != Color.Empty ?
+                            _style.backColor :
+                            (owner?.listView != null ?
+                                owner.listView.BackColor :
+                                    SystemColors.Window);
+                
                 set
                 {
-                    if (style == null)
+                    if (_style == null)
                     {
-                        style = new SubItemStyle();
+                        _style = new SubItemStyle();
                     }
 
-                    if (style.backColor != value)
+                    if (_style.backColor != value)
                     {
-                        style.backColor = value;
+                        _style.backColor = value;
                         owner?.InvalidateListView();
                     }
                 }
@@ -91,75 +82,39 @@ namespace System.Windows.Forms
             [Browsable(false)]
             public Rectangle Bounds
             {
-                get
-                {
-                    if (owner != null && owner.listView != null && owner.listView.IsHandleCreated)
-                    {
-                        return owner.listView.GetSubItemRect(owner.Index, owner.SubItems.IndexOf(this));
-                    }
-                    else
-                    {
-                        return Rectangle.Empty;
-                    }
-                }
+                get => owner?.listView?.IsHandleCreated == true ?
+                            owner.listView.GetSubItemRect(owner.Index, owner.SubItems.IndexOf(this)) :
+                            Rectangle.Empty;
             }
 
             internal bool CustomBackColor
-            {
-                get
-                {
-                    Debug.Assert(style != null, "Should have checked CustomStyle");
-                    return !style.backColor.IsEmpty;
-                }
-            }
+                => _style?.backColor.IsEmpty == false;
 
             internal bool CustomFont
-            {
-                get
-                {
-                    Debug.Assert(style != null, "Should have checked CustomStyle");
-                    return style.font != null;
-                }
-            }
+                => _style.font != null;
 
             internal bool CustomForeColor
-            {
-                get
-                {
-                    Debug.Assert(style != null, "Should have checked CustomStyle");
-                    return !style.foreColor.IsEmpty;
-                }
-            }
+                => _style?.foreColor.IsEmpty == false;
 
-            internal bool CustomStyle => style != null;
+            internal bool CustomStyle 
+                => _style != null;
 
             [Localizable(true)]
             public Font Font
             {
-                get
-                {
-                    if (style != null && style.font != null)
-                    {
-                        return style.font;
-                    }
-
-                    if (owner != null && owner.listView != null)
-                    {
-                        return owner.listView.Font;
-                    }
-
-                    return Control.DefaultFont;
-                }
+                get => _style?.font != null ?
+                            _style.font :
+                            owner?.listView != null ?
+                                owner.listView.Font :
+                                Control.DefaultFont;
+                
                 set
                 {
-                    if (style == null)
-                    {
-                        style = new SubItemStyle();
-                    }
+                    _style = _style ?? new SubItemStyle();
 
-                    if (style.font != value)
+                    if (_style.font != value)
                     {
-                        style.font = value;
+                        _style.font = value;
                         owner?.InvalidateListView();
                     }
                 }
@@ -167,30 +122,19 @@ namespace System.Windows.Forms
 
             public Color ForeColor
             {
-                get
-                {
-                    if (style != null && style.foreColor != Color.Empty)
-                    {
-                        return style.foreColor;
-                    }
-
-                    if (owner != null && owner.listView != null)
-                    {
-                        return owner.listView.ForeColor;
-                    }
-
-                    return SystemColors.WindowText;
-                }
+                get => _style != null && _style.foreColor != Color.Empty ?
+                            _style.foreColor :
+                            owner?.listView != null ?
+                                owner.listView.ForeColor :
+                                 SystemColors.WindowText;
+                
                 set
                 {
-                    if (style == null)
-                    {
-                        style = new SubItemStyle();
-                    }
+                    _style = _style ?? new SubItemStyle();
 
-                    if (style.foreColor != value)
+                    if (_style.foreColor != value)
                     {
-                        style.foreColor = value;
+                        _style.foreColor = value;
                         owner?.InvalidateListView();
                     }
                 }
@@ -204,17 +148,17 @@ namespace System.Windows.Forms
             [TypeConverter(typeof(StringConverter))]
             public object Tag
             {
-                get => userData;
-                set => userData = value;
+                get => _userData;
+                set => _userData = value;
             }
 
             [Localizable(true)]
             public string Text
             {
-                get => text ?? string.Empty;
+                get => _text ?? string.Empty;
                 set
                 {
-                    text = value;
+                    _text = value;
                     owner?.UpdateSubItems(-1);
                 }
             }
@@ -222,10 +166,10 @@ namespace System.Windows.Forms
             [Localizable(true)]
             public string Name
             {
-                get => name ?? string.Empty;
+                get => _name ?? string.Empty;
                 set
                 {
-                    name = value;
+                    _name = value;
                     owner?.UpdateSubItems(-1);
                 }
             }
@@ -239,8 +183,8 @@ namespace System.Windows.Forms
             [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
             private void OnDeserialized(StreamingContext ctx)
             {
-                name = null;
-                userData = null;
+                _name = null;
+                _userData = null;
             }
 
             [OnSerializing]
@@ -255,22 +199,15 @@ namespace System.Windows.Forms
 
             public void ResetStyle()
             {
-                if (style != null)
+                if (_style != null)
                 {
-                    style = null;
+                    _style = null;
                     owner?.InvalidateListView();
                 }
             }
 
-            public override string ToString() => "ListViewSubItem: {" + Text + "}";
-
-            [Serializable]
-            private class SubItemStyle
-            {
-                public Color backColor = Color.Empty;
-                public Color foreColor = Color.Empty;
-                public Font font = null;
-            }
+            public override string ToString() 
+                => "ListViewSubItem: {" + Text + "}";
         }
     }
 }

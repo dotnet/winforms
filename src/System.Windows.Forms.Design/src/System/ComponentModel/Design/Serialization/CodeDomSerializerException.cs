@@ -8,10 +8,13 @@ using System.Runtime.Serialization;
 
 namespace System.ComponentModel.Design.Serialization
 {
+    // [Serializable] necessary for round trip binary serialization
+
     /// <summary>
     /// The exception that is thrown when the code dom serializer experiences an error.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
+    [Serializable]
     public class CodeDomSerializerException : SystemException
     {
         public CodeDomSerializerException(string message, CodeLinePragma linePragma) : base(message)

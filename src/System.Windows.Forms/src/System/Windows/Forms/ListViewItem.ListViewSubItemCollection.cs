@@ -28,15 +28,20 @@ namespace System.Windows.Forms
             /// Returns the total number of items within the list view.
             /// </summary>
             [Browsable(false)]
-            public int Count => _owner.SubItemCount;
+            public int Count 
+                => _owner.SubItemCount;
 
-            object ICollection.SyncRoot => this;
+            object ICollection.SyncRoot 
+                => this;
 
-            bool ICollection.IsSynchronized => true;
+            bool ICollection.IsSynchronized 
+                => true;
 
-            bool IList.IsFixedSize => false;
+            bool IList.IsFixedSize 
+                => false;
 
-            public bool IsReadOnly => false;
+            public bool IsReadOnly 
+                => false;
 
             /// <summary>
             /// Returns a ListViewSubItem given it's zero based index into the ListViewSubItemCollection.
@@ -139,10 +144,7 @@ namespace System.Windows.Forms
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (ListViewSubItem item in items)
                 {
-                    if (item != null)
-                    {
-                        _owner._listViewSubItems[_owner.SubItemCount++] = item;
-                    }
+                    Add(item);
                 }
 
                 _owner.UpdateSubItems(-1);
@@ -158,10 +160,7 @@ namespace System.Windows.Forms
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
                 {
-                    if (item != null)
-                    {
-                        _owner._listViewSubItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
-                    }
+                    Add(item);
                 }
 
                 _owner.UpdateSubItems(-1);
@@ -177,10 +176,7 @@ namespace System.Windows.Forms
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
                 {
-                    if (item != null)
-                    {
-                        _owner._listViewSubItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
-                    }
+                    Add(item, foreColor, backColor, font);
                 }
 
                 _owner.UpdateSubItems(-1);
@@ -206,22 +202,19 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(ListViewSubItem subItem) => IndexOf(subItem) != -1;
+            public bool Contains(ListViewSubItem subItem) 
+                => IndexOf(subItem) != -1;
 
             bool IList.Contains(object item)
-            {
-                if (!(item is ListViewSubItem itemValue))
-                {
-                    return false;
-                }
-
-                return Contains(itemValue);
-            }
+            => item is ListViewSubItem itemValue ?
+                    Contains(itemValue) :
+                    false;
 
             /// <summary>
             /// Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
+            public virtual bool ContainsKey(string key) 
+                => IsValidIndex(IndexOfKey(key));
 
             /// <summary>
             /// Ensures that the sub item array has the given
@@ -233,43 +226,39 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureSubItemSpace(int size, int index)
             {
-                if (_owner.SubItemCount == ListViewItem.MaxSubItems)
+                if (_owner.SubItemCount == MaxSubItems)
                 {
                     throw new InvalidOperationException(SR.ErrorCollectionFull);
                 }
 
-                if (_owner._listViewSubItems == null || _owner.SubItemCount + size > _owner._listViewSubItems.Length)
+                // Must grow array. Don't do it just by size, though;
+                // chunk it for efficiency.
+                if (_owner._listViewSubItems == null)
                 {
-                    // Must grow array. Don't do it just by size, though;
-                    // chunk it for efficiency.
-                    if (_owner._listViewSubItems == null)
+                    int newSize = (size > 4) ? size : 4;
+                    _owner._listViewSubItems = new ListViewSubItem[newSize];
+                }
+                else if (_owner.SubItemCount + size > _owner._listViewSubItems.Length)
+                {
+                    int newSize = _owner._listViewSubItems.Length * 2;
+                    while (newSize - _owner.SubItemCount < size)
                     {
-                        int newSize = (size > 4) ? size : 4;
-                        _owner._listViewSubItems = new ListViewSubItem[newSize];
+                        newSize *= 2;
+                    }
+
+                    ListViewSubItem[] newItems = new ListViewSubItem[newSize];
+
+                    // Now, when copying to the member variable, use index if it was provided.
+                    if (index != -1)
+                    {
+                        Array.Copy(_owner._listViewSubItems, 0, newItems, 0, index);
+                        Array.Copy(_owner._listViewSubItems, index, newItems, index + size, _owner.SubItemCount - index);
                     }
                     else
                     {
-                        int newSize = _owner._listViewSubItems.Length * 2;
-                        while (newSize - _owner.SubItemCount < size)
-                        {
-                            newSize *= 2;
-                        }
-
-                        ListViewSubItem[] newItems = new ListViewSubItem[newSize];
-
-                        // Now, when copying to the member variable, use index
-                        // if it was provided.
-                        if (index != -1)
-                        {
-                            Array.Copy(_owner._listViewSubItems, 0, newItems, 0, index);
-                            Array.Copy(_owner._listViewSubItems, index, newItems, index + size, _owner.SubItemCount - index);
-                        }
-                        else
-                        {
-                            Array.Copy(_owner._listViewSubItems, newItems, _owner.SubItemCount);
-                        }
-                        _owner._listViewSubItems = newItems;
+                        Array.Copy(_owner._listViewSubItems, newItems, _owner.SubItemCount);
                     }
+                    _owner._listViewSubItems = newItems;  
                 }
                 else
                 {
@@ -299,12 +288,13 @@ namespace System.Windows.Forms
 
             int IList.IndexOf(object subItem)
             {
-                if (!(subItem is ListViewSubItem subItemValue))
+                if (subItem is ListViewSubItem subItemValue)
                 {
-                    return -1;
+                    return IndexOf(subItemValue);
+
                 }
 
-                return IndexOf(subItemValue);
+                return -1;
             }
 
             /// <summary>
@@ -335,7 +325,7 @@ namespace System.Windows.Forms
                 }
 
                 _lastAccessedIndex = -1;
-                return -1;
+                return _lastAccessedIndex;
             }
 
             /// <summary>
@@ -371,7 +361,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(item));
                 }
 
-                Insert(index, (ListViewSubItem)item);
+                Insert(index, itemValue);
             }
 
             public void Remove(ListViewSubItem item)
@@ -434,17 +424,10 @@ namespace System.Windows.Forms
             }
 
             public IEnumerator GetEnumerator()
-            {
-                if (_owner._listViewSubItems != null)
-                {
-                    return new WindowsFormsUtils.ArraySubsetEnumerator(_owner._listViewSubItems, _owner.SubItemCount);
-                }
-                else
-                {
-                    return Array.Empty<ListViewSubItem>().GetEnumerator();
-                }
+                => _owner._listViewSubItems == null ?
+                    Array.Empty<ListViewSubItem>().GetEnumerator() :
+                    new WindowsFormsUtils.ArraySubsetEnumerator(_owner._listViewSubItems, _owner.SubItemCount);
 
-            }
         }
     }
 }

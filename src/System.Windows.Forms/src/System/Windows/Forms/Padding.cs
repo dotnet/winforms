@@ -8,8 +8,11 @@ using System.Drawing;
 using System.Globalization;
 
 namespace System.Windows.Forms
-{
+{    
+    // [Serializable] is required for roundtrip binary serialization of CollectionEditor
+
     [TypeConverterAttribute(typeof(PaddingConverter))]
+    [Serializable]
     public struct Padding
     {
         private bool _all;

@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem1 = new ListViewItem.ListViewSubItem(null, "text1");
             var subItem2 = new ListViewItem.ListViewSubItem(null, "text2");
-            var items = new ListViewItem.ListViewSubItem[] { subItem1, null, subItem2 };
+            var items = new ListViewItem.ListViewSubItem[] { subItem1, subItem2 };
             collection.AddRange(items);
 
             Assert.Equal(2, collection.Count);
@@ -334,7 +334,7 @@ namespace System.Windows.Forms.Tests
             var subItem2 = new ListViewItem.ListViewSubItem(null, "text2");
             var subItem3 = new ListViewItem.ListViewSubItem(null, "text3");
             var subItem4 = new ListViewItem.ListViewSubItem(null, "text4");
-            var items = new ListViewItem.ListViewSubItem[] { subItem1, null, subItem2, subItem3, subItem4 };
+            var items = new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4 };
             collection.AddRange(items);
 
             Assert.Equal(4, collection.Count);
@@ -342,6 +342,15 @@ namespace System.Windows.Forms.Tests
             Assert.Same(subItem2, collection[1]);
             Assert.Same(subItem3, collection[2]);
             Assert.Same(subItem4, collection[3]);
+        }
+
+        [Fact]
+        public void ListViewSubItemCollection_AddRange_ListViewSubItemArrayWithNullItems_Throws()
+        {
+            var item = new ListViewItem();
+            var collection = new ListViewItem.ListViewSubItemCollection(item);
+            var items = new ListViewItem.ListViewSubItem[] { null, null, null };
+            Assert.Throws<ArgumentNullException>("item", () => collection.AddRange(items));
         }
 
         [Fact]
@@ -358,20 +367,22 @@ namespace System.Windows.Forms.Tests
             var subItem7 = new ListViewItem.ListViewSubItem(null, "text7");
             var subItem8 = new ListViewItem.ListViewSubItem(null, "text8");
             var subItem9 = new ListViewItem.ListViewSubItem(null, "text8");
-            var items = new ListViewItem.ListViewSubItem[] { subItem2, null, subItem3, subItem4, subItem5, subItem6, subItem7, subItem8, subItem9 };
+            var items = new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5, subItem6, subItem7, subItem8, subItem9 };
+            
             collection.Add(subItem1);
             collection.AddRange(items);
 
-            Assert.Equal(9, collection.Count);
+            Assert.Equal(10, collection.Count);
             Assert.Same(subItem1, collection[0]);
-            Assert.Same(subItem2, collection[1]);
-            Assert.Same(subItem3, collection[2]);
-            Assert.Same(subItem4, collection[3]);
-            Assert.Same(subItem5, collection[4]);
-            Assert.Same(subItem6, collection[5]);
-            Assert.Same(subItem7, collection[6]);
-            Assert.Same(subItem8, collection[7]);
-            Assert.Same(subItem9, collection[8]);
+            Assert.Same(subItem1, collection[1]);
+            Assert.Same(subItem2, collection[2]);
+            Assert.Same(subItem3, collection[3]);
+            Assert.Same(subItem4, collection[4]);
+            Assert.Same(subItem5, collection[5]);
+            Assert.Same(subItem6, collection[6]);
+            Assert.Same(subItem7, collection[7]);
+            Assert.Same(subItem8, collection[8]);
+            Assert.Same(subItem9, collection[9]);
         }
 
         [Fact]
@@ -382,9 +393,10 @@ namespace System.Windows.Forms.Tests
             var items = new string[] { "text1", null, "text2" };
             collection.AddRange(items);
 
-            Assert.Equal(2, collection.Count);
+            Assert.Equal(3, collection.Count);
             Assert.Equal("text1", collection[0].Text);
-            Assert.Equal("text2", collection[1].Text);
+            Assert.Equal("", collection[1].Text);
+            Assert.Equal("text2", collection[2].Text);
         }
 
         public static IEnumerable<object[]> AddRange_StringArrayWithStyles_TestData()
@@ -403,15 +415,19 @@ namespace System.Windows.Forms.Tests
             var items = new string[] { "text1", null, "text2" };
             collection.AddRange(items, foreColor, backColor, font);
 
-            Assert.Equal(2, collection.Count);
+            Assert.Equal(3, collection.Count);
             Assert.Equal("text1", collection[0].Text);
             Assert.Equal(expectedForeColor, collection[0].ForeColor);
             Assert.Equal(expectedBackColor, collection[0].BackColor);
             Assert.Equal(font ?? Control.DefaultFont, collection[0].Font);
-            Assert.Equal("text2", collection[1].Text);
+            Assert.Equal("", collection[1].Text);
             Assert.Equal(expectedForeColor, collection[1].ForeColor);
             Assert.Equal(expectedBackColor, collection[1].BackColor);
             Assert.Equal(font ?? Control.DefaultFont, collection[1].Font);
+            Assert.Equal("text2", collection[2].Text);
+            Assert.Equal(expectedForeColor, collection[2].ForeColor);
+            Assert.Equal(expectedBackColor, collection[2].BackColor);
+            Assert.Equal(font ?? Control.DefaultFont, collection[2].Font);
         }
 
         [Fact]

@@ -21,7 +21,7 @@ using System.Globalization;
 
 namespace System.Resources
 {
-    // TODO: add why Serializable attribtue is necessary (@Devendar)
+    // [Serializable] necessary why???  (@Devendar)
 
     /// <summary>
     ///    

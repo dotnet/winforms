@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -15,7 +14,7 @@ using System.Runtime.Serialization;
 
 namespace System.Windows.Forms
 {
-// TODO: add serializable reasoning (@Devendar)
+    // [Serializable] necessary why???  (@Devendar)
 
     /// <summary>
     /// Implements an item of a <see cref='System.Windows.Forms.ListView'/>.
@@ -28,6 +27,8 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
     public partial class ListViewItem : ICloneable, ISerializable
     {
+        internal ListView listView;
+
         private const int MaxSubItems = 4096;
 
         private static readonly BitVector32.Section s_stateSelectedSection = BitVector32.CreateSection(1);
@@ -36,27 +37,30 @@ namespace System.Windows.Forms
         private static readonly BitVector32.Section s_avedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
         private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_avedStateImageIndexSection);
 
-        private int indentCount = 0;
-        private Point position = new Point(-1, -1);
-
-        internal ListView listView;
+        private int _indentCount = 0;
+        private Point _position;
+        private static readonly Point DefaultPosition = new Point(-1, -1);
 
         internal ListViewGroup group;
-        private string groupName;
+        private string _groupName;
 
-        private ListViewSubItemCollection listViewSubItemCollection = null;
+        private ListViewSubItemCollection _listViewSubItemCollection;
         private ListViewSubItem[] _listViewSubItems;
 
         // we stash the last index we got as a seed to GetDisplayIndex.
-        private int lastIndex = -1;
+        private int _lastIndex = DefaultLastIndex;
+        private const int DefaultLastIndex = -1;
+        private const int MaxStateImageIndex = 14;
 
         // An ID unique relative to a given list view that comctl uses to identify items.
         internal int ID = -1;
 
-        private BitVector32 state = new BitVector32();
-        private ListViewItemImageIndexer imageIndexer;
-        private string toolTipText = string.Empty;
-        private object userData;
+        private BitVector32 _state = new BitVector32();
+        private ListViewItemImageIndexer _imageIndexer;
+        private string _toolTipText;
+        private object _userData;
+
+        #region Constructors
 
         public ListViewItem()
         {
@@ -91,7 +95,7 @@ namespace System.Windows.Forms
         public ListViewItem(string[] items, int imageIndex) : this()
         {
             ImageIndexer.Index = imageIndex;
-            if (items != null && items.Length > 0)
+            if (items?.Length > 0)
             {
                 _listViewSubItems = new ListViewSubItem[items.Length];
                 for (int i = 0; i < items.Length; i++)
@@ -111,8 +115,8 @@ namespace System.Windows.Forms
 
         public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
         {
+            _listViewSubItems = subItems ?? throw new ArgumentNullException(nameof(subItems));
             ImageIndexer.Index = imageIndex;
-            this._listViewSubItems = subItems ?? throw new ArgumentNullException(nameof(subItems));
             SubItemCount = subItems.Length;
 
             // Update the owner of these subitems
@@ -229,6 +233,8 @@ namespace System.Windows.Forms
             Group = group;
         }
 
+        #endregion
+
         /// <summary>
         /// The font that this item will be displayed in. If its value is null, it will be displayed
         /// using the global font for the ListView control that hosts it.
@@ -236,23 +242,13 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatAppearance))]
         public Color BackColor
-        {
-            get
-            {
-                if (SubItemCount == 0)
-                {
-                    if (listView != null)
-                    {
-                        return listView.BackColor;
-                    }
-
-                    return SystemColors.Window;
-                }
-                else
-                {
-                    return _listViewSubItems[0].BackColor;
-                }
-            }
+        { 
+            get => SubItemCount == 0 ?
+                        (listView == null ?
+                            SystemColors.Window :
+                            listView.BackColor) :
+                        _listViewSubItems[0].BackColor;
+            
             set => SubItems[0].BackColor = value;
         }
 
@@ -263,17 +259,9 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public Rectangle Bounds
         {
-            get
-            {
-                if (listView != null)
-                {
-                    return listView.GetItemRect(Index);
-                }
-                else
-                {
-                    return new Rectangle();
-                }
-            }
+            get => listView == null ?
+                new Rectangle() :
+                listView.GetItemRect(Index);        
         }
 
         [DefaultValue(false)]
@@ -282,17 +270,20 @@ namespace System.Windows.Forms
         public bool Checked
         {
             get => StateImageIndex > 0;
+
             set
             {
                 if (Checked != value)
                 {
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView?.IsHandleCreated == true)
                     {
-                        StateImageIndex = value ? 1 : 0;
+                        StateImageIndex = value ? 
+                            1 : 
+                            0;
 
                         // the setter for StateImageIndex calls ItemChecked handler
                         // thus need to verify validity of the listView again
-                        if (listView != null && !listView.UseCompatibleStateImageBehavior)
+                        if (listView?.UseCompatibleStateImageBehavior == false)
                         {
                             if (!listView.CheckBoxes)
                             {
@@ -302,7 +293,9 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        SavedStateImageIndex = value ? 1 : 0;
+                        SavedStateImageIndex = value ? 
+                            1 : 
+                            0;
                     }
                 }
             }
@@ -315,21 +308,19 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public bool Focused
         {
-            get
-            {
-                if (listView != null && listView.IsHandleCreated)
-                {
-                    return listView.GetItemState(Index, NativeMethods.LVIS_FOCUSED) != 0;
-                }
-
-                return false;
-            }
+            get => listView?.IsHandleCreated == true ?
+                listView.GetItemState(Index, NativeMethods.LVIS_FOCUSED) != 0 :
+                false;
 
             set
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView?.IsHandleCreated == true)
                 {
-                    listView.SetItemState(Index, value ? NativeMethods.LVIS_FOCUSED : 0, NativeMethods.LVIS_FOCUSED);
+                    listView.SetItemState(Index, 
+                        value ? 
+                            NativeMethods.LVIS_FOCUSED : 
+                            0,
+                        NativeMethods.LVIS_FOCUSED);
                 }
             }
         }
@@ -339,22 +330,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public Font Font
         {
-            get
-            {
-                if (SubItemCount == 0)
-                {
-                    if (listView != null)
-                    {
-                        return listView.Font;
-                    }
+            get => SubItemCount == 0 ?
+                (listView != null ?
+                    listView.Font :
+                    Control.DefaultFont) :
+                _listViewSubItems[0].Font;
 
-                    return Control.DefaultFont;
-                }
-                else
-                {
-                    return _listViewSubItems[0].Font;
-                }
-            }
             set => SubItems[0].Font = value;
         }
 
@@ -362,26 +343,13 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public Color ForeColor
         {
-            get
-            {
-                if (SubItemCount == 0)
-                {
-                    if (listView != null)
-                    {
-                        return listView.ForeColor;
-                    }
+            get => SubItemCount == 0 ?
+                        (listView != null ?
+                            listView.ForeColor :
+                            SystemColors.WindowText) :
+                        _listViewSubItems[0].ForeColor;
 
-                    return SystemColors.WindowText;
-                }
-                else
-                {
-                    return _listViewSubItems[0].ForeColor;
-                }
-            }
-            set
-            {
-                SubItems[0].ForeColor = value;
-            }
+            set => SubItems[0].ForeColor = value;          
         }
 
         [DefaultValue(null)]
@@ -407,7 +375,7 @@ namespace System.Windows.Forms
                 Debug.Assert(group == value, "BUG: group member variable wasn't updated!");
 
                 // If the user specifically sets the group then don't use the groupName again.
-                groupName = null;
+                _groupName = null;
             }
         }
 
@@ -424,15 +392,9 @@ namespace System.Windows.Forms
         [TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))]
         public int ImageIndex
         {
-            get
-            {
-                if (ImageIndexer.Index != -1 && ImageList != null && ImageIndexer.Index >= ImageList.Images.Count)
-                {
-                    return ImageList.Images.Count - 1;
-                }
-
-                return ImageIndexer.Index;
-            }
+            get => (ImageIndexer.Index >= ImageList?.Images.Count) ?
+                        ImageList.Images.Count - 1 :
+                        ImageIndexer.Index;
             set
             {
                 if (value < -1)
@@ -442,14 +404,15 @@ namespace System.Windows.Forms
 
                 ImageIndexer.Index = value;
 
-                if (listView != null && listView.IsHandleCreated)
+                if (listView?.IsHandleCreated == true)
                 {
                     listView.SetItemImage(Index, ImageIndexer.ActualIndex);
                 }
             }
         }
 
-        internal ListViewItemImageIndexer ImageIndexer => imageIndexer ?? (imageIndexer = new ListViewItemImageIndexer(this));
+        internal ListViewItemImageIndexer ImageIndexer 
+            => _imageIndexer ?? (_imageIndexer = new ListViewItemImageIndexer(this));
 
         /// <summary>
         /// Returns the ListViewItem's currently set image index
@@ -468,7 +431,7 @@ namespace System.Windows.Forms
             {
                 ImageIndexer.Key = value;
 
-                if (listView != null && listView.IsHandleCreated)
+                if (listView?.IsHandleCreated == true)
                 {
                     listView.SetItemImage(Index, ImageIndexer.ActualIndex);
                 }
@@ -480,21 +443,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null)
+                switch (listView?.View)
                 {
-                    switch (listView.View)
-                    {
-                        case View.LargeIcon:
-                        case View.Tile:
-                            return listView.LargeImageList;
-                        case View.SmallIcon:
-                        case View.Details:
-                        case View.List:
-                            return listView.SmallImageList;
-                    }
+                    case View.LargeIcon:
+                    case View.Tile:
+                        return listView.LargeImageList;
+                    case View.SmallIcon:
+                    case View.Details:
+                    case View.List:
+                        return listView.SmallImageList;
+                    default:
+                        return null;
                 }
-
-                return null;
             }
         }
 
@@ -503,7 +463,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatDisplay))]
         public int IndentCount
         {
-            get => indentCount;
+            get => _indentCount;
             set
             {
                 if (value < 0)
@@ -511,12 +471,12 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(IndentCount), SR.ListViewIndentCountCantBeNegative);
                 }
 
-                if (value != indentCount)
+                if (value != _indentCount)
                 {
-                    indentCount = value;
-                    if (listView != null && listView.IsHandleCreated)
+                    _indentCount = value;
+                    if (listView?.IsHandleCreated == true)
                     {
-                        listView.SetItemIndentCount(Index, indentCount);
+                        listView.SetItemIndentCount(Index, _indentCount);
                     }
                 }
             }
@@ -530,20 +490,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null)
+                if (listView == null)
                 {
-                    // if the list is virtual, the ComCtrl control does not keep any information
-                    // about any list view items, so we use our cache instead.
-                    if (!listView.VirtualMode)
-                    {
-                        lastIndex = listView.GetDisplayIndex(this, lastIndex);
-                    }
-                    return lastIndex;
+                    return DefaultLastIndex;
                 }
-                else
+
+                // if the list is virtual, the ComCtrl control does not keep any information
+                // about any list view items, so we use our cache instead.
+                if (!listView.VirtualMode)
                 {
-                    return -1;
+                    _lastIndex = listView.GetDisplayIndex(this, _lastIndex);
                 }
+                return _lastIndex;           
             }
         }
 
@@ -562,17 +520,11 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Name
         {
-            get
-            {
-                if (SubItemCount == 0)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return _listViewSubItems[0].Name;
-                }
-            }
+            get => 
+                SubItemCount == 0 ?
+                    string.Empty :
+                    _listViewSubItems[0].Name;
+                            
             set => SubItems[0].Name = value;
         }
 
@@ -583,23 +535,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null && listView.IsHandleCreated)
-                {
-                    position = listView.GetItemPosition(Index);
-                }
+                _position = listView?.IsHandleCreated == true ? 
+                    listView.GetItemPosition(Index) :
+                    DefaultPosition;
 
-                return position;
+                return _position;
             }
             set
             {
-                if (!value.Equals(position))
+                if (!value.Equals(_position))
                 {
-                    position = value;
-                    if (listView != null && listView.IsHandleCreated)
+                    _position = value;
+                    if (listView?.IsHandleCreated == true)
                     {
                         if (!listView.VirtualMode)
                         {
-                            listView.SetItemPosition(Index, position.X, position.Y);
+                            listView.SetItemPosition(Index, _position.X, _position.Y);
                         }
                     }
                 }
@@ -613,19 +564,15 @@ namespace System.Windows.Forms
         /// </summary>
         private int SavedStateImageIndex
         {
-            get
-            {
-                // State goes from zero to 15, but we need a negative
-                // number, so we store + 1.
-                return state[s_avedStateImageIndexSection] - 1;
-            }
+            get => _state[s_avedStateImageIndexSection] - 1;
+            
             set
             {
                 // flag whether we've set a value.
-                state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
+                _state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
 
                 // push in the actual value
-                state[s_avedStateImageIndexSection] = value + 1;
+                _state[s_avedStateImageIndexSection] = value + 1;
             }
         }
 
@@ -636,18 +583,13 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool Selected
         {
-            get
-            {
-                if (listView != null && listView.IsHandleCreated)
-                {
-                    return listView.GetItemState(Index, NativeMethods.LVIS_SELECTED) != 0;
-                }
-
-                return StateSelected;
-            }
+            get => listView?.IsHandleCreated == true ?
+                    listView.GetItemState(Index, NativeMethods.LVIS_SELECTED) != 0 :
+                    StateSelected;
+            
             set
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView?.IsHandleCreated == true)
                 {
                     listView.SetItemState(Index, value ? NativeMethods.LVIS_SELECTED : 0, NativeMethods.LVIS_SELECTED);
 
@@ -657,7 +599,7 @@ namespace System.Windows.Forms
                 else
                 {
                     StateSelected = value;
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView?.IsHandleCreated == true)
                     {
                         // Set the selected state on the list view item only if the list view's Handle is already created.
                         listView.CacheSelectedStateForItem(this, value);
@@ -676,42 +618,42 @@ namespace System.Windows.Forms
         [RelatedImageList("ListView.StateImageList")]
         public int StateImageIndex
         {
-            get
-            {
-                if (listView != null && listView.IsHandleCreated)
-                {
-                    int state = listView.GetItemState(Index, NativeMethods.LVIS_STATEIMAGEMASK);
-                    return ((state >> 12) - 1);   // index is 1-based
-                }
-
-                return SavedStateImageIndex;
-            }
+            get => listView?.IsHandleCreated == true ?
+                    ((listView.GetItemState(Index, NativeMethods.LVIS_STATEIMAGEMASK) >> 12) - 1) :  // index is 1-based
+                    SavedStateImageIndex;
+            
             set
             {
-                if (value < -1 || value > 14)
+                if (value < DefaultLastIndex || value > MaxStateImageIndex)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
                 }
 
-                if (listView != null && listView.IsHandleCreated)
+                if (listView?.IsHandleCreated == true)
                 {
-                    this.state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
-                    int state = ((value + 1) << 12);  // index is 1-based
+                    _state[s_stateImageMaskSet] = (value == -1 ? 
+                        0 : 
+                        1);
+
+                    var state = ((value + 1) << 12);  // index is 1-based
                     listView.SetItemState(Index, state, NativeMethods.LVIS_STATEIMAGEMASK);
                 }
+
                 SavedStateImageIndex = value;
             }
         }
 
-        internal bool StateImageSet => (state[s_stateImageMaskSet] != 0);
+        internal bool StateImageSet => (_state[s_stateImageMaskSet] != 0);
 
         /// <summary>
         /// Accessor for our state bit vector.
         /// </summary>
         internal bool StateSelected
         {
-            get => state[s_stateSelectedSection] == 1;
-            set => state[s_stateSelectedSection] = value ? 1 : 0;
+            get => _state[s_stateSelectedSection] == 1;
+            set => _state[s_stateSelectedSection] = value ? 
+                1 : 
+                0;
         }
 
         /// <summary>
@@ -719,8 +661,8 @@ namespace System.Windows.Forms
         /// </summary>
         private int SubItemCount
         {
-            get => state[s_subItemCountSection];
-            set => state[s_subItemCountSection] = value;
+            get => _state[s_subItemCountSection];
+            set => _state[s_subItemCountSection] = value;
         }
 
         [SRCategory(nameof(SR.CatData))]
@@ -738,7 +680,7 @@ namespace System.Windows.Forms
                     SubItemCount = 1;
                 }
 
-                return listViewSubItemCollection ?? (listViewSubItemCollection = new ListViewSubItemCollection(this));
+                return _listViewSubItemCollection ?? (_listViewSubItemCollection = new ListViewSubItemCollection(this));
             }
         }
 
@@ -750,8 +692,8 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
-            get => userData;
-            set => userData = value;
+            get => _userData;
+            set => _userData = value;
         }
 
         /// <summary>
@@ -762,17 +704,10 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public string Text
         {
-            get
-            {
-                if (SubItemCount == 0)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return _listViewSubItems[0].Text;
-                }
-            }
+            get => SubItemCount == 0 ?
+                    string.Empty :
+                    _listViewSubItems[0].Text;
+
             set => SubItems[0].Text = value;
         }
 
@@ -783,20 +718,18 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         public string ToolTipText
         {
-            get => toolTipText;
+            get => _toolTipText ?? string.Empty;
+
             set
             {
-                if (value == null)
-                {
-                    value = string.Empty;
-                }
+                value = value ?? string.Empty;
 
-                if (!WindowsFormsUtils.SafeCompareStrings(toolTipText, value, ignoreCase: false))
+                if (!WindowsFormsUtils.SafeCompareStrings(_toolTipText, value, ignoreCase: false))
                 {
-                    toolTipText = value;
+                    _toolTipText = value;
 
                     // tell the list view about this change
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView?.IsHandleCreated == true)
                     {
                         listView.ListViewItemToolTipChanged(this);
                     }
@@ -814,8 +747,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public bool UseItemStyleForSubItems
         {
-            get => state[s_stateWholeRowOneStyleSection] == 1;
-            set => state[s_stateWholeRowOneStyleSection] = value ? 1 : 0;
+            get => _state[s_stateWholeRowOneStyleSection] == 1;
+            set => _state[s_stateWholeRowOneStyleSection] = value ? 1 : 0;
         }
 
         /// <summary>
@@ -841,31 +774,26 @@ namespace System.Windows.Forms
 
         public virtual object Clone()
         {
-            ListViewSubItem[] clonedSubItems = new ListViewSubItem[SubItems.Count];
+            var clonedSubItems = new ListViewSubItem[SubItems.Count];
+
             for (int index = 0; index < SubItems.Count; ++index)
             {
-                ListViewSubItem subItem = SubItems[index];
+                var subItem = SubItems[index];
                 clonedSubItems[index] = new ListViewSubItem(null,
-                                                            subItem.Text,
-                                                            subItem.ForeColor,
-                                                            subItem.BackColor,
-                                                            subItem.Font)
-                {
-                    Tag = subItem.Tag
-                };
+                    subItem.Text,
+                    subItem.ForeColor,
+                    subItem.BackColor,
+                    subItem.Font)
+                    {
+                        Tag = subItem.Tag
+                    };
             }
 
             Type clonedType = GetType();
-            ListViewItem newItem = null;
-
-            if (clonedType == typeof(ListViewItem))
-            {
-                newItem = new ListViewItem(clonedSubItems, ImageIndexer.Index);
-            }
-            else
-            {
-                newItem = (ListViewItem)Activator.CreateInstance(clonedType);
-            }
+            ListViewItem newItem = clonedType == typeof(ListViewItem) ?
+                new ListViewItem(clonedSubItems, ImageIndexer.Index) :
+                Activator.CreateInstance(clonedType) as ListViewItem;
+            
             newItem._listViewSubItems = clonedSubItems;
             newItem.ImageIndexer.Index = ImageIndexer.Index;
             newItem.SubItemCount = SubItemCount;
@@ -879,9 +807,9 @@ namespace System.Windows.Forms
                 newItem.ImageIndexer.Key = ImageIndexer.Key;
             }
 
-            newItem.indentCount = indentCount;
+            newItem._indentCount = _indentCount;
             newItem.StateImageIndex = StateImageIndex;
-            newItem.toolTipText = toolTipText;
+            newItem._toolTipText = _toolTipText;
             newItem.BackColor = BackColor;
             newItem.ForeColor = ForeColor;
             newItem.Font = Font;
@@ -904,17 +832,17 @@ namespace System.Windows.Forms
 
         public ListViewItem FindNearestItem(SearchDirectionHint searchDirection)
         {
-            Rectangle r = Bounds;
+            Rectangle rect = Bounds;
             switch (searchDirection)
             {
                 case SearchDirectionHint.Up:
-                    return ListView.FindNearestItem(searchDirection, r.Left, r.Top);
+                    return ListView.FindNearestItem(searchDirection, rect.Left, rect.Top);
                 case SearchDirectionHint.Down:
-                    return ListView.FindNearestItem(searchDirection, r.Left, r.Bottom);
+                    return ListView.FindNearestItem(searchDirection, rect.Left, rect.Bottom);
                 case SearchDirectionHint.Left:
-                    return ListView.FindNearestItem(searchDirection, r.Left, r.Top);
+                    return ListView.FindNearestItem(searchDirection, rect.Left, rect.Top);
                 case SearchDirectionHint.Right:
-                    return ListView.FindNearestItem(searchDirection, r.Right, r.Top);
+                    return ListView.FindNearestItem(searchDirection, rect.Right, rect.Top);
                 default:
                     Debug.Fail("we handled all the 4 directions");
                     return null;
@@ -926,31 +854,25 @@ namespace System.Windows.Forms
         /// The rectangle returned is empty if the ListViewItem has not been added to a ListView control.
         /// </summary>
         public Rectangle GetBounds(ItemBoundsPortion portion)
-        {
-            if (listView != null && listView.IsHandleCreated)
-            {
-                return listView.GetItemRect(Index, portion);
-            }
-
-            return new Rectangle();
-        }
+            => listView?.IsHandleCreated == true ?
+                    listView.GetItemRect(Index, portion) :
+                    new Rectangle();
+        
 
         public ListViewSubItem GetSubItemAt(int x, int y)
         {
-            if (listView != null && listView.IsHandleCreated && listView.View == View.Details)
+            if (listView?.IsHandleCreated != true || listView.View != View.Details)
             {
-                listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
-                if (iItem == Index && iSubItem != -1 && iSubItem < SubItems.Count)
-                {
-                    return SubItems[iSubItem];
-                }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
 
-            return null;
+            listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
+            if (iItem == Index && iSubItem != -1 && iSubItem < SubItems.Count)
+            {
+                return SubItems[iSubItem];
+            }
+
+            return null;                     
         }
 
         internal void Host(ListView parent, int id, int index)
@@ -976,16 +898,17 @@ namespace System.Windows.Forms
         {
             Debug.Assert(listView != null, "This method is used only when items are parented in a list view");
             Debug.Assert(!listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
-            if (string.IsNullOrEmpty(groupName))
+
+            if (string.IsNullOrEmpty(_groupName))
             {
                 return;
             }
 
-            ListViewGroup group = listView.Groups[groupName];
+            ListViewGroup group = listView.Groups[_groupName];
             Group = group;
 
             // Use the group name only once.
-            groupName = null;
+            _groupName = null;
         }
 
         internal void UpdateStateToListView(int index)
@@ -1009,12 +932,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                lastIndex = index;
+                _lastIndex = index;
             }
 
             // Update Item state in one shot
             int itemState = 0;
             int stateMask = 0;
+
             if (StateSelected)
             {
                 itemState |= NativeMethods.LVIS_SELECTED;
@@ -1049,48 +973,51 @@ namespace System.Windows.Forms
 
         internal void UpdateStateFromListView(int displayIndex, bool checkSelection)
         {
-            if (listView != null && listView.IsHandleCreated && displayIndex != -1)
+            if (listView?.IsHandleCreated != true || displayIndex == -1)
             {
-                // Get information from comctl control
-                var lvItem = new NativeMethods.LVITEM
+                return;
+            }
+
+            // Get information from comctl control
+            var lvItem = new NativeMethods.LVITEM
+            {
+                mask = NativeMethods.LVIF_PARAM | NativeMethods.LVIF_STATE | NativeMethods.LVIF_GROUPID
+            };
+
+            if (checkSelection)
+            {
+                lvItem.stateMask = NativeMethods.LVIS_SELECTED;
+            }
+
+            // we want to get all the information, including the state image mask
+            lvItem.stateMask |= NativeMethods.LVIS_STATEIMAGEMASK;
+
+            if (lvItem.stateMask == 0)
+            {
+                // perf optimization: no work to do.
+                return;
+            }
+
+            lvItem.iItem = displayIndex;
+            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);
+
+            // Update this class' information
+            if (checkSelection)
+            {
+                StateSelected = (lvItem.state & NativeMethods.LVIS_SELECTED) != 0;
+            }
+            SavedStateImageIndex = ((lvItem.state & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) - 1;
+
+            group = null;
+            foreach (ListViewGroup lvg in ListView.Groups)
+            {
+                if (lvg.ID == lvItem.iGroupId)
                 {
-                    mask = NativeMethods.LVIF_PARAM | NativeMethods.LVIF_STATE | NativeMethods.LVIF_GROUPID
-                };
-
-                if (checkSelection)
-                {
-                    lvItem.stateMask = NativeMethods.LVIS_SELECTED;
-                }
-
-                // we want to get all the information, including the state image mask
-                lvItem.stateMask |= NativeMethods.LVIS_STATEIMAGEMASK;
-
-                if (lvItem.stateMask == 0)
-                {
-                    // perf optimization: no work to do.
-                    return;
-                }
-
-                lvItem.iItem = displayIndex;
-                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);
-
-                // Update this class' information
-                if (checkSelection)
-                {
-                    StateSelected = (lvItem.state & NativeMethods.LVIS_SELECTED) != 0;
-                }
-                SavedStateImageIndex = ((lvItem.state & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) - 1;
-
-                group = null;
-                foreach (ListViewGroup lvg in ListView.Groups)
-                {
-                    if (lvg.ID == lvItem.iGroupId)
-                    {
-                        group = lvg;
-                        break;
-                    }
+                    group = lvg;
+                    break;
                 }
             }
+            
         }
 
         internal void UnHost(bool checkSelection) => UnHost(Index, checkSelection);
@@ -1120,50 +1047,52 @@ namespace System.Windows.Forms
 
             foreach (SerializationEntry entry in info)
             {
-                if (entry.Name == "Text")
+                switch (entry.Name)
                 {
-                    Text = info.GetString(entry.Name);
-                }
-                else if (entry.Name == nameof(ImageIndex))
-                {
-                    imageIndex = info.GetInt32(entry.Name);
-                }
-                else if (entry.Name == "ImageKey")
-                {
-                    imageKey = info.GetString(entry.Name);
-                }
-                else if (entry.Name == "SubItemCount")
-                {
-                    SubItemCount = info.GetInt32(entry.Name);
-                    if (SubItemCount > 0)
-                    {
-                        foundSubItems = true;
-                    }
-                }
-                else if (entry.Name == "BackColor")
-                {
-                    BackColor = (Color)info.GetValue(entry.Name, typeof(Color));
-                }
-                else if (entry.Name == "Checked")
-                {
-                    Checked = info.GetBoolean(entry.Name);
-                }
-                else if (entry.Name == "Font")
-                {
-                    Font = (Font)info.GetValue(entry.Name, typeof(Font));
-                }
-                else if (entry.Name == "ForeColor")
-                {
-                    ForeColor = (Color)info.GetValue(entry.Name, typeof(Color));
-                }
-                else if (entry.Name == "UseItemStyleForSubItems")
-                {
-                    UseItemStyleForSubItems = info.GetBoolean(entry.Name);
-                }
-                else if (entry.Name == "Group")
-                {
-                    ListViewGroup group = (ListViewGroup)info.GetValue(entry.Name, typeof(ListViewGroup));
-                    groupName = group.Name;
+                    case nameof(Text):
+                        Text = info.GetString(entry.Name);
+                        break;
+
+                    case nameof(ImageIndex):
+                        imageIndex = info.GetInt32(entry.Name);
+                        break;
+
+                    case nameof(ImageKey):
+                        imageKey = info.GetString(entry.Name);
+                        break;
+
+                    case nameof(BackColor):
+                        BackColor = (Color)info.GetValue(entry.Name, typeof(Color));
+                        break;
+
+                    case nameof(Checked):
+                        Checked = info.GetBoolean(entry.Name);
+                        break;
+
+                    case nameof(Font):
+                        Font = (Font)info.GetValue(entry.Name, typeof(Font));
+                        break;
+
+                    case nameof(ForeColor):
+                        ForeColor = (Color)info.GetValue(entry.Name, typeof(Color));
+                        break;
+
+                    case nameof(UseItemStyleForSubItems):
+                        UseItemStyleForSubItems = info.GetBoolean(entry.Name);
+                        break;
+
+                    case nameof(Group):
+                        ListViewGroup group = (ListViewGroup)info.GetValue(entry.Name, typeof(ListViewGroup));
+                        _groupName = group.Name;
+                        break;
+
+                    case nameof(SubItemCount):
+                        SubItemCount = info.GetInt32(entry.Name);
+                        if (SubItemCount > 0)
+                        {
+                            foundSubItems = true;
+                        }
+                        break;
                 }
             }
 
@@ -1182,7 +1111,7 @@ namespace System.Windows.Forms
                 ListViewSubItem[] newItems = new ListViewSubItem[SubItemCount];
                 for (int i = 1; i < SubItemCount; i++)
                 {
-                    ListViewSubItem newItem = (ListViewSubItem)info.GetValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), typeof(ListViewSubItem));
+                    var newItem = info.GetValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), typeof(ListViewSubItem)) as ListViewSubItem;
                     newItem.owner = this;
                     newItems[i] = newItem;
                 }
@@ -1196,28 +1125,28 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void Serialize(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Text", Text);
+            info.AddValue(nameof(Text), Text);
             info.AddValue(nameof(ImageIndex), ImageIndexer.Index);
             if (!string.IsNullOrEmpty(ImageIndexer.Key))
             {
-                info.AddValue("ImageKey", ImageIndexer.Key);
+                info.AddValue(nameof(ImageKey), ImageIndexer.Key);
             }
             if (SubItemCount > 1)
             {
-                info.AddValue("SubItemCount", SubItemCount);
+                info.AddValue(nameof(SubItemCount), SubItemCount);
                 for (int i = 1; i < SubItemCount; i++)
                 {
                     info.AddValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), _listViewSubItems[i], typeof(ListViewSubItem));
                 }
             }
-            info.AddValue("BackColor", BackColor);
-            info.AddValue("Checked", Checked);
-            info.AddValue("Font", Font);
-            info.AddValue("ForeColor", ForeColor);
-            info.AddValue("UseItemStyleForSubItems", UseItemStyleForSubItems);
+            info.AddValue(nameof(BackColor), BackColor);
+            info.AddValue(nameof(Checked), Checked);
+            info.AddValue(nameof(Font), Font);
+            info.AddValue(nameof(ForeColor), ForeColor);
+            info.AddValue(nameof(UseItemStyleForSubItems), UseItemStyleForSubItems);
             if (Group != null)
             {
-                info.AddValue("Group", Group);
+                info.AddValue(nameof(Group), Group);
             }
         }
 
@@ -1228,19 +1157,19 @@ namespace System.Windows.Forms
             Debug.Assert(listView != null && listView.VirtualMode, "ListViewItem::SetItemIndex should be used only when the list is virtual");
             Debug.Assert(index > -1, "can't set the index on a virtual list view item to -1");
             this.listView = listView;
-            lastIndex = index;
+            _lastIndex = index;
         }
 
         internal bool ShouldSerializeText() => false;
 
-        private bool ShouldSerializePosition() => !position.Equals(new Point(-1, -1));
+        private bool ShouldSerializePosition() => !_position.Equals(DefaultPosition);
 
         public override string ToString() => "ListViewItem: {" + Text + "}";
 
         internal void InvalidateListView()
         {
             // The ListItem's state (or a SubItem's state) has changed, so invalidate the ListView control
-            if (listView != null && listView.IsHandleCreated)
+            if (listView?.IsHandleCreated == true)
             {
                 listView.Invalidate();
             }
@@ -1250,7 +1179,7 @@ namespace System.Windows.Forms
 
         internal void UpdateSubItems(int index, int oldCount)
         {
-            if (listView != null && listView.IsHandleCreated)
+            if (listView?.IsHandleCreated == true)
             {
                 int subItemCount = SubItemCount;
                 int itemIndex = Index;

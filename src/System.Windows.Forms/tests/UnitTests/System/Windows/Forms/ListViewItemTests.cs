@@ -43,7 +43,8 @@ namespace System.Windows.Forms.Tests
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
             Assert.Empty(item.Text);
-            Assert.Empty(item.ToolTipText);
+            var v = item.ToolTipText;
+            Assert.Empty(v);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
