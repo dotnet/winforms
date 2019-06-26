@@ -101,7 +101,7 @@ Now, whenever you need to use the Designer on one of the Core Form or UserContro
 
 ### Option 2
 
-1. Start Visual Studio and open this project.
+1. Start Visual Studio and open your .NET Core project.
 1. Save the project in Visual Studio, and with that, also save the Solution file.
 1. Open the project file in the text editor and change the ``TargetFramework`` xml node from:
 
