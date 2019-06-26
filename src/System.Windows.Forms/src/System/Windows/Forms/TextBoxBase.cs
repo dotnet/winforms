@@ -1888,7 +1888,7 @@ namespace System.Windows.Forms
                 IntPtr editOlePtr = IntPtr.Zero;
                 try
                 {
-                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0)
+                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0)
                     {
 
                         editOlePtr = Marshal.GetIUnknownForObject(editOle);

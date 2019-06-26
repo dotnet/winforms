@@ -4,34 +4,56 @@
 
 internal static partial class Interop
 {
+    /// <summary>
+    /// Edit Control Messages.
+    /// Copied form winuser.h
+    /// </summary>
     public static class EditMessages
     {
         public const int EM_GETSEL = 0x00B0;
         public const int EM_SETSEL = 0x00B1;
+        public const int EM_GETRECT = 0x00B2;
+        public const int EM_SETRECT = 0x00B3;
+        public const int EM_SETRECTNP = 0x00B4;
         public const int EM_SCROLL = 0x00B5;
+        public const int EM_LINESCROLL = 0x00B6;
+        public const int EM_SCROLLCARET = 0x00B7;
         public const int EM_GETMODIFY = 0x00B8;
         public const int EM_SETMODIFY = 0x00B9;
         public const int EM_GETLINECOUNT = 0x00BA;
+        public const int EM_LINEINDEX = 0x00BB;
+        public const int EM_SETHANDLE = 0x00BC;
+        public const int EM_GETHANDLE = 0x00BD;
+        public const int EM_GETTHUMB = 0x00BE;
+        public const int EM_LINELENGTH = 0x00C1;
         public const int EM_REPLACESEL = 0x00C2;
         public const int EM_GETLINE = 0x00C4;
         public const int EM_LIMITTEXT = 0x00C5;
         public const int EM_CANUNDO = 0x00C6;
         public const int EM_UNDO = 0x00C7;
-        public const int EM_SETPASSWORDCHAR = 0x00CC;
-        public const int EM_GETPASSWORDCHAR = 0x00D2;
-        public const int EM_EMPTYUNDOBUFFER = 0x00CD;
-        public const int EM_SETREADONLY = 0x00CF;
-        public const int EM_SETMARGINS = 0x00D3;
+        public const int EM_FMTLINES = 0x00C8;
         public const int EM_LINEFROMCHAR = 0x00C9;
+        public const int EM_SETTABSTOPS = 0x00CB;
+        public const int EM_SETPASSWORDCHAR = 0x00CC;
+        public const int EM_EMPTYUNDOBUFFER = 0x00CD;
         public const int EM_GETFIRSTVISIBLELINE = 0x00CE;
-        public const int EM_LINEINDEX = 0x00BB;
+        public const int EM_SETREADONLY = 0x00CF;
+        public const int EM_SETWORDBREAKPROC = 0x00D0;
+        public const int EM_GETWORDBREAKPROC = 0x00D1;
+        public const int EM_GETPASSWORDCHAR = 0x00D2;
+        public const int EM_SETMARGINS = 0x00D3;
+        public const int EM_GETMARGINS = 0x00D4;
+        public const int EM_GETLIMITTEXT = 0x00D5;
+        public const int EM_POSFROMCHAR = 0x00D6;
+        public const int EM_CHARFROMPOS = 0x00D7;
+    }
 
-        public const int EM_GETLIMITTEXT = (WindowMessages.WM_USER + 37);
-
-        public const int EM_POSFROMCHAR = (WindowMessages.WM_USER + 38);
-        public const int EM_CHARFROMPOS = (WindowMessages.WM_USER + 39);
-
-        public const int EM_SCROLLCARET = (WindowMessages.WM_USER + 49);
+    /// <summary>
+    /// RichTextBox Control Messages. Note that some messages have the same name but different value compared to normal Edit Control Messages.
+    /// Copied form richedit.h
+    /// </summary>
+    public static class RichEditMessages
+    {
         public const int EM_CANPASTE = (WindowMessages.WM_USER + 50);
         public const int EM_DISPLAYBAND = (WindowMessages.WM_USER + 51);
         public const int EM_EXGETSEL = (WindowMessages.WM_USER + 52);
@@ -120,16 +142,17 @@ internal static partial class Interop
         public const int EM_SETQUERYRTFOBJ = (WindowMessages.WM_USER + 270);
 
         // Pegasus outline mode messages (RE 3.0)
+
         // Outline mode message
-        internal const int EM_OUTLINE = Interop.WindowMessages.WM_USER + 220;
+        public const int EM_OUTLINE = WindowMessages.WM_USER + 220;
 
         // Message for getting and restoring scroll pos
-        internal const int EM_GETSCROLLPOS = Interop.WindowMessages.WM_USER + 221;
-        internal const int EM_SETSCROLLPOS = Interop.WindowMessages.WM_USER + 222;
+        public const int EM_GETSCROLLPOS = WindowMessages.WM_USER + 221;
+        public const int EM_SETSCROLLPOS = WindowMessages.WM_USER + 222;
 
         // Change fontsize in current selection by wparam
-        internal const int EM_SETFONTSIZE = Interop.WindowMessages.WM_USER + 223;
-        internal const int EM_GETZOOM = Interop.WindowMessages.WM_USER + 224;
-        internal const int EM_SETZOOM = Interop.WindowMessages.WM_USER + 225;
+        public const int EM_SETFONTSIZE = WindowMessages.WM_USER + 223;
+        public const int EM_GETZOOM = WindowMessages.WM_USER + 224;
+        public const int EM_SETZOOM = WindowMessages.WM_USER + 225;
     }
 }
