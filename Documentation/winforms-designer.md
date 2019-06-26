@@ -47,7 +47,7 @@ dotnet build
 
 1. Start Visual Studio and open this project.
 1. Save the project in Visual Studio, and with that, also save the Solution file.
-1. Open the context menu of the solution (not the project!) in the Solution Explorer and chose *Add New Project*.
+1. Open the context menu of the solution (not the project!) in the Solution Explorer and chose **Add New Project**.
 
     ![add-projects-to-sln][add-projects-to-sln]
 
