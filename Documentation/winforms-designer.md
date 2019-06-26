@@ -63,7 +63,9 @@ dotnet build
 
 1. Erase the existing Form files in both projects.
 
-#### The following steps you always repeat, when you need to insert a new Form or a new UserControl
+#### Inserting a new Form or a new UserControl
+
+Always repeat the following steps when inserting a new Form or a new UserControl:
 
 1. In the Classing Framework project, open the project's context menu, and click *Add New Item*.
 
