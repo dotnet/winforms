@@ -2069,7 +2069,7 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
 
-            Assert.Equal("Microsoft® .NET", control.ProductName);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
         }
 
         #endregion
