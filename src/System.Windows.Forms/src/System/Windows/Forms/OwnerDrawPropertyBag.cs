@@ -9,6 +9,8 @@ using System.Runtime.Serialization.Formatters;
 
 namespace System.Windows.Forms
 {
+    // TODO: add serializable reasoning -- serialized indirectly via list/treeview items???
+
     /// <summary>
     /// Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
     /// </summary>

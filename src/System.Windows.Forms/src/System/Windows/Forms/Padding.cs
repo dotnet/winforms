@@ -10,7 +10,6 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     [TypeConverterAttribute(typeof(PaddingConverter))]
-    [Serializable]
     public struct Padding
     {
         private bool _all;

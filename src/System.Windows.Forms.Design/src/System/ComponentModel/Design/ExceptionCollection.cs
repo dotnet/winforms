@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace System.ComponentModel.Design
 {
-    [Serializable]
+    // TODO: determine if Serializable attribute is necessary; also is this class necessary?
     public sealed class ExceptionCollection : Exception
     {
         private readonly ArrayList _exceptions;

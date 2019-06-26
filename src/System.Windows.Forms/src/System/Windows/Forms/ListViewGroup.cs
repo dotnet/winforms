@@ -10,6 +10,8 @@ using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
+    // TODO: add serializable reasoning (@Devendar)
+
     /// <summary>
     /// Represents a group within a ListView.
     /// </summary>

@@ -11,7 +11,6 @@ namespace System.ComponentModel.Design.Serialization
     /// <summary>
     /// The exception that is thrown when the code dom serializer experiences an error.
     /// </summary>
-    [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
     public class CodeDomSerializerException : SystemException
     {

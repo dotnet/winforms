@@ -2,30 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
+using System.Windows.Forms;
+using System.Reflection;
+using System.Drawing;
+using System.IO;
+using System.Text;
+using System.ComponentModel;
+using System.Collections;
+using System.Collections.Generic;
+using System.Xml;
+using System.ComponentModel.Design;
+using System.Globalization;
+
 namespace System.Resources
 {
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System;
-    using System.Linq;
-    using System.Windows.Forms;
-    using System.Reflection;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.IO;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
-    using System.Resources;
-    using System.Xml;
-    using System.ComponentModel.Design;
-    using System.Globalization;
-    using System.Runtime.Versioning;
+    // TODO: add why Serializable attribtue is necessary (@Devendar)
 
     /// <summary>
     ///    
@@ -33,7 +29,6 @@ namespace System.Resources
     [Serializable]
     public sealed class ResXDataNode : ISerializable
     {
-
         private static readonly char[] SpecialChars = new char[] { ' ', '\r', '\n' };
 
         private DataNodeInfo nodeInfo;
@@ -41,7 +36,8 @@ namespace System.Resources
         private string name;
         private string comment;
 
-        private string typeName; // is only used when we create a resxdatanode manually with an object and contains the FQN
+        // is only used when we create a resxdatanode manually with an object and contains the FQN
+        private string typeName; 
 
         private string fileRefFullPath;
         private string fileRefType;

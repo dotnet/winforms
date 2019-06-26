@@ -11,7 +11,6 @@ using System.Collections;
 namespace System.Windows.Forms
 {
     [TypeConverterAttribute(typeof(LinkArea.LinkAreaConverter))]
-    [Serializable]
     public struct LinkArea
     {
         private int start; // Do not rename (binary serialization)

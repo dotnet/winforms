@@ -15,6 +15,9 @@ using System.Windows.Forms;
 
 namespace System.Drawing.Design
 {
+    // This class *needs* to be serializable in order to enable scenarios which store toolbox items
+    // TODO: ^^ make this better, as a remark (@Shyam)
+
     /// <summary>
     /// Provides a base implementation of a toolbox item.
     /// </summary>

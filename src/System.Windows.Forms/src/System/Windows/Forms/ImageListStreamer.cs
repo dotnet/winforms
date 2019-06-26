@@ -16,6 +16,8 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Globalization;
 
+    // TODO: add info why serializable is needed (@Devendar)
+
     /// <summary>
     /// </summary>
     [Serializable]
