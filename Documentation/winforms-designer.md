@@ -115,10 +115,6 @@ to:
     <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
 ```
 
-![edit-project-file001][edit-project-file001]
-![edit-project-file002][edit-project-file002]
-![edit-project-file003][edit-project-file003]
-
 4.Keep the file open in editor and also add for any and every form file you have in this ``ItemGroup``:
 
 ```xml
@@ -137,7 +133,8 @@ to:
 </ItemGroup>
 ```
 
-![edit-project-file004][edit-project-file004]
+After doing these steps this is what you should end up with:
+![edit-project-file][edit-project-file]
 
 [comment]: <> (URI Links)
 
@@ -151,7 +148,4 @@ to:
 [add-new-form]: images/add-new-form.png
 [add-new-form-dialog]: images/add-new-form-dialog.png
 [add-as-link]: images/add-as-link.png
-[edit-project-file001]: images/edit-project-file001.png
-[edit-project-file002]: images/edit-project-file002.png
-[edit-project-file003]: images/edit-project-file003.png
-[edit-project-file004]: images/edit-project-file004.png
+[edit-project-file]: images/edit-project-file004.png
