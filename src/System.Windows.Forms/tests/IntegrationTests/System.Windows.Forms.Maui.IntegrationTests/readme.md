@@ -79,7 +79,7 @@ See the pull request at XXXXXXXXXXXXXXXXXXXXXXXX for an example of how to do thi
 1. Open a command prompt and browse to the root of your repo.
 1. Build the source code (including the test you just ported):
 
-        .\build
+        .\build-local.ps1
 	
 1. Browse to `.\artifacts\bin\<your-test-name>\Debug\netcoreapp3.0`
 1. Double click on `<your-test-name>.exe`
