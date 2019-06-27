@@ -18,7 +18,11 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     ///
     /// The solution to this is to inherit from MemberDataAttribute and execute custom code 
     /// (running the maui test) before returning the expected data. See MauiMemberDataAttribute.cs for more info.
+    /// 
+    /// Also [Collection("Maui")] is used put all maui tests in the same collection, which makes them run sequentially
+    /// instead of in parallel. This is to migitate race conditions of multiple forms open at once.
     /// </summary>
+    [Collection("Maui")]
     public class WinformsMauiComboBoxTest
     {
         private const string ProjectName = "MauiComboBoxTest";
