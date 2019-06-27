@@ -23,13 +23,13 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// instead of in parallel. This is to migitate race conditions of multiple forms open at once.
     /// </summary>
     [Collection("Maui")]
-    public class WinformsMauiButtonTest
+    public class WinformsMauiComboBoxTest
     {
-        private const string ProjectName = "MauiButtonTest";
+        private const string ProjectName = "MauiComboBoxTest";
 
         [Theory]
         [MauiData(ProjectName)]
-        public void MauiButtonTest(string scenarioName)
+        public void MauiComboBoxTest(string scenarioName)
         {
             MauiTestHelper.ValidateScenarioPassed(ProjectName, scenarioName);
         }

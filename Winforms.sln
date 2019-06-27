@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsControlsClassicTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiComboBoxTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiComboBoxTest\MauiComboBoxTest.csproj", "{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFD4B8B0-C7B9-4661-8E10-D78473B64004}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -165,6 +167,10 @@ Global
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{87CF8481-647B-4951-8A57-468B2F0CD84B} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{840B70B2-4F4B-4FF0-A26F-185789625C78} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
