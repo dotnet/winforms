@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Tests
         {
             var button = new Button();
 
-            Assert.Equal("Microsoft® .NET", button.ProductName);
+            Assert.Equal("Microsoft\u00AE .NET", button.ProductName);
         }
 
         // helper method to generate data for the GetPreferredSizeCore test
