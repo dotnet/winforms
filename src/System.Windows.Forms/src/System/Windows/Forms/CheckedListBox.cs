@@ -1534,6 +1534,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => false;
+
         /// <summary>
         /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]
@@ -1662,7 +1664,7 @@ namespace System.Windows.Forms
                 {
                     Rectangle rect = ParentCheckedListBox.GetItemRectangle(index);
 
-                    if(rect.IsEmpty)
+                    if (rect.IsEmpty)
                     {
                         return rect;
                     }
