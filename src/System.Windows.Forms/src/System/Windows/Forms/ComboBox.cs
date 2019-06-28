@@ -3349,7 +3349,6 @@ namespace System.Windows.Forms
         ///     Enables the AutoComplete feature for combobox depending on the properties set.
         ///     These properties are namely AutoCompleteMode, AutoCompleteSource and AutoCompleteCustomSource.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void SetAutoComplete(bool reset, bool recreate)
         {
             if (!IsHandleCreated || childEdit == null)

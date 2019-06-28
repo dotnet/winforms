@@ -2418,7 +2418,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal bool IsUserMode()
         {
             ISite site = Site;
@@ -2517,13 +2516,11 @@ namespace System.Windows.Forms
             GetOleObject().DoVerb(verb, IntPtr.Zero, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, FillInRect(new NativeMethods.COMRECT(), Bounds));
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private bool AwaitingDefreezing()
         {
             return freezeCount > 0;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void Freeze(bool v)
         {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "freezing " + v.ToString());
@@ -2571,7 +2568,6 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private int GetOcState()
         {
             return ocState;
@@ -3356,13 +3352,11 @@ namespace System.Windows.Forms
         ///     Returns the IUnknown pointer to the enclosed ActiveX control.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public object GetOcx()
         {
             return instance;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private object GetOcxCreate()
         {
             if (instance == null)

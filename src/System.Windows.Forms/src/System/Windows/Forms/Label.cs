@@ -1515,7 +1515,6 @@ namespace System.Windows.Forms
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
         ///    </para>
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         protected override void OnMouseLeave(EventArgs e)
         {
             if (!controlToolTip && textToolTip != null && textToolTip.GetHandleCreated())
@@ -1552,7 +1551,6 @@ namespace System.Windows.Forms
         }
 
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
