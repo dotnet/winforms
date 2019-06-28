@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
         private static extern IntPtr IntGetDC(HandleRef hWnd);
-        
+
         public static IntPtr GetDC(HandleRef hWnd)
         {
             return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
@@ -103,7 +103,11 @@ namespace System.Windows.Forms.Design
         //it'll be OK.
         public static IntPtr GetWindowLong(HandleRef hWnd, int nIndex)
         {
-            if (IntPtr.Size == 4) return GetWindowLong32(hWnd, nIndex);
+            if (IntPtr.Size == 4)
+            {
+                return GetWindowLong32(hWnd, nIndex);
+            }
+
             return GetWindowLongPtr64(hWnd, nIndex);
         }
 
@@ -126,7 +130,11 @@ namespace System.Windows.Forms.Design
         //it'll be OK.
         public static IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong)
         {
-            if (IntPtr.Size == 4) return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
+            if (IntPtr.Size == 4)
+            {
+                return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
+            }
+
             return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
         }
 

@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.ComponentModel;
     using System.Drawing;
@@ -15,7 +16,8 @@ namespace System.Windows.Forms {
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionMenuStrip))
     ]
-    public class MenuStrip : ToolStrip {
+    public class MenuStrip : ToolStrip
+    {
 
 
         private ToolStripMenuItem mdiWindowListItem = null;
@@ -25,22 +27,29 @@ namespace System.Windows.Forms {
 
 
 
-        public MenuStrip() {
-            this.CanOverflow = false;
-            this.GripStyle = ToolStripGripStyle.Hidden;
-            this.Stretch = true;
+        public MenuStrip()
+        {
+            CanOverflow = false;
+            GripStyle = ToolStripGripStyle.Hidden;
+            Stretch = true;
 
         }
 
-        internal override bool KeyboardActive {
-            get { return base.KeyboardActive; }
-            set {
-                if (base.KeyboardActive != value) {
+        internal override bool KeyboardActive
+        {
+            get => base.KeyboardActive;
+
+            set
+            {
+                if (base.KeyboardActive != value)
+                {
                     base.KeyboardActive = value;
-                    if (value) {
+                    if (value)
+                    {
                         OnMenuActivate(EventArgs.Empty);
                     }
-                    else {
+                    else
+                    {
                         OnMenuDeactivate(EventArgs.Empty);
                     }
                 }
@@ -54,62 +63,63 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false)
         ]
-        public new bool CanOverflow {
-            get {
-                return base.CanOverflow;
-            }
-            set {
-                base.CanOverflow = value;
-            }
+        public new bool CanOverflow
+        {
+            get => base.CanOverflow;
+            set => base.CanOverflow = value;
         }
-        protected override bool DefaultShowItemToolTips {
-            get {
-                return false;
-            }
-        }
-        protected override Padding DefaultGripMargin {
-            get {
+        protected override bool DefaultShowItemToolTips 
+            => false;
+
+        protected override Padding DefaultGripMargin 
+            =>
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Ensure grip aligns properly when set visible.
-                return new Padding(2, 2, 0, 2);
-            }
-        }
+                DpiHelper.IsPerMonitorV2Awareness ?
+                       DpiHelper.LogicalToDeviceUnits(new Padding(2, 2, 0, 2), DeviceDpi) :
+                       new Padding(2, 2, 0, 2);
 
-        protected override Size DefaultSize {
-            get {
-                return new Size(200, 24);
-            }
-        }
+        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
+        protected override Size DefaultSize 
+            => DpiHelper.IsPerMonitorV2Awareness ?
+               DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
+               new Size(200, 24);
 
-        protected override Padding DefaultPadding {
-            get {
+        protected override Padding DefaultPadding
+        {
+            get
+            {
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Scoot the grip over when present
-                if (GripStyle == ToolStripGripStyle.Visible) {
-                    return new Padding(3, 2, 0, 2);
+                if (GripStyle == ToolStripGripStyle.Visible)
+                {
+                    return DpiHelper.IsPerMonitorV2Awareness ?
+                           DpiHelper.LogicalToDeviceUnits(new Padding(3, 2, 0, 2), DeviceDpi) :
+                           new Padding(3, 2, 0, 2);
                 }
-                return new Padding(6, 2, 0, 2);
+                return DpiHelper.IsPerMonitorV2Awareness ?
+                       DpiHelper.LogicalToDeviceUnits(new Padding(6, 2, 0, 2), DeviceDpi) :
+                       new Padding(6, 2, 0, 2);
             }
         }
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
-        public new ToolStripGripStyle GripStyle {
-            get {
-                return base.GripStyle;
-            }
-            set {
-                base.GripStyle = value;
-            }
+        public new ToolStripGripStyle GripStyle
+        {
+            get => base.GripStyle;
+            set => base.GripStyle = value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
-        public event EventHandler MenuActivate {
+        public event EventHandler MenuActivate
+        {
             add => Events.AddHandler(EventMenuActivate, value);
             remove => Events.RemoveHandler(EventMenuActivate, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
-        public event EventHandler MenuDeactivate {
+        public event EventHandler MenuDeactivate
+        {
             add => Events.AddHandler(EventMenuDeactivate, value);
             remove => Events.RemoveHandler(EventMenuDeactivate, value);
         }
@@ -117,25 +127,19 @@ namespace System.Windows.Forms {
         [DefaultValue(false)]
         [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
-        public new bool ShowItemToolTips {
-            get {
-                return base.ShowItemToolTips;
-            }
-            set {
-                base.ShowItemToolTips = value;
-            }
+        public new bool ShowItemToolTips
+        {
+            get => base.ShowItemToolTips;
+            set => base.ShowItemToolTips = value;
         }
 
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ToolStripStretchDescr))]
-        public new bool Stretch {
-            get {
-                return base.Stretch;
-            }
-            set {
-                base.Stretch = value;
-            }
+        public new bool Stretch
+        {
+            get => base.Stretch;
+            set => base.Stretch = value;
         }
 
         [DefaultValue(null)]
@@ -143,64 +147,71 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.MenuStripMdiWindowListItem))]
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverterAttribute(typeof(MdiWindowListItemConverter))]
-        public ToolStripMenuItem MdiWindowListItem {
-            get {
-                return mdiWindowListItem;
-            }
-            set {
-                mdiWindowListItem = value;
-            }
+        public ToolStripMenuItem MdiWindowListItem
+        {
+            get => mdiWindowListItem;
+            set => mdiWindowListItem = value;
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance() {
-            return new MenuStripAccessibleObject(this);
-        }
-        protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick) {
-            if (text == "-") {
+        protected override AccessibleObject CreateAccessibilityInstance() 
+            => new MenuStripAccessibleObject(this);
+
+        protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
+        {
+            if (text == "-")
+            {
                 return new ToolStripSeparator();
             }
-            else {
+            else
+            {
                 return new ToolStripMenuItem(text, image, onClick);
             }
         }
 
-        internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware) {
+        internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware)
+        {
             ToolStripItem nextItem = base.GetNextItem(start, direction, rtlAware);
-            if (nextItem is MdiControlStrip.SystemMenuItem) {
+            if (nextItem is MdiControlStrip.SystemMenuItem)
+            {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);
             }
             return nextItem;
         }
 
-        protected virtual void OnMenuActivate(EventArgs e) {
-            if (IsHandleCreated) {
+        protected virtual void OnMenuActivate(EventArgs e)
+        {
+            if (IsHandleCreated)
+            {
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, -1);
-            }
-            EventHandler handler = (EventHandler)Events[EventMenuActivate];
-            if (handler != null) handler(this, e);
+            } ((EventHandler)Events[EventMenuActivate])?.Invoke(this, e);
         }
 
-        protected virtual void OnMenuDeactivate(EventArgs e) {
-            if (IsHandleCreated) {
+        protected virtual void OnMenuDeactivate(EventArgs e)
+        {
+            if (IsHandleCreated)
+            {
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, -1);
-            }
-            EventHandler handler = (EventHandler)Events[EventMenuDeactivate];
-            if (handler != null) handler(this, e);
+            } ((EventHandler)Events[EventMenuDeactivate])?.Invoke(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
-        /// </devdoc>
-        internal bool OnMenuKey() {
-            if (!(Focused || ContainsFocus)) {
+        /// </summary>
+        internal bool OnMenuKey()
+        {
+            if (!(Focused || ContainsFocus))
+            {
                 Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] set focus to menustrip");
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, /*menuKeyPressed=*/true);
 
-                if (DisplayedItems.Count > 0) {
-                    if (DisplayedItems[0] is MdiControlStrip.SystemMenuItem) {
+                if (DisplayedItems.Count > 0)
+                {
+                    if (DisplayedItems[0] is MdiControlStrip.SystemMenuItem)
+                    {
                         SelectNextToolStripItem(DisplayedItems[0], /*forward=*/true);
                     }
-                    else {
+                    else
+                    {
                         // first alt should select "File".  Future keydowns of alt should restore focus.
                         SelectNextToolStripItem(null, /*forward=*/(RightToLeft == RightToLeft.No));
                     }
@@ -211,15 +222,18 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
-
-            if (ToolStripManager.ModalMenuFilter.InMenuMode) {
+        protected override bool ProcessCmdKey(ref Message m, Keys keyData)
+        {
+            if (ToolStripManager.ModalMenuFilter.InMenuMode)
+            {
                 // ALT, then space should dismiss the menu and activate the system menu.
-                if (keyData == Keys.Space) {
+                if (keyData == Keys.Space)
+                {
                     // if we're focused it's ok to activate system menu
                     // if we're not focused - we should not activate if we contain focus - this means a text box or something
                     // has focus.
-                    if (Focused || !ContainsFocus) {
+                    if (Focused || !ContainsFocus)
+                    {
                         NotifySelectionChange(null);
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
@@ -231,19 +245,21 @@ namespace System.Windows.Forms {
             }
             return base.ProcessCmdKey(ref m, keyData);
 
-
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of WndProc.
-        /// </devdoc>
+        /// </summary>
         /// <param name=m></param>
-        protected override void WndProc(ref Message m) {
+        protected override void WndProc(ref Message m)
+        {
 
-            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
+            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
+            {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
                 ToolStripItem item = GetItemAt(pt);
-                if (item != null && !(item is ToolStripControlHost)) {
+                if (item != null && !(item is ToolStripControlHost))
+                {
                     // verify the place where we've clicked is a place where we have to do "fake" focus
                     // e.g. an item that isnt a control.
                     KeyboardActive = true;
@@ -254,30 +270,36 @@ namespace System.Windows.Forms {
         }
 
         [System.Runtime.InteropServices.ComVisible(true)]
-        internal class MenuStripAccessibleObject : ToolStripAccessibleObject {
+        internal class MenuStripAccessibleObject : ToolStripAccessibleObject
+        {
 
             public MenuStripAccessibleObject(MenuStrip owner)
-                : base(owner) {
+                : base(owner)
+            {
             }
 
-            public override AccessibleRole Role {
-                get {
+            public override AccessibleRole Role
+            {
+                get
+                {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default) {
+                    if (role != AccessibleRole.Default)
+                    {
                         return role;
                     }
                     return AccessibleRole.MenuBar;
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID) {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+            internal override object GetPropertyValue(int propertyID)
+            {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                {
                     return NativeMethods.UIA_MenuBarControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
         }
-
     }
 }

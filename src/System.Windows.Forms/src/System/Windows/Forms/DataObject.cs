@@ -21,9 +21,9 @@ namespace System.Windows.Forms
     using System.Text;
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Implements a basic data transfer mechanism.</para>
-    /// </devdoc>
+    /// </summary>
     [
         ClassInterface(ClassInterfaceType.None)
     ]
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             TYMED.TYMED_MFPICT,
             TYMED.TYMED_GDI};
 
-        private IDataObject innerData = null;
+        private readonly IDataObject innerData = null;
         internal bool RestrictedFormats { get; set; }
 
         // We use this to identify that a stream is actually a serialized object.  On read,
@@ -59,9 +59,9 @@ namespace System.Windows.Forms
         //
         private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, with the specified <see cref='System.Windows.Forms.IDataObject'/>.</para>
-        /// </devdoc>
+        /// </summary>
         internal DataObject(IDataObject data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IDataObject");
@@ -69,9 +69,9 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, with the specified <see langword='IComDataObject'/>.</para>
-        /// </devdoc>
+        /// </summary>
         internal DataObject(IComDataObject data)
         {
             if (data is DataObject)
@@ -86,12 +86,12 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/>
         ///       class, which can store arbitrary data.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DataObject()
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject standalone");
@@ -99,9 +99,9 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, containing the specified data.</para>
-        /// </devdoc>
+        /// </summary>
         public DataObject(object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject base on Object: " + data.ToString());
@@ -121,10 +121,10 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, containing the specified data and its 
         ///    associated format.</para>
-        /// </devdoc>
+        /// </summary>
         public DataObject(string format, object data) : this()
         {
             SetData(format, data);
@@ -172,11 +172,11 @@ namespace System.Windows.Forms
             return hBitmapNew;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Retrieves the data associated with the specified data 
         ///       format, using an automated conversion parameter to determine whether to convert
         ///       the data to the format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual object GetData(string format, bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format + ", " + autoConvert.ToString());
@@ -184,20 +184,20 @@ namespace System.Windows.Forms
             return innerData.GetData(format, autoConvert);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Retrieves the data associated with the specified data 
         ///       format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual object GetData(string format)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format);
             return GetData(format, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Retrieves the data associated with the specified class 
         ///       type format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual object GetData(Type format)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format.FullName);
@@ -209,11 +209,11 @@ namespace System.Windows.Forms
             return GetData(format.FullName);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Determines whether data stored in this instance is 
         ///       associated with, or can be converted to, the specified
         ///       format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual bool GetDataPresent(Type format)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format.FullName);
@@ -227,11 +227,11 @@ namespace System.Windows.Forms
             return b;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Determines whether data stored in this instance is 
         ///       associated with the specified format, using an automatic conversion
         ///       parameter to determine whether to convert the data to the format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual bool GetDataPresent(string format, bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format + ", " + autoConvert.ToString());
@@ -241,11 +241,11 @@ namespace System.Windows.Forms
             return b;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Determines whether data stored in this instance is 
         ///       associated with, or can be converted to, the specified
         ///       format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual bool GetDataPresent(string format)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format);
@@ -255,13 +255,13 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a list of all formats that data stored in this 
         ///       instance is associated with or can be converted to, using an automatic
         ///       conversion parameter<paramref name=" "/>to
         ///       determine whether to retrieve all formats that the data can be converted to or
         ///       only native data formats.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual string[] GetFormats(bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats: " + autoConvert.ToString());
@@ -269,10 +269,10 @@ namespace System.Windows.Forms
             return innerData.GetFormats(autoConvert);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a list of all formats that data stored in this instance is associated
         ///       with or can be converted to.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual string[] GetFormats()
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats:");
@@ -320,8 +320,7 @@ namespace System.Windows.Forms
         public virtual StringCollection GetFileDropList()
         {
             StringCollection retVal = new StringCollection();
-            string[] strings = GetData(DataFormats.FileDrop, true) as string[];
-            if (strings != null)
+            if (GetData(DataFormats.FileDrop, true) is string[] strings)
             {
                 retVal.AddRange(strings);
             }
@@ -346,8 +345,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
-            string text = GetData(ConvertToDataFormats(format), false) as string;
-            if (text != null)
+            if (GetData(ConvertToDataFormats(format), false) is string text)
             {
                 return text;
             }
@@ -436,9 +434,9 @@ namespace System.Windows.Forms
 
         // END - WHIDBEY ADDITIONS -->
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a list of distinct strings from the array.
-        /// </devdoc>
+        /// </summary>
         private static string[] GetDistinctStrings(string[] formats)
         {
             ArrayList distinct = new ArrayList();
@@ -456,9 +454,9 @@ namespace System.Windows.Forms
             return temp;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns all the "synonyms" for the specified format.
-        /// </devdoc>
+        /// </summary>
         private static string[] GetMappedFormats(string format)
         {
             if (format == null)
@@ -503,9 +501,9 @@ namespace System.Windows.Forms
             return new string[] { format };
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the tymed is useable.
-        /// </devdoc>
+        /// </summary>
         private bool GetTymedUseable(TYMED tymed)
         {
             for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
@@ -518,10 +516,10 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Populates Ole datastructes from a WinForms dataObject. This is the core
         ///     of WinForms to OLE conversion.
-        /// </devdoc>
+        /// </summary>
         private void GetDataIntoOleStructs(ref FORMATETC formatetc,
                                            ref STGMEDIUM medium)
         {
@@ -584,9 +582,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
@@ -598,9 +596,9 @@ namespace System.Windows.Forms
             return (NativeMethods.E_NOTIMPL);
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         void IComDataObject.DUnadvise(int dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
@@ -612,9 +610,9 @@ namespace System.Windows.Forms
             Marshal.ThrowExceptionForHR(NativeMethods.E_NOTIMPL);
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
@@ -626,9 +624,9 @@ namespace System.Windows.Forms
             return (OLE_E_ADVISENOTSUPPORTED);
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
@@ -646,9 +644,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
@@ -660,9 +658,9 @@ namespace System.Windows.Forms
             return (DATA_S_SAMEFORMATETC);
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
@@ -711,9 +709,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
@@ -727,9 +725,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
@@ -771,9 +769,9 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        // <devdoc>
+        // <summary>
         //     Part of IComDataObject, used to interop with OLE.
-        // </devdoc>
+        // </summary>
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
 
@@ -885,9 +883,9 @@ namespace System.Windows.Forms
             formatter.Serialize(stream, data);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Saves stream out to handle.
-        /// </devdoc>
+        /// </summary>
         private unsafe int SaveStreamToHandle(ref IntPtr handle, Stream stream)
         {
             if (handle != IntPtr.Zero)
@@ -918,9 +916,9 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Saves a list of files out to the handle in HDROP format.
-        /// </devdoc>
+        /// </summary>
         private int SaveFileListToHandle(IntPtr handle, string[] files)
         {
             if (files == null)
@@ -987,10 +985,10 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Save string to handle. If unicode is set to true
         ///     then the string is saved as Unicode, else it is saves as DBCS.
-        /// </devdoc>
+        /// </summary>
         private int SaveStringToHandle(IntPtr handle, string str, bool unicode)
         {
             if (handle == IntPtr.Zero)
@@ -1091,12 +1089,12 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Stores the specified data and its associated format in 
         ///       this instance, using the automatic conversion parameter
         ///       to specify whether the
         ///       data can be converted to another format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void SetData(string format, bool autoConvert, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data.ToString());
@@ -1104,10 +1102,10 @@ namespace System.Windows.Forms
             innerData.SetData(format, autoConvert, data);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Stores the specified data and its associated format in this
         ///       instance.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void SetData(string format, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data.ToString());
@@ -1115,11 +1113,11 @@ namespace System.Windows.Forms
             innerData.SetData(format, data);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Stores the specified data and
         ///       its
         ///       associated class type in this instance.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void SetData(Type format, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format.FullName + ", " + data.ToString());
@@ -1127,10 +1125,10 @@ namespace System.Windows.Forms
             innerData.SetData(format, data);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Stores the specified data in
         ///       this instance, using the class of the data for the format.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void SetData(object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data.ToString());
@@ -1138,9 +1136,9 @@ namespace System.Windows.Forms
             innerData.SetData(data);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Part of IComDataObject, used to interop with OLE.
-        /// </devdoc>
+        /// </summary>
         private class FormatEnumerator : IEnumFORMATETC
         {
 
@@ -1161,8 +1159,7 @@ namespace System.Windows.Forms
                 current = 0;
                 if (formats != null)
                 {
-                    DataObject dataObject = parent as DataObject;
-                    if (dataObject != null && dataObject.RestrictedFormats)
+                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
                     {
                         if (!Clipboard.IsFormatValid(formats))
                         {
@@ -1174,12 +1171,14 @@ namespace System.Windows.Forms
                     {
                         FORMATETC currentFormat = formats[i];
 
-                        FORMATETC temp = new FORMATETC();
-                        temp.cfFormat = currentFormat.cfFormat;
-                        temp.dwAspect = currentFormat.dwAspect;
-                        temp.ptd = currentFormat.ptd;
-                        temp.lindex = currentFormat.lindex;
-                        temp.tymed = currentFormat.tymed;
+                        FORMATETC temp = new FORMATETC
+                        {
+                            cfFormat = currentFormat.cfFormat,
+                            dwAspect = currentFormat.dwAspect,
+                            ptd = currentFormat.ptd,
+                            lindex = currentFormat.lindex,
+                            tymed = currentFormat.tymed
+                        };
                         this.formats.Add(temp);
                     }
                 }
@@ -1194,9 +1193,7 @@ namespace System.Windows.Forms
 
                 if (formats != null)
                 {
-
-                    DataObject dataObject = parent as DataObject;
-                    if (dataObject != null && dataObject.RestrictedFormats)
+                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
                     {
                         if (!Clipboard.IsFormatValid(formats))
                         {
@@ -1207,11 +1204,13 @@ namespace System.Windows.Forms
                     for (int i = 0; i < formats.Length; i++)
                     {
                         string format = formats[i];
-                        FORMATETC temp = new FORMATETC();
-                        temp.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-                        temp.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                        temp.ptd = IntPtr.Zero;
-                        temp.lindex = -1;
+                        FORMATETC temp = new FORMATETC
+                        {
+                            cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                            dwAspect = DVASPECT.DVASPECT_CONTENT,
+                            ptd = IntPtr.Zero,
+                            lindex = -1
+                        };
 
                         if (format.Equals(DataFormats.Bitmap))
                         {
@@ -1279,7 +1278,7 @@ namespace System.Windows.Forms
             public int Skip(int celt)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
-                if (current + celt >= this.formats.Count)
+                if (current + celt >= formats.Count)
                 {
                     return NativeMethods.S_FALSE;
                 }
@@ -1303,10 +1302,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     OLE Converter.  This class embodies the nastiness required to convert from our
         ///     managed types to standard OLE clipboard formats.
-        /// </devdoc>
+        /// </summary>
         private class OleConverter : IDataObject
         {
             internal IComDataObject innerData;
@@ -1317,9 +1316,9 @@ namespace System.Windows.Forms
                 innerData = data;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns the data Object we are wrapping
-            /// </devdoc>
+            /// </summary>
             public IComDataObject OleDataObject
             {
                 get
@@ -1328,9 +1327,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Uses IStream and retrieves the specified format from the bound IComDataObject.
-            /// </devdoc>
+            /// </summary>
             private object GetDataFromOleIStream(string format)
             {
 
@@ -1382,9 +1381,9 @@ namespace System.Windows.Forms
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified form from the specified hglobal.
-            /// </devdoc>
+            /// </summary>
             private object GetDataFromHGLOBAL(string format, IntPtr hglobal)
             {
                 object data = null;
@@ -1434,9 +1433,9 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Uses HGLOBALs and retrieves the specified format from the bound IComDatabject.
-            /// </devdoc>
+            /// </summary>
             private object GetDataFromOleHGLOBAL(string format, out bool done)
             {
                 done = false;
@@ -1476,11 +1475,11 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified format data from the bound IComDataObject, from
             ///     other sources that IStream and HGLOBAL... this is really just a place
             ///     to put the "special" formats like BITMAP, ENHMF, etc.
-            /// </devdoc>
+            /// </summary>
             private object GetDataFromOleOther(string format)
             {
                 Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
@@ -1557,10 +1556,10 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Extracts a managed Object from the innerData of the specified
             ///     format. This is the base of the OLE to managed conversion.
-            /// </devdoc>
+            /// </summary>
             private object GetDataFromBoundOleDataObject(string format, out bool done)
             {
                 object data = null;
@@ -1584,9 +1583,9 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Creates an Stream from the data stored in handle.
-            /// </devdoc>
+            /// </summary>
             private Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
             {
                 IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
@@ -1638,16 +1637,15 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Creates a new instance of the Object that has been persisted into the
             ///     handle.
-            /// </devdoc>
+            /// </summary>
             private object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
             {
                 object value = null;
 
-                bool isSerializedObject;
-                Stream stream = ReadByteStreamFromHandle(handle, out isSerializedObject);
+                Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
 
                 if (isSerializedObject)
                 {
@@ -1672,10 +1670,10 @@ namespace System.Windows.Forms
                 return formatter.Deserialize(stream);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Parses the HDROP format and returns a list of strings using
             ///     the DragQueryFile function.
-            /// </devdoc>
+            /// </summary>
             private string[] ReadFileListFromHandle(IntPtr hdrop)
             {
 
@@ -1692,7 +1690,10 @@ namespace System.Windows.Forms
                     {
                         int charlen = UnsafeNativeMethods.DragQueryFileLongPath(new HandleRef(null, hdrop), i, sb);
                         if (0 == charlen)
+                        {
                             continue;
+                        }
+
                         string s = sb.ToString(0, charlen);
                         string fullPath = Path.GetFullPath(s);
                         files[i] = s;
@@ -1702,11 +1703,11 @@ namespace System.Windows.Forms
                 return files;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Creates a string from the data stored in handle. If
             ///     unicode is set to true, then the string is assume to be Unicode,
             ///     else DBCS (ASCI) is assumed.
-            /// </devdoc>
+            /// </summary>
             private unsafe string ReadStringFromHandle(IntPtr handle, bool unicode)
             {
                 string stringData = null;
@@ -1754,8 +1755,7 @@ namespace System.Windows.Forms
             //=------------------------------------------------------------------------=
             public virtual object GetData(string format, bool autoConvert)
             {
-                bool done = false;
-                object baseVar = GetDataFromBoundOleDataObject(format, out done);
+                object baseVar = GetDataFromBoundOleDataObject(format, out bool done);
                 object original = baseVar;
 
                 if (!done && autoConvert && (baseVar == null || baseVar is MemoryStream))
@@ -1842,10 +1842,12 @@ namespace System.Windows.Forms
             private bool GetDataPresentInner(string format)
             {
                 Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
-                FORMATETC formatetc = new FORMATETC();
-                formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-                formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                formatetc.lindex = -1;
+                FORMATETC formatetc = new FORMATETC
+                {
+                    cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1
+                };
 
                 for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
                 {
@@ -1955,8 +1957,8 @@ namespace System.Windows.Forms
         // Data Store
         //--------------------------------------------------------------------------
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private class DataStore : IDataObject
         {
             private class DataStoreEntry
@@ -1971,7 +1973,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
+            private readonly Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
 
             public DataStore()
             {
@@ -2188,7 +2190,7 @@ namespace System.Windows.Forms
             private static readonly string s_allowedTypeName = "System.Drawing.Bitmap";
             private static readonly string s_allowedAssemblyName = "System.Drawing";
             // PublicKeyToken=b03f5f7f11d50a3a
-            private static byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
+            private static readonly byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
             /// <summary>
             ///  Only safe to deserialize types are bypassing this callback, Strings 

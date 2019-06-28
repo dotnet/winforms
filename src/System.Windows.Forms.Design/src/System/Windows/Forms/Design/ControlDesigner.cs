@@ -1601,7 +1601,7 @@ namespace System.Windows.Forms.Design
             // Handle shadowed properties
             string[] shadowProps = new string[] { "Visible", "Enabled", "ContextMenu", "AllowDrop", "Location", "Name" };
 
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
@@ -1628,7 +1628,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Now we add our own design time properties.
-            properties["Locked"] = TypeDescriptor .CreateProperty(typeof(ControlDesigner), "Locked", typeof(bool), new DefaultValueAttribute(false), BrowsableAttribute.Yes, CategoryAttribute.Design, DesignOnlyAttribute.Yes, new SRDescriptionAttribute(SR.lockedDescr));
+            properties["Locked"] = TypeDescriptor.CreateProperty(typeof(ControlDesigner), "Locked", typeof(bool), new DefaultValueAttribute(false), BrowsableAttribute.Yes, CategoryAttribute.Design, DesignOnlyAttribute.Yes, new SRDescriptionAttribute(SR.lockedDescr));
         }
 
         /// <summary>
@@ -2519,7 +2519,7 @@ namespace System.Windows.Forms.Design
             }
 
             public override int GetChildCount() => _control.AccessibilityObject.GetChildCount();
-            
+
             private AccessibleObject GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
             {
                 if (cao == null)

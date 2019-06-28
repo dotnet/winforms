@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
@@ -19,11 +20,11 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> Displays an image that can be a graphic from a bitmap, 
     ///       icon, or metafile, as well as from
     ///       an enhanced metafile, JPEG, or GIF files.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -33,132 +34,142 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.PictureBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionPictureBox))
     ]
-    public class PictureBox : Control, ISupportInitialize {
+    public class PictureBox : Control, ISupportInitialize
+    {
 
-        /// <devdoc>
+        /// <summary>
         ///     The type of border this control will have.
-        /// </devdoc>
+        /// </summary>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <devdoc>
+        /// <summary>
         ///     The image being displayed.
-        /// </devdoc>
+        /// </summary>
         private Image image;
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls how the image is placed within our bounds, or how we are
         ///     sized to fit said image.
-        /// </devdoc>
+        /// </summary>
         private PictureBoxSizeMode sizeMode = PictureBoxSizeMode.Normal;
         private Size savedSize;
 
         bool currentlyAnimating;
 
         // Instance members for asynchronous behavior
-        private AsyncOperation     currentAsyncLoadOperation = null;
-        private string             imageLocation;
-        private Image              initialImage;
-        private Image              errorImage;
-        private int                contentLength;
-        private int                totalBytesRead;
-        private MemoryStream       tempDownloadStream;
-        private const int          readBlockSize = 4096;    
-        private byte[]             readBuffer = null;
+        private AsyncOperation currentAsyncLoadOperation = null;
+        private string imageLocation;
+        private Image initialImage;
+        private Image errorImage;
+        private int contentLength;
+        private int totalBytesRead;
+        private MemoryStream tempDownloadStream;
+        private const int readBlockSize = 4096;
+        private byte[] readBuffer = null;
         private ImageInstallationType imageInstallationType;
         private SendOrPostCallback loadCompletedDelegate = null;
         private SendOrPostCallback loadProgressDelegate = null;
-        private bool               handleValid = false;
-        private object             internalSyncObject = new object();
+        private bool handleValid = false;
+        private readonly object internalSyncObject = new object();
 
         // These default images will be demand loaded.
-        private Image              defaultInitialImage = null;
-        private Image              defaultErrorImage = null;
+        private Image defaultInitialImage = null;
+        private Image defaultErrorImage = null;
 
-        [ ThreadStatic ]
-        private static Image       defaultInitialImageForThread = null;
-        
-        [ ThreadStatic ]
-        private static Image       defaultErrorImageForThread = null;
+        [ThreadStatic]
+        private static Image defaultInitialImageForThread = null;
+
+        [ThreadStatic]
+        private static Image defaultErrorImageForThread = null;
 
 
         private static readonly object defaultInitialImageKey = new object();
         private static readonly object defaultErrorImageKey = new object();
         private static readonly object loadCompletedKey = new object();
         private static readonly object loadProgressChangedKey = new object();
-        
 
-        private const int   PICTUREBOXSTATE_asyncOperationInProgress    = 0x00000001;
-        private const int   PICTUREBOXSTATE_cancellationPending         = 0x00000002;
-        private const int   PICTUREBOXSTATE_useDefaultInitialImage      = 0x00000004;
-        private const int   PICTUREBOXSTATE_useDefaultErrorImage        = 0x00000008;
-        private const int   PICTUREBOXSTATE_waitOnLoad                  = 0x00000010;
-        private const int   PICTUREBOXSTATE_needToLoadImageLocation     = 0x00000020;
-        private const int   PICTUREBOXSTATE_inInitialization            = 0x00000040;
+
+        private const int PICTUREBOXSTATE_asyncOperationInProgress = 0x00000001;
+        private const int PICTUREBOXSTATE_cancellationPending = 0x00000002;
+        private const int PICTUREBOXSTATE_useDefaultInitialImage = 0x00000004;
+        private const int PICTUREBOXSTATE_useDefaultErrorImage = 0x00000008;
+        private const int PICTUREBOXSTATE_waitOnLoad = 0x00000010;
+        private const int PICTUREBOXSTATE_needToLoadImageLocation = 0x00000020;
+        private const int PICTUREBOXSTATE_inInitialization = 0x00000040;
 
         // PERF: take all the bools and put them into a state variable
-        private System.Collections.Specialized.BitVector32      pictureBoxState; // see PICTUREBOXSTATE_ consts above
+        private System.Collections.Specialized.BitVector32 pictureBoxState; // see PICTUREBOXSTATE_ consts above
 
         // http://msdn.microsoft.com/en-us/library/93z9ee4x(v=VS.100).aspx
         // if we load an image from a stream, 
         // we must keep the stream open for the lifetime of the Image
         StreamReader localImageStreamReader = null;
         Stream uriImageStream = null;
- 
-        /// <devdoc>
+
+        /// <summary>
         ///    <para>Creates a new picture with all default properties and no 
         ///       Image. The default PictureBox.SizeMode will be PictureBoxSizeMode.NORMAL.
         ///    </para>
-        /// </devdoc>
-        public PictureBox() {
+        /// </summary>
+        public PictureBox()
+        {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
             pictureBoxState = new System.Collections.Specialized.BitVector32(PICTUREBOXSTATE_useDefaultErrorImage |
                                                                              PICTUREBOXSTATE_useDefaultInitialImage);
 
-            SetStyle(ControlStyles.Opaque |ControlStyles.Selectable , false);
-            SetStyle(ControlStyles.OptimizedDoubleBuffer|ControlStyles.SupportsTransparentBackColor, true);
+            SetStyle(ControlStyles.Opaque | ControlStyles.Selectable, false);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.SupportsTransparentBackColor, true);
 
 
             TabStop = false;
             savedSize = Size;
         }
-        
+
         /// <hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool AllowDrop {
-            get {
+        public override bool AllowDrop
+        {
+            get
+            {
                 return base.AllowDrop;
             }
-            set {
+            set
+            {
                 base.AllowDrop = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the
         ///       border style for the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(BorderStyle.None),
         SRCategory(nameof(SR.CatAppearance)),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
         SRDescription(nameof(SR.PictureBoxBorderStyleDescr))
         ]
-        public BorderStyle BorderStyle {
-            get {
+        public BorderStyle BorderStyle
+        {
+            get
+            {
                 return borderStyle;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
-                if (borderStyle != value) {
+                if (borderStyle != value)
+                {
                     borderStyle = value;
                     RecreateHandle();
                     AdjustSize();
@@ -196,32 +207,39 @@ namespace System.Windows.Forms {
 
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new bool CausesValidation {
-            get {
+        public new bool CausesValidation
+        {
+            get
+            {
                 return base.CausesValidation;
             }
-            set {
+            set
+            {
                 base.CausesValidation = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CausesValidationChanged {
+        new public event EventHandler CausesValidationChanged
+        {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the parameters needed to create the handle. Inheriting classes
         ///       can override this to provide extra functionality. They should not,
         ///       however, forget to call base.getCreateParams() first to get the struct
         ///       filled up with the basic info.</para>
-        /// </devdoc>
-        protected override CreateParams CreateParams {
-            get {
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
 
-                switch (borderStyle) {
+                switch (borderStyle)
+                {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
                         break;
@@ -233,19 +251,23 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
-        protected override ImeMode DefaultImeMode {
-            get {
+
+        protected override ImeMode DefaultImeMode
+        {
+            get
+            {
                 return ImeMode.Disable;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
-        protected override Size DefaultSize {
-            get {
+        /// </summary>
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(100, 50);
             }
         }
@@ -256,10 +278,12 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.PictureBoxErrorImageDescr))
         ]
-        public Image ErrorImage {
-            
-            
-            get {
+        public Image ErrorImage
+        {
+
+
+            get
+            {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] approach used
                 // here to avoid statically loading the default bitmaps from resources at
                 // runtime when they're never used.
@@ -279,7 +303,8 @@ namespace System.Windows.Forms {
                 }
                 return errorImage;
             }
-            set {
+            set
+            {
                 if (ErrorImage != value)
                 {
                     pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] = false;
@@ -290,58 +315,69 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color ForeColor {
-            get {
+        public override Color ForeColor
+        {
+            get
+            {
                 return base.ForeColor;
             }
-            set {
+            set
+            {
                 base.ForeColor = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged {
+        new public event EventHandler ForeColorChanged
+        {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Font Font {
-            get {
+        public override Font Font
+        {
+            get
+            {
                 return base.Font;
             }
-            set {
+            set
+            {
                 base.Font = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged {
+        new public event EventHandler FontChanged
+        {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Retrieves the Image that the <see cref='System.Windows.Forms.PictureBox'/> is currently displaying.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         Bindable(true),
         SRDescription(nameof(SR.PictureBoxImageDescr))
         ]
-        public Image Image {
-            
-            get {
+        public Image Image
+        {
+
+            get
+            {
                 return image;
             }
-            set {
+            set
+            {
                 InstallNewImage(value, ImageInstallationType.DirectlySpecified);
             }
         }
@@ -354,20 +390,20 @@ namespace System.Windows.Forms {
          RefreshProperties(RefreshProperties.All),
          SRDescription(nameof(SR.PictureBoxImageLocationDescr))
         ]
-        public string ImageLocation 
+        public string ImageLocation
         {
-            get 
+            get
             {
                 return imageLocation;
             }
-            set 
+            set
             {
                 // Reload even if value hasn't changed, since Image itself may
                 // have changed.
                 imageLocation = value;
 
                 pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation] = !string.IsNullOrEmpty(imageLocation);
-                
+
                 // Reset main image if it hasn't been directly specified. 
                 if (string.IsNullOrEmpty(imageLocation) &&
                     imageInstallationType != ImageInstallationType.DirectlySpecified)
@@ -380,72 +416,78 @@ namespace System.Windows.Forms {
                     // Load immediately, so any error will occur synchronously
                     Load();
                 }
-                
+
                 Invalidate();
             }
         }
 
-        private Rectangle ImageRectangle {
-            get {
+        private Rectangle ImageRectangle
+        {
+            get
+            {
                 return ImageRectangleFromSizeMode(sizeMode);
             }
         }
-        
+
         private Rectangle ImageRectangleFromSizeMode(PictureBoxSizeMode mode)
         {
             Rectangle result = LayoutUtils.DeflateRect(ClientRectangle, Padding);
 
-            if (image != null) {
-                switch (mode) {
-                  case PictureBoxSizeMode.Normal:
-                  case PictureBoxSizeMode.AutoSize:
-                      // Use image's size rather than client size.
-                      result.Size = image.Size;
-                      break;
+            if (image != null)
+            {
+                switch (mode)
+                {
+                    case PictureBoxSizeMode.Normal:
+                    case PictureBoxSizeMode.AutoSize:
+                        // Use image's size rather than client size.
+                        result.Size = image.Size;
+                        break;
 
-                  case PictureBoxSizeMode.StretchImage:
-                      // Do nothing, was initialized to the available dimensions.
-                      break;
+                    case PictureBoxSizeMode.StretchImage:
+                        // Do nothing, was initialized to the available dimensions.
+                        break;
 
-                  case PictureBoxSizeMode.CenterImage:
-                      // Center within the available space.
-                      result.X += (result.Width - image.Width) / 2;
-                      result.Y += (result.Height - image.Height) / 2;
-                      result.Size = image.Size;
-                      break;
-                  
-                  case PictureBoxSizeMode.Zoom:
-                    Size imageSize = image.Size;
-                    float ratio = Math.Min((float)ClientRectangle.Width / (float)imageSize.Width, (float)ClientRectangle.Height / (float)imageSize.Height);
-                    result.Width = (int)(imageSize.Width * ratio);
-                    result.Height = (int) (imageSize.Height * ratio);
-                    result.X = (ClientRectangle.Width - result.Width) /2;
-                    result.Y = (ClientRectangle.Height - result.Height) /2;
-                    break;
+                    case PictureBoxSizeMode.CenterImage:
+                        // Center within the available space.
+                        result.X += (result.Width - image.Width) / 2;
+                        result.Y += (result.Height - image.Height) / 2;
+                        result.Size = image.Size;
+                        break;
 
-                  default:
-                      Debug.Fail("Unsupported PictureBoxSizeMode value: " + mode);
-                      break;
+                    case PictureBoxSizeMode.Zoom:
+                        Size imageSize = image.Size;
+                        float ratio = Math.Min((float)ClientRectangle.Width / (float)imageSize.Width, (float)ClientRectangle.Height / (float)imageSize.Height);
+                        result.Width = (int)(imageSize.Width * ratio);
+                        result.Height = (int)(imageSize.Height * ratio);
+                        result.X = (ClientRectangle.Width - result.Width) / 2;
+                        result.Y = (ClientRectangle.Height - result.Height) / 2;
+                        break;
+
+                    default:
+                        Debug.Fail("Unsupported PictureBoxSizeMode value: " + mode);
+                        break;
                 }
             }
 
             return result;
         }
-        
+
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.PictureBoxInitialImageDescr))
         ]
-        public Image InitialImage {
-            
-            
-            get {
+        public Image InitialImage
+        {
+
+
+            get
+            {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] approach
                 // used here to avoid statically loading the default bitmaps from resources at
                 // runtime when they're never used.
-                
+
                 if (initialImage == null && pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage])
                 {
                     if (defaultInitialImage == null)
@@ -453,7 +495,7 @@ namespace System.Windows.Forms {
                         // Can't share images across threads.
                         if (defaultInitialImageForThread == null)
                         {
-                            defaultInitialImageForThread =  DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
+                            defaultInitialImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
                         }
                         defaultInitialImage = defaultInitialImageForThread;
                     }
@@ -461,7 +503,8 @@ namespace System.Windows.Forms {
                 }
                 return initialImage;
             }
-            set {
+            set
+            {
                 if (InitialImage != value)
                 {
                     pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] = false;
@@ -469,38 +512,42 @@ namespace System.Windows.Forms {
                 initialImage = value;
             }
         }
-        
+
         private void InstallNewImage(Image value,
                                      ImageInstallationType installationType)
         {
             StopAnimate();
-            this.image = value;
-            
-            LayoutTransaction.DoLayoutIf(AutoSize, this, this, PropertyNames.Image); 
-            
+            image = value;
+
+            LayoutTransaction.DoLayoutIf(AutoSize, this, this, PropertyNames.Image);
+
             Animate();
             if (installationType != ImageInstallationType.ErrorOrInitial)
             {
                 AdjustSize();
             }
-            this.imageInstallationType = installationType;
-            
+            imageInstallationType = installationType;
+
             Invalidate();
             CommonProperties.xClearPreferredSizeCache(this);
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode {
-            get {
+        new public ImeMode ImeMode
+        {
+            get
+            {
                 return base.ImeMode;
             }
-            set {
+            set
+            {
                 base.ImeMode = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged {
+        public new event EventHandler ImeModeChanged
+        {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
         }
@@ -567,8 +614,8 @@ namespace System.Windows.Forms {
         ]
         public void Load(string url)
         {
-            this.ImageLocation = url;
-            this.Load();
+            ImageLocation = url;
+            Load();
         }
 
         [
@@ -590,7 +637,7 @@ namespace System.Windows.Forms {
             }
 
             pictureBoxState[PICTUREBOXSTATE_asyncOperationInProgress] = true;
-            
+
             if ((Image == null ||
                  (imageInstallationType == ImageInstallationType.ErrorOrInitial))
                 && InitialImage != null)
@@ -599,19 +646,19 @@ namespace System.Windows.Forms {
             }
 
             currentAsyncLoadOperation = AsyncOperationManager.CreateOperation(null);
-            
+
             if (loadCompletedDelegate == null)
             {
                 loadCompletedDelegate = new SendOrPostCallback(LoadCompletedDelegate);
                 loadProgressDelegate = new SendOrPostCallback(LoadProgressDelegate);
                 readBuffer = new byte[readBlockSize];
             }
-            
+
             pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation] = false;
             pictureBoxState[PICTUREBOXSTATE_cancellationPending] = false;
             contentLength = -1;
             tempDownloadStream = new MemoryStream();
-                        
+
             WebRequest req = WebRequest.Create(CalculateUri(imageLocation));
 
             // Invoke BeginGetResponse on a threadpool thread, as it has
@@ -639,11 +686,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void LoadCompletedDelegate(object arg) 
+        private void LoadCompletedDelegate(object arg)
         {
             AsyncCompletedEventArgs e = (AsyncCompletedEventArgs)arg;
 
-            Image                 img         = ErrorImage;
+            Image img = ErrorImage;
             ImageInstallationType installType = ImageInstallationType.ErrorOrInitial;
 
             if (!e.Cancelled && e.Error == null)
@@ -665,7 +712,7 @@ namespace System.Windows.Forms {
             {
                 InstallNewImage(img, installType);
             }
-            
+
             tempDownloadStream = null;
             pictureBoxState[PICTUREBOXSTATE_cancellationPending] = false;
             pictureBoxState[PICTUREBOXSTATE_asyncOperationInProgress] = false;
@@ -676,8 +723,8 @@ namespace System.Windows.Forms {
         {
             OnLoadProgressChanged((ProgressChangedEventArgs)arg);
         }
-        
-        private void GetResponseCallback(IAsyncResult result) 
+
+        private void GetResponseCallback(IAsyncResult result)
         {
             if (pictureBoxState[PICTUREBOXSTATE_cancellationPending])
             {
@@ -713,7 +760,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void ReadCallBack(IAsyncResult result) 
+        private void ReadCallBack(IAsyncResult result)
         {
             if (pictureBoxState[PICTUREBOXSTATE_cancellationPending])
             {
@@ -779,8 +826,8 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
-        
+
+
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadAsync1Descr)),
@@ -788,8 +835,8 @@ namespace System.Windows.Forms {
         ]
         public void LoadAsync(string url)
         {
-            this.ImageLocation = url;
-            this.LoadAsync();
+            ImageLocation = url;
+            LoadAsync();
         }
 
         [
@@ -798,8 +845,8 @@ namespace System.Windows.Forms {
         ]
         public event AsyncCompletedEventHandler LoadCompleted
         {
-            add => this.Events.AddHandler(loadCompletedKey, value);
-            remove => this.Events.RemoveHandler(loadCompletedKey, value);
+            add => Events.AddHandler(loadCompletedKey, value);
+            remove => Events.RemoveHandler(loadCompletedKey, value);
         }
 
         [
@@ -808,42 +855,46 @@ namespace System.Windows.Forms {
         ]
         public event ProgressChangedEventHandler LoadProgressChanged
         {
-            add => this.Events.AddHandler(loadProgressChangedKey, value);
-            remove => this.Events.RemoveHandler(loadProgressChangedKey, value);
+            add => Events.AddHandler(loadProgressChangedKey, value);
+            remove => Events.RemoveHandler(loadProgressChangedKey, value);
         }
-        
+
         private void ResetInitialImage()
         {
             pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] = true;
             initialImage = defaultInitialImage;
         }
-        
+
         private void ResetErrorImage()
         {
             pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] = true;
             errorImage = defaultErrorImage;
         }
-        
+
         private void ResetImage()
         {
             InstallNewImage(null, ImageInstallationType.DirectlySpecified);
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override RightToLeft RightToLeft {
-            get {
+        public override RightToLeft RightToLeft
+        {
+            get
+            {
                 return base.RightToLeft;
             }
-            set {
+            set
+            {
                 base.RightToLeft = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftChanged {
+        public new event EventHandler RightToLeftChanged
+        {
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
         }
@@ -853,7 +904,7 @@ namespace System.Windows.Forms {
         {
             return !pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage];
         }
-        
+
         // Be sure not to re-serialized error image if it's the default. 
         private bool ShouldSerializeErrorImage()
         {
@@ -868,34 +919,40 @@ namespace System.Windows.Forms {
             return (imageInstallationType == ImageInstallationType.DirectlySpecified)
                 && (Image != null);
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///    <para>Indicates how the image is displayed.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(PictureBoxSizeMode.Normal),
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         SRDescription(nameof(SR.PictureBoxSizeModeDescr)),
-        RefreshProperties(RefreshProperties.Repaint)        
+        RefreshProperties(RefreshProperties.Repaint)
         ]
-        public PictureBoxSizeMode SizeMode {
-            get {
+        public PictureBoxSizeMode SizeMode
+        {
+            get
+            {
                 return sizeMode;
             }
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)PictureBoxSizeMode.Normal, (int)PictureBoxSizeMode.Zoom))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PictureBoxSizeMode));
                 }
-                if (this.sizeMode != value) {
-                    if (value == PictureBoxSizeMode.AutoSize) {
-                        this.AutoSize = true;
+                if (sizeMode != value)
+                {
+                    if (value == PictureBoxSizeMode.AutoSize)
+                    {
+                        AutoSize = true;
                         SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
                     }
-                    if (value != PictureBoxSizeMode.AutoSize) {
-                        this.AutoSize = false;
+                    if (value != PictureBoxSizeMode.AutoSize)
+                    {
+                        AutoSize = false;
                         SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, false);
                         savedSize = Size;
                     }
@@ -906,147 +963,178 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         private static readonly object EVENT_SIZEMODECHANGED = new object();
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
-        public event EventHandler SizeModeChanged {
+        public event EventHandler SizeModeChanged
+        {
             add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
 
             remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool TabStop {
-            get {
+        new public bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged {
+        new public event EventHandler TabStopChanged
+        {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public int TabIndex {
-            get {
+        new public int TabIndex
+        {
+            get
+            {
                 return base.TabIndex;
             }
-            set {
+            set
+            {
                 base.TabIndex = value;
             }
-        }     
+        }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabIndexChanged {
+        new public event EventHandler TabIndexChanged
+        {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
         }
 
         /// <hideinheritance/>        
-        /// <devdoc>
-        /// </devdoc>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
-        public override string Text {
-            get {
+        /// <summary>
+        /// </summary>
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 base.Text = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged {
+        new public event EventHandler TextChanged
+        {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Enter {
+        public new event EventHandler Enter
+        {
             add => base.Enter += value;
             remove => base.Enter -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp {
+        public new event KeyEventHandler KeyUp
+        {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown {
+        public new event KeyEventHandler KeyDown
+        {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress {
+        public new event KeyPressEventHandler KeyPress
+        {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Leave {
+        public new event EventHandler Leave
+        {
             add => base.Leave += value;
             remove => base.Leave -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If the PictureBox has the SizeMode property set to AutoSize, this makes
         ///     sure that the picturebox is large enough to hold the image.
-        /// </devdoc>
-        private void AdjustSize() {
-            if (sizeMode == PictureBoxSizeMode.AutoSize) {
+        /// </summary>
+        private void AdjustSize()
+        {
+            if (sizeMode == PictureBoxSizeMode.AutoSize)
+            {
                 Size = PreferredSize;
-            } 
-            else {
+            }
+            else
+            {
                 Size = savedSize;
             }
         }
 
-        private void Animate() {
+        private void Animate()
+        {
             Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
         }
 
-        private void StopAnimate() {
+        private void StopAnimate()
+        {
             Animate(false);
         }
 
-        private void Animate(bool animate) {
-            if (animate != this.currentlyAnimating) {
-                if (animate) {
-                    if (this.image != null) {
-                        ImageAnimator.Animate(this.image, new EventHandler(this.OnFrameChanged));
-                        this.currentlyAnimating = animate;
+        private void Animate(bool animate)
+        {
+            if (animate != currentlyAnimating)
+            {
+                if (animate)
+                {
+                    if (image != null)
+                    {
+                        ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
+                        currentlyAnimating = animate;
                     }
                 }
-                else {
-                    if (this.image != null) {
-                        ImageAnimator.StopAnimate(this.image, new EventHandler(this.OnFrameChanged));
-                        this.currentlyAnimating = animate;
+                else
+                {
+                    if (image != null)
+                    {
+                        ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
+                        currentlyAnimating = animate;
                     }
                 }
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
+        /// <summary>
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
                 StopAnimate();
             }
 
@@ -1055,12 +1143,15 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        private void DisposeImageStream() {
-            if (localImageStreamReader != null) {
+        private void DisposeImageStream()
+        {
+            if (localImageStreamReader != null)
+            {
                 localImageStreamReader.Dispose();
                 localImageStreamReader = null;
             }
-            if (uriImageStream != null) {
+            if (uriImageStream != null)
+            {
                 uriImageStream.Dispose();
                 localImageStreamReader = null;
             }
@@ -1068,49 +1159,62 @@ namespace System.Windows.Forms {
 
         // Overriding this method allows us to get the caching and clamping the proposedSize/output to
         // MinimumSize / MaximumSize from GetPreferredSize for free.
-        internal override Size GetPreferredSizeCore(Size proposedSize) {
-            if (image == null) {
+        internal override Size GetPreferredSizeCore(Size proposedSize)
+        {
+            if (image == null)
+            {
                 return CommonProperties.GetSpecifiedBounds(this).Size;
             }
-            else {
+            else
+            {
                 Size bordersAndPadding = SizeFromClientSize(Size.Empty) + Padding.Size;
                 return image.Size + bordersAndPadding;
             }
         }
-        
-        protected override void OnEnabledChanged(EventArgs e) {
+
+        protected override void OnEnabledChanged(EventArgs e)
+        {
             base.OnEnabledChanged(e);
             Animate();
         }
-        
-        private void OnFrameChanged(object o, EventArgs e) {
-            if (Disposing || IsDisposed) {
+
+        private void OnFrameChanged(object o, EventArgs e)
+        {
+            if (Disposing || IsDisposed)
+            {
                 return;
             }
             // Handle should be created, before calling the BeginInvoke.
-            if (InvokeRequired && IsHandleCreated) {
-                lock (internalSyncObject) {
-                    if (handleValid) {
-                        BeginInvoke(new EventHandler(this.OnFrameChanged), o, e);
+            if (InvokeRequired && IsHandleCreated)
+            {
+                lock (internalSyncObject)
+                {
+                    if (handleValid)
+                    {
+                        BeginInvoke(new EventHandler(OnFrameChanged), o, e);
                     }
                     return;
                 }
             }
-            
-            Invalidate();  
+
+            Invalidate();
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnHandleDestroyed(EventArgs e) {
-            lock (internalSyncObject) {
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            lock (internalSyncObject)
+            {
                 handleValid = false;
             }
             base.OnHandleDestroyed(e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnHandleCreated(EventArgs e) {
-            lock (internalSyncObject) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            lock (internalSyncObject)
+            {
                 handleValid = true;
             }
             base.OnHandleCreated(e);
@@ -1118,26 +1222,19 @@ namespace System.Windows.Forms {
 
         protected virtual void OnLoadCompleted(AsyncCompletedEventArgs e)
         {
-            AsyncCompletedEventHandler handler = (AsyncCompletedEventHandler)(Events[loadCompletedKey]);
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((AsyncCompletedEventHandler)(Events[loadCompletedKey]))?.Invoke(this, e);
         }
 
         protected virtual void OnLoadProgressChanged(ProgressChangedEventArgs e)
         {
-            ProgressChangedEventHandler handler = (ProgressChangedEventHandler)(Events[loadProgressChangedKey]);
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ProgressChangedEventHandler)(Events[loadProgressChangedKey]))?.Invoke(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden onPaint to make sure that the image is painted correctly.
-        /// </devdoc>
-        protected override void OnPaint(PaintEventArgs pe) {
+        /// </summary>
+        protected override void OnPaint(PaintEventArgs pe)
+        {
 
             if (pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation])
             {
@@ -1162,19 +1259,20 @@ namespace System.Windows.Forms {
                     image = ErrorImage;
                 }
             }
-            
-            if (image != null) {
+
+            if (image != null)
+            {
                 Animate();
-                ImageAnimator.UpdateFrames(this.Image);
-                
+                ImageAnimator.UpdateFrames(Image);
+
                 // Error and initial image are drawn centered, non-stretched.
                 Rectangle drawingRect =
                     (imageInstallationType == ImageInstallationType.ErrorOrInitial)
                     ? ImageRectangleFromSizeMode(PictureBoxSizeMode.CenterImage)
                     : ImageRectangle;
-                
+
                 pe.Graphics.DrawImage(image, drawingRect);
-                
+
             }
 
             // Windows draws the border for us (see CreateParams)
@@ -1182,38 +1280,44 @@ namespace System.Windows.Forms {
         }
 
 
-        protected override void OnVisibleChanged(EventArgs e) {
+        protected override void OnVisibleChanged(EventArgs e)
+        {
             base.OnVisibleChanged(e);
             Animate();
         }
 
-        protected override void OnParentChanged(EventArgs e) {
+        protected override void OnParentChanged(EventArgs e)
+        {
             base.OnParentChanged(e);
             Animate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     OnResize override to invalidate entire control in Stetch mode
-        /// </devdoc>
-        protected override void OnResize(EventArgs e) {
+        /// </summary>
+        protected override void OnResize(EventArgs e)
+        {
             base.OnResize(e);
-            if (sizeMode == PictureBoxSizeMode.Zoom || sizeMode == PictureBoxSizeMode.StretchImage || sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage != null) {
+            if (sizeMode == PictureBoxSizeMode.Zoom || sizeMode == PictureBoxSizeMode.StretchImage || sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage != null)
+            {
                 Invalidate();
             }
             savedSize = Size;
         }
 
-        protected virtual void OnSizeModeChanged(EventArgs e) {
-            EventHandler eh = Events[EVENT_SIZEMODECHANGED] as EventHandler;
-            if (eh != null) {
+        protected virtual void OnSizeModeChanged(EventArgs e)
+        {
+            if (Events[EVENT_SIZEMODECHANGED] is EventHandler eh)
+            {
                 eh(this, e);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        public override string ToString() {
+        /// </summary>
+        public override string ToString()
+        {
 
             string s = base.ToString();
             return s + ", SizeMode: " + sizeMode.ToString("G");
@@ -1225,11 +1329,14 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.PictureBoxWaitOnLoadDescr))
         ]
-        public bool WaitOnLoad {
-            get {
+        public bool WaitOnLoad
+        {
+            get
+            {
                 return pictureBoxState[PICTUREBOXSTATE_waitOnLoad];
             }
-            set {
+            set
+            {
                 pictureBoxState[PICTUREBOXSTATE_waitOnLoad] = value;
             }
         }
@@ -1257,7 +1364,7 @@ namespace System.Windows.Forms {
                 // Load when initialization completes, so any error will occur synchronously
                 Load();
             }
-            
+
             pictureBoxState[PICTUREBOXSTATE_inInitialization] = false;
         }
     }

@@ -17,7 +17,7 @@ namespace System.Drawing.Design.Tests
         public static IEnumerable<object[]> CreateExtensionsString_TestData()
         {
             yield return new object[] { null, ",", null };
-            yield return new object[] { new string[0], ",", null };
+            yield return new object[] { Array.Empty<string>(), ",", null };
             yield return new object[] { new string[] { "a", "b", "c" }, ",", "*.a,*.b,*.c" };
             yield return new object[] { new string[] { "a", "b", "c" }, "", "*.a*.b*.c" };
             yield return new object[] { new string[] { "a", "b", "c" }, null, "*.a*.b*.c" };
@@ -35,8 +35,10 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ImageEditor_CreateFilterEntry_Invoke_CallsGetExtensionsOnce()
         {
-            var editor = new CustomGetImageExtendersEditor();
-            editor.GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor) };
+            var editor = new CustomGetImageExtendersEditor
+            {
+                GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor) }
+            };
             Assert.Equal("CustomGetImageExtendersEditor(*.PublicImageEditor,*.PrivateImageEditor)|*.PublicImageEditor;*.PrivateImageEditor", SubImageEditor.CreateFilterEntry(editor));
             Assert.Equal(1, editor.GetImageExtendersCallCount);
         }
@@ -92,8 +94,10 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ImageEditor_GetExtensions_InvokeCustom_CallsGetImageExtendersOnce()
         {
-            var editor = new CustomGetImageExtendersEditor();
-            editor.GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor), typeof(ImageEditor), typeof(NullExtensionsImageEditor) };
+            var editor = new CustomGetImageExtendersEditor
+            {
+                GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor), typeof(ImageEditor), typeof(NullExtensionsImageEditor) }
+            };
             Assert.Equal(new string[] { "PublicImageEditor", "PrivateImageEditor" }, editor.GetExtensions());
             Assert.Equal(1, editor.GetImageExtendersCallCount);
         }
@@ -101,8 +105,10 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ImageEditor_GetExtensions_InvokeInvalid_ReturnsExpected()
         {
-            var editor = new CustomGetImageExtendersEditor();
-            editor.GetImageExtendersResult = new Type[] { typeof(object), null };
+            var editor = new CustomGetImageExtendersEditor
+            {
+                GetImageExtendersResult = new Type[] { typeof(object), null }
+            };
             Assert.Empty(editor.GetExtensions());
             Assert.Equal(1, editor.GetImageExtendersCallCount);
         }

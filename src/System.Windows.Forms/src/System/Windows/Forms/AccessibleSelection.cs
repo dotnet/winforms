@@ -4,44 +4,44 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how an accessible object will be selected or receive focus.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum AccessibleSelection
     {
-        /// <devdoc>
+        /// <summary>
         /// The selection or focus of an object is unchanged.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         /// Assigns focus to an object and makes it the anchor, which is the
         /// starting point for the selection. Can be combined with
         /// <see cref='TakeSelection'/>, <see cref='ExtendSelection'/>,
         /// <see cref='AddSelection'/>, or  <see cref='RemoveSelection'/>.
-        /// </devdoc>
+        /// </summary>
         TakeFocus = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Selects the object and deselects all other objects in the container.
-        /// </devdoc>
+        /// </summary>
         TakeSelection = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// Selects all objects between the anchor and the selected object.
-        /// </devdoc>
+        /// </summary>
         ExtendSelection = 4,
 
-        /// <devdoc>
+        /// <summary>
         /// Adds the object to the selection.
-        /// </devdoc>
+        /// </summary>
         AddSelection = 8,
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the object from the selection.
-        /// </devdoc>
+        /// </summary>
         RemoveSelection = 16,
     }
 }

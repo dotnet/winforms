@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     public enum ToolStripManagerRenderMode
     {
         [Browsable(false)]
-        Custom = ToolStripRenderMode.Custom, 
+        Custom = ToolStripRenderMode.Custom,
         System = ToolStripRenderMode.System,
         Professional = ToolStripRenderMode.Professional
     }

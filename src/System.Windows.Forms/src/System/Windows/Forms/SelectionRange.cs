@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
 
     using System.Diagnostics;
@@ -15,85 +16,98 @@ namespace System.Windows.Forms {
     using System.IO;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///     This is a class that represents the date selection range of a MonthCalendar control.
-    /// </devdoc>
+    /// </summary>
     [
     TypeConverterAttribute(typeof(SelectionRangeConverter))
     ]
-    public sealed class SelectionRange {
-        /// <devdoc>
+    public sealed class SelectionRange
+    {
+        /// <summary>
         ///     The lower limit of the selection range.
-        /// </devdoc>
+        /// </summary>
         private DateTime start = DateTime.MinValue.Date;
 
-        /// <devdoc>
+        /// <summary>
         ///     The upper limit of the selection range.
-        /// </devdoc>
+        /// </summary>
         private DateTime end = DateTime.MaxValue.Date;
 
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object with the range [null, null].
-        /// </devdoc>
-        public SelectionRange() {
+        /// </summary>
+        public SelectionRange()
+        {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object with the given range.
-        /// </devdoc>
-        public SelectionRange(DateTime lower, DateTime upper) {
+        /// </summary>
+        public SelectionRange(DateTime lower, DateTime upper)
+        {
             //NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
             //                swap them around. This is because the win32 control can return non-
             //                normalized ranges.
-            
+
             // We use lower.Date and upper.Date to remove any time component
             //
-            if (lower < upper) {
+            if (lower < upper)
+            {
                 start = lower.Date;
                 end = upper.Date;
             }
-            else {
+            else
+            {
                 start = upper.Date;
                 end = lower.Date;
-            }                        
+            }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object given an existing SelectionRange object.
-        /// </devdoc>
-        public SelectionRange(SelectionRange range) {
-            this.start = range.start;
-            this.end = range.end;
+        /// </summary>
+        public SelectionRange(SelectionRange range)
+        {
+            start = range.start;
+            end = range.end;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the ending time of this range.
-        /// </devdoc>
-        public DateTime End {
-            get { 
+        /// </summary>
+        public DateTime End
+        {
+            get
+            {
                 return end;
             }
-            set { 
+            set
+            {
                 end = value.Date;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Starting time of this range
-        /// </devdoc>
-        public DateTime Start {
-            get {
+        /// </summary>
+        public DateTime Start
+        {
+            get
+            {
                 return start;
             }
-            set { 
+            set
+            {
                 start = value.Date;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        public override string ToString() {
+        /// </summary>
+        public override string ToString()
+        {
             return "SelectionRange: Start: " + start.ToString() + ", End: " + end.ToString();
         }
     }

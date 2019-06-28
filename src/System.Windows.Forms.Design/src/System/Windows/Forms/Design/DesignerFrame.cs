@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Design
         /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
         /// </summary>
         int IOverlayService.PushOverlay(Control control) => _designerRegion.PushOverlay(control);
-        
+
         /// <summary>
         /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
         /// </summary>

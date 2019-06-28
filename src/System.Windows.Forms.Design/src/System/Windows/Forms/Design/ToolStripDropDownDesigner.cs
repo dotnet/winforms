@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design
                     actionLists.Add(cmActionList);
                 }
                 // finally add the verbs for this component there...
-                DesignerVerbCollection cmVerbs = this.Verbs;
+                DesignerVerbCollection cmVerbs = Verbs;
                 if (cmVerbs != null && cmVerbs.Count != 0)
                 {
                     DesignerVerb[] cmverbsArray = new DesignerVerb[cmVerbs.Count];
@@ -162,32 +162,31 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (string.IsNullOrEmpty((string)ShadowProperties["SettingsKey"]))
+                if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
                 {
-                    IPersistComponentSettings persistableComponent = Component as IPersistComponentSettings;
-                    if (persistableComponent != null && host != null)
+                    if (Component is IPersistComponentSettings persistableComponent && host != null)
                     {
                         if (persistableComponent.SettingsKey == null)
                         {
                             IComponent rootComponent = host.RootComponent;
                             if (rootComponent != null && rootComponent != persistableComponent)
                             {
-                                ShadowProperties["SettingsKey"] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
+                                ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
                             }
                             else
                             {
-                                ShadowProperties["SettingsKey"] = Component.Site.Name;
+                                ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
-                        persistableComponent.SettingsKey = ShadowProperties["SettingsKey"] as string;
+                        persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
                 }
-                return ShadowProperties["SettingsKey"] as string;
+                return ShadowProperties[SettingsKeyName] as string;
             }
             set
             {
-                ShadowProperties["SettingsKey"] = value;
+                ShadowProperties[SettingsKeyName] = value;
                 if (Component is IPersistComponentSettings persistableComponent)
                 {
                     persistableComponent.SettingsKey = value;
@@ -240,8 +239,8 @@ namespace System.Windows.Forms.Design
                 // Unhook our services
                 if (selSvc != null)
                 {
-                    selSvc.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
-                    selSvc.SelectionChanging -= new EventHandler(this.OnSelectionChanging);
+                    selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                    selSvc.SelectionChanging -= new EventHandler(OnSelectionChanging);
                 }
 
                 DisposeMenu();
@@ -256,7 +255,7 @@ namespace System.Windows.Forms.Design
                 }
                 if (undoEngine != null)
                 {
-                    undoEngine.Undone -= new EventHandler(this.OnUndone);
+                    undoEngine.Undone -= new EventHandler(OnUndone);
                 }
             }
             base.Dispose(disposing);
@@ -566,8 +565,8 @@ namespace System.Windows.Forms.Design
         {
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
-            string[] shadowProps = new string[] { "AutoClose", "SettingsKey", "RightToLeft", "AllowDrop" };
-            Attribute[] empty = new Attribute[0];
+            string[] shadowProps = new string[] { "AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop" };
+            Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];

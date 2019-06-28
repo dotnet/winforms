@@ -6,58 +6,58 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the AutoCompleteSource for ComboBox and TextBox AutoComplete Feature.
-    /// </devdoc>
+    /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum AutoCompleteSource
     {
-        /// <devdoc>
+        /// <summary>
         /// This option includes the file system as the source.
-        /// </devdoc>
+        /// </summary>
         FileSystem = 0x00000001,
 
-        /// <devdoc>
+        /// <summary>
         /// This option includes the URL's in the users history list.
-        /// </devdoc>
+        /// </summary>
         HistoryList = 0x00000002,
 
-        /// <devdoc>
+        /// <summary>
         /// This option includes the URL's in the users recently used list.
-        /// </devdoc>
+        /// </summary>
         RecentlyUsedList = 0x00000004,
 
-        /// <devdoc>
+        /// <summary>
         /// This option is equivalent to HistoryList | RecentlyUsedList.
-        /// </devdoc>
-        AllUrl =  HistoryList | RecentlyUsedList,
+        /// </summary>
+        AllUrl = HistoryList | RecentlyUsedList,
 
-        /// <devdoc>
+        /// <summary>
         /// This option is equivalent to FILESYSTEM | AllUrl. This is the default
         /// value when the AutoCompleteMode has been set to a non default value.
-        /// </devdoc>
+        /// </summary>
         AllSystemSources = FileSystem | AllUrl,
 
-        /// <devdoc>
+        /// <summary>
         /// This option is allows to autoComplete just directory names and not
         /// the files inside.
-        /// </devdoc>
+        /// </summary>
         FileSystemDirectories = 0x00000020,
 
-        /// <devdoc>
+        /// <summary>
         /// This option includes stirngs from a built in String Collection object.
-        /// </devdoc>
+        /// </summary>
         CustomSource = 0x00000040,
 
-        /// <devdoc>
+        /// <summary>
         /// The default value specifying the no AutoCompleteSource is currently
         /// in use.
-        /// </devdoc>
+        /// </summary>
         None = 0x00000080,
 
-        /// <devdoc>
+        /// <summary>
         /// The items of the combobox represent the source.
-        /// </devdoc>
+        /// </summary>
         ListItems = 0x00000100
     }
 }

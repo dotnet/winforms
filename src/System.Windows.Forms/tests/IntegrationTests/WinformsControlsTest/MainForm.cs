@@ -4,6 +4,8 @@
 
 using System;
 using System.Windows.Forms;
+using WinformsControlsTest.UserControls;
+using System.Windows.Forms.IntegrationTests.Common;
 
 namespace WinformsControlsTest
 {
@@ -11,77 +13,78 @@ namespace WinformsControlsTest
     {
         public MainForm()
         {
+            this.BringToForeground();
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            (new Buttons()).Show();
+            new Buttons().Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            (new DesignTimeAligned()).Show();
+            new DesignTimeAligned().Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            (new TreeViewTest()).Show();
+            new TreeViewTest().Show();
         }
 
         private void calendar_Click(object sender, EventArgs e)
         {
-            (new Calendar()).Show();
+            new Calendar().Show();
         }
 
         private void multipleControls_Click(object sender, EventArgs e)
         {
-            (new MultipleControls()).Show();
+            new MultipleControls().Show();
         }
 
         private void menuesButton_Click(object sender, EventArgs e)
         {
-            (new MenuStripAndCheckedListBox()).Show();
+            new MenuStripAndCheckedListBox().Show();
         }
 
         private void dataGridViewButton_Click(object sender, EventArgs e)
         {
-            (new DataGridViewHeaders()).Show();
+            new DataGridViewHeaders().Show();
         }
 
         private void ComboBoxesButton_Click(object sender, EventArgs e)
         {
-            (new ComboBoxes()).Show();
+            new ComboBoxes().Show();
         }
 
         private void splitterButton_Click(object sender, EventArgs e)
         {
-            (new Splitter()).Show();
+            new Splitter().Show();
         }
 
         private void panelsButton_Click(object sender, EventArgs e)
         {
-            (new Panels()).Show();
+            new Panels().Show();
         }
 
         private void mdiParent_Click(object sender, EventArgs e)
         {
-            (new MDIParent()).Show();
+            new MDIParent().Show();
         }
 
         private void propertyGrid_Click(object sender, EventArgs e)
         {
-            (new PropertyGrid()).Show();
+            new PropertyGrid(new UserControlWithObjectCollectionEditor()).Show();
         }
 
         private void listViewButton_Click(object sender, EventArgs e)
         {
-            (new ListViewTest()).Show();
+            new ListViewTest().Show();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            (new DateTimePicker()).Show();
+            new DateTimePicker().Show();
         }
 
         private void folderBrowserDialogButton_Click(object sender, EventArgs e)
@@ -92,7 +95,12 @@ namespace WinformsControlsTest
 
         private void ShowExceptionDialogButton_Click(object sender, EventArgs e)
         {
-            (new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated."))).ShowDialog();
+            new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated.")).ShowDialog();
+        }
+
+        private void FontNameEditor_Click(object sender, EventArgs e)
+        {
+            new PropertyGrid(new UserControlWithFontNameEditor()).Show();
         }
     }
 }

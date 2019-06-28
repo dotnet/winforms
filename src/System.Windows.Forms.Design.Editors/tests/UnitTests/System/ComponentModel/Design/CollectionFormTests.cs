@@ -58,7 +58,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> Items_Set_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new object[0] };
+            yield return new object[] { Array.Empty<object>() };
             yield return new object[] { new object[] { 1, 2, 3 } };
         }
 
@@ -205,16 +205,16 @@ namespace System.ComponentModel.Design.Tests
             form.OnEditValueChangedCallCount = 0;
 
             form.Items = value;
-            Assert.Equal(value ?? new object[0], form.EditValue);
-            Assert.Equal(value ?? new object[0], form.Items);
+            Assert.Equal(value ?? Array.Empty<object>(), form.EditValue);
+            Assert.Equal(value ?? Array.Empty<object>(), form.Items);
             Assert.Equal(0, form.OnEditValueChangedCallCount);
             mockContext.Verify(c => c.OnComponentChanging(), Times.Once());
             mockContext.Verify(c => c.OnComponentChanged(), Times.Once());
 
             // Set same.
             form.Items = value;
-            Assert.Equal(value ?? new object[0], form.EditValue);
-            Assert.Equal(value ?? new object[0], form.Items);
+            Assert.Equal(value ?? Array.Empty<object>(), form.EditValue);
+            Assert.Equal(value ?? Array.Empty<object>(), form.Items);
             Assert.Equal(0, form.OnEditValueChangedCallCount);
             mockContext.Verify(c => c.OnComponentChanging(), Times.Exactly(2));
             mockContext.Verify(c => c.OnComponentChanged(), Times.Exactly(2));
@@ -488,7 +488,8 @@ namespace System.ComponentModel.Design.Tests
             var editor = new SubCollectionEditor(null);
             var form = new SubCollectionForm(editor);
             Assert.True(form.CanSelectMultipleInstances());
-        }        public static IEnumerable<object[]> InvalidDesignerHost_TestData()
+        }
+        public static IEnumerable<object[]> InvalidDesignerHost_TestData()
         {
             yield return new object[] { null };
             yield return new object[] { new object() };
@@ -654,7 +655,7 @@ namespace System.ComponentModel.Design.Tests
 
             var result = new Component();
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(d => d.InitializeNewComponent(null))
                 .Verifiable();
@@ -865,7 +866,7 @@ namespace System.ComponentModel.Design.Tests
             public new bool CanRemoveInstance(object value) => base.CanRemoveInstance(value);
 
             public new bool CanSelectMultipleInstances() => base.CanSelectMultipleInstances();
-            
+
             public new object CreateInstance(Type itemType) => base.CreateInstance(itemType);
 
             public new void DestroyInstance(object instance) => base.DestroyInstance(instance);
@@ -873,7 +874,7 @@ namespace System.ComponentModel.Design.Tests
             public new void DisplayError(Exception e) => base.DisplayError(e);
 
             public new object GetService(Type serviceType) => base.GetService(serviceType);
-            
+
             public new DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc) => base.ShowEditorDialog(edSvc);
 
             public int OnEditValueChangedCallCount { get; set; }

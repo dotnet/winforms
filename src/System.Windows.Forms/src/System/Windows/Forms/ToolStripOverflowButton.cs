@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.Collections;
     using System.ComponentModel;
@@ -11,23 +12,25 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
 
 
-    /// <devdoc>
+    /// <summary>
     /// ToolStripOverflowButton
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]
-    public class ToolStripOverflowButton : ToolStripDropDownButton {
+    public class ToolStripOverflowButton : ToolStripDropDownButton
+    {
 
         // we need to cache this away as the Parent property gets reset a lot.
-        private ToolStrip parentToolStrip;
-       
+        private readonly ToolStrip parentToolStrip;
+
         private static bool isScalingInitialized = false;
         private const int MAX_WIDTH = 16;
         private const int MAX_HEIGHT = 16;
         private static int maxWidth = MAX_WIDTH;
         private static int maxHeight = MAX_HEIGHT;
-        
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        internal ToolStripOverflowButton(ToolStrip parentToolStrip) {
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        internal ToolStripOverflowButton(ToolStrip parentToolStrip)
+        {
             if (!isScalingInitialized)
             {
                 if (DpiHelper.IsScalingRequired)
@@ -42,33 +45,41 @@ namespace System.Windows.Forms {
             SupportsItemClick = false;
             this.parentToolStrip = parentToolStrip;
         }
-       
-        protected override void Dispose(bool disposing) {
-            if (disposing && this.HasDropDownItems) {
-                this.DropDown.Dispose();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && HasDropDownItems)
+            {
+                DropDown.Dispose();
             }
 
             base.Dispose(disposing);
         }
 
-        protected internal override Padding DefaultMargin {
-            get {
+        protected internal override Padding DefaultMargin
+        {
+            get
+            {
                 return Padding.Empty;
             }
         }
 
-        public override bool HasDropDownItems {
-            get {
-                return this.ParentInternal.OverflowItems.Count > 0;
+        public override bool HasDropDownItems
+        {
+            get
+            {
+                return ParentInternal.OverflowItems.Count > 0;
             }
         }
 
 
-        internal override bool OppositeDropDownAlign {
+        internal override bool OppositeDropDownAlign
+        {
             get { return true; }
         }
 
-        internal ToolStrip ParentToolStrip {
+        internal ToolStrip ParentToolStrip
+        {
             get { return parentToolStrip; }
         }
         [
@@ -76,47 +87,60 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new bool RightToLeftAutoMirrorImage {
-            get {
+        public new bool RightToLeftAutoMirrorImage
+        {
+            get
+            {
                 return base.RightToLeftAutoMirrorImage;
             }
-            set {
+            set
+            {
                 base.RightToLeftAutoMirrorImage = value;
             }
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new ToolStripOverflowButtonAccessibleObject(this);
         }
 
 
-        protected override ToolStripDropDown CreateDefaultDropDown() {
+        protected override ToolStripDropDown CreateDefaultDropDown()
+        {
             // AutoGenerate a ToolStrip DropDown - set the property so we hook events
-             return new ToolStripOverflow(this);
+            return new ToolStripOverflow(this);
         }
-       
-        public override Size GetPreferredSize(Size constrainingSize) {
+
+        public override Size GetPreferredSize(Size constrainingSize)
+        {
             Size preferredSize = constrainingSize;
-            if (this.ParentInternal != null)  {
-              if (this.ParentInternal.Orientation == Orientation.Horizontal) {
-                  preferredSize.Width = Math.Min(constrainingSize.Width, maxWidth);
-              }
-              else {
-                  preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
-              }                
+            if (ParentInternal != null)
+            {
+                if (ParentInternal.Orientation == Orientation.Horizontal)
+                {
+                    preferredSize.Width = Math.Min(constrainingSize.Width, maxWidth);
+                }
+                else
+                {
+                    preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
+                }
             }
-            return preferredSize + this.Padding.Size;
+            return preferredSize + Padding.Size;
         }
 
         // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
-        internal protected override void SetBounds(Rectangle bounds) {
-            if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout) {
-                
-                if (ParentInternal.Orientation == Orientation.Horizontal) {
+        internal protected override void SetBounds(Rectangle bounds)
+        {
+            if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
+            {
+
+                if (ParentInternal.Orientation == Orientation.Horizontal)
+                {
                     bounds.Height = ParentInternal.Height;
                     bounds.Y = 0;
                 }
-                else {
+                else
+                {
                     bounds.Width = ParentInternal.Width;
                     bounds.X = 0;
                 }
@@ -124,38 +148,49 @@ namespace System.Windows.Forms {
             base.SetBounds(bounds);
         }
 
-        protected override void OnPaint(PaintEventArgs e) {
-            if (this.ParentInternal != null) {
-                ToolStripRenderer renderer = this.ParentInternal.Renderer;            
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (ParentInternal != null)
+            {
+                ToolStripRenderer renderer = ParentInternal.Renderer;
                 renderer.DrawOverflowButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
             }
         }
 
-        internal class ToolStripOverflowButtonAccessibleObject : ToolStripDropDownItemAccessibleObject {
+        internal class ToolStripOverflowButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
+        {
             private string stockName;
 
-            public ToolStripOverflowButtonAccessibleObject(ToolStripOverflowButton owner) : base(owner){
+            public ToolStripOverflowButtonAccessibleObject(ToolStripOverflowButton owner) : base(owner)
+            {
             }
- 
-            
-            public override string Name {
-                get {
+
+
+            public override string Name
+            {
+                get
+                {
                     string name = Owner.AccessibleName;
-                    if (name != null) {
+                    if (name != null)
+                    {
                         return name;
                     }
-                    if (string.IsNullOrEmpty(stockName)) {
+                    if (string.IsNullOrEmpty(stockName))
+                    {
                         stockName = SR.ToolStripOptions;
                     }
                     return stockName;
                 }
-                set {
-                    base.Name  = value;
+                set
+                {
+                    base.Name = value;
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID) {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+            internal override object GetPropertyValue(int propertyID)
+            {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                {
                     return NativeMethods.UIA_MenuItemControlTypeId;
                 }
 

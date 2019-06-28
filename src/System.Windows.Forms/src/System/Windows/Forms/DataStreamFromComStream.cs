@@ -11,8 +11,8 @@ namespace System.Windows.Forms
     using System.IO;
 
 
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     internal class DataStreamFromComStream : Stream
     {
 
@@ -64,9 +64,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                long curPos = this.Position;
+                long curPos = Position;
                 long endPos = Seek(0, SeekOrigin.End);
-                this.Position = curPos;
+                Position = curPos;
                 return endPos - curPos;
             }
         }
@@ -147,7 +147,9 @@ namespace System.Windows.Forms
         public override void Write(byte[] buffer, int index, int count)
         {
             if (count <= 0)
+            {
                 return;
+            }
 
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
@@ -167,7 +169,9 @@ namespace System.Windows.Forms
         public unsafe override void Write(ReadOnlySpan<byte> buffer)
         {
             if (buffer.IsEmpty)
+            {
                 return;
+            }
 
             int bytesWritten = 0;
             try

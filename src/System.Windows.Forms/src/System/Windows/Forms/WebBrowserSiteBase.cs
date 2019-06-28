@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class implements the necessary interfaces required for an ActiveX site.
     ///
     /// This class is public, but has an internal constructor so that external
@@ -20,11 +20,11 @@ namespace System.Windows.Forms
     /// All implementations of the site interface methods are private, which
     /// means that inheritors who want to override even a single method of one
     /// of these interfaces will have to implement the whole interface.
-    /// </devdoc>
+    /// </summary>
     public class WebBrowserSiteBase
         : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
     {
-        private WebBrowserBase host;
+        private readonly WebBrowserBase host;
         private AxHost.ConnectionPointCookie connectionPoint;
 
         //
@@ -32,28 +32,26 @@ namespace System.Windows.Forms
         // this cannot be used as a standalone site. It has to be used in conjunction
         // with WebBrowserBase. Perhaps we can change it in future.
         //
-        internal WebBrowserSiteBase(WebBrowserBase h) {
-            if (h == null) {
-                throw new ArgumentNullException(nameof(h));
-            }
-            this.host = h;
+        internal WebBrowserSiteBase(WebBrowserBase h)
+        {
+            host = h ?? throw new ArgumentNullException(nameof(h));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Dispose(release the cookie)
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Release the cookie if we're disposing
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -61,146 +59,179 @@ namespace System.Windows.Forms
                 StopEvents();
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Retrieves the WebBrowserBase object set in the constructor.
         ///     </para>
-        /// </devdoc>
-        internal WebBrowserBase Host {
-            get {
-                return this.host;
+        /// </summary>
+        internal WebBrowserBase Host
+        {
+            get
+            {
+                return host;
             }
         }
-        
+
         //
         // Interface implementations:
         //
-        
+
         //
         // IOleControlSite methods:
         //
-        int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged() {
+        int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged()
+        {
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.LockInPlaceActive(int fLock) {
+        int UnsafeNativeMethods.IOleControlSite.LockInPlaceActive(int fLock)
+        {
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.GetExtendedControl(out object ppDisp) {
+        int UnsafeNativeMethods.IOleControlSite.GetExtendedControl(out object ppDisp)
+        {
             ppDisp = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.TransformCoords(NativeMethods._POINTL pPtlHimetric, NativeMethods.tagPOINTF pPtfContainer, int dwFlags) {
-            if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER)  != 0) {
-                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0) {
-                    pPtfContainer.x = (float) WebBrowserHelper.HM2Pix(pPtlHimetric.x, WebBrowserHelper.LogPixelsX);
-                    pPtfContainer.y = (float) WebBrowserHelper.HM2Pix(pPtlHimetric.y, WebBrowserHelper.LogPixelsY);
+        int UnsafeNativeMethods.IOleControlSite.TransformCoords(NativeMethods._POINTL pPtlHimetric, NativeMethods.tagPOINTF pPtfContainer, int dwFlags)
+        {
+            if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER) != 0)
+            {
+                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
+                {
+                    pPtfContainer.x = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.x, WebBrowserHelper.LogPixelsX);
+                    pPtfContainer.y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.y, WebBrowserHelper.LogPixelsY);
                 }
-                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0) {
-                    pPtfContainer.x = (float) WebBrowserHelper.HM2Pix(pPtlHimetric.x, WebBrowserHelper.LogPixelsX);
-                    pPtfContainer.y = (float) WebBrowserHelper.HM2Pix(pPtlHimetric.y, WebBrowserHelper.LogPixelsY);
+                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
+                {
+                    pPtfContainer.x = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.x, WebBrowserHelper.LogPixelsX);
+                    pPtfContainer.y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.y, WebBrowserHelper.LogPixelsY);
                 }
-                else {
+                else
+                {
                     return NativeMethods.E_INVALIDARG;
                 }
             }
-            else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC) != 0) {
-                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0) {
+            else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC) != 0)
+            {
+                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
+                {
                     pPtlHimetric.x = WebBrowserHelper.Pix2HM((int)pPtfContainer.x, WebBrowserHelper.LogPixelsX);
                     pPtlHimetric.y = WebBrowserHelper.Pix2HM((int)pPtfContainer.y, WebBrowserHelper.LogPixelsY);
                 }
-                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0) {
+                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
+                {
                     pPtlHimetric.x = WebBrowserHelper.Pix2HM((int)pPtfContainer.x, WebBrowserHelper.LogPixelsX);
                     pPtlHimetric.y = WebBrowserHelper.Pix2HM((int)pPtfContainer.y, WebBrowserHelper.LogPixelsY);
                 }
-                else {
+                else
+                {
                     return NativeMethods.E_INVALIDARG;
                 }
             }
-            else {
+            else
+            {
                 return NativeMethods.E_INVALIDARG;
             }
 
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers) {
-            Debug.Assert(!this.Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
-            this.Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
+        int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers)
+        {
+            Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
+            Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
 
-            Message msg = new Message();
-            msg.Msg = pMsg.message;
-            msg.WParam = pMsg.wParam;
-            msg.LParam = pMsg.lParam;
-            msg.HWnd = pMsg.hwnd;
-            
-            try {
-                bool f = ((Control)this.Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
+            Message msg = new Message
+            {
+                Msg = pMsg.message,
+                WParam = pMsg.wParam,
+                LParam = pMsg.lParam,
+                HWnd = pMsg.hwnd
+            };
+
+            try
+            {
+                bool f = ((Control)Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
                 return f ? NativeMethods.S_OK : NativeMethods.S_FALSE;
             }
-            finally {
-                this.Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+            finally
+            {
+                Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
             }
         }
 
-        int UnsafeNativeMethods.IOleControlSite.OnFocus(int fGotFocus) {
+        int UnsafeNativeMethods.IOleControlSite.OnFocus(int fGotFocus)
+        {
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.ShowPropertyFrame() {
+        int UnsafeNativeMethods.IOleControlSite.ShowPropertyFrame()
+        {
             return NativeMethods.E_NOTIMPL;
         }
 
         //
         // IOleClientSite methods:
         //
-        int UnsafeNativeMethods.IOleClientSite.SaveObject() {
+        int UnsafeNativeMethods.IOleClientSite.SaveObject()
+        {
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker) {
+        int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker)
+        {
             moniker = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container) {
-            container = this.Host.GetParentContainer();
+        int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)
+        {
+            container = Host.GetParentContainer();
             return NativeMethods.S_OK;
         }
 
 
-        int UnsafeNativeMethods.IOleClientSite.ShowObject() {
-            if (this.Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive) {
-                IntPtr hwnd;
-                if (NativeMethods.Succeeded(this.Host.AXInPlaceObject.GetWindow(out hwnd))) {
-                    if (this.Host.GetHandleNoCreate() != hwnd) {
-                        if (hwnd != IntPtr.Zero) {
-                            this.Host.AttachWindow(hwnd);
-                            this.OnActiveXRectChange(new NativeMethods.COMRECT(this.Host.Bounds));
+        int UnsafeNativeMethods.IOleClientSite.ShowObject()
+        {
+            if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
+            {
+                if (NativeMethods.Succeeded(Host.AXInPlaceObject.GetWindow(out IntPtr hwnd)))
+                {
+                    if (Host.GetHandleNoCreate() != hwnd)
+                    {
+                        if (hwnd != IntPtr.Zero)
+                        {
+                            Host.AttachWindow(hwnd);
+                            OnActiveXRectChange(new NativeMethods.COMRECT(Host.Bounds));
                         }
                     }
                 }
-                else if (this.Host.AXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless) {
+                else if (Host.AXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                {
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
             }
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.OnShowWindow(int fShow) {
+        int UnsafeNativeMethods.IOleClientSite.OnShowWindow(int fShow)
+        {
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.RequestNewObjectLayout() {
+        int UnsafeNativeMethods.IOleClientSite.RequestNewObjectLayout()
+        {
             return NativeMethods.E_NOTIMPL;
         }
 
         //
         // IOleInPlaceSite methods:
         //
-        IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
+        IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow()
+        {
             try
             {
                 return UnsafeNativeMethods.GetParent(new HandleRef(Host, Host.Handle));
@@ -212,103 +243,122 @@ namespace System.Windows.Forms
             }
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(int fEnterMode) {
+        int UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(int fEnterMode)
+        {
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate() {
+        int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
+        {
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate() {
-            this.Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
-            this.OnActiveXRectChange(new NativeMethods.COMRECT(this.Host.Bounds));
+        int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
+        {
+            Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
+            OnActiveXRectChange(new NativeMethods.COMRECT(Host.Bounds));
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.OnUIActivate() {
-            this.Host.ActiveXState = WebBrowserHelper.AXState.UIActive;
-            this.Host.GetParentContainer().OnUIActivate(this.Host);
+        int UnsafeNativeMethods.IOleInPlaceSite.OnUIActivate()
+        {
+            Host.ActiveXState = WebBrowserHelper.AXState.UIActive;
+            Host.GetParentContainer().OnUIActivate(Host);
             return NativeMethods.S_OK;
         }
 
         int UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(out UnsafeNativeMethods.IOleInPlaceFrame ppFrame, out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
-                                             NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect, NativeMethods.tagOIFI lpFrameInfo) {
+                                             NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect, NativeMethods.tagOIFI lpFrameInfo)
+        {
             ppDoc = null;
-            ppFrame = this.Host.GetParentContainer();
-            
-            lprcPosRect.left = this.Host.Bounds.X;
-            lprcPosRect.top = this.Host.Bounds.Y;
-            lprcPosRect.right = this.Host.Bounds.Width + this.Host.Bounds.X;
-            lprcPosRect.bottom = this.Host.Bounds.Height + this.Host.Bounds.Y;
-            
+            ppFrame = Host.GetParentContainer();
+
+            lprcPosRect.left = Host.Bounds.X;
+            lprcPosRect.top = Host.Bounds.Y;
+            lprcPosRect.right = Host.Bounds.Width + Host.Bounds.X;
+            lprcPosRect.bottom = Host.Bounds.Height + Host.Bounds.Y;
+
             lprcClipRect = WebBrowserHelper.GetClipRect();
-            if (lpFrameInfo != null) {
+            if (lpFrameInfo != null)
+            {
                 lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
                 lpFrameInfo.fMDIApp = false;
                 lpFrameInfo.hAccel = IntPtr.Zero;
                 lpFrameInfo.cAccelEntries = 0;
-                lpFrameInfo.hwndFrame = (this.Host.ParentInternal == null) ? IntPtr.Zero : this.Host.ParentInternal.Handle;
+                lpFrameInfo.hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
             }
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.Scroll(NativeMethods.tagSIZE scrollExtant) {
+        int UnsafeNativeMethods.IOleInPlaceSite.Scroll(NativeMethods.tagSIZE scrollExtant)
+        {
             return NativeMethods.S_FALSE;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable) {
-            this.Host.GetParentContainer().OnUIDeactivate(this.Host);
-            if (this.Host.ActiveXState > WebBrowserHelper.AXState.InPlaceActive) {
-                this.Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
+        int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable)
+        {
+            Host.GetParentContainer().OnUIDeactivate(Host);
+            if (Host.ActiveXState > WebBrowserHelper.AXState.InPlaceActive)
+            {
+                Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
             }
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceDeactivate() {
-            if (this.Host.ActiveXState == WebBrowserHelper.AXState.UIActive) {
+        int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceDeactivate()
+        {
+            if (Host.ActiveXState == WebBrowserHelper.AXState.UIActive)
+            {
                 ((UnsafeNativeMethods.IOleInPlaceSite)this).OnUIDeactivate(0);
             }
 
-            this.Host.GetParentContainer().OnInPlaceDeactivate(this.Host);
-            this.Host.ActiveXState = WebBrowserHelper.AXState.Running;
+            Host.GetParentContainer().OnInPlaceDeactivate(Host);
+            Host.ActiveXState = WebBrowserHelper.AXState.Running;
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.DiscardUndoState() {
+        int UnsafeNativeMethods.IOleInPlaceSite.DiscardUndoState()
+        {
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo() {
-            return this.Host.AXInPlaceObject.UIDeactivate();
+        int UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
+        {
+            return Host.AXInPlaceObject.UIDeactivate();
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect) {
-            return this.OnActiveXRectChange(lprcPosRect);
+        int UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect)
+        {
+            return OnActiveXRectChange(lprcPosRect);
         }
 
         //
         // ISimpleFrameSite methods:
         //
-        int UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, ref int pdwCookie) {
+        int UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, ref int pdwCookie)
+        {
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, int dwCookie) {
+        int UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, int dwCookie)
+        {
             return NativeMethods.S_FALSE;
         }
 
         //
         // IPropertyNotifySink methods:
         //
-        void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid) {
+        void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid)
+        {
             // Some controls fire OnChanged() notifications when getting values of some properties.
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
             //
-            if (this.Host.NoComponentChangeEvents != 0)
+            if (Host.NoComponentChangeEvents != 0)
+            {
                 return;
+            }
 
-            this.Host.NoComponentChangeEvents++;
+            Host.NoComponentChangeEvents++;
             try
             {
                 OnPropertyChanged(dispid);
@@ -318,12 +368,14 @@ namespace System.Windows.Forms
                 Debug.Fail(t.ToString());
                 throw;
             }
-            finally {
-                this.Host.NoComponentChangeEvents--;
+            finally
+            {
+                Host.NoComponentChangeEvents--;
             }
         }
 
-        int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid) {
+        int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid)
+        {
             return NativeMethods.S_OK;
         }
 
@@ -331,10 +383,11 @@ namespace System.Windows.Forms
         //
         // Virtual overrides:
         //
-        internal virtual void OnPropertyChanged(int dispid) {
+        internal virtual void OnPropertyChanged(int dispid)
+        {
             try
             {
-                ISite site = this.Host.Site;
+                ISite site = Host.Site;
                 if (site != null)
                 {
                     IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
@@ -343,7 +396,7 @@ namespace System.Windows.Forms
                     {
                         try
                         {
-                            changeService.OnComponentChanging(this.Host, null);
+                            changeService.OnComponentChanging(Host, null);
                         }
                         catch (CheckoutException coEx)
                         {
@@ -356,7 +409,7 @@ namespace System.Windows.Forms
 
                         // Now notify the change service that the change was successful.
                         //
-                        changeService.OnComponentChanged(this.Host, null, null, null);
+                        changeService.OnComponentChanged(Host, null, null, null);
                     }
                 }
             }
@@ -371,16 +424,21 @@ namespace System.Windows.Forms
         //
         // Internal helper methods:
         //
-        internal WebBrowserBase GetAXHost() {
-            return this.Host;
+        internal WebBrowserBase GetAXHost()
+        {
+            return Host;
         }
 
-        internal void StartEvents() {
+        internal void StartEvents()
+        {
             if (connectionPoint != null)
+            {
                 return;
+            }
 
-            object nativeObject = this.Host.activeXInstance;
-            if (nativeObject != null) {
+            object nativeObject = Host.activeXInstance;
+            if (nativeObject != null)
+            {
                 try
                 {
                     connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(UnsafeNativeMethods.IPropertyNotifySink));
@@ -395,18 +453,21 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void StopEvents() {
-            if (connectionPoint != null) {
+        internal void StopEvents()
+        {
+            if (connectionPoint != null)
+            {
                 connectionPoint.Disconnect();
                 connectionPoint = null;
             }
         }
 
-        private int OnActiveXRectChange(NativeMethods.COMRECT lprcPosRect) {
-            this.Host.AXInPlaceObject.SetObjectRects(
+        private int OnActiveXRectChange(NativeMethods.COMRECT lprcPosRect)
+        {
+            Host.AXInPlaceObject.SetObjectRects(
                 NativeMethods.COMRECT.FromXYWH(0, 0, lprcPosRect.right - lprcPosRect.left, lprcPosRect.bottom - lprcPosRect.top),
                 WebBrowserHelper.GetClipRect());
-            this.Host.MakeDirty();
+            Host.MakeDirty();
             return NativeMethods.S_OK;
         }
     }

@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
         {
             var timer = new Timer();
             timer.Start();
-            
+
             timer.Interval = value;
             Assert.Equal(value, timer.Interval);
 
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Tests
             var timer = new Timer();
             timer.Start();
             timer.Stop();
-            
+
             timer.Interval = value;
             Assert.Equal(value, timer.Interval);
 
@@ -259,7 +259,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Start again.
             timer.Start();
             Assert.True(timer.Enabled);
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Tests
             // Start
             timer.Start();
             Assert.True(timer.Enabled);
-            
+
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);

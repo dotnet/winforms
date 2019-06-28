@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides functionality for a control to parent other controls.
-    /// </devdoc>
+    /// </summary>
     public interface IContainerControl
     {
-        /// <devdoc>
+        /// <summary>
         /// Indicates the control that is currently active on the container control.
-        /// </devdoc>
+        /// </summary>
         Control ActiveControl { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Activates the specified control.
-        /// </devdoc>
+        /// </summary>
         bool ActivateControl(Control active);
     }
 }

@@ -43,7 +43,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_begin == null)
+                {
                     _begin = new CodeStatementCollection();
+                }
+
                 return _begin;
             }
         }
@@ -53,7 +56,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_end == null)
+                {
                     _end = new CodeStatementCollection();
+                }
+
                 return _end;
             }
         }
@@ -63,7 +69,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_container == null)
+                {
                     _container = new CodeStatementCollection();
+                }
+
                 return _container;
             }
         }
@@ -78,7 +87,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_statements == null)
+                {
                     _statements = new CodeStatementCollection();
+                }
+
                 return _statements;
             }
         }
@@ -88,7 +100,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_locals == null)
+                {
                     _locals = new CodeStatementCollection();
+                }
+
                 return _locals;
             }
         }
@@ -98,7 +113,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_fields == null)
+                {
                     _fields = new CodeStatementCollection();
+                }
+
                 return _fields;
             }
         }
@@ -109,7 +127,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 if (_variables == null)
+                {
                     _variables = new CodeStatementCollection();
+                }
+
                 return _variables;
             }
         }
@@ -165,19 +186,39 @@ namespace System.ComponentModel.Design.Serialization
         internal void Combine()
         {
             if (_container != null)
+            {
                 _targetStatements.AddRange(_container);
+            }
+
             if (_locals != null)
+            {
                 _targetStatements.AddRange(_locals);
+            }
+
             if (_fields != null)
+            {
                 _targetStatements.AddRange(_fields);
+            }
+
             if (_variables != null)
+            {
                 _targetStatements.AddRange(_variables);
+            }
+
             if (_begin != null)
+            {
                 _targetStatements.AddRange(_begin);
+            }
+
             if (_statements != null)
+            {
                 _targetStatements.AddRange(_statements);
+            }
+
             if (_end != null)
+            {
                 _targetStatements.AddRange(_end);
+            }
         }
     }
 }

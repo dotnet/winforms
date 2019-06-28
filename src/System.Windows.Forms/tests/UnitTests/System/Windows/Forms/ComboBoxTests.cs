@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BackgroundImage_SetWithHandler_CallsBackColorChanged()
+        public void BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
             var control = new ComboBox();
             int callCount = 0;
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new List<int>() };
-            yield return new object[] { new int[0] };
+            yield return new object[] { Array.Empty<int>() };
 
             var mockSource = new Mock<IListSource>(MockBehavior.Strict);
             mockSource
@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            var font1 = SystemFonts.MenuFont;
+            Font font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -386,7 +386,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var font2 = SystemFonts.DialogFont;
+            Font font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
-            
+
             // Set same.
             control.SelectedIndex = value;
             Assert.Equal(value, control.SelectedIndex);
@@ -606,7 +606,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
-            
+
             // Set same.
             control.SelectedIndex = value;
             Assert.Equal(value, control.SelectedIndex);
@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 0 };
             yield return new object[] { controlWithItems, string.Empty, 0, 1 };
             yield return new object[] { controlWithItems, string.Empty, 1, 2 };
@@ -755,7 +755,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { controlWithItems, "abc", 2, ignoreCase, 0 };
                 yield return new object[] { controlWithItems, "abc", 5, ignoreCase, 0 };
             }
-            
+
             yield return new object[] { controlWithItems, "ABC", -1, false, 2 };
             yield return new object[] { controlWithItems, "ABC", 0, false, 2 };
             yield return new object[] { controlWithItems, "ABC", 1, false, 2 };
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { controlWithItems, null, 1, ignoreCase, -1 };
                 yield return new object[] { controlWithItems, null, 2, ignoreCase, -1 };
                 yield return new object[] { controlWithItems, null, 5, ignoreCase, -1 };
-        
+
                 yield return new object[] { controlWithItems, string.Empty, -1, ignoreCase, 4 };
                 yield return new object[] { controlWithItems, string.Empty, 0, ignoreCase, 4 };
                 yield return new object[] { controlWithItems, string.Empty, 1, ignoreCase, 4 };
@@ -844,6 +844,63 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex, ignoreCase: false));
         }
 
+        private SubComboBox CreateControlForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
+        {
+            var tb = new SubComboBox
+            {
+                Text = text
+            };
+            tb.Focus();
+            tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
+            tb.SelectionLength = 0;
+            return tb;
+        }
+
+        private void SendCtrlBackspace(SubComboBox tb)
+        {
+            var message = new Message();
+            tb.ProcessCmdKey(ref message, Keys.Control | Keys.Back);
+        }
+
+        [Fact]
+        public void CtrlBackspaceTextRemainsEmpty()
+        {
+            SubComboBox control = CreateControlForCtrlBackspace();
+            SendCtrlBackspace(control);
+            Assert.Equal("", control.Text);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
+        public void CtrlBackspaceTextChanged(string value, string expected, int cursorRelativeToEnd)
+        {
+            SubComboBox control = CreateControlForCtrlBackspace(value, cursorRelativeToEnd);
+            SendCtrlBackspace(control);
+            Assert.Equal(expected, control.Text);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
+        public void CtrlBackspaceRepeatedTextChanged(string value, string expected, int repeats)
+        {
+            SubComboBox control = CreateControlForCtrlBackspace(value);
+            for (int i = 0; i < repeats; i++)
+            {
+                SendCtrlBackspace(control);
+            }
+            Assert.Equal(expected, control.Text);
+        }
+
+        [Fact]
+        public void CtrlBackspaceDeletesSelection()
+        {
+            SubComboBox control = CreateControlForCtrlBackspace("123-5-7-9");
+            control.SelectionStart = 2;
+            control.SelectionLength = 5;
+            SendCtrlBackspace(control);
+            Assert.Equal("12-9", control.Text);
+        }
+
         private class SubComboBox : ComboBox
         {
             public new bool AllowSelection => base.AllowSelection;
@@ -857,11 +914,50 @@ namespace System.Windows.Forms.Tests
             public new Padding DefaultPadding => base.DefaultPadding;
 
             public new Size DefaultSize => base.DefaultSize;
+
+            public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
         }
 
         private class DataClass
         {
             public string Value { get; set; }
+        }
+
+        [Fact]
+        public void GettingComboBoxItemAccessibleObject_Not_ThrowsException()
+        {
+            var control = new ComboBox();
+
+            var h1 = new HashNotImplementedObject();
+            var h2 = new HashNotImplementedObject();
+            var h3 = new HashNotImplementedObject();
+
+            control.Items.AddRange(new[] { h1, h2, h3 });
+
+            var comboBoxAccObj = (ComboBox.ComboBoxAccessibleObject)control.AccessibilityObject;
+
+            var exceptionThrown = false;
+
+            try
+            {
+                var itemAccObj1 = comboBoxAccObj.ItemAccessibleObjects[h1];
+                var itemAccObj2 = comboBoxAccObj.ItemAccessibleObjects[h2];
+                var itemAccObj3 = comboBoxAccObj.ItemAccessibleObjects[h3];
+            }
+            catch
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
+        }
+
+        public class HashNotImplementedObject
+        {
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

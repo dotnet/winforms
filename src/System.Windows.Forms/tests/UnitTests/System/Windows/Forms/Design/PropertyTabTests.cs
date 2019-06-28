@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design.Tests
             tab.Dispose();
             Assert.Null(tab.Bitmap);
             Assert.Throws<ArgumentException>(null, () => bitmap.Size);
-            
+
             // Dispose again.
             tab.Dispose();
             Assert.Null(tab.Bitmap);
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design.Tests
             var tab = new SubPropertyTab();
             tab.Dispose();
             Assert.Null(tab.Bitmap);
-            
+
             // Dispose again.
             tab.Dispose();
             Assert.Null(tab.Bitmap);
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design.Tests
             var tab = new SubPropertyTab();
             tab.Dispose(disposing);
             Assert.Null(tab.Bitmap);
-            
+
             // Dispose again.
             tab.Dispose(disposing);
             Assert.Null(tab.Bitmap);
@@ -105,7 +105,7 @@ namespace System.Windows.Forms.Design.Tests
             {
                 Assert.Same(bitmap, tab.Bitmap);
             }
-            
+
             // Dispose again.
             tab.Dispose(disposing);
             if (disposing)
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design.Tests
         {
             yield return new object[] { null, null, null };
             var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
-            yield return new object[] { mockContext.Object, new object(), new Attribute[0] };
+            yield return new object[] { mockContext.Object, new object(), Array.Empty<Attribute>() };
         }
 
         [Theory]

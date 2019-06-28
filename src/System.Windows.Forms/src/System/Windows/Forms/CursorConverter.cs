@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
     using Microsoft.Win32;
@@ -14,57 +15,67 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.IO;
 
-    /// <devdoc>
+    /// <summary>
     ///      CursorConverter is a class that can be used to convert
     ///      colors from one data type to another.  Access this
     ///      class through the TypeDescriptor.
-    /// </devdoc>
-    public class CursorConverter : TypeConverter {
-    
+    /// </summary>
+    public class CursorConverter : TypeConverter
+    {
+
         private StandardValuesCollection values;
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
-        /// </devdoc>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
-            if (sourceType == typeof(string) || sourceType == typeof(byte[])) {
+        /// </summary>
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string) || sourceType == typeof(byte[]))
+            {
                 return true;
             }
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
-        /// </devdoc>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
-            if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(byte[])) {
+        /// </summary>
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(byte[]))
+            {
                 return true;
             }
 
             return base.CanConvertTo(context, destinationType);
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///      Converts the given object to the converter's native type.
-        /// </devdoc>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-        
-            if (value is string) {
+        /// </summary>
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+
+            if (value is string)
+            {
                 string text = ((string)value).Trim();
-                
+
                 PropertyInfo[] props = GetProperties();
-                for (int i = 0; i < props.Length; i++) {
+                for (int i = 0; i < props.Length; i++)
+                {
                     PropertyInfo prop = props[i];
-                    if (string.Equals(prop.Name, text, StringComparison.OrdinalIgnoreCase) ){
+                    if (string.Equals(prop.Name, text, StringComparison.OrdinalIgnoreCase))
+                    {
                         object[] tempIndex = null;
                         return prop.GetValue(null, tempIndex);
                     }
                 }
             }
-            
-            if (value is byte[]) {
+
+            if (value is byte[])
+            {
                 MemoryStream ms = new MemoryStream((byte[])value);
                 return new Cursor(ms);
             }
@@ -72,40 +83,48 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-            if (destinationType == null) {
+        /// </summary>
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == null)
+            {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value != null) {
+            if (destinationType == typeof(string) && value != null)
+            {
                 PropertyInfo[] props = GetProperties();
                 int bestMatch = -1;
 
-                for (int i = 0; i < props.Length; i++) {
+                for (int i = 0; i < props.Length; i++)
+                {
                     PropertyInfo prop = props[i];
                     object[] tempIndex = null;
                     Cursor c = (Cursor)prop.GetValue(null, tempIndex);
-                    if (c == (Cursor)value) {
-                        if (Object.ReferenceEquals(c, value)) {
+                    if (c == (Cursor)value)
+                    {
+                        if (Object.ReferenceEquals(c, value))
+                        {
                             return prop.Name;
                         }
-                        else {
+                        else
+                        {
                             bestMatch = i;
                         }
                     }
                 }
 
-                if (bestMatch != -1) {
+                if (bestMatch != -1)
+                {
                     return props[bestMatch].Name;
                 }
-                
+
                 // We throw here because we cannot meaningfully convert a custom
                 // cursor into a string. In fact, the ResXResourceWriter will use
                 // this exception to indicate to itself that this object should
@@ -114,65 +133,77 @@ namespace System.Windows.Forms {
                 throw new FormatException(SR.CursorCannotCovertToString);
             }
 
-            if (destinationType == typeof(InstanceDescriptor) && value is Cursor) {
+            if (destinationType == typeof(InstanceDescriptor) && value is Cursor)
+            {
                 PropertyInfo[] props = GetProperties();
-                foreach(PropertyInfo prop in props) {
-                    if (prop.GetValue(null, null) == value) {
+                foreach (PropertyInfo prop in props)
+                {
+                    if (prop.GetValue(null, null) == value)
+                    {
                         return new InstanceDescriptor(prop, null);
                     }
                 }
             }
-            
-            if (destinationType == typeof(byte[])) {
-                if (value != null) {
+
+            if (destinationType == typeof(byte[]))
+            {
+                if (value != null)
+                {
                     MemoryStream ms = new MemoryStream();
                     Cursor cursor = (Cursor)value;
                     cursor.SavePicture(ms);
                     ms.Close();
                     return ms.ToArray();
                 }
-                else 
-                    return new byte[0];
+                else
+                {
+                    return Array.Empty<byte>();
+                }
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///      Retrieves the properties for the available cursors.
-        /// </devdoc>
-        private PropertyInfo[] GetProperties() {
+        /// </summary>
+        private PropertyInfo[] GetProperties()
+        {
             return typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a
         ///      standard set of values.
-        /// </devdoc>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
-            if (values == null) {
+        /// </summary>
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            if (values == null)
+            {
                 ArrayList list = new ArrayList();
                 PropertyInfo[] props = GetProperties();
-                for (int i = 0; i < props.Length; i++) {
+                for (int i = 0; i < props.Length; i++)
+                {
                     PropertyInfo prop = props[i];
                     object[] tempIndex = null;
                     Debug.Assert(prop.GetValue(null, tempIndex) != null, "Property " + prop.Name + " returned NULL");
                     list.Add(prop.GetValue(null, tempIndex));
                 }
-                
+
                 values = new StandardValuesCollection(list.ToArray());
             }
-            
+
             return values;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
-        /// </devdoc>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
+        /// </summary>
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
             return true;
         }
     }

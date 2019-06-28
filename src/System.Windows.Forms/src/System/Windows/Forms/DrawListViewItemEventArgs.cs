@@ -6,14 +6,14 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class contains the information a user needs to paint ListView items.
-    /// </devdoc>
+    /// </summary>
     public class DrawListViewItemEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawListViewItemEventArgs with the given parameters.
-        /// </devdoc>
+        /// </summary>
         public DrawListViewItemEventArgs(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
         {
             Graphics = graphics;
@@ -23,39 +23,39 @@ namespace System.Windows.Forms
             State = state;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The item to be painted.
-        /// </devdoc>
+        /// </summary>
         public ListViewItem Item { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Rectangle Bounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The index of the item that should be painted.
-        /// </devdoc>
+        /// </summary>
         public int ItemIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Miscellaneous state information.
-        /// </devdoc>
+        /// </summary>
         public ListViewItemStates State { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
-        /// </devdoc>
+        /// </summary>
         public bool DrawDefault { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground()
         {
             using (var backBrush = new SolidBrush(Item.BackColor))
@@ -64,10 +64,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a focus rectangle in the given bounds, if the item is focused. In Details View, if FullRowSelect is
         /// true, the rectangle is drawn around the whole item, else around the first sub-item's text area.
-        /// </devdoc>
+        /// </summary>
         public void DrawFocusRectangle()
         {
             if ((State & ListViewItemStates.Focused) == ListViewItemStates.Focused)
@@ -76,17 +76,17 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details
-        /// </devdoc>
+        /// </summary>
         public void DrawText()
         {
             DrawText(TextFormatFlags.Left);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
-        /// </devdoc>
+        /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
             TextRenderer.DrawText(Graphics, Item.Text, Item.Font, UpdateBounds(Bounds, drawText: true), Item.ForeColor, flags);

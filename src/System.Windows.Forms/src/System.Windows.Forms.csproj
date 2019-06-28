@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CLSCompliant>true</CLSCompliant>
@@ -42,6 +41,7 @@
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.EditMessages.cs" Link="Interop\Interop.EditMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.RichEditMessages.cs" Link="Interop\Interop.RichEditMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.CommonHandles.cs" Link="Interop\Interop.CommonHandles.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.HandleCollector.cs" Link="Interop\Interop.HandleCollector.cs" />
@@ -53,6 +53,8 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetCurrentThemeName.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />
+    <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetThemeDocumentationProperty.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />
     <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />
   </ItemGroup>
 

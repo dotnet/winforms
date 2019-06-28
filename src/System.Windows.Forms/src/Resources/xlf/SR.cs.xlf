@@ -5061,7 +5061,7 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="ExDlgCancel">
         <source>Cancel</source>
-        <target state="translated">Zrušit</target>
+        <target state="translated">Storno</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
@@ -7832,8 +7832,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Podokno popisu</target>
+        <source>Description</source>
+        <target state="needs-review-translation">Podokno popisu</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Panel nástrojů (ToolBar)</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">Panel nástrojů (ToolBar)</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">

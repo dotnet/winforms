@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Tests
                 RowNumber = value
             };
             Assert.Equal(value, cell.RowNumber);
-            
+
             // Set same.
             cell.RowNumber = value;
             Assert.Equal(value, cell.RowNumber);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
                 ColumnNumber = value
             };
             Assert.Equal(value, cell.ColumnNumber);
-            
+
             // Set same.
             cell.ColumnNumber = value;
             Assert.Equal(value, cell.ColumnNumber);

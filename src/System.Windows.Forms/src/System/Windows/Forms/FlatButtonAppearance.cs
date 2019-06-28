@@ -2,33 +2,36 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.Drawing;
     using System.Globalization;
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
 
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     [TypeConverter(typeof(FlatButtonAppearanceConverter))]
-    public class FlatButtonAppearance {
+    public class FlatButtonAppearance
+    {
 
-        private ButtonBase owner;
+        private readonly ButtonBase owner;
 
-        private int   borderSize         = 1;
-        private Color borderColor        = Color.Empty;
-        private Color checkedBackColor   = Color.Empty;
+        private int borderSize = 1;
+        private Color borderColor = Color.Empty;
+        private Color checkedBackColor = Color.Empty;
         private Color mouseDownBackColor = Color.Empty;
         private Color mouseOverBackColor = Color.Empty;
 
-        internal FlatButtonAppearance(ButtonBase owner) {
+        internal FlatButtonAppearance(ButtonBase owner)
+        {
             this.owner = owner;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -38,17 +41,24 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(1),
         ]
-        public int BorderSize {
-            get {
+        public int BorderSize
+        {
+            get
+            {
                 return borderSize;
             }
-            set {
+            set
+            {
                 if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
+                }
 
-                if (borderSize != value) {
+                if (borderSize != value)
+                {
                     borderSize = value;
-                    if (owner != null && owner.ParentInternal != null) {
+                    if (owner != null && owner.ParentInternal != null)
+                    {
                         LayoutTransaction.DoLayoutIf(owner.AutoSize, owner.ParentInternal, owner, PropertyNames.FlatAppearanceBorderSize);
                     }
                     owner.Invalidate();
@@ -56,9 +66,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -68,26 +78,31 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
-        public Color BorderColor {
-            get {
+        public Color BorderColor
+        {
+            get
+            {
                 return borderColor;
             }
-            set {
-                if (value.Equals(Color.Transparent)) {
+            set
+            {
+                if (value.Equals(Color.Transparent))
+                {
                     throw new NotSupportedException(SR.ButtonFlatAppearanceInvalidBorderColor);
                 }
-                
-                if (borderColor != value) {
+
+                if (borderColor != value)
+                {
                     borderColor = value;
                     owner.Invalidate();
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         NotifyParentProperty(true),
@@ -96,22 +111,26 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
-        public Color CheckedBackColor {
-            get {
+        public Color CheckedBackColor
+        {
+            get
+            {
                 return checkedBackColor;
             }
-            set {
-                if (checkedBackColor != value) {
+            set
+            {
+                if (checkedBackColor != value)
+                {
                     checkedBackColor = value;
                     owner.Invalidate();
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -121,22 +140,26 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
-        public Color MouseDownBackColor {
-            get {
+        public Color MouseDownBackColor
+        {
+            get
+            {
                 return mouseDownBackColor;
             }
-            set {
-                if (mouseDownBackColor != value) {
+            set
+            {
+                if (mouseDownBackColor != value)
+                {
                     mouseDownBackColor = value;
                     owner.Invalidate();
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
         ///     area of the button when the mouse cursor is within the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -146,12 +169,16 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
-        public Color MouseOverBackColor {
-            get {
+        public Color MouseOverBackColor
+        {
+            get
+            {
                 return mouseOverBackColor;
             }
-            set {
-                if (mouseOverBackColor != value) {
+            set
+            {
+                if (mouseOverBackColor != value)
+                {
                     mouseOverBackColor = value;
                     owner.Invalidate();
                 }
@@ -160,16 +187,21 @@ namespace System.Windows.Forms {
 
     }
 
-    internal sealed class ApplicableToButtonAttribute : Attribute {
-        public ApplicableToButtonAttribute() {
+    internal sealed class ApplicableToButtonAttribute : Attribute
+    {
+        public ApplicableToButtonAttribute()
+        {
         }
     }
 
-    internal class FlatButtonAppearanceConverter : ExpandableObjectConverter {
+    internal class FlatButtonAppearanceConverter : ExpandableObjectConverter
+    {
 
         // Don't let the property grid display the full type name in the value cell
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-            if (destinationType == typeof(string)) {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+            {
                 return "";
             }
 
@@ -177,8 +209,10 @@ namespace System.Windows.Forms {
         }
 
         // Don't let the property grid display the CheckedBackColor property for Button controls
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
-            if (context != null && context.Instance is Button) {
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        {
+            if (context != null && context.Instance is Button)
+            {
                 Attribute[] attributes2 = new Attribute[attributes.Length + 1];
                 attributes.CopyTo(attributes2, 0);
                 attributes2[attributes.Length] = new ApplicableToButtonAttribute();

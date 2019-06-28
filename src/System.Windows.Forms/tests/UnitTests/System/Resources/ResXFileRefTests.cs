@@ -27,7 +27,7 @@ namespace System.Resources.Tests
         {
             var fileName = "SomeFile";
             var typeName = "SomeType";
-            var encoding = Encoding.Default;
+            Encoding encoding = Encoding.Default;
 
             var fileRef = new ResXFileRef(fileName, typeName, encoding);
 

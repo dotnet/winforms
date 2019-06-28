@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace System.Resources
 {
-    /// <devdoc>
+    /// <summary>
     /// Summary of IAliasResolver.
-    /// </devdoc>
+    /// </summary>
     internal interface IAliasResolver
     {
         AssemblyName ResolveAlias(string alias);

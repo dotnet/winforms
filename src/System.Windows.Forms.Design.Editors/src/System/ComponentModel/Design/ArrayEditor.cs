@@ -10,7 +10,6 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class ArrayEditor : CollectionEditor
     {
-
         /// <summary>
         /// Initializes a new instance of <see cref='System.ComponentModel.Design.ArrayEditor'/> 
         /// using the specified type for the array.
@@ -22,25 +21,22 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Gets or sets the data type this collection contains.
         /// </summary>
-        protected override Type CreateCollectionItemType() => CollectionType.GetElementType();
+        protected override Type CreateCollectionItemType()
+            => CollectionType?.GetElementType();
 
         /// <summary>
         /// Gets the items in the array.
         /// </summary>
-        /// <param name="editValue"></param>
         protected override object[] GetItems(object editValue)
         {
-            if (editValue is Array)
+            if (editValue is Array valueArray)
             {
-                Array valueArray = (Array)editValue;
                 object[] items = new object[valueArray.GetLength(0)];
                 Array.Copy(valueArray, items, items.Length);
                 return items;
             }
-            else
-            {
-                return new object[0];
-            }
+
+            return Array.Empty<object>();
         }
 
         /// <summary>
@@ -48,13 +44,18 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected override object SetItems(object editValue, object[] value)
         {
-            if (editValue is Array || editValue == null)
+            if (editValue != null && !(editValue is Array))
             {
-                Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
-                Array.Copy(value, newArray, value.Length);
-                return newArray;
+                return editValue;
             }
-            return editValue;
+            if (value == null)
+            {
+                return null;
+            }
+
+            Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
+            Array.Copy(value, newArray, value.Length);
+            return newArray;
         }
     }
 }

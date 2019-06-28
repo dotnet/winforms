@@ -2,18 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
     using System;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/>
     ///       event of a <see cref='System.Windows.Forms.StatusBar'/>.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public delegate void StatusBarPanelClickEventHandler(object sender, StatusBarPanelClickEventArgs e);
 }

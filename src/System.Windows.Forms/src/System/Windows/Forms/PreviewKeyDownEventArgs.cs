@@ -6,64 +6,64 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the PreviewKeyDownEvent
-    /// </devdoc>
+    /// </summary>
     public class PreviewKeyDownEventArgs : EventArgs
     {
         public PreviewKeyDownEventArgs(Keys keyData)
         {
             KeyData = keyData;
         }
-       
-        /// <devdoc>
+
+        /// <summary>
         /// Gets the key data for a <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
-        /// </devdoc>
+        /// </summary>
         public Keys KeyData { get; }
 
         public bool Alt => (KeyData & Keys.Alt) == Keys.Alt;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the CTRL key was pressed.
-        /// </devdoc>
+        /// </summary>
         public bool Control => (KeyData & Keys.Control) == Keys.Control;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the keyboard code for a <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
-        /// </devdoc>
+        /// </summary>
         public Keys KeyCode
         {
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")] // Keys is discontiguous so we have to use Enum.IsDefined.
             get
             {
-                Keys keyGenerated =  KeyData & Keys.KeyCode;
-                if (!Enum.IsDefined(typeof(Keys),(int)keyGenerated))
+                Keys keyGenerated = KeyData & Keys.KeyCode;
+                if (!Enum.IsDefined(typeof(Keys), (int)keyGenerated))
                 {
                     return Keys.None;
                 }
-                
+
                 return keyGenerated;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the keyboard value for a <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
-        /// </devdoc>
+        /// </summary>
         public int KeyValue => (int)(KeyData & Keys.KeyCode);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the modifier flags for a <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
         /// This indicates which modifier keys (CTRL, SHIFT, and/or ALT) were pressed.
-        /// </devdoc>
+        /// </summary>
         public Keys Modifiers => KeyData & Keys.Modifiers;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the SHIFT key was pressed.
-        /// </devdoc>
+        /// </summary>
         public bool Shift => (KeyData & Keys.Shift) == Keys.Shift;
 
         public bool IsInputKey { get; set; }

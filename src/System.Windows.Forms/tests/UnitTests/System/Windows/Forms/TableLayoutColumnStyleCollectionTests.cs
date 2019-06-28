@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
 
             var style = new RowStyle();
-            Assert.Throws< InvalidCastException>(() => collection.Add(style));
+            Assert.Throws<InvalidCastException>(() => collection.Add(style));
             Assert.Equal(style, Assert.Single(collection));
         }
 
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
             var style = new ColumnStyle();
             collection.Insert(0, style);
             Assert.Equal(style, Assert.Single(collection));
-    }   
+        }
 
         [Fact]
         public void TableLayoutColumnStyleCollection_Item_SetColumnStyle_GetReturnsExpected()

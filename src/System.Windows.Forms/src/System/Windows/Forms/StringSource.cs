@@ -2,48 +2,52 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Runtime.InteropServices.ComTypes;
     using System.Runtime.InteropServices;
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
 
-    
-    /// <devdoc>
+
+    /// <summary>
     ///    <para> 
     ///       Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSoucr property.
     ///       This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
     ///       The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     ///    </para>
-    /// </devdoc>
-    internal class StringSource : IEnumString {
+    /// </summary>
+    internal class StringSource : IEnumString
+    {
 
         private string[] strings;
         private int current;
         private int size;
         private UnsafeNativeMethods.IAutoComplete2 autoCompleteObject2;
-        
-        /// <devdoc>
+
+        /// <summary>
         ///    <para> 
         ///       SHAutoComplete COM object CLSID.
         ///    </para>
-        /// </devdoc>
-        private static Guid   autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
+        /// </summary>
+        private static Guid autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Constructor.
         ///    </para>
-        /// </devdoc>
-        public StringSource(string[] strings) {
-            Array.Clear(strings,0, size);
-    
-            if (strings != null) {
+        /// </summary>
+        public StringSource(string[] strings)
+        {
+            Array.Clear(strings, 0, size);
+
+            if (strings != null)
+            {
                 this.strings = strings;
             }
             current = 0;
-            size = (strings == null ) ? 0 : strings.Length;
+            size = (strings == null) ? 0 : strings.Length;
 
             Guid iid_iunknown = typeof(UnsafeNativeMethods.IAutoComplete2).GUID;
             object obj = UnsafeNativeMethods.CoCreateInstance(ref autoCompleteClsid, null, NativeMethods.CLSCTX_INPROC_SERVER, ref iid_iunknown);
@@ -51,17 +55,19 @@ namespace System.Windows.Forms {
             autoCompleteObject2 = (UnsafeNativeMethods.IAutoComplete2)obj;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle 
         ///       to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         ///    </para>
-        /// </devdoc>
-        public bool Bind(HandleRef edit, int options) {
-            
+        /// </summary>
+        public bool Bind(HandleRef edit, int options)
+        {
+
             bool retVal = false;
-            
-            if (autoCompleteObject2 != null) {
+
+            if (autoCompleteObject2 != null)
+            {
                 try
                 {
                     autoCompleteObject2.SetOptions(options);
@@ -75,7 +81,7 @@ namespace System.Windows.Forms {
             }
             return retVal;
         }
-	[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public void ReleaseAutoComplete()
         {
             if (autoCompleteObject2 != null)
@@ -87,13 +93,14 @@ namespace System.Windows.Forms {
 
         public void RefreshList(string[] newSource)
         {
-            Array.Clear(strings,0, size);
-    
-            if (strings != null) {
-                this.strings = newSource;
+            Array.Clear(strings, 0, size);
+
+            if (strings != null)
+            {
+                strings = newSource;
             }
             current = 0;
-            size = (strings == null ) ? 0 : strings.Length;
+            size = (strings == null) ? 0 : strings.Length;
         }
 
         #region IEnumString Members
@@ -144,4 +151,4 @@ namespace System.Windows.Forms {
         #endregion
     }
 }
-       
+

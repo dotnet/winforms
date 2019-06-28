@@ -11,13 +11,13 @@ namespace System.Windows.Forms.VisualStyles
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum RadioButtonState
     {
-        UncheckedNormal = 1, 
-        UncheckedHot = 2, 
-        UncheckedPressed = 3, 
-        UncheckedDisabled = 4, 
-        CheckedNormal = 5, 
-        CheckedHot = 6, 
-        CheckedPressed = 7, 
+        UncheckedNormal = 1,
+        UncheckedHot = 2,
+        UncheckedPressed = 3,
+        UncheckedDisabled = 4,
+        CheckedNormal = 5,
+        CheckedHot = 6,
+        CheckedPressed = 7,
         CheckedDisabled = 8
-    } 
+    }
 }

@@ -7,24 +7,24 @@ namespace System.Windows.Forms
     [Flags]
     public enum MessageBoxOptions
     {
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box is displayed on the active desktop.
-        /// </devdoc>
+        /// </summary>
         ServiceNotification = 0x00200000,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box is displayed on the active desktop.
-        /// </devdoc>
+        /// </summary>
         DefaultDesktopOnly = 0x00020000,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box text is right-aligned.
-        /// </devdoc>
+        /// </summary>
         RightAlign = 0x00080000,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box text is displayed with Rtl reading order.
-        /// </devdoc>
+        /// </summary>
         RtlReading = 0x00100000,
     }
 }

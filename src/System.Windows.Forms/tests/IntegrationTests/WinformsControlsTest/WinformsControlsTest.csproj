@@ -4,7 +4,6 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>WinformsControlsTest</AssemblyName>
     <RootNamespace>WinformsControlsTest</RootNamespace>
-    <LangVersion>7.3</LangVersion>
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <StartupObject />
@@ -15,6 +14,7 @@
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

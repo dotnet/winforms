@@ -10,9 +10,9 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System.ComponentModel;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a linked list of <see cref='System.Windows.Forms.DataGridViewCell'/> objects</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewCellLinkedList : IEnumerable
     {
         private DataGridViewCellLinkedListElement lastAccessedElement;
@@ -21,12 +21,12 @@ namespace System.Windows.Forms
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new DataGridViewCellLinkedListEnumerator(this.headElement);
+            return new DataGridViewCellLinkedListEnumerator(headElement);
         }
 
         public DataGridViewCellLinkedList()
         {
-            this.lastAccessedIndex = -1;
+            lastAccessedIndex = -1;
         }
 
         public DataGridViewCell this[int index]
@@ -34,28 +34,28 @@ namespace System.Windows.Forms
             get
             {
                 Debug.Assert(index >= 0);
-                Debug.Assert(index < this.count);
-                if (this.lastAccessedIndex == -1 || index < this.lastAccessedIndex)
+                Debug.Assert(index < count);
+                if (lastAccessedIndex == -1 || index < lastAccessedIndex)
                 {
-                    DataGridViewCellLinkedListElement tmp = this.headElement;
+                    DataGridViewCellLinkedListElement tmp = headElement;
                     int tmpIndex = index;
                     while (tmpIndex > 0)
                     {
                         tmp = tmp.Next;
                         tmpIndex--;
                     }
-                    this.lastAccessedElement = tmp;
-                    this.lastAccessedIndex = index;
+                    lastAccessedElement = tmp;
+                    lastAccessedIndex = index;
                     return tmp.DataGridViewCell;
                 }
                 else
                 {
-                    while (this.lastAccessedIndex < index)
+                    while (lastAccessedIndex < index)
                     {
-                        this.lastAccessedElement = this.lastAccessedElement.Next;
-                        this.lastAccessedIndex++;
+                        lastAccessedElement = lastAccessedElement.Next;
+                        lastAccessedIndex++;
                     }
-                    return this.lastAccessedElement.DataGridViewCell;
+                    return lastAccessedElement.DataGridViewCell;
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.count;
+                return count;
             }
         }
 
@@ -72,8 +72,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(this.headElement != null);
-                return this.headElement.DataGridViewCell;
+                Debug.Assert(headElement != null);
+                return headElement.DataGridViewCell;
             }
         }
 
@@ -84,35 +84,35 @@ namespace System.Windows.Forms
                          dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect ||
                          dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect);
             DataGridViewCellLinkedListElement newHead = new DataGridViewCellLinkedListElement(dataGridViewCell);
-            if (this.headElement != null)
+            if (headElement != null)
             {
-                newHead.Next = this.headElement;
+                newHead.Next = headElement;
             }
-            this.headElement = newHead;
-            this.count++;
-            this.lastAccessedElement = null;
-            this.lastAccessedIndex = -1;
+            headElement = newHead;
+            count++;
+            lastAccessedElement = null;
+            lastAccessedIndex = -1;
         }
 
         public void Clear()
         {
-            this.lastAccessedElement = null;
-            this.lastAccessedIndex = -1;
-            this.headElement = null;
-            this.count = 0;
+            lastAccessedElement = null;
+            lastAccessedIndex = -1;
+            headElement = null;
+            count = 0;
         }
 
         public bool Contains(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(dataGridViewCell != null);
             int index = 0;
-            DataGridViewCellLinkedListElement tmp = this.headElement;
+            DataGridViewCellLinkedListElement tmp = headElement;
             while (tmp != null)
             {
                 if (tmp.DataGridViewCell == dataGridViewCell)
                 {
-                    this.lastAccessedElement = tmp;
-                    this.lastAccessedIndex = index;
+                    lastAccessedElement = tmp;
+                    lastAccessedIndex = index;
                     return true;
                 }
                 tmp = tmp.Next;
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
         public bool Remove(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(dataGridViewCell != null);
-            DataGridViewCellLinkedListElement tmp1 = null, tmp2 = this.headElement;
+            DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
             while (tmp2 != null)
             {
                 if (tmp2.DataGridViewCell == dataGridViewCell)
@@ -139,15 +139,15 @@ namespace System.Windows.Forms
                 DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
                 if (tmp1 == null)
                 {
-                    this.headElement = tmp3;
+                    headElement = tmp3;
                 }
                 else
                 {
                     tmp1.Next = tmp3;
                 }
-                this.count--;
-                this.lastAccessedElement = null;
-                this.lastAccessedIndex = -1;
+                count--;
+                lastAccessedElement = null;
+                lastAccessedIndex = -1;
                 return true;
             }
             return false;
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
         public int RemoveAllCellsAtBand(bool column, int bandIndex)
         {
             int removedCount = 0;
-            DataGridViewCellLinkedListElement tmp1 = null, tmp2 = this.headElement;
+            DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
             while (tmp2 != null)
             {
                 if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
@@ -181,16 +181,16 @@ namespace System.Windows.Forms
                     DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
                     if (tmp1 == null)
                     {
-                        this.headElement = tmp3;
+                        headElement = tmp3;
                     }
                     else
                     {
                         tmp1.Next = tmp3;
                     }
                     tmp2 = tmp3;
-                    this.count--;
-                    this.lastAccessedElement = null;
-                    this.lastAccessedIndex = -1;
+                    count--;
+                    lastAccessedElement = null;
+                    lastAccessedIndex = -1;
                     removedCount++;
                 }
                 else
@@ -203,59 +203,59 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewCellLinkedList'/>  linked list.</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewCellLinkedListEnumerator : IEnumerator
     {
-        private DataGridViewCellLinkedListElement headElement;
+        private readonly DataGridViewCellLinkedListElement headElement;
         private DataGridViewCellLinkedListElement current;
         private bool reset;
 
         public DataGridViewCellLinkedListEnumerator(DataGridViewCellLinkedListElement headElement)
         {
             this.headElement = headElement;
-            this.reset = true;
+            reset = true;
         }
 
         object IEnumerator.Current
         {
             get
             {
-                Debug.Assert(this.current != null); // Since this is for internal use only.
-                return this.current.DataGridViewCell;
+                Debug.Assert(current != null); // Since this is for internal use only.
+                return current.DataGridViewCell;
             }
         }
 
         bool IEnumerator.MoveNext()
         {
-            if (this.reset)
+            if (reset)
             {
-                Debug.Assert(this.current == null);
-                this.current = this.headElement;
-                this.reset = false;
+                Debug.Assert(current == null);
+                current = headElement;
+                reset = false;
             }
             else
             {
-                Debug.Assert(this.current != null); // Since this is for internal use only.
-                this.current = this.current.Next;
+                Debug.Assert(current != null); // Since this is for internal use only.
+                current = current.Next;
             }
-            return (this.current != null);
+            return (current != null);
         }
 
         void IEnumerator.Reset()
         {
-            this.reset = true;
-            this.current = null;
+            reset = true;
+            current = null;
         }
     }
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewCellLinkedList'/> linked list.</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewCellLinkedListElement
     {
-        private DataGridViewCell dataGridViewCell;
+        private readonly DataGridViewCell dataGridViewCell;
         private DataGridViewCellLinkedListElement next;
 
         public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.dataGridViewCell;
+                return dataGridViewCell;
             }
         }
 
@@ -276,11 +276,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.next;
+                return next;
             }
             set
             {
-                this.next = value;
+                next = value;
             }
         }
     }

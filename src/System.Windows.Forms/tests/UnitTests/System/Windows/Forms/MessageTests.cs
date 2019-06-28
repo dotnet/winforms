@@ -199,7 +199,7 @@ namespace System.Windows.Forms.Tests
                 {
                     LParam = ptr
                 };
-                var lparam = Assert.IsType<TestStruct>(message.GetLParam(typeof(TestStruct)));
+                TestStruct lparam = Assert.IsType<TestStruct>(message.GetLParam(typeof(TestStruct)));
                 Assert.Equal(1, lparam._field1);
                 Assert.Equal(2, lparam._field2);
             }
@@ -419,84 +419,84 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Interop.EditMessages.EM_POSFROMCHAR, " (EM_POSFROMCHAR)" };
             yield return new object[] { Interop.EditMessages.EM_CHARFROMPOS, " (EM_CHARFROMPOS)" };
             yield return new object[] { Interop.EditMessages.EM_SCROLLCARET, " (EM_SCROLLCARET)" };
-            yield return new object[] { Interop.EditMessages.EM_CANPASTE, " (EM_CANPASTE)" };
-            yield return new object[] { Interop.EditMessages.EM_DISPLAYBAND, " (EM_DISPLAYBAND)" };
-            yield return new object[] { Interop.EditMessages.EM_EXGETSEL, " (EM_EXGETSEL)" };
-            yield return new object[] { Interop.EditMessages.EM_EXLIMITTEXT, " (EM_EXLIMITTEXT)" };
-            yield return new object[] { Interop.EditMessages.EM_EXLINEFROMCHAR, " (EM_EXLINEFROMCHAR)" };
-            yield return new object[] { Interop.EditMessages.EM_EXSETSEL, " (EM_EXSETSEL)" };
-            yield return new object[] { Interop.EditMessages.EM_FINDTEXT, " (EM_FINDTEXT)" };
-            yield return new object[] { Interop.EditMessages.EM_FORMATRANGE, " (EM_FORMATRANGE)" };
-            yield return new object[] { Interop.EditMessages.EM_GETCHARFORMAT, " (EM_GETCHARFORMAT)" };
-            yield return new object[] { Interop.EditMessages.EM_GETEVENTMASK, " (EM_GETEVENTMASK)" };
-            yield return new object[] { Interop.EditMessages.EM_GETOLEINTERFACE, " (EM_GETOLEINTERFACE)" };
-            yield return new object[] { Interop.EditMessages.EM_GETPARAFORMAT, " (EM_GETPARAFORMAT)" };
-            yield return new object[] { Interop.EditMessages.EM_GETSELTEXT, " (EM_GETSELTEXT)" };
-            yield return new object[] { Interop.EditMessages.EM_HIDESELECTION, " (EM_HIDESELECTION)" };
-            yield return new object[] { Interop.EditMessages.EM_PASTESPECIAL, " (EM_PASTESPECIAL)" };
-            yield return new object[] { Interop.EditMessages.EM_REQUESTRESIZE, " (EM_REQUESTRESIZE)" };
-            yield return new object[] { Interop.EditMessages.EM_SELECTIONTYPE, " (EM_SELECTIONTYPE)" };
-            yield return new object[] { Interop.EditMessages.EM_SETBKGNDCOLOR, " (EM_SETBKGNDCOLOR)" };
-            yield return new object[] { Interop.EditMessages.EM_SETCHARFORMAT, " (EM_SETCHARFORMAT)" };
-            yield return new object[] { Interop.EditMessages.EM_SETEVENTMASK, " (EM_SETEVENTMASK)" };
-            yield return new object[] { Interop.EditMessages.EM_SETOLECALLBACK, " (EM_SETOLECALLBACK)" };
-            yield return new object[] { Interop.EditMessages.EM_SETPARAFORMAT, " (EM_SETPARAFORMAT)" };
-            yield return new object[] { Interop.EditMessages.EM_SETTARGETDEVICE, " (EM_SETTARGETDEVICE)" };
-            yield return new object[] { Interop.EditMessages.EM_STREAMIN, " (EM_STREAMIN)" };
-            yield return new object[] { Interop.EditMessages.EM_STREAMOUT, " (EM_STREAMOUT)" };
-            yield return new object[] { Interop.EditMessages.EM_GETTEXTRANGE, " (EM_GETTEXTRANGE)" };
-            yield return new object[] { Interop.EditMessages.EM_FINDWORDBREAK, " (EM_FINDWORDBREAK)" };
-            yield return new object[] { Interop.EditMessages.EM_SETOPTIONS, " (EM_SETOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETOPTIONS, " (EM_GETOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_FINDTEXTEX, " (EM_FINDTEXTEX)" };
-            yield return new object[] { Interop.EditMessages.EM_GETWORDBREAKPROCEX, " (EM_GETWORDBREAKPROCEX)" };
-            yield return new object[] { Interop.EditMessages.EM_SETWORDBREAKPROCEX, " (EM_SETWORDBREAKPROCEX)" };
+            yield return new object[] { Interop.RichEditMessages.EM_CANPASTE, " (EM_CANPASTE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_DISPLAYBAND, " (EM_DISPLAYBAND)" };
+            yield return new object[] { Interop.RichEditMessages.EM_EXGETSEL, " (EM_EXGETSEL)" };
+            yield return new object[] { Interop.RichEditMessages.EM_EXLIMITTEXT, " (EM_EXLIMITTEXT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_EXLINEFROMCHAR, " (EM_EXLINEFROMCHAR)" };
+            yield return new object[] { Interop.RichEditMessages.EM_EXSETSEL, " (EM_EXSETSEL)" };
+            yield return new object[] { Interop.RichEditMessages.EM_FINDTEXT, " (EM_FINDTEXT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_FORMATRANGE, " (EM_FORMATRANGE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETCHARFORMAT, " (EM_GETCHARFORMAT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETEVENTMASK, " (EM_GETEVENTMASK)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETOLEINTERFACE, " (EM_GETOLEINTERFACE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETPARAFORMAT, " (EM_GETPARAFORMAT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETSELTEXT, " (EM_GETSELTEXT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_HIDESELECTION, " (EM_HIDESELECTION)" };
+            yield return new object[] { Interop.RichEditMessages.EM_PASTESPECIAL, " (EM_PASTESPECIAL)" };
+            yield return new object[] { Interop.RichEditMessages.EM_REQUESTRESIZE, " (EM_REQUESTRESIZE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SELECTIONTYPE, " (EM_SELECTIONTYPE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETBKGNDCOLOR, " (EM_SETBKGNDCOLOR)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETCHARFORMAT, " (EM_SETCHARFORMAT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETEVENTMASK, " (EM_SETEVENTMASK)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETOLECALLBACK, " (EM_SETOLECALLBACK)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETPARAFORMAT, " (EM_SETPARAFORMAT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETTARGETDEVICE, " (EM_SETTARGETDEVICE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_STREAMIN, " (EM_STREAMIN)" };
+            yield return new object[] { Interop.RichEditMessages.EM_STREAMOUT, " (EM_STREAMOUT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETTEXTRANGE, " (EM_GETTEXTRANGE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_FINDWORDBREAK, " (EM_FINDWORDBREAK)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETOPTIONS, " (EM_SETOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETOPTIONS, " (EM_GETOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_FINDTEXTEX, " (EM_FINDTEXTEX)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETWORDBREAKPROCEX, " (EM_GETWORDBREAKPROCEX)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETWORDBREAKPROCEX, " (EM_SETWORDBREAKPROCEX)" };
 
             // Richedit v2.0 messages
-            yield return new object[] { Interop.EditMessages.EM_SETUNDOLIMIT, " (EM_SETUNDOLIMIT)" };
-            yield return new object[] { Interop.EditMessages.EM_REDO, " (EM_REDO)" };
-            yield return new object[] { Interop.EditMessages.EM_CANREDO, " (EM_CANREDO)" };
-            yield return new object[] { Interop.EditMessages.EM_GETUNDONAME, " (EM_GETUNDONAME)" };
-            yield return new object[] { Interop.EditMessages.EM_GETREDONAME, " (EM_GETREDONAME)" };
-            yield return new object[] { Interop.EditMessages.EM_STOPGROUPTYPING, " (EM_STOPGROUPTYPING)" };
-            yield return new object[] { Interop.EditMessages.EM_SETTEXTMODE, " (EM_SETTEXTMODE)" };
-            yield return new object[] { Interop.EditMessages.EM_GETTEXTMODE, " (EM_GETTEXTMODE)" };
-            yield return new object[] { Interop.EditMessages.EM_AUTOURLDETECT, " (EM_AUTOURLDETECT)" };
-            yield return new object[] { Interop.EditMessages.EM_GETAUTOURLDETECT, " (EM_GETAUTOURLDETECT)" };
-            yield return new object[] { Interop.EditMessages.EM_SETPALETTE, " (EM_SETPALETTE)" };
-            yield return new object[] { Interop.EditMessages.EM_GETTEXTEX, " (EM_GETTEXTEX)" };
-            yield return new object[] { Interop.EditMessages.EM_GETTEXTLENGTHEX, " (EM_GETTEXTLENGTHEX)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETUNDOLIMIT, " (EM_SETUNDOLIMIT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_REDO, " (EM_REDO)" };
+            yield return new object[] { Interop.RichEditMessages.EM_CANREDO, " (EM_CANREDO)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETUNDONAME, " (EM_GETUNDONAME)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETREDONAME, " (EM_GETREDONAME)" };
+            yield return new object[] { Interop.RichEditMessages.EM_STOPGROUPTYPING, " (EM_STOPGROUPTYPING)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETTEXTMODE, " (EM_SETTEXTMODE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETTEXTMODE, " (EM_GETTEXTMODE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_AUTOURLDETECT, " (EM_AUTOURLDETECT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETAUTOURLDETECT, " (EM_GETAUTOURLDETECT)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETPALETTE, " (EM_SETPALETTE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETTEXTEX, " (EM_GETTEXTEX)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETTEXTLENGTHEX, " (EM_GETTEXTLENGTHEX)" };
 
             // Asia specific messages
-            yield return new object[] { Interop.EditMessages.EM_SETPUNCTUATION, " (EM_SETPUNCTUATION)" };
-            yield return new object[] { Interop.EditMessages.EM_GETPUNCTUATION, " (EM_GETPUNCTUATION)" };
-            yield return new object[] { Interop.EditMessages.EM_SETWORDWRAPMODE, " (EM_SETWORDWRAPMODE)" };
-            yield return new object[] { Interop.EditMessages.EM_GETWORDWRAPMODE, " (EM_GETWORDWRAPMODE)" };
-            yield return new object[] { Interop.EditMessages.EM_SETIMECOLOR, " (EM_SETIMECOLOR)" };
-            yield return new object[] { Interop.EditMessages.EM_GETIMECOLOR, " (EM_GETIMECOLOR)" };
-            yield return new object[] { Interop.EditMessages.EM_SETIMEOPTIONS, " (EM_SETIMEOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETIMEOPTIONS, " (EM_GETIMEOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_CONVPOSITION, " (EM_CONVPOSITION)" };
-            yield return new object[] { Interop.EditMessages.EM_SETLANGOPTIONS, " (EM_SETLANGOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETLANGOPTIONS, " (EM_GETLANGOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETIMECOMPMODE, " (EM_GETIMECOMPMODE)" };
-            yield return new object[] { Interop.EditMessages.EM_FINDTEXTW, " (EM_FINDTEXTW)" };
-            yield return new object[] { Interop.EditMessages.EM_FINDTEXTEXW, " (EM_FINDTEXTEXW)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETPUNCTUATION, " (EM_SETPUNCTUATION)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETPUNCTUATION, " (EM_GETPUNCTUATION)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETWORDWRAPMODE, " (EM_SETWORDWRAPMODE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETWORDWRAPMODE, " (EM_GETWORDWRAPMODE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETIMECOLOR, " (EM_SETIMECOLOR)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETIMECOLOR, " (EM_GETIMECOLOR)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETIMEOPTIONS, " (EM_SETIMEOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETIMEOPTIONS, " (EM_GETIMEOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_CONVPOSITION, " (EM_CONVPOSITION)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETLANGOPTIONS, " (EM_SETLANGOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETLANGOPTIONS, " (EM_GETLANGOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETIMECOMPMODE, " (EM_GETIMECOMPMODE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_FINDTEXTW, " (EM_FINDTEXTW)" };
+            yield return new object[] { Interop.RichEditMessages.EM_FINDTEXTEXW, " (EM_FINDTEXTEXW)" };
 
             // Rich Edit 3.0 Asia msgs
-            yield return new object[] { Interop.EditMessages.EM_RECONVERSION, " (EM_RECONVERSION)" };
-            yield return new object[] { Interop.EditMessages.EM_SETIMEMODEBIAS, " (EM_SETIMEMODEBIAS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETIMEMODEBIAS, " (EM_GETIMEMODEBIAS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_RECONVERSION, " (EM_RECONVERSION)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETIMEMODEBIAS, " (EM_SETIMEMODEBIAS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETIMEMODEBIAS, " (EM_GETIMEMODEBIAS)" };
 
             // BiDi Specific messages
-            yield return new object[] { Interop.EditMessages.EM_SETBIDIOPTIONS, " (EM_SETBIDIOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETBIDIOPTIONS, " (EM_GETBIDIOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_SETTYPOGRAPHYOPTIONS, " (EM_SETTYPOGRAPHYOPTIONS)" };
-            yield return new object[] { Interop.EditMessages.EM_GETTYPOGRAPHYOPTIONS, " (EM_GETTYPOGRAPHYOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETBIDIOPTIONS, " (EM_SETBIDIOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETBIDIOPTIONS, " (EM_GETBIDIOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETTYPOGRAPHYOPTIONS, " (EM_SETTYPOGRAPHYOPTIONS)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETTYPOGRAPHYOPTIONS, " (EM_GETTYPOGRAPHYOPTIONS)" };
 
             // Extended Edit style specific messages
-            yield return new object[] { Interop.EditMessages.EM_SETEDITSTYLE, " (EM_SETEDITSTYLE)" };
-            yield return new object[] { Interop.EditMessages.EM_GETEDITSTYLE, " (EM_GETEDITSTYLE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_SETEDITSTYLE, " (EM_SETEDITSTYLE)" };
+            yield return new object[] { Interop.RichEditMessages.EM_GETEDITSTYLE, " (EM_GETEDITSTYLE)" };
         }
 
         [Theory]

@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BackgroundImage_SetWithHandler_CallsBackColorChanged()
+        public void BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
             var control = new ListBox();
             int callCount = 0;
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new List<int>() };
-            yield return new object[] { new int[0] };
+            yield return new object[] { Array.Empty<int>() };
 
             var mockSource = new Mock<IListSource>(MockBehavior.Strict);
             mockSource
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            var font1 = SystemFonts.MenuFont;
+            Font font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var font2 = SystemFonts.DialogFont;
+            Font font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -635,7 +635,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 0 };
             yield return new object[] { controlWithItems, string.Empty, 0, 1 };
             yield return new object[] { controlWithItems, string.Empty, 1, 2 };
@@ -739,7 +739,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 4 };
             yield return new object[] { controlWithItems, string.Empty, 0, 4 };
             yield return new object[] { controlWithItems, string.Empty, 1, 4 };

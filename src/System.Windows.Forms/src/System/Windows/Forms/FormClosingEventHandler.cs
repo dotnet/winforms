@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents a method that will handle Form Closing event.
-    /// </devdoc>
+    /// </summary>
     public delegate void FormClosingEventHandler(object sender, FormClosingEventArgs e);
 }

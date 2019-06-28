@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menuItem.Site);
             Assert.Null(menuItem.Container);
             Assert.Null(menuItem.Tag);
-            Assert.Same(expectedText, menuItem.Text);
+            Assert.Equal(expectedText, menuItem.Text);
         }
 
         public static IEnumerable<object[]> Ctor_String_EventHandler_TestData()
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_String_MenuItemArray_TestData()
         {
             yield return new object[] { null, null, false, string.Empty };
-            yield return new object[] { string.Empty, new MenuItem[0], false, string.Empty };
+            yield return new object[] { string.Empty, Array.Empty<MenuItem>(), false, string.Empty };
             yield return new object[] { "text", new MenuItem[] { new MenuItem() }, true, "text" };
         }
 
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, menuItem.Index);
             Assert.Equal(expectedIsParent, menuItem.IsParent);
             Assert.False(menuItem.MdiList);
-            Assert.Equal(items ?? new MenuItem[0], menuItem.MenuItems.Cast<MenuItem>());
+            Assert.Equal(items ?? Array.Empty<MenuItem>(), menuItem.MenuItems.Cast<MenuItem>());
             Assert.Equal(0, menuItem.MergeOrder);
             Assert.Equal(MenuMerge.Add, menuItem.MergeType);
             Assert.Equal('\0', menuItem.Mnemonic);
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests
             EventHandler onSelect = (sender, e) => { };
 
             yield return new object[] { (MenuMerge)(MenuMerge.Add - 1), -1, (Shortcut)(Shortcut.None - 1), null, null, null, null, null, false, string.Empty };
-            yield return new object[] { MenuMerge.Add, 0, Shortcut.None, string.Empty, onClick, onPopup, onSelect, new MenuItem[0], false, string.Empty };
+            yield return new object[] { MenuMerge.Add, 0, Shortcut.None, string.Empty, onClick, onPopup, onSelect, Array.Empty<MenuItem>(), false, string.Empty };
             yield return new object[] { MenuMerge.MergeItems, 1, Shortcut.CtrlA, "text", onClick, onPopup, onSelect, new MenuItem[] { new MenuItem() }, true, "text" };
         }
 
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, menuItem.Index);
             Assert.Equal(expectedIsParent, menuItem.IsParent);
             Assert.False(menuItem.MdiList);
-            Assert.Equal(items ?? new MenuItem[0], menuItem.MenuItems.Cast<MenuItem>());
+            Assert.Equal(items ?? Array.Empty<MenuItem>(), menuItem.MenuItems.Cast<MenuItem>());
             Assert.Equal(mergeOrder, menuItem.MergeOrder);
             Assert.Equal(mergeType, menuItem.MergeType);
             Assert.Equal('\0', menuItem.Mnemonic);
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(menuItem, sender);
                 callCount++;
             };
-            menuItem = new SubMenuItem(MenuMerge.Add, 0, Shortcut.None, string.Empty, onClick, null, null, new MenuItem[0]);
+            menuItem = new SubMenuItem(MenuMerge.Add, 0, Shortcut.None, string.Empty, onClick, null, null, Array.Empty<MenuItem>());
             menuItem.OnClick(null);
             Assert.Equal(1, callCount);
         }
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(menuItem, sender);
                 callCount++;
             };
-            menuItem = new SubMenuItem(MenuMerge.Add, 0, Shortcut.None, string.Empty, null, onPopup, null, new MenuItem[0]);
+            menuItem = new SubMenuItem(MenuMerge.Add, 0, Shortcut.None, string.Empty, null, onPopup, null, Array.Empty<MenuItem>());
             menuItem.OnPopup(null);
             Assert.Equal(1, callCount);
         }
@@ -296,7 +296,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(menuItem, sender);
                 callCount++;
             };
-            menuItem = new SubMenuItem(MenuMerge.Add, 0, Shortcut.None, string.Empty, null, null, onSelect, new MenuItem[0]);
+            menuItem = new SubMenuItem(MenuMerge.Add, 0, Shortcut.None, string.Empty, null, null, onSelect, Array.Empty<MenuItem>());
             menuItem.OnSelect(null);
             Assert.Equal(1, callCount);
         }
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { new MenuItem("text", new MenuItem[] { new MenuItem() }) { MdiList = mdiList }, null, true };
             }
 
-            var disposedItem = new MenuItem("text", new MenuItem[0]);
+            var disposedItem = new MenuItem("text", Array.Empty<MenuItem>());
             disposedItem.Dispose();
             yield return new object[] { disposedItem, new SubMenu(), false };
 
@@ -703,7 +703,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, menuItem.ShowShortcut);
         }
-        
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_ShowShortcut_SetCreated_GetReturnsExpected(bool value)
@@ -736,7 +736,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, menuItem.Shortcut);
         }
-        
+
         [Theory]
         [InlineData(Shortcut.None)]
         [InlineData(Shortcut.Ctrl0)]
@@ -775,11 +775,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, menuItem.Text);
+            Assert.Equal(expected, menuItem.Text);
 
             // Set same.
             menuItem.Text = value;
-            Assert.Same(expected, menuItem.Text);
+            Assert.Equal(expected, menuItem.Text);
         }
 
         [Fact]
@@ -794,8 +794,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItem_Visible_Set_GetReturnsExpected()
         {
-            var menuItem = new MenuItem();
-            menuItem.Visible = false;
+            var menuItem = new MenuItem
+            {
+                Visible = false
+            };
             Assert.False(menuItem.Visible);
 
             menuItem.Visible = true;
@@ -1098,7 +1100,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItem_OnPopup_MdiChildrenWithoutParent_DoesNotAddSeparator()
         {
             var menuItem = new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true };
-            
+
             menuItem.OnPopup(null);
             Assert.Equal(new string[] { "child" }, menuItem.MenuItems.Cast<MenuItem>().Select(m => m.Text));
 
@@ -1112,14 +1114,14 @@ namespace System.Windows.Forms.Tests
             var formWithNoMdiChildren = new Form { Menu = new MainMenu() };
             formWithNoMdiChildren.Controls.Add(new MdiClient());
             yield return new object[] { new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true }, new MainMenu(), new string[] { "child" } };
-            yield return new object[] { new SubMenuItem("text") { MdiList = true }, formWithNoMdiChildren.Menu, new string[0] };
+            yield return new object[] { new SubMenuItem("text") { MdiList = true }, formWithNoMdiChildren.Menu, Array.Empty<string>() };
 
             var formWithNoVisibleMdiChildren = new Form { Menu = new MainMenu() };
             var formWithNoVisibleMdiChildrenClient = new MdiClient();
             formWithNoVisibleMdiChildren.Controls.Add(formWithNoVisibleMdiChildrenClient);
             formWithNoVisibleMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithNoVisibleMdiChildren });
             yield return new object[] { new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true }, formWithNoVisibleMdiChildren.Menu, new string[] { "child", "-" } };
-            yield return new object[] { new SubMenuItem("text"), formWithNoVisibleMdiChildren.Menu, new string[0] };
+            yield return new object[] { new SubMenuItem("text"), formWithNoVisibleMdiChildren.Menu, Array.Empty<string>() };
 
             var formWithMdiChildren = new Form { Menu = new MainMenu(), Visible = true };
             var formWithMdiChildrenClient = new MdiClient();
@@ -1141,7 +1143,7 @@ namespace System.Windows.Forms.Tests
             formWithManyMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithManyMdiChildren, Visible = true, Text = "Form9" });
             formWithManyMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithManyMdiChildren, Visible = true, Text = "Form10" });
             yield return new object[] { new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true }, formWithManyMdiChildren.Menu, new string[] { "child", "-", "&1 Form1", "&2 Form1", "&3 Form2", "&4 Form2", "&5 Form3", "&6 Form3", "&7 Form4", "&8 Form4", "&9 Form10", "&10 Form10", "&More Windows..." } };
-            
+
             var formWithActiveMdiChildren = new SubForm { Menu = new MainMenu(), Visible = true };
             var formWithActiveMdiChildrenClient = new MdiClient();
             formWithActiveMdiChildren.Controls.Add(formWithActiveMdiChildrenClient);
@@ -1309,7 +1311,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CloneMenu_TestData()
         {
-            yield return new object[] { new MenuItem[0] };
+            yield return new object[] { Array.Empty<MenuItem>() };
             yield return new object[] { new MenuItem[] { new MenuItem("text") } };
         }
 
@@ -1723,7 +1725,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void MenuItem_Dispose_NoParentOrChildren_Success()
         {
-            var menuItem = new MenuItem("text", new MenuItem[0]);
+            var menuItem = new MenuItem("text", Array.Empty<MenuItem>());
             menuItem.Dispose();
             menuItem.Dispose();
         }

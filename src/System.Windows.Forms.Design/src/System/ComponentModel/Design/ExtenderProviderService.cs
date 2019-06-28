@@ -7,15 +7,14 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The extender provider service actually provides two services:  IExtenderProviderService, which allows other objects to add and remove extender providers, and IExtenderListService, which is used by TypeDescriptor to discover the set of extender providers.
+    /// The extender provider service actually provides two services: IExtenderProviderService,
+    /// which allows other objects to add and remove extender providers, and IExtenderListService,
+    /// which is used by TypeDescriptor to discover the set of extender providers.
     /// </summary>
     internal sealed class ExtenderProviderService : IExtenderProviderService, IExtenderListService
     {
         private ArrayList _providers;
 
-        /// <summary>
-        /// Internal ctor to prevent semitrust from creating us.
-        /// </summary>
         internal ExtenderProviderService()
         {
         }
@@ -31,7 +30,7 @@ namespace System.ComponentModel.Design
                 _providers.CopyTo(providers, 0);
                 return providers;
             }
-            return new IExtenderProvider[0];
+            return Array.Empty<IExtenderProvider>();
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace System.ComponentModel.Design
 
             if (_providers.Contains(provider))
             {
-                throw new ArgumentException(string.Format(SR.ExtenderProviderServiceDuplicateProvider, provider));
+                throw new ArgumentException(string.Format(SR.ExtenderProviderServiceDuplicateProvider, provider), nameof(provider));
             }
 
             _providers.Add(provider);
@@ -67,10 +66,7 @@ namespace System.ComponentModel.Design
                 throw new ArgumentNullException(nameof(provider));
             }
 
-            if (_providers != null)
-            {
-                _providers.Remove(provider);
-            }
+            _providers?.Remove(provider);
         }
     }
 }

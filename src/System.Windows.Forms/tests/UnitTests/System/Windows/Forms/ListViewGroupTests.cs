@@ -56,10 +56,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroup_Ctor_String_HorizontalAlignment(string header, HorizontalAlignment headerAlignment, string expectedHeader)
         {
             var group = new ListViewGroup(header, headerAlignment);
-            Assert.Same(expectedHeader, group.Header);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(headerAlignment, group.HeaderAlignment);
             Assert.Empty(group.Items);
-            Assert.Same(group.Items, group.Items);
+            Assert.Equal(group.Items, group.Items);
             Assert.Null(group.ListView);
             Assert.Null(group.Name);
             Assert.Null(group.Tag);
@@ -95,11 +95,11 @@ namespace System.Windows.Forms.Tests
             listView.Groups.Add(group);
 
             group.Header = value;
-            Assert.Same(expected, group.Header);
+            Assert.Equal(expected, group.Header);
 
             // Set same.
             group.Header = value;
-            Assert.Same(expected, group.Header);
+            Assert.Equal(expected, group.Header);
         }
 
         [Theory]
@@ -110,11 +110,11 @@ namespace System.Windows.Forms.Tests
             {
                 Header = value
             };
-            Assert.Same(expected, group.Header);
+            Assert.Equal(expected, group.Header);
 
             // Set same.
             group.Header = value;
-            Assert.Same(expected, group.Header);
+            Assert.Equal(expected, group.Header);
         }
 
         [Theory]
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, group);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
                 Assert.Equal(group.Header, result.Header);
                 Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroup_ToString_Invoke_ReturnsExpected(string header, string expected)
         {
             var group = new ListViewGroup(header);
-            Assert.Same(expected, group.ToString());
+            Assert.Equal(expected, group.ToString());
         }
     }
 }

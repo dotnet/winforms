@@ -15,436 +15,509 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public sealed class SplitterPanel : Panel
     {
-        SplitContainer owner  = null;
+        readonly SplitContainer owner = null;
         private bool collapsed = false;
-        
+
         public SplitterPanel(SplitContainer owner)
-        : base() {
-              this.owner =   owner;
-              SetStyle(ControlStyles.ResizeRedraw, true);
-          
+        : base()
+        {
+            this.owner = owner;
+            SetStyle(ControlStyles.ResizeRedraw, true);
+
         }
 
-        internal bool Collapsed {
-            get {
+        internal bool Collapsed
+        {
+            get
+            {
                 return collapsed;
             }
-            set {
+            set
+            {
                 collapsed = value;
             }
         }
 
-        
-        /// <devdoc>
+
+        /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new bool AutoSize {
-            get {
+        public new bool AutoSize
+        {
+            get
+            {
                 return base.AutoSize;
             }
-            set {
+            set
+            {
                 base.AutoSize = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged {
+        new public event EventHandler AutoSizeChanged
+        {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false),
         Localizable(false)
         ]
-        public override AutoSizeMode AutoSizeMode {
-            get {
+        public override AutoSizeMode AutoSizeMode
+        {
+            get
+            {
                 return AutoSizeMode.GrowOnly;
             }
-            set {
+            set
+            {
             }
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///    Override Anchor to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new AnchorStyles Anchor {
-            get {
+        public new AnchorStyles Anchor
+        {
+            get
+            {
                 return base.Anchor;
             }
-            set {
+            set
+            {
                 base.Anchor = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new BorderStyle BorderStyle {
-            get {
+        public new BorderStyle BorderStyle
+        {
+            get
+            {
                 return base.BorderStyle;
             }
-            set {
+            set
+            {
                 base.BorderStyle = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
         ///     the top of the container, the control will be displayed flush at the
         ///     top of the container, extending the length of the container.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new DockStyle Dock {
-            get {
+        public new DockStyle Dock
+        {
+            get
+            {
                 return base.Dock;
             }
-            set {
+            set
+            {
                 base.Dock = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Override DockPadding to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        new public DockPaddingEdges DockPadding {
-            get {
+        new public DockPaddingEdges DockPadding
+        {
+            get
+            {
                 return base.DockPadding;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The height of this SplitterPanel
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ControlHeightDescr))
         ]
-        public new int Height {
-            get {
-                if (Collapsed) {
+        public new int Height
+        {
+            get
+            {
+                if (Collapsed)
+                {
                     return 0;
                 }
                 return base.Height;
             }
-            set {
-                throw new NotSupportedException(SR.SplitContainerPanelHeight); 
+            set
+            {
+                throw new NotSupportedException(SR.SplitContainerPanelHeight);
             }
         }
 
-        internal int HeightInternal {
-            get {
+        internal int HeightInternal
+        {
+            get
+            {
                 return ((Panel)this).Height;
             }
-            set {
+            set
+            {
                 ((Panel)this).Height = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override Location to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Point Location {
-            get {
+        public new Point Location
+        {
+            get
+            {
                 return base.Location;
             }
-            set {
+            set
+            {
                 base.Location = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
-        protected override Padding DefaultMargin {
-            get {
+        /// </summary>
+        protected override Padding DefaultMargin
+        {
+            get
+            {
                 return new Padding(0, 0, 0, 0);
             }
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Size MinimumSize {
-            get {
+        public new Size MinimumSize
+        {
+            get
+            {
                 return base.MinimumSize;
             }
-            set {
+            set
+            {
                 base.MinimumSize = value;
             }
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Size MaximumSize {
-            get {
+        public new Size MaximumSize
+        {
+            get
+            {
                 return base.MaximumSize;
             }
-            set {
+            set
+            {
                 base.MaximumSize = value;
             }
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
         ///     used as a key into the ControlCollection.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new string Name {
-            get {
+        public new string Name
+        {
+            get
+            {
                 return base.Name;
             }
-            set {
+            set
+            {
                 base.Name = value;
             }
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
-        internal SplitContainer Owner {
-            get {
+        /// </summary>
+        internal SplitContainer Owner
+        {
+            get
+            {
                 return owner;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Control Parent {
-            get {
+        public new Control Parent
+        {
+            get
+            {
                 return base.Parent;
             }
-            set {
+            set
+            {
                 base.Parent = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override Size to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new Size Size {
-            get {
-                if (Collapsed) {
+        public new Size Size
+        {
+            get
+            {
+                if (Collapsed)
+                {
                     return Size.Empty;
                 }
                 return base.Size;
             }
-            set {
+            set
+            {
                 base.Size = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override TabIndex to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new int TabIndex {
-            get {
+        public new int TabIndex
+        {
+            get
+            {
                 return base.TabIndex;
             }
-            set {
+            set
+            {
                 base.TabIndex = value;
             }
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Override TabStop to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new bool TabStop {
-            get {
+        public new bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override Visible to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new bool Visible {
-            get {
+        public new bool Visible
+        {
+            get
+            {
                 return base.Visible;
             }
-            set {
+            set
+            {
                 base.Visible = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The width of this control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ControlWidthDescr))
         ]
-        public new int Width {
-            get {
-                if (Collapsed) {
+        public new int Width
+        {
+            get
+            {
+                if (Collapsed)
+                {
                     return 0;
                 }
                 return base.Width;
             }
-            set {
+            set
+            {
                 throw new NotSupportedException(SR.SplitContainerPanelWidth);
             }
         }
 
-        internal int WidthInternal {
-            get {
+        internal int WidthInternal
+        {
+            get
+            {
                 return ((Panel)this).Width;
             }
-            set {
+            set
+            {
                 ((Panel)this).Width = value;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override VisibleChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler VisibleChanged {
+        public new event EventHandler VisibleChanged
+        {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override DockChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler DockChanged {
+        public new event EventHandler DockChanged
+        {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override LocationChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler LocationChanged {
+        public new event EventHandler LocationChanged
+        {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override TabIndexChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler TabIndexChanged {
+        public new event EventHandler TabIndexChanged
+        {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
-        }        
+        }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override TabStopChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new event EventHandler TabStopChanged {
+        public new event EventHandler TabStopChanged
+        {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }

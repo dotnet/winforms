@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -305,11 +305,11 @@ namespace System.Windows.Forms.Tests
             {
                 ImageKey = value
             };
-            Assert.Same(expected, header.ImageKey);
+            Assert.Equal(expected, header.ImageKey);
 
             // Set same.
             header.ImageKey = value;
-            Assert.Same(expected, header.ImageKey);
+            Assert.Equal(expected, header.ImageKey);
         }
 
         [Theory]
@@ -322,11 +322,11 @@ namespace System.Windows.Forms.Tests
                 ImageKey = value
             };
             listView.Columns.Add(header);
-            Assert.Same(expected, header.ImageKey);
+            Assert.Equal(expected, header.ImageKey);
 
             // Set same.
             header.ImageKey = value;
-            Assert.Same(expected, header.ImageKey);
+            Assert.Equal(expected, header.ImageKey);
         }
 
         [Theory]
@@ -340,11 +340,11 @@ namespace System.Windows.Forms.Tests
             };
             listView.Columns.Add(header);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
-            Assert.Same(expected, header.ImageKey);
+            Assert.Equal(expected, header.ImageKey);
 
             // Set same.
             header.ImageKey = value;
-            Assert.Same(expected, header.ImageKey);
+            Assert.Equal(expected, header.ImageKey);
         }
 
         [Fact]
@@ -401,11 +401,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
 
             // Set same.
             header.Name = value;
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
         }
 
         [Theory]
@@ -417,11 +417,11 @@ namespace System.Windows.Forms.Tests
             listView.Columns.Add(header);
 
             header.Name = value;
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
 
             // Set same.
             header.Name = value;
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
         }
 
         [Theory]
@@ -434,11 +434,11 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
             header.Name = value;
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
 
             // Set same.
             header.Name = value;
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
         }
 
         [Theory]
@@ -450,12 +450,12 @@ namespace System.Windows.Forms.Tests
                 Site = Mock.Of<ISite>(),
                 Name = value
             };
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
             Assert.Equal(value, header.Site.Name);
 
             // Set same.
             header.Name = value;
-            Assert.Same(expected, header.Name);
+            Assert.Equal(expected, header.Name);
             Assert.Equal(value, header.Site.Name);
         }
 
@@ -482,11 +482,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, header.Text);
+            Assert.Equal(expected, header.Text);
 
             // Set same.
             header.Text = value;
-            Assert.Same(expected, header.Text);
+            Assert.Equal(expected, header.Text);
         }
 
         [Theory]
@@ -498,11 +498,11 @@ namespace System.Windows.Forms.Tests
             listView.Columns.Add(header);
 
             header.Text = value;
-            Assert.Same(expected, header.Text);
+            Assert.Equal(expected, header.Text);
 
             // Set same.
             header.Text = value;
-            Assert.Same(expected, header.Text);
+            Assert.Equal(expected, header.Text);
         }
 
         [Theory]
@@ -515,11 +515,11 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
             header.Text = value;
-            Assert.Same(expected, header.Text);
+            Assert.Equal(expected, header.Text);
 
             // Set same.
             header.Text = value;
-            Assert.Same(expected, header.Text);
+            Assert.Equal(expected, header.Text);
         }
 
         [Theory]
@@ -641,7 +641,7 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var header = new ColumnHeader();
             listView.Columns.Add(header);
-            
+
             Assert.Equal(60, header.Width);
         }
 
@@ -652,7 +652,7 @@ namespace System.Windows.Forms.Tests
             var header = new ColumnHeader();
             listView.Columns.Add(header);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
-            
+
             Assert.Equal(60, header.Width);
         }
 
@@ -666,7 +666,7 @@ namespace System.Windows.Forms.Tests
             var header = new ColumnHeader();
             listView.Columns.Add(header);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
-            
+
             Assert.Equal(header.Width, header.Width);
         }
 
@@ -829,7 +829,7 @@ namespace System.Windows.Forms.Tests
             header.Dispose();
             Assert.Empty(listView.Columns);
         }
-        
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ColumnHeader_ToString_Invoke_ReturnsExpected(string value)

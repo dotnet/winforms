@@ -26,8 +26,10 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Panel_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            var panel = new Panel();
-            panel.AutoSize = value;
+            var panel = new Panel
+            {
+                AutoSize = value
+            };
             Assert.Equal(value, panel.AutoSize);
 
             // Set with observer.
@@ -121,8 +123,10 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Panel_TabStop_Set_GetReturnsExpected(bool value)
         {
-            var panel = new Panel();
-            panel.TabStop = value;
+            var panel = new Panel
+            {
+                TabStop = value
+            };
             Assert.Equal(value, panel.TabStop);
 
             // Set with observer.
@@ -150,8 +154,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Panel_Text_Set_GetReturnsExpected()
         {
-            var panel = new Panel();
-            panel.Text = "value1";
+            var panel = new Panel
+            {
+                Text = "value1"
+            };
             Assert.Equal("value1", panel.Text);
 
             // Set with observer.

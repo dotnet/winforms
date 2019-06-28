@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Drawing;
     using System.Globalization;
-    
+
     [ToolboxBitmapAttribute(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
     public class DataGridViewTextBoxColumn : DataGridViewColumn
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
         public DataGridViewTextBoxColumn() : base(new DataGridViewTextBoxCell())
         {
-            this.SortMode = DataGridViewColumnSortMode.Automatic;
+            SortMode = DataGridViewColumnSortMode.Automatic;
         }
 
         [
@@ -50,26 +50,25 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (this.TextBoxCellTemplate == null)
+                if (TextBoxCellTemplate == null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
-                return this.TextBoxCellTemplate.MaxInputLength;
+                return TextBoxCellTemplate.MaxInputLength;
             }
             set
             {
-                if (this.MaxInputLength != value)
+                if (MaxInputLength != value)
                 {
-                    this.TextBoxCellTemplate.MaxInputLength = value;
-                    if (this.DataGridView != null)
+                    TextBoxCellTemplate.MaxInputLength = value;
+                    if (DataGridView != null)
                     {
-                        DataGridViewRowCollection dataGridViewRows = this.DataGridView.Rows;
+                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
                             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            DataGridViewTextBoxCell dataGridViewCell = dataGridViewRow.Cells[this.Index] as DataGridViewTextBoxCell;
-                            if (dataGridViewCell != null)
+                            if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
                             {
                                 dataGridViewCell.MaxInputLength = value;
                             }
@@ -98,17 +97,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewTextBoxCell) this.CellTemplate;
+                return (DataGridViewTextBoxCell)CellTemplate;
             }
         }
 
-        public override string ToString() 
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("DataGridViewTextBoxColumn { Name=");
-            sb.Append(this.Name);
+            sb.Append(Name);
             sb.Append(", Index=");
-            sb.Append(this.Index.ToString(CultureInfo.CurrentCulture));
+            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
             sb.Append(" }");
             return sb.ToString();
         }

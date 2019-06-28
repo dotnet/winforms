@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,58 +11,61 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace System.ComponentModel.Design.Serialization 
+namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
     ///     Code model serializer for primitive types.
     /// </summary>
-    internal class PrimitiveCodeDomSerializer : CodeDomSerializer 
+    internal class PrimitiveCodeDomSerializer : CodeDomSerializer
     {
         private static PrimitiveCodeDomSerializer s_defaultSerializer;
-        
+
         /// <summary>
         ///     Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static PrimitiveCodeDomSerializer Default 
+        internal new static PrimitiveCodeDomSerializer Default
         {
-            get 
+            get
             {
-                if (s_defaultSerializer == null) 
+                if (s_defaultSerializer == null)
                 {
                     s_defaultSerializer = new PrimitiveCodeDomSerializer();
                 }
                 return s_defaultSerializer;
             }
         }
-        
+
         /// <summary>
         ///     Serializes the given object into a CodeDom object.
         /// </summary>
-        public override object Serialize(IDesignerSerializationManager manager, object value) 
+        public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            using (TraceScope("PrimitiveCodeDomSerializer::" + nameof(Serialize))) 
+            using (TraceScope("PrimitiveCodeDomSerializer::" + nameof(Serialize)))
             {
-                Trace("Value: {0}",  (value == null ? "(null)" : value.ToString()));
+                Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
             }
 
             CodeExpression expression = new CodePrimitiveExpression(value);
 
-            if (value != null) 
+            if (value == null)
             {
-                if (value is string) 
+				return expression;
+			}
+			
+            if (value is string stringValue)
+            {
+                if (stringValue.Length > 200)
                 {
-                    string stringValue = value as string;
-                    if (stringValue != null && stringValue.Length > 200) 
-                    {
-                        expression = SerializeToResourceExpression(manager, stringValue);
-                    }
+                    expression = SerializeToResourceExpression(manager, stringValue);
                 }
-                else 
-                {
-                    // Generate a cast for all other types because we won't parse them properly otherwise 
-                    // because we won't know to convert them to the narrow form.
-                    expression = new CodeCastExpression(new CodeTypeReference(value.GetType()), expression);
-                }
+				return expression;
+            }
+                
+		    if (!(value is bool || value is char || value is int || value is float || value is double))
+            {
+                // Generate a cast for all other types because we won't parse them properly otherwise 
+                // because we won't know to convert them to the narrow form.
+                expression = new CodeCastExpression(new CodeTypeReference(value.GetType()), expression);
             }
 
             return expression;

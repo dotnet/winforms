@@ -15,11 +15,11 @@ namespace System.ComponentModel.Design
     /// <summary>
     /// <para>Describes and represents inherited properties in an inherited class.</para>
     /// </summary>
-    internal class InheritedPropertyDescriptor : PropertyDescriptor
+    internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     {
         private PropertyDescriptor propertyDescriptor;
         private object _defaultValue;
-        private static object s_noDefault = new Object();
+        private static readonly object s_noDefault = new Object();
         private bool _initShouldSerialize;
         private object _originalValue;
 
@@ -27,12 +27,12 @@ namespace System.ComponentModel.Design
         /// Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
         /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component, bool rootComponent) : base(propertyDescriptor, new Attribute[] { })
+        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, new Attribute[] { })
         {
             Debug.Assert(!(propertyDescriptor is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
             this.propertyDescriptor = propertyDescriptor;
 
-            InitInheritedDefaultValue(component, rootComponent);
+            InitInheritedDefaultValue(component);
 
             // Check to see if this property points to a collection of objects that are not IComponents.  We cannot serialize the delta between two collections if they do not contain components, so if we detect this case we will make the property invisible to serialization.
             // We only do this if there are already items in the collection.  Otherwise, it is safe.
@@ -41,8 +41,7 @@ namespace System.ComponentModel.Design
             if (typeof(ICollection).IsAssignableFrom(propertyDescriptor.PropertyType) &&
                 propertyDescriptor.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
             {
-                ICollection collection = propertyDescriptor.GetValue(component) as ICollection;
-                if (collection != null && collection.Count > 0)
+                if (propertyDescriptor.GetValue(component) is ICollection collection && collection.Count > 0)
                 {
                     // Trawl Add and AddRange methods looking for the first compatible serializable method.  All we need is the data type.
                     bool addComponentExists = false;
@@ -234,7 +233,7 @@ namespace System.ComponentModel.Design
             return propertyDescriptor.GetValue(component);
         }
 
-        private void InitInheritedDefaultValue(object component, bool rootComponent)
+        private void InitInheritedDefaultValue(object component)
         {
             try
             {

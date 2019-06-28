@@ -85,11 +85,11 @@ namespace System.ComponentModel.Design.Tests
                 DtelLoading = value
             };
             Assert.Equal(value, surface.DtelLoading);
-            
+
             // Set same
             surface.DtelLoading = value;
             Assert.Equal(value, surface.DtelLoading);
-            
+
             // Set different
             surface.DtelLoading = !value;
             Assert.Equal(!value, surface.DtelLoading);
@@ -271,6 +271,9 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(surface.IsLoaded);
             Assert.Empty(surface.LoadErrors);
             Assert.True(surface.Host.Loading);
+            Assert.True(host.Loading);
+            Assert.Null(host.RootComponent);
+            Assert.Null(host.RootComponentClassName);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
 
@@ -375,7 +378,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, unloadedCallCount);
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
-            
+
             // Begin again.
             surface.BeginLoad(mockLoader.Object);
             Assert.False(surface.IsLoaded);
@@ -439,7 +442,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, loadedCallCount);
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
-            
+
             // Begin again.
             surface.BeginLoad(mockLoader.Object);
             Assert.False(surface.IsLoaded);
@@ -628,7 +631,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
-        
+
         [Fact]
         public void DesignSurface_BeginLoad_NullLoader_ThrowsArgumentNullException()
         {
@@ -705,6 +708,141 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.CreateDesigner(new Component(), false));
         }
 
+#pragma warning disable 0618
+        [Fact]
+        public void DesignSurface_CreateComponent_IComponentWithPublicDefaultConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            ComponentWithPublicConstructor instance = Assert.IsType<ComponentWithPublicConstructor>(surface.CreateComponent(typeof(ComponentWithPublicConstructor)));
+            Assert.Null(instance.Container);
+        }
+
+        [Fact]
+        public void DesignSurface_CreateComponent_IComponentWithPrivateDefaultConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            ComponentWithPrivateDefaultConstructor instance = Assert.IsType<ComponentWithPrivateDefaultConstructor>(surface.CreateComponent(typeof(ComponentWithPrivateDefaultConstructor)));
+            Assert.Null(instance.Container);
+        }
+
+        [Fact]
+        public void DesignSurface_CreateComponent_IComponentWithIContainerConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            ComponentWithIContainerConstructor instance = Assert.IsType<ComponentWithIContainerConstructor>(surface.CreateComponent(typeof(ComponentWithIContainerConstructor)));
+            Assert.Same(surface.ComponentContainer, instance.Container);
+        }
+
+        [Theory]
+        [InlineData(typeof(ClassWithPublicConstructor))]
+        [InlineData(typeof(ClassWithPrivateDefaultConstructor))]
+        public void DesignSurface_CreateComponent_NonIComponent_ReturnsNull(Type type)
+        {
+            var surface = new DesignSurface();
+            Assert.Null(surface.CreateComponent(type));
+        }
+
+        [Theory]
+        [InlineData(typeof(ClassWithIContainerConstructor))]
+        [InlineData(typeof(ClassWithNoMatchingConstructor))]
+        [InlineData(typeof(ComponentWithPrivateIContainerConstructor))]
+        [InlineData(typeof(ComponentWithNoMatchingConstructor))]
+        public void DesignSurface_CreateComponent_TypeWithNoMatchingConstructor_ThrowsMissingMethodException(Type type)
+        {
+            var surface = new DesignSurface();
+            Assert.Throws<MissingMethodException>(() => surface.CreateComponent(type));
+        }
+
+        [Fact]
+        public void DesignSurface_CreateComponent_NullType_ThrowsArgumentNullException()
+        {
+            var surface = new DesignSurface();
+            Assert.Throws<ArgumentNullException>("type", () => surface.CreateComponent(null));
+        }
+#pragma warning restore 0618
+
+        [Fact]
+        public void DesignSurface_CreateInstance_NonIComponentWithPublicDefaultConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            Assert.IsType<ClassWithPublicConstructor>(surface.CreateInstance(typeof(ClassWithPublicConstructor)));
+        }
+
+        [Fact]
+        public void DesignSurface_CreateInstance_NonIComponentWithPrivateDefaultConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            Assert.IsType<ClassWithPrivateDefaultConstructor>(surface.CreateInstance(typeof(ClassWithPrivateDefaultConstructor)));
+        }
+
+        [Fact]
+        public void DesignSurface_CreateInstance_IComponentWithPublicDefaultConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            ComponentWithPublicConstructor instance = Assert.IsType<ComponentWithPublicConstructor>(surface.CreateInstance(typeof(ComponentWithPublicConstructor)));
+            Assert.Null(instance.Container);
+        }
+
+        [Fact]
+        public void DesignSurface_CreateInstance_IComponentWithPrivateDefaultConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            ComponentWithPrivateDefaultConstructor instance = Assert.IsType<ComponentWithPrivateDefaultConstructor>(surface.CreateInstance(typeof(ComponentWithPrivateDefaultConstructor)));
+            Assert.Null(instance.Container);
+        }
+
+        [Fact]
+        public void DesignSurface_CreateInstance_IComponentWithIContainerConstructor_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            ComponentWithIContainerConstructor instance = Assert.IsType<ComponentWithIContainerConstructor>(surface.CreateInstance(typeof(ComponentWithIContainerConstructor)));
+            Assert.Same(surface.ComponentContainer, instance.Container);
+        }
+
+        [Theory]
+        [InlineData(typeof(ClassWithIContainerConstructor))]
+        [InlineData(typeof(ClassWithNoMatchingConstructor))]
+        [InlineData(typeof(ComponentWithPrivateIContainerConstructor))]
+        [InlineData(typeof(ComponentWithNoMatchingConstructor))]
+        public void DesignSurface_CreateInstance_TypeWithNoMatchingConstructor_ThrowsMissingMethodException(Type type)
+        {
+            var surface = new DesignSurface();
+            Assert.Throws<MissingMethodException>(() => surface.CreateInstance(type));
+        }
+
+        [Fact]
+        public void DesignSurface_CreateInstance_NullType_ThrowsArgumentNullException()
+        {
+            var surface = new DesignSurface();
+            Assert.Throws<ArgumentNullException>("type", () => surface.CreateInstance(null));
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        public void DesignSurface_CreateNestedContainer_Invoke_ReturnsExpected(string containerName)
+        {
+            var surface = new DesignSurface();
+            var ownerComponent = new Component();
+            INestedContainer container = surface.CreateNestedContainer(ownerComponent, containerName);
+            Assert.Empty(container.Components);
+            Assert.Same(ownerComponent, container.Owner);
+        }
+
+        [Fact]
+        public void DesignSurface_CreateNestedContainer_NullOwningComponent_ThrowsArgumentNullException()
+        {
+            var surface = new DesignSurface();
+            Assert.Throws<ArgumentNullException>("owningComponent", () => surface.CreateNestedContainer(null, "name"));
+        }
+
+        [Fact]
+        public void DesignSurface_CreateNestedContainer_Disposed_ThrowsObjectDisposedException()
+        {
+            var surface = new DesignSurface();
+            surface.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => surface.CreateNestedContainer(null, "name"));
+        }
+
         [Fact]
         public void DesignSurface_Dispose_MultipleTimes_Success()
         {
@@ -714,19 +852,45 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignSurface_Dispose_HasHost_ThrowsInvalidOperationException()
+        public void DesignSurface_Dispose_HasLoader_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
             var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
             mockLoader
-                .Setup(l => l.BeginLoad(host))
-                .Verifiable();
+                .Setup(l => l.BeginLoad(host));
             surface.BeginLoad(mockLoader.Object);
             Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+            Assert.True(host.Loading);
 
             // Should not throw again.
             surface.Dispose();
+            Assert.True(host.Loading);
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_HasHostWithTransactions_ThrowsInvalidOperationException()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            DesignerTransaction transaction = host.CreateTransaction("Transaction1");
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+            Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+
+            // Should not throw again.
+            surface.Dispose();
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
         }
 
         [Fact]
@@ -811,10 +975,88 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
+        public void DesignSurface_GetService_GetISelectionService_ReturnsExpected()
+        {
+            var surface = new SubDesignSurface();
+            ISelectionService service = Assert.IsAssignableFrom<ISelectionService>(surface.GetService(typeof(ISelectionService)));
+            Assert.Null(service.PrimarySelection);
+            Assert.Equal(0, service.SelectionCount);
+        }
+
+        [Fact]
+        public void DesignSurface_GetService_GetIExtenderProviderService_ReturnsExpected()
+        {
+            var surface = new SubDesignSurface();
+            Assert.IsAssignableFrom<IExtenderProviderService>(surface.GetService(typeof(IExtenderProviderService)));
+        }
+
+        [Fact]
+        public void DesignSurface_GetService_GetIExtenderListService_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            Assert.IsAssignableFrom<IExtenderListService>(surface.GetService(typeof(IExtenderListService)));
+            Assert.IsAssignableFrom<IExtenderProviderService>(surface.GetService(typeof(IExtenderListService)));
+        }
+
+        [Fact]
+        public void DesignSurface_GetService_GetITypeDescriptorFilterService_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            Assert.IsAssignableFrom<ITypeDescriptorFilterService>(surface.GetService(typeof(ITypeDescriptorFilterService)));
+        }
+
+        [Fact]
+        public void DesignSurface_GetService_GetIReferenceService_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            Assert.IsAssignableFrom<IReferenceService>(surface.GetService(typeof(IReferenceService)));
+        }
+
+        [Fact]
+        public void DesignSurface_GetService_GetDesignSurfaceService_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            Assert.Same(surface, surface.GetService(typeof(DesignSurface)));
+        }
+
+        [Fact]
+        public void DesignSurface_GetService_GetInstanceTypeService_ReturnsExpected()
+        {
+            var surface = new SubDesignSurface();
+            Assert.Same(surface.ServiceContainer, surface.GetService(surface.ServiceContainer.GetType()));
+        }
+
+        [Theory]
+        [InlineData(typeof(IServiceContainer))]
+        [InlineData(typeof(ServiceContainer))]
+        public void DesignSurface_GetService_IServiceContainer_ReturnsExpected(Type serviceType)
+        {
+            var surface = new SubDesignSurface();
+            Assert.Same(surface.ServiceContainer, surface.GetService(serviceType));
+        }
+
+        [Theory]
+        [MemberData(nameof(ServiceContainer_FixedService_TestData))]
+        public void DesignSurface_GetService_GetFixedService_ReturnsExpected(Type serviceType)
+        {
+            var surface = new SubDesignSurface();
+            Assert.Same(surface.Host, surface.GetService(serviceType));
+        }
+
+        [Fact]
         public void DesignSurface_GetService_InvokeWithoutServiceProvider_ReturnsNull()
         {
             var surface = new DesignSurface();
             Assert.Null(surface.GetService(typeof(int)));
+        }
+
+        [Theory]
+        [MemberData(nameof(ServiceContainer_FixedService_TestData))]
+        public void DesignSurface_GetService_Disposed_ReturnsNull(Type serviceType)
+        {
+            var surface = new SubDesignSurface();
+            surface.Dispose();
+            Assert.Null(surface.GetService(serviceType));
         }
 
         [Theory]
@@ -1002,6 +1244,102 @@ namespace System.ComponentModel.Design.Tests
         [Designer(typeof(RootComponentDesigner), typeof(IRootDesigner))]
         private class RootDesignerComponent : Component
         {
+        }
+
+        private class ClassWithPublicConstructor
+        {
+            public ClassWithPublicConstructor()
+            {
+            }
+
+            public ClassWithPublicConstructor(IContainer container)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class ComponentWithPublicConstructor : Component
+        {
+            public ComponentWithPublicConstructor()
+            {
+            }
+
+            public ComponentWithPublicConstructor(IContainer container)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class ClassWithPrivateDefaultConstructor
+        {
+            private ClassWithPrivateDefaultConstructor()
+            {
+            }
+
+            private ClassWithPrivateDefaultConstructor(IContainer container)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class ComponentWithPrivateDefaultConstructor : Component
+        {
+            private ComponentWithPrivateDefaultConstructor()
+            {
+            }
+
+            private ComponentWithPrivateDefaultConstructor(IContainer container)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class ComponentWithIContainerConstructor : Component
+        {
+            public new IContainer Container { get; set; }
+
+            public ComponentWithIContainerConstructor(IContainer container)
+            {
+                Container = container;
+            }
+        }
+
+        private class ClassWithIContainerConstructor
+        {
+            public IContainer Container { get; set; }
+
+            public ClassWithIContainerConstructor(IContainer container)
+            {
+                Container = container;
+            }
+        }
+
+        private class ClassWithNoMatchingConstructor
+        {
+            private ClassWithNoMatchingConstructor(bool value)
+            {
+            }
+        }
+
+        private class ComponentWithNoMatchingConstructor : Component
+        {
+            private ComponentWithNoMatchingConstructor(bool value)
+            {
+            }
+        }
+
+        private class ClassWithPrivateIContainerConstructor
+        {
+            private ClassWithPrivateIContainerConstructor(IContainer container)
+            {
+            }
+        }
+
+        private class ComponentWithPrivateIContainerConstructor : Component
+        {
+            private ComponentWithPrivateIContainerConstructor(IContainer container)
+            {
+            }
         }
     }
 }

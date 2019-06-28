@@ -822,7 +822,7 @@ namespace System.Windows.Forms.Design
                         if (parentItem != null)
                         {
                             ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(parentItem);
-                            ToolStripDropDown topmost = (itemDesigner == null) ? null : itemDesigner.GetFirstDropDown((ToolStripDropDownItem)parentItem);
+                            ToolStripDropDown topmost = itemDesigner?.GetFirstDropDown((ToolStripDropDownItem)parentItem);
                             ToolStripItem topMostItem = (topmost == null) ? parentItem : topmost.OwnerItem;
                             if (topMostItem != null && topMostItem.Owner == ToolStrip)
                             {
@@ -2224,7 +2224,7 @@ namespace System.Windows.Forms.Design
                "AllowDrop",
                "AllowItemReorder"
             };
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];

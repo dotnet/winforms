@@ -324,11 +324,11 @@ namespace System.Windows.Forms.Tests
             {
                 Format = value
             };
-            Assert.Same(expected, style.Format);
+            Assert.Equal(expected, style.Format);
 
             // Set same.
             style.Format = value;
-            Assert.Same(expected, style.Format);
+            Assert.Equal(expected, style.Format);
         }
 
         [Theory]
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Tests
                 Format = "value"
             };
             style.Format = value;
-            Assert.Same(expected, style.Format);
+            Assert.Equal(expected, style.Format);
         }
 
         public static IEnumerable<object[]> FormatProvider_TestData()
@@ -845,7 +845,7 @@ namespace System.Windows.Forms.Tests
             var formatProvider = new NumberFormatInfo();
 
             yield return new object[] { new DataGridViewCellStyle(), new DataGridViewCellStyle(), true };
-            
+
             yield return new object[]
             {
                 new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomCenter },

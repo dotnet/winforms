@@ -53,8 +53,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[]
             {
                 new ColumnHeader(),
-                new Type[0],
-                new object[0]
+                Array.Empty<Type>(),
+                Array.Empty<object>()
             };
             yield return new object[]
             {
@@ -71,14 +71,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[]
             {
                 new PrivateIntConstructor() { ImageIndex = 1 },
-                new Type[0],
-                new object[0]
+                Array.Empty<Type>(),
+                Array.Empty<object>()
             };
             yield return new object[]
             {
                 new PrivateStringConstructor() { ImageKey = "imageKey" },
-                new Type[0],
-                new object[0]
+                Array.Empty<Type>(),
+                Array.Empty<object>()
             };
             yield return new object[]
             {

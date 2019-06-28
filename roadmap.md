@@ -27,22 +27,16 @@ roadmap][core-roadmap].
 If you'd like to contribute to WinForms, please take a look at our [Contributing
 Guide](Documentation/contributing.md).
 
-## Shorter-Term Feature Backlog
-
-* Port existing functional tests and test infrastructure to this repository
-* Add Application property for DPI Awareness setting
-
-## Longer-Term Feature Backlog
+## Feature Backlog
 
 * Add WinForms Designer support for .NET Core 3 projects in a Visual Studio 2019 update
 * Fix existing scaling bugs in Per Monitor DPI aware applications
 * Add a new “clean" way of calculating location/size information in PMA mode.
 * Make new projects be per monitor aware
-* Add Edge browser control
-* Add Data Visualization controls
+* Add Chromium-based Edge browser control
 * Improve accessibility support for some missing UIA interfaces
 * Improve performance of WinForms runtime
 
 [comment]: <> (URI Links)
 
-[core-roadmap]: roadmap.md
+[core-roadmap]: https://github.com/dotnet/core/blob/master/roadmap.md

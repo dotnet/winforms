@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private int _smallChange = 1;
         private int _largeChange = 10;
         private int _value = 0;
-        private ScrollOrientation _scrollOrientation;
+        private readonly ScrollOrientation _scrollOrientation;
         private int _wheelDelta = 0;
         private bool _scaleScrollBarForDpiChange = true;
 
@@ -603,12 +603,14 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && Enabled)
             {
-                var si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
-                si.fMask = NativeMethods.SIF_ALL;
-                si.nMin = _minimum;
-                si.nMax = _maximum;
-                si.nPage = LargeChange;
+                var si = new NativeMethods.SCROLLINFO
+                {
+                    cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
+                    fMask = NativeMethods.SIF_ALL,
+                    nMin = _minimum,
+                    nMax = _maximum,
+                    nPage = LargeChange
+                };
 
                 if (RightToLeft == RightToLeft.Yes)
                 {
@@ -699,8 +701,10 @@ namespace System.Windows.Forms
 
                 case ScrollEventType.ThumbPosition:
                 case ScrollEventType.ThumbTrack:
-                    var si = new NativeMethods.SCROLLINFO();
-                    si.fMask = NativeMethods.SIF_TRACKPOS;
+                    var si = new NativeMethods.SCROLLINFO
+                    {
+                        fMask = NativeMethods.SIF_TRACKPOS
+                    };
                     SafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_CTL, si);
 
                     if (RightToLeft == RightToLeft.Yes)

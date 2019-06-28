@@ -32,7 +32,11 @@ namespace System.Drawing.Design
         {
             object returnValue = value;
 
-            if (provider == null) return value;
+            if (provider == null)
+            {
+                return value;
+            }
+
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
 
             if (edSvc != null)
@@ -67,7 +71,7 @@ namespace System.Drawing.Design
         {
             private object value;
             private IWindowsFormsEditorService edSvc;
-            private TypeConverter cursorConverter;
+            private readonly TypeConverter cursorConverter;
             private UITypeEditor editor;
 
             public CursorUI(UITypeEditor editor)

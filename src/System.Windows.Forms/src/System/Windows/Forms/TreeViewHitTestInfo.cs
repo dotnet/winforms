@@ -2,44 +2,51 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
     using System;
-    
-    /// <devdoc>
+
+    /// <summary>
     ///    <para>
     ///       Specifies the return value for HITTEST on treeview.
     ///    </para>
-    /// </devdoc>
-    public class TreeViewHitTestInfo {
+    /// </summary>
+    public class TreeViewHitTestInfo
+    {
 
-        private TreeViewHitTestLocations loc;
-        private TreeNode node;
+        private readonly TreeViewHitTestLocations loc;
+        private readonly TreeNode node;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a TreeViewHitTestInfo instance.
-        /// </devdoc>
-        public TreeViewHitTestInfo(TreeNode hitNode, TreeViewHitTestLocations hitLocation) {
-            this.node = hitNode;
-            this.loc = hitLocation;
+        /// </summary>
+        public TreeViewHitTestInfo(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
+        {
+            node = hitNode;
+            loc = hitLocation;
         }
-        
 
-        /// <devdoc>
+
+        /// <summary>
         ///     This gives the exact location returned by hit test on treeview.
-        /// </devdoc>
-        public TreeViewHitTestLocations Location {
-            get {
+        /// </summary>
+        public TreeViewHitTestLocations Location
+        {
+            get
+            {
                 return loc;
             }
         }
-        
-        /// <devdoc>
+
+        /// <summary>
         ///     This gives the node returned by hit test on treeview.
-        /// </devdoc>
-        public TreeNode Node {
-            get {
+        /// </summary>
+        public TreeNode Node
+        {
+            get
+            {
                 return node;
             }
         }

@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
 
         [ThreadStatic]
         private static Dictionary<Type, Bitmap> s_cachedWinformsImages;
-        private static string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
+        private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
 
         private ToolStripDesignerUtils()
         {
@@ -38,17 +38,17 @@ namespace System.Windows.Forms.Design
         #region NewItemTypeLists
         // This section controls the ordering of standard item types in all the various pieces of toolstrip designer UI.
         // ToolStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForToolStrip = 
-            new Type[]{typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar)};
+        private static readonly Type[] s_newItemTypesForToolStrip =
+            new Type[] { typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar) };
         // StatusStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForStatusStrip = 
-            new Type[]{typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton)};
+        private static readonly Type[] s_newItemTypesForStatusStrip =
+            new Type[] { typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton) };
         // MenuStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForMenuStrip = 
-            new Type[]{typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox)};
+        private static readonly Type[] s_newItemTypesForMenuStrip =
+            new Type[] { typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox) };
         // ToolStripDropDown - roughly same as menu strip.
-        private static readonly Type[] s_newItemTypesForToolStripDropDownMenu = 
-            new Type[]{typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox)};
+        private static readonly Type[] s_newItemTypesForToolStripDropDownMenu =
+            new Type[] { typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox) };
         #endregion
 
         // Get the Correct bounds for painting...
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Design
                             continue;
                         }
                         // Check if we have public constructor...
-                        ConstructorInfo ctor = t.GetConstructor(new Type[0]);
+                        ConstructorInfo ctor = t.GetConstructor(Array.Empty<Type>());
                         if (ctor == null)
                         {
                             continue;
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Design
                 }
             }
             s_customToolStripItemCount = 0;
-            return new Type[0];
+            return Array.Empty<Type>();
         }
 
         /// <summary> 

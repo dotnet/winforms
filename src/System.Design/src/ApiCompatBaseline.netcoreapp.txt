@@ -6,12 +6,10 @@ TypesMustExist : Type 'System.ComponentModel.Design.BinaryEditor' does not exist
 TypesMustExist : Type 'System.ComponentModel.Design.ByteViewer' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ComponentActionsType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DateTimeEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionHeaderItem' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionTextItem' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeEventHandler' does not exist in the implementation but it does exist in the contract.

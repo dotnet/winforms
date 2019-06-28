@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         // Support for property change event hooking on list items
         private object _currentItemHookedForItemChange = null;
         private object _lastCurrentItem = null;
-        private EventHandler _listItemPropertyChangedHandler;
+        private readonly EventHandler _listItemPropertyChangedHandler;
 
         // State data
         private int _addNewPos = -1;
@@ -129,7 +129,7 @@ namespace System.Windows.Forms
             container.Add(this);
         }
 
-        private bool AllowNewInternal(bool checkconstructor)
+        private bool AllowNewInternal(bool checkConstructor)
         {
             if (_disposedOrFinalized)
             {
@@ -149,13 +149,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                return IsListWriteable(checkconstructor);
+                return IsListWriteable(checkConstructor);
             }
         }
 
-        private bool IsListWriteable(bool checkconstructor)
+        private bool IsListWriteable(bool checkConstructor)
         {
-            return !List.IsReadOnly && !List.IsFixedSize && (!checkconstructor || _itemConstructor != null);
+            return !List.IsReadOnly && !List.IsFixedSize && (!checkConstructor || _itemConstructor != null);
         }
 
         [Browsable(false)]
@@ -315,14 +315,11 @@ namespace System.Windows.Forms
             {
                 ListSortDescriptionCollection sortsColln = null;
 
-                IBindingListView iblv = List as IBindingListView;
-                IBindingList ibl = List as IBindingList;
-
-                if (iblv != null && iblv.SupportsAdvancedSorting)
+                if (List is IBindingListView iblv && iblv.SupportsAdvancedSorting)
                 {
                     sortsColln = iblv.SortDescriptions;
                 }
-                else if (ibl != null && ibl.SupportsSorting && ibl.IsSorted)
+                else if (List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
                 {
                     ListSortDescription[] sortsArray = new ListSortDescription[1];
                     sortsArray[0] = new ListSortDescription(ibl.SortProperty, ibl.SortDirection);
@@ -614,13 +611,13 @@ namespace System.Windows.Forms
             OnDataError(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Unhook BindingSource from its data source, since the data source could be some
         /// global object who's lifetime exceeds the lifetime of the parent form. Otherwise
         /// the BindingSource (and any components bound through it) will end up in limbo,
         /// still processing list change events, etc. And when unhooking from the data source,
         /// take care not to trigger any events that could confuse compoents bound to us.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -916,8 +913,7 @@ namespace System.Windows.Forms
                 // Do what RelatedCurrencyManager does when the parent changes:
                 // 1. PullData from the controls into the back end.
                 // 2. Don't EndEdit the transaction.
-                bool success;
-                _currencyManager.PullData(out success);
+                _currencyManager.PullData(out bool success);
             }
             finally
             {
@@ -1104,7 +1100,7 @@ namespace System.Windows.Forms
         /// Binds the BindingSource to the list specified by its DataSource and DataMember
         /// properties.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "List is cast to IEnumerable twice. Acceptible trade-off versus code clarity (this method contains *critical* logic).")]
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "List is cast to IEnumerable twice. Acceptible trade-off versus code clarity (this method contains *critical* logic).")]
         private void ResetList()
         {
             // Don't bind during initialization, since the data source may not have been initialized yet.
@@ -1126,7 +1122,7 @@ namespace System.Windows.Forms
             //
             // Note: The method below will throw an exception if a data member is specified
             // but does not correspond to a valid property on the data source.
-            object dataSourceInstance = (_dataSource is Type) ? GetListFromType(_dataSource as Type) : _dataSource;
+            object dataSourceInstance = _dataSource is Type dataSourceType ? GetListFromType(dataSourceType) : _dataSource;
             object list = ListBindingHelper.GetList(dataSourceInstance, _dataMember);
             _listExtractedFromEnumerable = false;
 
@@ -1151,7 +1147,9 @@ namespace System.Windows.Forms
                     // GetListFromEnumerable returns null if there are no elements
                     // Don't consider it a list of enumerables in this case
                     if (bindingList != null)
+                    {
                         _listExtractedFromEnumerable = true;
+                    }
                 }
                 // If it's not an IList, IListSource or IEnumerable
                 if (bindingList == null)
@@ -1178,7 +1176,7 @@ namespace System.Windows.Forms
             }
 
             // Bind to this list now
-            SetList(bindingList, true, true);
+            SetList(bindingList, metaDataChanged: true, applySortAndFilter: true);
         }
 
         /// <summary>
@@ -1200,8 +1198,7 @@ namespace System.Windows.Forms
             UnhookItemChangedEventsForOldCurrent();
 
             // Bind to the new list
-            IList listInternal = ListBindingHelper.GetList(list) as IList;
-            if (listInternal == null)
+            if (!(ListBindingHelper.GetList(list) is IList listInternal))
             {
                 listInternal = list;
             }
@@ -1232,7 +1229,7 @@ namespace System.Windows.Forms
                 _itemConstructor = _itemType.GetConstructor(BindingFlags.Public |
                                                                     BindingFlags.Instance |
                                                                     BindingFlags.CreateInstance,
-                                                                    null, new Type[0], null);
+                                                                    null, Array.Empty<Type>(), null);
             }
 
             // Wire stuff up to the new list
@@ -1419,12 +1416,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Respond to late completion of the DataSource's initialization, by completing our
         /// own initialization. This situation can arise if the call to the DataSource's
         /// EndInit() method comes after the call to the BindingSource's EndInit() method
         /// (since code-generated ordering of these calls is non-deterministic).
-        /// </devdoc>
+        /// </summary>
         private void DataSource_Initialized(object sender, EventArgs e)
         {
             if (DataSource is ISupportInitializeNotification dsInit)
@@ -1597,12 +1594,12 @@ namespace System.Windows.Forms
         public virtual object AddNew()
         {
             // Throw if adding new items has been disabled
-            if (!AllowNewInternal(false))
+            if (!AllowNewInternal(checkConstructor: false))
             {
                 throw new InvalidOperationException(SR.BindingSourceBindingListWrapperAddToReadOnlyList);
             }
 
-            if (!AllowNewInternal(true))
+            if (!AllowNewInternal(checkConstructor: true))
             {
                 throw new InvalidOperationException(string.Format(
                     SR.BindingSourceBindingListWrapperNeedToSetAllowNew,
@@ -1692,7 +1689,7 @@ namespace System.Windows.Forms
                 // Don't let user set value to true if inner list can never support adding of items
                 // do NOT check for a default constructor because someone will set AllowNew=True
                 // when they have overridden OnAddingNew (which we cannot detect).
-                if (value == true && !_isBindingList && !IsListWriteable(false))
+                if (value == true && !_isBindingList && !IsListWriteable(checkConstructor: false))
                 {
                     throw new InvalidOperationException(SR.NoAllowNewOnReadOnlyList);
                 }

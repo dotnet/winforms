@@ -16,8 +16,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class BaseContextMenuStrip : GroupedContextMenuStrip
     {
-        private IServiceProvider serviceProvider;
-        private Component component;
+        private readonly IServiceProvider serviceProvider;
+        private readonly Component component;
         private ToolStripMenuItem selectionMenuItem;
 
         public BaseContextMenuStrip(IServiceProvider provider, Component component) : base()
@@ -117,8 +117,7 @@ namespace System.Windows.Forms.Design
             {
                 selectionMenuItem = new ToolStripMenuItem();
 
-                IUIService uis = serviceProvider.GetService(typeof(IUIService)) as IUIService;
-                if (uis != null)
+                if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                 {
                     selectionMenuItem.DropDown.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
                     //Set the right Font
@@ -204,7 +203,7 @@ namespace System.Windows.Forms.Design
                     ForeColor = (Color)uis.Styles["VsColorPanelText"];
                 }
             }
-            GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties});
+            GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
             // ADD MENUITEMS
             AddCodeMenuItem();
             AddZorderMenuItem();
@@ -226,10 +225,9 @@ namespace System.Windows.Forms.Design
                 Font = (Font)uis.Styles["DialogFont"];
             }
 
-            foreach (ToolStripItem item in this.Items)
+            foreach (ToolStripItem item in Items)
             {
-                StandardCommandToolStripMenuItem stdItem = item as StandardCommandToolStripMenuItem;
-                if (stdItem != null)
+                if (item is StandardCommandToolStripMenuItem stdItem)
                 {
                     stdItem.RefreshItem();
                 }

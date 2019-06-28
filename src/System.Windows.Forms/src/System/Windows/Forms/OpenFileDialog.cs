@@ -15,23 +15,23 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a common dialog box
     ///       that displays the control that allows the user to open a file. This class
     ///       cannot be inherited.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed class OpenFileDialog : FileDialog
     {
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a
         ///       warning if the user specifies a file name that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         SRDescription(nameof(SR.OFDcheckFileExistsDescr))
@@ -48,12 +48,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value
         ///       indicating whether the dialog box allows multiple files to be selected.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -71,12 +71,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether
         ///       the read-only check box is selected.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -94,11 +94,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog contains a read-only check box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -116,12 +116,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Opens the file selected by the user with read-only permission.  The file
         ///       attempted is specified by the <see cref='System.Windows.Forms.FileDialog.FileName'/> property.
         ///    </para>
-        /// </devdoc>        
+        /// </summary>        
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public Stream OpenFile()
         {
@@ -134,20 +134,20 @@ namespace System.Windows.Forms
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all properties to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset()
         {
             base.Reset();
             SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays a file open dialog.
-        /// </devdoc>
+        /// </summary>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);
@@ -176,23 +176,19 @@ namespace System.Windows.Forms
             FileDialogNative.IFileOpenDialog openDialog = (FileDialogNative.IFileOpenDialog)dialog;
             if (Multiselect)
             {
-                FileDialogNative.IShellItemArray results;
-                openDialog.GetResults(out results);
-                uint count;
-                results.GetCount(out count);
+                openDialog.GetResults(out FileDialogNative.IShellItemArray results);
+                results.GetCount(out uint count);
                 string[] files = new string[count];
                 for (uint i = 0; i < count; ++i)
-                { 
-                    FileDialogNative.IShellItem item;
-                    results.GetItemAt(i, out item);
+                {
+                    results.GetItemAt(i, out FileDialogNative.IShellItem item);
                     files[unchecked((int)i)] = GetFilePathFromShellItem(item);
                 }
                 return files;
             }
             else
-            { 
-                FileDialogNative.IShellItem item;
-                openDialog.GetResult(out item);
+            {
+                openDialog.GetResult(out FileDialogNative.IShellItem item);
                 return new string[] { GetFilePathFromShellItem(item) };
             }
         }
@@ -233,7 +229,7 @@ namespace System.Windows.Forms
             {
                 string[] fullPaths = FileNames;
                 if (null == fullPaths || 0 == fullPaths.Length)
-                { return new string[0]; }
+                { return Array.Empty<string>(); }
                 string[] safePaths = new string[fullPaths.Length];
                 for (int i = 0; i < safePaths.Length; ++i)
                 {
@@ -244,7 +240,7 @@ namespace System.Windows.Forms
         }
 
         private protected override bool SettingsSupportVistaDialog
-        { 
+        {
             get => base.SettingsSupportVistaDialog && !ShowReadOnly;
         }
     }

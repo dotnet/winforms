@@ -92,8 +92,6 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            ISite site = component.Site;
-            Debug.Assert(site != null, "RemoveFromContainerPreProcess should have returned false for this.");
             RemoveWithoutUnsiting(component);
             _host.RemoveFromContainerPostProcess(component, this);
         }
@@ -137,7 +135,7 @@ namespace System.ComponentModel.Design
         private sealed class NestedSite : DesignerHost.Site, INestedSite
         {
             private readonly SiteNestedContainer _container;
-            private string _name;
+            private readonly string _name;
 
             internal NestedSite(IComponent component, DesignerHost host, string name, Container container) : base(component, host, name, container)
             {

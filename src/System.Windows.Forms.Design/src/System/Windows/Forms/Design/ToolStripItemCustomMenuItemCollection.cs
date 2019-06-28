@@ -15,8 +15,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     {
-        private ToolStripItem currentItem;
-        private IServiceProvider serviceProvider;
+        private readonly ToolStripItem currentItem;
+        private readonly IServiceProvider serviceProvider;
 
         private ToolStripMenuItem imageToolStripMenuItem;
         private ToolStripMenuItem enabledToolStripMenuItem;
@@ -92,8 +92,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private ToolStripMenuItem CreateEnumValueItem(string propertyName, string name, object value)
         {
-            ToolStripMenuItem item = new ToolStripMenuItem(name);
-            item.Tag = new EnumValueDescription(propertyName, value);
+            ToolStripMenuItem item = new ToolStripMenuItem(name)
+            {
+                Tag = new EnumValueDescription(propertyName, value)
+            };
             item.Click += new EventHandler(OnEnumValueChanged);
             return item;
         }
@@ -116,32 +118,34 @@ namespace System.Windows.Forms.Design
             ToolStripItem selectedItem = currentItem;
             if (!(selectedItem is ToolStripControlHost) && !(selectedItem is ToolStripSeparator))
             {
-                imageToolStripMenuItem = new ToolStripMenuItem();
-                imageToolStripMenuItem.Text = SR.ToolStripItemContextMenuSetImage;
-                imageToolStripMenuItem.Image = new Bitmap(typeof(ToolStripMenuItem), "image.bmp");
-                imageToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+                imageToolStripMenuItem = new ToolStripMenuItem
+                {
+                    Text = SR.ToolStripItemContextMenuSetImage,
+                    Image = new Bitmap(typeof(ToolStripMenuItem), "image.bmp"),
+                    ImageTransparentColor = Color.Magenta
+                };
                 //Add event Handlers
                 imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
                 enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
-                this.AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem});
+                AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem });
                 if (selectedItem is ToolStripMenuItem)
                 {
                     checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
                     showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
-                    this.AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem});
+                    AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
                 }
                 else
                 {
                     if (selectedItem is ToolStripLabel)
                     {
                         isLinkToolStripMenuItem = CreateBooleanItem("IsLin&k", "IsLink");
-                        this.Add(isLinkToolStripMenuItem);
+                        Add(isLinkToolStripMenuItem);
                     }
 
                     if (selectedItem is ToolStripStatusLabel)
                     {
                         springToolStripMenuItem = CreateBooleanItem("Sprin&g", "Spring");
-                        this.Add(springToolStripMenuItem);
+                        Add(springToolStripMenuItem);
                     }
 
                     leftToolStripMenuItem = CreateEnumValueItem("Alignment", "Left", ToolStripItemAlignment.Left);
@@ -152,10 +156,10 @@ namespace System.Windows.Forms.Design
                     imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                     // alignmentToolStripMenuItem
                     alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment.bmp");
-                    alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem});
+                    alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem });
                     // displayStyleToolStripMenuItem
                     displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle.bmp");
-                    displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem});
+                    displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem });
 
                     if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                     {
@@ -176,10 +180,10 @@ namespace System.Windows.Forms.Design
                             displayStyleToolStripMenuItem.DropDown.ForeColor = panelTextColor;
                         }
                     }
-                    this.AddRange(new System.Windows.Forms.ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
+                    AddRange(new System.Windows.Forms.ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
                 }
                 toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-                this.Add(toolStripSeparator1);
+                Add(toolStripSeparator1);
             }
 
             convertToolStripMenuItem = new ToolStripMenuItem
@@ -193,7 +197,7 @@ namespace System.Windows.Forms.Design
                 DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), false, serviceProvider, true)
             };
 
-            this.AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem});
+            AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
 
             if (currentItem is ToolStripDropDownItem)
             {
@@ -203,12 +207,14 @@ namespace System.Windows.Forms.Design
                     if (_designerHost.GetDesigner(currentItem) is ToolStripItemDesigner itemDesigner)
                     {
                         verbManager = new CollectionEditVerbManager(string.Format(SR.ToolStripDropDownItemCollectionEditorVerb), itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
-                        editItemsToolStripMenuItem = new ToolStripMenuItem();
-                        editItemsToolStripMenuItem.Text = SR.ToolStripDropDownItemCollectionEditorVerb;
+                        editItemsToolStripMenuItem = new ToolStripMenuItem
+                        {
+                            Text = SR.ToolStripDropDownItemCollectionEditorVerb
+                        };
                         editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
                         editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist.bmp").ToBitmap();
                         editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
-                        this.Add(editItemsToolStripMenuItem);
+                        Add(editItemsToolStripMenuItem);
                     }
                 }
             }
@@ -404,8 +410,7 @@ namespace System.Windows.Forms.Design
                 // We need to cancel the ToolStripDesigner's nested MenuItemTransaction; otherwise, we can't cancel our Transaction and the Designer will be left in an unusable state
                 if ((parent != null) && (parent.OwnerItem != null) && (parent.OwnerItem.Owner != null))
                 {
-                    ToolStripDesigner toolStripDesigner = designerHost.GetDesigner(parent.OwnerItem.Owner) as ToolStripDesigner;
-                    if (toolStripDesigner != null)
+                    if (designerHost.GetDesigner(parent.OwnerItem.Owner) is ToolStripDesigner toolStripDesigner)
                     {
                         toolStripDesigner.CancelPendingMenuItemTransaction();
                     }

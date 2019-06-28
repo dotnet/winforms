@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     If the there is data store in the data object associated with
             ///     format this will return true.
             /// </summary>
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     If the there is data store in the data object associated with
             ///     format this will return true.
             /// </summary>
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design
                 return GetDataPresent(format, false);
             }
 
-        /// <summary>
+            /// <summary>
             ///     If the there is data store in the data object associated with
             ///     format this will return true.
             /// </summary>
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats(bool autoConvert)
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats()
@@ -201,7 +201,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     Sets the data to be associated with the specific data format. For
             ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
             /// </summary>
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     Sets the data to be associated with the specific data format. For
             ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
             /// </summary>
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Design
                 throw new Exception(SR.DragDropSetDataError);
             }
 
-        /// <summary>
+            /// <summary>
             ///     Sets the data to be associated with the specific data format.
             /// </summary>
             public void SetData(Type format, object data)
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
+            /// <summary>
             ///     Stores data in the data object. The format assumed is the
             ///     class of data
             /// </summary>

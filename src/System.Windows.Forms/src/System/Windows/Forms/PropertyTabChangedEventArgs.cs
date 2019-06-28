@@ -15,9 +15,9 @@ namespace System.Windows.Forms
             OldTab = oldTab;
             NewTab = newTab;
         }
-        
+
         public PropertyTab OldTab { get; }
-        
+
         public PropertyTab NewTab { get; }
     }
 }

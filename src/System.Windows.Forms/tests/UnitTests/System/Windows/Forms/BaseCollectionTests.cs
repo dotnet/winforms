@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests
             var collection = new SubCollection(new ArrayList { 1, 2, 3 });
             Assert.Equal(3, collection.Count);
         }
-        
+
         [Fact]
         public void Count_GetDefault_ThrowsNullReferenceException()
         {
@@ -41,12 +41,12 @@ namespace System.Windows.Forms.Tests
             collection.CopyTo(array, 1);
             Assert.Equal(new object[] { 0, 1, 2, 3, 4 }, array);
         }
-        
+
         [Fact]
         public void CopyTo_InvokeDefault_ThrowsNullReferenceException()
         {
             var collection = new BaseCollection();
-            Assert.Throws<NullReferenceException>(() => collection.CopyTo(new object[0], 0));
+            Assert.Throws<NullReferenceException>(() => collection.CopyTo(Array.Empty<object>(), 0));
         }
 
         [Fact]
@@ -57,17 +57,17 @@ namespace System.Windows.Forms.Tests
             Assert.True(enumerator.MoveNext());
             Assert.Equal(1, enumerator.Current);
         }
-        
+
         [Fact]
         public void GetEnumerator_InvokeDefault_ThrowsNullReferenceException()
         {
             var collection = new BaseCollection();
-            Assert.Throws<NullReferenceException>(() => collection.CopyTo(new object[0], 0));
+            Assert.Throws<NullReferenceException>(() => collection.CopyTo(Array.Empty<object>(), 0));
         }
 
         private class SubCollection : BaseCollection
         {
-            private ArrayList _list;
+            private readonly ArrayList _list;
 
             public SubCollection(ArrayList list) => _list = list;
 

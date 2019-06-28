@@ -397,7 +397,7 @@ namespace System.ComponentModel.Design.Serialization
                     return new CodeMemberMethod[] { ctor };
                 }
             }
-            return new CodeMemberMethod[0];
+            return Array.Empty<CodeMemberMethod>();
         }
 
         /// <summary>
@@ -470,7 +470,10 @@ namespace System.ComponentModel.Design.Serialization
 #if DEBUG
                             string memberName = manager.GetName(member);
                             if (memberName == null)
+                            {
                                 memberName = member.ToString();
+                            }
+
                             Trace("--------------------------------------------------------------------");
                             Trace("     Beginning serialization of {0}", memberName);
                             Trace("--------------------------------------------------------------------");
@@ -484,7 +487,10 @@ namespace System.ComponentModel.Design.Serialization
 #if DEBUG
                 string rootName = manager.GetName(root);
                 if (rootName == null)
+                {
                     rootName = root.ToString();
+                }
+
                 Trace("--------------------------------------------------------------------");
                 Trace("     Bedginning serialization of root object {0}", rootName);
                 Trace("--------------------------------------------------------------------");

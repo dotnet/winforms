@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { TypeDescriptor.GetProperties(typeof(DataClass))[0], true, "Value1", false };
             yield return new object[] { TypeDescriptor.GetProperties(typeof(DataClass))[0], false, string.Empty, false };
-        
+
             yield return new object[] { TypeDescriptor.GetProperties(typeof(ReadOnlyDataClass))[0], true, "Value1", true };
             yield return new object[] { TypeDescriptor.GetProperties(typeof(ReadOnlyDataClass))[0], false, string.Empty, true };
         }
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void HeaderText_SetWithPropertyDescriptor_GetReturnsExpected(string value)
         {
-            var property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
             var style = new SubDataGridColumnStyle(property)
             {
                 HeaderText = value
@@ -586,7 +586,7 @@ namespace System.Windows.Forms.Tests
             dataGrid.TableStyles.Add(tableStyle);
             var style = new SubDataGridColumnStyle();
             tableStyle.GridColumnStyles.Add(style);
-            
+
             style.Width = value;
             Assert.Equal(value, style.Width);
             Assert.Equal(1, callCount);
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.Tests
             var tableStyle = new DataGridTableStyle();
             var style = new SubDataGridColumnStyle();
             tableStyle.GridColumnStyles.Add(style);
-            
+
             style.Width = value;
             Assert.Equal(value, style.Width);
 
@@ -681,10 +681,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridColumnStyle_CheckValidDataSource_HasPropertyDescriptor_Nop()
         {
-            var property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
             var style = new SubDataGridColumnStyle(property);
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager value = Assert.IsType<CurrencyManager>(context[dataSource]);
             style.CheckValidDataSource(value);
         }
@@ -701,7 +701,7 @@ namespace System.Windows.Forms.Tests
         {
             var style = new SubDataGridColumnStyle();
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager value = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Throws<InvalidOperationException>(() => style.CheckValidDataSource(value));
         }
@@ -764,7 +764,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, -2, Rectangle.Empty, false };
 
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             yield return new object[] { context[dataSource], -1, new Rectangle(1, 2, 3, 4), true };
             yield return new object[] { context[dataSource], 1, new Rectangle(-1, -2, -3, -4), true };
         }
@@ -794,7 +794,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, -2, Rectangle.Empty, false, null };
 
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             yield return new object[] { context[dataSource], -1, new Rectangle(1, 2, 3, 4), true, string.Empty };
             yield return new object[] { context[dataSource], 1, new Rectangle(-1, -2, -3, -4), true, "displayText" };
         }
@@ -899,7 +899,7 @@ namespace System.Windows.Forms.Tests
         {
             var style = new SubDataGridColumnStyle();
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager source = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Throws<InvalidOperationException>(() => style.GetColumnValueAtRow(source, 0));
         }
@@ -909,7 +909,7 @@ namespace System.Windows.Forms.Tests
         {
             var style = new NullPropertyDescriptorDataGridColumnStyle(1);
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager source = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Throws<InvalidOperationException>(() => style.GetColumnValueAtRow(source, 0));
         }
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms.Tests
         {
             var style = new SubDataGridColumnStyle();
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager source = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Throws<InvalidOperationException>(() => style.SetColumnValueAtRow(source, 0, 1));
         }
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms.Tests
         {
             var style = new NullPropertyDescriptorDataGridColumnStyle(1);
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager source = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Throws<InvalidOperationException>(() => style.SetColumnValueAtRow(source, 0, new object()));
         }
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms.Tests
             public new void SetDataGridInColumn(DataGrid value) => base.SetDataGridInColumn(value);
 
             public Action<CurrencyManager, int, Rectangle, bool, string, bool> EditAction { get; set; }
-            
+
             protected internal override void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible)
             {
                 EditAction(source, rowNum, bounds, readOnly, displayText, cellIsVisible);
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms.Tests
             }
 
             public int RequiredCallCount { get; set; }
-            
+
             private int _callCount = 0;
 
             public override PropertyDescriptor PropertyDescriptor

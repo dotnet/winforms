@@ -8,7 +8,7 @@ using System.IO;
 namespace System.Windows.Forms
 {
     public class FileDialogCustomPlacesCollection : Collection<FileDialogCustomPlace>
-    {        
+    {
         internal void Apply(FileDialogNative.IFileDialog dialog)
         {
             // Walk backwards
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Add(string path) => Add(new FileDialogCustomPlace(path)); 
+        public void Add(string path) => Add(new FileDialogCustomPlace(path));
 
         public void Add(Guid knownFolderGuid) => Add(new FileDialogCustomPlace(knownFolderGuid));
     }

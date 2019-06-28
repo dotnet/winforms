@@ -5182,7 +5182,7 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">Tamam</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
@@ -7832,8 +7832,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Açıklama Bölmesi</target>
+        <source>Description</source>
+        <target state="needs-review-translation">Açıklama Bölmesi</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">ToolBar</target>
+        <source>PropertyGrid</source>
+        <target state="needs-review-translation">ToolBar</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">

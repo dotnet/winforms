@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignSurface : IDisposable, IServiceProvider
     {
-        private IServiceProvider _parentProvider;
+        private readonly IServiceProvider _parentProvider;
         private ServiceContainer _serviceContainer;
         private DesignerHost _host;
         private ICollection _loadErrors;
@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
             {
                 if (_host == null)
                 {
-                    throw new ObjectDisposedException(this.GetType().FullName);
+                    throw new ObjectDisposedException(GetType().FullName);
                 }
                 return ((IDesignerHost)_host).Container;
             }
@@ -106,7 +106,7 @@ namespace System.ComponentModel.Design
                 {
                     return _loadErrors;
                 }
-                return new object[0];
+                return Array.Empty<object>();
             }
         }
 
@@ -178,8 +178,7 @@ namespace System.ComponentModel.Design
                     throw ex;
                 }
 
-                IRootDesigner rootDesigner = ((IDesignerHost)_host).GetDesigner(rootComponent) as IRootDesigner;
-                if (rootDesigner == null)
+                if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
                 {
                     ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {
@@ -196,8 +195,10 @@ namespace System.ComponentModel.Design
                 }
 
                 // We are out of luck here.  Throw.
-                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology);
-                ex.HelpLink = SR.DesignSurfaceNoSupportedTechnology;
+                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
+                {
+                    HelpLink = SR.DesignSurfaceNoSupportedTechnology
+                };
                 throw ex;
             }
         }
@@ -324,10 +325,10 @@ namespace System.ComponentModel.Design
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
-            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(new Type[0]);
+            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
             if (ctor != null)
             {
-                instance = TypeDescriptor.CreateInstance(this, type, new Type[0], new object[0]);
+                instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
             }
             else
             {

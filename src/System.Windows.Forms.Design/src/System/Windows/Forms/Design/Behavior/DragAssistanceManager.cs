@@ -40,8 +40,8 @@ namespace System.Windows.Forms.Design.Behavior
         //T hese are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
         private readonly ArrayList _tempVertLines = new ArrayList();
         private readonly ArrayList _tempHorzLines = new ArrayList();
-        private Line[] _vertLines = new Line[0];
-        private Line[] _horzLines = new Line[0];
+        private Line[] _vertLines = Array.Empty<Line>();
+        private Line[] _horzLines = Array.Empty<Line>();
         // When we draw snap lines - we only draw lines from the targetControl to the control we're snapping to.  To do this, we'll keep a hashtable... format: snapLineToBounds[SnapLine]=ControlBounds.
         private readonly Hashtable _snapLineToBounds = new Hashtable();
         // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc.  From there, if we receive a test hook message requesting these - we got 'em
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
             else
             {
-                lines = new Line[0];
+                lines = Array.Empty<Line>();
             }
             return lines;
         }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return _recentLines;
             }
-            return new Line[0];
+            return Array.Empty<Line>();
         }
 
         private void IdentifyAndStoreValidLines(ArrayList snapLines, int[] distances, Rectangle dragBounds, int smallestDistance)

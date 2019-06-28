@@ -21,9 +21,9 @@ namespace System.ComponentModel.Design
         public void CopyTo(DesignerActionItem[] array, int index) => List.CopyTo(array, index);
 
         public int IndexOf(DesignerActionItem value) => List.IndexOf(value);
-        
+
         public void Insert(int index, DesignerActionItem value) => List.Insert(index, value);
-        
+
         public void Remove(DesignerActionItem value) => List.Remove(value);
     }
 }

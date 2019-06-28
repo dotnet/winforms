@@ -4,31 +4,31 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how parent row labels of a DataGrid
     /// control are displayed.
-    /// </devdoc>
+    /// </summary>
     public enum DataGridParentRowsLabelStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// Display no parent row labels.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Displaya the parent table name.
-        /// </devdoc>
+        /// </summary>
         TableName = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Displaya the parent column name.
-        /// </devdoc>
+        /// </summary>
         ColumnName = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// Displays
         /// both the parent table and column names.
-        /// </devdoc>
+        /// </summary>
         Both = 3,
     }
 }
