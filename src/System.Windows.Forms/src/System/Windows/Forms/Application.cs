@@ -1447,7 +1447,6 @@ namespace System.Windows.Forms
         ///     This switch determines the default text rendering engine to use by some controls that support 
         ///     switching rendering engine.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SetCompatibleTextRenderingDefault(bool defaultValue)
         {
             if (NativeWindow.AnyHandleCreated)

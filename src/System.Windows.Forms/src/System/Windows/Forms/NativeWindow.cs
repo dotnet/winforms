@@ -21,7 +21,6 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Text;
     using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Versioning;
 
     /// <summary>
@@ -83,7 +82,6 @@ namespace System.Windows.Forms
         private static readonly object createWindowSyncObject = new object();
 
 #if DEBUG
-        AppDomain handleCreatedIn = null;
         string subclassStatus = "None";
 #endif
         IntPtr handle;
@@ -227,10 +225,6 @@ namespace System.Windows.Forms
         {
             get
             {
-#if DEBUG
-                Debug.Assert(handle == IntPtr.Zero || (handleCreatedIn != null && handleCreatedIn == AppDomain.CurrentDomain),
-                             "Attempt to access a handle created in a different domain");
-
                 // We cannot assert this here.  Consider the case where someone has created an HWND on a thread but
                 // never started a message pump.  When the thread is cleaned up by the OS USER will destroy all window
                 // handles. This happens long before we finalize, so when finalization does come along and we
@@ -238,7 +232,7 @@ namespace System.Windows.Forms
                 //
                 // Debug.Assert(handle == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(this, handle)), 
                 //             "Attempt to access a non-valid handle ");
-#endif
+
                 return handle;
             }
         }
@@ -253,7 +247,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal NativeWindow PreviousWindow
         {
-            [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             get
             {
                 return previousWindow;
@@ -351,7 +344,6 @@ namespace System.Windows.Forms
 
         internal static bool WndProcShouldBeDebuggable
         {
-            [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             get
             {
                 return (WndProcFlags & UseDebuggableWndProc) != 0;
@@ -633,9 +625,7 @@ namespace System.Windows.Forms
             {
                 CheckReleased();
                 Debug.Assert(handle != IntPtr.Zero, "handle is 0");
-#if DEBUG
-                handleCreatedIn = AppDomain.CurrentDomain;
-#endif
+
                 this.handle = handle;
 
                 if (userDefWindowProc == IntPtr.Zero)
@@ -987,7 +977,6 @@ namespace System.Windows.Forms
         ///    <paramref name="handle"/>.
         ///    </para>
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static NativeWindow FromHandle(IntPtr handle)
         {
             if (handle != IntPtr.Zero && handleCount > 0)

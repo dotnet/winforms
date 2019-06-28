@@ -132,7 +132,6 @@ namespace System.Windows.Forms
 
         public string Id
         {
-            [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             get
             {
                 return NativeHtmlElement.GetId();
@@ -417,7 +416,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public string GetAttribute(string attributeName)
         {
             object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);

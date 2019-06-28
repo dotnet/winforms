@@ -4,12 +4,8 @@
 
 namespace System.Windows.Forms
 {
-
     using System.Runtime.InteropServices.ComTypes;
     using System.Runtime.InteropServices;
-    using System.Collections;
-    using System.Diagnostics.CodeAnalysis;
-
 
     /// <summary>
     ///    <para> 
@@ -81,7 +77,7 @@ namespace System.Windows.Forms
             }
             return retVal;
         }
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+
         public void ReleaseAutoComplete()
         {
             if (autoCompleteObject2 != null)
