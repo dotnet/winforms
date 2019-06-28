@@ -9,12 +9,12 @@ using System.Windows.Forms.IntegrationTests.Common;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
-    public class MauiButtonTest : ReflectBase
+    public class MauiButtonTests : ReflectBase
     {
         private readonly Button _button;
         private bool _wasClicked = false;
 
-        public MauiButtonTest(string[] args) : base(args)
+        public MauiButtonTests(string[] args) : base(args)
         {
             this.BringToForeground();
             _button = new Button
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         public static void Main(string[] args)
         {
             Thread.CurrentThread.SetCulture("en-US");
-            Application.Run(new MauiButtonTest(args));
+            Application.Run(new MauiButtonTests(args));
         }
 
         [Scenario(true)]

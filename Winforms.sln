@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibil
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maui", "maui", "{8F20A905-BD37-4D80-B8DF-FA45276FC23F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiButtonTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiButtonTest\MauiButtonTest.csproj", "{8AB0265C-B32D-444E-BFCB-8902FE45143A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiButtonTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiButtonTests\MauiButtonTests.csproj", "{8AB0265C-B32D-444E-BFCB-8902FE45143A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Maui.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.Maui.IntegrationTests\System.Windows.Forms.Maui.IntegrationTests.csproj", "{87CF8481-647B-4951-8A57-468B2F0CD84B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -65,7 +65,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsControlsClassicTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiComboBoxTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiComboBoxTest\MauiComboBoxTest.csproj", "{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiComboBoxTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiComboBoxTests\MauiComboBoxTests.csproj", "{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFD4B8B0-C7B9-4661-8E10-D78473B64004}"
 	ProjectSection(SolutionItems) = preProject
