@@ -67,20 +67,40 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Integr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiComboBoxTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiComboBoxTest\MauiComboBoxTest.csproj", "{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFD4B8B0-C7B9-4661-8E10-D78473B64004}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{462AD69A-9395-4E98-882D-569CDE562559}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
 		azure-pipelines.yml = azure-pipelines.yml
-		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		build-local.ps1 = build-local.ps1
+		build.cmd = build.cmd
+		eng\ci.yml = eng\ci.yml
+		eng\CIBuild.cmd = eng\CIBuild.cmd
+		eng\CodeCoverage.proj = eng\CodeCoverage.proj
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
-		LICENSE.TXT = LICENSE.TXT
+		eng\FacadeAssemblies.props = eng\FacadeAssemblies.props
+		global.json = global.json
 		NuGet.Config = NuGet.Config
+		eng\Version.Details.xml = eng\Version.Details.xml
+		eng\versioning.targets = eng\versioning.targets
+		eng\Versions.props = eng\Versions.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{C029199F-7D5C-417C-AA52-913A214E3285}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\building.md = Documentation\building.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		Documentation\contributing.md = Documentation\contributing.md
+		Documentation\debugging.md = Documentation\debugging.md
+		Documentation\developer-guide.md = Documentation\developer-guide.md
+		Documentation\getting-started.md = Documentation\getting-started.md
+		Documentation\intellisense.md = Documentation\intellisense.md
+		Documentation\issue-guide.md = Documentation\issue-guide.md
+		Documentation\porting-guidelines.md = Documentation\porting-guidelines.md
 		README.md = README.md
 		roadmap.md = roadmap.md
+		Documentation\testing.md = Documentation\testing.md
 		THIRD-PARTY-NOTICES.TXT = THIRD-PARTY-NOTICES.TXT
+		Documentation\winforms-designer.md = Documentation\winforms-designer.md
 	EndProjectSection
 EndProject
 Global
