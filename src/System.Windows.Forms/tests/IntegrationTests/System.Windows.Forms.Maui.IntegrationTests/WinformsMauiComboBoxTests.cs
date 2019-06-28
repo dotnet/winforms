@@ -23,9 +23,9 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// instead of in parallel. This is to migitate race conditions of multiple forms open at once.
     /// </summary>
     [Collection("Maui")]
-    public class WinformsMauiComboBoxTest
+    public class WinformsMauiComboBoxTests
     {
-        private const string ProjectName = "MauiComboBoxTest";
+        private const string ProjectName = "MauiComboBoxTests";
 
         [Theory]
         [MauiData(ProjectName)]

@@ -12,13 +12,13 @@ using ReflectTools;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
-    public class MauiComboBoxTest : ReflectBase
+    public class MauiComboBoxTests : ReflectBase
     {
         private const int NumItems = 200;
         private readonly ComboBox _comboBox;
         private int _numEvents = 0;
 
-        public MauiComboBoxTest(string[] args) : base(args)
+        public MauiComboBoxTests(string[] args) : base(args)
         {
             this.BringToForeground();
             _comboBox = new ComboBox();
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         public static void Main(string[] args)
         {
             Thread.CurrentThread.SetCulture("en-US");
-            Application.Run(new MauiComboBoxTest(args));
+            Application.Run(new MauiComboBoxTests(args));
         }
 
         [Scenario(true)]
