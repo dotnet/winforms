@@ -2,51 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+BITMAPINFO")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+BITMAPINFO_ARRAY")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+CommonHandles")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+CREATESTRUCT")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+DIBSECTION")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+DLLVERSIONINFO")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+LOGPALETTE")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+MSOCM")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+NMDATETIMEFORMAT")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+NMDATETIMEFORMATQUERY")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+NMDATETIMEWMKEYDOWN")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+NMTTCUSTOMDRAW")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+Ole")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+OLECMD")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+OVERLAPPED")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+SHFILEINFO")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+STARTUPINFO")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+tagDVTARGETDEVICE")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+tagLOGPALETTE")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+tagOleMenuGroupWidths")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+tagSIZE")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+tagTLIBATTR")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+WNDCLASS")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.NativeMethods+XFORM")]
-
-
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+MSOCM..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+Ole..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+Util..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.ComponentModel.WeakDelegateHolder.get_IsAlive():System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+CommonHandles..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+tagDVTARGETDEVICE..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+tagLOGPALETTE..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+tagOleMenuGroupWidths..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+tagSIZE..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.NativeMethods+OLECMD..ctor()")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "System.Windows.Forms.NativeMethods+INPUTUNION.hi")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "System.Windows.Forms.NativeMethods+INPUTUNION.mi")]
 
 namespace System.Windows.Forms
 {
@@ -591,16 +549,10 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
 
-
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         public static HandleRef HWND_TOP = new HandleRef(null, (IntPtr)0);
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         public static HandleRef HWND_BOTTOM = new HandleRef(null, (IntPtr)1);
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         public static HandleRef HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         public static HandleRef HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         public static HandleRef HWND_MESSAGE = new HandleRef(null, new IntPtr(-3));
 
         public const int IME_CMODE_NATIVE = 0x0001,
@@ -1844,6 +1796,7 @@ namespace System.Windows.Forms
         public const int PD_RESULT_APPLY = 2;
 
         private static int wmMouseEnterMessage = -1;
+
         public static int WM_MOUSEENTER
         {
             get
@@ -2888,9 +2841,6 @@ namespace System.Windows.Forms
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential)]
-        // This is not our convention for managed resources.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         public class BITMAP
         {
             public int bmType = 0;
@@ -2899,7 +2849,6 @@ namespace System.Windows.Forms
             public int bmWidthBytes = 0;
             public short bmPlanes = 0;
             public short bmBitsPixel = 0;
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
             public IntPtr bmBits = IntPtr.Zero;
         }
 
@@ -2911,16 +2860,6 @@ namespace System.Windows.Forms
             public int yHotspot = 0;
             public IntPtr hbmMask = IntPtr.Zero;
             public IntPtr hbmColor = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class LOGPEN
-        {
-            public int lopnStyle = 0;
-            // lopnWidth was a by-value POINT structure
-            public int lopnWidth_x = 0;
-            public int lopnWidth_y = 0;
-            public int lopnColor = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2936,25 +2875,6 @@ namespace System.Windows.Forms
         {
             public LOGFONT()
             {
-            }
-            public LOGFONT(LOGFONT lf)
-            {
-                Debug.Assert(lf != null, "lf is null");
-
-                lfHeight = lf.lfHeight;
-                lfWidth = lf.lfWidth;
-                lfEscapement = lf.lfEscapement;
-                lfOrientation = lf.lfOrientation;
-                lfWeight = lf.lfWeight;
-                lfItalic = lf.lfItalic;
-                lfUnderline = lf.lfUnderline;
-                lfStrikeOut = lf.lfStrikeOut;
-                lfCharSet = lf.lfCharSet;
-                lfOutPrecision = lf.lfOutPrecision;
-                lfClipPrecision = lf.lfClipPrecision;
-                lfQuality = lf.lfQuality;
-                lfPitchAndFamily = lf.lfPitchAndFamily;
-                lfFaceName = lf.lfFaceName;
             }
             public int lfHeight;
             public int lfWidth;
@@ -3543,18 +3463,7 @@ namespace System.Windows.Forms
             }
 
             [DllImport(ExternDll.Oleaut32, CharSet = CharSet.Auto)]
-
-            private static extern IntPtr SysAllocString([In, MarshalAs(UnmanagedType.LPWStr)]string s);
-
-            [DllImport(ExternDll.Oleaut32, CharSet = CharSet.Auto)]
-
             private static extern void SysFreeString(IntPtr pbstr);
-
-            public void SetLong(long lVal)
-            {
-                data1 = (IntPtr)(lVal & 0xFFFFFFFF);
-                data2 = (IntPtr)((lVal >> 32) & 0xFFFFFFFF);
-            }
 
             public object ToObject()
             {
@@ -4012,17 +3921,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct NMTVGETINFOTIP
-        {
-            public NMHDR nmhdr;
-            public string pszText;
-            public int cchTextMax;
-            public IntPtr item;
-            public IntPtr lParam;
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class NMTVDISPINFO
         {
             public NMHDR hdr;
@@ -4375,8 +4273,6 @@ namespace System.Windows.Forms
             public IntPtr lItemlParam;
         }
 
-
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class MCHITTESTINFO
         {
@@ -4669,7 +4565,6 @@ namespace System.Windows.Forms
             public SYSTEMTIME st = null;
         }
 
-
         [StructLayout(LayoutKind.Sequential)]
         public class COPYDATASTRUCT
         {
@@ -4687,8 +4582,6 @@ namespace System.Windows.Forms
             public IntPtr pItem = IntPtr.Zero;    // HDITEM*
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
-        [StructLayout(LayoutKind.Sequential)]
         public class MOUSEHOOKSTRUCT
         {
             // pt was a by-value POINT structure
@@ -4860,7 +4753,6 @@ namespace System.Windows.Forms
             public string lpstrText;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
         public class ENLINK
         {
@@ -5256,13 +5148,6 @@ namespace System.Windows.Forms
             public short wParamFlags;
         }
 
-
-        public enum tagSYSKIND
-        {
-            SYS_WIN16 = 0,
-            SYS_MAC = 2
-        }
-
         public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
 
         [ComImport]
@@ -5475,24 +5360,6 @@ namespace System.Windows.Forms
             public byte Reserved1;
             public int BatteryLifeTime;
             public int BatteryFullLifeTime;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal class DLLVERSIONINFO
-        {
-            internal uint cbSize = 0;
-            internal uint dwMajorVersion = 0;
-            internal uint dwMinorVersion = 0;
-            internal uint dwBuildNumber = 0;
-            internal uint dwPlatformID = 0;
-        }
-
-        public enum OLERENDER
-        {
-            OLERENDER_NONE = 0,
-            OLERENDER_DRAW = 1,
-            OLERENDER_FORMAT = 2,
-            OLERENDER_ASIS = 3
         }
 
         public enum PROCESS_DPI_AWARENESS
@@ -5853,24 +5720,27 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] POINT pt, int cPoints);
 
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr WindowFromPoint(int x, int y);
+
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
+
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
+
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
         private static extern bool IntDeleteObject(IntPtr hObject);
+
         public static bool DeleteObject(IntPtr hObject)
         {
             Interop.HandleCollector.Remove(hObject, Interop.CommonHandles.GDI);

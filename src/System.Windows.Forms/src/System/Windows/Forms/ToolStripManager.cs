@@ -1571,10 +1571,8 @@ namespace System.Windows.Forms
 
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]  // since this has the lifetime of the thread, theres no great way to dispose.
             private class HostedWindowsFormsMessageHook
             {
-                [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
                 private IntPtr messageHookHandle = IntPtr.Zero;
                 private bool isHooked = false;
                 private NativeMethods.HookProc hookProc;

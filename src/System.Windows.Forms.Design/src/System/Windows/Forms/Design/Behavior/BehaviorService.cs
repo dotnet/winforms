@@ -1065,7 +1065,6 @@ namespace System.Windows.Forms.Design.Behavior
                 private AdornerWindow _currentAdornerWindow;
                 private int _thisProcessID = 0;
                 private GCHandle _mouseHookRoot;
-                [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
 

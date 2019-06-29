@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 namespace System.Windows.Forms
 {
@@ -18,6 +17,7 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Kernel32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
         public static extern IntPtr GetProcAddress(HandleRef hModule, string lpProcName);
+
         [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetModuleHandle(string modName);
 
@@ -73,7 +73,6 @@ namespace System.Windows.Forms
         internal static extern DpiAwarenessContext SetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
 
         /// <summary>
@@ -89,23 +88,6 @@ namespace System.Windows.Forms
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Tries to get thread dpi awareness context
-        /// </summary>
-        /// <returns> returns thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
-        public static DpiAwarenessContext TryGetThreadDpiAwarenessContext()
-        {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetThreadDpiAwarenessContext"))
-            {
-                return GetThreadDpiAwarenessContext();
-            }
-            else
-            {
-                // legacy OS that does not have this API available.
-                return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
-            }
         }
 
         /// <summary>

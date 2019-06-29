@@ -2,16 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA902:MovePInvokesToNativeMethodsClass", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA902:MovePInvokesToNativeMethodsClass", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
+using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Text;
+using System.Runtime.InteropServices;
+using System.Globalization;
 
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
+[assembly: SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
 
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
@@ -21,16 +22,6 @@ namespace System.Drawing.Internal
 namespace System.Internal
 #endif
 {
-    using System;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Reflection;
-    using System.Text;
-    using System.Runtime.InteropServices;
-    using System.Globalization;
-
-
     /// <summary>
     /// Debug help utility.
     /// </summary>
@@ -44,6 +35,7 @@ namespace System.Internal
 
         [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetUserDefaultLCID();
+
         [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int FormatMessage(int dwFlags, HandleRef lpSource, int dwMessageId, int dwLanguageId, StringBuilder lpBuffer, int nSize, HandleRef arguments);
 
@@ -255,16 +247,6 @@ namespace System.Internal
         }
 
         /// <summary>
-        /// </summary>
-        public static string StackTrace
-        {
-            get
-            {
-                return Environment.StackTrace;
-            }
-        }
-
-        /// <summary>
         ///   Returns information about the top stack frames in a string format.  The input param determines the number of
         ///   frames to include.
         /// </summary>
@@ -349,14 +331,6 @@ namespace System.Internal
             }
 
             return trace.ToString();
-        }
-
-        /// <summary>
-        ///   Returns information about the top stack frames in a string format.
-        /// </summary>
-        public static string StackFramesToStr()
-        {
-            return StackFramesToStr(DbgUtil.gdipInitMaxFrameCount);
         }
 
         /// <summary>

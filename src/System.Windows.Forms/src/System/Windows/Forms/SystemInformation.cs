@@ -805,8 +805,8 @@ namespace System.Windows.Forms
                     s_isUserInteractive = true;
 
                     int lengthNeeded = 0;
-                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
 
+                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
                     if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, ref flags, sizeof(NativeMethods.USEROBJECTFLAGS), ref lengthNeeded))
                     {
                         if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)

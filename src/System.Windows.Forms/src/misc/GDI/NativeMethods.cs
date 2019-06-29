@@ -2,6 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
@@ -10,14 +14,6 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Collections;
-    using System.Text;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -194,14 +190,6 @@ namespace System.Experimental.Gdi
                 }
             }
 
-            public System.Drawing.Rectangle ToRectangle()
-            {
-                return new Rectangle(
-                    left,
-                    top,
-                    right - left,
-                    bottom - top);
-            }
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
             public override string ToString()
             {

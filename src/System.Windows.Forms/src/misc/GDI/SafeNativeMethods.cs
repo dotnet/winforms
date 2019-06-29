@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Runtime.InteropServices;
+
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
@@ -10,12 +13,6 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    using System;
-    using System.Text;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Runtime.Versioning;
-
     /// <summary>
     ///   This is an extract of the System.Drawing IntNativeMethods in the CommonUI tree.
     ///   This is done to be able to compile the GDI code in both assemblies System.Drawing
@@ -31,9 +28,7 @@ namespace System.Experimental.Gdi
         // Brush.
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateSolidBrush", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-
         private static extern IntPtr IntCreateSolidBrush(int crColor);
-
 
         public static IntPtr CreateSolidBrush(int crColor)
         {
@@ -45,9 +40,7 @@ namespace System.Experimental.Gdi
         // Pen.
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreatePen", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-
         private static extern IntPtr IntCreatePen(int fnStyle, int nWidth, int crColor);
-
 
         public static IntPtr CreatePen(int fnStyle, int nWidth, int crColor)
         {
@@ -57,9 +50,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "ExtCreatePen", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-
         private static extern IntPtr IntExtCreatePen(int fnStyle, int dwWidth, IntNativeMethods.LOGBRUSH lplb, int dwStyleCount, [MarshalAs(UnmanagedType.LPArray)] int[] lpStyle);
-
 
         public static IntPtr ExtCreatePen(int fnStyle, int dwWidth, IntNativeMethods.LOGBRUSH lplb, int dwStyleCount, int[] lpStyle)
         {
@@ -71,9 +62,7 @@ namespace System.Experimental.Gdi
         // Region
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-
         public static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
-
 
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
         {
@@ -81,16 +70,6 @@ namespace System.Experimental.Gdi
             DbgUtil.AssertWin32(hRgn != IntPtr.Zero, "IntCreateRectRgn([x1={0}, y1={1}, x2={2}, y2={3}]) failed.", x1, y1, x2, y2);
             return hRgn;
         }
-
-        // Misc.
-
-        [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-
-        public static extern int GetUserDefaultLCID();
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-
-        public static extern bool GdiFlush();
     }
 }
 
