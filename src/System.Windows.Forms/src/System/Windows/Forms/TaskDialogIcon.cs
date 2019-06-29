@@ -8,7 +8,10 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents an icon that can be shown in the main area of a task dialog
+    /// (by setting the <see cref="TaskDialogPage.Icon"/> property) or in the
+    /// footer of a task dialog (by setting the <see cref="TaskDialogFooter.Icon"/>
+    /// property).
     /// </summary>
     public abstract class TaskDialogIcon
     {
@@ -54,7 +57,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Returns an <see cref="TaskDialogIcon"/> instance that reprents the specified
+        /// <see cref="TaskDialogStandardIcon"/>.
         /// </summary>
         /// <param name="icon"></param>
         /// <returns></returns>

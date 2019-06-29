@@ -7,7 +7,7 @@ using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a control of a task dialog.
     /// </summary>
     public abstract class TaskDialogControl
     {
@@ -19,6 +19,10 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the object that contains data about the control.
         /// </summary>
+        /// <value>
+        /// An <see cref="object"/> that contains data about the control.
+        /// The default is <c>null</c>.
+        /// </value>
         public object Tag
         {
             get;

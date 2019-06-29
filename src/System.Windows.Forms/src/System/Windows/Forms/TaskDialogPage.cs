@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Linq;
 
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
@@ -12,8 +11,14 @@ using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a page of content of a task dialog.
     /// </summary>
+    /// <remarks>
+    /// It is possible to navigate a task dialog while it is shown by setting the
+    /// <see cref="TaskDialog.Page"/> property to a different <see cref="TaskDialogPage"/>
+    /// instance. See the <see cref="TaskDialog.Page"/> property for more information about
+    /// navigation.
+    /// </remarks>
     public class TaskDialogPage
     {
         /// <summary>
@@ -84,17 +89,20 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Occurs when the user presses F1 while the task dialog has focus, or when the
-        /// user clicks the <see cref="TaskDialogButtons.Help"/> button.
+        /// user clicks the <see cref="TaskDialogResult.Help"/> button.
         /// </summary>
         public event EventHandler HelpRequest;
 
         /// <summary>
-        /// 
+        /// Occurs when the user has clicked on a hyperlink.
         /// </summary>
+        /// <remarks>
+        /// This event will only be raised if <see cref="EnableHyperlinks"/> is set to <c>true</c>.
+        /// </remarks>
         public event EventHandler<TaskDialogHyperlinkClickedEventArgs> HyperlinkClicked;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogPage"/> class.
         /// </summary>
         public TaskDialogPage()
         {
@@ -106,8 +114,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the collection of <see cref="TaskDialogStandardButton"/> instances
+        /// to be shown in this page.
         /// </summary>
+        /// <value>
+        /// A <see cref="TaskDialogStandardButtonCollection"/> instance representing the
+        /// collection of standard buttons to be shown in this page.
+        /// </value>
         public TaskDialogStandardButtonCollection StandardButtons
         {
             get => _standardButtons ??= new TaskDialogStandardButtonCollection();
@@ -123,8 +136,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the collection of <see cref="TaskDialogCustomButton"/> instances
+        /// to be shown in this page.
         /// </summary>
+        /// <value>
+        /// A <see cref="TaskDialogCustomButtonCollection"/> instance representing the
+        /// collection of custom buttons to be shown in this page.
+        /// </value>
         public TaskDialogCustomButtonCollection CustomButtons
         {
             get => _customButtons ??= new TaskDialogCustomButtonCollection();
@@ -140,8 +158,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the collection of <see cref="TaskDialogRadioButton"/> instances
+        /// to be shown in this page.
         /// </summary>
+        /// <value>
+        /// A <see cref="TaskDialogRadioButtonCollection"/> instance representing the
+        /// collection of radio buttons to be shown in this page.
+        /// </value>
         public TaskDialogRadioButtonCollection RadioButtons
         {
             get => _radioButtons ??= new TaskDialogRadioButtonCollection();
@@ -157,8 +180,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the <see cref="TaskDialogCheckBox"/> to be shown in this page.
         /// </summary>
+        /// <remarks>
+        /// The checkbox will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
+        /// is not <c>null</c> or an empty string.
+        /// </remarks>
         public TaskDialogCheckBox CheckBox
         {
             get => _checkBox;
@@ -174,8 +201,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the <see cref="TaskDialogExpander"/> to be shown in this page.
         /// </summary>
+        /// <remarks>
+        /// The expander button (and the expanded area) will only be shown if its
+        /// <see cref="TaskDialogExpander.Text"/> property is not <c>null</c> or an empty string.
+        /// </remarks>
         public TaskDialogExpander Expander
         {
             get => _expander;
@@ -191,8 +222,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the <see cref="TaskDialogFooter"/> to be shown in this page.
         /// </summary>
+        /// <remarks>
+        /// The footer will only be shown if its <see cref="TaskDialogFooter.Text"/> property
+        /// is not <c>null</c> or an empty string.
+        /// </remarks>
         public TaskDialogFooter Footer
         {
             get => _footer;
@@ -208,8 +243,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the <see cref="TaskDialogProgressBar"/> to be shown in this page.
         /// </summary>
+        /// <remarks>
+        /// The progress bar will only be shown if its <see cref="TaskDialogProgressBar.State"/>
+        /// property is not <see cref="TaskDialogProgressBarState.None"/>.
+        /// </remarks>
         public TaskDialogProgressBar ProgressBar
         {
             get => _progressBar;
@@ -326,6 +365,10 @@ namespace System.Windows.Forms
         /// when the dialog is is created or navigated.
         /// If <c>0</c>, the width will be automatically calculated by the system.
         /// </summary>
+        /// <value>
+        /// The width in dialog units that the dialog's client area will get. The default is
+        /// <c>0</c> which means the width is calculated by the system.
+        /// </value>
         public int Width
         {
             get => _width;
@@ -347,6 +390,10 @@ namespace System.Windows.Forms
         /// Gets or sets the <see cref="TaskDialogCustomButtonStyle"/> that specifies how to
         /// display custom buttons.
         /// </summary>
+        /// <value>
+        /// The <see cref="TaskDialogCustomButtonStyle"/> that specifies how to display custom
+        /// buttons. The default value is <see cref="TaskDialogCustomButtonStyle.Default"/>.
+        /// </value>
         public TaskDialogCustomButtonStyle CustomButtonStyle
         {
             get => _customButtonStyle;
@@ -371,6 +418,10 @@ namespace System.Windows.Forms
         /// Warning: Enabling hyperlinks when using content from an unsafe source
         /// may cause security vulnerabilities.
         /// </summary>
+        /// <value>
+        /// <c>true</c> to enable hyperlinks; otherwise, <c>false</c>. The default value
+        /// is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// Note: The Task Dialog will not actually execute any hyperlinks.
         /// Hyperlink execution must be handled in the <see cref="HyperlinkClicked"/>
@@ -391,11 +442,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the task dialog can be canceled
-        /// by pressing ESC, Alt+F4 or clicking the title bar's close button even if no
-        /// <see cref="TaskDialogButtons.Cancel"/> button is specified in
-        /// <see cref="StandardButtons"/>.
+        /// Gets or sets a value that indicates whether the task dialog can be closed with
+        /// a <see cref="TaskDialogResult.Cancel"/> result by pressing ESC or Alt+F4 or by clicking
+        /// the title bar's close button even if no <see cref="TaskDialogButtons.Cancel"/> button
+        /// is added to the <see cref="StandardButtons"/> collection.
         /// </summary>
+        /// <value>
+        /// <c>true</c> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
+        /// the title bar's close button; otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// You can intercept cancellation of the dialog without displaying a "Cancel"
         /// button by adding a <see cref="TaskDialogStandardButton"/> with its
@@ -409,8 +464,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value that indicates whether text and controls are displayed
+        /// reading right to left. 
         /// </summary>
+        /// <value>
+        /// <c>true</c> to display text and controls reading right to left; <c>false</c>
+        /// to display controls reading left to right. The default value is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// Note that once a task dialog has been opened with or has navigated to a
         /// <see cref="TaskDialogPage"/> where this flag is set, it will keep on
@@ -427,6 +487,10 @@ namespace System.Windows.Forms
         /// Gets or sets a value that indicates whether the task dialog can be minimized
         /// when it is shown modeless.
         /// </summary>
+        /// <value>
+        /// <c>true</c> to specify that the task dialog can be minimized; otherwise, <c>false</c>.
+        /// The default value is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// When setting this property to <c>true</c>, <see cref="AllowCancel"/> is
         /// automatically implied.
@@ -441,6 +505,10 @@ namespace System.Windows.Forms
         /// Indicates that the width of the task dialog is determined by the width
         /// of its content area (similar to Message Box sizing behavior).
         /// </summary>
+        /// <value>
+        /// <c>true</c> to determine the width of the task dialog by the width of
+        /// its content area; otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// This flag is ignored if <see cref="Width"/> is not set to <c>0</c>.
         /// </remarks>
@@ -828,36 +896,36 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Raises the <see cref="Created"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnCreated(EventArgs e)
         {
             Created?.Invoke(this, e);
         }
 
         /// <summary>
-        /// 
+        /// Raises the <see cref="Destroyed"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnDestroyed(EventArgs e)
         {
             Destroyed?.Invoke(this, e);
         }
 
         /// <summary>
-        /// 
+        /// Raises the <see cref="HelpRequest"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnHelpRequest(EventArgs e)
         {
             HelpRequest?.Invoke(this, e);
         }
 
         /// <summary>
-        /// 
+        /// Raises the <see cref="HyperlinkClicked"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">An <see cref="TaskDialogHyperlinkClickedEventArgs"/> that contains the event data.</param>
         internal protected void OnHyperlinkClicked(TaskDialogHyperlinkClickedEventArgs e)
         {
             HyperlinkClicked?.Invoke(this, e);

@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Contains constants that specify the state of a task dialog progress bar.
     /// </summary>
     public enum TaskDialogProgressBarState : int
     {
@@ -33,9 +33,8 @@ namespace System.Windows.Forms
         /// Shows a marquee progress bar where the marquee animation is paused.
         /// </summary>
         /// <remarks>
-        /// For example, if you switch from <see cref="Marquee"/> to 
-        /// <see cref="MarqueePaused"/> while the dialog is shown, the 
-        /// marquee animation will stop.
+        /// If you switch from <see cref="Marquee"/> to <see cref="MarqueePaused"/> while the
+        /// dialog is shown, the  marquee animation will stop.
         /// </remarks>
         MarqueePaused,
 

@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a collection of <see cref="TaskDialogCustomButton"/> objects.
     /// </summary>
     public class TaskDialogCustomButtonCollection : Collection<TaskDialogCustomButton>
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private TaskDialogPage _boundPage;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogCustomButtonCollection"/> class.
         /// </summary>
         public TaskDialogCustomButtonCollection()
         {
@@ -31,11 +31,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Creates and adds a <see cref="TaskDialogCustomButton"/> to the collection.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="descriptionText"></param>
-        /// <returns></returns>
+        /// <param name="text">The text of the custom button.</param>
+        /// <param name="descriptionText">The description text of the custom button.</param>
+        /// <returns>The created <see cref="TaskDialogCustomButton"/>.</returns>
         public TaskDialogCustomButton Add(string text, string descriptionText = null)
         {
             var button = new TaskDialogCustomButton()
@@ -48,11 +48,7 @@ namespace System.Windows.Forms
             return button;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         protected override void SetItem(int index, TaskDialogCustomButton item)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -79,11 +75,7 @@ namespace System.Windows.Forms
             base.SetItem(index, item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         protected override void InsertItem(int index, TaskDialogCustomButton item)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -100,10 +92,7 @@ namespace System.Windows.Forms
             base.InsertItem(index, item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -116,9 +105,7 @@ namespace System.Windows.Forms
             base.RemoveItem(index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             // Disallow collection modification, so that we don't need to copy it

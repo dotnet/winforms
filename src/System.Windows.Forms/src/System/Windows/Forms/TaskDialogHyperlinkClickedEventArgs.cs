@@ -5,22 +5,23 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Provides data for the <see cref="TaskDialogPage.HyperlinkClicked"/> event.
     /// </summary>
     public class TaskDialogHyperlinkClickedEventArgs : EventArgs
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="hyperlink"></param>
         internal TaskDialogHyperlinkClickedEventArgs(string hyperlink)
         {
             Hyperlink = hyperlink;
         }
 
         /// <summary>
-        /// 
+        /// The value of the <c>href</c> attribute of the hyperlink that the user clicked.
         /// </summary>
+        /// <remarks>
+        /// Please note: In order to avoid possible security vulnerabilities when showing content
+        /// from unsafe sources in a task dialog, you should always verify the value if this
+        /// property before actually opening the link.
+        /// </remarks>
         public string Hyperlink
         {
             get;

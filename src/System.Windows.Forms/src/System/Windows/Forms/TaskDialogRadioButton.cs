@@ -7,7 +7,7 @@ using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a radio button control of a task dialog.
     /// </summary>
     public sealed class TaskDialogRadioButton : TaskDialogControl
     {
@@ -24,20 +24,21 @@ namespace System.Windows.Forms
         private bool _ignoreRadioButtonClickedNotification;
 
         /// <summary>
-        /// Occurs when the value of the <see cref="Checked"/> property has changed
-        /// while this control is bound to a task dialog.
+        /// Occurs when the value of the <see cref="Checked"/> property changes
+        /// while this control is shown in a task dialog.
         /// </summary>
         public event EventHandler CheckedChanged;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class.
         /// </summary>
         public TaskDialogRadioButton()
         {
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class
+        /// using the given <paramref name="text"/> and optionally a <paramref name="descriptionText"/>.
         /// </summary>
         public TaskDialogRadioButton(string text)
             : this()
@@ -46,11 +47,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value indicating whether the button can respond to user interaction.
         /// </summary>
+        /// <value>
+        /// <c>true</c> if the button can respond to user interaction; otherwise,
+        /// <c>false</c>. The default value is <c>true</c>.
+        /// </value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
+        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog
+        /// but it has not been created.</exception>
         public bool Enabled
         {
             get => _enabled;
@@ -70,8 +77,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the text associated with this control.
         /// </summary>
+        /// <value>
+        /// The text associated with this control. The default value is <c>null</c>.
+        /// </value>
+        /// <remarks>
+        /// This property must not be <c>null</c> or an empty string when showing or navigating
+        /// the dialog; otherwise the operation will fail.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
         public string Text
         {
             get => _text;
@@ -85,12 +100,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or set a value indicating whether the <see cref="TaskDialogRadioButton"/> is
+        /// in the checked state.
         /// </summary>
+        /// <value>
+        /// <c>true</c> if the <see cref="TaskDialogRadioButton"/> is in the checked state;
+        /// otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// This property can be set to <c>true</c> while the dialog is shown (except
-        /// from within the <see cref="CheckedChanged"/> event).
+        /// from within the <see cref="CheckedChanged"/> event), but while the dialog is shown
+        /// you can only set it to <c>false</c>.
         /// </remarks>
+        /// <exception cref="InvalidOperationException"></exception>
         public bool Checked
         {
             get => _checked;
@@ -239,9 +261,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string that contains the control text.</returns>
         public override string ToString()
         {
             return _text ?? base.ToString();

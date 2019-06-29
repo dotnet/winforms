@@ -9,7 +9,7 @@ using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a progress bar control of a task dialog.
     /// </summary>
     public sealed class TaskDialogProgressBar : TaskDialogControl
     {
@@ -24,15 +24,17 @@ namespace System.Windows.Forms
         private int _marqueeSpeed;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogProgressBar"/> class.
         /// </summary>
         public TaskDialogProgressBar()
         {
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogProgressBar"/> class
+        /// using the given <paramref name="state"/>.
         /// </summary>
+        /// <param name="state">The state of the progress bar.</param>
         public TaskDialogProgressBar(TaskDialogProgressBarState state)
             : this()
         {
@@ -43,9 +45,17 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the state of the progress bar.
         /// </summary>
+        /// <value>
+        /// The state of the progress bar. The default is <see cref="TaskDialogProgressBarState.Normal"/>,
+        /// except if this instance is the default instance created by a <see cref="TaskDialogPage"/>,
+        /// where the default value is <see cref="TaskDialogProgressBarState.None"/>.
+        /// </value>
         /// <remarks>
-        /// This property can be set while the dialog is shown. However, it is
-        /// not possible to change the state from
+        /// This control will only be shown if this property is not
+        /// <see cref="TaskDialogProgressBarState.None"/>.
+        /// 
+        /// This property can be set while the dialog is shown. However, while the dialog is
+        /// shown, it is not possible to change the state from
         /// <see cref="TaskDialogProgressBarState.None"/> to any other state,
         /// and vice versa.
         /// </remarks>
@@ -150,9 +160,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the minimum value of the range of the control.
         /// </summary>
+        /// <value>
+        /// The minimum value of the range. The default is <c>0</c>.
+        /// </value>
         /// <remarks>
+        /// This value is only used if the progress bar is not a marquee progress bar (as defined
+        /// by the <see cref="State"/> property).
+        /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
         public int Minimum
@@ -181,9 +197,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the maximum value of the range of the control.
         /// </summary>
+        /// <value>
+        /// The maximum value of the range. The default is <c>100</c>.
+        /// </value>
         /// <remarks>
+        /// This value is only used if the progress bar is not a marquee progress bar (as defined
+        /// by the <see cref="State"/> property).
+        /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
         public int Maximum
@@ -212,9 +234,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the current position of the progress bar.
         /// </summary>
+        /// <value>
+        /// The position within the range of the progress bar. The default is <c>0</c>.
+        /// </value>
         /// <remarks>
+        /// This value is only used if the progress bar is not a marquee progress bar (as defined
+        /// by the <see cref="State"/> property).
+        /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
         public int Value
@@ -243,9 +271,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the speed of the marquee display of a progress bar.
         /// </summary>
+        /// <value>
+        /// The speed of the marquee display which is the time, in milliseconds, between marquee
+        /// animation updates. If this value is <c>0</c>, the marquee animation is updated every
+        /// 30 milliseconds. The default value is <c>0</c>.
+        /// </value>
         /// <remarks>
+        /// This value is only used if the progress bar is a marquee progress bar (as defined
+        /// by the <see cref="State"/> property).
+        /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
         public int MarqueeSpeed

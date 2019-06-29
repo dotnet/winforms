@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a collection of <see cref="TaskDialogRadioButton"/> objects.
     /// </summary>
     public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private TaskDialogPage _boundPage;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
         /// </summary>
         public TaskDialogRadioButtonCollection()
         {
@@ -31,10 +31,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Creates and adds a <see cref="TaskDialogRadioButton"/> to the collection.
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="text">The text of the radio button.</param>
+        /// <returns>The created <see cref="TaskDialogRadioButton"/>.</returns>
         public TaskDialogRadioButton Add(string text)
         {
             var button = new TaskDialogRadioButton()

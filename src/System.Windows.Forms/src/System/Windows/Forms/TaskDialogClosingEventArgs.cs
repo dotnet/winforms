@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Provides data for the <see cref="TaskDialog.Closing"/> event.
     /// </summary>
     public class TaskDialogClosingEventArgs : CancelEventArgs
     {

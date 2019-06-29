@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a button control of a task dialog.
     /// </summary>
     public abstract class TaskDialogButton : TaskDialogControl
     {
@@ -29,6 +29,10 @@ namespace System.Windows.Forms
         /// To prevent the dialog from closing, set the
         /// <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> property to
         /// <c>true</c>.
+        /// 
+        /// When the <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> is not set to
+        /// <c>true</c>, the <see cref="TaskDialog.Closing"/> event will occur afterwards which
+        /// also allows you to prevent the dialog from closing.
         /// </remarks>
         public event EventHandler<TaskDialogButtonClickedEventArgs> Click;
 
@@ -38,8 +42,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value indicating whether the button can respond to user interaction.
         /// </summary>
+        /// <value>
+        /// <c>true</c> if the button can respond to user interaction; otherwise,
+        /// <c>false</c>. The default value is <c>true</c>.
+        /// </value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
@@ -62,8 +70,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value that indicates if the User Account Control (UAC) shield icon
+        /// should be shown near the button; that is, whether the action invoked by the button
+        /// requires elevation.
         /// </summary>
+        /// <value><c>true</c> to show the UAC shield icon; otherwise, <c>false</c>. The default
+        /// value is <c>false</c>.</value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
@@ -86,8 +98,15 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a value that indicates if this button will be the default button
-        /// in the Task Dialog.
+        /// in the task dialog.
         /// </summary>
+        /// <value>
+        /// <c>true</c> to indicate that this button will be the default button in the task dialog;
+        /// otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// </value>
+        /// <remarks>
+        /// Note that only a single button in a task dialog can be set as the default button.
+        /// </remarks>
         public bool DefaultButton
         {
             get => _defaultButton;

@@ -8,7 +8,8 @@ using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents an expander button and the associated expanded area
+    /// of a task dialog.
     /// </summary>
     public sealed class TaskDialogExpander : TaskDialogControl
     {
@@ -23,21 +24,28 @@ namespace System.Windows.Forms
         private bool _expanded;
 
         /// <summary>
-        /// 
+        /// Occurs when the value of the <see cref="Expanded"/> property changes while
+        /// this control is shown in a task dialog.
         /// </summary>
+        /// <remarks>
+        /// This event will only occur when the expanded state is changed by the user,
+        /// because it is not possible to programmatically change the <see cref="Expanded"/>
+        /// property while this control is shown in a task dialog.
+        /// </remarks>
         public event EventHandler ExpandedChanged;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogExpander"/> class.
         /// </summary>
         public TaskDialogExpander()
         {
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogExpander"/> class
+        /// using the given <paramref name="text"/>.
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">The text to be displayed in the dialog's expanded area.</param>
         public TaskDialogExpander(string text)
             : this()
         {
@@ -47,7 +55,13 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the text to be displayed in the dialog's expanded area.
         /// </summary>
+        /// <value>
+        /// The text to be displayed in the dialog's expanded area. The default value is
+        /// <c>null</c>.
+        /// </value>
         /// <remarks>
+        /// This control will only be shown if this property is not <c>null</c> or an empty string.
+        /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
         public string Text
@@ -69,8 +83,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the text to be displayed in the expander button when it
+        /// is in the expanded state.
         /// </summary>
+        /// <value>
+        /// The text that is to be displayed in the expander button when it
+        /// is in the expanded state, or <c>null</c> or an empty string to use a
+        /// text provided by the operating system. The default value is <c>null</c>.
+        /// </value>
         public string ExpandedButtonText
         {
             get => _expandedButtonText;
@@ -84,8 +104,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the text to be displayed in the expander button when it
+        /// is in the collapsed state.
         /// </summary>
+        /// <value>
+        /// The text that is to be displayed in the expander button when it
+        /// is in the collapsed state, or <c>null</c> or an empty string to use a
+        /// text provided by the operating system. The default value is <c>null</c>.
+        /// </value>
         public string CollapsedButtonText
         {
             get => _collapsedButtonText;
@@ -99,8 +125,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value that indicates if the expander button is in the
+        /// expanded state (so that the dialog's expanded area is visible).
         /// </summary>
+        /// <remarks>
+        /// <c>true</c> if the expander button is in the expanded state; <c>false</c> if
+        /// it is in the collapsed state. The default value is <c>false</c>.
+        /// </remarks>
         public bool Expanded
         {
             get => _expanded;
@@ -119,8 +150,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value that indicates if the expanded area is displayed at the bottom
+        /// of the task dialog's footer area, instead of immediately after the dialog's
+        /// <see cref="TaskDialogPage.Text"/>.
         /// </summary>
+        /// <value>
+        /// <c>true</c> to display the expanded area at the bottom of the task dialog's
+        /// footer area, <c>false</c> to display the expanded area immediately after the
+        /// dialog's <see cref="TaskDialogPage.Text"/>. The default value is <c>false</c>.
+        /// </value>
         public bool ExpandFooterArea
         {
             get => _expandFooterArea;
@@ -139,9 +177,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Returns a string that represents the current <see cref="TaskDialogExpander"/> control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string that contains the control text.</returns>
         public override string ToString()
         {
             return _text ?? base.ToString();

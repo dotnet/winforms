@@ -9,7 +9,7 @@ using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents the footer area of a task dialog.
     /// </summary>
     public sealed class TaskDialogFooter : TaskDialogControl
     {
@@ -20,16 +20,17 @@ namespace System.Windows.Forms
         private bool _boundIconIsFromHandle;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogFooter"/> class.
         /// </summary>
         public TaskDialogFooter()
         {
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogFooter"/> class
+        /// using the given <paramref name="text"/>.
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">The text to be displayed in the dialog's footer area.</param>
         public TaskDialogFooter(string text)
             : this()
         {
@@ -39,7 +40,12 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the text to be displayed in the dialog's footer area.
         /// </summary>
+        /// <value>
+        /// The text to be displayed in the dialog's footer area. The default value is <c>null</c>.
+        /// </value>
         /// <remarks>
+        /// This control will only be shown if this property is not <c>null</c> or an empty string.
+        /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
         public string Text
@@ -99,9 +105,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Returns a string that represents the current <see cref="TaskDialogFooter"/> control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string that contains the control text.</returns>
         public override string ToString()
         {
             return _text ?? base.ToString();

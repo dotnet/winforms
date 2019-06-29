@@ -8,14 +8,14 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a collection of <see cref="TaskDialogStandardButton"/> objects.
     /// </summary>
     public class TaskDialogStandardButtonCollection : KeyedCollection<TaskDialogResult, TaskDialogStandardButton>
     {
         private TaskDialogPage _boundPage;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogStandardButtonCollection"/> class.
         /// </summary>
         public TaskDialogStandardButtonCollection()
         {
@@ -45,10 +45,6 @@ namespace System.Windows.Forms
             set => _boundPage = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="buttons"></param>
         internal static IEnumerable<TaskDialogResult> GetResultsForButtonFlags(TaskDialogButtons buttons)
         {
             // Note: The order in which we yield the results is the order in which
@@ -78,10 +74,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Creates and adds a <see cref="TaskDialogStandardButton"/> to the collection.
         /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
+        /// <param name="result">The <see cref="TaskDialogResult"/> that is represented by the
+        /// <see cref="TaskDialogStandardButton"/>.</param>
+        /// <returns>The created <see cref="TaskDialogStandardButton"/>.</returns>
         public TaskDialogStandardButton Add(TaskDialogResult result)
         {
             var button = new TaskDialogStandardButton(result);

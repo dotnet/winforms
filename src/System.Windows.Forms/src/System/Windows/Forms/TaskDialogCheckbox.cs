@@ -7,7 +7,7 @@ using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a checkbox control of a task dialog.
     /// </summary>
     public sealed class TaskDialogCheckBox : TaskDialogControl
     {
@@ -16,19 +16,21 @@ namespace System.Windows.Forms
         private bool _checked;
 
         /// <summary>
-        /// 
+        /// Occurs when the value of the <see cref="Checked"/> property changes while 
+        /// this control is shown in a task dialog.
         /// </summary>
         public event EventHandler CheckedChanged;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogCheckBox"/> class.
         /// </summary>
         public TaskDialogCheckBox()
         {
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogCheckBox"/> class with
+        /// the given <paramref name="text"/>.
         /// </summary>
         /// <param name="text"></param>
         public TaskDialogCheckBox(string text)
@@ -38,8 +40,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the text associated with this control.
         /// </summary>
+        /// <value>
+        /// The text associated with this control. The default value is <c>null</c>.
+        /// </value>
+        /// <remarks>
+        /// This control will only be shown if this property is not <c>null</c> or an empty string.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
         public string Text
         {
             get => _text;
@@ -53,8 +62,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or set a value indicating whether the <see cref="TaskDialogCheckBox"/> is in
+        /// the checked state.
         /// </summary>
+        /// <value>
+        /// <c>true</c> if the <see cref="TaskDialogCheckBox"/> is in the checked state;
+        /// otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// </value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
@@ -86,6 +100,7 @@ namespace System.Windows.Forms
             get => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
         }
 
+        // TODO: Maybe remove this method for now
         /// <summary>
         /// 
         /// </summary>
@@ -98,9 +113,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Returns a string that represents the current <see cref="TaskDialogCheckBox"/> control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string that contains the control text.</returns>
         public override string ToString()
         {
             return _text ?? base.ToString();

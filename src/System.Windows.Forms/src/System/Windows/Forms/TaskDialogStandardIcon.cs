@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Contains constants for predefined icons of a task dialog.
     /// </summary>
     public enum TaskDialogStandardIcon : int
     {

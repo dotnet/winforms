@@ -5,8 +5,22 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// 
+    /// Represents a standard ("common") button of a task dialog whose text and function
+    /// is defined by a <see cref="TaskDialogResult"/> value.
     /// </summary>
+    /// <remarks>
+    /// The text of a <see cref="TaskDialogStandardButton"/> is provided by the operating system,
+    /// depending on the <see cref="TaskDialogResult"/> that the button uses.
+    /// 
+    /// In contrast to a <see cref="TaskDialogCustomButton"/> that can be shown as regular button
+    /// or as command link, a <see cref="TaskDialogStandardButton"/> can only be shown as
+    /// regular button.
+    /// 
+    /// Showing a <see cref="TaskDialogButton"/> with a <see cref="TaskDialogResult.Cancel"/>
+    /// result in a task dialog will add a close button to the task dialog title bar and will
+    /// allow to close the dialog by pressing ESC or Alt+F4 (just as if
+    /// <see cref="TaskDialogPage.AllowCancel"/> was set to <c>true</c>).
+    /// </remarks>
     public sealed class TaskDialogStandardButton : TaskDialogButton
     {
         private TaskDialogResult _result;
@@ -14,7 +28,7 @@ namespace System.Windows.Forms
         private bool _visible = true;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogStandardButton"/> class.
         /// </summary>
         public TaskDialogStandardButton()
             // Use 'OK' by default instead of 'None' (which would not be a valid
@@ -24,9 +38,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TaskDialogStandardButton"/> class
+        /// using the specified result.
         /// </summary>
-        /// <param name="result"></param>
+        /// <param name="result">The <see cref="TaskDialogResult"/> that is represent by this
+        /// <see cref="TaskDialogStandardButton"/>.</param>
         public TaskDialogStandardButton(TaskDialogResult result)
         {
             if (!IsValidStandardButtonResult(result))
@@ -67,10 +83,10 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value that indicates if this
         /// <see cref="TaskDialogStandardButton"/> should be shown when displaying
-        /// the Task Dialog.
+        /// the task dialog.
         /// </summary>
         /// <remarks>
-        /// Setting this to <c>false</c> allows you to still receive the
+        /// Setting this property to <c>false</c> allows you to still receive the
         /// <see cref="TaskDialogButton.Click"/> event (e.g. for the
         /// <see cref="TaskDialogResult.Cancel"/> button when
         /// <see cref="TaskDialogPage.AllowCancel"/> is set), or to call the
@@ -142,9 +158,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        /// Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string that contains the name of the <see cref="TaskDialogResult"/> value.</returns>
         public override string ToString()
         {
             return _result.ToString();
