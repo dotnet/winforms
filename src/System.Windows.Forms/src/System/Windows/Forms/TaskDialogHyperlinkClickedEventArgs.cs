@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// Please note: In order to avoid possible security vulnerabilities when showing content
-        /// from unsafe sources in a task dialog, you should always verify the value if this
+        /// from unsafe sources in a task dialog, you should always verify the value of this
         /// property before actually opening the link.
         /// </remarks>
         public string Hyperlink
