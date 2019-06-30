@@ -613,7 +613,9 @@ namespace System.Windows.Forms
             // Recursive Show() is not possible because a TaskDialog instance can only
             // represent a single native dialog.
             if (IsShown)
-                throw new InvalidOperationException($"This {nameof(TaskDialog)} instance is already being shown.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogInstanceAlreadyShown,
+                    nameof(TaskDialog)));
 
             Page.Validate();
 
@@ -671,10 +673,10 @@ namespace System.Windows.Forms
                     }
                     catch (EntryPointNotFoundException ex)
                     {
-                        throw new InvalidOperationException(
-                            $"You need to call {nameof(Application)}.{nameof(Application.EnableVisualStyles)}() " +
-                            $"before showing the task dialog. Alternatively, you can use an application manifest " +
-                            $"that enables Microsoft.Windows.Common-Controls 6.0.0.0.",
+                        throw new InvalidOperationException(string.Format(
+                            SR.TaskDialogNeedToEnableVisualStyles,
+                            nameof(Application),
+                            nameof(Application.EnableVisualStyles)),
                             ex);
                     }
                     finally
@@ -1204,7 +1206,8 @@ namespace System.Windows.Forms
                             IntPtr.Zero,
                             IntPtr.Zero))
                         {
-                            throw new InvalidOperationException("Could not send message."); // TODO: Exception type
+                            // Ignore. This should not happen in normal circumstances, and even then
+                            // we don't need to fail.
                         }
 
                         _ignoreButtonClickedNotifications = true;
@@ -1382,10 +1385,10 @@ namespace System.Windows.Forms
             // and /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInRadioButtonClicked.md
             if (RadioButtonClickedStackCount > 0)
             {
-                throw new InvalidOperationException(
-                    $"Cannot navigate the dialog from within the " +
-                    $"{nameof(TaskDialogRadioButton)}.{nameof(TaskDialogRadioButton.CheckedChanged)} " +
-                    $"event of one of the radio buttons of the current task dialog.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogCannotNavigateWithinRadioButtonCheckedChanged,
+                    nameof(TaskDialogRadioButton),
+                    nameof(TaskDialogRadioButton.CheckedChanged)));
             }
 
             // Don't allow to navigate the dialog if called from an event handler
@@ -1393,18 +1396,16 @@ namespace System.Windows.Forms
             if (_isInNavigate)
             {
                 throw new InvalidOperationException(
-                    "Cannot navigate the dialog from an event handler that is" +
-                    "called from within navigation.");
+                    SR.TaskDialogCannotNavigateWithinNavigationEventHandler);
             }
 
             // Don't allow navigation of the dialog window is already closed (and
             // therefore has set a result button), because that would result in
             // weird/undefined behavior (e.g. returning IDCANCEL (2) as button
             // result even though a different button has already been set as result).
-            const string dialogAlreadyClosedMesssage = "Cannot navigate the dialog when it has already closed.";
             if (_resultButton != null)
             {
-                throw new InvalidOperationException(dialogAlreadyClosedMesssage);
+                throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
             }
 
             _isInNavigate = true;
@@ -1429,7 +1430,7 @@ namespace System.Windows.Forms
                     // within the event handler.
                     if (_resultButton != null)
                     {
-                        throw new InvalidOperationException(dialogAlreadyClosedMesssage);
+                        throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
                     }
 
                     // Also, we need to validate the page again. For example, the user
@@ -1803,9 +1804,7 @@ namespace System.Windows.Forms
         {
             if (_boundPage != null)
             {
-                throw new InvalidOperationException(
-                    "Cannot set this property or call this method while the " +
-                    "task dialog is shown.");
+                throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfShownDialog);
             }
         }
 
@@ -1813,7 +1812,7 @@ namespace System.Windows.Forms
         {
             if (!IsHandleCreated)
             {
-                throw new InvalidOperationException("Can only update the state of a task dialog while it is shown.");
+                throw new InvalidOperationException(SR.TaskDialogCanUpdateStateOnlyWhenShown);
             }
 
             // When we wait for the navigated event to occur, also don't allow to
@@ -1827,11 +1826,10 @@ namespace System.Windows.Forms
             // waiting for the navigation to finish.
             if (_waitingNavigationPages.Count > 0 && checkWaitingForNavigation)
             {
-                throw new InvalidOperationException(
-                    "Cannot manipulate the task dialog immediately after navigating it. " +
-                    $"Please wait for the " +
-                    $"{nameof(TaskDialogPage)}.{nameof(TaskDialogPage.Created)} " +
-                    $"event of the next page to occur.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogCannotUpdateAfterNavigation,
+                    nameof(TaskDialogPage),
+                    nameof(TaskDialogPage.Created)));
             }
         }
 

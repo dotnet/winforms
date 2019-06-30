@@ -349,9 +349,7 @@ namespace System.Windows.Forms
                 if (_boundTaskDialog != null && iconIsFromHandle != null &&
                     iconIsFromHandle != _boundIconIsFromHandle)
                 {
-                    throw new InvalidOperationException(
-                        "Cannot update the icon from a handle icon type to a " +
-                        "non-handle icon type, and vice versa.");
+                    throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
                 _boundTaskDialog?.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_MAIN, iconValue);
@@ -566,9 +564,7 @@ namespace System.Windows.Forms
         {
             if (_boundTaskDialog != null)
             {
-                throw new InvalidOperationException(
-                    "Cannot set this property or call this method while the " +
-                    "page is bound to a task dialog.");
+                throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfBoundPage);
             }
         }
 
@@ -576,10 +572,10 @@ namespace System.Windows.Forms
         {
             if (WaitingForInitialization)
             {
-                throw new InvalidOperationException(
-                    $"Navigation of the task dialog did not complete yet. " +
-                    $"Please wait for the " +
-                    $"{nameof(TaskDialogPage)}.{nameof(Created)} event to occur.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogNavigationNotCompleted,
+                    nameof(TaskDialogPage),
+                    nameof(Created)));
             }
         }
 
@@ -631,9 +627,10 @@ namespace System.Windows.Forms
             // Check that this page instance is not already bound to a TaskDialog instance.
             if (_boundTaskDialog != null)
             {
-                throw new InvalidOperationException(
-                    $"This {nameof(TaskDialogPage)} instance is already bound to " +
-                    $"a {nameof(TaskDialog)} instance.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogPageIsAlreadyBound,
+                    nameof(TaskDialogPage),
+                    nameof(TaskDialog)));
             }
 
             // We also need to check the controls (and collections) since they could also be
@@ -643,9 +640,10 @@ namespace System.Windows.Forms
                 CustomButtons.BoundPage != null ||
                 RadioButtons.BoundPage != null)
             {
-                throw new InvalidOperationException(
-                    $"One of the collections of this {nameof(TaskDialogPage)} is already bound to a " +
-                    $"{nameof(TaskDialog)} instance.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogCollectionAlreadyBound,
+                    nameof(TaskDialogPage),
+                    nameof(TaskDialog)));
             }
 
             if (StandardButtons.Concat<TaskDialogControl>(CustomButtons).Concat(RadioButtons)
@@ -655,38 +653,38 @@ namespace System.Windows.Forms
                 .Append(_progressBar)
                 .Any(c => c.BoundPage != null))
             {
-                throw new InvalidOperationException(
-                    $"One of the controls of this {nameof(TaskDialogPage)} is already bound to a " +
-                    $"{nameof(TaskDialog)} instance.");
+                throw new InvalidOperationException(string.Format(
+                    SR.TaskDialogControlAlreadyBound,
+                    nameof(TaskDialogPage),
+                    nameof(TaskDialog)));
             }
 
             if (CustomButtons.Count > int.MaxValue - CustomButtonStartID + 1 ||
                 RadioButtons.Count > int.MaxValue - RadioButtonStartID + 1)
             {
-                throw new InvalidOperationException(
-                    "Too many custom buttons or radio buttons have been added.");
+                throw new InvalidOperationException(SR.TaskDialogTooManyButtonsAdded);
             }
 
             if (StandardButtons.Concat<TaskDialogButton>(CustomButtons).Where(e => e.DefaultButton).Count() > 1)
             {
-                throw new InvalidOperationException("Only a single button can be set as default button.");
+                throw new InvalidOperationException(SR.TaskDialogOnlySingleButtonCanBeDefault);
             }
 
             if (_radioButtons.Where(e => e.Checked).Count() > 1)
             {
-                throw new InvalidOperationException("Only a single radio button can be set as checked.");
+                throw new InvalidOperationException(SR.TaskDialogOnlySingleRadioButtonCanBeChecked);
             }
 
             // For custom and radio buttons, we need to ensure the strings are not null or empty,
             // as otherwise an error would occur when showing/navigating the dialog.
             if (_customButtons.Any(e => !e.IsCreatable))
             {
-                throw new InvalidOperationException("The text of a custom button must not be null or empty.");
+                throw new InvalidOperationException(SR.TaskDialogButtonTextMustNotBeNull);
             }
 
             if (_radioButtons.Any(e => !e.IsCreatable))
             {
-                throw new InvalidOperationException("The text of a radio button must not be null or empty.");
+                throw new InvalidOperationException(SR.TaskDialogRadioButtonTextMustNotBeNull);
             }
         }
 

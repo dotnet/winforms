@@ -65,6 +65,9 @@ namespace System.Windows.Forms
             {
                 if (!IsValidStandardButtonResult(value))
                 {
+                    // Note: This shouldn't be an InvalidEnumArgumentException because we actually
+                    // don't allow all values of the enum (TaskDialogResult.None is not a valid
+                    // standard button result).
                     throw new ArgumentOutOfRangeException(nameof(value));
                 }
 

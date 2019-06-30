@@ -4865,9 +4865,9 @@ Stack trace where the illegal operation occurred was:
   <data name="PrintPreviewControlZoomNegative" xml:space="preserve">
     <value>Zoom must be 0 or greater. Negative values are not permitted.</value>
   </data>
-   <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
+  <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
     <value>Print preview</value>
-   </data>
+  </data>
   <data name="PrintPreviewDocumentDescr" xml:space="preserve">
     <value>PrintDocument to be previewed.</value>
   </data>
@@ -7069,5 +7069,83 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TreeNodeCircularReference" xml:space="preserve">
     <value>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</value>
+  </data>
+  <data name="TaskDialogButtonTextMustNotBeNull" xml:space="preserve">
+    <value>The text of a custom button must not be null or an empty string.</value>
+  </data>
+  <data name="TaskDialogCannotNavigateClosedDialog" xml:space="preserve">
+    <value>Cannot navigate the dialog when it has already closed.</value>
+  </data>
+  <data name="TaskDialogCannotNavigateWithinNavigationEventHandler" xml:space="preserve">
+    <value>Cannot navigate the dialog from an event handler that is called from within navigation.</value>
+  </data>
+  <data name="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged" xml:space="preserve">
+    <value>Cannot navigate the dialog from within the {0}.{1} event of one of the radio buttons of the current task dialog.</value>
+  </data>
+  <data name="TaskDialogCannotRemoveProgressBarWhileDialogIsShown" xml:space="preserve">
+    <value>Cannot remove the progress bar while the task dialog is shown.</value>
+  </data>
+  <data name="TaskDialogCannotSetPropertyOfBoundPage" xml:space="preserve">
+    <value>Cannot set this property or call this method while the page is bound to a task dialog.</value>
+  </data>
+  <data name="TaskDialogCannotSetPropertyOfShownDialog" xml:space="preserve">
+    <value>Cannot set this property while the task dialog is shown.</value>
+  </data>
+  <data name="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent" xml:space="preserve">
+    <value>Cannot set the {0}.{1} property from within the {2}.{3} event of one of the radio buttons of the current task dialog.</value>
+  </data>
+  <data name="TaskDialogCannotUncheckRadioButtonWhileBound" xml:space="preserve">
+    <value>Cannot uncheck a radio button while it is bound to a task dialog.</value>
+  </data>
+  <data name="TaskDialogCannotUpdateAfterNavigation" xml:space="preserve">
+    <value>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0}.{1} event of the next page to occur.</value>
+  </data>
+  <data name="TaskDialogCannotUpdateIconType" xml:space="preserve">
+    <value>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</value>
+  </data>
+  <data name="TaskDialogCanUpdateStateOnlyWhenShown" xml:space="preserve">
+    <value>Can only update the state of a task dialog while it is shown.</value>
+  </data>
+  <data name="TaskDialogCollectionAlreadyBound" xml:space="preserve">
+    <value>One of the collections of this {0} is already bound to a {1} instance.</value>
+  </data>
+  <data name="TaskDialogControlAlreadyAddedToCollection" xml:space="preserve">
+    <value>This control has already been added to the collection.</value>
+  </data>
+  <data name="TaskDialogControlAlreadyBound" xml:space="preserve">
+    <value>One of the controls of this {0} is already bound to a {1} instance.</value>
+  </data>
+  <data name="TaskDialogControlIsPartOfOtherCollection" xml:space="preserve">
+    <value>This control is already part of a different collection.</value>
+  </data>
+  <data name="TaskDialogControlNotBound" xml:space="preserve">
+    <value>This control is not currently bound to a task dialog.</value>
+  </data>
+  <data name="TaskDialogControlNotCreated" xml:space="preserve">
+    <value>The control has not been created.</value>
+  </data>
+  <data name="TaskDialogInstanceAlreadyShown" xml:space="preserve">
+    <value>This {0} instance is already being shown.</value>
+  </data>
+  <data name="TaskDialogNavigationNotCompleted" xml:space="preserve">
+    <value>Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</value>
+  </data>
+  <data name="TaskDialogNeedToEnableVisualStyles" xml:space="preserve">
+    <value>You need to call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that enables Microsoft.Windows.Common-Controls 6.0.0.0.</value>
+  </data>
+  <data name="TaskDialogOnlySingleButtonCanBeDefault" xml:space="preserve">
+    <value>Only a single button can be set as default button.</value>
+  </data>
+  <data name="TaskDialogOnlySingleRadioButtonCanBeChecked" xml:space="preserve">
+    <value>Only a single radio button can be set as checked.</value>
+  </data>
+  <data name="TaskDialogPageIsAlreadyBound" xml:space="preserve">
+    <value>This {0} instance is already bound to a {1} instance.</value>
+  </data>
+  <data name="TaskDialogRadioButtonTextMustNotBeNull" xml:space="preserve">
+    <value>The text of a radio button must not be null or an empty string.</value>
+  </data>
+  <data name="TaskDialogTooManyButtonsAdded" xml:space="preserve">
+    <value>Too many custom buttons or radio buttons have been added.</value>
   </data>
 </root>

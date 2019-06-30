@@ -88,9 +88,7 @@ namespace System.Windows.Forms
                 // throw in such a case.
                 if (BoundPage != null && iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
                 {
-                    throw new InvalidOperationException(
-                        "Cannot update the icon from a handle icon type to a " +
-                        "non-handle icon type, and vice versa.");
+                    throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
                 BoundPage?.BoundTaskDialog.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_FOOTER, iconValue);

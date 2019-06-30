@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 if (BoundPage != null && value == TaskDialogProgressBarState.None)
                 {
                     throw new InvalidOperationException(
-                        "Cannot remove the progress bar while the task dialog is shown.");
+                        SR.TaskDialogCannotRemoveProgressBarWhileDialogIsShown);
                 }
 
                 // Verify that the enum value is actually valid.

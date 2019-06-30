@@ -179,7 +179,7 @@ namespace System.Windows.Forms
         {
             if (item.Collection != null && item.Collection != this)
             {
-                throw new InvalidOperationException("This control is already part of a different collection.");
+                throw new InvalidOperationException(SR.TaskDialogControlIsPartOfOtherCollection);
             }
         }
     }

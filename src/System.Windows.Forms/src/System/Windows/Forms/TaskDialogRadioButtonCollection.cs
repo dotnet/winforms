@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                 // then remove the old one.
                 if (!_itemSet.Add(item))
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException(SR.TaskDialogControlAlreadyAddedToCollection);
                 }
 
                 _itemSet.Remove(oldItem);
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
 
             if (!_itemSet.Add(item))
             {
-                throw new ArgumentException();
+                throw new ArgumentException(SR.TaskDialogControlAlreadyAddedToCollection);
             }
 
             item.Collection = this;
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
         {
             if (item.Collection != null && item.Collection != this)
             {
-                throw new InvalidOperationException("This control is already part of a different collection.");
+                throw new InvalidOperationException(SR.TaskDialogControlIsPartOfOtherCollection);
             }
         }
     }

@@ -146,8 +146,7 @@ namespace System.Windows.Forms
                 // old one?
                 if (!value)
                 {
-                    throw new InvalidOperationException(
-                        "Cannot uncheck a radio button while it is bound to a task dialog.");
+                    throw new InvalidOperationException(SR.TaskDialogCannotUncheckRadioButtonWhileBound);
                 }
 
                 // Note: We do not allow to set the "Checked" property of any
@@ -197,12 +196,12 @@ namespace System.Windows.Forms
                 // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_WeirdBehavior.md
                 if (BoundPage.BoundTaskDialog.RadioButtonClickedStackCount > 0)
                 {
-                    throw new InvalidOperationException(
-                        $"Cannot set the " +
-                        $"{nameof(TaskDialogRadioButton)}.{nameof(Checked)} " +
-                        $"property from within the " +
-                        $"{nameof(TaskDialogRadioButton)}.{nameof(CheckedChanged)} " +
-                        $"event of one of the radio buttons of the current task dialog.");
+                    throw new InvalidOperationException(string.Format(
+                        SR.TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent,
+                        nameof(TaskDialogRadioButton),
+                        nameof(Checked),
+                        nameof(TaskDialogRadioButton),
+                        nameof(CheckedChanged)));
                 }
 
                 // Click the radio button which will (recursively) raise the

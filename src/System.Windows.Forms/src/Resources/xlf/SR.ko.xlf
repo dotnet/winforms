@@ -9696,6 +9696,136 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">지정된 TablePrintLayout 인스턴스가 다른 문서에 대해 생성되었습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TaskDialogButtonTextMustNotBeNull">
+        <source>The text of a custom button must not be null or an empty string.</source>
+        <target state="new">The text of a custom button must not be null or an empty string.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCanUpdateStateOnlyWhenShown">
+        <source>Can only update the state of a task dialog while it is shown.</source>
+        <target state="new">Can only update the state of a task dialog while it is shown.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateClosedDialog">
+        <source>Cannot navigate the dialog when it has already closed.</source>
+        <target state="new">Cannot navigate the dialog when it has already closed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
+        <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
+        <target state="new">Cannot navigate the dialog from an event handler that is called from within navigation.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
+        <source>Cannot navigate the dialog from within the {0}.{1} event of one of the radio buttons of the current task dialog.</source>
+        <target state="new">Cannot navigate the dialog from within the {0}.{1} event of one of the radio buttons of the current task dialog.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
+        <source>Cannot remove the progress bar while the task dialog is shown.</source>
+        <target state="new">Cannot remove the progress bar while the task dialog is shown.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetPropertyOfBoundPage">
+        <source>Cannot set this property or call this method while the page is bound to a task dialog.</source>
+        <target state="new">Cannot set this property or call this method while the page is bound to a task dialog.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetPropertyOfShownDialog">
+        <source>Cannot set this property while the task dialog is shown.</source>
+        <target state="new">Cannot set this property while the task dialog is shown.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
+        <source>Cannot set the {0}.{1} property from within the {2}.{3} event of one of the radio buttons of the current task dialog.</source>
+        <target state="new">Cannot set the {0}.{1} property from within the {2}.{3} event of one of the radio buttons of the current task dialog.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
+        <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
+        <target state="new">Cannot uncheck a radio button while it is bound to a task dialog.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
+        <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0}.{1} event of the next page to occur.</source>
+        <target state="new">Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0}.{1} event of the next page to occur.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUpdateIconType">
+        <source>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</source>
+        <target state="new">Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCollectionAlreadyBound">
+        <source>One of the collections of this {0} is already bound to a {1} instance.</source>
+        <target state="new">One of the collections of this {0} is already bound to a {1} instance.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlAlreadyAddedToCollection">
+        <source>This control has already been added to the collection.</source>
+        <target state="new">This control has already been added to the collection.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlAlreadyBound">
+        <source>One of the controls of this {0} is already bound to a {1} instance.</source>
+        <target state="new">One of the controls of this {0} is already bound to a {1} instance.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlIsPartOfOtherCollection">
+        <source>This control is already part of a different collection.</source>
+        <target state="new">This control is already part of a different collection.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlNotBound">
+        <source>This control is not currently bound to a task dialog.</source>
+        <target state="new">This control is not currently bound to a task dialog.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlNotCreated">
+        <source>The control has not been created.</source>
+        <target state="new">The control has not been created.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogInstanceAlreadyShown">
+        <source>This {0} instance is already being shown.</source>
+        <target state="new">This {0} instance is already being shown.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogNavigationNotCompleted">
+        <source>Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</source>
+        <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogNeedToEnableVisualStyles">
+        <source>You need to call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that enables Microsoft.Windows.Common-Controls 6.0.0.0.</source>
+        <target state="new">You need to call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that enables Microsoft.Windows.Common-Controls 6.0.0.0.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogOnlySingleButtonCanBeDefault">
+        <source>Only a single button can be set as default button.</source>
+        <target state="new">Only a single button can be set as default button.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">
+        <source>Only a single radio button can be set as checked.</source>
+        <target state="new">Only a single radio button can be set as checked.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogPageIsAlreadyBound">
+        <source>This {0} instance is already bound to a {1} instance.</source>
+        <target state="new">This {0} instance is already bound to a {1} instance.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogRadioButtonTextMustNotBeNull">
+        <source>The text of a radio button must not be null or an empty string.</source>
+        <target state="new">The text of a radio button must not be null or an empty string.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogTooManyButtonsAdded">
+        <source>Too many custom buttons or radio buttons have been added.</source>
+        <target state="new">Too many custom buttons or radio buttons have been added.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
         <source>Indicates if return characters are accepted as input for multiline edit controls.</source>
         <target state="translated">리턴 문자를 다중 행 편집 컨트롤에 대한 입력으로 받아들일지 여부를 나타냅니다.</target>

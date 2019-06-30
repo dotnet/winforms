@@ -139,7 +139,7 @@ namespace System.Windows.Forms
 
             if (BoundPage == null)
             {
-                throw new InvalidOperationException("This control is not currently bound to a task dialog.");
+                throw new InvalidOperationException(SR.TaskDialogControlNotBound);
             }
         }
 
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
         {
             if (BoundPage != null && !IsCreated)
             {
-                throw new InvalidOperationException("The control has not been created.");
+                throw new InvalidOperationException(SR.TaskDialogControlNotCreated);
             }
         }
     }
