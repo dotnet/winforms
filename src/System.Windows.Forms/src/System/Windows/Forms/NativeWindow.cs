@@ -305,10 +305,10 @@ namespace System.Windows.Forms
                             intWndProcFlags |= UseDebuggableWndProc;
                         }
                         else {
-                            // Reading Framework key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
+                            // Reading Framework registry key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
                             // default behaviour after applications deployed ( otherwise, Developer/user can set this flag
                             // via Application.SetUnhandledExceptionModeInternal(..).
-                            // Disablign this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
+                            // Disabling this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
 
                             Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger check from registry is not supported in this release of .Net version");
                         }
