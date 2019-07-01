@@ -484,13 +484,8 @@ namespace System.ComponentModel.Design
                 return new TypeDescriptorFilterService();
             }
 
-            if (serviceType == typeof(IReferenceService))
-            {
-                return new ReferenceService(container);
-            }
-
-            Debug.Fail("Demand created service not supported: " + serviceType.Name);
-            return null;
+            Debug.Assert(serviceType == typeof(IReferenceService), "Demand created service not supported: " + serviceType.Name);
+            return new ReferenceService(container);
         }
 
         /// <summary>
@@ -600,36 +595,16 @@ namespace System.ComponentModel.Design
         private class DefaultDesignerLoader : DesignerLoader
         {
             private readonly Type _type;
-            private readonly ICollection _components;
 
             public DefaultDesignerLoader(Type type)
             {
                 _type = type;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public DefaultDesignerLoader(ICollection components)
-            {
-                _components = components;
-            }
-
             public override void BeginLoad(IDesignerLoaderHost loaderHost)
             {
-                string typeName = null;
-                if (_type != null)
-                {
-                    loaderHost.CreateComponent(_type);
-                    typeName = _type.FullName;
-                }
-                else
-                {
-                    foreach (IComponent component in _components)
-                    {
-                        loaderHost.Container.Add(component);
-                    }
-                }
-
-                loaderHost.EndLoad(typeName, true, null);
+                loaderHost.CreateComponent(_type);
+                loaderHost.EndLoad(_type.FullName, true, null);
             }
             public override void Dispose()
             {
