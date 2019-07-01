@@ -660,7 +660,8 @@ namespace System.Windows.Forms
                     // Activate a theming scope so that the task dialog works without
                     // having to use an application manifest that enables common controls
                     // v6 (provided that Application.EnableVisualStyles() was called
-                    // earlier).
+                    // earlier). Otherwise, the "TaskDialogIndirect" entry point will
+                    // not be available in comctl32.dll.
                     IntPtr themingCookie = UnsafeNativeMethods.ThemingScope.Activate();
                     int returnValue, resultButtonID;
                     try
@@ -674,7 +675,7 @@ namespace System.Windows.Forms
                     catch (EntryPointNotFoundException ex)
                     {
                         throw new InvalidOperationException(string.Format(
-                            SR.TaskDialogNeedToEnableVisualStyles,
+                            SR.TaskDialogVisualStylesNotEnabled,
                             nameof(Application),
                             nameof(Application.EnableVisualStyles)),
                             ex);

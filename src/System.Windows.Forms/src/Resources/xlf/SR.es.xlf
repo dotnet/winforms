@@ -9796,11 +9796,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TaskDialogNeedToEnableVisualStyles">
-        <source>You need to call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that enables Microsoft.Windows.Common-Controls 6.0.0.0.</source>
-        <target state="new">You need to call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that enables Microsoft.Windows.Common-Controls 6.0.0.0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="TaskDialogOnlySingleButtonCanBeDefault">
         <source>Only a single button can be set as default button.</source>
         <target state="new">Only a single button can be set as default button.</target>
@@ -9824,6 +9819,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="TaskDialogTooManyButtonsAdded">
         <source>Too many custom buttons or radio buttons have been added.</source>
         <target state="new">Too many custom buttons or radio buttons have been added.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogVisualStylesNotEnabled">
+        <source>Visual styles are not enabled. Please call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</source>
+        <target state="new">Visual styles are not enabled. Please call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">

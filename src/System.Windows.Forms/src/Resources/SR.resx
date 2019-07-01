@@ -7130,8 +7130,8 @@ Stack trace where the illegal operation occurred was:
   <data name="TaskDialogNavigationNotCompleted" xml:space="preserve">
     <value>Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</value>
   </data>
-  <data name="TaskDialogNeedToEnableVisualStyles" xml:space="preserve">
-    <value>You need to call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that enables Microsoft.Windows.Common-Controls 6.0.0.0.</value>
+  <data name="TaskDialogVisualStylesNotEnabled" xml:space="preserve">
+    <value>Visual styles are not enabled. Please call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</value>
   </data>
   <data name="TaskDialogOnlySingleButtonCanBeDefault" xml:space="preserve">
     <value>Only a single button can be set as default button.</value>
