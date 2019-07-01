@@ -964,6 +964,57 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void BindingContext_InvokeCircularWithoutComponent_ThrowsArgumentException()
+        {
+            var context = new BindingContext();
+            var dataSource = new DataSource();
+            var binding = new Binding(null, dataSource, "dataMember");
+
+            BindingContext.UpdateBinding(context, binding);
+            BindingManagerBase oldManager = binding.BindingManagerBase;
+            int callCount = 0;
+            oldManager.Bindings.CollectionChanged += (sender, e) =>
+            {
+                if (e.Action == CollectionChangeAction.Remove)
+                {
+                    Assert.Null(binding.BindingManagerBase);
+                    oldManager.Bindings.Add(binding);
+                    Assert.NotNull(binding.BindingManagerBase);
+                    callCount++;
+                }
+            };
+            Assert.Throws<ArgumentException>("dataBinding", () => BindingContext.UpdateBinding(context, binding));
+            Assert.Equal(1, callCount);
+        }
+
+        [Fact]
+        public void BindingContext_InvokeCircularWithComponent_ThrowsArgumentException()
+        {
+            var context = new BindingContext();
+            var dataSource = new DataSource();
+            var binding = new Binding(null, dataSource, "dataMember");
+            var control = new Control();
+            control.DataBindings.Add(binding);
+            Assert.NotNull(binding.BindableComponent);
+
+            BindingContext.UpdateBinding(context, binding);
+            BindingManagerBase oldManager = binding.BindingManagerBase;
+            int callCount = 0;
+            oldManager.Bindings.CollectionChanged += (sender, e) =>
+            {
+                if (e.Action == CollectionChangeAction.Remove)
+                {
+                    Assert.Null(binding.BindingManagerBase);
+                    oldManager.Bindings.Add(binding);
+                    Assert.NotNull(binding.BindingManagerBase);
+                    callCount++;
+                }
+            };
+            Assert.Throws<ArgumentException>("dataBinding", () => BindingContext.UpdateBinding(context, binding));
+            Assert.Equal(1, callCount);
+        }
+
+        [Fact]
         public void BindingContext_UpdateBinding_NullBinding_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("binding", () => BindingContext.UpdateBinding(new BindingContext(), null));

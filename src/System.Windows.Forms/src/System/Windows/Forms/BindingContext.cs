@@ -4,6 +4,7 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -96,7 +97,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
-        internal protected void Add(object dataSource, BindingManagerBase listManager)
+        protected internal void Add(object dataSource, BindingManagerBase listManager)
         {
             AddCore(dataSource, listManager);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataSource));
@@ -144,7 +145,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
-        internal protected void Clear()
+        protected internal void Clear()
         {
             ClearCore();
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
@@ -173,12 +174,12 @@ namespace System.Windows.Forms
             return _listManagers.ContainsKey(GetKey(dataSource, dataMember));
         }
 
-        internal HashKey GetKey(object dataSource, string dataMember)
+        private HashKey GetKey(object dataSource, string dataMember)
         {
             return new HashKey(dataSource, dataMember);
         }
 
-        internal class HashKey
+        private class HashKey
         {
             private readonly WeakReference _wRef;
             private readonly int _dataSourceHashCode;
@@ -232,7 +233,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This method is obsolete and unused.
         /// </remarks>
-        internal protected void Remove(object dataSource)
+        protected internal void Remove(object dataSource)
         {
             RemoveCore(dataSource);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataSource));
@@ -253,7 +254,7 @@ namespace System.Windows.Forms
         /// - If the data source is an ICurrencyManagerProvider, just delegate to the data
         ///  source.
         /// </summary>
-        internal BindingManagerBase EnsureListManager(object dataSource, string dataMember)
+        private BindingManagerBase EnsureListManager(object dataSource, string dataMember)
         {
             BindingManagerBase bindingManagerBase = null;
 
@@ -342,12 +343,10 @@ namespace System.Windows.Forms
 
         private static void CheckPropertyBindingCycles(BindingContext newBindingContext, Binding propBinding)
         {
-            if (newBindingContext == null || propBinding == null)
-            {
-                return;
-            }
+            Debug.Assert(newBindingContext != null, "Always called with a non-null BindingContext");
+            Debug.Assert(propBinding != null, "Always called with a non-null Binding.");
 
-            if (newBindingContext.Contains(propBinding.BindableComponent, string.Empty))
+            if (propBinding.BindableComponent != null && newBindingContext.Contains(propBinding.BindableComponent, string.Empty))
             {
                 // this way we do not add a bindingManagerBase to the
                 // bindingContext if there isn't one already

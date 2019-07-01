@@ -450,6 +450,19 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        public void Ctor_Object_String_ICurrencyManagerProvider(string dataMember)
+        {
+            var mockCurrencyManagerProvider = new Mock<ICurrencyManagerProvider>(MockBehavior.Strict);
+            mockCurrencyManagerProvider
+                .Setup(p => p.CurrencyManager)
+                .Returns<CurrencyManager>(null)
+                .Verifiable();
+            var source = new BindingSource(mockCurrencyManagerProvider.Object, dataMember);
+            mockCurrencyManagerProvider.Verify(p => p.CurrencyManager, Times.Once());
+        }
+
+        [Theory]
         [InlineData(typeof(PrivateDefaultConstructor))]
         [InlineData(typeof(NoDefaultConstructor))]
         [InlineData(typeof(ThrowingDefaultConstructor))]

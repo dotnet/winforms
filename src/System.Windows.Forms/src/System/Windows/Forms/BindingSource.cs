@@ -1306,21 +1306,27 @@ namespace System.Windows.Forms
 
         private void WireDataSource()
         {
-            if (_dataSource is ICurrencyManagerProvider)
+            if (_dataSource is ICurrencyManagerProvider provider)
             {
-                CurrencyManager cm = (_dataSource as ICurrencyManagerProvider).CurrencyManager;
-                cm.CurrentItemChanged += new EventHandler(ParentCurrencyManager_CurrentItemChanged);
-                cm.MetaDataChanged += new EventHandler(ParentCurrencyManager_MetaDataChanged);
+                CurrencyManager cm = provider.CurrencyManager;
+                if (cm != null)
+                {
+                    cm.CurrentItemChanged += new EventHandler(ParentCurrencyManager_CurrentItemChanged);
+                    cm.MetaDataChanged += new EventHandler(ParentCurrencyManager_MetaDataChanged);
+                }
             }
         }
 
         private void UnwireDataSource()
         {
-            if (_dataSource is ICurrencyManagerProvider)
+            if (_dataSource is ICurrencyManagerProvider provider)
             {
-                CurrencyManager cm = (_dataSource as ICurrencyManagerProvider).CurrencyManager;
-                cm.CurrentItemChanged -= new EventHandler(ParentCurrencyManager_CurrentItemChanged);
-                cm.MetaDataChanged -= new EventHandler(ParentCurrencyManager_MetaDataChanged);
+                CurrencyManager cm = provider.CurrencyManager;
+                if (cm != null)
+                {
+                    cm.CurrentItemChanged -= new EventHandler(ParentCurrencyManager_CurrentItemChanged);
+                    cm.MetaDataChanged -= new EventHandler(ParentCurrencyManager_MetaDataChanged);
+                }
             }
         }
 
