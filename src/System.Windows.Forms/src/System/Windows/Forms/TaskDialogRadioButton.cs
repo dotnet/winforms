@@ -108,9 +108,8 @@ namespace System.Windows.Forms
         /// otherwise, <c>false</c>. The default value is <c>false</c>.
         /// </value>
         /// <remarks>
-        /// This property can be set to <c>true</c> while the dialog is shown (except
-        /// from within the <see cref="CheckedChanged"/> event), but while the dialog is shown
-        /// you can only set it to <c>false</c>.
+        /// While the dialog is shown, this property can only be set to <c>true</c> and you cannot
+        /// set it from within the <see cref="CheckedChanged"/> event.
         /// </remarks>
         /// <exception cref="InvalidOperationException"></exception>
         public bool Checked
