@@ -6,128 +6,174 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
 {
+    /// <summary>
+    /// Provides a systematic way to manage event handlers for the current document.
+    /// </summary>
     public sealed class EventHandlerService : IEventHandlerService
     {
         // We cache the last requested handler for speed.
-        //
-        private object lastHandler;
-        private Type lastHandlerType;
+        private object _lastHandler;
+        private Type _lastHandlerType;
+        private EventHandler _changedEvent;
 
         // The handler stack
-        //
-        private HandlerEntry handlerHead;
+        private HandlerEntry _handlerHead;
 
-        // Our change event
-        //
-        private EventHandler changedEvent;
-
-        private readonly Control focusWnd;
-
+        /// <summary>
+        /// Initializes a new instance of the EventHandlerService class.
+        /// </summary>
+        /// <param name="focusWnd">The <see cref="Control"/> which is being designed.</param>
         public EventHandlerService(Control focusWnd)
         {
-            this.focusWnd = focusWnd;
-        }
-
-        public event EventHandler EventHandlerChanged
-        {
-            add => changedEvent += value;
-            remove => changedEvent -= value;
-        }
-
-        public Control FocusWindow
-        {
-            get => focusWnd;
+            FocusWindow = focusWnd;
         }
 
         /// <summary>
-        ///     <para>
-        ///         Gets the currently active event handler of the specified type.
-        ///     </para>
+        /// Fires an OnEventHandlerChanged event.
+        /// </summary>
+        public event EventHandler EventHandlerChanged
+        {
+            add => _changedEvent += value;
+            remove => _changedEvent -= value;
+        }
+
+        public Control FocusWindow { get; }
+
+        /// <summary>
+        ///  Gets the currently active event handler of the specified type.
         /// </summary>
         public object GetHandler(Type handlerType)
         {
-            if (handlerType == lastHandlerType)
+            if (handlerType == null)
             {
-                return lastHandler;
+                throw new ArgumentNullException(nameof(handlerType));
             }
 
-            for (HandlerEntry entry = handlerHead; entry != null; entry = entry.next)
+            if (_lastHandlerType == null)
+            {
+                return null;
+            }
+
+            if (handlerType == _lastHandlerType)
+            {
+                return _lastHandler;
+            }
+
+            Debug.Assert(_handlerHead != null, "Failed to locate handler to iterate from list.");
+
+            for (HandlerEntry entry = _handlerHead; entry != null; entry = entry.next)
             {
                 if (entry.handler != null && handlerType.IsInstanceOfType(entry.handler))
                 {
-                    lastHandlerType = handlerType;
-                    lastHandler = entry.handler;
+                    _lastHandlerType = handlerType;
+                    _lastHandler = entry.handler;
                     return entry.handler;
                 }
             }
+
             return null;
         }
 
         /// <summary>
-        ///     <para>
-        ///         Pops
-        ///         the given handler off of the stack.
-        ///     </para>
+        ///  Pops the given handler off of the stack.
         /// </summary>
         public void PopHandler(object handler)
         {
-            for (HandlerEntry entry = handlerHead; entry != null; entry = entry.next)
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            for (HandlerEntry entry = _handlerHead; entry != null; entry = entry.next)
             {
                 if (entry.handler == handler)
                 {
-                    handlerHead = entry.next;
-                    lastHandler = null;
-                    lastHandlerType = null;
+                    _handlerHead = entry.next;
+                    _lastHandler = null;
+                    _lastHandlerType = null;
                     OnEventHandlerChanged(EventArgs.Empty);
                     return;
                 }
             }
 
-            Debug.Assert(handler == null || handlerHead == null, "Failed to locate handler to remove from list.");
+            Debug.Assert(handler == null || _handlerHead == null, "Failed to locate handler to remove from list.");
         }
 
         /// <summary>
-        ///     <para>Pushes a new event handler on the stack.</para>
+        ///  Pushes a new event handler on the stack.
         /// </summary>
         public void PushHandler(object handler)
         {
-            handlerHead = new HandlerEntry(handler, handlerHead);
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            _handlerHead = new HandlerEntry(handler, _handlerHead);
+
             // Update the handlerType if the Handler pushed is the same type as the last one ....
             // This is true when SplitContainer is on the form and Edit Properties pushed another handler.
-            lastHandlerType = handler.GetType();
-            lastHandler = handlerHead.handler;
+            _lastHandlerType = handler.GetType();
+            _lastHandler = _handlerHead.handler;
+
             OnEventHandlerChanged(EventArgs.Empty);
         }
 
         /// <summary>
-        ///     Fires an OnEventHandlerChanged event.
+        ///  Fires an OnEventHandlerChanged event.
         /// </summary>
         private void OnEventHandlerChanged(EventArgs e)
         {
-            if (changedEvent != null)
-            {
-                ((EventHandler)changedEvent)(this, e);
-            }
+            _changedEvent?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Contains a single node of our handler stack.  We typically
-        ///     have very few handlers, and the handlers are long-living, so
-        ///     I just implemented this as a linked list.
+        ///  Contains a single node of our handler stack.  We typically
+        ///  have very few handlers, and the handlers are long-living, so
+        ///  I just implemented this as a linked list.
         /// </summary>
-        private sealed class HandlerEntry
+        internal sealed class HandlerEntry
         {
             public object handler;
             public HandlerEntry next;
 
-            /// <include file='doc\EventHandlerService.uex' path='docs/doc[@for="EventHandlerService.HandlerEntry.HandlerEntry"]/*' />
-            /// <devdoc>
-            ///     Creates a new handler entry objet.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new handler entry objet.
+            /// </summary>
             public HandlerEntry(object handler, HandlerEntry next)
             {
                 this.handler = handler;
                 this.next = next;
+            }
+        }
+
+        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
+
+        internal readonly struct TestAccessor
+        {
+            private readonly EventHandlerService _service;
+
+            public TestAccessor(EventHandlerService service)
+            {
+                _service = service;
+            }
+
+            public object LastHandler
+            {
+                get => _service._lastHandler;
+                set => _service._lastHandler = value;
+            }
+
+            public Type LastHandlerType
+            {
+                get => _service._lastHandlerType;
+                set => _service._lastHandlerType = value;
+            }
+
+            public HandlerEntry HandlerHead
+            {
+                get => _service._handlerHead;
+                set => _service._handlerHead = value;
             }
         }
     }

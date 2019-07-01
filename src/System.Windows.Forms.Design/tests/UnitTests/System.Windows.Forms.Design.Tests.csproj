@@ -13,9 +13,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.csproj" />
+    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
     <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
     <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
-    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
+    <Compile Include="..\..\..\Common\tests\TraceListenerlessContext.cs" Link="Common\TraceListenerlessContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
