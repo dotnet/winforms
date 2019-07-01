@@ -145,7 +145,6 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                Exception ex;
                 if (_host == null)
                 {
                     throw new ObjectDisposedException(ToString());
@@ -159,47 +158,42 @@ namespace System.ComponentModel.Design
                     {
                         foreach (object o in _loadErrors)
                         {
-                            ex = o as Exception;
-                            if (ex != null)
+                            if (o is Exception ex)
                             {
                                 throw new InvalidOperationException(ex.Message, ex);
                             }
-                            else
+                            else if (o != null)
                             {
                                 throw new InvalidOperationException(o.ToString());
                             }
                         }
                     }
                     // loader didn't provide any help.  Just generally fail.
-                    ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
+                    throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
-                    throw ex;
                 }
 
                 if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
                 {
-                    ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
+                    throw new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {
                         HelpLink = SR.DesignSurfaceDesignerNotLoaded
                     };
-                    throw ex;
                 }
 
                 ViewTechnology[] designerViews = rootDesigner.SupportedTechnologies;
-                // We just feed the available technologies back into the root designer. ViewTechnology itself is outdated.
-                foreach (ViewTechnology availableTech in designerViews)
+                if (designerViews == null || designerViews.Length == 0)
                 {
-                    return rootDesigner.GetView(availableTech);
+                    throw new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
+                    {
+                        HelpLink = SR.DesignSurfaceNoSupportedTechnology
+                    };
                 }
 
-                // We are out of luck here.  Throw.
-                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
-                {
-                    HelpLink = SR.DesignSurfaceNoSupportedTechnology
-                };
-                throw ex;
+                // We just feed the available technologies back into the root designer. ViewTechnology itself is outdated.
+                return rootDesigner.GetView(designerViews[0]);
             }
         }
 

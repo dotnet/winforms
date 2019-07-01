@@ -136,10 +136,6 @@ namespace System.ComponentModel.Design
                     {
                         TypeDescriptor.AddProvider(typeProvider, component);
                     }
-                    else
-                    {
-                        Debug.Fail("TypeDescriptionProviderService.GetService returned null for component " + name);
-                    }
                 }
             }
             PerformAdd(component, name);
