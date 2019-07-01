@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms
         public static extern IntPtr GetProcessWindowStation();
         [DllImport(ExternDll.User32, SetLastError = true)]
 
-        public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, [MarshalAs(UnmanagedType.LPStruct)] NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
+        public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
 
         public static extern int ClientToScreen(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);

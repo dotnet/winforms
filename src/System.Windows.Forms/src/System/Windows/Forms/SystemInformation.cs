@@ -795,7 +795,7 @@ namespace System.Windows.Forms
         /// Gets a value indicating whether the current process is running in user
         /// interactive mode.
         /// </summary>
-        public static bool UserInteractive
+        public unsafe static bool UserInteractive
         {
             get
             {
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
                     int lengthNeeded = 0;
                     NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
 
-                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, flags, Marshal.SizeOf(flags), ref lengthNeeded))
+                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, ref flags, sizeof(NativeMethods.USEROBJECTFLAGS), ref lengthNeeded))
                     {
                         if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)
                         {

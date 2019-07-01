@@ -2007,12 +2007,11 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class USEROBJECTFLAGS
+        public struct USEROBJECTFLAGS
         {
-            public int fInherit = 0;
-            public int fReserved = 0;
-            public int dwFlags = 0;
+            public int fInherit;
+            public int fReserved;
+            public int dwFlags;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
