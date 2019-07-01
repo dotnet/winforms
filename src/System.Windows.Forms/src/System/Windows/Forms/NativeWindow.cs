@@ -297,31 +297,13 @@ namespace System.Windows.Forms
                             Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger is attached, using debuggable WndProc");
                             intWndProcFlags |= UseDebuggableWndProc;
                         }
-                        else
-                        {
-                            intWndProcFlags = AdjustWndProcFlagsFromRegistry(intWndProcFlags);
-                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "After reg check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
-                            if ((intWndProcFlags & DebuggerPresent) != 0)
-                            {
-                                Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger present");
+                        else {
+                            // Reading Framework registry key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
+                            // default behaviour after applications deployed ( otherwise, Developer/user can set this flag
+                            // via Application.SetUnhandledExceptionModeInternal(..).
+                            // Disabling this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
 
-                                intWndProcFlags = AdjustWndProcFlagsFromMetadata(intWndProcFlags);
-
-                                if ((intWndProcFlags & AssemblyIsDebuggable) != 0)
-                                {
-                                    if ((intWndProcFlags & LoadConfigSettings) != 0)
-                                    {
-                                        intWndProcFlags = AdjustWndProcFlagsFromConfig(intWndProcFlags);
-                                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "After config check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
-                                    }
-                                    else
-                                    {
-                                        intWndProcFlags |= UseDebuggableWndProc;
-                                    }
-                                }
-                            }
-
-                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "After config & debugger check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
+                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger check from registry is not supported in this release of .Net version");
                         }
                     }
 
@@ -483,128 +465,6 @@ namespace System.Windows.Forms
             NativeWindow.hashForHandleId[handle] = NativeWindow.globalID;
             UnsafeNativeMethods.SetWindowLong(new HandleRef(wrapper, handle), NativeMethods.GWL_ID, new HandleRef(wrapper, (IntPtr)globalID));
             globalID++;
-
-        }
-
-        // disable inlining optimization
-        // This method introduces a dependency on System.Configuration.dll
-        // due to its usage of the type WindowsFormsSection
-        //
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        private static int AdjustWndProcFlagsFromConfig(int wndProcFlags)
-        {
-            if (WindowsFormsSection.GetSection().JitDebugging)
-            {
-                wndProcFlags |= UseDebuggableWndProc;
-            }
-            return wndProcFlags;
-        }
-
-        private static int AdjustWndProcFlagsFromRegistry(int wndProcFlags)
-        {
-            // This is the enum used to define the meaning of the debug flag...
-            //
-
-            /*
-            //
-            // We split the value of DbgJITDebugLaunchSetting between the value for whether or not to ask the user and between a
-            // mask of places to ask. The places to ask are specified in the UnhandledExceptionLocation enum in excep.h.
-            //
-            enum DebuggerLaunchSetting
-            {
-                DLS_ASK_USER          = 0x00000000,
-                DLS_TERMINATE_APP     = 0x00000001,
-                DLS_ATTACH_DEBUGGER   = 0x00000002,
-                DLS_QUESTION_MASK     = 0x0000000F,
-                DLS_ASK_WHEN_SERVICE  = 0x00000010,
-                DLS_MODIFIER_MASK     = 0x000000F0,
-                DLS_LOCATION_MASK     = 0xFFFFFF00,
-                DLS_LOCATION_SHIFT    = 8 // Shift right 8 bits to get a UnhandledExceptionLocation value from the location part.
-            };
-            */
-
-            Debug.Assert(wndProcFlags == 0x00, "Re-entrancy into IsDebuggerInstalled()");
-
-            RegistryKey debugKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework");
-            if (debugKey == null)
-            {
-                Debug.WriteLineIf(WndProcChoice.TraceVerbose, ".NETFramework key not found");
-                return wndProcFlags;
-            }
-            try
-            {
-                object value = debugKey.GetValue("DbgJITDebugLaunchSetting");
-                if (value != null)
-                {
-                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "DbgJITDebugLaunchSetting value found, debugger is installed");
-                    int dbgJit = 0;
-                    try
-                    {
-                        dbgJit = (int)value;
-                    }
-                    catch (InvalidCastException)
-                    {
-                        // If the value isn't a DWORD, then we will 
-                        // continue to use the non-debuggable wndproc
-                        //
-                        dbgJit = 1;
-                    }
-
-                    // From the enum above, 0x01 == "Terminate App"... for
-                    // anything else, we should flag that the debugger
-                    // will catch unhandled exceptions
-                    //
-                    if (dbgJit != 1)
-                    {
-                        wndProcFlags |= DebuggerPresent;
-                        wndProcFlags |= LoadConfigSettings;
-                    }
-                }
-                else if (debugKey.GetValue("DbgManagedDebugger") != null)
-                {
-                    //if there is a debugger installed, check the config files to decide
-                    //whether to allow JIT debugging.
-                    wndProcFlags |= DebuggerPresent;
-                    wndProcFlags |= LoadConfigSettings;
-                }
-            }
-            finally
-            {
-                debugKey.Close();
-            }
-
-
-            return wndProcFlags;
-        }
-
-        static int AdjustWndProcFlagsFromMetadata(int wndProcFlags)
-        {
-            if ((wndProcFlags & DebuggerPresent) != 0)
-            {
-                Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger present, checking for debuggable entry assembly");
-                Assembly entry = Assembly.GetEntryAssembly();
-                if (entry != null)
-                {
-                    if (Attribute.IsDefined(entry, typeof(DebuggableAttribute)))
-                    {
-                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debuggable attribute on assembly");
-                        Attribute[] attr = Attribute.GetCustomAttributes(entry, typeof(DebuggableAttribute));
-                        if (attr.Length > 0)
-                        {
-                            DebuggableAttribute dbg = (DebuggableAttribute)attr[0];
-                            if (dbg.IsJITTrackingEnabled)
-                            {
-                                // Only if the assembly is really setup for debugging
-                                // does it really make sense to enable the jitDebugging
-                                //
-                                Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Entry assembly is debuggable");
-                                wndProcFlags |= AssemblyIsDebuggable;
-                            }
-                        }
-                    }
-                }
-            }
-            return wndProcFlags;
         }
 
         /// <summary>
