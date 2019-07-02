@@ -5397,7 +5397,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct tagELEMDESC
         {
-            public NativeMethods.tagTYPEDESC* tdesc;
+            public NativeMethods.tagTYPEDESC tdesc;
             public NativeMethods.tagPARAMDESC paramdesc;
         }
 
