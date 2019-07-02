@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Le contrôle ActiveX est un contrôle sans fenêtre. Ce contrôle n'est pas pris en charge dans cette version du .NET Framework.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Le contrôle ActiveX est un contrôle sans fenêtre. Ce contrôle n'est pas pris en charge dans cette version du .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Framework Configuration.
+        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Configuration.
 
 Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer.
 
@@ -5204,12 +5204,12 @@ Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer 
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Framework Configuration.
+        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Configuration.
 
 Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer. Si vous cliquez sur Quitter, l'application va s'arrêter immédiatement.
 

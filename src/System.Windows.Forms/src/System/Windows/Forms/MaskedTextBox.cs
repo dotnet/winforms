@@ -1607,8 +1607,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a handle for this control. This method is called by the .NET Framework, this should
-        ///     not be called. Inheriting classes should always call base.createHandle when overriding this method.
+        ///     Creates a handle for this control. This method is called by the .NET.
+        ///     Inheriting classes should always call base.createHandle when overriding this method.
         ///     Overridden to be able to set the control text with the masked (passworded) value when recreating
         ///     handle, since the underlying native edit control is not aware of it.
         /// </summary>

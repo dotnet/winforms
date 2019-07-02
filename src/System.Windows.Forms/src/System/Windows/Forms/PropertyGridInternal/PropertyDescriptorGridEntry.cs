@@ -1169,9 +1169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         /// Creates a new AccessibleObject for this PropertyDescriptorGridEntry instance.
-        /// The AccessibleObject instance returned by this method supports IsEnabled UIA property.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.7.2 or opt in into this feature using a compatibility switch. 
+        /// The AccessibleObject instance returned by this method supports IsEnabled UIA property. 
         /// </summary>
         /// <returns>
         /// AccessibleObject for this PropertyDescriptorGridEntry instance.

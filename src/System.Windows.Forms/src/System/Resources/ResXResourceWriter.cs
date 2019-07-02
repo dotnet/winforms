@@ -45,19 +45,6 @@ namespace System.Resources
 
         private static readonly TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
-        internal static readonly string Beta2CompatSerializedObjectMimeType = "text/microsoft-urt/psuedoml-serialized/base64";
-
-        // These two "compat" mimetypes are here. In Beta 2 and RTM we used the term "URT"
-        // internally to refer to parts of the .NET Framework. Since these references
-        // will be in Beta 2 ResX files, and RTM ResX files for customers that had 
-        // early access to releases, we don't want to break that. We will read 
-        // and parse these types correctly in version 1.0, but will always 
-        // write out the new version. So, opening and editing a ResX file in VS will
-        // update it to the new types.
-        //
-        internal static readonly string CompatBinSerializedObjectMimeType = "text/microsoft-urt/binary-serialized/base64";
-        internal static readonly string CompatSoapSerializedObjectMimeType = "text/microsoft-urt/soap-serialized/base64";
-
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;

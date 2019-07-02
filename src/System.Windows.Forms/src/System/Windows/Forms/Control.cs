@@ -5900,8 +5900,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a handle for this control. This method is called by the .NET Framework, this should
-        ///     not be called. Inheriting classes should always call base.createHandle when
+        ///     Creates a handle for this control. This method is called by the .NET.
+        ///     Inheriting classes should always call base.createHandle when
         ///     overriding this method.
         /// </summary>
         [
@@ -20679,7 +20679,6 @@ namespace System.Windows.Forms
             /// Raises the LiveRegionChanged UIA event.
             /// To make this method effective, the control must implement System.Windows.Forms.Automation.IAutomationLiveRegion interface
             /// and its LiveSetting property must return either AutomationLiveSetting.Polite or AutomationLiveSetting.Assertive value.
-            /// In addition, the applications must be recompiled to target .NET Framework 4.7.3 or opt in into this feature using compatibility switches.
             /// </summary>
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()

@@ -417,9 +417,7 @@ namespace System.Resources
 
             if (!string.IsNullOrEmpty(mimeTypeName))
             {
-                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
-                    || string.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
-                    || string.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType))
+                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType))
                 {
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData = FromBase64WrappedString(text);
@@ -1103,6 +1101,7 @@ namespace System.Resources
                 throw new ArgumentException(string.Format(SR.InvalidResXNoType, name));
             }
 
+            //TODO -dreddy
             if (result != null)
             {
                 // Only cache types from .Net framework  because they don't need to update.

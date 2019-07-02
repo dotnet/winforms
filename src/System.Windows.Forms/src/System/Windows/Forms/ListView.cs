@@ -9857,9 +9857,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Creates the new instance of AccessibleObject for this ListView control.
-        /// Returning ListViewAccessibleObject is only available in applications that
-        /// are recompiled to target .NET Framework 4.7.3 or opt-in into this feature
-        /// using a compatibility switch.
+        /// Returning ListViewAccessibleObject.
         /// </summary>
         /// <returns>
         /// The AccessibleObject for this ListView instance.

@@ -57,8 +57,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a new AccessibleObject for this ToolStripStatusLabel instance.
         /// The AccessibleObject instance returned by this method supports UIA Live Region feature.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.7.3 or opted into this feature using compatibility switches. 
         /// </summary>
         /// <returns>
         /// AccessibleObject for this ToolStripStatusLabel instance.
@@ -277,8 +275,6 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// Raises the LiveRegionChanged UIA event.
-            /// To make this method effective, the applications must be recompiled to target .NET Framework 4.7.3
-            /// or opted into this feature using compatibility switches.
             /// </summary>
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()

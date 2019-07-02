@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">El control ActiveX es un control sin ventanas. Esta versión de .Net Framework no admite dichos controles.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">El control ActiveX es un control sin ventanas. Esta versión de .Net no admite dichos controles.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">La aplicación intentó realizar una operación no permitida por la directiva de seguridad. Para otorgar a esta aplicación el permiso requerido póngase en contacto con el administrador del sistema o utilice la herramienta Configuración de Microsoft .NET Framework.
+        <target state="translated">La aplicación intentó realizar una operación no permitida por la directiva de seguridad. Para otorgar a esta aplicación el permiso requerido póngase en contacto con el administrador del sistema o utilice la herramienta Configuración de Microsoft .NET.
 
 Si hace clic en Continuar, la aplicación pasará por alto este error e intentará seguir.
 
@@ -5204,12 +5204,12 @@ Si hace clic en Continuar, la aplicación pasará por alto este error e intentar
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">La aplicación intentó realizar una operación no permitida por la directiva de seguridad. Para otorgar a esta aplicación el permiso requerido póngase en contacto con el administrador del sistema o utilice la herramienta Configuración de Microsoft .NET Framework.
+        <target state="translated">La aplicación intentó realizar una operación no permitida por la directiva de seguridad. Para otorgar a esta aplicación el permiso requerido póngase en contacto con el administrador del sistema o utilice la herramienta Configuración de Microsoft .NET.
 
 Si hace clic en Continuar, la aplicación pasará por alto este error e intentará seguir. Si hace clic en Salir, la aplicación se cerrará inmediatamente.
 
