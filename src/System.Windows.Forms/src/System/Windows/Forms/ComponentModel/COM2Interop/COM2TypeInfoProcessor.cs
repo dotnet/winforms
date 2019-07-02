@@ -719,7 +719,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             unsafe
                             {
-                                typeDesc = *funcDesc.elemdescFunc.tdesc;
+                                typeDesc = funcDesc.elemdescFunc.tdesc;
                             }
                         }
                         else
@@ -734,7 +734,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             ref readonly NativeMethods.tagELEMDESC ed = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagELEMDESC>(funcDesc.lprgelemdescParam);
                             unsafe
                             {
-                                typeDesc = *ed.tdesc;
+                                typeDesc = ed.tdesc;
                             }
                         }
                         pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags);
@@ -973,7 +973,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         unsafe
                         {
-                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in *varDesc.elemdescVar.tdesc, varDesc.wVarFlags);
+                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in varDesc.elemdescVar.tdesc, varDesc.wVarFlags);
                             if (pi.ReadOnly != PropInfo.ReadOnlyTrue)
                             {
                                 pi.ReadOnly = PropInfo.ReadOnlyFalse;
