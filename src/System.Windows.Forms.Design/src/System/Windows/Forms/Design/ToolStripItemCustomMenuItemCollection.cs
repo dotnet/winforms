@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design
                 imageToolStripMenuItem = new ToolStripMenuItem
                 {
                     Text = SR.ToolStripItemContextMenuSetImage,
-                    Image = new Bitmap(typeof(ToolStripMenuItem), "image.bmp"),
+                    Image = new Icon(typeof(ToolStripMenuItem), "image").ToBitmap(),
                     ImageTransparentColor = Color.Magenta
                 };
                 //Add event Handlers
@@ -155,10 +155,10 @@ namespace System.Windows.Forms.Design
                     imageStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "Image", ToolStripItemDisplayStyle.Image);
                     imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                     // alignmentToolStripMenuItem
-                    alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment.bmp");
+                    alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment");
                     alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem });
                     // displayStyleToolStripMenuItem
-                    displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle.bmp");
+                    displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle");
                     displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem });
 
                     if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
@@ -212,7 +212,7 @@ namespace System.Windows.Forms.Design
                             Text = SR.ToolStripDropDownItemCollectionEditorVerb
                         };
                         editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
-                        editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist.bmp").ToBitmap();
+                        editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist").ToBitmap();
                         editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
                         Add(editItemsToolStripMenuItem);
                     }
@@ -553,7 +553,7 @@ namespace System.Windows.Forms.Design
                     Image image = null;
                     try
                     {
-                        image = new Bitmap(typeof(ToolStripButton), "blank.bmp");
+                        image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                     }
                     catch (Exception ex)
                     {

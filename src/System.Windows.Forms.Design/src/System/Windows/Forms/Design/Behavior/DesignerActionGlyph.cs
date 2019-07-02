@@ -94,8 +94,8 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (_glyphImageClosed == null)
                 {
-                    _glyphImageClosed = new Bitmap(typeof(DesignerActionGlyph), "Close_left.bmp");
-                    _glyphImageClosed.MakeTransparent(Color.Magenta);
+                    _glyphImageClosed = new Icon(typeof(DesignerActionGlyph), "Close_left").ToBitmap();
+
                     if (DpiHelper.IsScalingRequired)
                     {
                         DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageClosed);
@@ -111,8 +111,8 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (_glyphImageOpened == null)
                 {
-                    _glyphImageOpened = new Bitmap(typeof(DesignerActionGlyph), "Open_left.bmp");
-                    _glyphImageOpened.MakeTransparent(Color.Magenta);
+                    _glyphImageOpened = new Icon(typeof(DesignerActionGlyph), "Open_left").ToBitmap();
+
                     if (DpiHelper.IsScalingRequired)
                     {
                         DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageOpened);
