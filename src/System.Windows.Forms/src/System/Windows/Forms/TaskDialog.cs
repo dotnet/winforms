@@ -84,7 +84,7 @@ namespace System.Windows.Forms
 
         private TaskDialogStartupLocation _startupLocation;
 
-        private bool _doNotSetForeground;
+        private bool _setToForeground;
 
         private TaskDialogPage _page;
 
@@ -379,37 +379,39 @@ namespace System.Windows.Forms
             }
         }
 
-        // TODO: Maybe invert the property (like "SetToForeground") so that by default
-        // the TDF_NO_SET_FOREGROUND flag is specified (as that is also the default
-        // behavior of the MessageBox).
         /// <summary>
-        /// Gets or sets a value that indicates if the task dialog should not set
-        /// itself as foreground window when showing it.
+        /// Gets or sets a value that indicates whether the task dialog should set itself as
+        /// foreground window when showing it.
         /// </summary>
         /// <value>
-        /// <c>true</c> to indicate that the task dialog should not set itself as foreground window
+        /// <c>true</c> to indicate that the task dialog should set itself as foreground window
         /// when showing it; otherwise, <c>false</c>. The default value is <c>false</c>.
         /// </value>
         /// <remarks>
         /// When setting this property to <c>true</c> and then showing the dialog, it
-        /// causes the dialog to not set itself as foreground window. This means that
+        /// causes the dialog to set itself as foreground window. This means that
         /// if currently none of the application's windows has focus, the task dialog
-        /// doesn't try to "steal" focus (which otherwise can result in the task dialog
-        /// window being activated, or the taskbar button for the window flashing
-        /// orange). However, if the application already has focus, the task dialog
-        /// window will be activated anyway.
+        /// tries to "steal" focus (which can result in the task dialog window being
+        /// activated, or the taskbar button for the window flashing orange). However,
+        /// if the application already has focus, the task dialog window will be
+        /// activated in either case.
         /// 
-        /// Note: This property only has an effect on Windows 8 and higher.
+        /// Note: A value of <c>false</c> only has an effect on Windows 8/Windows Server 2012
+        /// and higher. On previous versions of Windows, the task dialog will always behave as
+        /// if this property was set to <c>true</c>.
         /// </remarks>
-        public bool DoNotSetForeground
+        public bool SetToForeground
         {
-            get => _doNotSetForeground;
+            // Note: The default value of this property is 'false' which means the
+            // TDF_NO_SET_FOREGROUND flag is specified by default (which is also the default
+            // behavior of the MessageBox).
+            get => _setToForeground;
 
             set
             {
                 DenyIfBound();
 
-                _doNotSetForeground = value;
+                _setToForeground = value;
             }
         }
 
@@ -630,7 +632,7 @@ namespace System.Windows.Forms
                     _page,
                     hwndOwner,
                     _startupLocation,
-                    _doNotSetForeground,
+                    _setToForeground,
                     out IntPtr ptrToFree,
                     out IntPtr ptrTaskDialogConfig);
 
@@ -1466,7 +1468,7 @@ namespace System.Windows.Forms
                     page,
                     IntPtr.Zero,
                     startupLocation: default,
-                    doNotSetForeground: false,
+                    setToForeground: false,
                     out IntPtr ptrToFree,
                     out IntPtr ptrTaskDialogConfig);
                 try
@@ -1530,7 +1532,7 @@ namespace System.Windows.Forms
             TaskDialogPage page,
             IntPtr hwndOwner,
             TaskDialogStartupLocation startupLocation,
-            bool doNotSetForeground,
+            bool setToForeground,
             out IntPtr ptrToFree,
             out IntPtr ptrTaskDialogConfig)
         {
@@ -1549,7 +1551,7 @@ namespace System.Windows.Forms
                 {
                     flags |= TaskDialogFlags.TDF_POSITION_RELATIVE_TO_WINDOW;
                 }
-                if (doNotSetForeground)
+                if (!setToForeground)
                 {
                     flags |= TaskDialogFlags.TDF_NO_SET_FOREGROUND;
                 }
