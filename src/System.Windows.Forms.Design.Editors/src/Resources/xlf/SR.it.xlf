@@ -130,7 +130,8 @@
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
-        <target state="needs-review-translation">Per iniziare una nuova riga, premere INVIO.\r\nPer accettare il testo, premere CTRL+INVIO.</target>
+        <target state="translated">Per iniziare una nuova riga premere INVIO.
+Per accettare testo premere CTRL+INVIO.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

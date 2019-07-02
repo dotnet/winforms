@@ -130,7 +130,8 @@
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
-        <target state="needs-review-translation">Yeni satıra başlamak için Enter tuşuna basın.\r\nMetni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
+        <target state="translated">Yeni satıra başlamak için Enter tuşuna basın.
+Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
