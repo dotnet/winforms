@@ -244,12 +244,12 @@ namespace System.ComponentModel.Design
 
         void IDesignerFilter.PreFilterAttributes(IDictionary attributes)
         {
-            throw new NotImplementedException();
+            PreFilterAttributes(attributes);
         }
 
         void IDesignerFilter.PreFilterEvents(IDictionary events)
         {
-            throw new NotImplementedException();
+            PreFilterEvents(events);
         }
 
         void IDesignerFilter.PreFilterProperties(IDictionary properties)
@@ -853,7 +853,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void PreFilterAttributes(IDictionary attributes)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
@@ -861,7 +860,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void PreFilterEvents(IDictionary events)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>

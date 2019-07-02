@@ -968,22 +968,6 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(designer.InvokeGetInheritanceAttribute(null));
         }
 
-        [Theory]
-        [MemberData(nameof(IDictionary_TestData))]
-        public void PreFilterAttributes_Invoke_ThrowsNotImplementedException(IDictionary attributes)
-        {
-            var designer = new SubComponentDesigner();
-            Assert.Throws<NotImplementedException>(() => designer.PreFilterAttributes(attributes));
-        }
-
-        [Theory]
-        [MemberData(nameof(IDictionary_TestData))]
-        public void PreFilterEvents_Invoke_ThrowsNotImplementedException(IDictionary events)
-        {
-            var designer = new SubComponentDesigner();
-            Assert.Throws<NotImplementedException>(() => designer.PreFilterEvents(events));
-        }
-
         public static IEnumerable<object[]> PreFilterProperties_ComponentWithoutKey_TestData()
         {
             yield return new object[] { null };
@@ -1464,17 +1448,8 @@ namespace System.ComponentModel.Design.Tests
         }
 #pragma warning restore 0618
 
-        [Theory]
-        [MemberData(nameof(IDictionary_TestData))]
-        public void IDesignerFilterPreFilterAttributes_Invoke_ThrowsNotImplementedException(IDictionary attributes)
-        {
-            var designer = new ComponentDesigner();
-            IDesignerFilter filter = designer;
-            Assert.Throws<NotImplementedException>(() => filter.PreFilterAttributes(attributes));
-        }
-
         [Fact]
-        public void IDesignerFilterPreFilterAttributes_Invoke_DoesNotCallProtectedVirtualMethod()
+        public void IDesignerFilterPreFilterAttributes_Invoke_CallsProtectedVirtualMethod()
         {
             var mockDesigner = new Mock<ComponentDesigner>(MockBehavior.Strict);
             mockDesigner
@@ -1482,21 +1457,14 @@ namespace System.ComponentModel.Design.Tests
                 .Setup("PreFilterAttributes", ItExpr.IsAny<IDictionary>())
                 .Verifiable();
             IDesignerFilter filter = mockDesigner.Object;
-            Assert.Throws<NotImplementedException>(() => filter.PreFilterAttributes(new Dictionary<string, object>()));
-            mockDesigner.Protected().Verify("PreFilterAttributes", Times.Never(), ItExpr.IsAny<IDictionary>());
-        }
 
-        [Theory]
-        [MemberData(nameof(IDictionary_TestData))]
-        public void IDesignerFilterPreFilterEvents_Invoke_ThrowsNotImplementedException(IDictionary events)
-        {
-            var designer = new ComponentDesigner();
-            IDesignerFilter filter = designer;
-            Assert.Throws<NotImplementedException>(() => filter.PreFilterEvents(events));
+            filter.PreFilterAttributes(new Dictionary<string, object>());
+
+            mockDesigner.Protected().Verify("PreFilterAttributes", Times.Once(), ItExpr.IsAny<IDictionary>());
         }
 
         [Fact]
-        public void IDesignerFilterPreFilterEvents_Invoke_DoesNotCallProtectedVirtualMethod()
+        public void IDesignerFilterPreFilterEvents_Invoke_CallsProtectedVirtualMethod()
         {
             var mockDesigner = new Mock<ComponentDesigner>(MockBehavior.Strict);
             mockDesigner
@@ -1504,8 +1472,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup("PreFilterEvents", ItExpr.IsAny<IDictionary>())
                 .Verifiable();
             IDesignerFilter filter = mockDesigner.Object;
-            Assert.Throws<NotImplementedException>(() => filter.PreFilterEvents(new Dictionary<string, object>()));
-            mockDesigner.Protected().Verify("PreFilterEvents", Times.Never(), ItExpr.IsAny<IDictionary>());
+
+            filter.PreFilterEvents(new Dictionary<string, object>());
+
+            mockDesigner.Protected().Verify("PreFilterEvents", Times.Once(), ItExpr.IsAny<IDictionary>());
         }
 
         [Fact]
