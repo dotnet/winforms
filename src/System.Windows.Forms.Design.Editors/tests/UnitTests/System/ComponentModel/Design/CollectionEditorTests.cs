@@ -747,47 +747,30 @@ namespace System.ComponentModel.Design.Tests
             var value = new object();
             Assert.Throws<ArgumentNullException>("type", () => editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         }
-        public static IEnumerable<object[]> EditValue_InvalidProvider_TestData()
-        {
-            yield return new object[] { null };
-
-            var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            nullServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(null);
-            yield return new object[] { nullServiceProviderMock.Object };
-
-            var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            invalidServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(new object());
-            yield return new object[] { invalidServiceProviderMock.Object };
-        }
 
         [Theory]
-        [MemberData(nameof(EditValue_InvalidProvider_TestData))]
-        public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider)
+        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new SubCollectionEditor(null);
-            var value = new object();
             Assert.Same(value, editor.EditValue(null, provider, value));
             Assert.Null(editor.Context);
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("value")]
-        public void CollectionEditor_EditValue_NullProvider_ReturnsValue(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
-            var editor = new SubCollectionEditor(null);
-            Assert.Same(value, editor.EditValue(null, null, value));
+            var editor = new CollectionEditor(null);
+            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
         }
 
-        [Fact]
-        public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void CollectionEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
-            var editor = new SubCollectionEditor(null);
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
+            var editor = new CollectionEditor(null);
+            Assert.False(editor.GetPaintValueSupported(context));
         }
 
         public static IEnumerable<Object[]> GetDisplayText_TestData()

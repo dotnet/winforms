@@ -56,12 +56,12 @@ namespace System.Drawing.Design.Tests
             mockEditor.Verify(e => e.EditValue(null, provider, value), Times.Once());
         }
 
-        [Fact]
-        public void UITypeEditor_GetEditStyle_Invoke_ReturnsNone()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void UITypeEditor_GetEditStyle_Invoke_ReturnsNone(ITypeDescriptorContext context)
         {
             var editor = new UITypeEditor();
-            Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle());
-            Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle(null));
+            Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle(context));
         }
 
         [Fact]
@@ -76,11 +76,12 @@ namespace System.Drawing.Design.Tests
             mockEditor.Verify(e => e.GetEditStyle(null), Times.Once());
         }
 
-        [Fact]
-        public void UITypeEditor_GetPaintValueSupported_Invoke_ReturnsFalse()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void UITypeEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new UITypeEditor();
-            Assert.False(editor.GetPaintValueSupported(null));
+            Assert.False(editor.GetPaintValueSupported(context));
         }
 
         [Theory]

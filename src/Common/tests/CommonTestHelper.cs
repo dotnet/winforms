@@ -4,12 +4,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
 using System.Security;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using Moq;
 using Xunit;
 
 namespace WinForms.Common.Tests
@@ -489,6 +492,37 @@ namespace WinForms.Common.Tests
                 null,
                 new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4),
                 new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)
+            };
+        }
+
+        public static TheoryData<IServiceProvider, object> GetEditValueInvalidProviderTestData()
+        {
+            var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            nullServiceProviderMock
+                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
+                .Returns(null);
+            var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            invalidServiceProviderMock
+                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
+                .Returns(new object());
+            var value = new object();
+            return new TheoryData<IServiceProvider, object>
+            {
+                { null, null },
+                { null, value },
+                { nullServiceProviderMock.Object, null },
+                { nullServiceProviderMock.Object, value },
+                { invalidServiceProviderMock.Object, null },
+                { invalidServiceProviderMock.Object, value }
+            };
+        }
+
+        public static TheoryData<ITypeDescriptorContext> GetITypeDescriptorContextTestData()
+        {
+            return new TheoryData<ITypeDescriptorContext>
+            {
+                null,
+                new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object
             };
         }
 
