@@ -9,7 +9,19 @@ Please close every open instance of Visual Studio before installing this extensi
 
 ## Create WinForms .NET Core app
 
-Visual Studio does not currently ship a WinForms .NET Core app template, so if you want to build a WinForms .NET Core app, you need to create an app first from a command line.
+Create a new WinForms application targeting .NET Core from Visual Studio or your favorite command line interface.
+
+### Create in Visual Studio
+
+`VS2019`: 
+
+1. _File > Add > New Project... > Windows Forms App (.NET Core)_, choose C# or Visual Basic
+2. Specify project name, e.g. `SimpleWinForms`
+
+
+
+### Create from command line
+
 Open your favorite console, create a new folder for your application:
 
 ```cmd
@@ -22,9 +34,7 @@ dotnet sln add SimpleWinForms
 
 :point_up: **TIP:** You can have the folder name different from the project's name. Use the option `-n` (or `-name`) for that when using `dotnet new`.
 
-:warning: **NOTE:** Templates for **Visual Basic** are currently in development (so `dotnet new winforms -lang VB` will eventually work!), and they are not available yet.
-Visual Basic, however, is already supported; as a workaround for the time being, you can create an empty .NET Core Console VB app, rename and patch the project files accordingly (just copy those definitions over from a C# app). 
-Please also note that a support for the Application Framework in Visual Basic is coming at a later date.
+:point_up: **TIP:** For Visual Basic projects use the option `-lang vb` when using `dotnet new`.
 
 After creating the project, you can run the application:
 ```cmd
@@ -120,7 +130,11 @@ If you installed the [File Nesting Visual Studio Extension][file-nesting-extensi
 Now, whenever you need to use the Designer on one of the .NET Core Form or UserControl files, simply open the linked files in the .NET Framework project with the Windows Forms Designer.
 
 
+## More information
 
+If you are porintg an existing .NET Framework application to .NET Core you may wish to read the following blog posts:
+* [Porting desktop apps to .NET Core](https://devblogs.microsoft.com/dotnet/porting-desktop-apps-to-net-core/)
+* [Using the WinForms designer for .NET Core projects](https://devblogs.microsoft.com/dotnet/how-to-port-desktop-applications-to-net-core-3-0/#user-content-using-the-winforms-designer-for-net-core-projects)
 
 [comment]: <> (URI Links)
 
