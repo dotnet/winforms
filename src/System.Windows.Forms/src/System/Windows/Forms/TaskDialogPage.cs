@@ -574,8 +574,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogNavigationNotCompleted,
-                    nameof(TaskDialogPage),
-                    nameof(Created)));
+                    $"{nameof(TaskDialogPage)}.{nameof(Created)}"));
             }
         }
 

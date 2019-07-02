@@ -7080,7 +7080,7 @@ Stack trace where the illegal operation occurred was:
     <value>Cannot navigate the dialog from an event handler that is called from within navigation.</value>
   </data>
   <data name="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged" xml:space="preserve">
-    <value>Cannot navigate the dialog from within the {0}.{1} event of one of the radio buttons of the current task dialog.</value>
+    <value>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</value>
   </data>
   <data name="TaskDialogCannotRemoveProgressBarWhileDialogIsShown" xml:space="preserve">
     <value>Cannot remove the progress bar while the task dialog is shown.</value>
@@ -7092,13 +7092,13 @@ Stack trace where the illegal operation occurred was:
     <value>Cannot set this property while the task dialog is shown.</value>
   </data>
   <data name="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent" xml:space="preserve">
-    <value>Cannot set the {0}.{1} property from within the {2}.{3} event of one of the radio buttons of the current task dialog.</value>
+    <value>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</value>
   </data>
   <data name="TaskDialogCannotUncheckRadioButtonWhileBound" xml:space="preserve">
     <value>Cannot uncheck a radio button while it is bound to a task dialog.</value>
   </data>
   <data name="TaskDialogCannotUpdateAfterNavigation" xml:space="preserve">
-    <value>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0}.{1} event of the next page to occur.</value>
+    <value>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</value>
   </data>
   <data name="TaskDialogCannotUpdateIconType" xml:space="preserve">
     <value>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</value>
@@ -7128,10 +7128,10 @@ Stack trace where the illegal operation occurred was:
     <value>This {0} instance is already being shown.</value>
   </data>
   <data name="TaskDialogNavigationNotCompleted" xml:space="preserve">
-    <value>Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</value>
+    <value>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</value>
   </data>
   <data name="TaskDialogVisualStylesNotEnabled" xml:space="preserve">
-    <value>Visual styles are not enabled. Please call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</value>
+    <value>Visual styles are not enabled. Please call {0} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</value>
   </data>
   <data name="TaskDialogOnlySingleButtonCanBeDefault" xml:space="preserve">
     <value>Only a single button can be set as default button.</value>

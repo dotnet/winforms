@@ -9717,8 +9717,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
-        <source>Cannot navigate the dialog from within the {0}.{1} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot navigate the dialog from within the {0}.{1} event of one of the radio buttons of the current task dialog.</target>
+        <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
+        <target state="new">Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
@@ -9737,8 +9737,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
-        <source>Cannot set the {0}.{1} property from within the {2}.{3} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot set the {0}.{1} property from within the {2}.{3} event of one of the radio buttons of the current task dialog.</target>
+        <source>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</source>
+        <target state="new">Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
@@ -9747,8 +9747,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
-        <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0}.{1} event of the next page to occur.</source>
-        <target state="new">Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0}.{1} event of the next page to occur.</target>
+        <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
+        <target state="new">Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
@@ -9792,8 +9792,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
-        <source>Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</source>
-        <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0}.{1} event to occur.</target>
+        <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
+        <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleButtonCanBeDefault">
@@ -9822,8 +9822,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogVisualStylesNotEnabled">
-        <source>Visual styles are not enabled. Please call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</source>
-        <target state="new">Visual styles are not enabled. Please call {0}.{1} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</target>
+        <source>Visual styles are not enabled. Please call {0} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</source>
+        <target state="new">Visual styles are not enabled. Please call {0} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">

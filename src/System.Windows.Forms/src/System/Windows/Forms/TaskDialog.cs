@@ -676,8 +676,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(string.Format(
                             SR.TaskDialogVisualStylesNotEnabled,
-                            nameof(Application),
-                            nameof(Application.EnableVisualStyles)),
+                            $"{nameof(Application)}.{nameof(Application.EnableVisualStyles)}"),
                             ex);
                     }
                     finally
@@ -1388,8 +1387,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogCannotNavigateWithinRadioButtonCheckedChanged,
-                    nameof(TaskDialogRadioButton),
-                    nameof(TaskDialogRadioButton.CheckedChanged)));
+                    $"{nameof(TaskDialogRadioButton)}.{nameof(TaskDialogRadioButton.CheckedChanged)}"));
             }
 
             // Don't allow to navigate the dialog if called from an event handler
@@ -1829,8 +1827,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogCannotUpdateAfterNavigation,
-                    nameof(TaskDialogPage),
-                    nameof(TaskDialogPage.Created)));
+                    $"{nameof(TaskDialogPage)}.{nameof(TaskDialogPage.Created)}"));
             }
         }
 

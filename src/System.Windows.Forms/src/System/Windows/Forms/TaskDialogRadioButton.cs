@@ -197,10 +197,8 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(string.Format(
                         SR.TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent,
-                        nameof(TaskDialogRadioButton),
-                        nameof(Checked),
-                        nameof(TaskDialogRadioButton),
-                        nameof(CheckedChanged)));
+                        $"{nameof(TaskDialogRadioButton)}.{nameof(Checked)}",
+                        $"{nameof(TaskDialogRadioButton)}.{nameof(CheckedChanged)}"));
                 }
 
                 // Click the radio button which will (recursively) raise the
