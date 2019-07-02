@@ -157,89 +157,17 @@ namespace System.ComponentModel.Design
 
         void IDesignerFilter.PostFilterAttributes(IDictionary attributes)
         {
-            // If this component is being inherited, mark it as such in the class attributes.
-            if (attributes == null)
-            {
-                return;
-            }
-
-            if (attributes.Contains(typeof(InheritanceAttribute)))
-            {
-                _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
-            }
-            else
-            {
-                InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
-                if (inheritanceAttribute != null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
-                {
-                    attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
-                }
-            }
+            PostFilterAttributes(attributes);
         }
 
         void IDesignerFilter.PostFilterEvents(IDictionary events)
         {
-            // If this component is being privately inherited, we need to filter the events to make them read-only.
-            if (events == null)
-            {
-                return;
-            }
-
-            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
-            if (inheritanceAttribute != null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
-            {
-                EventDescriptor[] values = new EventDescriptor[events.Values.Count];
-                events.Values.CopyTo(values, 0);
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    EventDescriptor evt = values[i];
-                    if (evt != null)
-                    {
-                        events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
-                    }
-                }
-            }
+            PostFilterEvents(events);
         }
 
         void IDesignerFilter.PostFilterProperties(IDictionary properties)
         {
-            if (_inheritedProps != null)
-            {
-                bool readOnlyInherit = (InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly));
-
-                if (readOnlyInherit)
-                {
-                    // Now loop through all the properties.  For each one, try to match a pre-created property.
-                    // If that fails, then create a new property.
-                    PropertyDescriptor[] values = new PropertyDescriptor[properties.Values.Count];
-                    properties.Values.CopyTo(values, 0);
-
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        PropertyDescriptor prop = values[i];
-                        // This is a private component.  Therefore, the user should not be allowed to modify any properties.  We replace all properties with read-only versions.
-                        properties[prop.Name] = TypeDescriptor.CreateProperty(prop.ComponentType, prop, ReadOnlyAttribute.Yes);
-                    }
-                }
-                else
-                {
-                    // otherwise apply our inherited properties to the actual property list.
-                    foreach (DictionaryEntry de in _inheritedProps)
-                    {
-                        if (de.Value is InheritedPropertyDescriptor inheritedPropDesc)
-                        {
-                            // replace the property descriptor it was created with with the new one in case we're shadowing
-                            PropertyDescriptor newInnerProp = (PropertyDescriptor)properties[de.Key];
-                            if (newInnerProp != null)
-                            {
-                                inheritedPropDesc.PropertyDescriptor = newInnerProp;
-                                properties[de.Key] = inheritedPropDesc;
-                            }
-                        }
-                    }
-                }
-            }
+            PostFilterProperties(properties);
         }
 
         void IDesignerFilter.PreFilterAttributes(IDictionary attributes)
@@ -254,13 +182,7 @@ namespace System.ComponentModel.Design
 
         void IDesignerFilter.PreFilterProperties(IDictionary properties)
         {
-            if (Component is IPersistComponentSettings && properties != null)
-            {
-                if (properties[SettingsKeyName] is PropertyDescriptor prop)
-                {
-                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, Array.Empty<Attribute>());
-                }
-            }
+            PreFilterProperties(properties);
         }
 
         /// <summary>
@@ -817,14 +739,15 @@ namespace System.ComponentModel.Design
 
                 if (readOnlyInherit)
                 {
-                    // Now loop through all the properties.  For each one, try to match a pre-created property. If that fails, then create a new property.
+                    // Now loop through all the properties.  For each one, try to match a pre-created property. 
+                    // If that fails, then create a new property.
                     PropertyDescriptor[] values = new PropertyDescriptor[properties.Values.Count];
                     properties.Values.CopyTo(values, 0);
 
                     for (int i = 0; i < values.Length; i++)
                     {
                         PropertyDescriptor prop = values[i];
-                        // This is a private component. Therefore, the user should not be allowed to modify any properties.  We replace all properties with read-only versions.
+                        // This is a private component. Therefore, the user should not be allowed to modify any properties. We replace all properties with read-only versions.
                         properties[prop.Name] = TypeDescriptor.CreateProperty(prop.ComponentType, prop, ReadOnlyAttribute.Yes);
                     }
                 }

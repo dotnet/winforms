@@ -1560,7 +1560,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void IDesignerFilterPreFilterProperties_Invoke_DoesNotCallProtectedVirtualMethod()
+        public void IDesignerFilterPreFilterProperties_Invoke_CallsProtectedVirtualMethod()
         {
             var mockDesigner = new Mock<ComponentDesigner>(MockBehavior.Strict);
             mockDesigner
@@ -1568,8 +1568,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup("PreFilterProperties", ItExpr.IsAny<IDictionary>())
                 .Verifiable();
             IDesignerFilter filter = mockDesigner.Object;
+
             filter.PreFilterProperties(new Dictionary<string, object>());
-            mockDesigner.Protected().Verify("PreFilterProperties", Times.Never(), ItExpr.IsAny<IDictionary>());
+
+            mockDesigner.Protected().Verify("PreFilterProperties", Times.Once(), ItExpr.IsAny<IDictionary>());
         }
 
         [Theory]
@@ -1593,7 +1595,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void IDesignerFilterPostFilterAttributes_Invoke_DoesNotCallProtectedVirtualMethod()
+        public void IDesignerFilterPostFilterAttributes_Invoke_CallsProtectedVirtualMethod()
         {
             var mockDesigner = new Mock<ComponentDesigner>(MockBehavior.Strict);
             mockDesigner
@@ -1605,8 +1607,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup("PostFilterAttributes", ItExpr.IsAny<IDictionary>())
                 .Verifiable();
             IDesignerFilter filter = mockDesigner.Object;
+
             filter.PostFilterAttributes(new Dictionary<string, object>());
-            mockDesigner.Protected().Verify("PostFilterAttributes", Times.Never(), ItExpr.IsAny<IDictionary>());
+
+            mockDesigner.Protected().Verify("PostFilterAttributes", Times.Once(), ItExpr.IsAny<IDictionary>());
         }
 
         [Theory]
@@ -1651,7 +1655,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void PostFilterEvents_Invoke_DoesNotCallProtectedVirtualMethod()
+        public void PostFilterEvents_Invoke_CallsProtectedVirtualMethod()
         {
             var mockDesigner = new Mock<ComponentDesigner>(MockBehavior.Strict);
             mockDesigner
@@ -1663,8 +1667,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup("PostFilterEvents", ItExpr.IsAny<IDictionary>())
                 .Verifiable();
             IDesignerFilter filter = mockDesigner.Object;
+
             filter.PostFilterEvents(new Dictionary<string, object>());
-            mockDesigner.Protected().Verify("PostFilterEvents", Times.Never(), ItExpr.IsAny<IDictionary>());
+
+            mockDesigner.Protected().Verify("PostFilterEvents", Times.Once(), ItExpr.IsAny<IDictionary>());
         }
 
         private class SubComponentDesigner : ComponentDesigner
