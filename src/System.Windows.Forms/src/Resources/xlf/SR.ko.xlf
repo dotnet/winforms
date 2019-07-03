@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">비공개</target>
+        <target state="translated">프라이빗</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -7153,7 +7153,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;폼 없음&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7833,7 +7833,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
         <source>Description</source>
-        <target state="needs-review-translation">설명 창</target>
+        <target state="translated">설명</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8813,7 +8813,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
         <source>PropertyGrid</source>
-        <target state="needs-review-translation">도구 모음</target>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11648,7 +11648,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Delete</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11668,7 +11668,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Insert</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11678,12 +11678,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

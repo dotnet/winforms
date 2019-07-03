@@ -130,7 +130,8 @@
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
-        <target state="needs-review-translation">Stisknutím klávesy Enter přejděte na nový řádek.\r\nStisknutím kombinace kláves Ctrl+Enter text přijmete.</target>
+        <target state="translated">Stisknutím klávesy Enter přejděte na nový řádek.
+Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

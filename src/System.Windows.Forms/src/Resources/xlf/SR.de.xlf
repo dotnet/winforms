@@ -7153,7 +7153,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Kein Formular&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7833,7 +7833,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
         <source>Description</source>
-        <target state="needs-review-translation">Beschreibungsbereich</target>
+        <target state="translated">Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7858,7 +7858,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PBRSToolTipCategorized">
         <source>Categorized</source>
-        <target state="translated">Nach Kategorien</target>
+        <target state="translated">Nach Kategorien.</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipEvents">
@@ -8813,7 +8813,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
         <source>PropertyGrid</source>
-        <target state="needs-review-translation">Symbolleiste</target>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11648,7 +11648,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">ENTF</target>
+        <target state="translated">Entf</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11678,12 +11678,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">BILD-AB</target>
+        <target state="translated">Bild ab</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">BILD-AUF</target>
+        <target state="translated">Bild auf</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

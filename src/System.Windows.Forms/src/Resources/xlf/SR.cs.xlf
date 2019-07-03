@@ -7153,7 +7153,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Žádný formulář&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7833,7 +7833,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
         <source>Description</source>
-        <target state="needs-review-translation">Podokno popisu</target>
+        <target state="translated">Popis</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7858,7 +7858,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PBRSToolTipCategorized">
         <source>Categorized</source>
-        <target state="translated">Zařazené do kategorie</target>
+        <target state="translated">Zařazené do kategorií</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipEvents">
@@ -8813,7 +8813,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
         <source>PropertyGrid</source>
-        <target state="needs-review-translation">Panel nástrojů (ToolBar)</target>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11648,7 +11648,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Odstranit</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11668,7 +11668,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Vložit</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11678,12 +11678,12 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

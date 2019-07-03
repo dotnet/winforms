@@ -7153,7 +7153,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Brak formularza&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7833,7 +7833,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
         <source>Description</source>
-        <target state="needs-review-translation">Okienko opisu</target>
+        <target state="translated">Opis</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8813,7 +8813,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
         <source>PropertyGrid</source>
-        <target state="needs-review-translation">Element ToolBar</target>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11668,7 +11668,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Insert</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11678,12 +11678,12 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

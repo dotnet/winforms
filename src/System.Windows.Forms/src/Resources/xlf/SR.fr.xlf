@@ -7153,7 +7153,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Pas de formulaire&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7833,7 +7833,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
         <source>Description</source>
-        <target state="needs-review-translation">Volet Description</target>
+        <target state="translated">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7853,17 +7853,17 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="PBRSToolTipAlphabetic">
         <source>Alphabetical</source>
-        <target state="translated">Ordre alphabétique</target>
+        <target state="translated">Alphabétique</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipCategorized">
         <source>Categorized</source>
-        <target state="translated">Par catégorie</target>
+        <target state="translated">Catégories</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipEvents">
         <source>Events</source>
-        <target state="translated">Événements </target>
+        <target state="translated">Événements</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipProperties">
@@ -8813,7 +8813,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
         <source>PropertyGrid</source>
-        <target state="needs-review-translation">Barre d'outils</target>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11648,7 +11648,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Suppr</target>
+        <target state="translated">Supprimer</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11668,7 +11668,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Inser</target>
+        <target state="translated">Insertion</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11678,17 +11678,17 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PageSuiv</target>
+        <target state="translated">Page suivante</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PagePréc</target>
+        <target state="translated">Page précédente</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="translated">Maj</target>
+        <target state="translated">Majuscule</target>
         <note />
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
