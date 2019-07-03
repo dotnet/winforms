@@ -132,7 +132,7 @@ Now, whenever you need to use the Designer on one of the .NET Core Form or UserC
 
 ## More information
 
-If you are porintg an existing .NET Framework application to .NET Core you may wish to read the following blog posts:
+If you are porting an existing .NET Framework application to .NET Core you may wish to read the following blog posts:
 * [Porting desktop apps to .NET Core](https://devblogs.microsoft.com/dotnet/porting-desktop-apps-to-net-core/)
 * [Using the WinForms designer for .NET Core projects](https://devblogs.microsoft.com/dotnet/how-to-port-desktop-applications-to-net-core-3-0/#user-content-using-the-winforms-designer-for-net-core-projects)
 
