@@ -409,7 +409,7 @@ namespace System.Windows.Forms
             get
             {
 #if DEBUG
-                if (handle != IntPtr.Zero)
+                if (handle != IntPtr.Zero && !treeView.IsDisposed)
                 {
                     NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
                     {
@@ -601,7 +601,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (handle == IntPtr.Zero && TreeView != null)
                 {
                     TreeView.CreateControl(); // force handle creation
                 }
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (index + 1 < parent.Nodes.Count)
+                if (parent != null && index + 1 < parent.Nodes.Count)
                 {
                     return parent.Nodes[index + 1];
                 }
@@ -951,6 +951,11 @@ namespace System.Windows.Forms
         {
             get
             {
+                if (parent == null)
+                {
+                    return null;
+                }
+
                 //fixedIndex is used for perf. optimization in case of adding big ranges of nodes
                 int currentInd = index;
                 int fixedInd = parent.Nodes.FixedIndex;
