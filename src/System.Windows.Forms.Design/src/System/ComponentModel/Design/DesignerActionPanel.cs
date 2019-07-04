@@ -2663,17 +2663,14 @@ namespace System.ComponentModel.Design
             private static class UnsafeNativeMethods
             {
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
                 public static extern IntPtr GetWindowLong(HandleRef hWnd, int nIndex);
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
                 public static extern IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
 
-                [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
 
@@ -2682,6 +2679,7 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
                 private static extern IntPtr IntGetDC(HandleRef hWnd);
+
                 public static IntPtr GetDC(HandleRef hWnd)
                 {
                     return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
@@ -2689,6 +2687,7 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
                 private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
+
                 public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
                 {
                     Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);

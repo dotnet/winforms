@@ -18,17 +18,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.DeviceContext.get_DeviceContextType():System.Windows.Forms.Internal.DeviceContextType")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.DeviceContext.get_DpiX():System.Int32")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.DeviceContext.TranslateTransform(System.Single,System.Single):System.Void")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntNativeMethods+POINT.ToPoint():System.Drawing.Point")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntNativeMethods+RECT.ToRectangle():System.Drawing.Rectangle")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntNativeMethods+SIZE.ToSize():System.Drawing.Size")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntSafeNativeMethods.GdiFlush():System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntSafeNativeMethods.GetUserDefaultLCID():System.Int32")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntArc(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntCreateDC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntCreateDIBSection(System.Runtime.InteropServices.HandleRef,System.Windows.Forms.Internal.IntNativeMethods+BITMAPINFO&,System.Int32,System.IntPtr&,System.IntPtr,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntCreateIC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntGetObject(System.Runtime.InteropServices.HandleRef,System.Int32,System.Windows.Forms.Internal.IntNativeMethods+LOGBRUSH):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntGetObject(System.Runtime.InteropServices.HandleRef,System.Windows.Forms.Internal.IntNativeMethods+LOGBRUSH):System.Int32")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsFont.ToString():System.String")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.DrawText(System.String,System.Drawing.Point):System.Void")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.DrawText(System.String,System.Drawing.Point,System.Drawing.Color):System.Void")]
@@ -40,26 +29,8 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.FromHwnd(System.IntPtr):System.Windows.Forms.Internal.WindowsGraphics")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.DeviceContext.get_GraphicsMode():System.Windows.Forms.Internal.DeviceContextGraphicsMode")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.DeviceContext.SetGraphicsMode(System.Windows.Forms.Internal.DeviceContextGraphicsMode):System.Windows.Forms.Internal.DeviceContextGraphicsMode")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.Arc(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.CreateDC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.CreateDIBSection(System.Runtime.InteropServices.HandleRef,System.Windows.Forms.Internal.IntNativeMethods+BITMAPINFO&,System.Int32,System.IntPtr&,System.IntPtr,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.CreateIC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.GetGraphicsMode(System.Runtime.InteropServices.HandleRef):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.GetObject(System.Runtime.InteropServices.HandleRef,System.Windows.Forms.Internal.IntNativeMethods+LOGBRUSH):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.IntSetGraphicsMode(System.Runtime.InteropServices.HandleRef,System.Int32):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.IntUnsafeNativeMethods.SetGraphicsMode(System.Runtime.InteropServices.HandleRef,System.Int32):System.Int32")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Control+ImeModeConversion.get_ChineseTable():System.Windows.Forms.ImeMode[]")]
 
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Drawing.Internal.IntNativeMethods+RECT..ctor(System.Drawing.Rectangle)")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Drawing.Internal.IntNativeMethods+RECT..ctor(System.Int32,System.Int32,System.Int32,System.Int32)")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Drawing.Internal.IntNativeMethods+POINT..ctor(System.Int32,System.Int32)")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Drawing.Internal.IntUnsafeNativeMethods.IntersectClipRect(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Int32,System.Int32):System.Drawing.Internal.IntNativeMethods+RegionFlags")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Drawing.Internal.IntUnsafeNativeMethods.IntIntersectClipRect(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Int32,System.Int32):System.Drawing.Internal.IntNativeMethods+RegionFlags")]
-
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.Internal.IntNativeMethods+BITMAPINFO")]
-[assembly: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope = "type", Target = "System.Windows.Forms.Internal.IntSafeNativeMethods+CommonHandles")]
-
-[assembly: SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "System.Windows.Forms.Internal.IntSafeNativeMethods+CommonHandles..cctor()")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphicsCacheManager..cctor()")]
 
 [assembly: SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.FillRectangle(System.Windows.Forms.Internal.WindowsBrush,System.Int32,System.Int32,System.Int32,System.Int32):System.Void")]
@@ -68,7 +39,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.get_TextPadding():System.Windows.Forms.Internal.TextPaddingOptions")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.set_TextPadding(System.Windows.Forms.Internal.TextPaddingOptions):System.Void")]
 
-[assembly: SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api", Scope = "member", Target = "System.Windows.Forms.Internal.IntSafeNativeMethods.GetUserDefaultLCID():System.Int32")]
 [assembly: SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.Dispose():System.Void")]
 
 [assembly: SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.GetOverhangPadding(System.Windows.Forms.Internal.WindowsFont,System.Boolean):System.Int32")]
@@ -98,8 +68,6 @@ namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE ////////////////////////////////// FxCop suppressions for System.Drawing.dll //////////////////////////////////
 
 //// SECURITY
-
-[assembly: SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments", Scope="member", Target="System.Drawing.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
 
 // FxCop...
 //
@@ -243,10 +211,8 @@ namespace System.Windows.Forms.Internal
 [assembly: SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops", Scope="member", Target="System.Drawing.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
 
-[assembly: SuppressMessage("Microsoft.Design", "CA902:MovePInvokesToNativeMethodsClass", Scope="member", Target="System.Drawing.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="System.Drawing.Internal.DbgUtil.GetLastErrorStr():System.String")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="System.Drawing.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
-[assembly: SuppressMessage("Microsoft.Design", "CA902:MovePInvokesToNativeMethodsClass", Scope="member", Target="System.Drawing.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="System.Drawing.Internal.WindowsGraphics.Dispose(System.Boolean):System.Void")]
 
 [assembly: SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke", Scope="member", Target="System.Drawing.Internal.DbgUtil.GetLastErrorStr():System.String")]

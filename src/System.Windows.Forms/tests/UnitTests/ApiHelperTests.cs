@@ -9,9 +9,13 @@ namespace System.Windows.Forms.Tests
 {
     public class ApiHelperTests
     {
+        // Some APIs that are known to be present on all supported Windows versions
+        private const string KnownPresentGdiApi = "GdiFlush";
+        private const string KnownPresentKernelApi = "GetUserDefaultLCID";
+
         [Theory]
-        [InlineData(ExternDll.Gdi32, nameof(IntSafeNativeMethods.GdiFlush))]
-        [InlineData(ExternDll.Kernel32, nameof(IntSafeNativeMethods.GetUserDefaultLCID))]
+        [InlineData(ExternDll.Gdi32, KnownPresentGdiApi)]
+        [InlineData(ExternDll.Kernel32, KnownPresentKernelApi)]
         public void KnownAvailableApi(string libName, string procName)
         {
             Assert.True(ApiHelper.IsApiAvailable(libName, procName));
@@ -21,12 +25,12 @@ namespace System.Windows.Forms.Tests
         public void DuplicateCalls()
         {
             // Test duplicate calls for an API that exists
-            Assert.True(ApiHelper.IsApiAvailable(ExternDll.Kernel32, nameof(IntSafeNativeMethods.GetUserDefaultLCID)));
-            Assert.True(ApiHelper.IsApiAvailable(ExternDll.Kernel32, nameof(IntSafeNativeMethods.GetUserDefaultLCID)));
+            Assert.True(ApiHelper.IsApiAvailable(ExternDll.Kernel32, KnownPresentKernelApi));
+            Assert.True(ApiHelper.IsApiAvailable(ExternDll.Kernel32, KnownPresentKernelApi));
 
             // Test duplicate calls for an API that does not exist (in this case, an incorrect DLL for the given API)
-            Assert.False(ApiHelper.IsApiAvailable(ExternDll.Gdi32, nameof(IntSafeNativeMethods.GetUserDefaultLCID)));
-            Assert.False(ApiHelper.IsApiAvailable(ExternDll.Gdi32, nameof(IntSafeNativeMethods.GetUserDefaultLCID)));
+            Assert.False(ApiHelper.IsApiAvailable(ExternDll.Gdi32, KnownPresentKernelApi));
+            Assert.False(ApiHelper.IsApiAvailable(ExternDll.Gdi32, KnownPresentKernelApi));
         }
 
         [Fact]
@@ -35,7 +39,7 @@ namespace System.Windows.Forms.Tests
             const string moduleName = ExternDll.Kernel32;
 
             // Verify that the module name is correct
-            Assert.True(ApiHelper.IsApiAvailable(moduleName, nameof(IntSafeNativeMethods.GetUserDefaultLCID)));
+            Assert.True(ApiHelper.IsApiAvailable(moduleName, KnownPresentKernelApi));
 
             // Verify that the API returns false for unknown procedures passed to the same module
             Assert.False(ApiHelper.IsApiAvailable(moduleName, "NotAnActualProcedure"));
@@ -46,7 +50,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void UnknownModuleName()
         {
-            const string procedureName = nameof(IntSafeNativeMethods.GetUserDefaultLCID);
+            const string procedureName = KnownPresentKernelApi;
 
             // Verify that the procedure name is correct
             Assert.True(ApiHelper.IsApiAvailable(ExternDll.Kernel32, procedureName));

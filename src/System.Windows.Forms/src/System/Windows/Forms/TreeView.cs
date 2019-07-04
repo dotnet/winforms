@@ -68,7 +68,6 @@ namespace System.Windows.Forms
         private bool hoveredAlready = false;
         private bool rightToLeftLayout = false;
 
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         private IntPtr hNodeMouseDown = IntPtr.Zero;//ensures we fire nodeclick on the correct node
 
         private const int TREEVIEWSTATE_hideSelection = 0x00000001;

@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    using Runtime.InteropServices;
-    using Runtime.Versioning;
-    using System;
-
     internal class CommonUnsafeNativeMethods
     {
         #region PInvoke General
@@ -18,22 +15,18 @@ namespace System.Windows.Forms
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
         [DllImport(ExternDll.Kernel32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
-
         public static extern IntPtr GetProcAddress(HandleRef hModule, string lpProcName);
-        [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = CharSet.Auto)]
 
+        [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetModuleHandle(string modName);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
-
         private static extern IntPtr LoadLibraryEx(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-
         private static extern IntPtr LoadLibrary(string libname);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-
         public static extern bool FreeLibrary(HandleRef hModule);
 
         /// <summary>
@@ -71,15 +64,12 @@ namespace System.Windows.Forms
         // This section could go to Nativemethods.cs or Safenativemethods.cs but we have separate copies of them in each library (System.winforms, System.Design and System.Drawing).
         // These APIs are available starting Windows 10, version 1607 only.
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-
         internal static extern DpiAwarenessContext GetThreadDpiAwarenessContext();
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-
         internal static extern DpiAwarenessContext SetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
 
         /// <summary>
