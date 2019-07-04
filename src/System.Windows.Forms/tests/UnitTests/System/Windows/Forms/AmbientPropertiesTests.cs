@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void BackColor_Set_GetReturnsExpected(Color value)
         {
             var property = new AmbientProperties

@@ -852,9 +852,15 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("subItems", () => new ListViewItem(subItems, 1, new ListViewGroup()));
         }
 
+        public static IEnumerable<object[]> BackColor_Set_TestData()
+        {
+            yield return new object[] { Color.Empty, SystemColors.Window };
+            yield return new object[] { Color.Red, Color.Red };
+        }
+
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
-        public void ListViewItem_BackColor_GetWithOwner_ReturnsExpected(Color value)
+        [MemberData(nameof(BackColor_Set_TestData))]
+        public void ListViewItem_BackColor_GetWithOwner_ReturnsExpected(Color value, Color expected)
         {
             var listView = new ListView
             {
@@ -862,7 +868,7 @@ namespace System.Windows.Forms.Tests
             };
             var item = new ListViewItem();
             listView.Items.Add(item);
-            Assert.Equal(value, item.BackColor);
+            Assert.Equal(expected, item.BackColor);
 
             // Remove item.
             listView.Items.Remove(item);
@@ -870,23 +876,45 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
-        public void ListViewItem_BackColor_Set_GetReturnsExpected(Color value)
+        [MemberData(nameof(BackColor_Set_TestData))]
+        public void ListViewItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             var item = new ListViewItem
             {
                 BackColor = value
             };
-            Assert.Equal(value, item.BackColor);
+            Assert.Equal(expected, item.BackColor);
 
             // Set same.
             item.BackColor = value;
-            Assert.Equal(value, item.BackColor);
+            Assert.Equal(expected, item.BackColor);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
-        public void ListViewItem_ForeColor_GetWithOwner_ReturnsExpected(Color value)
+        [MemberData(nameof(BackColor_Set_TestData))]
+        public void ListViewItem_BackColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
+        {
+            var listView = new ListView();
+            var item = new ListViewItem();
+            listView.Items.Add(item);
+            
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+
+            // Set same.
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+        }
+
+        public static IEnumerable<object[]> ForeColor_Set_TestData()
+        {
+            yield return new object[] { Color.Empty, SystemColors.WindowText };
+            yield return new object[] { Color.Red, Color.Red };
+        }
+
+        [Theory]
+        [MemberData(nameof(ForeColor_Set_TestData))]
+        public void ListViewItem_ForeColor_GetWithOwner_ReturnsExpected(Color value, Color expected)
         {
             var listView = new ListView
             {
@@ -894,7 +922,7 @@ namespace System.Windows.Forms.Tests
             };
             var item = new ListViewItem();
             listView.Items.Add(item);
-            Assert.Equal(value, item.ForeColor);
+            Assert.Equal(expected, item.ForeColor);
 
             // Remove item.
             listView.Items.Remove(item);
@@ -902,34 +930,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
-        public void ListViewItem_ForeColor_Set_GetReturnsExpected(Color value)
+        [MemberData(nameof(ForeColor_Set_TestData))]
+        public void ListViewItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             var item = new ListViewItem
             {
                 ForeColor = value
             };
-            Assert.Equal(value, item.ForeColor);
+            Assert.Equal(expected, item.ForeColor);
 
             // Set same.
             item.ForeColor = value;
-            Assert.Equal(value, item.ForeColor);
+            Assert.Equal(expected, item.ForeColor);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
-        public void ListViewItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value)
+        [MemberData(nameof(ForeColor_Set_TestData))]
+        public void ListViewItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
         {
             var listView = new ListView();
             var item = new ListViewItem();
             listView.Items.Add(item);
             
             item.ForeColor = value;
-            Assert.Equal(value, item.ForeColor);
+            Assert.Equal(expected, item.ForeColor);
 
             // Set same.
             item.ForeColor = value;
-            Assert.Equal(value, item.ForeColor);
+            Assert.Equal(expected, item.ForeColor);
         }
 
         [Theory]

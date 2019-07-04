@@ -78,6 +78,10 @@ namespace System.Windows.Forms.Tests
                 LargeChange = value
             };
             Assert.Equal(value, properties.LargeChange);
+
+            // Set same.
+            properties.LargeChange = value;
+            Assert.Equal(value, properties.LargeChange);
         }
 
         [Theory]
@@ -93,6 +97,10 @@ namespace System.Windows.Forms.Tests
             {
                 LargeChange = value
             };
+            Assert.Equal(value, properties.LargeChange);
+
+            // Set same.
+            properties.LargeChange = value;
             Assert.Equal(value, properties.LargeChange);
         }
 
@@ -118,6 +126,10 @@ namespace System.Windows.Forms.Tests
                 SmallChange = value
             };
             Assert.Equal(expectedValue, properties.SmallChange);
+
+            // Set same.
+            properties.SmallChange = value;
+            Assert.Equal(expectedValue, properties.SmallChange);
         }
 
         [Theory]
@@ -135,6 +147,10 @@ namespace System.Windows.Forms.Tests
             {
                 SmallChange = value
             };
+            Assert.Equal(expectedValue, properties.SmallChange);
+
+            // Set same.
+            properties.SmallChange = value;
             Assert.Equal(expectedValue, properties.SmallChange);
         }
 
@@ -166,6 +182,14 @@ namespace System.Windows.Forms.Tests
             {
                 Maximum = value
             };
+            Assert.Equal(value, properties.Maximum);
+            Assert.Equal(0, properties.Minimum);
+            Assert.Equal(0, properties.Value);
+            Assert.Equal(expectedLargeChange, properties.LargeChange);
+            Assert.Equal(1, properties.SmallChange);
+
+            // Set value.
+            properties.Maximum = value;
             Assert.Equal(value, properties.Maximum);
             Assert.Equal(0, properties.Minimum);
             Assert.Equal(0, properties.Value);
@@ -249,6 +273,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, properties.Value);
             Assert.Equal(10, properties.LargeChange);
             Assert.Equal(1, properties.SmallChange);
+
+            // Set same.
+            properties.Minimum = value;
+            Assert.Equal(100, properties.Maximum);
+            Assert.Equal(value, properties.Minimum);
+            Assert.Equal(5, properties.Value);
+            Assert.Equal(10, properties.LargeChange);
+            Assert.Equal(1, properties.SmallChange);
         }
 
         [Fact]
@@ -316,6 +348,14 @@ namespace System.Windows.Forms.Tests
             {
                 Value = value
             };
+            Assert.Equal(100, properties.Maximum);
+            Assert.Equal(0, properties.Minimum);
+            Assert.Equal(value, properties.Value);
+            Assert.Equal(10, properties.LargeChange);
+            Assert.Equal(1, properties.SmallChange);
+
+            // Set same.
+            properties.Value = value;
             Assert.Equal(100, properties.Maximum);
             Assert.Equal(0, properties.Minimum);
             Assert.Equal(value, properties.Value);

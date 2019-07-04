@@ -296,6 +296,24 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Color, Color> GetBackColorTheoryData()
+        {
+            return new TheoryData<Color, Color>
+            {
+                { Color.Red, Color.Red },
+                { Color.Empty, Control.DefaultBackColor }
+            };
+        }
+
+        public static TheoryData<Color, Color> GetForeColorTheoryData()
+        {
+            return new TheoryData<Color, Color>
+            {
+                { Color.Red, Color.Red },
+                { Color.Empty, Control.DefaultForeColor }
+            };
+        }
+
         public static TheoryData<Image> GetImageTheoryData()
         {
             var data = new TheoryData<Image>
@@ -451,6 +469,27 @@ namespace WinForms.Common.Tests
                 new EventArgs()
             };
             return data;
+        }
+
+        public static TheoryData<PaintEventArgs> GetPaintEventArgsTheoryData()
+        {
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
+            return new TheoryData<PaintEventArgs>
+            {
+                null,
+                new PaintEventArgs(graphics, Rectangle.Empty)
+            };
+        }
+
+        public static TheoryData<MouseEventArgs> GetMouseEventArgsTheoryData()
+        {
+            return new TheoryData<MouseEventArgs>
+            {
+                null,
+                new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4),
+                new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)
+            };
         }
 
         #endregion

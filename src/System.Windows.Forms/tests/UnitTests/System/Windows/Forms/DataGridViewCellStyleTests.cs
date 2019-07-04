@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void DataGridViewCellStyle_BackColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void DataGridViewCellStyle_SelectionBackColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
