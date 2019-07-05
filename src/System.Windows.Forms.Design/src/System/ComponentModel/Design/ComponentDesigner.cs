@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
@@ -216,12 +217,11 @@ namespace System.ComponentModel.Design
             get
             {
                 ICollection comps = AssociatedComponents;
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (comps.Count > 0 && host != null)
+                if (comps != null && comps.Count > 0 && GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
                     IDesigner[] designers = new IDesigner[comps.Count];
                     int idx = 0;
-                    foreach (IComponent comp in comps)
+                    foreach (IComponent comp in comps.OfType<IComponent>())
                     {
                         designers[idx] = host.GetDesigner(comp);
                         if (designers[idx] != null)
@@ -274,16 +274,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void DoDefaultAction()
         {
-            IEventBindingService eps = (IEventBindingService)GetService(typeof(IEventBindingService));
-
-            //If the event binding service is not available, there is nothing much we can do, so just return.
-            if (eps == null)
+            // If the event binding service is not available, there is nothing much we can do, so just return.
+            if (!(GetService(typeof(IEventBindingService)) is IEventBindingService eps))
             {
                 return;
             }
-
-            ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
-            if (selectionService == null)
+            if (!(GetService(typeof(ISelectionService)) is ISelectionService selectionService))
             {
                 return;
             }
@@ -291,22 +287,19 @@ namespace System.ComponentModel.Design
             ICollection components = selectionService.GetSelectedComponents();
             EventDescriptor thisDefaultEvent = null;
             string thisHandler = null;
-            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
             DesignerTransaction t = null;
 
+            if (components == null)
+            {
+                return;
+            }
             try
             {
-                foreach (object comp in components)
+                foreach (IComponent comp in components.OfType<IComponent>())
                 {
-
-                    if (!(comp is IComponent))
-                    {
-                        continue;
-                    }
-
                     EventDescriptor defaultEvent = TypeDescriptor.GetDefaultEvent(comp);
                     PropertyDescriptor defaultPropEvent = null;
-                    string handler = null;
                     bool eventChanged = false;
 
                     if (defaultEvent != null)
@@ -327,42 +320,46 @@ namespace System.ComponentModel.Design
                             t = host.CreateTransaction(string.Format(SR.ComponentDesignerAddEvent, defaultEvent.Name));
                         }
                     }
-                    catch (CheckoutException cxe)
+                    catch (CheckoutException cxe) when (cxe == CheckoutException.Canceled)
                     {
-                        if (cxe == CheckoutException.Canceled)
-                        {
-                            return;
-                        }
-
-                        throw cxe;
+                        return;
                     }
 
                     // handler will be null if there is no explicit event hookup in the parsed init method
-                    handler = (string)defaultPropEvent.GetValue(comp);
-
+                    object result = defaultPropEvent.GetValue(comp);
+                    string handler = result as string;
                     if (handler == null)
                     {
+                        // Skip invalid properties.
+                        if (result != null)
+                        {
+                            continue;
+                        }
+        
                         eventChanged = true;
-
                         handler = eps.CreateUniqueMethodName((IComponent)comp, defaultEvent);
                     }
                     else
                     {
                         // ensure the handler is still there
                         eventChanged = true;
-                        foreach (string compatibleMethod in eps.GetCompatibleMethods(defaultEvent))
+                        ICollection methods = eps.GetCompatibleMethods(defaultEvent);
+                        if (methods != null)
                         {
-                            if (handler == compatibleMethod)
+                            foreach (string compatibleMethod in methods.OfType<string>())
                             {
-                                eventChanged = false;
-                                break;
+                                if (handler == compatibleMethod)
+                                {
+                                    eventChanged = false;
+                                    break;
+                                }
                             }
                         }
                     }
 
                     // Save the new value... BEFORE navigating to it!
                     //s_codemarkers.CodeMarker(CodeMarkerEvent.perfFXBindEventDesignToCode);
-                    if (eventChanged && defaultPropEvent != null)
+                    if (eventChanged)
                     {
                         defaultPropEvent.SetValue(comp, handler);
                     }
