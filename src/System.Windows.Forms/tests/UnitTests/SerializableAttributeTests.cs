@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
 {
     public class SerializableAttributeTests
     {
-        private string[] interestedAssemblies = new string[]
+        private static readonly string[] s_interestedAssemblies = new string[]
         {
             "System.Windows.Forms",
         };
