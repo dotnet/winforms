@@ -4,8 +4,10 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -133,6 +135,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsType<TargetException>(ex.InnerException);
         }
 
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void ArrayEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
+        {
+            var editor = new ArrayEditor(null);
+            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
+        }
+
         public static IEnumerable<object[]> GetItems_TestData()
         {
             yield return new object[] { null, Array.Empty<object>() };
@@ -150,6 +160,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(expected, items);
             Assert.IsType(expected.GetType(), items);
             Assert.NotSame(editValue, items);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void ArrayEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
+        {
+            var editor = new ArrayEditor(null);
+            Assert.False(editor.GetPaintValueSupported(context));
         }
 
         public static IEnumerable<object[]> SetItems_Array_TestData()

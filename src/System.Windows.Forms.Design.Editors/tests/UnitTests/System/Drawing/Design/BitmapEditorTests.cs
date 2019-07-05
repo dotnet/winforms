@@ -3,10 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.IO;
 using Moq;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
@@ -14,12 +17,27 @@ namespace System.Drawing.Design.Tests
     public class BitmapEditorTests
     {
         [Fact]
+        public void BitmapEditor_Ctor_Default()
+        {
+            var editor = new BitmapEditor();
+            Assert.False(editor.IsDropDownResizable);
+        }
+
+        [Fact]
         public void BitmapEditor_BitmapExtensions_Get_ReturnsExpected()
         {
             var editor = new SubBitmapEditor();
             List<string> extensions = SubBitmapEditor.BitmapExtensions;
             Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
             Assert.Same(extensions, SubBitmapEditor.BitmapExtensions);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void BitmapEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
+        {
+            var editor = new BitmapEditor();
+            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
         }
 
         [Fact]
@@ -45,6 +63,14 @@ namespace System.Drawing.Design.Tests
         {
             var editor = new SubBitmapEditor();
             Assert.Equal("Bitmap files", editor.GetFileDialogDescription());
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void BitmapEditor_GetPaintValueSupported_Invoke_ReturnsTrue(ITypeDescriptorContext context)
+        {
+            var editor = new BitmapEditor();
+            Assert.True(editor.GetPaintValueSupported(context));
         }
 
         [Fact]
