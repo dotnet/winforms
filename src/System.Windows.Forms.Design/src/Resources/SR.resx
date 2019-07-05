@@ -747,4 +747,19 @@
   <data name="ToolStripSelectMenuItem" xml:space="preserve">
     <value>'{0}'</value>
   </data>
+  <data name="IntegerCollectionEditorCancelCaption" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="IntegerCollectionEditorHelpCaption" xml:space="preserve">
+    <value>&amp;Help</value>
+  </data>
+  <data name="IntegerCollectionEditorInstruction" xml:space="preserve">
+    <value>Enter the integers in the array (one per line):</value>
+  </data>
+  <data name="IntegerCollectionEditorOKCaption" xml:space="preserve">
+    <value>&amp;OK</value>
+  </data>
+  <data name="IntegerCollectionEditorTitle" xml:space="preserve">
+    <value>Integer Collection Editor</value>
+  </data>
 </root>

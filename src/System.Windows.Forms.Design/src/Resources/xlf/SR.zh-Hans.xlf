@@ -503,6 +503,31 @@
         <target state="translated">只读</target>
         <note />
       </trans-unit>
+      <trans-unit id="IntegerCollectionEditorCancelCaption">
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IntegerCollectionEditorHelpCaption">
+        <source>&amp;Help</source>
+        <target state="new">&amp;Help</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IntegerCollectionEditorInstruction">
+        <source>Enter the integers in the array (one per line):</source>
+        <target state="new">Enter the integers in the array (one per line):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IntegerCollectionEditorOKCaption">
+        <source>&amp;OK</source>
+        <target state="new">&amp;OK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IntegerCollectionEditorTitle">
+        <source>Integer Collection Editor</source>
+        <target state="new">Integer Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
         <target state="translated">“{1}”不是“{0}”的有效值。</target>
