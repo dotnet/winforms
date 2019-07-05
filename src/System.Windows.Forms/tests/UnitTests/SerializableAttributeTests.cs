@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
             "System.Windows.Forms",
         };
 
-        private string[] serializableWhiteList = new string[]
+        private static readonly string[] s_serializableWhiteList = new string[]
         {
             "System.Resources.ResXDataNode",
             "System.Resources.ResXFileRef",
