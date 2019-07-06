@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -11,13 +10,13 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>>
-    ///         Implements the design time editor for specifying the
-    ///         <see cref='System.Windows.Forms.Control.Dock' /> property.
+    /// Implements the design time editor for specifying the <see cref='System.Windows.Forms.Control.Dock' />
+    /// property.
     /// </summary>
     [CLSCompliant(false)]
     public sealed class DockEditor : UITypeEditor
     {
-        private DockUI dockUI;
+        private DockUI _dockUI;
 
         /// <summary>
         /// Edits the given object value using the editor style provided by GetEditorStyle.
@@ -27,20 +26,17 @@ namespace System.Windows.Forms.Design
         {
             if (provider != null)
             {
-                IWindowsFormsEditorService edSvc =
-                    (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (dockUI == null)
+                    if (_dockUI == null)
                     {
-                        dockUI = new DockUI(this);
+                        _dockUI = new DockUI(this);
                     }
 
-                    dockUI.Start(edSvc, value);
-                    edSvc.DropDownControl(dockUI);
-                    value = dockUI.Value;
-                    dockUI.End();
+                    _dockUI.Start(edSvc, value);
+                    edSvc.DropDownControl(_dockUI);
+                    value = _dockUI.Value;
+                    _dockUI.End();
                 }
             }
 
@@ -57,9 +53,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     User Interface for the DockEditor.
+        /// User Interface for the DockEditor.
         /// </summary>
-
         private class DockUI : Control
         {
             private const int NONE_HEIGHT = 24;
