@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 {
                     WndProc(ref m);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (CanCatchWndProcException(ex))
                 {
                     HandleWndProcException(ex);
                 }
@@ -180,9 +180,15 @@ namespace System.Windows.Forms
             }
         }
 
+        protected virtual bool CanCatchWndProcException(Exception ex)
+        {
+            // By default, don't catch exceptions.
+            return false;
+        }
+
         protected virtual void HandleWndProcException(Exception ex)
         {
-            // By default, we simply rethrow the exception.
+            // Simply rethrow the exception here.
             ExceptionDispatchInfo.Capture(ex).Throw();
         }
     }

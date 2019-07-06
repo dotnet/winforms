@@ -1342,7 +1342,7 @@ namespace System.Windows.Forms
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (CanCatchCallbackException())
             {
                 // When an exception occurs, handle it by calling the application's
                 // ThreadException handler. 
@@ -1833,9 +1833,19 @@ namespace System.Windows.Forms
             }
         }
 
+        private bool CanCatchCallbackException()
+        {
+            // Catch all exceptions, except when the NativeWindow indicates
+            // that a debuggable WndProc callback should be used, in which
+            // case we don't catch any exception. This is so that an attached
+            // debugger can stop that the original location where the exception
+            // was thrown.
+            return !NativeWindow.WndProcShouldBeDebuggable;
+        }
+
         /// <summary>
-        ///      Called when an exception occurs in dispatching messages through
-        ///      the task dialog callback or its window procedure
+        /// Called when an exception occurs in dispatching messages through
+        /// the task dialog callback or its window procedure.
         /// </summary>
         private void HandleCallbackException(Exception e)
         {
