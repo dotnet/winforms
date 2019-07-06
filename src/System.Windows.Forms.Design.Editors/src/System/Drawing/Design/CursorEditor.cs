@@ -10,53 +10,46 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///     Provides an editor that can perform default file searching for cursor (.cur)
-    ///     files.
+    /// Provides an editor that can perform default file searching for cursor (.cur) files.
     /// </summary>
     [CLSCompliant(false)]
     public class CursorEditor : UITypeEditor
     {
-        private CursorUI cursorUI;
+        private CursorUI _cursorUI;
 
         /// <summary>
-        ///     Returns true, indicating that this drop-down control can be resized.
+        /// Returns true, indicating that this drop-down control can be resized.
         /// </summary>
         public override bool IsDropDownResizable => true;
 
         /// <summary>
-        ///     Edits the given object value using the editor style provided by
-        ///     GetEditorStyle.  A service provider is provided so that any
-        ///     required editing services can be obtained.
+        /// Edits the given object value using the editor style provided by GetEditorStyle. A service
+        /// provider is provided so that any required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            object returnValue = value;
-
-            if (provider == null)
+            if (provider != null)
             {
-                return value;
-            }
-
-            IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-            if (edSvc != null)
-            {
-                if (cursorUI == null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    cursorUI = new CursorUI(this);
+                    if (_cursorUI == null)
+                    {
+                        _cursorUI = new CursorUI(this);
+                    }
+
+                    _cursorUI.Start(edSvc, value);
+                    edSvc.DropDownControl(_cursorUI);
+                    value = _cursorUI.Value;
+                    _cursorUI.End();
                 }
-                cursorUI.Start(edSvc, value);
-                edSvc.DropDownControl(cursorUI);
-                value = cursorUI.Value;
-                cursorUI.End();
             }
 
             return value;
         }
 
         /// <summary>
-        ///     Retrieves the editing style of the Edit method.  If the method
-        ///     is not supported, this will return None.
+        /// Retrieves the editing style of the Edit method. If the method is not supported, this will
+        /// return None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -64,8 +57,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///     The user interface for the cursor drop-down.  This is just an owner-drawn
-        ///     list box.
+        /// The user interface for the cursor drop-down. This is just an owner-drawn list box.
         /// </summary>
         private class CursorUI : ListBox
         {
@@ -84,7 +76,7 @@ namespace System.Drawing.Design
                 BorderStyle = BorderStyle.None;
 
                 cursorConverter = TypeDescriptor.GetConverter(typeof(Cursor));
-                Debug.Assert(cursorConverter.GetStandardValuesSupported(), "Converter '" + cursorConverter.ToString() + "' does not support a list of standard values.  We cannot provide a drop-down");
+                Debug.Assert(cursorConverter.GetStandardValuesSupported(), "Converter '" + cursorConverter.ToString() + "' does not support a list of standard values. We cannot provide a drop-down");
 
                 // Fill the list with cursors.
                 //
