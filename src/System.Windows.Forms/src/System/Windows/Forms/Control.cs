@@ -935,7 +935,7 @@ namespace System.Windows.Forms
                 {
                     if (Site != null)
                     {
-                        props = (AmbientProperties)Site.GetService(typeof(AmbientProperties));
+                        props = Site.GetService(typeof(AmbientProperties)) as AmbientProperties;
                     }
                     else
                     {
@@ -4101,7 +4101,7 @@ namespace System.Windows.Forms
 
                 if (value != null)
                 {
-                    newAmbients = (AmbientProperties)value.GetService(typeof(AmbientProperties));
+                    newAmbients = value.GetService(typeof(AmbientProperties)) as AmbientProperties;
                 }
 
 
