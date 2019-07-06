@@ -42,10 +42,9 @@ namespace System.ComponentModel.Design
         {
             if (null != provider)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (null == _selector)
+                    if (_selector == null)
                     {
                         _selector = new Selector(this);
 
