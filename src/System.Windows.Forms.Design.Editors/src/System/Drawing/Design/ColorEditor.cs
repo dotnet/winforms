@@ -17,12 +17,12 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///     Provides an editor for visually picking a color.
+    /// Provides an editor for visually picking a color.
     /// </summary>
     [CLSCompliant(false)]
     public class ColorEditor : UITypeEditor
     {
-        private ColorUI colorUI;
+        private ColorUI _colorUI;
 
         /// <summary>
         /// Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
@@ -30,27 +30,24 @@ namespace System.Drawing.Design
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            object returnValue = value;
-
             if (provider != null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (colorUI == null)
+                    if (_colorUI == null)
                     {
-                        colorUI = new ColorUI(this);
-                    }
-                    colorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(colorUI);
-
-                    if (colorUI.Value != null && ((Color)colorUI.Value) != Color.Empty)
-                    {
-                        value = colorUI.Value;
+                        _colorUI = new ColorUI(this);
                     }
 
-                    colorUI.End();
+                    _colorUI.Start(edSvc, value);
+                    edSvc.DropDownControl(_colorUI);
+
+                    if (_colorUI.Value is Color colorValue && colorValue != Color.Empty)
+                    {
+                        value = colorValue;
+                    }
+
+                    _colorUI.End();
                 }
             }
 
@@ -93,7 +90,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///     A control to display the color palette.
+        /// A control to display the color palette.
         /// </summary>
         private class ColorPalette : Control
         {
@@ -661,7 +658,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Editor UI for the color editor.
+        ///  Editor UI for the color editor.
         /// </summary>
         private class ColorUI : Control
         {
