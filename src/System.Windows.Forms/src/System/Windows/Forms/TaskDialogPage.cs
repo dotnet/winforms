@@ -440,10 +440,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the task dialog can be closed with
-        /// a <see cref="TaskDialogResult.Cancel"/> result by pressing ESC or Alt+F4 or by clicking
-        /// the title bar's close button even if no <see cref="TaskDialogButtons.Cancel"/> button
-        /// is added to the <see cref="StandardButtons"/> collection.
+        /// Gets or sets a value that indicates whether the task dialog can be closed with a
+        /// <see cref="TaskDialogResult.Cancel"/> result by pressing ESC or Alt+F4 or by clicking
+        /// the title bar's close button even if no button with a <see cref="TaskDialogResult.Cancel"/>
+        /// result is added to the <see cref="StandardButtons"/> collection.
         /// </summary>
         /// <value>
         /// <c>true</c> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
