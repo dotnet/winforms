@@ -24,21 +24,24 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_anchorUI == null)
-                    {
-                        _anchorUI = new AnchorUI(this);
-                    }
-
-                    _anchorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(_anchorUI);
-                    value = _anchorUI.Value;
-                    _anchorUI.End();
-                }
+                return value;
             }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
+            }
+
+            if (_anchorUI == null)
+            {
+                _anchorUI = new AnchorUI(this);
+            }
+
+            _anchorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_anchorUI);
+            value = _anchorUI.Value;
+            _anchorUI.End();
 
             return value;
         }

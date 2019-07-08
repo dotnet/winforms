@@ -24,28 +24,30 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_dockUI == null)
-                    {
-                        _dockUI = new DockUI(this);
-                    }
-
-                    _dockUI.Start(edSvc, value);
-                    edSvc.DropDownControl(_dockUI);
-                    value = _dockUI.Value;
-                    _dockUI.End();
-                }
+                return value;
             }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
+            }
+
+            if (_dockUI == null)
+            {
+                _dockUI = new DockUI(this);
+            }
+
+            _dockUI.Start(edSvc, value);
+            edSvc.DropDownControl(_dockUI);
+            value = _dockUI.Value;
+            _dockUI.End();
 
             return value;
         }
 
         /// <summary>
         /// Retrieves the editing style of the Edit method.
-        /// If the method is not supported, this will return None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
