@@ -88,6 +88,14 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
+        public void DesignerActionListCollection_AddRange_NullValue_ThrowsArgumentNullException()
+        {
+            var collection = new DesignerActionListCollection();
+            Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerActionList[])null));
+            Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerActionListCollection)null));
+        }
+
+        [Fact]
         public void DesignerActionListCollection_Insert_DesignerActionList_Success()
         {
             var collection = new DesignerActionListCollection();
