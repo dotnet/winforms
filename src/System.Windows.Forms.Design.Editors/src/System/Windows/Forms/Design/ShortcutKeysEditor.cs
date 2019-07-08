@@ -23,36 +23,37 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_shortcutKeysUI == null)
-                    {
-                        _shortcutKeysUI = new ShortcutKeysUI(this)
-                        {
-                            BackColor = SystemColors.Control
-                        };
-                    }
-
-                    _shortcutKeysUI.Start(edSvc, value);
-                    edSvc.DropDownControl(_shortcutKeysUI);
-
-                    if (_shortcutKeysUI.Value != null)
-                    {
-                        value = _shortcutKeysUI.Value;
-                    }
-
-                    _shortcutKeysUI.End();
-                }
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
             }
 
+            if (_shortcutKeysUI == null)
+            {
+                _shortcutKeysUI = new ShortcutKeysUI(this)
+                {
+                    BackColor = SystemColors.Control
+                };
+            }
+
+            _shortcutKeysUI.Start(edSvc, value);
+            edSvc.DropDownControl(_shortcutKeysUI);
+
+            if (_shortcutKeysUI.Value != null)
+            {
+                value = _shortcutKeysUI.Value;
+            }
+
+            _shortcutKeysUI.End();
             return value;
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method. If the method is not supported, this will return
-        /// UITypeEditorEditStyle.None.
+        /// Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
