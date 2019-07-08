@@ -30,27 +30,29 @@ namespace System.Drawing.Design
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_colorUI == null)
-                    {
-                        _colorUI = new ColorUI(this);
-                    }
-
-                    _colorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(_colorUI);
-
-                    if (_colorUI.Value is Color colorValue && colorValue != Color.Empty)
-                    {
-                        value = colorValue;
-                    }
-
-                    _colorUI.End();
-                }
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
             }
 
+            if (_colorUI == null)
+            {
+                _colorUI = new ColorUI(this);
+            }
+
+            _colorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_colorUI);
+
+            if (_colorUI.Value is Color colorValue && colorValue != Color.Empty)
+            {
+                value = colorValue;
+            }
+
+            _colorUI.End();
             return value;
         }
 
