@@ -664,12 +664,12 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.TaskDialogTooManyButtonsAdded);
             }
 
-            if (StandardButtons.Concat<TaskDialogButton>(CustomButtons).Where(e => e.DefaultButton).Count() > 1)
+            if (StandardButtons.Concat<TaskDialogButton>(CustomButtons).Count(e => e.DefaultButton) > 1)
             {
                 throw new InvalidOperationException(SR.TaskDialogOnlySingleButtonCanBeDefault);
             }
 
-            if (_radioButtons.Where(e => e.Checked).Count() > 1)
+            if (_radioButtons.Count(e => e.Checked) > 1)
             {
                 throw new InvalidOperationException(SR.TaskDialogOnlySingleRadioButtonCanBeChecked);
             }
