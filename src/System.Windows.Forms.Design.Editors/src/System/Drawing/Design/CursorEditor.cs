@@ -28,28 +28,30 @@ namespace System.Drawing.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_cursorUI == null)
-                    {
-                        _cursorUI = new CursorUI(this);
-                    }
-
-                    _cursorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(_cursorUI);
-                    value = _cursorUI.Value;
-                    _cursorUI.End();
-                }
+                return value;
             }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
+            }
+
+            if (_cursorUI == null)
+            {
+                _cursorUI = new CursorUI(this);
+            }
+
+            _cursorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_cursorUI);
+            value = _cursorUI.Value;
+            _cursorUI.End();
 
             return value;
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method. If the method is not supported, this will
-        /// return None.
+        /// Retrieves the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
