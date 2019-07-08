@@ -21,14 +21,14 @@ namespace System.ComponentModel.Design
         private Selector _selector = null;
 
         /// <summary>
-        ///     Default constructor for ObjectSelectorEditor
+        /// Default constructor for ObjectSelectorEditor
         /// </summary>
         public ObjectSelectorEditor()
         {
         }
 
         /// <summary>
-        ///     Constructor for ObjectSelectorEditor which sets SubObjectSelector equal to parameter subObjectSelector
+        /// Constructor for ObjectSelectorEditor which sets SubObjectSelector equal to parameter subObjectSelector
         /// </summary>
         public ObjectSelectorEditor(bool subObjectSelector)
         {
@@ -40,29 +40,32 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (null != provider)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_selector == null)
-                    {
-                        _selector = new Selector(this);
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
+            }
 
-                        // Enable Vista Explorer treeview style
-                        ApplyTreeViewThemeStyles(_selector);
-                    }
+            if (_selector == null)
+            {
+                _selector = new Selector(this);
 
-                    prevValue = value;
-                    currValue = value;
-                    FillTreeWithData(_selector, context, provider);
-                    _selector.Start(edSvc, value);
-                    edSvc.DropDownControl(_selector);
-                    _selector.Stop();
-                    if (prevValue != currValue)
-                    {
-                        value = currValue;
-                    }
-                }
+                // Enable Vista Explorer treeview style
+                ApplyTreeViewThemeStyles(_selector);
+            }
+
+            prevValue = value;
+            currValue = value;
+            FillTreeWithData(_selector, context, provider);
+            _selector.Start(edSvc, value);
+            edSvc.DropDownControl(_selector);
+            _selector.Stop();
+            if (prevValue != currValue)
+            {
+                value = currValue;
             }
 
             return value;
@@ -103,26 +106,16 @@ namespace System.ComponentModel.Design
             return UITypeEditorEditStyle.DropDown;
         }
 
-        protected internal bool EqualsToValue(object value)
-        {
-            if (value == currValue)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        protected internal bool EqualsToValue(object value) => value == currValue;
 
         protected virtual void FillTreeWithData(Selector selector, ITypeDescriptorContext context, IServiceProvider provider)
         {
             selector.Clear();
         }
 
-        //
-        // override this method to add validation code for new value
-        //
+        /// <summary>
+        /// Override this method to add validation code for new value
+        /// </summary>
         public virtual void SetValue(object value)
         {
             currValue = value;
@@ -154,8 +147,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Adds a Node with given label and value to the parent, provided the parent is not null;
-            ///     Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
+            /// Adds a Node with given label and value to the parent, provided the parent is not null;
+            /// Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
             /// </summary>
             public SelectorNode AddNode(string label, object value, SelectorNode parent)
             {
@@ -173,7 +166,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Returns true if the given node was selected; false otherwise.
+            /// Returns true if the given node was selected; false otherwise.
             /// </summary>
             private bool ChooseSelectedNodeIfEqual()
             {
@@ -190,7 +183,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Clears the TreeNodeCollection and sets clickSeen to false
+            /// Clears the TreeNodeCollection and sets clickSeen to false
             /// </summary>
             public void Clear()
             {
@@ -250,7 +243,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Sets the selection
+            /// Sets the selection
             /// </summary>
             public bool SetSelection(object value, TreeNodeCollection nodes)
             {
@@ -294,7 +287,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
+            /// Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
@@ -304,7 +297,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///     Sets the internal IWindowsFormsEditorService to null
+            /// Sets the internal IWindowsFormsEditorService to null
             /// </summary>
             public void Stop()
             {
@@ -345,7 +338,7 @@ namespace System.ComponentModel.Design
             public object value = null;
 
             /// <summary>
-            ///     Sets label and value to given.
+            /// Sets label and value to given.
             /// </summary>
             public SelectorNode(string label, object value) : base(label)
             {
