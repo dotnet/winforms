@@ -23,27 +23,29 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_borderSidesEditorUI == null)
-                    {
-                        _borderSidesEditorUI = new BorderSidesEditorUI(this);
-                    }
-
-                    _borderSidesEditorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(_borderSidesEditorUI);
-
-                    if (_borderSidesEditorUI.Value != null)
-                    {
-                        value = _borderSidesEditorUI.Value;
-                    }
-
-                    _borderSidesEditorUI.End();
-                }
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
             }
 
+            if (_borderSidesEditorUI == null)
+            {
+                _borderSidesEditorUI = new BorderSidesEditorUI(this);
+            }
+
+            _borderSidesEditorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_borderSidesEditorUI);
+
+            if (_borderSidesEditorUI.Value != null)
+            {
+                value = _borderSidesEditorUI.Value;
+            }
+
+            _borderSidesEditorUI.End();
             return value;
         }
 
