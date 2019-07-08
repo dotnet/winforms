@@ -650,7 +650,7 @@ namespace System.Windows.Forms
                 .Append(_expander)
                 .Append(_footer)
                 .Append(_progressBar)
-                .Any(c => c.BoundPage != null))
+                .Any(c => c?.BoundPage != null))
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogControlAlreadyBound,
