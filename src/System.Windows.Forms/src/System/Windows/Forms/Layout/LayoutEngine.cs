@@ -17,6 +17,7 @@ namespace System.Windows.Forms.Layout
             {
                 throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
             }
+
             return element;
         }
 
@@ -35,7 +36,7 @@ namespace System.Windows.Forms.Layout
             InitLayoutCore(CastToArrangedElement(child), specified);
         }
 
-        internal virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
+        private protected virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
         {
         }
 
@@ -77,7 +78,7 @@ namespace System.Windows.Forms.Layout
             return parentNeedsLayout;
         }
 
-        internal virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
+        private protected virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
         {
             return false;
         }

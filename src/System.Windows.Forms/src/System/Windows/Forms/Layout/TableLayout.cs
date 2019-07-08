@@ -228,7 +228,7 @@ namespace System.Windows.Forms.Layout
         ///         (a)   Calculate bounds of item
         ///         (b)   Align and stretch item to fill column/row as according to Dock&Anchor properties.
         /// </summary>
-        internal override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
+        private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
         {
 
             ProcessSuspendedLayoutEventArgs(container, args);
