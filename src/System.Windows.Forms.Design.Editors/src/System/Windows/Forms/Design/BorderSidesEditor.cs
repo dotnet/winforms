@@ -11,41 +11,41 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     Provides an editor for setting the ToolStripStatusLabel BorderSides property..
+    /// Provides an editor for setting the ToolStripStatusLabel BorderSides property..
     /// </summary>
     [CLSCompliant(false)]
     public class BorderSidesEditor : UITypeEditor
     {
-        private BorderSidesEditorUI borderSidesEditorUI;
+        private BorderSidesEditorUI _borderSidesEditorUI;
 
         /// <summary>
         /// Edits the given object value using the editor style provided by BorderSidesEditor.GetEditStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                IWindowsFormsEditorService edSvc =
-                    (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                if (edSvc != null)
-                {
-                    if (borderSidesEditorUI == null)
-                    {
-                        borderSidesEditorUI = new BorderSidesEditorUI(this);
-                    }
-
-                    borderSidesEditorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(borderSidesEditorUI);
-
-                    if (borderSidesEditorUI.Value != null)
-                    {
-                        value = borderSidesEditorUI.Value;
-                    }
-
-                    borderSidesEditorUI.End();
-                }
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
             }
 
+            if (_borderSidesEditorUI == null)
+            {
+                _borderSidesEditorUI = new BorderSidesEditorUI(this);
+            }
+
+            _borderSidesEditorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_borderSidesEditorUI);
+
+            if (_borderSidesEditorUI.Value != null)
+            {
+                value = _borderSidesEditorUI.Value;
+            }
+
+            _borderSidesEditorUI.End();
             return value;
         }
 
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Allows to select proper values..
+            /// Allows to select proper values..
             /// </summary>
             private void SetCheckBoxCheckState(ToolStripStatusLabelBorderSides sides)
             {
@@ -410,24 +410,24 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Triggered whenever the user drops down the editor.
+            /// Triggered whenever the user drops down the editor.
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
                 Debug.Assert(edSvc != null);
-                Debug.Assert(value is ToolStripStatusLabelBorderSides);
 
                 EditorService = edSvc;
                 originalValue = Value = value;
 
-                ToolStripStatusLabelBorderSides currentSides = (ToolStripStatusLabelBorderSides)value;
-
-                SetCheckBoxCheckState(currentSides);
-                updateCurrentValue = true;
+                if (value is ToolStripStatusLabelBorderSides currentSides)
+                {
+                    SetCheckBoxCheckState(currentSides);
+                    updateCurrentValue = true;
+                }
             }
 
             /// <summary>
-            ///     Update the current value based on the state of the UI controls.
+            /// Update the current value based on the state of the UI controls.
             /// </summary>
             private void UpdateCurrentValue()
             {
