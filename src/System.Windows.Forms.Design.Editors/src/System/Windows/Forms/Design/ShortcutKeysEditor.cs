@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -12,50 +11,49 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     Provides an editor for picking shortcut keys.
+    /// Provides an editor for picking shortcut keys.
     /// </summary>
     [CLSCompliant(false)]
     public class ShortcutKeysEditor : UITypeEditor
     {
-        private ShortcutKeysUI shortcutKeysUI;
+        private ShortcutKeysUI _shortcutKeysUI;
 
         /// <summary>
-        ///     Edits the given object value using the editor style provided by ShortcutKeysEditor.GetEditStyle.
+        /// Edits the given object value using the editor style provided by ShortcutKeysEditor.GetEditStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                IWindowsFormsEditorService edSvc =
-                    (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                if (edSvc != null)
-                {
-                    if (shortcutKeysUI == null)
-                    {
-                        shortcutKeysUI = new ShortcutKeysUI(this)
-                        {
-                            BackColor = SystemColors.Control
-                        };
-                    }
-
-                    shortcutKeysUI.Start(edSvc, value);
-                    edSvc.DropDownControl(shortcutKeysUI);
-
-                    if (shortcutKeysUI.Value != null)
-                    {
-                        value = shortcutKeysUI.Value;
-                    }
-
-                    shortcutKeysUI.End();
-                }
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
             }
 
+            if (_shortcutKeysUI == null)
+            {
+                _shortcutKeysUI = new ShortcutKeysUI(this)
+                {
+                    BackColor = SystemColors.Control
+                };
+            }
+
+            _shortcutKeysUI.Start(edSvc, value);
+            edSvc.DropDownControl(_shortcutKeysUI);
+
+            if (_shortcutKeysUI.Value != null)
+            {
+                value = _shortcutKeysUI.Value;
+            }
+
+            _shortcutKeysUI.End();
             return value;
         }
 
         /// <summary>
-        ///     Gets the editing style of the Edit method. If the method
-        ///     is not supported, this will return UITypeEditorEditStyle.None.
+        /// Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -63,12 +61,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Editor UI for the shortcut keys editor.
+        /// Editor UI for the shortcut keys editor.
         /// </summary>
         private class ShortcutKeysUI : UserControl
         {
             /// <summary>
-            ///     Array of keys that are present in the drop down list of the combo box.
+            /// Array of keys that are present in the drop down list of the combo box.
             /// </summary>
             private static readonly Keys[] validKeys =
             {
@@ -128,7 +126,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Allows someone else to close our dropdown.
+            /// Allows someone else to close our dropdown.
             /// </summary>
             // Can be called through reflection.
             public IWindowsFormsEditorService EditorService
@@ -139,7 +137,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Returns the Keys' type converter.
+            /// Returns the Keys' type converter.
             /// </summary>
             private TypeConverter KeysConverter
             {
@@ -156,13 +154,13 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Returns the selected keys. If only modifers were selected, we return Keys.None.
+            /// Returns the selected keys. If only modifers were selected, we return Keys.None.
             /// </summary>
             public object Value
             {
                 get
                 {
-                    if (((Keys)currentValue & Keys.KeyCode) == 0)
+                    if (currentValue is Keys currentKeys && (currentKeys & Keys.KeyCode) == 0)
                     {
                         return Keys.None;
                     }
@@ -172,7 +170,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Triggered when the user clicks the Reset button. The value is set to Keys.None
+            /// Triggered when the user clicks the Reset button. The value is set to Keys.None
             /// </summary>
             private void btnReset_Click(object sender, EventArgs e)
             {
@@ -341,7 +339,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Returns True if the given key is part of the valid keys array.
+            /// Returns True if the given key is part of the valid keys array.
             /// </summary>
             private static bool IsValidKey(Keys keyCode)
             {
@@ -358,7 +356,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     The Ctrl checkbox gets the focus by default.
+            /// The Ctrl checkbox gets the focus by default.
             /// </summary>
             protected override void OnGotFocus(EventArgs e)
             {
@@ -367,7 +365,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Fix keyboard navigation and handle escape key
+            /// Fix keyboard navigation and handle escape key
             /// </summary>
             protected override bool ProcessDialogKey(Keys keyData)
             {
@@ -431,17 +429,16 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Triggered whenever the user drops down the editor.
+            /// Triggered whenever the user drops down the editor.
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
                 Debug.Assert(edSvc != null);
-                Debug.Assert(value is Keys);
                 Debug.Assert(!updateCurrentValue);
                 EditorService = edSvc;
                 originalValue = currentValue = value;
 
-                Keys keys = (Keys)value;
+                Keys keys = value is Keys ? (Keys)value : Keys.None;
                 chkCtrl.Checked = (keys & Keys.Control) != 0;
                 chkAlt.Checked = (keys & Keys.Alt) != 0;
                 chkShift.Checked = (keys & Keys.Shift) != 0;
@@ -466,7 +463,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Update the current value based on the state of the UI controls.
+            /// Update the current value based on the state of the UI controls.
             /// </summary>
             private void UpdateCurrentValue()
             {
