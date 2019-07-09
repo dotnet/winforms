@@ -105,6 +105,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiAddNewTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiAddNewTests\MauiAddNewTests.csproj", "{A7F54254-8636-4872-A912-E0166A9A195F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiBackgroundWorkerTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiBackgroundWorkerTests\MauiBackgroundWorkerTests.csproj", "{1306D97F-ECAC-4459-BAF5-E2F072F7A99B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiContextMenuTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiContextMenuTests\MauiContextMenuTests.csproj", "{B3972B60-D900-4900-9306-EFD6B501FED1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiCheckBoxTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiCheckBoxTests\MauiCheckBoxTests.csproj", "{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +205,18 @@ Global
 		{A7F54254-8636-4872-A912-E0166A9A195F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7F54254-8636-4872-A912-E0166A9A195F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7F54254-8636-4872-A912-E0166A9A195F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1306D97F-ECAC-4459-BAF5-E2F072F7A99B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1306D97F-ECAC-4459-BAF5-E2F072F7A99B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1306D97F-ECAC-4459-BAF5-E2F072F7A99B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1306D97F-ECAC-4459-BAF5-E2F072F7A99B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3972B60-D900-4900-9306-EFD6B501FED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3972B60-D900-4900-9306-EFD6B501FED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3972B60-D900-4900-9306-EFD6B501FED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3972B60-D900-4900-9306-EFD6B501FED1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,6 +248,9 @@ Global
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{A7F54254-8636-4872-A912-E0166A9A195F} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{1306D97F-ECAC-4459-BAF5-E2F072F7A99B} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{B3972B60-D900-4900-9306-EFD6B501FED1} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
