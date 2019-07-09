@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -11,37 +10,38 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>>
-    /// Provides a design-time editor for specifying the
-    /// <see cref='System.Windows.Forms.Control.Anchor' />
+    /// Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
     /// property.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     [CLSCompliant(false)]
     public sealed class AnchorEditor : UITypeEditor
     {
-        private AnchorUI anchorUI;
+        private AnchorUI _anchorUI;
 
         /// <summary>>
-        /// Edits the given object value using the editor style provided by
-        /// GetEditorStyle.
+        /// Edits the given object value using the editor style provided by GetEditorStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            IWindowsFormsEditorService edSvc =
-                (IWindowsFormsEditorService)provider?.GetService(typeof(IWindowsFormsEditorService));
-
-            if (edSvc != null)
+            if (provider == null)
             {
-                if (anchorUI == null)
-                {
-                    anchorUI = new AnchorUI(this);
-                }
-
-                anchorUI.Start(edSvc, value);
-                edSvc.DropDownControl(anchorUI);
-                value = anchorUI.Value;
-                anchorUI.End();
+                return value;
             }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
+            }
+
+            if (_anchorUI == null)
+            {
+                _anchorUI = new AnchorUI(this);
+            }
+
+            _anchorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_anchorUI);
+            value = _anchorUI.Value;
+            _anchorUI.End();
 
             return value;
         }
@@ -55,9 +55,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     User Interface for the AnchorEditor.
+        /// User Interface for the AnchorEditor.
         /// </summary>
-
         private class AnchorUI : Control
         {
             private readonly SpringControl bottom;
