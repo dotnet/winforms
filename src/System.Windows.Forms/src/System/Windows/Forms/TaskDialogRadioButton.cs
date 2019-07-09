@@ -50,8 +50,8 @@ namespace System.Windows.Forms
         /// Gets or sets a value indicating whether the button can respond to user interaction.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the button can respond to user interaction; otherwise,
-        /// <c>false</c>. The default value is <c>true</c>.
+        /// <see langword="true"/> if the button can respond to user interaction; otherwise,
+        /// <see langword="false"/>. The default value is <see langword="true"/>.
         /// </value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
@@ -104,11 +104,11 @@ namespace System.Windows.Forms
         /// in the checked state.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the <see cref="TaskDialogRadioButton"/> is in the checked state;
-        /// otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// <see langword="true"/> if the <see cref="TaskDialogRadioButton"/> is in the checked state;
+        /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// While the dialog is shown, this property can only be set to <c>true</c> and you cannot
+        /// While the dialog is shown, this property can only be set to <see langword="true"/> and you cannot
         /// set it from within the <see cref="CheckedChanged"/> event.
         /// </remarks>
         /// <exception cref="InvalidOperationException"></exception>

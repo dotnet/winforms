@@ -66,8 +66,8 @@ namespace System.Windows.Forms
         /// the checked state.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the <see cref="TaskDialogCheckBox"/> is in the checked state;
-        /// otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// <see langword="true"/> if the <see cref="TaskDialogCheckBox"/> is in the checked state;
+        /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
         /// This property can be set while the dialog is shown.

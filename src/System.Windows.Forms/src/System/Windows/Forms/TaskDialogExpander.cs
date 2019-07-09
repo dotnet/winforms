@@ -129,8 +129,8 @@ namespace System.Windows.Forms
         /// expanded state (so that the dialog's expanded area is visible).
         /// </summary>
         /// <remarks>
-        /// <c>true</c> if the expander button is in the expanded state; <c>false</c> if
-        /// it is in the collapsed state. The default value is <c>false</c>.
+        /// <see langword="true"/> if the expander button is in the expanded state; <see langword="false"/> if
+        /// it is in the collapsed state. The default value is <see langword="false"/>.
         /// </remarks>
         public bool Expanded
         {
@@ -155,9 +155,9 @@ namespace System.Windows.Forms
         /// <see cref="TaskDialogPage.Text"/>.
         /// </summary>
         /// <value>
-        /// <c>true</c> to display the expanded area at the bottom of the task dialog's
-        /// footer area, <c>false</c> to display the expanded area immediately after the
-        /// dialog's <see cref="TaskDialogPage.Text"/>. The default value is <c>false</c>.
+        /// <see langword="true"/> to display the expanded area at the bottom of the task dialog's
+        /// footer area, <see langword="false"/> to display the expanded area immediately after the
+        /// dialog's <see cref="TaskDialogPage.Text"/>. The default value is <see langword="false"/>.
         /// </value>
         public bool ExpandFooterArea
         {

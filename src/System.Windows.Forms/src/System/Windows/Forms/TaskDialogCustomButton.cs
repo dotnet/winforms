@@ -16,9 +16,7 @@ namespace System.Windows.Forms
     public sealed class TaskDialogCustomButton : TaskDialogButton
     {
         private string _text;
-
         private string _descriptionText;
-
         private int _buttonID;
 
         /// <summary>

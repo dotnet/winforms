@@ -83,11 +83,8 @@ namespace System.Windows.Forms
         private static readonly IntPtr s_callbackProcDelegatePtr;
 
         private TaskDialogStartupLocation _startupLocation;
-
         private bool _setToForeground;
-
         private TaskDialogPage _page;
-
         private TaskDialogPage _boundPage;
 
         /// <summary>
@@ -98,11 +95,6 @@ namespace System.Windows.Forms
         /// not yet received.
         /// </summary>
         private readonly Queue<TaskDialogPage> _waitingNavigationPages = new Queue<TaskDialogPage>();
-
-        /// <summary>
-        /// Window handle of the task dialog when it is being shown.
-        /// </summary>
-        private IntPtr _hwndDialog;
 
         /// <summary>
         /// The <see cref="IntPtr"/> of a <see cref="GCHandle"/> that represents this
@@ -228,7 +220,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// You can cancel the close by setting
-        /// <see cref="CancelEventArgs.Cancel"/> to <c>true</c>. Otherwise, the
+        /// <see cref="CancelEventArgs.Cancel"/> to <see langword="true"/>. Otherwise, the
         /// dialog window will close, and the <see cref="Closed"/> event will be
         /// raised afterwards.
         /// 
@@ -301,34 +293,35 @@ namespace System.Windows.Forms
         /// <see cref="Opened"/> event occurs, and last when the
         /// <see cref="Closed"/> event occurs after which you shouldn't use it any more.
         /// </remarks>
-        public IntPtr Handle
-        {
-            get => _hwndDialog;
-        }
+        public IntPtr Handle { get; private set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="TaskDialogPage"/> instance that contains
-        /// the contents which this task dialog will display.
+        ///   Gets or sets the <see cref="TaskDialogPage"/> instance that contains 
+        ///   the contents which this task dialog will display.
         /// </summary>
         /// <remarks>
-        /// When setting this property while the task dialog is displayed, it will
-        /// recreate its contents from the specified <see cref="TaskDialogPage"/>
-        /// ("navigation"). This means that the <see cref="TaskDialogPage.Destroyed"/>
-        /// event will occur for the current page, and after the dialog
-        /// completed navigation, the <see cref="TaskDialogPage.Created"/> event
-        /// of the new page will occur.
-        /// 
-        /// Please note that you cannot manipulate the task dialog or its controls
-        /// immediately after navigating it (except for calling <see cref="Close"/>
-        /// or navigating the dialog again).
-        /// You will need to wait for the <see cref="TaskDialogPage.Created"/>
-        /// event to occur before you can manipulate the dialog or its controls.
-        /// 
-        /// Note that when navigating the dialog, the new page will be bound
-        /// immediately, but the previous page will not be unbound until the
-        /// <see cref="TaskDialogPage.Created"/> event of the new page is raised,
-        /// because during that time the task dialog behaves as if it still
-        /// showed the controls of the previous page.
+        /// <para>
+        ///   When setting this property while the task dialog is displayed, it will
+        ///   recreate its contents from the specified <see cref="TaskDialogPage"/>
+        ///   ("navigation"). This means that the <see cref="TaskDialogPage.Destroyed"/>
+        ///   event will occur for the current page, and after the dialog
+        ///   completed navigation, the <see cref="TaskDialogPage.Created"/> event
+        ///   of the new page will occur.
+        /// </para>
+        /// <para>
+        ///   Please note that you cannot manipulate the task dialog or its controls
+        ///   immediately after navigating it (except for calling <see cref="Close"/>
+        ///   or navigating the dialog again).
+        ///   You will need to wait for the <see cref="TaskDialogPage.Created"/>
+        ///   event to occur before you can manipulate the dialog or its controls.
+        /// </para>
+        /// <para>
+        ///   Note that when navigating the dialog, the new page will be bound
+        ///   immediately, but the previous page will not be unbound until the
+        ///   <see cref="TaskDialogPage.Created"/> event of the new page is raised,
+        ///   because during that time the task dialog behaves as if it still
+        ///   showed the controls of the previous page.
+        /// </para>
         /// </remarks>
         public TaskDialogPage Page
         {
@@ -384,11 +377,11 @@ namespace System.Windows.Forms
         /// foreground window when showing it.
         /// </summary>
         /// <value>
-        /// <c>true</c> to indicate that the task dialog should set itself as foreground window
-        /// when showing it; otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// <see langword="true"/> to indicate that the task dialog should set itself as foreground window
+        /// when showing it; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// When setting this property to <c>true</c> and then showing the dialog, it
+        /// When setting this property to <see langword="true"/> and then showing the dialog, it
         /// causes the dialog to set itself as foreground window. This means that
         /// if currently none of the application's windows has focus, the task dialog
         /// tries to "steal" focus (which can result in the task dialog window being
@@ -396,9 +389,9 @@ namespace System.Windows.Forms
         /// if the application already has focus, the task dialog window will be
         /// activated in either case.
         /// 
-        /// Note: A value of <c>false</c> only has an effect on Windows 8/Windows Server 2012
+        /// Note: A value of <see langword="false"/> only has an effect on Windows 8/Windows Server 2012
         /// and higher. On previous versions of Windows, the task dialog will always behave as
-        /// if this property was set to <c>true</c>.
+        /// if this property was set to <see langword="true"/>.
         /// </remarks>
         public bool SetToForeground
         {
@@ -430,14 +423,14 @@ namespace System.Windows.Forms
         /// property.
         /// </summary>
         /// <remarks>
-        /// This property can only be <c>true</c> if <see cref="IsShown"/> is
-        /// also <c>true</c>. However, normally this property should be equivalent
+        /// This property can only be <see langword="true"/> if <see cref="IsShown"/> is
+        /// also <see langword="true"/>. However, normally this property should be equivalent
         /// to <see cref="IsShown"/>, because when showing the dialog, the
         /// callback should have been called setting the handle.
         /// </remarks>
         internal bool IsHandleCreated
         {
-            get => _hwndDialog != IntPtr.Zero;
+            get => Handle != IntPtr.Zero;
         }
 
         /// <summary>
@@ -719,7 +712,7 @@ namespace System.Windows.Forms
                     // thrown (which means the native task dialog is still showing),
                     // which we should avoid as it is not supported.
                     // TODO: Maybe FailFast() in that case to prevent future errors.
-                    Debug.Assert(_hwndDialog == IntPtr.Zero);
+                    Debug.Assert(Handle == IntPtr.Zero);
 
                     // Ensure to keep the callback delegate alive until
                     // TaskDialogIndirect() returns in case we could not undo the
@@ -734,7 +727,7 @@ namespace System.Windows.Forms
                     // raiseClosed/raisePageDestroyed flags are is cleared even if
                     // the TDN_DESTROYED notification did not occur (although that
                     // should only happen when there was an exception).
-                    _hwndDialog = IntPtr.Zero;
+                    Handle = IntPtr.Zero;
                     _raisedOpened = false;
                     _raisedPageCreated = false;
 
@@ -1026,7 +1019,7 @@ namespace System.Windows.Forms
             // (or null) with this method causes the window title to be empty.
             // We could replicate the Task Dialog behavior by also using the
             // executable's name as title if the string is null or empty.
-            if (Interop.User32.SetWindowTextW(new HandleRef(this, _hwndDialog), title) == 0)
+            if (Interop.User32.SetWindowTextW(new HandleRef(this, Handle), title) == 0)
             {
                 Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
             }
@@ -1075,8 +1068,8 @@ namespace System.Windows.Forms
             IntPtr lParam)
         {
             // Set the hWnd as this may be the first time that we get it.
-            bool isFirstNotification = _hwndDialog == IntPtr.Zero;
-            _hwndDialog = hWnd;
+            bool isFirstNotification = Handle == IntPtr.Zero;
+            Handle = hWnd;
 
             try
             {
@@ -1176,7 +1169,7 @@ namespace System.Windows.Forms
                             // must not continue to send any notifications to the dialog
                             // after the callback function has returned from being called
                             // with the 'Destroyed' notification.                    
-                            _hwndDialog = IntPtr.Zero;
+                            Handle = IntPtr.Zero;
                         }
                         break;
 
@@ -1861,7 +1854,7 @@ namespace System.Windows.Forms
             DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
             UnsafeNativeMethods.SendMessage(
-                new HandleRef(this, _hwndDialog),
+                new HandleRef(this, Handle),
                 (int)message,
                 // Note: When a negative 32-bit integer is converted to a
                 // 64-bit pointer, the high dword will be set to 0xFFFFFFFF.

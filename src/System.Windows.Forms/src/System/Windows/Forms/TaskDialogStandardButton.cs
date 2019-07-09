@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     /// Showing a <see cref="TaskDialogButton"/> with a <see cref="TaskDialogResult.Cancel"/>
     /// result in a task dialog will add a close button to the task dialog title bar and will
     /// allow to close the dialog by pressing ESC or Alt+F4 (just as if
-    /// <see cref="TaskDialogPage.AllowCancel"/> was set to <c>true</c>).
+    /// <see cref="TaskDialogPage.AllowCancel"/> was set to <see langword="true"/>).
     /// </remarks>
     public sealed class TaskDialogStandardButton : TaskDialogButton
     {
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         /// the task dialog.
         /// </summary>
         /// <remarks>
-        /// Setting this property to <c>false</c> allows you to still receive the
+        /// Setting this property to <see langword="false"/> allows you to still receive the
         /// <see cref="TaskDialogButton.Click"/> event (e.g. for the
         /// <see cref="TaskDialogResult.Cancel"/> button when
         /// <see cref="TaskDialogPage.AllowCancel"/> is set), or to call the

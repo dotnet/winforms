@@ -9,11 +9,10 @@ namespace System.Windows.Forms
         private class WindowSubclassHandler : Forms.WindowSubclassHandler
         {
             private readonly TaskDialog _taskDialog;
-
             private bool _processedShowWindowMessage;
 
             public WindowSubclassHandler(TaskDialog taskDialog)
-                : base(taskDialog?._hwndDialog ?? throw new ArgumentNullException(nameof(taskDialog)))
+                : base(taskDialog?.Handle ?? throw new ArgumentNullException(nameof(taskDialog)))
             {
                 _taskDialog = taskDialog;
             }

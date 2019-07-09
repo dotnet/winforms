@@ -40,37 +40,26 @@ namespace System.Windows.Forms
         private const int RadioButtonStartID = 1;
 
         private TaskDialogStandardButtonCollection _standardButtons;
-
         private TaskDialogCustomButtonCollection _customButtons;
-
         private TaskDialogRadioButtonCollection _radioButtons;
-
         private TaskDialogCheckBox _checkBox;
-
         private TaskDialogExpander _expander;
-
         private TaskDialogFooter _footer;
-
         private TaskDialogProgressBar _progressBar;
 
         private TaskDialogFlags _flags;
+        private TaskDialogCustomButtonStyle _customButtonStyle;
+        private TaskDialogIcon _icon;
         private string _title;
         private string _instruction;
         private string _text;
-        private TaskDialogIcon _icon;
         private int _width;
-        private TaskDialogCustomButtonStyle _customButtonStyle;
-
-        private TaskDialog _boundTaskDialog;
-
         private bool _boundIconIsFromHandle;
-
         private bool _appliedInitialization;
 
         /// <summary>
         /// Occurs after this instance is bound to a task dialog and the task dialog
-        /// has created the GUI elements represented by this
-        /// <see cref="TaskDialogPage"/> instance.
+        /// has created the GUI elements represented by this <see cref="TaskDialogPage"/> instance.
         /// </summary>
         /// <remarks>
         /// This will happen after showing or navigating the dialog.
@@ -97,7 +86,7 @@ namespace System.Windows.Forms
         /// Occurs when the user has clicked on a hyperlink.
         /// </summary>
         /// <remarks>
-        /// This event will only be raised if <see cref="EnableHyperlinks"/> is set to <c>true</c>.
+        /// This event will only be raised if <see cref="EnableHyperlinks"/> is set to <see langword="true"/>.
         /// </remarks>
         public event EventHandler<TaskDialogHyperlinkClickedEventArgs> HyperlinkClicked;
 
@@ -279,7 +268,7 @@ namespace System.Windows.Forms
 
                 // Note: We set the field values after calling the method to ensure
                 // it still has the previous value it the method throws.
-                _boundTaskDialog?.UpdateTitle(value);
+                BoundTaskDialog?.UpdateTitle(value);
 
                 _title = value;
             }
@@ -299,7 +288,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                _boundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, value);
+                BoundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, value);
 
                 _instruction = value;
             }
@@ -319,7 +308,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                _boundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_CONTENT, value);
+                BoundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_CONTENT, value);
 
                 _text = value;
             }
@@ -346,13 +335,13 @@ namespace System.Windows.Forms
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
                 // throw in such a case.
-                if (_boundTaskDialog != null && iconIsFromHandle != null &&
+                if (BoundTaskDialog != null && iconIsFromHandle != null &&
                     iconIsFromHandle != _boundIconIsFromHandle)
                 {
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                _boundTaskDialog?.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_MAIN, iconValue);
+                BoundTaskDialog?.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_MAIN, iconValue);
 
                 _icon = value;
             }
@@ -405,33 +394,39 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that specifies whether the task dialog should
-        /// interpret strings in the form <c>&lt;a href="link"&gt;Hyperlink Text&lt;/a&gt;</c>
-        /// as hyperlink when specified in the <see cref="Text"/>,
-        /// <see cref="TaskDialogFooter.Text"/>
-        /// or <see cref="TaskDialogExpander.Text"/> properties.
-        /// When the user clicks on such a link, the <see cref="HyperlinkClicked"/>
-        /// event is raised, containing the value of the <c>href</c> attribute.
-        /// 
-        /// Warning: Enabling hyperlinks when using content from an unsafe source
-        /// may cause security vulnerabilities.
+        /// <para>
+        ///   Gets or sets a value that specifies whether the task dialog should
+        ///   interpret strings in the form <c>&lt;a href="link"&gt;Hyperlink Text&lt;/a&gt;</c>
+        ///   as hyperlink when specified in the <see cref="Text"/>,
+        ///   <see cref="TaskDialogFooter.Text"/>
+        ///   or <see cref="TaskDialogExpander.Text"/> properties.
+        ///   When the user clicks on such a link, the <see cref="HyperlinkClicked"/>
+        ///   event is raised, containing the value of the <c>href</c> attribute.
+        /// </para>
+        /// <para>
+        ///   <b>Warning:</b> Enabling hyperlinks when using content from an unsafe source
+        ///   may cause security vulnerabilities.
+        /// </para>
         /// </summary>
         /// <value>
-        /// <c>true</c> to enable hyperlinks; otherwise, <c>false</c>. The default value
-        /// is <c>false</c>.
+        ///   <see langword="true"/> to enable hyperlinks; otherwise, <see langword="false"/>. 
+        ///   The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// Note: The Task Dialog will not actually execute any hyperlinks.
-        /// Hyperlink execution must be handled in the <see cref="HyperlinkClicked"/>
-        /// event.
-        /// 
-        /// Note: Enabling this setting causes the <c>"&amp;"</c> character to be
-        /// interpreted as prefix for an access key character (mnemonic) if at least
-        /// one link is used.
-        /// 
-        /// Note: When you enable this setting and you want to display a text
-        /// without interpreting links, you must replace the strings <c>"&lt;a"</c>
-        /// and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
+        /// <para>
+        ///   Note: The Task Dialog will not actually execute any hyperlinks.
+        ///   Hyperlink execution must be handled in the <see cref="HyperlinkClicked"/> event.
+        /// </para>
+        /// <para>
+        ///   Note: Enabling this setting causes the <c>"&amp;"</c> character to be
+        ///   interpreted as prefix for an access key character (mnemonic) if at least
+        ///   one link is used.
+        /// </para>
+        /// <para>
+        ///   Note: When you enable this setting and you want to display a text
+        ///   without interpreting links, you must replace the strings <c>"&lt;a"</c>
+        ///   and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
+        /// </para>
         /// </remarks>
         public bool EnableHyperlinks
         {
@@ -446,13 +441,13 @@ namespace System.Windows.Forms
         /// result is added to the <see cref="StandardButtons"/> collection.
         /// </summary>
         /// <value>
-        /// <c>true</c> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
-        /// the title bar's close button; otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// <see langword="true"/> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
+        /// the title bar's close button; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
         /// You can intercept cancellation of the dialog without displaying a "Cancel"
         /// button by adding a <see cref="TaskDialogStandardButton"/> with its
-        /// <see cref="TaskDialogStandardButton.Visible"/> set to <c>false</c> and specifying
+        /// <see cref="TaskDialogStandardButton.Visible"/> set to <see langword="false"/> and specifying
         /// a <see cref="TaskDialogResult.Cancel"/> result.
         /// </remarks>
         public bool AllowCancel
@@ -466,8 +461,8 @@ namespace System.Windows.Forms
         /// reading right to left. 
         /// </summary>
         /// <value>
-        /// <c>true</c> to display text and controls reading right to left; <c>false</c>
-        /// to display controls reading left to right. The default value is <c>false</c>.
+        /// <see langword="true"/> to display text and controls reading right to left; <see langword="false"/>
+        /// to display controls reading left to right. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
         /// Note that once a task dialog has been opened with or has navigated to a
@@ -486,11 +481,11 @@ namespace System.Windows.Forms
         /// when it is shown modeless.
         /// </summary>
         /// <value>
-        /// <c>true</c> to specify that the task dialog can be minimized; otherwise, <c>false</c>.
-        /// The default value is <c>false</c>.
+        /// <see langword="true"/> to specify that the task dialog can be minimized; otherwise, <see langword="false"/>.
+        /// The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// When setting this property to <c>true</c>, <see cref="AllowCancel"/> is
+        /// When setting this property to <see langword="true"/>, <see cref="AllowCancel"/> is
         /// automatically implied.
         /// </remarks>
         public bool CanBeMinimized
@@ -504,8 +499,8 @@ namespace System.Windows.Forms
         /// of its content area (similar to Message Box sizing behavior).
         /// </summary>
         /// <value>
-        /// <c>true</c> to determine the width of the task dialog by the width of
-        /// its content area; otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// <see langword="true"/> to determine the width of the task dialog by the width of
+        /// its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
         /// This flag is ignored if <see cref="Width"/> is not set to <c>0</c>.
@@ -516,19 +511,16 @@ namespace System.Windows.Forms
             set => SetFlag(TaskDialogFlags.TDF_SIZE_TO_CONTENT, value);
         }
 
-        internal TaskDialog BoundTaskDialog
-        {
-            get => _boundTaskDialog;
-        }
+        internal TaskDialog BoundTaskDialog { get; private set; }
 
         /// <summary>
-        /// Gets a value that indicates if the <see cref="_boundTaskDialog"/>
+        /// Gets a value that indicates if the <see cref="BoundTaskDialog"/>
         /// started navigation to this page but navigation did not yet complete
         /// (in which case we cannot modify the dialog even though we are bound).
         /// </summary>
         internal bool WaitingForInitialization
         {
-            get => _boundTaskDialog != null && !_appliedInitialization;
+            get => BoundTaskDialog != null && !_appliedInitialization;
         }
 
         internal static bool IsNativeStringNullOrEmpty(string str)
@@ -562,7 +554,7 @@ namespace System.Windows.Forms
 
         internal void DenyIfBound()
         {
-            if (_boundTaskDialog != null)
+            if (BoundTaskDialog != null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfBoundPage);
             }
@@ -580,7 +572,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogButton GetBoundButtonByID(int buttonID)
         {
-            if (_boundTaskDialog == null)
+            if (BoundTaskDialog == null)
             {
                 throw new InvalidOperationException();
             }
@@ -613,7 +605,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogRadioButton GetBoundRadioButtonByID(int buttonID)
         {
-            if (_boundTaskDialog == null)
+            if (BoundTaskDialog == null)
             {
                 throw new InvalidOperationException();
             }
@@ -624,7 +616,7 @@ namespace System.Windows.Forms
         internal void Validate()
         {
             // Check that this page instance is not already bound to a TaskDialog instance.
-            if (_boundTaskDialog != null)
+            if (BoundTaskDialog != null)
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogPageIsAlreadyBound,
@@ -696,14 +688,14 @@ namespace System.Windows.Forms
             out int defaultButtonID,
             out int defaultRadioButtonID)
         {
-            if (_boundTaskDialog != null)
+            if (BoundTaskDialog != null)
             {
                 throw new InvalidOperationException();
             }
 
             // This method assumes Validate() has already been called.
 
-            _boundTaskDialog = owner;
+            BoundTaskDialog = owner;
             flags = _flags;
 
             (IntPtr localIconValue, bool? iconIsFromHandle) = GetIconValue(_icon);
@@ -821,7 +813,7 @@ namespace System.Windows.Forms
 
         internal void Unbind()
         {
-            if (_boundTaskDialog == null)
+            if (BoundTaskDialog == null)
             {
                 throw new InvalidOperationException();
             }
@@ -854,7 +846,7 @@ namespace System.Windows.Forms
             _footer?.Unbind();
             _progressBar?.Unbind();
 
-            _boundTaskDialog = null;
+            BoundTaskDialog = null;
             _appliedInitialization = false;
         }
 

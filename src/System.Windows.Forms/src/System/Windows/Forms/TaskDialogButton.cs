@@ -12,12 +12,8 @@ namespace System.Windows.Forms
     public abstract class TaskDialogButton : TaskDialogControl
     {
         private bool _enabled = true;
-
         private bool _defaultButton;
-
         private bool _elevationRequired;
-
-        private IReadOnlyList<TaskDialogButton> _collection;
 
         /// <summary>
         /// Occurs when the button is clicked.
@@ -27,11 +23,10 @@ namespace System.Windows.Forms
         /// (except for the <see cref="TaskDialogResult.Help"/> button which instead
         /// will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
         /// To prevent the dialog from closing, set the
-        /// <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> property to
-        /// <c>true</c>.
+        /// <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> property to <see langword="true"/>.
         /// 
         /// When the <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> is not set to
-        /// <c>true</c>, the <see cref="TaskDialog.Closing"/> event will occur afterwards which
+        /// <see langword="true"/>, the <see cref="TaskDialog.Closing"/> event will occur afterwards which
         /// also allows you to prevent the dialog from closing.
         /// </remarks>
         public event EventHandler<TaskDialogButtonClickedEventArgs> Click;
@@ -45,8 +40,8 @@ namespace System.Windows.Forms
         /// Gets or sets a value indicating whether the button can respond to user interaction.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the button can respond to user interaction; otherwise,
-        /// <c>false</c>. The default value is <c>true</c>.
+        /// <see langword="true"/> if the button can respond to user interaction; otherwise,
+        /// <see langword="false"/>. The default value is <see langword="true"/>.
         /// </value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
@@ -74,8 +69,8 @@ namespace System.Windows.Forms
         /// should be shown near the button; that is, whether the action invoked by the button
         /// requires elevation.
         /// </summary>
-        /// <value><c>true</c> to show the UAC shield icon; otherwise, <c>false</c>. The default
-        /// value is <c>false</c>.</value>
+        /// <value><see langword="true"/> to show the UAC shield icon; otherwise, <see langword="false"/>.
+        /// The default value is <see langword="false"/>.</value>
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
@@ -101,8 +96,8 @@ namespace System.Windows.Forms
         /// in the task dialog.
         /// </summary>
         /// <value>
-        /// <c>true</c> to indicate that this button will be the default button in the task dialog;
-        /// otherwise, <c>false</c>. The default value is <c>false</c>.
+        /// <see langword="true"/> to indicate that this button will be the default button in the task dialog;
+        /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
         /// Note that only a single button in a task dialog can be set as the default button.
@@ -119,12 +114,14 @@ namespace System.Windows.Forms
                 // all other buttons to false.
                 // Note that this does not handle buttons that are added later to
                 // the collection.
-                if (_collection != null && value)
+                if (Collection == null || !value)
                 {
-                    foreach (TaskDialogButton button in _collection)
-                    {
-                        button._defaultButton = button == this;
-                    }
+                    return;
+                }
+
+                foreach (TaskDialogButton button in Collection)
+                {
+                    button._defaultButton = button == this;
                 }
             }
         }
@@ -140,11 +137,7 @@ namespace System.Windows.Forms
         // (e.g. if we ever need to add actions in the setter, it normally would
         // be the same for all subclasses). Instead, the subclass can declare
         // a new (internal) Collection property which has a more specific type.
-        private protected IReadOnlyList<TaskDialogButton> Collection
-        {
-            get => _collection;
-            set => _collection = value;
-        }
+        private protected IReadOnlyList<TaskDialogButton> Collection { get; set; }
 
         /// <summary>
         /// Simulates a click on this button.
