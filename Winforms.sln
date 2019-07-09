@@ -105,6 +105,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiAddNewTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiAddNewTests\MauiAddNewTests.csproj", "{A7F54254-8636-4872-A912-E0166A9A195F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDragDropEffectsTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDragDropEffectsTests\MauiDragDropEffectsTests.csproj", "{F0E7A377-A120-4C01-9BC0-C2DC92E38D01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +201,10 @@ Global
 		{A7F54254-8636-4872-A912-E0166A9A195F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7F54254-8636-4872-A912-E0166A9A195F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7F54254-8636-4872-A912-E0166A9A195F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0E7A377-A120-4C01-9BC0-C2DC92E38D01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0E7A377-A120-4C01-9BC0-C2DC92E38D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0E7A377-A120-4C01-9BC0-C2DC92E38D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0E7A377-A120-4C01-9BC0-C2DC92E38D01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,6 +236,7 @@ Global
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{A7F54254-8636-4872-A912-E0166A9A195F} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{F0E7A377-A120-4C01-9BC0-C2DC92E38D01} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
