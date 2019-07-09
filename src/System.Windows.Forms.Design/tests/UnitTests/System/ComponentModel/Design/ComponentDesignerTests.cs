@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Moq;
 using Moq.Protected;
@@ -2330,8 +2331,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(5, descriptor.Attributes.Count);
-            Assert.Equal(6, result.Attributes.Count);
+            Assert.Equal(7, descriptor.Attributes.Count);
+            Assert.Equal(8, result.Attributes.Count);
         }
 
         [Fact]
@@ -2350,8 +2351,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(5, descriptor.Attributes.Count);
-            Assert.Equal(6, result.Attributes.Count);
+            Assert.Equal(7, descriptor.Attributes.Count);
+            Assert.Equal(8, result.Attributes.Count);
         }
 
         [Theory]
@@ -2819,6 +2820,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithComponentWithKey_Success()
         {
+            //Debugger.Launch();
             var designer = new SubComponentDesigner();
             IDesignerFilter filter = designer;
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
@@ -2833,8 +2835,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(5, descriptor.Attributes.Count);
-            Assert.Equal(6, result.Attributes.Count);
+            Assert.Equal(7, descriptor.Attributes.Count);
+            Assert.Equal(8, result.Attributes.Count);
         }
 
         [Fact]
@@ -2854,8 +2856,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(5, descriptor.Attributes.Count);
-            Assert.Equal(6, result.Attributes.Count);
+            Assert.Equal(7, descriptor.Attributes.Count);
+            Assert.Equal(8, result.Attributes.Count);
         }
 
         [Theory]
