@@ -196,7 +196,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult ReportProgress(TParams p)
+        public ScenarioResult ReportProgress(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
         InitializeComponent();
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult NotRunningCancel(TParams p)
+        public ScenarioResult NotRunningCancel(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
         InitializeComponent();
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult RunningCancel(TParams p)
+        public ScenarioResult RunningCancel(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
 
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult AfterCompletedCancel(TParams p)
+        public ScenarioResult AfterCompletedCancel(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
 
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult RunTwice(TParams p)
+        public ScenarioResult RunTwice(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
 
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult RunWhenAlreadyRunning(TParams p)
+        public ScenarioResult RunWhenAlreadyRunning(TParams p)
     {
         InitializeComponent();
 
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult RunWithoutDoWorkEventHandler(TParams p)
+        public ScenarioResult RunWithoutDoWorkEventHandler(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
 
@@ -418,7 +418,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult FailedWorkerNonNullException(TParams p)
+        public ScenarioResult FailedWorkerNonNullException(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
         InitializeFailureComponent();
@@ -455,7 +455,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         //
 
         [Scenario(true)]
-        protected ScenarioResult FailedWorkerThrowsException(TParams p)
+        public ScenarioResult FailedWorkerThrowsException(TParams p)
     {
         ScenarioResult sr = new ScenarioResult();
 
