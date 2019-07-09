@@ -1,8 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 
@@ -15,11 +11,10 @@ using ReflectTools;
 /// Summary description for DerivedGridView.
 /// </summary>
 /// 
-
 //[System.ComponentModel.DesignerCategory("code")]
-namespace System.Windows.Forms.IntegrationTests.MauiTests { 
-  
 
+namespace System.Windows.Forms.IntegrationTests.MauiTests
+{
     public class DerivedDataGridView : DataGridView
     {
         public DerivedDataGridView()
