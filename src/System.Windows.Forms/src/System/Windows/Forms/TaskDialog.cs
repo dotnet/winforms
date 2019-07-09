@@ -996,11 +996,16 @@ namespace System.Windows.Forms
         internal void UpdateIconElement(TaskDialogIconElement element, IntPtr icon)
         {
             // Note: Updating the icon doesn't cause the task dialog to update
-            // its size. For example, if you initially didn't specify an icon
-            // but later want to set one, the dialog contents might get clipped.
-            // To fix this, we might want to call UpdateSize() that forces the
-            // task dialog to update its size.
+            // its size; in contrast to the text updates where we use a
+            // TDM_SET_... message.
+            // 
+            // For example, if you initially didn't specify an icon but later want to
+            // set one, the dialog contents might get clipped.
+            // 
+            // To fix this, we call UpdateWindowSize() after updating the icon, to
+            // force the task dialog to update its size.
             SendTaskDialogMessage(TaskDialogMessage.TDM_UPDATE_ICON, (int)element, icon);
+            UpdateWindowSize();
         }
 
         internal void UpdateTitle(string title)
