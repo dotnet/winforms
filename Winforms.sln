@@ -115,6 +115,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDblBuffSecurityChecksTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDataBindingAttributes01_ExistenceTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDataBindingAttributes01_ExistenceTests\MauiDataBindingAttributes01_ExistenceTests.csproj", "{A975AF59-7E26-47BA-94CD-67B36D08D674}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDeleteRows01Tests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDeleteRows01Tests\MauiDeleteRows01Tests.csproj", "{B7035A7C-6B36-4AA4-887D-F14C676FAF2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -229,6 +231,10 @@ Global
 		{A975AF59-7E26-47BA-94CD-67B36D08D674}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A975AF59-7E26-47BA-94CD-67B36D08D674}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A975AF59-7E26-47BA-94CD-67B36D08D674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7035A7C-6B36-4AA4-887D-F14C676FAF2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7035A7C-6B36-4AA4-887D-F14C676FAF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7035A7C-6B36-4AA4-887D-F14C676FAF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7035A7C-6B36-4AA4-887D-F14C676FAF2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,6 +271,7 @@ Global
 		{0C7CE645-2B70-4DFB-AEA9-EA4E8ACC1724} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{03C3DB09-F228-485B-9C54-0615B979D13C} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{A975AF59-7E26-47BA-94CD-67B36D08D674} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{B7035A7C-6B36-4AA4-887D-F14C676FAF2E} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
