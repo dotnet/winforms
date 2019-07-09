@@ -113,6 +113,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiGetListTests", "src\Sys
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiGetListItemPropertiesTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiGetListItemPropertiesTests\MauiGetListItemPropertiesTests.csproj", "{23027D8E-4ED6-44CB-B18C-ABE2F6108C10}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiIndexerTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiIndexerTests\MauiIndexerTests.csproj", "{209988F3-20F4-4A03-8F84-B7A07DEFFBFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiLabelTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiLabelTests\MauiLabelTests.csproj", "{C48A24C2-7150-45F2-A169-35DA1CFD84DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPrintingImprovmentsTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiPrintingImprovmentsTests\MauiPrintingImprovmentsTests.csproj", "{C9554F51-D779-4167-9946-1D0960D7B6E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +229,18 @@ Global
 		{23027D8E-4ED6-44CB-B18C-ABE2F6108C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23027D8E-4ED6-44CB-B18C-ABE2F6108C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23027D8E-4ED6-44CB-B18C-ABE2F6108C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{209988F3-20F4-4A03-8F84-B7A07DEFFBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{209988F3-20F4-4A03-8F84-B7A07DEFFBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{209988F3-20F4-4A03-8F84-B7A07DEFFBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{209988F3-20F4-4A03-8F84-B7A07DEFFBFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C48A24C2-7150-45F2-A169-35DA1CFD84DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C48A24C2-7150-45F2-A169-35DA1CFD84DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C48A24C2-7150-45F2-A169-35DA1CFD84DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C48A24C2-7150-45F2-A169-35DA1CFD84DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9554F51-D779-4167-9946-1D0960D7B6E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9554F51-D779-4167-9946-1D0960D7B6E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9554F51-D779-4167-9946-1D0960D7B6E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9554F51-D779-4167-9946-1D0960D7B6E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -258,6 +276,9 @@ Global
 		{E15875AC-B48C-43A1-BA3B-562362CF59DF} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{0BB6FDE4-718B-42CB-9FF2-D543F6A6CE76} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{23027D8E-4ED6-44CB-B18C-ABE2F6108C10} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{209988F3-20F4-4A03-8F84-B7A07DEFFBFB} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{C48A24C2-7150-45F2-A169-35DA1CFD84DF} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{C9554F51-D779-4167-9946-1D0960D7B6E2} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
