@@ -1,76 +1,61 @@
-//------------------------------------------------------------------------------
-// <copyright file="ImageListImage.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>                                                                
-//------------------------------------------------------------------------------
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design {
-    using System.ComponentModel;
-    using System.Drawing.Design;
-    using System.IO;   
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Drawing.Imaging;
+using System.IO;
 
-    [Editor(typeof(System.Windows.Forms.Design.ImageListImageEditor), typeof(UITypeEditor))]
-    internal class ImageListImage {
+namespace System.Windows.Forms.Design
+{
+    [Editor(typeof(ImageListImageEditor), typeof(UITypeEditor))]
+    internal class ImageListImage
+    {
+        private string _name = null;
 
-        public ImageListImage(Bitmap image) {
+        public ImageListImage(Bitmap image)
+        {
             Image = image;
         }
 
-        public ImageListImage (Bitmap image, string name) {
+        public ImageListImage(Bitmap image, string name)
+        {
             Image = image;
             Name = name;
         }
-            
-        private string _name = null;
-        private Bitmap _image = null;
-        
-        public string Name {
-            get { return (_name == null) ? "" : _name; }
-            set {
-                _name = value; 
-            }
+
+        public string Name
+        {
+            get => _name ?? string.Empty;
+            set => _name = value;
         }
 
         [Browsable(false)]
-        public Bitmap Image {
-            get { return _image; }
-            set { _image = value; }
-        }
+        public Bitmap Image { get; set; }
 
-       // Add properties to make this object "look" like Image in the Collection editor
-       public float HorizontalResolution {
-            get { return _image.HorizontalResolution; }
-       }
+        // Add properties to make this object "look" like Image in the Collection editor
+        public float HorizontalResolution => Image.HorizontalResolution;
 
-        public float VerticalResolution {
-            get { return _image.VerticalResolution; }
-        }
+        public float VerticalResolution => Image.VerticalResolution;
 
-        public PixelFormat PixelFormat {
-            get { return _image.PixelFormat; }
-        }
-        
-        public ImageFormat RawFormat {
-            get { return _image.RawFormat; }
-        }
+        public PixelFormat PixelFormat => Image.PixelFormat;
 
-        public Size Size {
-            get { return _image.Size; }
-        }
+        public ImageFormat RawFormat => Image.RawFormat;
 
-        public SizeF PhysicalDimension {
-            get { return _image.Size; }
-        }
-                
-        public static ImageListImage ImageListImageFromStream(Stream stream, bool imageIsIcon) {
-            if(imageIsIcon) {
+        public Size Size => Image.Size;
+
+        public SizeF PhysicalDimension => Image.Size;
+
+        public static ImageListImage ImageListImageFromStream(Stream stream, bool imageIsIcon)
+        {
+            if (imageIsIcon)
+            {
                 return new ImageListImage((new Icon(stream)).ToBitmap());
-            } else {
-                return new ImageListImage((Bitmap)Bitmap.FromStream(stream));
             }
+
+            return new ImageListImage((Bitmap)Bitmap.FromStream(stream));
         }
     }
 }

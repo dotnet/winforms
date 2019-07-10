@@ -1,146 +1,132 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="ImageListImageEditor.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>                                                                
-//------------------------------------------------------------------------------
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design {
-    using System.Runtime.InteropServices;
+using System.Collections;
+using System.ComponentModel;
+using System.Drawing.Design;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.IO;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using System.Reflection;
-    using System.Drawing.Design;
-    using System.Windows.Forms.ComponentModel;
-
-
-    /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageListImageEditor"]/*' />
-    /// <devdoc>
-    ///    <para>Provides an editor that can perform default file searching for bitmap (.bmp)
-    ///       files.</para>
-    /// </devdoc>
-    public class ImageListImageEditor : ImageEditor {
-
+namespace System.Windows.Forms.Design
+{
+    /// <summary>
+    ///  Provides an editor that can perform default file searching for bitmap (.bmp) files.
+    /// </summary>
+    [CLSCompliant(false)]
+    public class ImageListImageEditor : ImageEditor
+    {
         // VSWhidbey 95227: Metafile types are not supported in the ImageListImageEditor and should
         // not be displayed as an option.
-        internal static Type[] imageExtenders = new Type[] { typeof(BitmapEditor)/*, gpr typeof(Icon), typeof(MetafileEditor)*/};
-        private OpenFileDialog fileDialog = null;
+        internal static Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor)/*, gpr typeof(Icon), typeof(MetafileEditor)*/};
+        private OpenFileDialog _fileDialog = null;
 
         // VSWhidbey 95227: accessor needed into the static field so that derived classes
         // can implement a different list of supported image types.
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        protected override Type[] GetImageExtenders() {
-                return imageExtenders;
-        }
+        protected override Type[] GetImageExtenders() => s_imageExtenders;
 
-        /// <include file='doc\ImageListImageEditor.uex' path='docs/doc[@for="ImageEditor.EditValue"]/*' />
-        /// <devdoc>
-        ///      Edits the given object value using the editor style provided by
-        ///      GetEditorStyle.  A service provider is provided so that any
-        ///      required editing services can be obtained.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
-            ArrayList images = new ArrayList();
-            if (provider != null) {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                if (edSvc != null) {
-                    if (fileDialog == null) {
-                        fileDialog = new OpenFileDialog();
-                        fileDialog.Multiselect = true;
-                        string filter = CreateFilterEntry(this);
-                        for (int i = 0; i < GetImageExtenders().Length; i++) {
-                            ImageEditor e = (ImageEditor) Activator.CreateInstance(GetImageExtenders()[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null); //.CreateInstance();
-                            Type myClass = this.GetType();
-                            Type editorClass = e.GetType();
-                            if (!myClass.Equals(editorClass) && e != null && myClass.IsInstanceOfType(e))
-                                filter += "|" + CreateFilterEntry(e);
-                        }
-                        fileDialog.Filter = filter;
-                    }
+        /// <summary>
+        ///  Edits the given object value using the editor style provided by <see cref="GetEditorStyle"/>.
+        ///  A service provider is provided so that any required editing services can be obtained.
+        /// </summary>
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider == null)
+            {
+                return value;
+            }
 
-                    IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
-                    try {
-                        if (fileDialog.ShowDialog() == DialogResult.OK) {
-                            foreach (string name in fileDialog.FileNames) {
-                                
-                                ImageListImage image;
-                                FileStream file = new FileStream(name, FileMode.Open, FileAccess.Read, FileShare.Read);
-                                image = LoadImageFromStream(file, name.EndsWith(".ico"));
-                                image.Name = System.IO.Path.GetFileName(name);
-                                images.Add(image);
-                            }
-                        }
+            var images = new ArrayList();
+            var edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+            if (edSvc == null)
+            {
+                return images;
+            }
+
+            if (_fileDialog == null)
+            {
+                _fileDialog = new OpenFileDialog();
+                _fileDialog.Multiselect = true;
+                string filter = CreateFilterEntry(this);
+                Type[] imageExtenders = GetImageExtenders();
+                for (int i = 0; i < imageExtenders.Length; i++)
+                {
+                    var myClass = this.GetType();
+                    var editor = (ImageEditor)Activator.CreateInstance(imageExtenders[i],
+                                                                       BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
+                                                                       null, null, null);
+                    var editorClass = editor.GetType();
+
+                    if (!myClass.Equals(editorClass) && editor != null && myClass.IsInstanceOfType(editor))
+                    {
+                        filter += "|" + CreateFilterEntry(editor);
                     }
-                    finally {
-                        if (hwndFocus != IntPtr.Zero) {
-                            UnsafeNativeMethods.SetFocus(new HandleRef(null, hwndFocus));
+                }
+                _fileDialog.Filter = filter;
+            }
+
+            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+            try
+            {
+                if (_fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (string name in _fileDialog.FileNames)
+                    {
+                        ImageListImage image;
+                        using (FileStream file = new FileStream(name, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            image = LoadImageFromStream(file, name.EndsWith(".ico"));
+                            image.Name = Path.GetFileName(name);
+                            images.Add(image);
                         }
                     }
                 }
-                return images;
             }
-            return value;
+            finally
+            {
+                if (hwndFocus != IntPtr.Zero)
+                {
+                    UnsafeNativeMethods.SetFocus(new HandleRef(null, hwndFocus));
+                }
+            }
+
+            return images;
         }
 
-        /// <include file='doc\ImageListImageEditor.uex' path='docs/doc[@for="ImageListImageEditor.GetFileDialogDescription"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        protected override string GetFileDialogDescription() {
-            return SR.imageFileDescription;
-        }
+        protected override string GetFileDialogDescription() => SR.imageFileDescription;
 
-        /// <include file='doc\ImageListImageEditor.uex' path='docs/doc[@for="ImageListImageEditor.GetPaintValueSupported"]/*' />
-        /// <devdoc>
-        ///      Determines if this editor supports the painting of a representation
-        ///      of an object's value.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) {
-            return true;
-        }
+        /// <summary>
+        ///  Determines if this editor supports the painting of a representation of an object's value.
+        /// </summary>
+        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
 
-        /// <include file='doc\ImageListImageEditor.uex' path='docs/doc[@for="ImageListImageEditor.LoadFromStream"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        private ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon) {
-            //Copy the original stream to a buffer, then wrap a
-            //memory stream around it.  This way we can avoid
-            //locking the file
+        private ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon)
+        {
+            // Copy the original stream to a buffer, then wrap a
+            // memory stream around it.  This way we can avoid locking the file
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, (int)stream.Length);
-            MemoryStream ms = new MemoryStream(buffer);
 
-            return (ImageListImage)ImageListImage.ImageListImageFromStream(ms, imageIsIcon);
-        }
-
-
-        /// <include file='doc\ImageListImageEditor.uex' path='docs/doc[@for="ImageListImageEditor.PaintValue"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Paints a representative value of the given object to the provided
-        ///       canvas. Painting should be done within the boundaries of the
-        ///       provided rectangle.
-        ///    </para>
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        public override void PaintValue(PaintValueEventArgs e) {
-            if (e.Value is ImageListImage) {
-                e= new PaintValueEventArgs(e.Context, ((ImageListImage)e.Value).Image, e.Graphics, e.Bounds);
+            using (MemoryStream ms = new MemoryStream(buffer))
+            {
+                return ImageListImage.ImageListImageFromStream(ms, imageIsIcon);
             }
+        }
+
+        /// <summary>
+        ///  Paints a representative value of the given object to the provided canvas. 
+        ///  Painting should be done within the boundaries of the provided rectangle.
+        /// </summary>
+        public override void PaintValue(PaintValueEventArgs e)
+        {
+            if (e.Value is ImageListImage)
+            {
+                e = new PaintValueEventArgs(e.Context, ((ImageListImage)e.Value).Image, e.Graphics, e.Bounds);
+            }
+
             base.PaintValue(e);
-            
         }
     }
-    
-    }
+}
 
