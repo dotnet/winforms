@@ -156,4 +156,7 @@
     <value>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</value>
   </data>
+  <data name="ImageCollectionEditorFormText" xml:space="preserve">
+    <value>Images Collection Editor</value>
+  </data>
 </root>
