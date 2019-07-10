@@ -121,6 +121,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPrintingImprovmentsTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiMMFButtonTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiMMFButtonTests\MauiMMFButtonTests.csproj", "{7151ABB5-9F8C-4580-9552-CF2F33BBE433}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiMMFComboBoxTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiMMFComboBoxTests\MauiMMFComboBoxTests.csproj", "{7DC816DA-9D0E-48FE-9A26-168ED073ED31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,6 +249,10 @@ Global
 		{7151ABB5-9F8C-4580-9552-CF2F33BBE433}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7151ABB5-9F8C-4580-9552-CF2F33BBE433}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7151ABB5-9F8C-4580-9552-CF2F33BBE433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC816DA-9D0E-48FE-9A26-168ED073ED31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC816DA-9D0E-48FE-9A26-168ED073ED31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC816DA-9D0E-48FE-9A26-168ED073ED31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC816DA-9D0E-48FE-9A26-168ED073ED31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -286,6 +292,7 @@ Global
 		{C48A24C2-7150-45F2-A169-35DA1CFD84DF} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{C9554F51-D779-4167-9946-1D0960D7B6E2} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{7151ABB5-9F8C-4580-9552-CF2F33BBE433} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{7DC816DA-9D0E-48FE-9A26-168ED073ED31} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
