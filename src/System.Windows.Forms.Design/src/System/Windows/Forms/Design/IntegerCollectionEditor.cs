@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#define NEEDHELPBUTTON
-
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
@@ -44,9 +42,7 @@ namespace System.Windows.Forms.Design
             private readonly TextBox _textEntry = new TextBox();
             private readonly Button _okButton = new Button();
             private readonly Button _cancelButton = new Button();
-#if NEEDHELPBUTTON
             private readonly Button _helpButton = new Button();
-#endif
 
             /// <summary>
             /// Constructs a StringCollectionForm.
@@ -98,11 +94,7 @@ namespace System.Windows.Forms.Design
                 _textEntry.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
                 _textEntry.KeyDown += new KeyEventHandler(Edit1_keyDown);
 
-#if NEEDHELPBUTTON
                 _okButton.Location = new Point(185, 274);
-#else
-                _okButton.Location = new Point(264, 274);
-#endif
                 _okButton.Size = new Size(75, 23);
                 _okButton.TabIndex = 1;
                 _okButton.Text = SR.IntegerCollectionEditorOKCaption;
@@ -110,27 +102,20 @@ namespace System.Windows.Forms.Design
                 _okButton.DialogResult = DialogResult.OK;
                 _okButton.Click += new EventHandler(OKButton_click);
 
-#if NEEDHELPBUTTON
                 _cancelButton.Location = new Point(264, 274);
-#else
-                _cancelButton.Location = new Point(343, 274);
-#endif
                 _cancelButton.Size = new Size(75, 23);
                 _cancelButton.TabIndex = 2;
                 _cancelButton.Text = SR.IntegerCollectionEditorCancelCaption;
                 _cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 _cancelButton.DialogResult = DialogResult.Cancel;
 
-#if NEEDHELPBUTTON
                 _helpButton.Location = new Point(343, 274);
                 _helpButton.Size = new Size(75, 23);
                 _helpButton.TabIndex = 3;
                 _helpButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 _helpButton.Text = SR.IntegerCollectionEditorHelpCaption;
-
                 _helpButton.Click += new EventHandler(HelpButton_click);
                 HelpRequested += new HelpEventHandler(Form_HelpRequested);
-#endif
 
                 Location = new Point(7, 7);
                 Text = SR.IntegerCollectionEditorTitle;
@@ -153,9 +138,7 @@ namespace System.Windows.Forms.Design
                                         _textEntry,
                                         _okButton,
                                         _cancelButton,
-    #if NEEDHELPBUTTON
                                         _helpButton
-    #endif
                                         });
             }
 
