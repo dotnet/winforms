@@ -328,6 +328,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         #region Scenarios
         //[Scenario("Change focus to the control when it doesn't have focus using mouse.  Verify Enter and GotFocus fires.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario1(TParams p)
         {
 
@@ -356,6 +357,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Change focus to the control when it doesn't have focus using keyboard. Verify Enter and GotFocus fires.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario2(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -382,6 +384,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Change focus to/from the control when it has focus using mouse.  Verify Enter and GotFocus fires.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario3(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -420,6 +423,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Change focus to/from the control when it has focus using keyboard. Verify Enter and GotFocus fires.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario4(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -446,6 +450,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Change focus programatically.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario5(TParams p)
         {
             ScenarioResult result = new ScenarioResult();

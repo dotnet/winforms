@@ -235,6 +235,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         #region Scenarios
         //[Scenario("Press character key while cell is selected.  Verify no events fire.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario1(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -268,6 +269,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Press <escape> while cell is selected.  Verify events fire.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario3(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -300,6 +302,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Press character key while row is selected.  Verify events fire.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario4(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -330,6 +333,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Press character key while all cells are selected. Verify events fire.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario5(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -364,6 +368,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Press key with no cells selected. Verify events fire.")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario6(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -385,6 +390,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("Try special keys ( e.g. alt+a, ctrl+c )")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario7(TParams p)
         {
             ScenarioResult result = new ScenarioResult();

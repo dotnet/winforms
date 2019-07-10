@@ -254,7 +254,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(expectedNumber, events.Count, "An unexpected number of events fired.", log);
         }
         [Scenario(false)]
-      
+        [Obsolete]
         public ScenarioResult CheckEventFire(int eventIndex, EventArgs expectedArgs, string eventName)
         {
             ScenarioResult result = new ScenarioResult();
@@ -274,6 +274,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         // Single Click Scenario Helper
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickTextboxCellAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -419,6 +420,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult DragSelectAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -462,6 +464,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickTopLeftHeaderAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -599,6 +602,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickColumnHeaderAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -737,6 +741,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickEmptySpaceAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -848,6 +853,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickButtonCellAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1023,6 +1029,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickImageCellAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1168,6 +1175,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         // NOTE: This helper only clicks on LinkCells with no content, because strange things happen when
         // clicking on a LinkCell's content.  This is most probably an issue with MAUI, so it is not a 
         // pressing issue.
@@ -1311,6 +1319,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickComboBoxCellAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1416,6 +1425,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult ClickRowHeaderAndCheck(MouseClickType clickType, MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1527,6 +1537,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult EditCellAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1593,6 +1604,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         #region Scenarios
         //[Scenario("1) Left/right/middle click on cell")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario1(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1619,6 +1631,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("2) Click on top left header cell")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario2(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1646,6 +1659,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("3) Click on column header cell.  Verify ColumnHeaderMouseClick event fires after CellMouseClick, and verify its args")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario3(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1676,6 +1690,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("4) Click on row header cell.  Verify RowHeaderMouseClick event fires after CellMouseClick, and verify its args")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario4(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1696,6 +1711,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("5) Click on empty space in datagridview.  Verify only MouseDown, Click, MouseClick, and MouseUp events fire")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario5(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1713,6 +1729,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("6) Click on scrollbars  Verify no events fire")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario6(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1727,6 +1744,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("7) Click on button cell")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario7(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1754,6 +1772,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("8) Click on image cell")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario8(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1781,6 +1800,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("9) Click on link cell")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario9(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1808,6 +1828,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("10) Click on combobox")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario10(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1835,6 +1856,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("11) Enter editing mode for textbox cell.  Click on cell.  Same events as above")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario11(TParams p)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1850,6 +1872,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         //[Scenario("12) Click-drag to select cells - Verify CellClick, CellMouseClick, and CellContentClick don't fire (VSCurrent 276810")]
         [Scenario(true)]
+        [Obsolete]
         public ScenarioResult Scenario12(TParams p)
         {
 
