@@ -256,10 +256,18 @@ try {
 
     Write-Host "Building the solution...";
     .\build.cmd
+    $LastCode = $LASTEXITCODE;
+
     Write-Host "√ Solution built" -ForegroundColor Green;
 
     Create-SymLink -LocalSdkLocation $localSdkLocation -SystemSdkLocation $systemSdkLocation
     Create-SymLink -LocalSdkLocation $localNETCoreAppLocation -SystemSdkLocation $systemNETCoreAppLocation
+
+    if ($LastCode -ne 0) {
+        Write-Host 'Χ Build failed....' -ForegroundColor Red
+        pause
+        exit -1;
+    }
 
     Start-Process .\Winforms.sln
 }
