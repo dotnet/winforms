@@ -5,3 +5,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("System.Windows.Forms.Design.Editors.Tests, PublicKey=00000000000000000400000000000000")]
+[assembly: InternalsVisibleTo("WinformsControlsTest, PublicKey=00000000000000000400000000000000")]

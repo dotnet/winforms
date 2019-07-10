@@ -19,13 +19,11 @@
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-  
   <!-- Useless stuff to make Arcade SDK happy -->
   <PropertyGroup>
     <Language>msbuild</Language>
   </PropertyGroup>
-  <Target Name="Pack"/>
-  
+  <Target Name="Pack" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -222,6 +220,10 @@
     <Compile Include="..\WinformsControlsTest\TreeViewTest.Designer.cs">
       <Link>TreeViewTest.Designer.cs</Link>
       <DependentUpon>TreeViewTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\UserControls\UserControlWithCollectionEditors.cs">
+      <Link>UserControls\UserControlWithCollectionEditors.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\WinformsControlsTest\UserControls\UserControlWithFontNameEditor.cs">
       <Link>UserControls\UserControlWithFontNameEditor.cs</Link>
