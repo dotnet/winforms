@@ -5,11 +5,10 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Basic Properties for VScroll.
+    /// Basic Properties for HScroll.
     /// </summary>
     public class HScrollProperties : ScrollProperties
     {
-
         public HScrollProperties(ScrollableControl container) : base(container)
         {
         }

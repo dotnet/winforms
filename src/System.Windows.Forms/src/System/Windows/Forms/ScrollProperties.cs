@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             get => _enabled;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -54,11 +54,14 @@ namespace System.Windows.Forms
                 if (value != _enabled)
                 {
                     _enabled = value;
-                    UnsafeNativeMethods.EnableScrollBar(
-                        new HandleRef(_parent, _parent.Handle),
-                        Orientation,
-                        value ? NativeMethods.ESB_ENABLE_BOTH : NativeMethods.ESB_DISABLE_BOTH
-                    );
+                    if (_parent != null)
+                    {
+                        UnsafeNativeMethods.EnableScrollBar(
+                            new HandleRef(_parent, _parent.Handle),
+                            Orientation,
+                            value ? NativeMethods.ESB_ENABLE_BOTH : NativeMethods.ESB_DISABLE_BOTH
+                        );
+                    }
                 }
             }
         }
@@ -109,7 +112,7 @@ namespace System.Windows.Forms
             get => _maximum;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -144,7 +147,7 @@ namespace System.Windows.Forms
             get => _minimum;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -233,11 +236,10 @@ namespace System.Windows.Forms
 
                     _value = value;
                     UpdateScrollInfo();
-                    _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    _parent?.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
             }
         }
-
 
         /// <summary>
         /// Gets or sets a bool value controlling whether the scrollbar is showing.
@@ -250,7 +252,7 @@ namespace System.Windows.Forms
             get => _visible;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -258,16 +260,16 @@ namespace System.Windows.Forms
                 if (value != _visible)
                 {
                     _visible = value;
-                    _parent.UpdateStylesCore();
+                    _parent?.UpdateStylesCore();
                     UpdateScrollInfo();
-                    _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    _parent?.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
             }
         }
 
         internal void UpdateScrollInfo()
         {
-            if (_parent.IsHandleCreated && _visible)
+            if (_parent != null && _parent.IsHandleCreated && _visible)
             {
                 var si = new NativeMethods.SCROLLINFO
                 {
