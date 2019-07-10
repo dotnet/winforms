@@ -50,6 +50,7 @@ namespace WinformsControlsTest
             this.ShowExceptionDialogButton = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors = new System.Windows.Forms.FlowLayoutPanel();
             this.fontNameEditor = new System.Windows.Forms.Button();
+            this.collectionEditors = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -234,6 +235,7 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.propertyGrid);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.listViewButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.fontNameEditor);
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.collectionEditors);
             this.flowLayoutPanelUITypeEditors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelUITypeEditors.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelUITypeEditors.Location = new System.Drawing.Point(8, 8);
@@ -251,6 +253,17 @@ namespace WinformsControlsTest
             this.fontNameEditor.Text = "FontNameEditor";
             this.fontNameEditor.UseVisualStyleBackColor = true;
             this.fontNameEditor.Click += new System.EventHandler(this.FontNameEditor_Click);
+            // 
+            // collectionEditors
+            // 
+            this.collectionEditors.Location = new System.Drawing.Point(267, 228);
+            this.collectionEditors.Margin = new System.Windows.Forms.Padding(2);
+            this.collectionEditors.Name = "collectionEditors";
+            this.collectionEditors.Size = new System.Drawing.Size(258, 23);
+            this.collectionEditors.TabIndex = 16;
+            this.collectionEditors.Text = "CollectionEditors";
+            this.collectionEditors.UseVisualStyleBackColor = true;
+            this.collectionEditors.Click += new System.EventHandler(this.CollectionEditors_Click);
             // 
             // MainForm
             // 
@@ -288,6 +301,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button ShowExceptionDialogButton;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelUITypeEditors;
         private System.Windows.Forms.Button fontNameEditor;
+        private System.Windows.Forms.Button collectionEditors;
     }
 }
 

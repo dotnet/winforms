@@ -28,7 +28,10 @@
       <!-- Unncessary because ShortcutKeysEditor.resx only contains properties; not string constants -->
       <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.Windows.Forms.Design</Namespace>
-     </EmbeddedResource>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StringCollectionEditor.resx">
+      <Namespace>System.Windows.Forms.Design</Namespace>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
