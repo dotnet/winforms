@@ -10,6 +10,10 @@
     <ApplicationManifest>app1.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netcoreapp\d'))">
+    <DefineConstants>NETCORE</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
@@ -69,10 +73,6 @@
     <Compile Update="TreeViewTest.Designer.cs">
       <DependentUpon>TreeViewTest.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
   </ItemGroup>
 
   <ItemGroup>
