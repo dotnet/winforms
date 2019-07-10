@@ -93,10 +93,12 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.DoEvents();
         }
 
-        [Scenario(false)]
+        //[Scenario(false)]
+        [Scenario(true)]
+
 
         // Checks the event arguments
-        
+
         public ScenarioResult CheckEventArgs(int expectedRowIndex, int expectedColumnIndex)
         {
             ScenarioResult result = new ScenarioResult();
