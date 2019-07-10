@@ -3417,6 +3417,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///     Stores information about the last button or combination pressed by the user. 
+        /// </summary>
+        private protected static Keys LastKeyData { get; set; }
+
+        /// <summary>
         ///     The left coordinate of this control.
         /// </summary>
         [

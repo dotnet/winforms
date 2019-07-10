@@ -1263,6 +1263,7 @@ namespace System.Windows.Forms
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
 #endif
+            LastKeyData = keyData;
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
             {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -1290,7 +1291,6 @@ namespace System.Windows.Forms
             }
             return base.ProcessDialogKey(keyData);
         }
-
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
