@@ -306,6 +306,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(expectedNumber, events.Count, "An unexpected number of events fired.", log);
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult CheckEventFire(int eventIndex, EventArgs expectedArgs, string eventName)
         {
             ScenarioResult result = new ScenarioResult();

@@ -38,7 +38,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.Run(new MauiDGV_BasicKeyEvents(args));
         }
         DataGridView grid;
-        int eventCount = 0;
+        //int eventCount = 0;
 
         protected override void InitTest(TParams p)
         {
@@ -212,6 +212,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(expectedNumber, events.Count, "An unexpected number of events fired.", log);
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult CheckEventFire(int eventIndex, EventArgs expectedArgs, string eventName)
         {
             ScenarioResult result = new ScenarioResult();

@@ -254,6 +254,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(expectedNumber, events.Count, "An unexpected number of events fired.", log);
         }
         [Scenario(false)]
+      
         public ScenarioResult CheckEventFire(int eventIndex, EventArgs expectedArgs, string eventName)
         {
             ScenarioResult result = new ScenarioResult();
@@ -382,6 +383,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickTextBoxCellAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -564,6 +566,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickTopLeftHeaderAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -705,6 +708,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickColumnHeaderAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -774,6 +778,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickEmptySpaceAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -816,6 +821,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickScrollBarAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -950,6 +956,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickButtonCellAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -980,6 +987,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickImageCellAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
@@ -1125,6 +1133,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         // NOTE: This helper only clicks on LinkCells with no content, because strange things happen when
         // clicking on a LinkCell's content.  This is most probably an issue with MAUI, so it is not a 
         // pressing issue.
@@ -1268,6 +1277,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return result;
         }
         [Scenario(false)]
+        [Obsolete]
         public ScenarioResult TripleClickComboBoxCellAndCheck(MouseButtons button)
         {
             ScenarioResult result = new ScenarioResult();
