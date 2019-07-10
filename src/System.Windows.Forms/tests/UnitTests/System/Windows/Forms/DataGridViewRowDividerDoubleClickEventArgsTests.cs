@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(Ctor_Int_HandledMouseEventArgs_TestData))]
-        public void Ctor_Int_HandledMouseEventArgs(int rowIndex, HandledMouseEventArgs mouseE)
+        public void DataGridViewRowDividerDoubleClickEventArgs_Ctor_Int_HandledMouseEventArgs(int rowIndex, HandledMouseEventArgs mouseE)
         {
             var e = new DataGridViewRowDividerDoubleClickEventArgs(rowIndex, mouseE);
             Assert.Equal(rowIndex, e.RowIndex);
@@ -31,15 +31,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Ctor_NegativeRowIndex_ThrowsArgumentOutOfRangeException()
+        public void DataGridViewRowDividerDoubleClickEventArgs_Ctor_NegativeRowIndex_ThrowsArgumentOutOfRangeException()
         {
+            Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, null));
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4, true)));
         }
 
         [Fact]
-        public void Ctor_NullE_ThrowsNullReferenceException()
+        public void DataGridViewRowDividerDoubleClickEventArgs_Ctor_NullE_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => new DataGridViewRowDividerDoubleClickEventArgs(1, null));
+            Assert.Throws<ArgumentNullException>("e", () => new DataGridViewRowDividerDoubleClickEventArgs(1, null));
         }
     }
 }
