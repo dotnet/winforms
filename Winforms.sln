@@ -131,6 +131,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiNumericUpDownAccelerati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPrintDocumentTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiPrintDocumentTests\MauiPrintDocumentTests.csproj", "{BA8E0887-C84F-440A-AD1C-DA69D7C917FD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiBindingSourceTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiBindingSourceTests\MauiBindingSourceTests.csproj", "{E61C9250-4064-46AE-BD63-11BD72E62E9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -277,6 +279,10 @@ Global
 		{BA8E0887-C84F-440A-AD1C-DA69D7C917FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA8E0887-C84F-440A-AD1C-DA69D7C917FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA8E0887-C84F-440A-AD1C-DA69D7C917FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E61C9250-4064-46AE-BD63-11BD72E62E9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E61C9250-4064-46AE-BD63-11BD72E62E9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E61C9250-4064-46AE-BD63-11BD72E62E9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E61C9250-4064-46AE-BD63-11BD72E62E9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -321,6 +327,7 @@ Global
 		{177515A4-21DF-44BD-850B-D920417EAC86} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{712D8A3C-BFCE-446D-B0D6-ABAE4FFE7BF6} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{BA8E0887-C84F-440A-AD1C-DA69D7C917FD} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{E61C9250-4064-46AE-BD63-11BD72E62E9C} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

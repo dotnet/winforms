@@ -36,7 +36,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        protected ScenarioResult DoCheck(TParams p)
+        public ScenarioResult DoCheck(TParams p)
         {
             TestPrintDocument doc = new TestPrintDocument();
             result = new ScenarioResult();
