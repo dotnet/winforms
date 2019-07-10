@@ -119,6 +119,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDeleteRows01Tests", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiCellStyles07Tests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiCellStyles07Tests\MauiCellStyles07Tests.csproj", "{BBF141EB-888F-42CA-9948-AE35FF95C2C1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCamcelRowEditTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicCamcelRowEditTests\MauiDGV_BasicCamcelRowEditTests.csproj", "{9231A461-15CB-4BE8-883A-D38928B83201}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCellContentClickTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicCellContentClickTests\MauiDGV_BasicCellContentClickTests.csproj", "{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +245,14 @@ Global
 		{BBF141EB-888F-42CA-9948-AE35FF95C2C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBF141EB-888F-42CA-9948-AE35FF95C2C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBF141EB-888F-42CA-9948-AE35FF95C2C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9231A461-15CB-4BE8-883A-D38928B83201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9231A461-15CB-4BE8-883A-D38928B83201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9231A461-15CB-4BE8-883A-D38928B83201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9231A461-15CB-4BE8-883A-D38928B83201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -279,6 +291,8 @@ Global
 		{A975AF59-7E26-47BA-94CD-67B36D08D674} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{B7035A7C-6B36-4AA4-887D-F14C676FAF2E} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{BBF141EB-888F-42CA-9948-AE35FF95C2C1} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{9231A461-15CB-4BE8-883A-D38928B83201} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
