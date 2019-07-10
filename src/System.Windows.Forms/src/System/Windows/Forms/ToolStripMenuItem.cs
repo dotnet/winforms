@@ -1409,6 +1409,11 @@ namespace System.Windows.Forms
             {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
                 {
+                    if (Parent.GetPropertyValue(NativeMethods.UIA_ControlTypePropertyId) as int? == NativeMethods.UIA_MenuBarControlTypeId)
+                    {
+                        return NativeMethods.UIA_MenuControlTypeId;
+                    }
+
                     return NativeMethods.UIA_MenuItemControlTypeId;
                 }
                 else if (propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId)
