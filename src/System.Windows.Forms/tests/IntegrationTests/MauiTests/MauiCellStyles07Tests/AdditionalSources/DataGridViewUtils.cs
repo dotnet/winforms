@@ -793,6 +793,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         public static int S_num_DataGridView_rows { get => s_num_DataGridView_rows; set => s_num_DataGridView_rows = value; }
         public static int S_num_DataGridView_cols { get => s_num_DataGridView_cols; set => s_num_DataGridView_cols = value; }
+        public static DataGridView DataGridView1 { get => DataGridView; set => DataGridView = value; }
+        public static DataGridView S_typicalDataGridView { get => s_typicalDataGridView; set => s_typicalDataGridView = value; }
 
         public static void ReorderColumn(DataGridView dgv, int columnToReorder)
         {
