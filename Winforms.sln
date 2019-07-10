@@ -123,6 +123,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCamcelRowEditT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCellContentClickTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicCellContentClickTests\MauiDGV_BasicCellContentClickTests.csproj", "{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiAutoFill_BasicBehaviorTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiAutoFill_BasicBehaviorTests\MauiAutoFill_BasicBehaviorTests.csproj", "{DA181240-13FB-468C-AF4F-5056B73D6C97}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCellEdit_EventsTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicCellEdit_EventsTests\MauiDGV_BasicCellEdit_EventsTests.csproj", "{35648576-23C8-4DFB-A683-02248B20E8FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -253,6 +257,14 @@ Global
 		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA181240-13FB-468C-AF4F-5056B73D6C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA181240-13FB-468C-AF4F-5056B73D6C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA181240-13FB-468C-AF4F-5056B73D6C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA181240-13FB-468C-AF4F-5056B73D6C97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35648576-23C8-4DFB-A683-02248B20E8FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35648576-23C8-4DFB-A683-02248B20E8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35648576-23C8-4DFB-A683-02248B20E8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35648576-23C8-4DFB-A683-02248B20E8FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -293,6 +305,8 @@ Global
 		{BBF141EB-888F-42CA-9948-AE35FF95C2C1} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{9231A461-15CB-4BE8-883A-D38928B83201} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{30DD3ADF-27DB-4DFC-91F7-8722606AB74D} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{DA181240-13FB-468C-AF4F-5056B73D6C97} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{35648576-23C8-4DFB-A683-02248B20E8FF} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
