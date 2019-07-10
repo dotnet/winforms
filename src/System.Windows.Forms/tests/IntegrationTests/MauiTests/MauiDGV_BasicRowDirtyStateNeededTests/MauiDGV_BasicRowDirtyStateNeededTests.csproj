@@ -4,5 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Reference Include="Maui.Core">
+      <HintPath>\\winformssrvvm01\NETCoreMigration\RTTestCasesMigration\CommonDll\Maui.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
