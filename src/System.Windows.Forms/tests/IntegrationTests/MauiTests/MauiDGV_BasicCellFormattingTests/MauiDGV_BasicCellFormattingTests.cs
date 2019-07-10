@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -154,7 +158,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Mouse.Move(clickPt.X, clickPt.Y);
         }
         //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
         // Moves from one cell to another
         public void MoveBetweenCells(int rowIndex1, int columnIndex1, int rowIndex2, int columnIndex2)
         {
@@ -167,7 +171,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.DoEvents();
         }
         //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult CheckEventFire(int index, string expectedEventName, DataGridViewCellFormattingEventArgs expectedArgs)
         {
             ScenarioResult result = new ScenarioResult();

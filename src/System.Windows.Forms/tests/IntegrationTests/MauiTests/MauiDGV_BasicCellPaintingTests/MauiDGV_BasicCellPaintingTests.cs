@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -144,8 +148,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             return e.ColumnIndex + " " + e.RowIndex + " " + e.FormattedValue + " " + e.Cancel;
         }
-        //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
+      
         // Passes if the event args are: 1) of the same type and 2) their properties have equal values
         public ScenarioResult CompareEventArgs(EventArgs expectedArgs, EventArgs actualArgs)
         {
@@ -218,8 +222,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return cells;
         }
-        //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
+       
         // Checks that a CellPainting event fired at least once for each of the cells in the expectedCells 
         public ScenarioResult CheckCellEventsFired(ArrayList expectedCells)
         {
@@ -241,8 +245,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return result;
         }
-        //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
+       
         // Checks that a CellPainting event fired at least once for each of the displayed header cells
         public ScenarioResult CheckHeaderCellEventsFired()
         {
