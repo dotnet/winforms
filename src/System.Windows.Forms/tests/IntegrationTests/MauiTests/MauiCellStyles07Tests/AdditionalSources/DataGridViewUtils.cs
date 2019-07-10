@@ -20,8 +20,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
     {
         // Different DataGridView set-ups
         private static DataGridView DataGridView = null;
-        private static DataGridView typicalDataGridView;
-        private static DataGridView maxCapacityDataGridView = null;
+        private static DataGridView s_typicalDataGridView;
+        private static DataGridView s_maxCapacityDataGridView = null;
         private static DataGridView largeDataGridView = null;
         private static DataGridView oneCellDataGridView = null;
         private static DataGridView oneColumnDataGridView = null;
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         private static DataGridView textBoxDataGridView = null;
         private static DataGridView imageDataGridView = null;
         private static DataGridView checkBoxDataGridView = null;
-        private static DataGridView richTextBoxDataGridView = null;
+        private static DataGridView s_richTextBoxDataGridView = null;
         private static DataGridView mixedControlDataGridView = null;
         private static DataGridView userControlDataGridView = null;
         private static DataGridView nestedFormsDataGridView = null;
@@ -51,8 +51,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         private const int min_col_index = 0;
         private static int max_col_index = 0;
         private static string[,] DataGridViewValues;
-        private static int num_DataGridView_rows;
-        private static int num_DataGridView_cols;
+        private static int s_num_DataGridView_rows;
+        private static int s_num_DataGridView_cols;
 
         private static int upperSize = 0x7FFFFF; //DGV defines upperSize
         public static Size MaxSize
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
          */
         public static DataGridView GetTypicalDataGridView(bool newDataGridView, bool dataBound)
         {
-            return GetDataGridView(typicalDataGridView, newDataGridView, dataBound, typical_cols, typical_rows);
+            return GetDataGridView(s_typicalDataGridView, newDataGridView, dataBound, typical_cols, typical_rows);
         }
 
         /*
@@ -445,8 +445,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             simpleDataGridView.Rows[4].Cells[2].Value = "Flintstone";
             DataGridViewValues[4, 2] = "Flintstone";
 
-            num_DataGridView_rows = 5;
-            num_DataGridView_cols = 3;
+            s_num_DataGridView_rows = 5;
+            s_num_DataGridView_cols = 3;
 
             return simpleDataGridView;
         }
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                                 }
                                 return retVal.Trim();
                             }
-                            break;
+                            //break;
                         case DataGridViewSelectionMode.ColumnHeaderSelect:
                         case DataGridViewSelectionMode.FullColumnSelect:
                             if (dgv.SelectedColumns == null || dgv.SelectedColumns.Count <= 0)
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                         default:
                             return retVal;
                     }
-                    break;
+                    //break;
                 default:
                     return retVal;
             }
