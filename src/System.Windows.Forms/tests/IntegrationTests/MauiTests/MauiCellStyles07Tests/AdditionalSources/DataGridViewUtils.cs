@@ -20,8 +20,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
     {
         // Different DataGridView set-ups
         private static DataGridView DataGridView = null;
-        private static readonly DataGridView s_typicalDataGridView;
-        private static readonly DataGridView s_maxCapacityDataGridView = null;
+        private static DataGridView s_typicalDataGridView;
+       // private static readonly DataGridView s_maxCapacityDataGridView = null;
         private static DataGridView largeDataGridView = null;
         private static DataGridView oneCellDataGridView = null;
         private static DataGridView oneColumnDataGridView = null;
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         private static DataGridView textBoxDataGridView = null;
         private static DataGridView imageDataGridView = null;
         private static DataGridView checkBoxDataGridView = null;
-        private static readonly DataGridView s_richTextBoxDataGridView = null;
+       // private static readonly DataGridView s_richTextBoxDataGridView = null;
         private static DataGridView mixedControlDataGridView = null;
         private static DataGridView userControlDataGridView = null;
         private static DataGridView nestedFormsDataGridView = null;
