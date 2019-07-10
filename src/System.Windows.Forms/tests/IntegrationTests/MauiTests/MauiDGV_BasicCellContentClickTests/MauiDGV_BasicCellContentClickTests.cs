@@ -58,8 +58,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
 
         #endregion
-        //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
+        //[Scenario(true)]
         // Returns a given cell's coordinates wrt the screen.
         Point GetCellCoordsWrtScreen(DataGridViewCell cell)
         {
@@ -72,8 +72,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return new Point(cellsRectWrtDgv.X, cellsRectWrtDgv.Y);
         }
-        //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
+        //[Scenario(true)]
         // Click's the given cell's contents
         public void ClickCellContents(DataGridViewCell cell)
         {
@@ -93,8 +93,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.DoEvents();
         }
 
-        //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
+        //[Scenario(true)]
 
 
         // Checks the event arguments
