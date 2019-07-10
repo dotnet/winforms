@@ -139,6 +139,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCellValueNeede
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicCellValuePushedTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicCellValuePushedTests\MauiDGV_BasicCellValuePushedTests.csproj", "{BA31CAC5-9966-40D6-AACE-B74088834F1C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicClickEventsTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicClickEventsTests\MauiDGV_BasicClickEventsTests.csproj", "{A183FE5B-F49C-42E0-8225-DA417E1E4DBF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicFocusEvensTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicFocusEvensTests\MauiDGV_BasicFocusEvensTests.csproj", "{4E0A145D-167A-4C61-AEA0-DA8672BD034A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDGV_BasicKeyEvents", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDGV_BasicKeyEvents\MauiDGV_BasicKeyEvents.csproj", "{D75BC138-55E8-412B-A81B-799E0BC062AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -301,6 +307,18 @@ Global
 		{BA31CAC5-9966-40D6-AACE-B74088834F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA31CAC5-9966-40D6-AACE-B74088834F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA31CAC5-9966-40D6-AACE-B74088834F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A183FE5B-F49C-42E0-8225-DA417E1E4DBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A183FE5B-F49C-42E0-8225-DA417E1E4DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A183FE5B-F49C-42E0-8225-DA417E1E4DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A183FE5B-F49C-42E0-8225-DA417E1E4DBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E0A145D-167A-4C61-AEA0-DA8672BD034A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E0A145D-167A-4C61-AEA0-DA8672BD034A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E0A145D-167A-4C61-AEA0-DA8672BD034A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E0A145D-167A-4C61-AEA0-DA8672BD034A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D75BC138-55E8-412B-A81B-799E0BC062AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D75BC138-55E8-412B-A81B-799E0BC062AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D75BC138-55E8-412B-A81B-799E0BC062AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D75BC138-55E8-412B-A81B-799E0BC062AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -349,6 +367,9 @@ Global
 		{BE758BAF-54E0-4C67-B789-B855A523DF33} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{4C751704-7E23-447A-9900-8D582C6C745E} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{BA31CAC5-9966-40D6-AACE-B74088834F1C} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{A183FE5B-F49C-42E0-8225-DA417E1E4DBF} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{4E0A145D-167A-4C61-AEA0-DA8672BD034A} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{D75BC138-55E8-412B-A81B-799E0BC062AB} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
