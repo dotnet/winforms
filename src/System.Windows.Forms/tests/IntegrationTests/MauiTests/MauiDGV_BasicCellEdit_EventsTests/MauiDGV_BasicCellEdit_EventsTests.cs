@@ -151,7 +151,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
         }
         //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
         // Passes if the event args are: 1) of the same type and 2) their properties have equal values
         public ScenarioResult CompareEventArgs(EventArgs expectedArgs, EventArgs actualArgs)
         {
@@ -236,13 +236,13 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         // Helpers to check the firing of an event
         //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult CheckNumberEventsFired(int expectedNumber)
         {
             return new ScenarioResult(expectedNumber, events.Count, "An unexpected number of events fired.", log);
         }
         //[Scenario(false)]
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult CheckEventFire(int eventIndex, EventArgs expectedArgs, string eventName)
         {
             ScenarioResult result = new ScenarioResult();
