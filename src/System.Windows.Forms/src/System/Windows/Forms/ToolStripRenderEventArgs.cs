@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         {
             Graphics = g;
             ToolStrip = toolStrip;
-            AffectedBounds = new Rectangle(Point.Empty, toolStrip.Size);
+            AffectedBounds = new Rectangle(Point.Empty, toolStrip?.Size ?? Size.Empty);
         }
 
         /// <summary>
@@ -56,21 +56,28 @@ namespace System.Windows.Forms
                 if (_backColor == Color.Empty)
                 {
                     // get the user specified color
-                    _backColor = ToolStrip.RawBackColor;
-                    if (_backColor == Color.Empty)
+                    if (ToolStrip != null)
                     {
-                        if (ToolStrip is ToolStripDropDown)
+                        _backColor = ToolStrip.RawBackColor;
+                        if (_backColor == Color.Empty)
                         {
-                            _backColor = SystemColors.Menu;
+                            if (ToolStrip is ToolStripDropDown)
+                            {
+                                _backColor = SystemColors.Menu;
+                            }
+                            else if (ToolStrip is MenuStrip)
+                            {
+                                _backColor = SystemColors.MenuBar;
+                            }
+                            else
+                            {
+                                _backColor = SystemColors.Control;
+                            }
                         }
-                        else if (ToolStrip is MenuStrip)
-                        {
-                            _backColor = SystemColors.MenuBar;
-                        }
-                        else
-                        {
-                            _backColor = SystemColors.Control;
-                        }
+                    }
+                    else
+                    {
+                        _backColor = SystemColors.Control;
                     }
                 }
 
