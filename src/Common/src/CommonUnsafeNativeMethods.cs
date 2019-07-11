@@ -146,20 +146,13 @@ namespace System.Windows.Forms
         {
             DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
-            try
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetWindowDpiAwarenessContext") &&
+                ApiHelper.IsApiAvailable(ExternDll.User32, "GetAwarenessFromDpiAwarenessContext"))
             {
-                if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetWindowDpiAwarenessContext") &&
-                    ApiHelper.IsApiAvailable(ExternDll.User32, "GetAwarenessFromDpiAwarenessContext"))
-                {
-                    // Works only >= Windows 10/1607
-                    IntPtr awarenessContext = GetWindowDpiAwarenessContext(hWnd);
-                    DPI_AWARENESS awareness = GetAwarenessFromDpiAwarenessContext(awarenessContext);
-                    dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
-                }
-            }
-            catch
-            {
-                // swallow all exceptions
+                // Works only >= Windows 10/1607
+                IntPtr awarenessContext = GetWindowDpiAwarenessContext(hWnd);
+                DPI_AWARENESS awareness = GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
             }
 
             return dpiAwarenessContext;
