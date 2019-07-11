@@ -593,7 +593,7 @@ namespace System.Windows.Forms
         {
             base.Initialize();
             Padding = DefaultPadding;
-            FlowLayoutSettings settings = FlowLayout.CreateSettings(this);
+            FlowLayoutSettings settings = new FlowLayoutSettings(this);
             settings.FlowDirection = FlowDirection.TopDown;
             state[stateShowImageMargin] = true;
         }

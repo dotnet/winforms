@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Layout;
-    using System.Runtime.InteropServices;
-
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ProvideProperty("FlowBreak", typeof(Control))]
@@ -24,13 +23,10 @@ namespace System.Windows.Forms
 
         public FlowLayoutPanel()
         {
-            _flowLayoutSettings = FlowLayout.CreateSettings(this);
+            _flowLayoutSettings = new FlowLayoutSettings(this);
         }
 
-        public override LayoutEngine LayoutEngine
-        {
-            get { return FlowLayout.Instance; }
-        }
+        public override LayoutEngine LayoutEngine => FlowLayout.Instance;
 
         [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
@@ -38,7 +34,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         public FlowDirection FlowDirection
         {
-            get { return _flowLayoutSettings.FlowDirection; }
+            get => _flowLayoutSettings.FlowDirection;
             set
             {
                 _flowLayoutSettings.FlowDirection = value;
@@ -52,7 +48,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         public bool WrapContents
         {
-            get { return _flowLayoutSettings.WrapContents; }
+            get => _flowLayoutSettings.WrapContents;
             set
             {
                 _flowLayoutSettings.WrapContents = value;
@@ -60,26 +56,29 @@ namespace System.Windows.Forms
             }
         }
 
-        #region Provided properties
-        bool IExtenderProvider.CanExtend(object obj)
-        {
-            return obj is Control control && control.Parent == this;
-        }
+        bool IExtenderProvider.CanExtend(object obj) => obj is Control control && control.Parent == this;
 
         [DefaultValue(false)]
         [DisplayName("FlowBreak")]
         public bool GetFlowBreak(Control control)
         {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
+            }
+
             return _flowLayoutSettings.GetFlowBreak(control);
         }
 
         [DisplayName("FlowBreak")]
         public void SetFlowBreak(Control control, bool value)
         {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
+            }
+
             _flowLayoutSettings.SetFlowBreak(control, value);
         }
-
-        #endregion
     }
 }
-
