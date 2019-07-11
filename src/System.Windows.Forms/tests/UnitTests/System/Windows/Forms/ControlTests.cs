@@ -2483,16 +2483,379 @@ namespace System.Windows.Forms.Tests
 
         #region Misc. GetSet
 
-        [Fact]
-        public void Control_SiteGetSet()
+        public static IEnumerable<object[]> Site_Set_TestData()
         {
-            var cont = new Control();
-            var mock = new Mock<ISite>(MockBehavior.Strict);
-            mock.Setup(x => x.GetService(typeof(AmbientProperties))).Returns(new AmbientProperties());
+            yield return new object[] { null };
 
-            cont.Site = mock.Object;
+            var mockNullSite = new Mock<ISite>(MockBehavior.Strict);
+            mockNullSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            yield return new object[] { mockNullSite.Object };
 
-            Assert.Equal(mock.Object, cont.Site);
+            var mockInvalidSite = new Mock<ISite>(MockBehavior.Strict);
+            mockInvalidSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new object());
+            yield return new object[] { mockInvalidSite.Object };
+
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            yield return new object[] { mockSite.Object };
+        }
+
+        [Theory]
+        [MemberData(nameof(Site_Set_TestData))]
+        public void Control_Site_Set_GetReturnsExpected(ISite value)
+        {
+            var control = new Control
+            {
+                Site = value
+            };
+            Assert.Same(value, control.Site);
+
+            // Set same.
+            control.Site = value;
+            Assert.Same(value, control.Site);
+        }
+
+        [Theory]
+        [MemberData(nameof(Site_Set_TestData))]
+        public void Control_Site_SetWithNonNullOldValue_GetReturnsExpected(ISite value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            var control = new Control
+            {
+                Site = mockSite.Object
+            };
+
+            control.Site = value;
+            Assert.Same(value, control.Site);
+
+            // Set same.
+            control.Site = value;
+            Assert.Same(value, control.Site);
+        }
+
+        [Fact]
+        public void Control_Site_SetWithoutAmbientPropertiesSet_UpdatesProperties()
+        {
+            Font font1 = SystemFonts.CaptionFont;
+            Font font2 = SystemFonts.DialogFont;
+            Cursor cursor1 = Cursors.AppStarting;
+            Cursor cursor2 = Cursors.Arrow;
+            var properties = new AmbientProperties
+            {
+                BackColor = Color.Blue,
+                Cursor = cursor1,
+                Font = font1,
+                ForeColor = Color.Red
+            };
+            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite1
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(properties)
+                .Verifiable();
+
+            var sameProperties = new AmbientProperties
+            {
+                BackColor = Color.Blue,
+                Cursor = cursor1,
+                Font = font1,
+                ForeColor = Color.Red
+            };
+            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite2
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(sameProperties)
+                .Verifiable();
+
+            var differentProperties = new AmbientProperties
+            {
+                BackColor = Color.Red,
+                Cursor = cursor2,
+                Font = font2,
+                ForeColor = Color.Blue
+            };
+            var mockSite3 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite3
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(differentProperties)
+                .Verifiable();
+
+            var mockSite4 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite4
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null)
+                .Verifiable();
+
+            var control = new Control();
+            int backColorChangedCallCount = 0;
+            control.BackColorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                backColorChangedCallCount++;
+            };
+            int cursorChangedCallCount = 0;
+            control.CursorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                cursorChangedCallCount++;
+            };
+            int foreColorChangedCallCount = 0;
+            control.ForeColorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                foreColorChangedCallCount++;
+            };
+            int fontChangedCallCount = 0;
+            control.FontChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                fontChangedCallCount++;
+            };
+
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.Equal(Color.Blue, control.BackColor);
+            Assert.Same(cursor1, control.Cursor);
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Same(font1, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Once());
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(1, backColorChangedCallCount);
+            Assert.Equal(0, cursorChangedCallCount);
+            Assert.Equal(1, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
+
+            // Set same.
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.Equal(Color.Blue, control.BackColor);
+            Assert.Same(cursor1, control.Cursor);
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Same(font1, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(1, backColorChangedCallCount);
+            Assert.Equal(0, cursorChangedCallCount);
+            Assert.Equal(1, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
+
+            // Set equal.
+            control.Site = mockSite2.Object;
+            Assert.Same(mockSite2.Object, control.Site);
+            Assert.Equal(Color.Blue, control.BackColor);
+            Assert.Same(cursor1, control.Cursor);
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Same(font1, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(1, backColorChangedCallCount);
+            Assert.Equal(1, cursorChangedCallCount);
+            Assert.Equal(1, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
+
+            // Set different.
+            control.Site = mockSite3.Object;
+            Assert.Same(mockSite3.Object, control.Site);
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Same(cursor2, control.Cursor);
+            Assert.Equal(Color.Blue, control.ForeColor);
+            Assert.Same(font2, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(2, backColorChangedCallCount);
+            Assert.Equal(1, cursorChangedCallCount);
+            Assert.Equal(2, foreColorChangedCallCount);
+            Assert.Equal(1, fontChangedCallCount);
+
+            // Set null.
+            control.Site = mockSite4.Object;
+            Assert.Same(mockSite4.Object, control.Site);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Same(Cursors.Default, control.Cursor);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Same(Control.DefaultFont, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            Assert.Equal(3, backColorChangedCallCount);
+            Assert.Equal(2, cursorChangedCallCount);
+            Assert.Equal(3, foreColorChangedCallCount);
+            Assert.Equal(2, fontChangedCallCount);
+        }
+
+        [Fact]
+        public void Control_Site_SetWithAmbientPropertiesSet_DoesNotUpdate()
+        {
+            Font font1 = SystemFonts.MenuFont;
+            Font font2 = SystemFonts.DialogFont;
+            Cursor cursor1 = Cursors.AppStarting;
+            Cursor cursor2 = Cursors.Arrow;
+            var properties = new AmbientProperties
+            {
+                BackColor = Color.Blue,
+                Cursor = cursor1,
+                Font = font1,
+                ForeColor = Color.Red
+            };
+            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite1
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(properties)
+                .Verifiable();
+
+            var sameProperties = new AmbientProperties
+            {
+                BackColor = Color.Blue,
+                Cursor = cursor1,
+                Font = font1,
+                ForeColor = Color.Red
+            };
+            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite2
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(sameProperties)
+                .Verifiable();
+
+            var differentProperties = new AmbientProperties
+            {
+                BackColor = Color.Red,
+                Cursor = cursor2,
+                Font = font2,
+                ForeColor = Color.Blue
+            };
+            var mockSite3 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite3
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(differentProperties)
+                .Verifiable();
+
+            var mockSite4 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite4
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null)
+                .Verifiable();
+
+            var controlCursor = new Cursor((IntPtr)3);
+            Font controlFont = SystemFonts.StatusFont;
+            var control = new Control
+            {
+                BackColor = Color.Green,
+                Cursor = controlCursor,
+                ForeColor = Color.Yellow,
+                Font = controlFont
+            };
+            int backColorChangedCallCount = 0;
+            control.BackColorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                backColorChangedCallCount++;
+            };
+            int cursorChangedCallCount = 0;
+            control.CursorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                cursorChangedCallCount++;
+            };
+            int foreColorChangedCallCount = 0;
+            control.ForeColorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                foreColorChangedCallCount++;
+            };
+            int fontChangedCallCount = 0;
+            control.FontChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                fontChangedCallCount++;
+            };
+
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.Equal(Color.Green, control.BackColor);
+            Assert.Same(controlCursor, control.Cursor);
+            Assert.Equal(Color.Yellow, control.ForeColor);
+            Assert.Same(controlFont, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Once());
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(0, backColorChangedCallCount);
+            Assert.Equal(0, cursorChangedCallCount);
+            Assert.Equal(0, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
+
+            // Set same.
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.Equal(Color.Green, control.BackColor);
+            Assert.Same(controlCursor, control.Cursor);
+            Assert.Equal(Color.Yellow, control.ForeColor);
+            Assert.Same(controlFont, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(0, backColorChangedCallCount);
+            Assert.Equal(0, cursorChangedCallCount);
+            Assert.Equal(0, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
+
+            // Set equal.
+            control.Site = mockSite2.Object;
+            Assert.Same(mockSite2.Object, control.Site);
+            Assert.Equal(Color.Green, control.BackColor);
+            Assert.Same(controlCursor, control.Cursor);
+            Assert.Equal(Color.Yellow, control.ForeColor);
+            Assert.Same(controlFont, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(0, backColorChangedCallCount);
+            Assert.Equal(0, cursorChangedCallCount);
+            Assert.Equal(0, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
+
+            // Set different.
+            control.Site = mockSite3.Object;
+            Assert.Same(mockSite3.Object, control.Site);
+            Assert.Equal(Color.Green, control.BackColor);
+            Assert.Same(controlCursor, control.Cursor);
+            Assert.Equal(Color.Yellow, control.ForeColor);
+            Assert.Same(controlFont, control.Font);
+            mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
+            mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
+            mockSite4.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Never());
+            Assert.Equal(0, backColorChangedCallCount);
+            Assert.Equal(0, cursorChangedCallCount);
+            Assert.Equal(0, foreColorChangedCallCount);
+            Assert.Equal(0, fontChangedCallCount);
         }
 
         /// <summary>
