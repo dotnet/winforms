@@ -70,6 +70,12 @@ namespace System.Windows.Forms
         internal static extern DpiAwarenessContext SetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr GetWindowDpiAwarenessContext(IntPtr hWnd);
+
+        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern DPI_AWARENESS GetAwarenessFromDpiAwarenessContext(IntPtr dpiAwarenessContext);
+
+        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
 
         /// <summary>
@@ -135,6 +141,53 @@ namespace System.Windows.Forms
                 public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = (-3);
                 public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = (-4);
                 public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNSPECIFIED = (0);*/
+
+        internal static DpiAwarenessContext GetDpiAwarenessContextForWindow(IntPtr hWnd)
+        {
+            DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetWindowDpiAwarenessContext") &&
+                ApiHelper.IsApiAvailable(ExternDll.User32, "GetAwarenessFromDpiAwarenessContext"))
+            {
+                // Works only >= Windows 10/1607
+                IntPtr awarenessContext = GetWindowDpiAwarenessContext(hWnd);
+                DPI_AWARENESS awareness = GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
+            }
+
+            return dpiAwarenessContext;
+        }
+
         #endregion
+
+        #region Private Methods
+
+        private static DpiAwarenessContext ConvertToDpiAwarenessContext(DPI_AWARENESS dpiAwareness)
+        {
+            switch (dpiAwareness)
+            {
+                case DPI_AWARENESS.DPI_AWARENESS_UNAWARE:
+                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE;
+
+                case DPI_AWARENESS.DPI_AWARENESS_SYSTEM_AWARE:
+                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+
+                case DPI_AWARENESS.DPI_AWARENESS_PER_MONITOR_AWARE:
+                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
+
+                default:
+                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+            }
+        }
+
+        #endregion
+
+        internal enum DPI_AWARENESS
+        {
+            DPI_AWARENESS_INVALID = -1,
+            DPI_AWARENESS_UNAWARE = 0,
+            DPI_AWARENESS_SYSTEM_AWARE = 1,
+            DPI_AWARENESS_PER_MONITOR_AWARE = 2
+        }
     }
 }

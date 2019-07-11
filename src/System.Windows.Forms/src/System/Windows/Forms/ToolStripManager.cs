@@ -1476,99 +1476,103 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                switch (m.Msg)
+                DpiAwarenessContext context = CommonUnsafeNativeMethods.GetDpiAwarenessContextForWindow(m.HWnd);                
+
+                using (DpiHelper.EnterDpiAwarenessScope(context))
                 {
-
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
-                    case Interop.WindowMessages.WM_NCMOUSEMOVE:
-                        // Mouse move messages should be eaten if they arent for a dropdown.
-                        // this prevents things like ToolTips and mouse over highlights from
-                        // being processed.  
-                        Control control = Control.FromChildHandle(m.HWnd);
-                        if (control == null || !(control.TopLevelControlInternal is ToolStripDropDown))
-                        {
-                            // double check it's not a child control of the active toolstrip.
-                            if (!IsChildOrSameWindow(hwndActiveToolStrip, new HandleRef(null, m.HWnd)))
+                    switch (m.Msg)
+                    {
+                        case Interop.WindowMessages.WM_MOUSEMOVE:
+                        case Interop.WindowMessages.WM_NCMOUSEMOVE:
+                            // Mouse move messages should be eaten if they arent for a dropdown.
+                            // this prevents things like ToolTips and mouse over highlights from
+                            // being processed.  
+                            Control control = Control.FromChildHandle(m.HWnd);
+                            if (control == null || !(control.TopLevelControlInternal is ToolStripDropDown))
                             {
-
-                                // it is NOT a child of the current active toolstrip.
-
-                                ToolStrip toplevelToolStrip = GetCurrentToplevelToolStrip();
-                                if (toplevelToolStrip != null
-                                    && (IsChildOrSameWindow(new HandleRef(toplevelToolStrip, toplevelToolStrip.Handle),
-                                                           new HandleRef(null, m.HWnd))))
+                                // double check it's not a child control of the active toolstrip.
+                                if (!IsChildOrSameWindow(hwndActiveToolStrip, new HandleRef(null, m.HWnd)))
                                 {
-                                    // DONT EAT mouse message.
-                                    // The mouse message is from an HWND that is part of the toplevel toolstrip - let the mosue move through so
-                                    // when you have something like the file menu open and mouse over the edit menu
-                                    // the file menu will dismiss.
 
-                                    return false;
+                                    // it is NOT a child of the current active toolstrip.
+
+                                    ToolStrip toplevelToolStrip = GetCurrentToplevelToolStrip();
+                                    if (toplevelToolStrip != null
+                                        && (IsChildOrSameWindow(new HandleRef(toplevelToolStrip, toplevelToolStrip.Handle),
+                                                               new HandleRef(null, m.HWnd))))
+                                    {
+                                        // DONT EAT mouse message.
+                                        // The mouse message is from an HWND that is part of the toplevel toolstrip - let the mosue move through so
+                                        // when you have something like the file menu open and mouse over the edit menu
+                                        // the file menu will dismiss.
+
+                                        return false;
+                                    }
+                                    else if (!IsChildOrSameWindow(ActiveHwnd, new HandleRef(null, m.HWnd)))
+                                    {
+                                        // DONT EAT mouse message.
+                                        // the mouse message is from another toplevel HWND.
+                                        return false;
+                                    }
+                                    // EAT mouse message
+                                    // the HWND is 
+                                    //      not part of the active toolstrip
+                                    //      not the toplevel toolstrip (e.g. MenuStrip).
+                                    //      not parented to the toplevel toolstrip (e.g a combo box on a menu strip).
+                                    return true;
                                 }
-                                else if (!IsChildOrSameWindow(ActiveHwnd, new HandleRef(null, m.HWnd)))
-                                {
-                                    // DONT EAT mouse message.
-                                    // the mouse message is from another toplevel HWND.
-                                    return false;
-                                }
-                                // EAT mouse message
-                                // the HWND is 
-                                //      not part of the active toolstrip
-                                //      not the toplevel toolstrip (e.g. MenuStrip).
-                                //      not parented to the toplevel toolstrip (e.g a combo box on a menu strip).
-                                return true;
                             }
-                        }
-                        break;
-                    case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    case Interop.WindowMessages.WM_RBUTTONDOWN:
-                    case Interop.WindowMessages.WM_MBUTTONDOWN:
-                        //
-                        // When a mouse button is pressed, we should determine if it is within the client coordinates
-                        // of the active dropdown.  If not, we should dismiss it.  
-                        //
-                        ProcessMouseButtonPressed(m.HWnd,
-                            /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
-                            /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
+                            break;
+                        case Interop.WindowMessages.WM_LBUTTONDOWN:
+                        case Interop.WindowMessages.WM_RBUTTONDOWN:
+                        case Interop.WindowMessages.WM_MBUTTONDOWN:
+                            //
+                            // When a mouse button is pressed, we should determine if it is within the client coordinates
+                            // of the active dropdown.  If not, we should dismiss it.  
+                            //
+                            ProcessMouseButtonPressed(m.HWnd,
+                                /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
+                                /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
 
-                        break;
-                    case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCMBUTTONDOWN:
-                        //
-                        // When a mouse button is pressed, we should determine if it is within the client coordinates
-                        // of the active dropdown.  If not, we should dismiss it.  
-                        //
-                        ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero,
-                            /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
-                            /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
-                        break;
+                            break;
+                        case Interop.WindowMessages.WM_NCLBUTTONDOWN:
+                        case Interop.WindowMessages.WM_NCRBUTTONDOWN:
+                        case Interop.WindowMessages.WM_NCMBUTTONDOWN:
+                            //
+                            // When a mouse button is pressed, we should determine if it is within the client coordinates
+                            // of the active dropdown.  If not, we should dismiss it.  
+                            //
+                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero,
+                                /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
+                                /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
+                            break;
 
-                    case Interop.WindowMessages.WM_KEYDOWN:
-                    case Interop.WindowMessages.WM_KEYUP:
-                    case Interop.WindowMessages.WM_CHAR:
-                    case Interop.WindowMessages.WM_DEADCHAR:
-                    case Interop.WindowMessages.WM_SYSKEYDOWN:
-                    case Interop.WindowMessages.WM_SYSKEYUP:
-                    case Interop.WindowMessages.WM_SYSCHAR:
-                    case Interop.WindowMessages.WM_SYSDEADCHAR:
+                        case Interop.WindowMessages.WM_KEYDOWN:
+                        case Interop.WindowMessages.WM_KEYUP:
+                        case Interop.WindowMessages.WM_CHAR:
+                        case Interop.WindowMessages.WM_DEADCHAR:
+                        case Interop.WindowMessages.WM_SYSKEYDOWN:
+                        case Interop.WindowMessages.WM_SYSKEYUP:
+                        case Interop.WindowMessages.WM_SYSCHAR:
+                        case Interop.WindowMessages.WM_SYSDEADCHAR:
 
-                        if (!activeToolStrip.ContainsFocus)
-                        {
-                            Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] MODIFYING Keyboard message " + m.ToString());
+                            if (!activeToolStrip.ContainsFocus)
+                            {
+                                Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] MODIFYING Keyboard message " + m.ToString());
 
-                            // route all keyboard messages to the active dropdown.
-                            m.HWnd = activeToolStrip.Handle;
-                        }
-                        else
-                        {
-                            Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] got Keyboard message " + m.ToString());
-                        }
-                        break;
+                                // route all keyboard messages to the active dropdown.
+                                m.HWnd = activeToolStrip.Handle;
+                            }
+                            else
+                            {
+                                Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] got Keyboard message " + m.ToString());
+                            }
+                            break;
 
+                    }
                 }
-                return false;
 
+                return false;
             }
 
             private class HostedWindowsFormsMessageHook
