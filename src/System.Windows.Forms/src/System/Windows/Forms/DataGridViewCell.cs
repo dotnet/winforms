@@ -956,6 +956,15 @@ namespace System.Windows.Forms
             bool isFirstDisplayedColumn,
             bool isFirstDisplayedRow)
         {
+            if (dataGridViewAdvancedBorderStyleInput == null)
+            {
+                throw new ArgumentNullException(nameof(dataGridViewAdvancedBorderStyleInput));
+            }
+            if (dataGridViewAdvancedBorderStylePlaceholder == null)
+            {
+                throw new ArgumentNullException(nameof(dataGridViewAdvancedBorderStylePlaceholder));
+            }
+
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
                 case DataGridViewAdvancedCellBorderStyle.Single:
@@ -1008,6 +1017,11 @@ namespace System.Windows.Forms
 
         protected virtual Rectangle BorderWidths(DataGridViewAdvancedBorderStyle advancedBorderStyle)
         {
+            if (advancedBorderStyle == null)
+            {
+                throw new ArgumentNullException(nameof(advancedBorderStyle));
+            }
+
             Rectangle rect = new Rectangle
             {
                 X = (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ? 0 : 1
@@ -1059,14 +1073,6 @@ namespace System.Windows.Forms
         internal virtual void CacheEditingControl()
         {
         }
-
-        /* Unused at this point.
-        internal DataGridViewElementStates CellStateFromColumnRowStates()
-        {
-            Debug.Assert(this.DataGridView != null);
-            Debug.Assert(this.RowIndex >= 0);
-            return CellStateFromColumnRowStates(this.owningRow.State);
-        }*/
 
         internal DataGridViewElementStates CellStateFromColumnRowStates(DataGridViewElementStates rowState)
         {
@@ -3421,10 +3427,13 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
-
             if (cellStyle == null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
+            }
+            if (advancedBorderStyle == null)
+            {
+                throw new ArgumentNullException(nameof(advancedBorderStyle));
             }
 
             if (DataGridView == null)
@@ -4170,6 +4179,16 @@ namespace System.Windows.Forms
 
         protected virtual void PaintErrorIcon(Graphics graphics, Rectangle clipBounds, Rectangle cellValueBounds, string errorText)
         {
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
+            if (DataGridView == null)
+            {
+                return;
+            }
+
             if (!string.IsNullOrEmpty(errorText) &&
                 cellValueBounds.Width >= DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth &&
                 cellValueBounds.Height >= DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight)
@@ -4181,6 +4200,11 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
         private static void PaintErrorIcon(Graphics graphics, Rectangle iconBounds)
         {
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
             Bitmap bmp = DataGridViewCell.ErrorBitmap;
             if (bmp != null)
             {
@@ -4747,7 +4771,7 @@ namespace System.Windows.Forms
                     }
 
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
-                    if (owner == owner.DataGridView.CurrentCell)
+                    if (owner.DataGridView != null && owner == owner.DataGridView.CurrentCell)
                     {
                         state |= AccessibleStates.Focused;
                     }
@@ -4762,27 +4786,30 @@ namespace System.Windows.Forms
                         state |= AccessibleStates.ReadOnly;
                     }
 
-                    Rectangle cellBounds;
-                    if (owner.OwningColumn != null && owner.OwningRow != null)
+                    if (Owner.DataGridView != null)
                     {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, owner.OwningRow.Index, false /*cutOverflow*/);
-                    }
-                    else if (owner.OwningRow != null)
-                    {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, owner.OwningRow.Index, false /*cutOverflow*/);
-                    }
-                    else if (owner.OwningColumn != null)
-                    {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, -1, false /*cutOverflow*/);
-                    }
-                    else
-                    {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
-                    }
+                        Rectangle cellBounds;
+                        if (owner.OwningColumn != null && owner.OwningRow != null)
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, owner.OwningRow.Index, false /*cutOverflow*/);
+                        }
+                        else if (owner.OwningRow != null)
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, owner.OwningRow.Index, false /*cutOverflow*/);
+                        }
+                        else if (owner.OwningColumn != null)
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, -1, false /*cutOverflow*/);
+                        }
+                        else
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
+                        }
 
-                    if (!cellBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
-                    {
-                        state |= AccessibleStates.Offscreen;
+                        if (!cellBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
+                        {
+                            state |= AccessibleStates.Offscreen;
+                        }
                     }
 
                     return state;
@@ -5000,7 +5027,8 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
-                if (owner.DataGridView.EditingControl != null &&
+                if (owner.DataGridView != null &&
+                    owner.DataGridView.EditingControl != null &&
                     owner.DataGridView.IsCurrentCellInEditMode &&
                     owner.DataGridView.CurrentCell == owner &&
                     index == 0)
@@ -5020,7 +5048,8 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
-                if (owner.DataGridView.EditingControl != null &&
+                if (owner.DataGridView != null &&
+                    owner.DataGridView.EditingControl != null &&
                     owner.DataGridView.IsCurrentCellInEditMode &&
                     owner.DataGridView.CurrentCell == owner)
                 {
@@ -5200,12 +5229,15 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
-                    owner.DataGridView.Focus();
+                    owner.DataGridView?.Focus();
                 }
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
                     owner.Selected = true;
-                    owner.DataGridView.CurrentCell = owner; // Do not change old selection
+                    if (owner.DataGridView != null)
+                    {
+                        owner.DataGridView.CurrentCell = owner; // Do not change old selection
+                    }
                 }
                 if ((flags & AccessibleSelection.AddSelection) == AccessibleSelection.AddSelection)
                 {
