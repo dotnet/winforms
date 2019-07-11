@@ -4,60 +4,39 @@
 
 namespace System.Windows.Forms
 {
-
     /// <summary>
-    ///    <para>
-    ///       Specifies how a control should be docked by default when added through the designer.
-    ///    </para>
+    /// Specifies how a control should be docked by default when added through the designer.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute
     {
-        private readonly DockingBehavior _dockingBehavior;
-
         /// <summary>
-        ///    <para>
-        ///       Default constructor.
-        ///    </para>
+        /// Default constructor.
         /// </summary>
         public DockingAttribute()
         {
-            _dockingBehavior = DockingBehavior.Never;
+            DockingBehavior = DockingBehavior.Never;
         }
 
         /// <summary>
-        ///    <para>
-        ///       Constructor.
-        ///    </para>
+        /// Constructor.
         /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior)
         {
-            _dockingBehavior = dockingBehavior;
+            DockingBehavior = dockingBehavior;
         }
 
         /// <summary>
-        /// <para>
-        ///    Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
-        ///    This <see langword='static '/>field is read-only.
-        /// </para>
+        /// Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
+        /// This <see langword='static '/>field is read-only.
         /// </summary>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
         /// <summary>
-        ///    <para>
-        ///       DockingBehavior property.
-        ///    </para>
+        /// DockingBehavior property.
         /// </summary>
-        public DockingBehavior DockingBehavior
-        {
-            get
-            {
-                return _dockingBehavior;
-            }
-        }
+        public DockingBehavior DockingBehavior { get; }
 
-        /// <summary>
-        /// </summary>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -65,20 +44,11 @@ namespace System.Windows.Forms
                 return true;
             }
 
-
             return (obj is DockingAttribute other && other.DockingBehavior == DockingBehavior);
         }
 
-        public override int GetHashCode()
-        {
-            return DockingBehavior.GetHashCode();
-        }
+        public override int GetHashCode() => DockingBehavior.GetHashCode();
 
-        /// <summary>
-        /// </summary>
-        public override bool IsDefaultAttribute()
-        {
-            return Equals(Default);
-        }
+        public override bool IsDefaultAttribute() => Equals(Default);
     }
 }
