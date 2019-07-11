@@ -7659,6 +7659,30 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///     Executes the given Action on the thread that owns this Control's
+        ///     underlying window handle.  It is an error to call this on the same thread that
+        ///     the control belongs to.  If the control's handle doesn't exist yet, this will
+        ///     follow up the control's parent chain until it finds a control or form that does
+        ///     have a window handle.  If no appropriate handle can be found, invoke will throw
+        ///     an exception.  Exceptions that are raised during the call will be
+        ///     propapgated back to the caller.
+        /// </summary>
+        public void Invoke( Action action)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    action.Invoke();
+                });
+            }
+            else
+            {
+                action.Invoke();
+            }
+        }
+        
+        /// <summary>
         ///     Perform the callback of a particular ThreadMethodEntry - called by InvokeMarshaledCallbacks below.
         ///
         ///     If the invoke request originated from another thread, we should have already captured the ExecutionContext
