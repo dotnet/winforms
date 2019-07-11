@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 #if NETCORE
 using System.ComponentModel.Design;
@@ -24,6 +25,17 @@ namespace WinformsControlsTest.UserControls
         public UserControlWithCollectionEditors()
         {
             AutoScaleMode = AutoScaleMode.Font;
+
+            ListView = new ListView
+            {
+                LargeImageList = Images,
+                SmallImageList = new ImageList(),
+            };
+
+            Images.Images.Add(Bitmap.FromFile("SmallA.bmp"));
+            Images.Images.Add(Bitmap.FromFile("SmallABlue.bmp"));
+            Images.Images.Add(Bitmap.FromFile("LargeA.bmp"));
+            Images.Images.Add(Bitmap.FromFile("LargeABlue.bmp"));
         }
 
 #if NETCORE
@@ -61,5 +73,15 @@ namespace WinformsControlsTest.UserControls
             get => _stringCollection;
             set => _stringCollection = value;
         }
+
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Category(Category)]
+        public ImageList Images { get; set; } = new ImageList();
+
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Category(Category)]
+        public ListView ListView { get; set; }
     }
 }
