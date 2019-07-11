@@ -5,6 +5,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Drawing;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
@@ -87,5 +88,51 @@ namespace System.Windows.Forms.Design
         /// <param name="array">The input is an <see cref="ArrayList"/> as an object.</param>
         /// <returns>An <see cref="ArrayList"/> which contains individual images that need to be created.</returns>
         protected override IList GetObjectsFromInstance(object array) => array as ArrayList;
-   }
+
+        protected override object[] GetItems(object editValue)
+        {
+            var source = editValue as ImageList.ImageCollection;
+            if (source == null)
+            {
+                return base.GetItems(editValue);
+            }
+
+            var imageListImages = new ImageListImage[source.Count];
+            for (int i = 0; i < source.Count; i++)
+            {
+                imageListImages[i] = new ImageListImage(source[i]);
+            }
+
+            return imageListImages;
+        }
+
+        protected override object SetItems(object editValue, object[] value)
+        {
+            var source = editValue as ImageList.ImageCollection;
+            if (source == null)
+            {
+                return base.SetItems(editValue, value);
+            }
+
+            source.Clear();
+            if (value == null || value.Length == 0)
+            {
+                return source;
+            }
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (value[i] is Image image)
+                {
+                    source.Add(image);
+                }
+                else if (value[i] is ImageListImage imageListImage)
+                {
+                    source.Add(imageListImage.Image);
+                }
+            }
+
+            return source;
+        }
+    }
 }

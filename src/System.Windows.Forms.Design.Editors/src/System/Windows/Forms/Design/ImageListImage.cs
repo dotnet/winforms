@@ -15,12 +15,12 @@ namespace System.Windows.Forms.Design
     {
         private string _name = null;
 
-        public ImageListImage(Bitmap image)
+        public ImageListImage(Image image)
         {
             Image = image;
         }
 
-        public ImageListImage(Bitmap image, string name)
+        public ImageListImage(Image image, string name)
         {
             Image = image;
             Name = name;
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         }
 
         [Browsable(false)]
-        public Bitmap Image { get; set; }
+        public Image Image { get; set; }
 
         // Add properties to make this object "look" like Image in the Collection editor
         public float HorizontalResolution => Image.HorizontalResolution;
