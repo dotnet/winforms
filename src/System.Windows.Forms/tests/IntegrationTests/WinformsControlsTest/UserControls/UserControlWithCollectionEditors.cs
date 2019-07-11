@@ -32,10 +32,10 @@ namespace WinformsControlsTest.UserControls
                 SmallImageList = new ImageList(),
             };
 
-            Images.Images.Add(Bitmap.FromFile("SmallA.bmp"));
-            Images.Images.Add(Bitmap.FromFile("SmallABlue.bmp"));
-            Images.Images.Add(Bitmap.FromFile("LargeA.bmp"));
-            Images.Images.Add(Bitmap.FromFile("LargeABlue.bmp"));
+            Images.Images.Add("SmallA", Bitmap.FromFile("Images\\SmallA.bmp"));
+            Images.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
+            Images.Images.Add("LargeA", Bitmap.FromFile("Images\\LargeA.bmp"));
+            Images.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
         }
 
 #if NETCORE

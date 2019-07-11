@@ -2,12 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -80,10 +75,10 @@ namespace WinformsControlsTest
             ImageList imageListLarge = new ImageList();
 
             // Initialize the ImageList objects with bitmaps.\
-            imageListSmall.Images.Add(Bitmap.FromFile("SmallA.bmp"));
-            imageListSmall.Images.Add(Bitmap.FromFile("SmallABlue.bmp"));
-            imageListLarge.Images.Add(Bitmap.FromFile("LargeA.bmp"));
-            imageListLarge.Images.Add(Bitmap.FromFile("LargeABlue.bmp"));
+            imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
+            imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
+            imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeA.bmp"));
+            imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
 
             //Assign the ImageList objects to the ListView.
             listView1.LargeImageList = imageListLarge;

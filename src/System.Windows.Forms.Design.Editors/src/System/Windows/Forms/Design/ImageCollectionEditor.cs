@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Design
             var imageListImages = new ImageListImage[source.Count];
             for (int i = 0; i < source.Count; i++)
             {
-                imageListImages[i] = new ImageListImage(source[i]);
+                imageListImages[i] = new ImageListImage(source[i]) { Name = source.Keys[i] };
             }
 
             return imageListImages;
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Design
                 }
                 else if (value[i] is ImageListImage imageListImage)
                 {
-                    source.Add(imageListImage.Image);
+                    source.Add(imageListImage.Name, imageListImage.Image);
                 }
             }
 
