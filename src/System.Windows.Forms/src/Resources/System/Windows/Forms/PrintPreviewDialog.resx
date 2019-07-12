@@ -125,7 +125,7 @@
     <value xml:space="preserve">Print the document</value>
   </data>
   <data name="printToolStripButton.AccessibleName">
-    <value xml:space="preserve">Print Button</value>
+    <value xml:space="preserve">Print</value>
   </data>
   <data name="printToolStripButton.Text">
     <value xml:space="preserve">Print</value>
