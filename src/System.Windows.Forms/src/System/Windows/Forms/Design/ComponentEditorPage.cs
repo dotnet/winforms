@@ -209,7 +209,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void ExitLoadingMode()
         {
-            Debug.Assert(loading > 0, "Unbalanced Enter/ExitLoadingMode calls");
             loading--;
         }
 
@@ -290,7 +289,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void SetDirty()
         {
-            if (IsLoading() == false)
+            if (!IsLoading() && pageSite != null)
             {
                 pageSite.SetDirty();
             }
@@ -311,8 +310,7 @@ namespace System.Windows.Forms.Design
         public virtual void SetSite(IComponentEditorPageSite site)
         {
             pageSite = site;
-
-            pageSite.GetControl().Controls.Add(this);
+            pageSite?.GetControl()?.Controls.Add(this);
         }
 
         /// <summary>
