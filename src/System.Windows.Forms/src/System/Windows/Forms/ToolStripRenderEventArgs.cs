@@ -66,20 +66,22 @@ namespace System.Windows.Forms
                 }
 
                 _backColor = ToolStrip.RawBackColor;
-                if (_backColor == Color.Empty)
+                if (_backColor != Color.Empty)
                 {
-                    if (ToolStrip is ToolStripDropDown)
-                    {
-                        _backColor = SystemColors.Menu;
-                    }
-                    else if (ToolStrip is MenuStrip)
-                    {
-                        _backColor = SystemColors.MenuBar;
-                    }
-                    else
-                    {
-                        _backColor = SystemColors.Control;
-                    }
+                    return _backColor;
+                }
+
+                if (ToolStrip is ToolStripDropDown)
+                {
+                    _backColor = SystemColors.Menu;
+                }
+                else if (ToolStrip is MenuStrip)
+                {
+                    _backColor = SystemColors.MenuBar;
+                }
+                else
+                {
+                    _backColor = SystemColors.Control;
                 }
 
                 return _backColor;
