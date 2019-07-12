@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (image != null)
+            if (image != null && pe != null)
             {
                 Animate();
                 ImageAnimator.UpdateFrames(Image);
@@ -1316,7 +1316,10 @@ namespace System.Windows.Forms
 
         void ISupportInitialize.EndInit()
         {
-            Debug.Assert(pictureBoxState[PICTUREBOXSTATE_inInitialization]);
+            if (!pictureBoxState[PICTUREBOXSTATE_inInitialization])
+            {
+                return;
+            }
 
             // Need to do this in EndInit since there's no guarantee of the
             // order in which ImageLocation and WaitOnLoad will be set.
