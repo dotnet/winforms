@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         internal Pen headerForePen = DefaultHeaderForePen;
         private SolidBrush linkBrush = DefaultLinkBrush;
         internal int preferredColumnWidth = defaultPreferredColumnWidth;
-        private int prefferedRowHeight = defaultFontHeight + 3;
+        private int preferredRowHeight = defaultFontHeight + 3;
         private SolidBrush selectionBackBrush = DefaultSelectionBackBrush;
         private SolidBrush selectionForeBrush = DefaultSelectionForeBrush;
         private int rowHeaderWidth = defaultRowHeaderWidth;
@@ -932,7 +932,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return prefferedRowHeight;
+                return preferredRowHeight;
             }
             set
             {
@@ -946,9 +946,9 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridRowRowHeight);
                 }
 
-                if (prefferedRowHeight != value)
+                if (preferredRowHeight != value)
                 {
-                    prefferedRowHeight = value;
+                    preferredRowHeight = value;
                     OnPreferredRowHeightChanged(EventArgs.Empty);
                 }
             }
@@ -967,7 +967,7 @@ namespace System.Windows.Forms
 
         protected bool ShouldSerializePreferredRowHeight()
         {
-            return prefferedRowHeight != defaultFontHeight + 3;
+            return preferredRowHeight != defaultFontHeight + 3;
         }
 
         [

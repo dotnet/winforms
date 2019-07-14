@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         private int preferredColumnWidth = defaultPreferredColumnWidth;
 
         private static readonly int defaultFontHeight = Control.DefaultFont.Height;
-        private int prefferedRowHeight = defaultFontHeight + 3;
+        private int preferredRowHeight = defaultFontHeight + 3;
 
         // private bool rowHeadersVisible = true;
         private const int defaultRowHeaderWidth = 35;
@@ -2906,7 +2906,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return prefferedRowHeight;
+                return preferredRowHeight;
             }
             set
             {
@@ -2915,18 +2915,18 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.DataGridRowRowHeight);
                 }
 
-                prefferedRowHeight = value;
+                preferredRowHeight = value;
             }
         }
 
         private void ResetPreferredRowHeight()
         {
-            prefferedRowHeight = defaultFontHeight + 3;
+            preferredRowHeight = defaultFontHeight + 3;
         }
 
         protected bool ShouldSerializePreferredRowHeight()
         {
-            return prefferedRowHeight != defaultFontHeight + 3;
+            return preferredRowHeight != defaultFontHeight + 3;
         }
 
         /// <summary>
