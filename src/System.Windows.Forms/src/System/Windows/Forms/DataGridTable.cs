@@ -946,31 +946,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridRowRowHeight);
                 }
 
-                prefferedRowHeight = value;
-
-                /*
-                bool needToRedraw = false;
-                DataGridRow[] rows = DataGridRows;
-
-                for (int i = 0; i < DataGridRowsLength; i++)
+                if (prefferedRowHeight != value)
                 {
-                    if (rows[i].Height != value) needToRedraw = false;
-                    rows[i].Height = value;
+                    prefferedRowHeight = value;
+                    OnPreferredRowHeightChanged(EventArgs.Empty);
                 }
-
-                // if all rows' height was equal to "value" before setting it, then
-                // there is no need to redraw.
-                if (!needToRedraw)
-                    return;
-
-                // need to layout the scroll bars:
-                PerformLayout();
-
-                // invalidate the entire area...
-                Rectangle rightArea = Rectangle.Union(layout.RowHeaders, layout.Data);
-                Invalidate(rightArea);
-                */
-                OnPreferredRowHeightChanged(EventArgs.Empty);
             }
         }
 
@@ -1322,6 +1302,11 @@ namespace System.Windows.Forms
 
         internal protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop, bool isDefault)
         {
+            if (prop == null)
+            {
+                throw new ArgumentNullException(nameof(prop));
+            }
+
             DataGridColumnStyle ret = null;
             Type dataType = prop.PropertyType;
 
@@ -1645,7 +1630,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnForeColorChanged(EventArgs e)
         {
-            if (Events[EventBackColor] is EventHandler eh)
+            if (Events[EventForeColor] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1653,7 +1638,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnBackColorChanged(EventArgs e)
         {
-            if (Events[EventForeColor] is EventHandler eh)
+            if (Events[EventBackColor] is EventHandler eh)
             {
                 eh(this, e);
             }

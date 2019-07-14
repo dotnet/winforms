@@ -4926,7 +4926,6 @@ namespace System.Windows.Forms
         private void AbortEdit()
         {
             Debug.WriteLineIf(CompModSwitches.DataGridEditing.TraceVerbose, "DataGridEditing: \t! AbortEdit");
-            Debug.Assert(gridState[GRIDSTATE_isEditing], "Can't abort an edit that is not happening!");
 
             // the same rules from editColumn.OnEdit
             // while changing the editControl's visibility, do not
@@ -5690,7 +5689,7 @@ namespace System.Windows.Forms
             // the datagrid does not perform a layout
             gridState[GRIDSTATE_editControlChanging] = true;
 
-            if (editColumn.ReadOnly || gridState[GRIDSTATE_inAddNewRow])
+            if ((editColumn != null && editColumn.ReadOnly) || gridState[GRIDSTATE_inAddNewRow])
             {
                 bool focusTheGrid = false;
                 if (ContainsFocus)
@@ -5716,7 +5715,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            bool retVal = editColumn.Commit(ListManager, currentRow);
+            bool retVal = editColumn?.Commit(ListManager, currentRow) ?? true;
 
             // reset the editControl flag
             gridState[GRIDSTATE_editControlChanging] = false;
