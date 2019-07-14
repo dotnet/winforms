@@ -114,7 +114,7 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AllowSorting"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(AllowSorting)));
                 }
 
                 if (allowSorting != value)
@@ -148,18 +148,17 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(AlternatingBackColor)));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                 {
-                    throw new ArgumentException(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed);
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed, nameof(value));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
-                                                              "AlternatingBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(AlternatingBackColor)), nameof(value));
                 }
                 if (!alternatingBackBrush.Color.Equals(value))
                 {
@@ -229,18 +228,17 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "BackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(BackColor)));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                 {
-                    throw new ArgumentException(SR.DataGridTableStyleTransparentBackColorNotAllowed);
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentBackColorNotAllowed, nameof(value));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
-                                                              "BackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(BackColor)), nameof(value));
                 }
                 if (!backBrush.Color.Equals(value))
                 {
@@ -416,13 +414,12 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "ForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(ForeColor)));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
-                                                              "BackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(ForeColor)), nameof(value));
                 }
                 if (!foreBrush.Color.Equals(value))
                 {
@@ -469,19 +466,17 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(GridLineColor)));
                 }
 
                 if (gridLineBrush.Color != value)
                 {
                     if (value.IsEmpty)
                     {
-                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "GridLineColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(GridLineColor)), nameof(value));
                     }
 
                     gridLineBrush = new SolidBrush(value);
-
-                    // Invalidate(layout.Data);
                     OnGridLineColorChanged(EventArgs.Empty);
                 }
             }
@@ -538,7 +533,7 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(GridLineStyle)));
                 }
 
                 //valid values are 0x0 to 0x1.
@@ -549,7 +544,6 @@ namespace System.Windows.Forms
                 if (gridLineStyle != value)
                 {
                     gridLineStyle = value;
-                    // Invalidate(layout.Data);
                     OnGridLineStyleChanged(EventArgs.Empty);
                 }
             }
@@ -575,30 +569,22 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(HeaderBackColor)));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                 {
-                    throw new ArgumentException(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed);
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed, nameof(value));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(HeaderBackColor)), nameof(value));
                 }
 
                 if (!value.Equals(headerBackBrush.Color))
                 {
                     headerBackBrush = new SolidBrush(value);
-
-                    /*
-                    if (layout.RowHeadersVisible)
-                        Invalidate(layout.RowHeaders);
-                    if (layout.ColumnHeadersVisible)
-                        Invalidate(layout.ColumnHeaders);
-                    Invalidate(layout.TopLeftHeader);
-                    */
                     OnHeaderBackColorChanged(EventArgs.Empty);
                 }
             }
@@ -647,17 +633,12 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderFont"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(HeaderFont)));
                 }
 
                 if (value == null && headerFont != null || (value != null && !value.Equals(headerFont)))
                 {
                     headerFont = value;
-                    /*
-                    RecalculateFonts();
-                    PerformLayout();
-                    Invalidate(layout.Inside);
-                    */
                     OnHeaderFontChanged(EventArgs.Empty);
                 }
             }
@@ -679,11 +660,6 @@ namespace System.Windows.Forms
             if (headerFont != null)
             {
                 headerFont = null;
-                /*
-                RecalculateFonts();
-                PerformLayout();
-                Invalidate(layout.Inside);
-                */
                 OnHeaderFontChanged(EventArgs.Empty);
             }
         }
@@ -702,26 +678,18 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(HeaderForeColor)));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(HeaderForeColor)), nameof(value));
                 }
 
                 if (!value.Equals(headerForePen.Color))
                 {
                     headerForePen = new Pen(value);
                     headerForeBrush = new SolidBrush(value);
-
-                    /*
-                    if (layout.RowHeadersVisible)
-                        Invalidate(layout.RowHeaders);
-                    if (layout.ColumnHeadersVisible)
-                        Invalidate(layout.ColumnHeaders);
-                    Invalidate(layout.TopLeftHeader);
-                    */
                     OnHeaderForeColorChanged(EventArgs.Empty);
                 }
             }
@@ -776,18 +744,17 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "LinkColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(LinkColor)));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "LinkColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(LinkColor)), nameof(value));
                 }
 
                 if (!linkBrush.Color.Equals(value))
                 {
                     linkBrush = new SolidBrush(value);
-                    // Invalidate(layout.Data);
                     OnLinkColorChanged(EventArgs.Empty);
                 }
             }
@@ -846,7 +813,6 @@ namespace System.Windows.Forms
         protected virtual bool ShouldSerializeLinkHoverColor()
         {
             return false;
-            // return !LinkHoverBrush.Equals(defaultLinkHoverBrush);
         }
 
         internal Rectangle RelationshipRect
@@ -916,8 +882,6 @@ namespace System.Windows.Forms
 
         public void ResetLinkHoverColor()
         {
-            /*if (ShouldSerializeLinkHoverColor())
-                LinkHoverColor = defaultLinkHoverBrush.Color;*/
         }
 
         [
@@ -937,27 +901,17 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(PreferredColumnWidth)));
                 }
 
                 if (value < 0)
                 {
-                    throw new ArgumentException(SR.DataGridColumnWidth, "PreferredColumnWidth");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridColumnWidth);
                 }
 
                 if (preferredColumnWidth != value)
                 {
                     preferredColumnWidth = value;
-
-                    /*
-                    // reset the dataGridRows
-                    SetDataGridRows(null, this.DataGridRowsLength);
-                    // layout the horizontal scroll bar
-                    PerformLayout();
-                    // invalidate everything
-                    Invalidate();
-                    */
-
                     OnPreferredColumnWidthChanged(EventArgs.Empty);
                 }
             }
@@ -984,12 +938,12 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(PreferredRowHeight)));
                 }
 
                 if (value < 0)
                 {
-                    throw new ArgumentException(SR.DataGridRowRowHeight);
+                    throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridRowRowHeight);
                 }
 
                 prefferedRowHeight = value;
@@ -1052,10 +1006,6 @@ namespace System.Windows.Forms
                 if (columnHeadersVisible != value)
                 {
                     columnHeadersVisible = value;
-                    /*
-                    PerformLayout();
-                    InvalidateInside();
-                    */
                     OnColumnHeadersVisibleChanged(EventArgs.Empty);
                 }
             }
@@ -1083,10 +1033,6 @@ namespace System.Windows.Forms
                 if (rowHeadersVisible != value)
                 {
                     rowHeadersVisible = value;
-                    /*
-                    PerformLayout();
-                    InvalidateInside();
-                    */
                     OnRowHeadersVisibleChanged(EventArgs.Empty);
                 }
             }
@@ -1120,13 +1066,6 @@ namespace System.Windows.Forms
                 if (rowHeaderWidth != value)
                 {
                     rowHeaderWidth = value;
-                    /*
-                    if (layout.RowHeadersVisible)
-                    {
-                        PerformLayout();
-                        InvalidateInside();
-                    }
-                    */
                     OnRowHeaderWidthChanged(EventArgs.Empty);
                 }
             }
@@ -1152,25 +1091,23 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(SelectionBackColor)));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                 {
-                    throw new ArgumentException(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed);
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed, nameof(value));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(SelectionBackColor)), nameof(value));
                 }
 
                 if (!value.Equals(selectionBackBrush.Color))
                 {
                     selectionBackBrush = new SolidBrush(value);
-
                     InvalidateInside();
-
                     OnSelectionBackColorChanged(EventArgs.Empty);
                 }
             }
@@ -1226,20 +1163,18 @@ namespace System.Windows.Forms
             {
                 if (isDefaultTableStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(SelectionForeColor)));
                 }
 
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, nameof(SelectionForeColor)), nameof(value));
                 }
 
                 if (!value.Equals(selectionForeBrush.Color))
                 {
                     selectionForeBrush = new SolidBrush(value);
-
                     InvalidateInside();
-
                     OnSelectionForeColorChanged(EventArgs.Empty);
                 }
             }
