@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class DataGridViewElement
     {
-        private DataGridViewElementStates _state; // enabled frozen readOnly resizable selected visible
         private DataGridView _dataGridView;
 
         /// <summary>
@@ -19,23 +18,18 @@ namespace System.Windows.Forms
         /// </summary>
         public DataGridViewElement()
         {
-            _state = DataGridViewElementStates.Visible;
+            State = DataGridViewElementStates.Visible;
         }
 
         internal DataGridViewElement(DataGridViewElement dgveTemplate)
         {
             // Selected and Displayed states are not inherited
-            _state = dgveTemplate.State & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible);
+            State = dgveTemplate.State & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible);
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public virtual DataGridViewElementStates State => _state;
-
-        internal DataGridViewElementStates StateInternal
-        {
-            set => _state = value;
-        }
+        public virtual DataGridViewElementStates State { get; internal set; }
 
         internal bool StateIncludes(DataGridViewElementStates elementState)
         {
@@ -49,13 +43,12 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DataGridView DataGridView => _dataGridView;
-
-        internal DataGridView DataGridViewInternal
+        public DataGridView DataGridView
         {
-            set
+            get => _dataGridView;
+            internal set
             {
-                if (DataGridView != value)
+                if (_dataGridView != value)
                 {
                     _dataGridView = value;
                     OnDataGridViewChanged();

@@ -149,12 +149,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool HasValueType
+        private protected override bool HasValueType
         {
-            get
-            {
-                return Properties.ContainsObject(PropValueType) && Properties.GetObject(PropValueType) != null;
-            }
+            get => Properties.ContainsObject(PropValueType) && Properties.GetObject(PropValueType) != null;
         }
 
         [

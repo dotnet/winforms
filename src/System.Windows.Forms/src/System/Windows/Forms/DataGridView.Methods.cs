@@ -5130,7 +5130,7 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewColumn != null);
             for (int columnIndex = dataGridViewColumn.Index; columnIndex < Columns.Count; columnIndex++)
             {
-                Columns[columnIndex].IndexInternal = Columns[columnIndex].Index - 1;
+                Columns[columnIndex].Index = Columns[columnIndex].Index - 1;
                 Debug.Assert(Columns[columnIndex].Index == columnIndex);
             }
         }
@@ -5141,7 +5141,7 @@ namespace System.Windows.Forms
             Debug.Assert(insertionCount > 0);
             for (int columnIndex = dataGridViewColumn.Index + insertionCount; columnIndex < Columns.Count; columnIndex++)
             {
-                Columns[columnIndex].IndexInternal = columnIndex;
+                Columns[columnIndex].Index = columnIndex;
             }
         }
 
@@ -5288,7 +5288,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.IndexInternal = dataGridViewRow.Index - 1;
+                    dataGridViewRow.Index = dataGridViewRow.Index - 1;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -5314,7 +5314,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.IndexInternal = dataGridViewRow.Index + insertionCount;
+                    dataGridViewRow.Index = dataGridViewRow.Index + insertionCount;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -6571,7 +6571,7 @@ namespace System.Windows.Forms
                             Debug.Assert(dataGridViewColumnTmp != null);
                             if (!dataGridViewColumnTmp.Displayed)
                             {
-                                dataGridViewColumnTmp.DisplayedInternal = true;
+                                dataGridViewColumnTmp.Displayed = true;
                             }
                             dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                             numDisplayedScrollingCols--;
@@ -6584,7 +6584,7 @@ namespace System.Windows.Forms
                         dataGridViewColumnTmp = Columns.GetPreviousColumn(Columns[displayedBandsInfo.FirstDisplayedScrollingCol], DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
                         while (dataGridViewColumnTmp != null && dataGridViewColumnTmp.Displayed)
                         {
-                            dataGridViewColumnTmp.DisplayedInternal = false;
+                            dataGridViewColumnTmp.Displayed = false;
                             dataGridViewColumnTmp = Columns.GetPreviousColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
                         }
 
@@ -6598,7 +6598,7 @@ namespace System.Windows.Forms
                     }
                     while (dataGridViewColumnTmp != null && dataGridViewColumnTmp.Displayed)
                     {
-                        dataGridViewColumnTmp.DisplayedInternal = false;
+                        dataGridViewColumnTmp.Displayed = false;
                         dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                     }
 
@@ -6610,7 +6610,7 @@ namespace System.Windows.Forms
                         Debug.Assert(dataGridViewColumnTmp != null);
                         if (!dataGridViewColumnTmp.Displayed)
                         {
-                            dataGridViewColumnTmp.DisplayedInternal = true;
+                            dataGridViewColumnTmp.Displayed = true;
                         }
                         dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen, DataGridViewElementStates.None);
                         numDisplayedFrozenCols--;
@@ -6619,7 +6619,7 @@ namespace System.Windows.Forms
                     // Make sure all non-displayed frozen columns have their Displayed state set to false
                     while (dataGridViewColumnTmp != null && dataGridViewColumnTmp.Displayed)
                     {
-                        dataGridViewColumnTmp.DisplayedInternal = false;
+                        dataGridViewColumnTmp.Displayed = false;
                         dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen, DataGridViewElementStates.None);
                     }
 
@@ -6640,7 +6640,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            dataGridViewColumnTmp.DisplayedInternal = false;
+                            dataGridViewColumnTmp.Displayed = false;
                             dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                             columnIndexTmp = (dataGridViewColumnTmp == null) ? -1 : dataGridViewColumnTmp.Index;
                         }
@@ -6661,7 +6661,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                dataGridViewColumnTmp.DisplayedInternal = false;
+                                dataGridViewColumnTmp.Displayed = false;
                                 dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                             }
                         }
@@ -6674,7 +6674,7 @@ namespace System.Windows.Forms
                         {
                             if (dataGridViewColumnTmp.Displayed)
                             {
-                                dataGridViewColumnTmp.DisplayedInternal = false;
+                                dataGridViewColumnTmp.Displayed = false;
                             }
                             dataGridViewColumnTmp = Columns.GetPreviousColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                         }
@@ -10602,7 +10602,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewColumn.HasHeaderCell)
             {
-                dataGridViewColumn.HeaderCell.DataGridViewInternal = this;
+                dataGridViewColumn.HeaderCell.DataGridView = this;
             }
 
             AdjustExpandingRows(dataGridViewColumn.Index, false /*fixedWidth*/);
@@ -10846,9 +10846,9 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewCellNew.SetValueInternal(rowIndex, dataGridViewCellNew.DefaultNewRowValue);
                             }
-                            dataGridViewCellNew.DataGridViewInternal = this;
-                            dataGridViewCellNew.OwningRowInternal = dataGridViewRow;
-                            dataGridViewCellNew.OwningColumnInternal = dataGridViewColumn;
+                            dataGridViewCellNew.DataGridView = this;
+                            dataGridViewCellNew.OwningRow = dataGridViewRow;
+                            dataGridViewCellNew.OwningColumn = dataGridViewColumn;
                         }
                     }
                 }
@@ -10985,9 +10985,9 @@ namespace System.Windows.Forms
                                 {
                                     dataGridViewCellNew.Value = dataGridViewCellNew.DefaultNewRowValue;
                                 }
-                                dataGridViewCellNew.DataGridViewInternal = this;
-                                dataGridViewCellNew.OwningRowInternal = dataGridViewRow;
-                                dataGridViewCellNew.OwningColumnInternal = dataGridViewColumn;
+                                dataGridViewCellNew.DataGridView = this;
+                                dataGridViewCellNew.OwningRow = dataGridViewRow;
+                                dataGridViewCellNew.OwningColumn = dataGridViewColumn;
                             }
                         }
                     }
@@ -13374,7 +13374,7 @@ namespace System.Windows.Forms
             {
                 if (dataGridViewRow.Displayed)
                 {
-                    dataGridViewRow.DisplayedInternal = false;
+                    dataGridViewRow.Displayed = false;
                     DataGridViewRowStateChangedEventArgs dgvrsce = new DataGridViewRowStateChangedEventArgs(dataGridViewRow, DataGridViewElementStates.Displayed);
                     OnRowStateChanged(-1 /*rowIndex*/, dgvrsce);
                 }
@@ -14186,7 +14186,7 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewColumn != null);
             if (dataGridViewColumn.Displayed)
             {
-                dataGridViewColumn.DisplayedInternal = false;
+                dataGridViewColumn.Displayed = false;
                 DataGridViewColumnStateChangedEventArgs dgvrsce = new DataGridViewColumnStateChangedEventArgs(dataGridViewColumn, DataGridViewElementStates.Displayed);
                 OnColumnStateChanged(dgvrsce);
             }
@@ -14535,7 +14535,7 @@ namespace System.Windows.Forms
                     if (!dataGridViewColumn.Visible && dataGridViewColumn.Displayed)
                     {
                         // Displayed column becomes invisible. Turns off the Displayed state.
-                        dataGridViewColumn.DisplayedInternal = false;
+                        dataGridViewColumn.Displayed = false;
                     }
 
                     // UsedFillWeight values need to be updated
@@ -15585,9 +15585,9 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewCellNew.Value = dataGridViewCellNew.DefaultNewRowValue;
                             }
-                            dataGridViewCellNew.DataGridViewInternal = this;
-                            dataGridViewCellNew.OwningRowInternal = dataGridViewRow;
-                            dataGridViewCellNew.OwningColumnInternal = dataGridViewColumn;
+                            dataGridViewCellNew.DataGridView = this;
+                            dataGridViewCellNew.OwningRow = dataGridViewRow;
+                            dataGridViewCellNew.OwningColumn = dataGridViewColumn;
                         }
                     }
                 }
@@ -17034,7 +17034,7 @@ namespace System.Windows.Forms
             // Raise RowStateChanged event for Displayed state of deleted row
             if (rowDisplayed)
             {
-                dataGridViewRow.DisplayedInternal = false;
+                dataGridViewRow.Displayed = false;
                 DataGridViewRowStateChangedEventArgs dgvrsce = new DataGridViewRowStateChangedEventArgs(dataGridViewRow, DataGridViewElementStates.Displayed);
                 OnRowStateChanged(-1 /*rowIndex*/, dgvrsce);
             }
@@ -17190,7 +17190,7 @@ namespace System.Windows.Forms
             // Detach column header cell
             if (dataGridViewColumn.HasHeaderCell)
             {
-                dataGridViewColumn.HeaderCell.DataGridViewInternal = null;
+                dataGridViewColumn.HeaderCell.DataGridView = null;
             }
 
             // Reset sort related variables.
@@ -28279,7 +28279,7 @@ namespace System.Windows.Forms
                     Debug.Assert(dataGridViewColumnTmp != null);
                     if (dataGridViewColumnTmp.Displayed != displayed)
                     {
-                        dataGridViewColumnTmp.DisplayedInternal = displayed;
+                        dataGridViewColumnTmp.Displayed = displayed;
                         Debug.Assert(ColumnNeedsDisplayedState(dataGridViewColumnTmp));
                     }
                     dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen, DataGridViewElementStates.None);
@@ -28299,7 +28299,7 @@ namespace System.Windows.Forms
                     Debug.Assert(dataGridViewColumnTmp != null);
                     if (dataGridViewColumnTmp.Displayed != displayed)
                     {
-                        dataGridViewColumnTmp.DisplayedInternal = displayed;
+                        dataGridViewColumnTmp.Displayed = displayed;
                         Debug.Assert(ColumnNeedsDisplayedState(dataGridViewColumnTmp));
                     }
                     dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);

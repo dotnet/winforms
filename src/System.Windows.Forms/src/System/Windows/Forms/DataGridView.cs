@@ -4748,12 +4748,12 @@ namespace System.Windows.Forms
                     if (topLeftHeaderCell != null)
                     {
                         // Detach existing header cell
-                        topLeftHeaderCell.DataGridViewInternal = null;
+                        topLeftHeaderCell.DataGridView = null;
                     }
                     topLeftHeaderCell = value;
                     if (value != null)
                     {
-                        topLeftHeaderCell.DataGridViewInternal = this;
+                        topLeftHeaderCell.DataGridView = this;
                     }
                     if (ColumnHeadersVisible && RowHeadersVisible)
                     {

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private int _thickness;
         private int _minimumThickness;
         private int _bandIndex;
-        internal bool _bandIsRow;
+        private protected bool _bandIsRow;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='DataGridViewBand'/> class.
@@ -164,20 +164,16 @@ namespace System.Windows.Forms
                 Debug.Assert(!_bandIsRow);
                 return (State & DataGridViewElementStates.Displayed) != 0;
             }
-        }
-
-        internal bool DisplayedInternal
-        {
-            set
+            internal set
             {
                 Debug.Assert(value != Displayed);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.Displayed;
+                    State = State | DataGridViewElementStates.Displayed;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.Displayed;
+                    State = State & ~DataGridViewElementStates.Displayed;
                 }
                 if (DataGridView != null)
                 {
@@ -241,11 +237,11 @@ namespace System.Windows.Forms
                     OnStateChanging(DataGridViewElementStates.Frozen);
                     if (value)
                     {
-                        StateInternal = State | DataGridViewElementStates.Frozen;
+                        State = State | DataGridViewElementStates.Frozen;
                     }
                     else
                     {
-                        StateInternal = State & ~DataGridViewElementStates.Frozen;
+                        State = State & ~DataGridViewElementStates.Frozen;
                     }
                     OnStateChanged(DataGridViewElementStates.Frozen);
                 }
@@ -280,16 +276,16 @@ namespace System.Windows.Forms
                     Type cellType = DefaultHeaderCellType;
 
                     headerCell = (DataGridViewHeaderCell)Activator.CreateInstance(cellType);
-                    headerCell.DataGridViewInternal = DataGridView;
+                    headerCell.DataGridView = DataGridView;
                     if (_bandIsRow)
                     {
-                        headerCell.OwningRowInternal = (DataGridViewRow)this;   // may be a shared row
+                        headerCell.OwningRow = (DataGridViewRow)this;   // may be a shared row
                         Properties.SetObject(s_propHeaderCell, headerCell);
                     }
                     else
                     {
                         DataGridViewColumn dataGridViewColumn = this as DataGridViewColumn;
-                        headerCell.OwningColumnInternal = dataGridViewColumn;
+                        headerCell.OwningColumn = dataGridViewColumn;
                         // Set the headerCell in the property store before setting the SortOrder.
                         Properties.SetObject(s_propHeaderCell, headerCell);
                         if (DataGridView != null && DataGridView.SortedColumn == dataGridViewColumn)
@@ -310,14 +306,14 @@ namespace System.Windows.Forms
                 {
                     if (headerCell != null)
                     {
-                        headerCell.DataGridViewInternal = null;
+                        headerCell.DataGridView = null;
                         if (_bandIsRow)
                         {
-                            headerCell.OwningRowInternal = null;
+                            headerCell.OwningRow = null;
                         }
                         else
                         {
-                            headerCell.OwningColumnInternal = null;
+                            headerCell.OwningColumn = null;
                             ((DataGridViewColumnHeaderCell)headerCell).SortGlyphDirectionInternal = SortOrder.None;
                         }
                     }
@@ -337,7 +333,7 @@ namespace System.Windows.Forms
                                 value.OwningRow.HeaderCell = null;
                             }
                             Debug.Assert(value.OwningRow == null);
-                            value.OwningRowInternal = (DataGridViewRow)this;   // may be a shared row
+                            value.OwningRow = (DataGridViewRow)this;   // may be a shared row
                         }
                         else
                         {
@@ -353,10 +349,10 @@ namespace System.Windows.Forms
                             }
                             Debug.Assert(dataGridViewColumnHeaderCell.SortGlyphDirection == SortOrder.None);
                             Debug.Assert(value.OwningColumn == null);
-                            value.OwningColumnInternal = (DataGridViewColumn)this;
+                            value.OwningColumn = (DataGridViewColumn)this;
                         }
                         Debug.Assert(value.DataGridView == null);
-                        value.DataGridViewInternal = DataGridView;
+                        value.DataGridView = DataGridView;
                     }
 
                     Properties.SetObject(s_propHeaderCell, value);
@@ -369,11 +365,10 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public int Index => _bandIndex;
-
-        internal int IndexInternal
+        public int Index
         {
-            set => _bandIndex = value;
+            get => _bandIndex;
+            internal set => _bandIndex = value;
         }
 
         [Browsable(false)]
@@ -483,11 +478,11 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
-                            StateInternal = State | DataGridViewElementStates.ReadOnly;
+                            State = State | DataGridViewElementStates.ReadOnly;
                         }
                         else
                         {
-                            StateInternal = State & ~DataGridViewElementStates.ReadOnly;
+                            State = State & ~DataGridViewElementStates.ReadOnly;
                         }
                     }
                 }
@@ -501,11 +496,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != ReadOnly);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.ReadOnly;
+                    State = State | DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.ReadOnly;
+                    State = State & ~DataGridViewElementStates.ReadOnly;
                 }
 
                 Debug.Assert(DataGridView != null);
@@ -540,20 +535,20 @@ namespace System.Windows.Forms
                 DataGridViewTriState oldResizable = Resizable;
                 if (value == DataGridViewTriState.NotSet)
                 {
-                    StateInternal = State & ~DataGridViewElementStates.ResizableSet;
+                    State = State & ~DataGridViewElementStates.ResizableSet;
                 }
                 else
                 {
-                    StateInternal = State | DataGridViewElementStates.ResizableSet;
+                    State = State | DataGridViewElementStates.ResizableSet;
                     if (((State & DataGridViewElementStates.Resizable) != 0) != (value == DataGridViewTriState.True))
                     {
                         if (value == DataGridViewTriState.True)
                         {
-                            StateInternal = State | DataGridViewElementStates.Resizable;
+                            State = State | DataGridViewElementStates.Resizable;
                         }
                         else
                         {
-                            StateInternal = State & ~DataGridViewElementStates.Resizable;
+                            State = State & ~DataGridViewElementStates.Resizable;
                         }
                     }
                 }
@@ -614,11 +609,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.Selected;
+                    State = State | DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.Selected;
+                    State = State & ~DataGridViewElementStates.Selected;
                 }
 
                 if (DataGridView != null)
@@ -751,11 +746,11 @@ namespace System.Windows.Forms
                     OnStateChanging(DataGridViewElementStates.Visible);
                     if (value)
                     {
-                        StateInternal = State | DataGridViewElementStates.Visible;
+                        State = State | DataGridViewElementStates.Visible;
                     }
                     else
                     {
-                        StateInternal = State & ~DataGridViewElementStates.Visible;
+                        State = State & ~DataGridViewElementStates.Visible;
                     }
                     OnStateChanged(DataGridViewElementStates.Visible);
                 }
@@ -772,14 +767,14 @@ namespace System.Windows.Forms
             return band;
         }
 
-        internal void CloneInternal(DataGridViewBand dataGridViewBand)
+        private protected void CloneInternal(DataGridViewBand dataGridViewBand)
         {
             dataGridViewBand._propertyStore = new PropertyStore();
             dataGridViewBand._bandIndex = -1;
             dataGridViewBand._bandIsRow = _bandIsRow;
             if (!_bandIsRow || _bandIndex >= 0 || DataGridView == null)
             {
-                dataGridViewBand.StateInternal = State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
+                dataGridViewBand.State = State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
             }
             dataGridViewBand._thickness = Thickness;
             dataGridViewBand.MinimumThickness = MinimumThickness;
@@ -841,7 +836,7 @@ namespace System.Windows.Forms
             minimumHeight = _minimumThickness;
         }
 
-        internal void OnStateChanged(DataGridViewElementStates elementState)
+        private void OnStateChanged(DataGridViewElementStates elementState)
         {
             if (DataGridView != null)
             {

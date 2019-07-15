@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             }
 
             propertyStore = new PropertyStore();
-            StateInternal = DataGridViewElementStates.None;
+            State = DataGridViewElementStates.None;
         }
 
         ~DataGridViewCell()
@@ -377,12 +377,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool HasErrorText
+        private bool HasErrorText
         {
-            get
-            {
-                return Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) != null;
-            }
+            get => Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) != null;
         }
 
         [Browsable(false)]
@@ -410,12 +407,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual bool HasValueType
+        private protected virtual bool HasValueType
         {
-            get
-            {
-                return Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
-            }
+            get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
         }
 
         [Browsable(false)]
@@ -462,44 +456,20 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DataGridViewColumn OwningColumn
         {
-            get
-            {
-                return owningColumn;
-            }
+            get => owningColumn;
+            set => owningColumn = value;
         }
 
-        internal DataGridViewColumn OwningColumnInternal
-        {
-            set
-            {
-                owningColumn = value;
-            }
-        }
-
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DataGridViewRow OwningRow
         {
-            get
-            {
-                return owningRow;
-            }
-        }
-
-        internal DataGridViewRow OwningRowInternal
-        {
-            set
-            {
-                owningRow = value;
-            }
+            get => owningRow;
+            internal set => owningRow = value;
         }
 
         [
@@ -585,16 +555,14 @@ namespace System.Windows.Forms
                 Debug.Assert(value != ReadOnly);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.ReadOnly;
+                    State = State | DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.ReadOnly;
+                    State = State & ~DataGridViewElementStates.ReadOnly;
                 }
-                if (DataGridView != null)
-                {
-                    DataGridView.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
-                }
+                
+                DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
             }
         }
 
@@ -692,11 +660,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.Selected;
+                    State = State | DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.Selected;
+                    State = State & ~DataGridViewElementStates.Selected;
                 }
                 if (DataGridView != null)
                 {
@@ -714,19 +682,20 @@ namespace System.Windows.Forms
             }
         }
 
-        internal Rectangle StdBorderWidths
+        private protected Rectangle StdBorderWidths
         {
             get
             {
                 if (DataGridView != null)
                 {
                     DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
-                    dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle,
+                    dgvabsEffective = AdjustCellBorderStyle(
+                        DataGridView.AdvancedCellBorderStyle,
                         dataGridViewAdvancedBorderStylePlaceholder,
-                        false /*singleVerticalBorderAdded*/,
-                        false /*singleHorizontalBorderAdded*/,
-                        false /*isFirstDisplayedColumn*/,
-                        false /*isFirstDisplayedRow*/);
+                        singleVerticalBorderAdded: false,
+                        singleHorizontalBorderAdded: false,
+                        isFirstDisplayedColumn: false,
+                        isFirstDisplayedRow: false);
                     return BorderWidths(dgvabsEffective);
                 }
                 else
@@ -1096,7 +1065,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.ContextMenuStrip = ContextMenuStripInternal.Clone();
             }
-            dataGridViewCell.StateInternal = State & ~DataGridViewElementStates.Selected;
+            dataGridViewCell.State = State & ~DataGridViewElementStates.Selected;
             dataGridViewCell.Tag = Tag;
         }
 
