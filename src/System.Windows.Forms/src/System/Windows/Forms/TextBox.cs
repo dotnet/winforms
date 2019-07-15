@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private bool fromHandleCreate = false;
         private StringSource stringSource = null;
-        private string placeholderText;
+        private string placeholderText = "";
 
         public TextBox()
         {
@@ -903,10 +903,10 @@ namespace System.Windows.Forms
         /// </summary>
         [
         Localizable(true),
-        DefaultValue(null),
+        DefaultValue(""),
         SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))
         ]
-        public string PlaceholderText
+        public virtual string PlaceholderText
         {
             get
             {
@@ -914,10 +914,18 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (value == null)
+                {
+                    value = string.Empty;
+                }
+
                 if (placeholderText != value)
                 {
                     placeholderText = value;
-                    Invalidate();
+                    if (IsHandleCreated)
+                    {
+                        Invalidate();
+                    }
                 }
             }
         }
@@ -1009,10 +1017,11 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if ((m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
-                 !GetStyle(ControlStyles.UserPaint) &&
-                   string.IsNullOrEmpty(Text) &&
-                   !Focused)
+            if (!string.IsNullOrEmpty(PlaceholderText) &&
+                (m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
+                 !GetStyle(ControlStyles.UserPaint) && 
+                 !Focused &&
+                 TextLength == 0)
             {
                 using (Graphics g = CreateGraphics())
                 {
@@ -1020,20 +1029,5 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            if (string.IsNullOrEmpty(Text))
-            {
-                AccessibleObject accessibleObject = base.CreateAccessibilityInstance();
-                accessibleObject.Value = PlaceholderText;
-                return accessibleObject;
-            }
-            else
-            {
-                return base.CreateAccessibilityInstance();
-            }
-        }
-
     }
 }
