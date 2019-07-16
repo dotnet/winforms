@@ -29,6 +29,56 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void TextBox_PlaceholderText_DefaultValue()
+        {
+            var tb = new TextBox();
+            Assert.Equal(string.Empty, tb.PlaceholderText);
+        }
+
+        [Fact]
+        public void TextBox_PlaceholderText_When_InAccessibility_Doesnot_Raise_TextChanged()
+        {
+            var tb = new SubTextBox();
+            bool eventRaised = false;
+            EventHandler handler = (o, e) => eventRaised = true;
+            tb.TextChanged += handler;
+            tb.CreateAccessibilityInternal();
+            Assert.False(eventRaised);
+            tb.TextChanged -= handler;
+        }
+
+        [Fact]
+        public void TextBox_Text_IsNot_Accessed_When_Handling_WP_PAINT()
+        {
+            var tb = new SubTextBox();
+            Message m = new Message();
+            m.Msg = Interop.WindowMessages.WM_PAINT;
+            tb.DrawPlaceholderText(ref m);
+
+            Assert.False(tb.textAccessed);
+        }
+
+        [Fact]
+        public void TextBox_PlaceholderText_NullValue_CoercedTo_StringEmpty()
+        {
+            var tb = new TextBox()
+            {
+                PlaceholderText = "Text"
+            };
+
+            tb.PlaceholderText = null;
+            Assert.Equal(string.Empty, tb.PlaceholderText);
+        }
+
+        [Fact]
+        public void TextBox_PlaceholderText_Overriden()
+        {
+            var tb = new SubTextBox();
+
+            Assert.NotNull(tb);
+        }
+
+        [Fact]
         public void TextBox_PlaceholderTextAlignments()
         {
             var tb = new TextBox
@@ -139,6 +189,31 @@ namespace System.Windows.Forms.Tests
         private class SubTextBoxBase : TextBoxBase
         {
             public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private class SubTextBox : TextBox
+        {
+            public override string PlaceholderText { get => base.PlaceholderText; set => base.PlaceholderText = value; }
+
+            // used to test that PlaceholderText won't raise TextChanged event.
+            internal void CreateAccessibilityInternal()
+            {
+                this.CreateAccessibilityInstance();
+            }
+
+            public override bool Focused => false;
+
+            public bool textAccessed;
+
+            public override string Text
+            {
+                get
+                {
+                    textAccessed = true;
+                    return base.Text;
+                }
+                set => base.Text = value;
+            }
         }
     }
 }
