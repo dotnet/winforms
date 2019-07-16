@@ -2431,13 +2431,15 @@ namespace System.Windows.Forms
                 return null;
             }
 
+            ToolStripDropDown dropDown = this as ToolStripDropDown;
+
             if (start == null)
             {
-                // The navigation should be consisstent when navigating in forward and
+                // The navigation should be consistent when navigating in forward and
                 // backward direction entering the toolstrip, it means that the first
                 // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
                 // is pressed.
-                start = (forward) ? DisplayedItems[DisplayedItems.Count - 1] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
+                start = GetStartItem(forward, dropDown != null);
             }
 
             int current = DisplayedItems.IndexOf(start);
@@ -2462,7 +2464,8 @@ namespace System.Windows.Forms
                 {  // provide negative wrap if necessary
                     current = (--current < 0) ? count + current : current;
                 }
-                if (this is ToolStripDropDown dropDown)
+
+                if (dropDown != null)
                 {
                     if (dropDown.OwnerItem != null && dropDown.OwnerItem.IsInDesignMode)
                     {
@@ -2477,7 +2480,24 @@ namespace System.Windows.Forms
                 }
 
             } while (DisplayedItems[current] != start);
+
             return null;
+        }
+
+        private ToolStripItem GetStartItem(bool forward, bool isDropDown)
+        {
+            if (forward)
+            {
+                return DisplayedItems[DisplayedItems.Count - 1];
+            }
+            else if (!isDropDown)
+            {
+                // For the drop-down up-directed loop should be preserved.
+                // So if the current item is topmost, then the bottom item should be selected on up-key press.
+                return DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
+            }
+
+            return DisplayedItems[0];
         }
 
         /// <remarks>
