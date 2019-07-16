@@ -10,8 +10,6 @@ namespace System.Drawing.Design
     /// <summary>
     ///   Provides a <see cref="T:System.Drawing.Design.UITypeEditor" /> that paints a glyph for the font name.
     /// </summary>
-    [System.Security.SecurityCritical]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public class FontNameEditor : UITypeEditor
     {
         private const float ScaleFactor = 1.5f;
