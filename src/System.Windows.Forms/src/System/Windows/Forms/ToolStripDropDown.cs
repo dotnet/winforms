@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms
         internal override bool CanProcessMnemonic()
         {
             // Dont let mnemonics act as keyboard input in IE in the internet.
-            if (Application.MessageLoop)
+            if (!Application.MessageLoop)
             {
                 return false;
             }
