@@ -1629,30 +1629,30 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (AutoClose && Visible)
+            if (AutoClose && Visible & ToolStripManager.IsMenuKey(keyData))
             {
-                if (ToolStripManager.IsMenuKey(keyData))
+                SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
+                DismissAll();
+                ToolStrip toplevel = GetToplevelOwnerToolStrip();
+                if (toplevel != null)
                 {
-                    SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
-                    DismissAll();
-                    ToolStrip toplevel = GetToplevelOwnerToolStrip();
-                    if (toplevel != null)
-                    {
-                        Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
-                        toplevel.RestoreFocusInternal();
-                        ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
-                    }
-                    ToolStripManager.ModalMenuFilter.ExitMenuMode();
-                    return true;
+                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
+                    toplevel.RestoreFocusInternal();
+                    ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
                 }
-                else if ((keyData & Keys.KeyCode) == Keys.Escape)
-                {
-                    SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
-                    SelectPreviousToolStrip();
-                    return true;
+                ToolStripManager.ModalMenuFilter.ExitMenuMode();
 
-                }
+                return true;
             }
+
+            if ((keyData & Keys.KeyCode) == Keys.Escape)
+            {
+                SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
+                SelectPreviousToolStrip();
+
+                return true;
+            }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -1662,12 +1662,9 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
 
             // Since we're toplevel and arent a container control, we've got to do our own mnemonic handling.
-            if ((OwnerItem == null || OwnerItem.Pressed) && charCode != ' ')
+            if ((OwnerItem == null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))
             {
-                if (ProcessMnemonic(charCode))
-                {
-                    return true;
-                }
+                return true;
             }
 
             return base.ProcessDialogChar(charCode);
@@ -1734,36 +1731,43 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ownerHandle);
         }
 
-          internal override void ResetScaling(int newDpi) {
-              base.ResetScaling(newDpi);
-              CommonProperties.xClearPreferredSizeCache(this);
-              scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
-          }
+        internal override void ResetScaling(int newDpi)
+        {
+            base.ResetScaling(newDpi);
+            CommonProperties.xClearPreferredSizeCache(this);
+            scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
+        }
 
-          /// <devdoc>
-          ///  VERY similar to Form.ScaleCore
-          /// </devdoc>
-          [EditorBrowsable(EditorBrowsableState.Never)]
-          protected override void ScaleCore(float dx, float dy) {
-              Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
-              SuspendLayout();
-              try {
-                  //Get size values in advance to prevent one change from affecting another.
-                  Size clientSize = ClientSize;
-                  Size minSize = MinimumSize;
-                  Size maxSize = MaximumSize;
-                  ClientSize = ScaleSize(clientSize, dx, dy);
-                  if (!MinimumSize.IsEmpty) {
-                      MinimumSize = ScaleSize(minSize, dx, dy);
-                  }
-                  if (!MaximumSize.IsEmpty) {
-                      MaximumSize = ScaleSize(maxSize, dx, dy);
-                  }
+        /// <devdoc>
+        ///     VERY similar to Form.ScaleCore
+        /// </devdoc>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected override void ScaleCore(float dx, float dy)
+        {
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
+            SuspendLayout();
+            try
+            {
+                //Get size values in advance to prevent one change from affecting another.
+                Size clientSize = ClientSize;
+                Size minSize = MinimumSize;
+                Size maxSize = MaximumSize;
+                ClientSize = ScaleSize(clientSize, dx, dy);
+                if (!MinimumSize.IsEmpty)
+                {
+                    MinimumSize = ScaleSize(minSize, dx, dy);
+                }
+                if (!MaximumSize.IsEmpty)
+                {
+                    MaximumSize = ScaleSize(maxSize, dx, dy);
+                }
 
-                  ScaleDockPadding(dx, dy);
+                ScaleDockPadding(dx, dy);
 
-                  foreach(Control control in Controls) {
-                      if (control != null) {
+                foreach (Control control in Controls)
+                {
+                    if (control != null)
+                    {
 #pragma warning disable 618
                         control.Scale(dx, dy);
 #pragma warning restore 618

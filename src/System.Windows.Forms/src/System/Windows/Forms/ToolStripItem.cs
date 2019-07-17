@@ -757,8 +757,10 @@ namespace System.Windows.Forms
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
-        protected virtual Size DefaultSize {
-            get {
+        protected virtual Size DefaultSize
+        {
+            get
+            {
                 return DpiHelper.IsPerMonitorV2Awareness ?
                        DpiHelper.LogicalToDeviceUnits(new Size(23, 23), DeviceDpi) :
                        new Size(23, 23);
@@ -1078,8 +1080,9 @@ namespace System.Windows.Forms
                 return DpiHelper.IsPerMonitorV2Awareness ?
                        defaultFont :
                        ToolStripManager.DefaultFont;
-             }
-            set {
+            }
+            set
+            {
 
                 Font local = (Font)Properties.GetObject(PropFont);
                 if ((local != value))
@@ -3602,13 +3605,15 @@ namespace System.Windows.Forms
         }
 
         // This will only be called in PerMonitorV2 scenarios.
-        internal virtual void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
+        internal virtual void ToolStrip_RescaleConstants(int oldDpi, int newDpi)
+        {
             DeviceDpi = newDpi;
             RescaleConstantsInternal(newDpi);
             OnFontChanged(EventArgs.Empty);
         }
 
-        internal void RescaleConstantsInternal(int newDpi) {
+        internal void RescaleConstantsInternal(int newDpi)
+        {
             ToolStripManager.CurrentDpi = newDpi;
             defaultFont = ToolStripManager.DefaultFont;
             scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin, deviceDpi);
@@ -3674,31 +3679,38 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetOwner(ToolStrip newOwner) {
-            if (owner != newOwner) {
+        internal void SetOwner(ToolStrip newOwner)
+        {
+            if (owner != newOwner)
+            {
                 Font f = this.Font;
 
-                if (owner != null) {
+                if (owner != null)
+                {
                     owner.rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
                 }
                 owner = newOwner;
 
-                if (owner != null) {
+                if (owner != null)
+                {
                     owner.rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
                 }
 
                 // clear the parent if the owner is null...
                 //
-                if (newOwner == null) {
-                   this.ParentInternal = null;
-               }
-               if (!state[stateDisposing] &&  !IsDisposed) {
-                   OnOwnerChanged(EventArgs.Empty);
-                   if (f != Font) {
-                      OnFontChanged(EventArgs.Empty);
-                   }
-               }
-           }
+                if (newOwner == null)
+                {
+                    this.ParentInternal = null;
+                }
+                if (!state[stateDisposing] && !IsDisposed)
+                {
+                    OnOwnerChanged(EventArgs.Empty);
+                    if (f != Font)
+                    {
+                        OnFontChanged(EventArgs.Empty);
+                    }
+                }
+            }
         }
 
         protected virtual void SetVisibleCore(bool visible)
