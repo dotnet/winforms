@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Ovládací prvek ActiveX je ovládací prvek bez oken. Tento ovládací prvek není v této verzi platformy .NET Framework podporován.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Ovládací prvek ActiveX je ovládací prvek bez oken. Tento ovládací prvek není v této verzi platformy .NET podporován.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ nikoli v tomto dialogovém okně.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET.
 
 Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
 
@@ -5204,12 +5204,12 @@ Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a p
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET.
 
 Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na tlačítko Konec, bude aplikace okamžitě ukončena.
 

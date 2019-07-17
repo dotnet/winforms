@@ -417,9 +417,7 @@ namespace System.Resources
 
             if (!string.IsNullOrEmpty(mimeTypeName))
             {
-                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
-                    || string.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
-                    || string.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType))
+                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType))
                 {
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData = FromBase64WrappedString(text);
@@ -937,7 +935,8 @@ namespace System.Resources
         private Hashtable cachedAssemblies;
         private Hashtable cachedTypes;
 
-        private static readonly string NetFrameworkPath = Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "Microsoft.Net\\Framework");
+        private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "dotnet\\shared");
+        private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), "dotnet\\shared");
 
         internal AssemblyNamesTypeResolutionService(AssemblyName[] names)
         {
@@ -1107,7 +1106,7 @@ namespace System.Resources
             {
                 // Only cache types from .Net framework  because they don't need to update.
                 // For simplicity, don't cache custom types
-                if (IsNetFrameworkAssembly(result.Assembly.Location))
+                if (IsDotNetAssembly(result.Assembly.Location))
                 {
                     cachedTypes[name] = result;
                 }
@@ -1119,9 +1118,9 @@ namespace System.Resources
         /// <summary>
         /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
-        private bool IsNetFrameworkAssembly(string assemblyPath)
+        private bool IsDotNetAssembly(string assemblyPath)
         {
-            return assemblyPath != null && assemblyPath.StartsWith(NetFrameworkPath, StringComparison.OrdinalIgnoreCase);
+            return assemblyPath != null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
         }
 
         public void ReferenceAssembly(AssemblyName name)

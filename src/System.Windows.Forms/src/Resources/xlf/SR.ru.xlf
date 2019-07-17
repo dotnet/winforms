@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Данный элемент управления ActiveX является неоконным и не поддерживается в этой версии .NET Framework.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Данный элемент управления ActiveX является неоконным и не поддерживается в этой версии .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5192,12 +5192,12 @@ just-in-time (JIT) debugging instead of this dialog box.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET Framework.
+        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET.
 
 При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу.
 
@@ -5205,12 +5205,12 @@ If you click Continue, the application will ignore this error and attempt to con
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для получения соответствующего разрешения для данного приложения обратитесь к системному администратору или используйте конфигуратор Microsoft .NET Framework.
+        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для получения соответствующего разрешения для данного приложения обратитесь к системному администратору или используйте конфигуратор Microsoft .NET.
 
 При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу. При нажатии кнопки "Выход" приложение немедленно завершит работу.
 

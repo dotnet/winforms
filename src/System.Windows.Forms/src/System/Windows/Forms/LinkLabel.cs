@@ -618,7 +618,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   <para>
-        ///      Creates a handle for this control. This method is called by the .NET Framework,
+        ///      Creates a handle for this control. This method is called by the .NET,
         ///      this should not be called. Inheriting classes should always call
         ///      base.createHandle when overriding this method.
         ///   </para>

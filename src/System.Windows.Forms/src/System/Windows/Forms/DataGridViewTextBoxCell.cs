@@ -46,8 +46,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a new AccessibleObject for this DataGridViewTextBoxCell instance.
         /// The AccessibleObject instance returned by this method supports ControlType UIA property.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.7.2 or opt-in into this feature using a compatibility switch. 
         /// </summary>
         /// <returns>
         /// AccessibleObject for this DataGridViewTextBoxCell instance.

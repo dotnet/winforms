@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Formant ActiveX jest formantem bez okien. Formant nie jest obsługiwany w tej wersji platformy .NET Framework.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Formant ActiveX jest formantem bez okien. Formant nie jest obsługiwany w tej wersji platformy .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Framework.
+        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET.
 
 Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę.
 
@@ -5204,12 +5204,12 @@ Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie pr
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Framework Configuration.
+        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Configuration.
 
 Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę. Jeśli klikniesz przycisk Zamknij, aplikacja zostanie natychmiast zamknięta.
 

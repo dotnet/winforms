@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Il controllo ActiveX è privo di finestra. Questo tipo di controllo non è supportato nella versione di .NET Framework in uso.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Il controllo ActiveX è privo di finestra. Questo tipo di controllo non è supportato nella versione di .NET in uso.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ sono riportate in fondo al messaggio.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Framework Configuration.
+        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Configuration.
 
 Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
 
@@ -5204,12 +5204,12 @@ Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di co
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Framework Configuration.
+        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Configuration.
 
 Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
 
