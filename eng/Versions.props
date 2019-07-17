@@ -43,7 +43,7 @@
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <XUnitVersion>2.4.1-pre.build.4059</XUnitVersion>
+    <XUnitVersion>2.4.1</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
     <XUnitRunnerVisualStudioVersion>$(XUnitVersion)</XUnitRunnerVisualStudioVersion>
