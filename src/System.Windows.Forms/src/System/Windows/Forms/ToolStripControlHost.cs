@@ -597,13 +597,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventValidated, value);
         }
 
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return Control.AccessibilityObject;
-        }
-
         /// <summary>
         /// Cleans up and destroys the hosted control.
         /// </summary>
@@ -1173,6 +1166,102 @@ namespace System.Windows.Forms
             KeyboardToolTipStateMachine.Instance.Unhook(Control, toolTip);
         }
 
+        /// <summary>
+        ///     Constructs the new instance of the accessibility object for this ToolStripControlHost ToolStrip item.
+        /// </summary>
+        /// <returns>
+        ///     The new instance of the accessibility object for this ToolStripControlHost ToolStrip item
+        /// </returns>
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ToolStripControlHostAccessibleObject(this);
+        }
+
+        /// <summary>
+        /// Defines the ToolStripControlHost AccessibleObject.
+        /// </summary>
+        [Runtime.InteropServices.ComVisible(true)]
+        internal class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
+        {
+            private readonly ToolStripControlHost _ownerItem = null;
+
+            /// <summary>
+            /// Initializes the new instance of ToolStripControlHostAccessibleObject.
+            /// </summary>
+            /// <param name="ownerItem">The owning ToolStripControlHost.</param>
+            public ToolStripControlHostAccessibleObject(ToolStripControlHost ownerItem) : base(ownerItem)
+            {
+                _ownerItem = ownerItem;
+            }
+
+            /// <summary>
+            /// Gets a description of the default action for an object.
+            /// </summary>
+            public override string DefaultAction
+            {
+                get
+                {
+                    // Note: empty value is provided due to this Accessible object
+                    // represents the control container but not the contained control
+                    // control itself.
+                    return string.Empty;
+                }
+            }
+
+            /// <summary>
+            /// Performs the default action associated with this accessible object.
+            /// </summary>
+            public override void DoDefaultAction()
+            {
+                // Do nothing.
+            }
+
+            /// <summary>
+            /// Gets the role of this accessible object.
+            /// </summary>
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    AccessibleObject controlAccessibleObject  = _ownerItem.ControlAccessibilityObject;
+                    if (controlAccessibleObject != null)
+                    {
+                        return controlAccessibleObject.Role;
+                    }
+
+                    return AccessibleRole.Default;
+                }
+            }
+
+            /// <summary>
+            /// Request to return the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
+                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
+                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                {
+                    return _ownerItem.Control.AccessibilityObject;
+                }
+
+                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
+                return base.FragmentNavigate(direction);
+            }
+
+            /// <summary>
+            /// Return the element that is the root node of this fragment of UI.
+            /// </summary>
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            {
+                get
+                {
+                    return _ownerItem.RootToolStrip.AccessibilityObject;
+                }
+            }
+        }
+
         // Our implementation of ISite:
         // Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing 
         // whether the control is in runtime or designtime.
@@ -1319,6 +1408,80 @@ namespace System.Windows.Forms
                 {
                     _dictionary[key] = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Represents the ToolStrip hosted control accessible object which is responsible
+        /// for accessible navigation within the ToolStrip standard items and hosted controls
+        /// like TextBox, ComboBox, ProgressBar, etc.
+        /// </summary>
+        public class ToolStripHostedControlAccessibleObject : Control.ControlAccessibleObject
+        {
+            private ToolStripControlHost _toolStripControlHost;
+            private Control _toolStripHostedControl;
+
+            /// <summary>
+            /// Creates the new instance of ToolStripHostedControlAccessibleObject.
+            /// </summary>
+            /// <param name="toolStripHostedControl">The ToolStrip control hosted in the ToolStripControlHost container.</param>
+            /// <param name="toolStripControlHost">The ToolStripControlHost container which hosts the control.</param>
+            public ToolStripHostedControlAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl)
+            {
+                _toolStripControlHost = toolStripControlHost;
+                _toolStripHostedControl = toolStripHostedControl;
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            {
+                get
+                {
+                    if (_toolStripHostedControl != null // Hosted control should not be null.
+                        && _toolStripControlHost != null // ToolStripControlHost is a container for ToolStripControl.
+                        && _toolStripControlHost.Owner != null) { // Owner is the ToolStrip.
+                        return _toolStripControlHost.Owner.AccessibilityObject; 
+                    }
+
+                    return base.FragmentRoot;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
+                if (_toolStripHostedControl != null &&
+                    _toolStripControlHost != null)
+                {
+                    switch (direction)
+                    {
+                        case UnsafeNativeMethods.NavigateDirection.Parent:
+                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                            return _toolStripControlHost.AccessibilityObject.FragmentNavigate(direction);
+                    }
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ValuePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
             }
         }
     }

@@ -35,7 +35,7 @@ namespace System.Windows.Forms
     {
         readonly PrintPreviewControl previewControl;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.NumericUpDown pageCounter;
+        private ToolStripNumericUpDown pageCounter;
         private System.Windows.Forms.ToolStripButton printToolStripButton;
         private System.Windows.Forms.ToolStripSplitButton zoomToolStripSplitButton;
         private System.Windows.Forms.ToolStripMenuItem autoToolStripMenuItem;
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
             sixpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
             separatorToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             closeToolStripButton = new System.Windows.Forms.ToolStripButton();
-            pageCounter = new System.Windows.Forms.NumericUpDown();
+            pageCounter = new ToolStripNumericUpDown();
             pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(pageCounter)).BeginInit();
@@ -1529,10 +1529,7 @@ namespace System.Windows.Forms
             }
 
             //Create the ToolStripControlHost
-            ToolStripControlHost pageCounterItem = new ToolStripControlHost(pageCounter)
-            {
-                Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-            };
+            pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 
             toolStrip1.Items.Add(pageCounterItem);
             toolStrip1.Items.Add(pageToolStripLabel);
