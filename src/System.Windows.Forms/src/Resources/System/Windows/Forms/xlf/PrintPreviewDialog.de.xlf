@@ -94,7 +94,7 @@
       </trans-unit>
       <trans-unit id="printToolStripButton.AccessibleName">
         <source>Print</source>
-        <target state="needs-review-translation">Schaltfläche "Drucken"</target>
+        <target state="translated">Drucken</target>
         <note />
       </trans-unit>
       <trans-unit id="printToolStripButton.Text">
