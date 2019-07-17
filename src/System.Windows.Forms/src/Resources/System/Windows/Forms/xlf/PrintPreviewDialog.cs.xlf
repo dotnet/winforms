@@ -94,7 +94,7 @@
       </trans-unit>
       <trans-unit id="printToolStripButton.AccessibleName">
         <source>Print</source>
-        <target state="needs-review-translation">Tlačítko pro tisk</target>
+        <target state="translated">Tisk</target>
         <note />
       </trans-unit>
       <trans-unit id="printToolStripButton.Text">
