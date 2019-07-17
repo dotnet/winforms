@@ -42,20 +42,24 @@ namespace System.Windows.Forms.Tests
             bool eventRaised = false;
             EventHandler handler = (o, e) => eventRaised = true;
             tb.TextChanged += handler;
-            tb.CreateAccessibilityInternal();
+            tb.CreateAccessibility();
             Assert.False(eventRaised);
             tb.TextChanged -= handler;
         }
 
-        [Fact]
-        public void TextBox_Text_IsNot_Accessed_When_Handling_WP_PAINT()
+        public static IEnumerable<object[]> TextBox_ShouldRenderPlaceHolderText_TestData()
         {
-            var tb = new SubTextBox();
-            Message m = new Message();
-            m.Msg = Interop.WindowMessages.WM_PAINT;
-            tb.DrawPlaceholderText(ref m);
+            var textBox = new TextBox();
+            var message = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            yield return new object[] { textBox, message, false };
+        }
 
-            Assert.False(tb.textAccessed);
+        [Theory]
+        [MemberData(nameof(TextBox_ShouldRenderPlaceHolderText_TestData))]
+        public void TextBox_ShouldRenderPlaceHolderText(TextBox textBox, Message m, bool expected)
+        {
+            var result = textBox.GetTestAccessor().ShouldRenderPlaceHolderText(m);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -196,20 +200,20 @@ namespace System.Windows.Forms.Tests
             public override string PlaceholderText { get => base.PlaceholderText; set => base.PlaceholderText = value; }
 
             // used to test that PlaceholderText won't raise TextChanged event.
-            internal void CreateAccessibilityInternal()
+            public void CreateAccessibility()
             {
                 this.CreateAccessibilityInstance();
             }
 
             public override bool Focused => false;
 
-            public bool textAccessed;
+            public bool TextAccessed;
 
             public override string Text
             {
                 get
                 {
-                    textAccessed = true;
+                    TextAccessed = true;
                     return base.Text;
                 }
                 set => base.Text = value;
