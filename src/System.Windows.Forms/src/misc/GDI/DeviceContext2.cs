@@ -374,10 +374,9 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
-                IntUnsafeNativeMethods.GetViewportExtEx(new HandleRef(this, Hdc), size);
-
-                return size.ToSize();
+                Size size = new Size();
+                IntUnsafeNativeMethods.GetViewportExtEx(new HandleRef(this, Hdc), ref size);
+                return size;
             }
             set
             {
@@ -386,15 +385,14 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        ///  Sets the DC Viewport extent to the specified value and returns its previous value; extent values are in device units.
+        ///  Sets the DC Viewport extent to the specified value and returns its previous value;
+        ///  extent values are in device units.
         /// </summary>
         public Size SetViewportExtent(Size newExtent)
         {
-            IntNativeMethods.SIZE oldExtent = new IntNativeMethods.SIZE();
-
-            IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, Hdc), newExtent.Width, newExtent.Height, oldExtent);
-
-            return oldExtent.ToSize();
+            Size oldExtent = new Size();
+            IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, Hdc), newExtent.Width, newExtent.Height, ref oldExtent);
+            return oldExtent;
         }
 
         /// <summary>
@@ -404,10 +402,9 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                IntNativeMethods.POINT point = new IntNativeMethods.POINT();
-                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), point);
-
-                return point.ToPoint();
+                Point point = new Point();
+                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), ref point);
+                return point;
             }
             set
             {
@@ -416,16 +413,15 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        ///  Sets the DC Viewport origin to the specified value and returns its previous value; origin values are in device units.
+        ///  Sets the DC Viewport origin to the specified value and returns its previous value;
+        ///  origin values are in device units.
         /// </summary>
         public Point SetViewportOrigin(Point newOrigin)
         {
-            IntNativeMethods.POINT oldOrigin = new IntNativeMethods.POINT();
-            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, oldOrigin);
-
-            return oldOrigin.ToPoint();
+            Point oldOrigin = new Point();
+            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, ref oldOrigin);
+            return oldOrigin;
         }
-
     }
 }
 

@@ -215,11 +215,16 @@ namespace System.Windows.Forms
         CF_NOVERTFONTS = 0x01000000,
         CP_WINANSI = 1004;
 
-        public const int cmb4 = 0x0473,
-        CS_DBLCLKS = 0x0008,
-        CS_DROPSHADOW = 0x00020000,
-        CS_SAVEBITS = 0x0800,
-        CF_TEXT = 1,
+        public const int cmb4 = 0x0473;
+
+        public enum ClassStyle : uint
+        {
+            CS_DBLCLKS = 0x0008,
+            CS_DROPSHADOW = 0x00020000,
+            CS_SAVEBITS = 0x0800
+        }
+
+        public const int CF_TEXT = 1,
         CF_BITMAP = 2,
         CF_METAFILEPICT = 3,
         CF_SYLK = 4,
@@ -2357,21 +2362,6 @@ namespace System.Windows.Forms
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class WNDCLASS_I
-        {
-            public int style = 0;
-            public IntPtr lpfnWndProc = IntPtr.Zero;
-            public int cbClsExtra = 0;
-            public int cbWndExtra = 0;
-            public IntPtr hInstance = IntPtr.Zero;
-            public IntPtr hIcon = IntPtr.Zero;
-            public IntPtr hCursor = IntPtr.Zero;
-            public IntPtr hbrBackground = IntPtr.Zero;
-            public IntPtr lpszMenuName = IntPtr.Zero;
-            public IntPtr lpszClassName = IntPtr.Zero;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class NONCLIENTMETRICS
         {
@@ -2853,7 +2843,7 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class LOGBRUSH
+        public struct LOGBRUSH
         {
             public int lbStyle;
             public int lbColor;
@@ -3684,19 +3674,19 @@ namespace System.Windows.Forms
             VT_TYPEMASK = 4095
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class WNDCLASS_D
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct WNDCLASS
         {
-            public int style;
-            public WndProc lpfnWndProc;
-            public int cbClsExtra = 0;
-            public int cbWndExtra = 0;
-            public IntPtr hInstance = IntPtr.Zero;
-            public IntPtr hIcon = IntPtr.Zero;
-            public IntPtr hCursor = IntPtr.Zero;
-            public IntPtr hbrBackground = IntPtr.Zero;
-            public string lpszMenuName = null;
-            public string lpszClassName = null;
+            public ClassStyle style;
+            public IntPtr lpfnWndProc;
+            public int cbClsExtra;
+            public int cbWndExtra;
+            public IntPtr hInstance;
+            public IntPtr hIcon;
+            public IntPtr hCursor;
+            public IntPtr hbrBackground;
+            public char* lpszMenuName;
+            public char* lpszClassName;
         }
 
         public class MSOCM
@@ -5723,28 +5713,17 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        private static extern bool IntDeleteObject(IntPtr hObject);
-
-        public static bool DeleteObject(IntPtr hObject)
-        {
-            Interop.HandleCollector.Remove(hObject, Interop.CommonHandles.GDI);
-            return IntDeleteObject(hObject);
-        }
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
+        public static extern bool DeleteObject(IntPtr hObject);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, [In, Out] ref RECT rc, bool fErase);
+        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
-
-        public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
-        {
-            return Interop.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
+        public static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();

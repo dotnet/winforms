@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Internal
     {
         protected override void CreateBrush()
         {
-            IntPtr nativeHandle = IntSafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(Color));
+            IntPtr nativeHandle = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(Color));
             if (nativeHandle == IntPtr.Zero) // Don't use Debug.Assert, DbgUtil.GetLastErrorStr would always be evaluated.
             {
                 Debug.Fail("CreateSolidBrush failed : " + DbgUtil.GetLastErrorStr());

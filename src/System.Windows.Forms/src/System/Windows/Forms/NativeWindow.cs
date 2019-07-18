@@ -39,10 +39,7 @@ namespace System.Windows.Forms
         };
 
         const int InitializedFlags = 0x01;
-        const int DebuggerPresent = 0x02;
         const int UseDebuggableWndProc = 0x04;
-        const int LoadConfigSettings = 0x08;
-        const int AssemblyIsDebuggable = 0x10;
 
         // do we have any active HWNDs?
         //
@@ -55,7 +52,6 @@ namespace System.Windows.Forms
         private static int handleCount;
         private static int hashLoadSize;
         private static HandleBucket[] hashBuckets;
-        private static IntPtr userDefWindowProc;
         [ThreadStatic]
         private static byte wndProcFlags = 0;
         [ThreadStatic]
@@ -89,7 +85,6 @@ namespace System.Windows.Forms
         {
             EventHandler shutdownHandler = new EventHandler(OnShutdown);
             AppDomain.CurrentDomain.ProcessExit += shutdownHandler;
-            AppDomain.CurrentDomain.DomainUnload += shutdownHandler;
 
             // Initialize our static hash of handles.  I have chosen
             // a prime bucket based on a typical number of window handles
@@ -142,7 +137,6 @@ namespace System.Windows.Forms
             IntPtr h;
             bool ownedHandle;
 
-            //
             lock (this)
             {
                 h = handle;
@@ -157,7 +151,6 @@ namespace System.Windows.Forms
                 // when control finally reaches us.
                 if (UnsafeNativeMethods.IsWindow(new HandleRef(null, handle)))
                 {
-                    //unused
                     int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
                     IntPtr threadHandle = (ctx == null ? IntPtr.Zero : ctx.GetHandle());
@@ -177,6 +170,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (handle != IntPtr.Zero)
                 {
                     //if the dest thread is gone, it should be safe to unsubclass here.
@@ -240,29 +234,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Helper method that returns a static value for the
-        ///  unmanaged DefWindowProc call.
+        /// Address of the Windows default WNDPROC (DefWindowProcW).
         /// </summary>
-        internal static IntPtr UserDefindowProc
-        {
-            get
-            {
-                return userDefWindowProc;
-            }
-        }
+        internal static IntPtr DefaultWindowProc { get; private set; }
 
         private static int WndProcFlags
         {
             get
             {
                 // upcast for easy bit masking...
-                //
                 int intWndProcFlags = wndProcFlags;
 
                 // Check to see if a debugger is installed.  If there is, then use
                 // DebuggableCallback instead; this callback has no try/catch around it
                 // so exceptions go to the debugger.
-                //
+
                 if (intWndProcFlags == 0)
                 {
                     Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Init wndProcFlags");
@@ -283,8 +269,9 @@ namespace System.Windows.Forms
                             Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger is attached, using debuggable WndProc");
                             intWndProcFlags |= UseDebuggableWndProc;
                         }
-                        else {
-                            // Reading legacy Framework registry key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
+                        else
+                        {
+                            // Reading Framework registry key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
                             // default behaviour after applications deployed ( otherwise, Developer/user can set this flag
                             // via Application.SetUnhandledExceptionModeInternal(..).
                             // Disabling this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
@@ -470,12 +457,12 @@ namespace System.Windows.Forms
 
                 this.handle = handle;
 
-                if (userDefWindowProc == IntPtr.Zero)
+                if (DefaultWindowProc == IntPtr.Zero)
                 {
                     string defproc = "DefWindowProcW";
 
-                    userDefWindowProc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")), defproc);
-                    if (userDefWindowProc == IntPtr.Zero)
+                    DefaultWindowProc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")), defproc);
+                    if (DefaultWindowProc == IntPtr.Zero)
                     {
                         throw new Win32Exception();
                     }
@@ -581,7 +568,7 @@ namespace System.Windows.Forms
             lock (this)
             {
                 CheckReleased();
-                WindowClass windowClass = WindowClass.Create(cp.ClassName, cp.ClassStyle);
+                WindowClass windowClass = WindowClass.Create(cp.ClassName, (NativeMethods.ClassStyle)cp.ClassStyle);
                 lock (createWindowSyncObject)
                 {
                     // The CLR will sometimes pump messages while we're waiting on the lock.
@@ -592,7 +579,7 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
-                    windowClass.targetWindow = this;
+                    windowClass._targetWindow = this;
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
@@ -614,9 +601,19 @@ namespace System.Windows.Forms
                                 cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                             }
 
-                            createResult = UnsafeNativeMethods.CreateWindowEx(cp.ExStyle, windowClass.windowClassName,
-                                                                              cp.Caption, cp.Style, cp.X, cp.Y, cp.Width, cp.Height, new HandleRef(cp, cp.Parent), NativeMethods.NullHandleRef,
-                                                                              new HandleRef(null, modHandle), cp.Param);
+                            createResult = UnsafeNativeMethods.CreateWindowEx(
+                                cp.ExStyle,
+                                windowClass._windowClassName,
+                                cp.Caption,
+                                cp.Style,
+                                cp.X,
+                                cp.Y,
+                                cp.Width,
+                                cp.Height,
+                                new HandleRef(cp, cp.Parent),
+                                NativeMethods.NullHandleRef,
+                                new HandleRef(null, modHandle),
+                                cp.Param);
 
                             lastWin32Error = Marshal.GetLastWin32Error();
                         }
@@ -625,7 +622,7 @@ namespace System.Windows.Forms
                             throw new OutOfMemoryException(SR.ErrorCreatingHandle, e);
                         }
                     }
-                    windowClass.targetWindow = null;
+                    windowClass._targetWindow = null;
 
                     Debug.WriteLineIf(CoreSwitches.PerfTrack.Enabled, "Handle created of type '" + cp.ClassName + "' with caption '" + cp.Caption + "' from NativeWindow of type '" + GetType().FullName + "'");
 
@@ -634,7 +631,6 @@ namespace System.Windows.Forms
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
                     ownHandle = true;
-                    Interop.HandleCollector.Add(createResult, Interop.CommonHandles.Window);
                 }
             }
         }
@@ -956,11 +952,10 @@ namespace System.Windows.Forms
             // window. In retail we just detatch the window proc and let it go.  Note that
             // we cannot call DestroyWindow because this API will fail if called from
             // an incorrect thread.
-            //
+
             if (handleCount > 0)
             {
-
-                Debug.Assert(userDefWindowProc != IntPtr.Zero, "We have active windows but no user window proc?");
+                Debug.Assert(DefaultWindowProc != IntPtr.Zero, "We have active windows but no user window proc?");
 
                 lock (internalSyncObject)
                 {
@@ -970,8 +965,8 @@ namespace System.Windows.Forms
                         if (b.handle != IntPtr.Zero && b.handle != new IntPtr(-1))
                         {
                             HandleRef href = new HandleRef(b, b.handle);
-                            UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(null, userDefWindowProc));
-                            UnsafeNativeMethods.SetClassLong(href, NativeMethods.GCL_WNDPROC, userDefWindowProc);
+                            UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(null, DefaultWindowProc));
+                            UnsafeNativeMethods.SetClassLong(href, NativeMethods.GCL_WNDPROC, DefaultWindowProc);
                             UnsafeNativeMethods.PostMessage(href, Interop.WindowMessages.WM_CLOSE, 0, 0);
 
                             // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
@@ -998,8 +993,6 @@ namespace System.Windows.Forms
                     handleCount = 0;
                 }
             }
-
-            WindowClass.DisposeCache();
         }
 
         /// <summary>
@@ -1030,7 +1023,6 @@ namespace System.Windows.Forms
         {
             if (handle != IntPtr.Zero)
             {
-                //
                 lock (this)
                 {
                     if (handle != IntPtr.Zero)
@@ -1044,7 +1036,6 @@ namespace System.Windows.Forms
 
                         if (ownHandle)
                         {
-                            Interop.HandleCollector.Remove(handle, Interop.CommonHandles.Window);
                             ownHandle = false;
                         }
 
@@ -1160,17 +1151,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the given window is the first member of the linked list
-        ///  and has no children
-        /// </summary>
-        /* No one is calling this private method, so it is safe to comment it out.
-        private static bool IsRootWindowInListWithNoChildren(NativeWindow window)
-        {
-            return ((window.PreviousWindow == null) && (window.nextWindow == null));
-        }
-        */
-
-        /// <summary>
         ///  Inserts an entry into this ID hashtable.
         /// </summary>
         internal static void RemoveWindowFromIDTable(IntPtr handle)
@@ -1265,13 +1245,12 @@ namespace System.Windows.Forms
             HandleRef href = new HandleRef(this, handle);
 
             // Don't touch if the current window proc is not ours.
-            //
+
             IntPtr currentWinPrc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
             if (windowProcPtr == currentWinPrc)
             {
                 if (previousWindow == null)
                 {
-
 #if DEBUG
                     subclassStatus = "Unsubclassing back to native defWindowProc";
 #endif
@@ -1279,7 +1258,6 @@ namespace System.Windows.Forms
                     // If the defWindowProc points to a native window proc, previousWindow will
                     // be null.  In this case, it is completely safe to assign defWindowProc
                     // to the current wndproc.
-                    //
                     UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(this, defWindowProc));
                 }
                 else
@@ -1296,7 +1274,7 @@ namespace System.Windows.Forms
                         // holding a ref to it, and it is holding a ref to us.  The only way this cycle will
                         // finalize is if no one else is hanging onto it.  So, we re-assign the window proc to
                         // userDefWindowProc.
-                        UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(this, userDefWindowProc));
+                        UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(this, DefaultWindowProc));
                     }
                     else
                     {
@@ -1325,7 +1303,7 @@ namespace System.Windows.Forms
                 if (nextWindow == null || nextWindow.defWindowProc != windowProcPtr)
                 {
                     // we didn't find it... let's unhook anyway and cut the chain... this prevents crashes
-                    UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(this, userDefWindowProc));
+                    UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(this, DefaultWindowProc));
                 }
 #if DEBUG
                 subclassStatus = "FORCE unsubclass -- we do not own the subclass";
@@ -1358,7 +1336,7 @@ namespace System.Windows.Forms
         /// </summary>
         private struct HandleBucket
         {
-            public IntPtr handle; // Win32 window handle
+            public IntPtr handle;   // Win32 window handle
             public GCHandle window; // a weak GC handle to the NativeWindow class
             public int hash_coll;   // Store hash code; sign bit means there was a collision.
 #if DEBUG
@@ -1371,34 +1349,36 @@ namespace System.Windows.Forms
         /// </summary>
         private class WindowClass
         {
-            internal static WindowClass cache;
+            internal static WindowClass s_cache;
 
-            internal WindowClass next;
-            internal string className;
-            internal int classStyle;
-            internal string windowClassName;
-            internal int hashCode;
-            internal IntPtr defWindowProc;
-            internal NativeMethods.WndProc windowProc;
-            internal bool registered;
-            internal NativeWindow targetWindow;
+            internal WindowClass _next;
+            internal string _className;
+            internal NativeMethods.ClassStyle _classStyle;
+            internal string _windowClassName;
+            internal int _hashCode;
+            internal IntPtr _defaultWindowProc;
+            internal NativeMethods.WndProc _windowProc;
+            internal NativeWindow _targetWindow;
 
-            private static readonly object wcInternalSyncObject = new object();
-            private static int domainQualifier = 0;
+            private static string s_appDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
 
-            internal WindowClass(string className, int classStyle)
+            private static readonly object s_wcInternalSyncObject = new object();
+
+            internal WindowClass(string className, NativeMethods.ClassStyle classStyle)
             {
-                this.className = className;
-                this.classStyle = classStyle;
+                _className = className;
+                _classStyle = classStyle;
                 RegisterClass();
             }
 
             public IntPtr Callback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
             {
                 Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_WNDPROC, new HandleRef(this, defWindowProc));
-                targetWindow.AssignHandle(hWnd);
-                return targetWindow.Callback(hWnd, msg, wparam, lparam);
+
+                // Set the window procedure to the default window procedure
+                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defaultWindowProc));
+                _targetWindow.AssignHandle(hWnd);
+                return _targetWindow.Callback(hWnd, msg, wparam, lparam);
             }
 
             /// <summary>
@@ -1406,63 +1386,41 @@ namespace System.Windows.Forms
             ///  object if there is no such class/style available, or retrun a
             ///  cached object if one exists.
             /// </summary>
-            internal static WindowClass Create(string className, int classStyle)
+            internal static WindowClass Create(string className, NativeMethods.ClassStyle classStyle)
             {
-                lock (wcInternalSyncObject)
+                lock (s_wcInternalSyncObject)
                 {
-                    WindowClass wc = cache;
+                    WindowClass wc = s_cache;
                     if (className == null)
                     {
-                        while (wc != null && (wc.className != null ||
-                                              wc.classStyle != classStyle))
+                        // If we weren't given a class name, look for a window
+                        // that has the exact class style.
+                        while (wc != null
+                            && (wc._className != null || wc._classStyle != classStyle))
                         {
-                            wc = wc.next;
+                            wc = wc._next;
                         }
                     }
                     else
                     {
-                        while (wc != null &&
-                               !className.Equals(wc.className))
+                        while (wc != null && !className.Equals(wc._className))
                         {
-                            wc = wc.next;
+                            wc = wc._next;
                         }
                     }
+
                     if (wc == null)
                     {
+                        // Didn't find an existing class, create one and attatch it to
+                        // the end of the linked list.
                         wc = new WindowClass(className, classStyle)
                         {
-                            next = cache
+                            _next = s_cache
                         };
-                        cache = wc;
+                        s_cache = wc;
                     }
-                    else
-                    {
-                        if (!wc.registered)
-                        {
-                            wc.RegisterClass();
-                        }
-                    }
+
                     return wc;
-                }
-            }
-
-            /// <summary>
-            ///  Disposes our window class cache.  This doesn't free anything
-            ///  from the actual cache; it merely attempts to unregister
-            ///  the classes of everything in the cache.  This allows the unused
-            ///  classes to be unrooted. They can later be re-rooted and reused.
-            /// </summary>
-            internal static void DisposeCache()
-            {
-                lock (wcInternalSyncObject)
-                {
-                    WindowClass wc = cache;
-
-                    while (wc != null)
-                    {
-                        wc.UnregisterClass();
-                        wc = wc.next;
-                    }
                 }
             }
 
@@ -1475,145 +1433,89 @@ namespace System.Windows.Forms
                 b.Append(Application.WindowsFormsVersion);
                 b.Append('.');
                 b.Append(className);
-                b.Append(".app.");
-                b.Append(domainQualifier);
-                b.Append('.');
-                string appDomain = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
-                b.Append(VersioningHelper.MakeVersionSafeName(appDomain, ResourceScope.Process, ResourceScope.AppDomain));
+
+                // While we don't have multiple AppDomains any more, we'll still include the information
+                // to keep the names in the same historical format for now.
+
+                b.Append(".app.0.");
+
+                // VersioningHelper does a lot of string allocations, and on .NET Core for our purposes
+                // it always returns the exact same string (process is hardcoded to r3 and the AppDomain
+                // id is always 1 as there is only one AppDomain).
+
+                const string versionSuffix = "_r3_ad1";
+                Debug.Assert(string.Equals(
+                    VersioningHelper.MakeVersionSafeName(s_appDomainHash, ResourceScope.Process, ResourceScope.AppDomain),
+                    s_appDomainHash + versionSuffix));
+                b.Append(s_appDomainHash);
+                b.Append(versionSuffix);
+
                 return b.ToString();
             }
 
             /// <summary>
-            ///  Once the classname and style bits have been set, this can
-            ///  be called to register the class.
+            /// Once the classname and style bits have been set, this can be called to register the class.
             /// </summary>
-            private void RegisterClass()
+            private unsafe void RegisterClass()
             {
-                NativeMethods.WNDCLASS_D wndclass = new NativeMethods.WNDCLASS_D();
+                NativeMethods.WNDCLASS windowClass = new NativeMethods.WNDCLASS();
 
-                if (userDefWindowProc == IntPtr.Zero)
+                if (DefaultWindowProc == IntPtr.Zero)
                 {
-                    string defproc = "DefWindowProcW";
+                    // Cache the default windows procedure address
+                    DefaultWindowProc = UnsafeNativeMethods.GetProcAddress(
+                        new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")),
+                        "DefWindowProcW");
 
-                    userDefWindowProc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")), defproc);
-                    if (userDefWindowProc == IntPtr.Zero)
+                    if (DefaultWindowProc == IntPtr.Zero)
                     {
                         throw new Win32Exception();
                     }
                 }
 
-                string localClassName = className;
+                string localClassName = _className;
 
                 if (localClassName == null)
                 {
-
                     // If we don't use a hollow brush here, Windows will "pre paint" us with COLOR_WINDOW which
                     // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
                     // Make this hollow to avoid all flicker.
-                    //
-                    wndclass.hbrBackground = UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH); //(IntPtr)(NativeMethods.COLOR_WINDOW + 1);
-                    wndclass.style = classStyle;
 
-                    defWindowProc = userDefWindowProc;
-                    localClassName = "Window." + Convert.ToString(classStyle, 16);
-                    hashCode = 0;
+                    windowClass.hbrBackground = UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH);
+                    windowClass.style = _classStyle;
+
+                    _defaultWindowProc = DefaultWindowProc;
+                    localClassName = "Window." + Convert.ToString((int)_classStyle, 16);
+                    _hashCode = 0;
                 }
                 else
                 {
-                    NativeMethods.WNDCLASS_I wcls = new NativeMethods.WNDCLASS_I();
-                    bool ok = UnsafeNativeMethods.GetClassInfo(NativeMethods.NullHandleRef, className, wcls);
-                    int error = Marshal.GetLastWin32Error();
-                    if (!ok)
+                    // A system defined Window class was specified, get its info
+
+                    if (!UnsafeNativeMethods.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass))
                     {
-                        throw new Win32Exception(error, SR.InvalidWndClsName);
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
                     }
-                    wndclass.style = wcls.style;
-                    wndclass.cbClsExtra = wcls.cbClsExtra;
-                    wndclass.cbWndExtra = wcls.cbWndExtra;
-                    wndclass.hIcon = wcls.hIcon;
-                    wndclass.hCursor = wcls.hCursor;
-                    wndclass.hbrBackground = wcls.hbrBackground;
-                    wndclass.lpszMenuName = Marshal.PtrToStringAuto(wcls.lpszMenuName);
-                    localClassName = className;
-                    defWindowProc = wcls.lpfnWndProc;
-                    hashCode = className.GetHashCode();
+
+                    localClassName = _className;
+                    _defaultWindowProc = windowClass.lpfnWndProc;
+                    _hashCode = _className.GetHashCode();
                 }
 
-                // Our static data is different for different app domains, so we include the app domain in with
-                // our window class name.  This way our static table always matches what Win32 thinks.
-                //
-                windowClassName = GetFullClassName(localClassName);
-                windowProc = new NativeMethods.WndProc(Callback);
-                wndclass.lpfnWndProc = windowProc;
-                wndclass.hInstance = UnsafeNativeMethods.GetModuleHandle(null);
-                wndclass.lpszClassName = windowClassName;
+                _windowClassName = GetFullClassName(localClassName);
+                _windowProc = new NativeMethods.WndProc(Callback);
+                windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windowProc);
+                windowClass.hInstance = UnsafeNativeMethods.GetModuleHandle(null);
 
-                short atom = UnsafeNativeMethods.RegisterClass(wndclass);
-                if (atom == 0)
+                fixed (char* c = _windowClassName)
                 {
+                    windowClass.lpszClassName = c;
 
-                    int err = Marshal.GetLastWin32Error();
-                    if (err == NativeMethods.ERROR_CLASS_ALREADY_EXISTS)
+                    if (UnsafeNativeMethods.RegisterClassW(ref windowClass) == 0)
                     {
-                        // Check to see if the window class window
-                        // proc points to DefWndProc.  If it does, then
-                        // this is a class from a rudely-terminated app domain
-                        // and we can safely reuse it.  If not, we've got
-                        // to throw.
-                        NativeMethods.WNDCLASS_I wcls = new NativeMethods.WNDCLASS_I();
-                        bool ok = UnsafeNativeMethods.GetClassInfo(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)), windowClassName, wcls);
-                        if (ok && wcls.lpfnWndProc == NativeWindow.UserDefindowProc)
-                        {
-
-                            // We can just reuse this class because we have marked it
-                            // as being a nop in another domain.  All we need to do is call SetClassLong.
-                            // Only one problem:  SetClassLong takes an HWND, which we don't have.  That leaves
-                            // us with some tricky business. First, try this the easy way and see
-                            // if we can simply unregister and re-register the class.  This might
-                            // work because the other domain shutdown would have posted WM_CLOSE to all
-                            // the windows of the class.
-                            if (UnsafeNativeMethods.UnregisterClass(windowClassName, new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null))))
-                            {
-                                atom = UnsafeNativeMethods.RegisterClass(wndclass);
-                                // If this fails, we will always raise the first err above.  No sense exposing our twiddling.
-                            }
-                            else
-                            {
-                                // This is a little harder.  We cannot reuse the class because it is
-                                // already in use.  We must create a new class.  We bump our domain qualifier
-                                // here to account for this, so we only do this expensive search once for the
-                                // domain.
-                                do
-                                {
-                                    domainQualifier++;
-                                    windowClassName = GetFullClassName(localClassName);
-                                    wndclass.lpszClassName = windowClassName;
-                                    atom = UnsafeNativeMethods.RegisterClass(wndclass);
-                                } while (atom == 0 && Marshal.GetLastWin32Error() == NativeMethods.ERROR_CLASS_ALREADY_EXISTS);
-                            }
-                        }
+                        _windowProc = null;
+                        throw new Win32Exception();
                     }
-
-                    if (atom == 0)
-                    {
-                        windowProc = null;
-                        throw new Win32Exception(err);
-                    }
-                }
-                registered = true;
-            }
-
-            /// <summary>
-            ///  Unregisters this window class.  Unregistration is not a
-            ///  last resort; the window class may be re-registered through
-            ///  a call to registerClass.
-            /// </summary>
-            private void UnregisterClass()
-            {
-                if (registered && UnsafeNativeMethods.UnregisterClass(windowClassName, new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null))))
-                {
-                    windowProc = null;
-                    registered = false;
                 }
             }
         }

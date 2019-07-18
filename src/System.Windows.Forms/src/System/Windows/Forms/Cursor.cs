@@ -585,7 +585,7 @@ namespace System.Windows.Forms
             if (info.hbmColor != IntPtr.Zero)
             {
                 UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
-                SafeNativeMethods.IntDeleteObject(new HandleRef(null, info.hbmColor));
+                SafeNativeMethods.DeleteObject(new HandleRef(null, info.hbmColor));
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight);
             }
             else if (info.hbmMask != IntPtr.Zero)
@@ -596,7 +596,7 @@ namespace System.Windows.Forms
 
             if (info.hbmMask != IntPtr.Zero)
             {
-                SafeNativeMethods.IntDeleteObject(new HandleRef(null, info.hbmMask));
+                SafeNativeMethods.DeleteObject(new HandleRef(null, info.hbmMask));
             }
             return iconSize;
         }
@@ -630,8 +630,13 @@ namespace System.Windows.Forms
                             picSize = DpiHelper.LogicalToDeviceUnits(picSize);
                         }
 
-                        handle = SafeNativeMethods.CopyImageAsCursor(new HandleRef(this, cursorHandle), NativeMethods.IMAGE_CURSOR,
-                            picSize.Width, picSize.Height, 0);
+                        handle = SafeNativeMethods.CopyImage(
+                            new HandleRef(this, cursorHandle),
+                            NativeMethods.IMAGE_CURSOR,
+                            picSize.Width,
+                            picSize.Height,
+                            0);
+
                         ownHandle = true;
                     }
                     else

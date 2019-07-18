@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Internal
         private bool ownedByCacheManager;
         private bool everOwnedByCacheManager;
 
-        private readonly IntNativeMethods.LOGFONT logFont;
+        private readonly NativeMethods.LOGFONT logFont;
         private readonly FontStyle style;
 
         // Note: These defaults are according to the ones in GDI+ but those are not necessarily the same as the system
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Internal
             Debug.Assert(size > 0.0f, "size has a negative value.");
             const byte True = 1;
             const byte False = 0;
-            logFont = new IntNativeMethods.LOGFONT();
+            logFont = new NativeMethods.LOGFONT();
 
             //
             // Get the font height from the specified size.  size is in point units and height in logical
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Internal
         ///  Pass false in the createHandle param to create a 'compatible' font (handle-less, to be used for measuring/comparing) or
         ///  when the handle has already been created.
         /// </summary>
-        private WindowsFont(IntNativeMethods.LOGFONT lf, bool createHandle)
+        private WindowsFont(NativeMethods.LOGFONT lf, bool createHandle)
         {
             Debug.Assert(lf != null, "lf is null");
 
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsFont FromHfont(IntPtr hFont, bool takeOwnership)
         {
-            IntNativeMethods.LOGFONT lf = new IntNativeMethods.LOGFONT();
+            NativeMethods.LOGFONT lf = new NativeMethods.LOGFONT();
             IntUnsafeNativeMethods.GetObject(new HandleRef(null, hFont), lf);
 
             WindowsFont wf = new WindowsFont(lf, /*createHandle*/ false)
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Internal
                         Debug.Assert(hFont != IntPtr.Zero, "Unexpected null hFont.");
                         DbgUtil.AssertFinalization(this, disposing);
 
-                        IntUnsafeNativeMethods.DeleteObject(new HandleRef(this, hFont));
+                        NativeMethods.DeleteObject(hFont);
 #if TRACK_HFONT
                         Debug.WriteLine( DbgUtil.StackTraceToStr(String.Format( "DeleteObject(HFONT[0x{0:x8}]))", (int) this.hFont)));
 #endif

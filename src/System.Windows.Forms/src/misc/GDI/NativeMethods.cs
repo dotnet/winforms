@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -178,28 +177,6 @@ namespace System.Windows.Forms.Internal
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT()
-            {
-            }
-
-            public POINT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
-            public Point ToPoint()
-            {
-                return new Point(x, y);
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class DRAWTEXTPARAMS
         {
             private readonly int cbSize = Marshal.SizeOf<DRAWTEXTPARAMS>();
@@ -231,58 +208,6 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class LOGBRUSH
-        {
-            public int lbStyle;
-            public int lbColor;
-            public int lbHatch;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LOGFONT
-        {
-            public int lfHeight;
-            public int lfWidth;
-            public int lfEscapement;
-            public int lfOrientation;
-            public int lfWeight;
-            public byte lfItalic;
-            public byte lfUnderline;
-            public byte lfStrikeOut;
-            public byte lfCharSet;
-            public byte lfOutPrecision;
-            public byte lfClipPrecision;
-            public byte lfQuality;
-            public byte lfPitchAndFamily;
-            [MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string lfFaceName;
-
-            public LOGFONT()
-            {
-            }
-
-            public LOGFONT(LOGFONT lf)
-            {
-                Debug.Assert(lf != null, "lf is null");
-
-                lfHeight = lf.lfHeight;
-                lfWidth = lf.lfWidth;
-                lfEscapement = lf.lfEscapement;
-                lfOrientation = lf.lfOrientation;
-                lfWeight = lf.lfWeight;
-                lfItalic = lf.lfItalic;
-                lfUnderline = lf.lfUnderline;
-                lfStrikeOut = lf.lfStrikeOut;
-                lfCharSet = lf.lfCharSet;
-                lfOutPrecision = lf.lfOutPrecision;
-                lfClipPrecision = lf.lfClipPrecision;
-                lfQuality = lf.lfQuality;
-                lfPitchAndFamily = lf.lfPitchAndFamily;
-                lfFaceName = lf.lfFaceName;
-            }
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct TEXTMETRIC
         {
@@ -306,53 +231,6 @@ namespace System.Windows.Forms.Internal
             public byte tmStruckOut;
             public byte tmPitchAndFamily;
             public byte tmCharSet;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct TEXTMETRICA
-        {
-            public int tmHeight;
-            public int tmAscent;
-            public int tmDescent;
-            public int tmInternalLeading;
-            public int tmExternalLeading;
-            public int tmAveCharWidth;
-            public int tmMaxCharWidth;
-            public int tmWeight;
-            public int tmOverhang;
-            public int tmDigitizedAspectX;
-            public int tmDigitizedAspectY;
-            public byte tmFirstChar;
-            public byte tmLastChar;
-            public byte tmDefaultChar;
-            public byte tmBreakChar;
-            public byte tmItalic;
-            public byte tmUnderlined;
-            public byte tmStruckOut;
-            public byte tmPitchAndFamily;
-            public byte tmCharSet;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class SIZE
-        {
-            public int cx;
-            public int cy;
-
-            public SIZE()
-            {
-            }
-
-            public SIZE(int cx, int cy)
-            {
-                this.cx = cx;
-                this.cy = cy;
-            }
-
-            public Size ToSize()
-            {
-                return new Size(cx, cy);
-            }
         }
     }
 }

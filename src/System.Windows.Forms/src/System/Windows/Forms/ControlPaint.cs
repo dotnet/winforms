@@ -323,10 +323,10 @@ namespace System.Windows.Forms
 
             SafeNativeMethods.SelectObject(new HandleRef(null, source), new HandleRef(null, previousSourceBitmap));
             SafeNativeMethods.SelectObject(new HandleRef(null, target), new HandleRef(null, previousTargetBitmap));
-            UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, source));
-            UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, target));
+            UnsafeNativeMethods.DeleteDC(new HandleRef(null, source));
+            UnsafeNativeMethods.DeleteDC(new HandleRef(null, target));
 
-            return Interop.HandleCollector.Add(colorMask, Interop.CommonHandles.GDI);
+            return colorMask;
         }
 
         internal static IntPtr CreateHalftoneHBRUSH()
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
                 lbStyle = NativeMethods.BS_PATTERN,
                 lbHatch = hBitmap
             };
-            IntPtr brush = SafeNativeMethods.CreateBrushIndirect(lb);
+            IntPtr brush = SafeNativeMethods.CreateBrushIndirect(ref lb);
 
             SafeNativeMethods.DeleteObject(new HandleRef(null, hBitmap));
             return brush;

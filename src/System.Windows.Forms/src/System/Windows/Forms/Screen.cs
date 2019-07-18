@@ -11,8 +11,7 @@ using Microsoft.Win32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a display device or
-    ///  multiple display devices on a single system.
+    ///  Represents a display device or multiple display devices on a single system.
     /// </summary>
     public class Screen
     {
@@ -86,7 +85,7 @@ namespace System.Windows.Forms
 
                 if (hdc == IntPtr.Zero)
                 {
-                    screenDC = UnsafeNativeMethods.CreateDC(deviceName);
+                    screenDC = UnsafeNativeMethods.CreateDC(deviceName, null, null, NativeMethods.NullHandleRef);
                 }
             }
             hmonitor = monitor;

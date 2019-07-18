@@ -24,9 +24,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements a basic data transfer mechanism.
     /// </summary>
-    [
-        ClassInterface(ClassInterfaceType.None)
-    ]
+    [ClassInterface(ClassInterfaceType.None)]
     public class DataObject : IDataObject, IComDataObject
     {
         private static readonly string CF_DEPRECATED_FILENAME = "FileName";
@@ -160,8 +158,8 @@ namespace System.Windows.Forms
             SafeNativeMethods.SelectObject(new HandleRef(null, dcSrc), new HandleRef(null, srcOld));
             SafeNativeMethods.SelectObject(new HandleRef(null, dcDest), new HandleRef(null, destOld));
 
-            UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, dcSrc));
-            UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, dcDest));
+            UnsafeNativeMethods.DeleteDC(new HandleRef(null, dcSrc));
+            UnsafeNativeMethods.DeleteDC(new HandleRef(null, dcDest));
             UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
 
             SafeNativeMethods.DeleteObject(new HandleRef(bm, hBitmap));
@@ -1524,7 +1522,6 @@ namespace System.Windows.Forms
 
                         //This bitmap is created by the com object which originally copied the bitmap to tbe
                         //clipboard. We call Add here, since DeleteObject calls Remove.
-                        Interop.HandleCollector.Add(medium.unionmember, Interop.CommonHandles.GDI);
                         Image clipboardImage = Image.FromHbitmap(medium.unionmember);
                         if (clipboardImage != null)
                         {
@@ -1535,11 +1532,6 @@ namespace System.Windows.Forms
                         }
                         data = clipboardImage;
                     }
-                    /*
-                                        else if (format.Equals(DataFormats.EnhancedMetafile)) {
-                                            data = new Metafile(medium.unionmember);
-                                        }
-                    */
                 }
 
                 return data;
