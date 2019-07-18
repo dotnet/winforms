@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -27,7 +26,6 @@ namespace System.Drawing.Design
         // can implement a different list of supported image types.
         protected virtual Type[] GetImageExtenders() => s_imageExtenders;
 
-        [SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
         protected static string CreateExtensionsString(string[] extensions, string sep)
         {
             if (extensions == null || extensions.Length == 0)
@@ -55,7 +53,6 @@ namespace System.Drawing.Design
             return text.ToString();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Shipped as public API")]
         protected static string CreateFilterEntry(ImageEditor e)
         {
             if (e == null)
@@ -75,7 +72,6 @@ namespace System.Drawing.Design
         /// GetEditorStyle. A service provider is provided so that any
         /// required editing services can be obtained.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)
@@ -191,7 +187,6 @@ namespace System.Drawing.Design
         /// canvas. Painting should be done within the boundaries of the
         /// provided rectangle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign Code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
             if (e?.Value is Image image)

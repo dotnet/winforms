@@ -38,7 +38,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         {
             if (string.IsNullOrEmpty(projectName))
                 throw new ArgumentNullException(nameof(projectName));
-            
+
             var repoRoot = GetRepoRoot();
             var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp3.0\\{projectName}.exe");
 
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <summary>
         /// Start a process with the specified path.
         /// Also searches for a local .dotnet folder and adds it to the path.
-        /// If a local folder is not found, searches for a machine-wide install that matches 
+        /// If a local folder is not found, searches for a machine-wide install that matches
         /// the version specified in the global.json.
         /// </summary>
         /// <param name="path">The path to the file to execute</param>
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             {
                 startInfo.WorkingDirectory = Path.GetDirectoryName(path);
             }
-            
+
             // Set the dotnet_root for the exe being launched
             // This allows the exe to look for runtime dependencies (like the shared framework (NetCore.App))
             // outside of the normal machine-wide install location (program files\dotnet)
@@ -114,14 +114,14 @@ namespace System.Windows.Forms.IntegrationTests.Common
 
         /// <summary>
         /// Get the path of the globally installed dotnet that matches the version specified in the global.json
-        /// 
+        ///
         /// The file looks something like this:
-        /// 
+        ///
         /// {
-        ///   "tools": {
-        ///     "dotnet": "3.0.100-preview5-011568"
-        ///     },
-        /// 
+        ///  "tools": {
+        ///  "dotnet": "3.0.100-preview5-011568"
+        ///  },
+        ///
         /// All we care about is the dotnet entry under tools
         /// </summary>
         /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>

@@ -5,9 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.DpiChanged'/>,
-    /// <see cref='System.Windows.Forms.Control.DpiChanged'/>, or <see cref='System.Windows.Forms.Control.DpiChanged'/>
-    /// event of a <see cref='System.Windows.Forms.Control'/>.
+    /// Represents the method that will handle the <see cref='Control.DpiChanged'/>,
+    /// <see cref='Control.DpiChanged'/>, or <see cref='Control.DpiChanged'/>
+    /// event of a <see cref='Control'/>.
     /// </summary>
     public delegate void DpiChangedEventHandler(object sender, DpiChangedEventArgs e);
 }

@@ -2,37 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DRAWING_DESIGN_NAMESPACE
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///     <para>
-    ///         Encapsulates a GDI Region object.
-    ///     </para>
+    ///  Encapsulates a GDI Region object.
     /// </summary>
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    sealed partial class WindowsRegion : MarshalByRefObject, ICloneable, IDisposable
+    internal sealed partial class WindowsRegion : MarshalByRefObject, ICloneable, IDisposable
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         private IntPtr nativeHandle; // The hRegion, this class always takes ownership of the hRegion.
         private bool ownHandle;
 
@@ -40,24 +20,14 @@ namespace System.Experimental.Gdi
         private string AllocationSite = DbgUtil.StackTrace;
 #endif
 
-        /// <summary>
-        /// </summary>
         private WindowsRegion()
         {
         }
-
-        /// <summary>
-        /// </summary>
-
 
         public WindowsRegion(Rectangle rect)
         {
             CreateRegion(rect);
         }
-
-        /// <summary>
-        /// </summary>
-
 
         public WindowsRegion(int x, int y, int width, int height)
         {
@@ -67,14 +37,14 @@ namespace System.Experimental.Gdi
         // Consider implementing a constructor that calls ExtCreateRegion(XFORM lpXform, DWORD nCount, RGNDATA lpRgnData) if needed.
 
         /// <summary>
-        ///     Creates a WindowsRegion from a region handle, if 'takeOwnership' is true, the handle is added to the HandleCollector
-        ///     and is removed & destroyed on dispose. 
+        ///  Creates a WindowsRegion from a region handle, if 'takeOwnership' is true, the handle is added to the HandleCollector
+        ///  and is removed & destroyed on dispose.
         /// </summary>
         public static WindowsRegion FromHregion(IntPtr hRegion, bool takeOwnership)
         {
             WindowsRegion wr = new WindowsRegion();
 
-            // Note: Passing IntPtr.Zero for hRegion is ok.  GDI+ infinite regions will have hRegion == null.  
+            // Note: Passing IntPtr.Zero for hRegion is ok.  GDI+ infinite regions will have hRegion == null.
             // GDI's SelectClipRgn interprets null region handle as resetting the clip region (all region will be available for painting).
             if (hRegion != IntPtr.Zero)
             {
@@ -90,7 +60,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Creates a WindowsRegion from a System.Drawing.Region. 
+        ///  Creates a WindowsRegion from a System.Drawing.Region.
         /// </summary>
         public static WindowsRegion FromRegion(Region region, Graphics g)
         {
@@ -110,10 +80,6 @@ namespace System.Experimental.Gdi
             return WindowsRegion.FromHregion(region.GetHrgn(g), true);
         }
 
-        /// <summary>
-        /// </summary>
-
-
         public object Clone()
         {
             // WARNING: WindowsRegion currently supports rectangulare regions only, if the WindowsRegion was created
@@ -125,17 +91,13 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Combines region1 & region2 into this region.   The regions cannot be null. 
-        ///     The three regions need not be distinct. For example, the sourceRgn1 can equal this region. 
+        ///  Combines region1 & region2 into this region.   The regions cannot be null.
+        ///  The three regions need not be distinct. For example, the sourceRgn1 can equal this region.
         /// </summary>
         public IntNativeMethods.RegionFlags CombineRegion(WindowsRegion region1, WindowsRegion region2, RegionCombineMode mode)
         {
             return IntUnsafeNativeMethods.CombineRgn(new HandleRef(this, HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
         }
-
-        /// <summary>
-        /// </summary>
-
 
         private void CreateRegion(Rectangle rect)
         {
@@ -144,15 +106,11 @@ namespace System.Experimental.Gdi
             ownHandle = true;
         }
 
-        /// <summary>
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);
         }
 
-        /// <summary>
-        /// </summary>
         public void Dispose(bool disposing)
         {
             if (nativeHandle != IntPtr.Zero)
@@ -173,15 +131,13 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <summary>
-        /// </summary>
         ~WindowsRegion()
         {
             Dispose(false);
         }
 
         /// <summary>
-        ///     The native region handle. 
+        ///  The native region handle.
         /// </summary>
         public IntPtr HRegion
         {
@@ -191,8 +147,6 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <summary>
-        /// </summary>
         public bool IsInfinite
         {
             get
@@ -202,7 +156,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     A rectangle representing the window region set with the SetWindowRgn function. 
+        ///  A rectangle representing the window region set with the SetWindowRgn function.
         /// </summary>
         public Rectangle ToRectangle()
         {

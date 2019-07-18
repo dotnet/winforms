@@ -5,35 +5,33 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     <para>Provides access to the menu editing service.</para>
+    ///  Provides access to the menu editing service.
     /// </summary>
     public interface IMenuEditorService
     {
         /// <summary>
-        ///     Gets the current menu.
+        ///  Gets the current menu.
         /// </summary>
         Menu GetMenu();
 
         /// <summary>
-        ///     <para>Gets a value indicating whether the current menu is active.</para>
+        ///  Gets a value indicating whether the current menu is active.
         /// </summary>
         bool IsActive();
 
         /// <summary>
-        ///     <para>
-        ///         Sets the current menu visible
-        ///         on the form.
-        ///     </para>
-        /// </summary>
+            ///  Sets the current menu visible
+        ///  on the form.
+            /// </summary>
         void SetMenu(Menu menu);
 
         /// <summary>
-        ///     <para>Sets the selected menu item of the current menu.</para>
+        ///  Sets the selected menu item of the current menu.
         /// </summary>
         void SetSelection(MenuItem item);
 
         /// <summary>
-        ///     Allows the editor service to intercept Win32 messages.
+        ///  Allows the editor service to intercept Win32 messages.
         /// </summary>
         bool MessageFilter(ref Message m);
     }

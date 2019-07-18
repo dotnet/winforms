@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This class represents all the information to render the toolStrip
-        /// </summary>        
+        /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
         {
             Graphics = g;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This class represents all the information to render the toolStrip
-        /// </summary>        
+        /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
         {
             Graphics = g;
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                                         return new Rectangle(itemBounds.X + 1, 0, itemBounds.Width - 2, 2);
                                     }
 
-                                    // If its overlapping more than one pixel, this means we've pushed it to obscure 
+                                    // If its overlapping more than one pixel, this means we've pushed it to obscure
                                     // the menu item. In this case pretend it's not connected.
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.Right:

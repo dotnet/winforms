@@ -2,25 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Windows.Forms;
-
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Windows.Forms.Layout;
-
     internal class DocComment : PropertyGrid.SnappableControl
     {
-
         private readonly Label m_labelTitle;
         private readonly Label m_labelDesc;
         private string fullDesc;
@@ -160,7 +147,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Size size = ClientSize;
 
             // if the client size is 0, setting this to a negative number
-            // will force an extra layout.  
+            // will force an extra layout.
             size.Width = Math.Max(0, size.Width - 2 * cBorder);
             size.Height = Math.Max(0, size.Height - 2 * cBorder);
 
@@ -269,10 +256,9 @@ namespace System.Windows.Forms.PropertyGridInternal
     /// <summary>
     /// Represents the DocComment control accessible object.
     /// </summary>
-    [System.Runtime.InteropServices.ComVisible(true)]
+    [Runtime.InteropServices.ComVisible(true)]
     internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
     {
-
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>

@@ -4,15 +4,12 @@
 
 namespace System.Windows.Forms
 {
-    using System.Configuration;
-
     /// <summary>
     /// Part of DpiHelper class, with methods specific to WinForms assembly
     /// Also handles configuration switches that control states of various WinForms features
     /// </summary>
     internal static partial class DpiHelper
     {
-
         /// <summary>
         /// Returns a new Padding with the input's
         /// dimensions converted from logical units to device units.

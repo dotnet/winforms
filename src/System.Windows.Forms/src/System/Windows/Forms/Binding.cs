@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -12,7 +11,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Represents a simple binding of a value in a list and the property of a control.
     /// </summary>
-    [TypeConverterAttribute(typeof(ListBindingConverter))]
+    [TypeConverter(typeof(ListBindingConverter))]
     public class Binding
     {
         // the two collection owners that this binding belongs to.
@@ -50,7 +49,7 @@ namespace System.Windows.Forms
         private BindingCompleteEventHandler _onComplete = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Binding'/> class
+        /// Initializes a new instance of the <see cref='Binding'/> class
         /// that binds a property on the owning control to a property on a data source.
         /// </summary>
         public Binding(string propertyName, object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, string.Empty, null)
@@ -69,13 +68,10 @@ namespace System.Windows.Forms
         {
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters", Justification = "'formatString' is an appropriate name, since its a string passed to the Format method")]
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, null)
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "By design (no-one should be subclassing this class)")]
-        [SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters", Justification = "'formatString' is an appropriate name, since its a string passed to the Format method")]
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
             DataSource = dataSource;
@@ -94,7 +90,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Binding'/> class.
+        /// Initializes a new instance of the <see cref='Binding'/> class.
         /// </summary>
         private Binding()
         {
@@ -174,7 +170,7 @@ namespace System.Windows.Forms
         public bool IsBinding => _bound;
 
         /// <summary>
-        /// Gets the <see cref='System.Windows.Forms.BindingManagerBase'/> of this binding that
+        /// Gets the <see cref='Forms.BindingManagerBase'/> of this binding that
         /// allows enumeration of a set of bindings.
         /// </summary>
         public BindingManagerBase BindingManagerBase
@@ -427,8 +423,8 @@ namespace System.Windows.Forms
                 // If the control is being inherited, then get the properties for
                 // the control's type rather than for the control itself.  Getting
                 // properties for the control will merge the control's properties with
-                // those of its designer.  Normally we want that, but for 
-                // inherited controls we don't because an inherited control should 
+                // those of its designer.  Normally we want that, but for
+                // inherited controls we don't because an inherited control should
                 // "act" like a runtime control.
                 InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(_control)[typeof(InheritanceAttribute)];
                 if (attr != null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
@@ -517,7 +513,6 @@ namespace System.Windows.Forms
             return _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "Perfectly acceptible when dealing with PropertyDescriptors")]
         private object GetPropValue()
         {
             if (_propIsNullInfo != null && (bool)_propIsNullInfo.GetValue(_control))
@@ -1264,7 +1259,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Update IDataErrorInfo text. 
+                // Update IDataErrorInfo text.
                 _errorText = GetErrorText(obj);
             }
 
@@ -1301,7 +1296,7 @@ namespace System.Windows.Forms
                         throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                     }
 
-                    // Do not add propertyChange notification if the fieldInfo is null                
+                    // Do not add propertyChange notification if the fieldInfo is null
                     //
                     // We add an event handler to the dataSource in the BindingManagerBase because
                     // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)

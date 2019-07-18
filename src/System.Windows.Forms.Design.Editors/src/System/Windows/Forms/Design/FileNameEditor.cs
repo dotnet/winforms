@@ -60,7 +60,6 @@ namespace System.Windows.Forms.Design
         /// configure the dialog as you please. The default implementation provides a generic file
         /// filter and title.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {
             if (openFileDialog == null)

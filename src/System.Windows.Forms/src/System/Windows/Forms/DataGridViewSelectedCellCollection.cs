@@ -2,24 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
-    /// control.</para>
+    /// Represents a collection of selected <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
+    /// control.
     /// </summary>
-    [
-        ListBindable(false),
-        SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewSelectedCellCollection> implementation
-    ]
+    [ListBindable(false)]
     public class DataGridViewSelectedCellCollection : BaseCollection, IList
     {
         readonly ArrayList items = new ArrayList();
@@ -121,7 +114,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         internal int Add(DataGridViewCell dataGridViewCell)
         {
@@ -133,7 +126,7 @@ namespace System.Windows.Forms
         internal void AddRange(DataGridViewCell[] dataGridViewCells)
         {
             Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells) 
+            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));
                 this.items.Add(dataGridViewCell);
@@ -143,7 +136,7 @@ namespace System.Windows.Forms
         internal void AddCellCollection(DataGridViewSelectedCellCollection dataGridViewCells)
         {
             Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells) 
+            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));
                 this.items.Add(dataGridViewCell);
@@ -152,7 +145,7 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        /// <para>Adds all the <see cref='System.Windows.Forms.DataGridViewCell'/> objects from the provided linked list to this collection.</para>
+        /// Adds all the <see cref='DataGridViewCell'/> objects from the provided linked list to this collection.
         /// </summary>
         internal void AddCellLinkedList(DataGridViewCellLinkedList dataGridViewCells)
         {
@@ -173,7 +166,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridViewCell is contained in this collection.
+        ///  Checks to see if a DataGridViewCell is contained in this collection.
         /// </summary>
         public bool Contains(DataGridViewCell dataGridViewCell)
         {
@@ -185,10 +178,7 @@ namespace System.Windows.Forms
             items.CopyTo(array, index);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Never),
-            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Insert(int index, DataGridViewCell dataGridViewCell)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));

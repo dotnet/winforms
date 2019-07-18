@@ -2,23 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
     /// <summary>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnAfterCheck'/>, <see cref='System.Windows.Forms.TreeView.AfterCollapse'/>, <see cref='System.Windows.Forms.TreeView.AfterExpand'/>, or <see cref='System.Windows.Forms.TreeView.AfterSelect'/> event.
-    ///    </para>
+    ///  Provides data for the <see cref='TreeView.OnAfterCheck'/>, <see cref='TreeView.AfterCollapse'/>, <see cref='TreeView.AfterExpand'/>, or <see cref='TreeView.AfterSelect'/> event.
     /// </summary>
     public class TreeViewEventArgs : EventArgs
     {
@@ -45,7 +32,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      An event specific action-flag.
+        ///  An event specific action-flag.
         /// </summary>
         public TreeViewAction Action
         {

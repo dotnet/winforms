@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private readonly Hashtable _navigators = new Hashtable();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.HelpProvider'/> class.
+        /// Initializes a new instance of the <see cref='HelpProvider'/> class.
         /// </summary>
         public HelpProvider()
         {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a string indicating the name of the Help file associated with this
-        /// <see cref='System.Windows.Forms.HelpProvider'/> object.
+        /// <see cref='HelpProvider'/> object.
         /// </summary>
         [Localizable(true)]
         [DefaultValue(null)]

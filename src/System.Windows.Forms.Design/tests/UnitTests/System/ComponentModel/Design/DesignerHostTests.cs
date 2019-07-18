@@ -1707,7 +1707,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            
+
             object service = new object();
             host.AddService(typeof(object), service);
             Assert.Same(service, surface.ServiceContainer.GetService(typeof(object)));
@@ -1721,7 +1721,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            
+
             object service = new object();
             host.AddService(typeof(object), service, promote);
             Assert.Same(service, surface.ServiceContainer.GetService(typeof(object)));
@@ -1734,7 +1734,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            
+
             object service = new object();
             ServiceCreatorCallback callback = (container, serviceType) => service;
             host.AddService(typeof(object), callback);
@@ -1749,7 +1749,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            
+
             object service = new object();
             ServiceCreatorCallback callback = (container, serviceType) => service;
             host.AddService(typeof(object), callback, promote);
@@ -2730,7 +2730,7 @@ namespace System.ComponentModel.Design.Tests
             var surface2 = new SubDesignSurface();
             IDesignerLoaderHost2 host1 = surface1.Host;
             IDesignerLoaderHost2 host2 = surface2.Host;
-            
+
             var otherComponent = new RootDesignerComponent();
             var component = new RootDesignerComponent();
             host1.Container.Add(otherComponent);
@@ -2748,7 +2748,7 @@ namespace System.ComponentModel.Design.Tests
             var surface2 = new SubDesignSurface();
             IDesignerLoaderHost2 host1 = surface1.Host;
             IDesignerLoaderHost2 host2 = surface2.Host;
-            
+
             var otherComponent = new RootDesignerComponent();
             host1.Container.Add(otherComponent);
             host2.Container.Remove(otherComponent);
@@ -2786,7 +2786,7 @@ namespace System.ComponentModel.Design.Tests
                 componentRemovedCallCount++;
             };
             changeService.ComponentRemoved += componentRemovedHandler;
-            
+
             host.Container.Add(component1);
             host.Container.Add(component2);
 
@@ -2874,7 +2874,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            
+
             host.AddService(typeof(object), new object());
             host.RemoveService(typeof(object));
             Assert.Null(surface.ServiceContainer.GetService(typeof(object)));
@@ -2888,7 +2888,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            
+
             host.AddService(typeof(object), new object());
             host.RemoveService(typeof(object), promote);
             Assert.Null(surface.ServiceContainer.GetService(typeof(object)));

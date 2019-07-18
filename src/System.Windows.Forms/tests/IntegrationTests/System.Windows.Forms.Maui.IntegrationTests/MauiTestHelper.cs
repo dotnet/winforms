@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
             // Load the assembly. Note we have to load the dll instead of the exe because
             // of an architecture mismatch. Otherwise the line below will throw a BadImageFormatException
             var assembly = Assembly.LoadFrom(dllPath);
-            
+
             // Look for all methods on all types with the '[Scenario(true)]' attribute
             foreach (var type in assembly.DefinedTypes)
             {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
 
             if (s_testResults.ContainsKey(projectName))
                 throw new InvalidOperationException($"Maui test for {projectName} has already run. Please double-check the project name in your test class.");
-            
+
             var exePath = TestHelpers.GetExePath(projectName);
             var result = s_testRunner.RunTest(exePath);
             Assert.NotNull(result);

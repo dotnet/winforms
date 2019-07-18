@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design
     internal class OleDragDropHandler
     {
         // This is a bit that we stuff into the DoDragDrop
-        // to indicate that the thing that is being dragged should only 
+        // to indicate that the thing that is being dragged should only
         // be allowed to be moved in the current DropTarget (e.g. parent designer).
         // We use this for interited components that can be modified (e.g. location/size) changed
         // but not removed from their parent.
@@ -38,16 +38,14 @@ namespace System.Windows.Forms.Design
 
         public static bool FreezePainting => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         protected virtual bool CanDropDataObject(IDataObject dataObj)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     This is the worker method of all CreateTool methods.  It is the only one
-        ///     that can be overridden.
+        ///  This is the worker method of all CreateTool methods.  It is the only one
+        ///  that can be overridden.
         /// </summary>
         public IComponent[] CreateTool(ToolboxItem tool, Control parent, int x, int y, int width, int height,
             bool hasLocation, bool hasSize)
@@ -55,8 +53,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public IComponent[] CreateTool(ToolboxItem tool, Control parent, int x, int y, int width, int height,
             bool hasLocation, bool hasSize, ToolboxSnapDragDropEventArgs e)
         {
@@ -159,8 +155,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     If the there is data store in the data object associated with
-            ///     format this will return true.
+            ///  If the there is data store in the data object associated with
+            ///  format this will return true.
             /// </summary>
             public bool GetDataPresent(string format, bool autoConvert)
             {
@@ -168,8 +164,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     If the there is data store in the data object associated with
-            ///     format this will return true.
+            ///  If the there is data store in the data object associated with
+            ///  format this will return true.
             /// </summary>
             public bool GetDataPresent(string format)
             {
@@ -177,8 +173,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     If the there is data store in the data object associated with
-            ///     format this will return true.
+            ///  If the there is data store in the data object associated with
+            ///  format this will return true.
             /// </summary>
             public bool GetDataPresent(Type format)
             {
@@ -186,7 +182,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Retrieves a list of all formats stored in this data object.
+            ///  Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats(bool autoConvert)
             {
@@ -194,7 +190,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Retrieves a list of all formats stored in this data object.
+            ///  Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats()
             {
@@ -202,8 +198,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Sets the data to be associated with the specific data format. For
-            ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
+            ///  Sets the data to be associated with the specific data format. For
+            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
             /// </summary>
             public void SetData(string format, bool autoConvert, object data)
             {
@@ -211,8 +207,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Sets the data to be associated with the specific data format. For
-            ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
+            ///  Sets the data to be associated with the specific data format. For
+            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
             /// </summary>
             public void SetData(string format, object data)
             {
@@ -220,7 +216,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Sets the data to be associated with the specific data format.
+            ///  Sets the data to be associated with the specific data format.
             /// </summary>
             public void SetData(Type format, object data)
             {
@@ -228,8 +224,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Stores data in the data object. The format assumed is the
-            ///     class of data
+            ///  Stores data in the data object. The format assumed is the
+            ///  class of data
             /// </summary>
             public void SetData(object data)
             {

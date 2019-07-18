@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -14,8 +13,8 @@ using System.Threading;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents an individual item that is displayed within a <see cref='System.Windows.Forms.Menu'/>
-    /// or <see cref='System.Windows.Forms.Menu'/>.
+    /// Represents an individual item that is displayed within a <see cref='Menu'/>
+    /// or <see cref='Menu'/>.
     /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
@@ -58,14 +57,14 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// Initializes a <see cref='System.Windows.Forms.MenuItem'/> with a blank caption.
+        /// Initializes a <see cref='MenuItem'/> with a blank caption.
         /// </summary>
         public MenuItem() : this(MenuMerge.Add, 0, 0, null, null, null, null, null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.MenuItem'/> class
+        /// Initializes a new instance of the <see cref='MenuItem'/> class
         /// with a specified caption for the menu item.
         /// </summary>
         public MenuItem(string text) : this(MenuMerge.Add, 0, 0, text, null, null, null, null)
@@ -110,7 +109,6 @@ namespace System.Windows.Forms
         /// event-handlers for the Click, Select and Popup events, a shortcut key,
         /// a merge type, and order specified for the menu item.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
         public MenuItem(MenuMerge mergeType, int mergeOrder, Shortcut shortcut,
                         string text, EventHandler onClick, EventHandler onPopup,
                         EventHandler onSelect, MenuItem[] items) : base(items)
@@ -124,11 +122,10 @@ namespace System.Windows.Forms
 #endif
         }
 
-
         /// <summary>
         /// Gets or sets a value indicating whether the item is placed on a new line (for a
-        /// menu item added to a <see cref='System.Windows.Forms.MainMenu'/> object) or in a
-        /// new column (for a submenu or menu displayed in a <see cref='System.Windows.Forms.ContextMenu'/>).
+        /// menu item added to a <see cref='MainMenu'/> object) or in a
+        /// new column (for a submenu or menu displayed in a <see cref='ContextMenu'/>).
         /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
@@ -148,8 +145,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a value indicating whether the item is placed on a new line (for a
-        /// menu item added to a <see cref='System.Windows.Forms.MainMenu'/> object) or in a
-        /// new column (for a submenu or menu displayed in a <see cref='System.Windows.Forms.ContextMenu'/>).
+        /// menu item added to a <see cref='MainMenu'/> object) or in a
+        /// new column (for a submenu or menu displayed in a <see cref='ContextMenu'/>).
         /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
@@ -557,7 +554,6 @@ namespace System.Windows.Forms
                 CheckIfDisposed();
                 return _data._shortcut;
             }
-            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
                 CheckIfDisposed();
@@ -737,8 +733,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a copy of the specified menu item.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Already shipped as public API")]
         protected void CloneMenu(MenuItem itemSrc)
         {
             base.CloneMenu(itemSrc);
@@ -878,7 +872,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Disposes the <see cref='System.Windows.Forms.MenuItem'/>.
+        /// Disposes the <see cref='MenuItem'/>.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -921,7 +915,6 @@ namespace System.Windows.Forms
         /// To reliably tell IDs and structure addresses apart, IDs live in the 0xC0000000-0xFFFFFFFF range.
         /// This is the top 1Gb of unmananged process memory, where an app's heap allocations should never be.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         internal static MenuItem GetMenuItemFromItemData(IntPtr itemData)
         {
             uint uniqueID = (uint)(ulong)itemData;
@@ -1091,7 +1084,7 @@ namespace System.Windows.Forms
         /// can't readily combine the two. But if you're fixing something here, chances
         /// are that the same issue will need scrutiny over there.
         ///</summary>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // "-" is OK
+// "-" is OK
         private void PopulateMdiList()
         {
             MenuItem senderMenu = this;
@@ -1175,7 +1168,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Merges this menu item with another menu item and returns the resulting merged
-        /// <see cref='System.Windows.Forms.MenuItem'/>.
+        /// <see cref='MenuItem'/>.
         /// </summary>
         public virtual MenuItem MergeMenu()
         {
@@ -1190,7 +1183,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Merges another menu item with this menu item.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Already shipped as public API")]
         public void MergeMenu(MenuItem itemSrc)
         {
             base.MergeMenu(itemSrc);
@@ -1198,7 +1190,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.MenuItem.Click'/> event.
+        /// Raises the <see cref='Click'/> event.
         /// </summary>
         protected virtual void OnClick(EventArgs e)
         {
@@ -1219,7 +1211,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.MenuItem.DrawItem'/> event.
+        /// Raises the <see cref='DrawItem'/> event.
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
@@ -1236,7 +1228,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.MenuItem.MeasureItem'/> event.
+        /// Raises the <see cref='MeasureItem'/> event.
         /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
@@ -1253,7 +1245,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.MenuItem.Popup'/> event.
+        /// Raises the <see cref='Popup'/> event.
         /// </summary>
         protected virtual void OnPopup(EventArgs e)
         {
@@ -1299,7 +1291,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.MenuItem.Select'/> event.
+        /// Raises the <see cref='Select'/> event.
         /// </summary>
         protected virtual void OnSelect(EventArgs e)
         {
@@ -1318,13 +1310,13 @@ namespace System.Windows.Forms
         protected internal virtual void OnInitMenuPopup(EventArgs e) => OnPopup(e);
 
         /// <summary>
-        /// Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the MenuItem,
+        /// Generates a <see cref='Control.Click'/> event for the MenuItem,
         /// simulating a click by a user.
         /// </summary>
         public void PerformClick() => OnClick(EventArgs.Empty);
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.MenuItem.Select'/> event for this menu item.
+        /// Raises the <see cref='Select'/> event for this menu item.
         /// </summary>
         public virtual void PerformSelect() => OnSelect(EventArgs.Empty);
 
@@ -1534,7 +1526,6 @@ namespace System.Windows.Forms
                 _mnemonic = -1;
             }
 
-
             internal bool OwnerDraw
             {
                 get => ((State & StateOwnerDraw) != 0);
@@ -1610,7 +1601,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
 
             internal object UserData { get; set; }
 

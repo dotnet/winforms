@@ -2,20 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Globalization;
-    using System.ComponentModel;
-    using System.Windows.Forms.Layout;
-
-    /// <summary>
-    /// </summary>
     [TypeConverter(typeof(FlatButtonAppearanceConverter))]
     public class FlatButtonAppearance
     {
-
         private readonly ButtonBase owner;
 
         private int borderSize = 1;
@@ -30,7 +26,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
+        ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
         /// </summary>
         [
         Browsable(true),
@@ -67,7 +63,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
+        ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
         /// </summary>
         [
         Browsable(true),
@@ -100,8 +96,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
-        ///     of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
+        ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
+        ///  of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
         /// </summary>
         [
         Browsable(true),
@@ -128,8 +124,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
-        ///     of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
+        ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
+        ///  of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
         /// </summary>
         [
         Browsable(true),
@@ -157,8 +153,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
-        ///     area of the button when the mouse cursor is within the bounds of the control.
+        ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
+        ///  area of the button when the mouse cursor is within the bounds of the control.
         /// </summary>
         [
         Browsable(true),
@@ -196,7 +192,6 @@ namespace System.Windows.Forms
 
     internal class FlatButtonAppearanceConverter : ExpandableObjectConverter
     {
-
         // Don't let the property grid display the full type name in the value cell
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
@@ -221,8 +216,5 @@ namespace System.Windows.Forms
 
             return TypeDescriptor.GetProperties(value, attributes);
         }
-
     }
-
 }
-

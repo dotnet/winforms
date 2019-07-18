@@ -4,8 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
 using System.Text;
 
 namespace System.Windows.Forms
@@ -33,7 +31,7 @@ namespace System.Windows.Forms
         internal bool _bandIsRow;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewBand'/> class.
+        /// Initializes a new instance of the <see cref='DataGridViewBand'/> class.
         /// </summary>
         internal DataGridViewBand()
         {

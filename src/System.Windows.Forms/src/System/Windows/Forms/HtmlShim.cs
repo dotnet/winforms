@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-
     /// This is essentially a proxy object between the native
     /// html objects and our managed ones.  We want the managed
     /// HtmlDocument, HtmlWindow and HtmlElement to be super-lightweight,
@@ -19,11 +17,9 @@ namespace System.Windows.Forms
 
     internal abstract class HtmlShim : IDisposable
     {
-
         private EventHandlerList events;
         private int eventCount = 0;
         private Dictionary<EventHandler, HtmlToClrEventProxy> attachedEventList;
-
 
         protected HtmlShim()
         {
@@ -48,7 +44,6 @@ namespace System.Windows.Forms
         /// Support IHtml*3.AttachHandler
         public abstract void AttachEventHandler(string eventName, EventHandler eventHandler);
 
-
         public void AddHandler(object key, Delegate value)
         {
             eventCount++;
@@ -67,25 +62,21 @@ namespace System.Windows.Forms
             return proxy;
         }
 
-
         public abstract UnsafeNativeMethods.IHTMLWindow2 AssociatedWindow
         {
             get;
         }
 
-
-        /// create connectionpoint cookie 
+        /// create connectionpoint cookie
         public abstract void ConnectToEvents();
 
         /// Support IHtml*3.DetachEventHandler
         public abstract void DetachEventHandler(string eventName, EventHandler eventHandler);
 
-
         /// disconnect from connectionpoint cookie
         /// inheriting classes should override to disconnect from ConnectionPoint and call base.
         public virtual void DisconnectFromEvents()
         {
-
             if (attachedEventList != null)
             {
                 EventHandler[] events = new EventHandler[attachedEventList.Count];
@@ -102,8 +93,6 @@ namespace System.Windows.Forms
 
         /// return the sender for events, usually the HtmlWindow, HtmlElement, HtmlDocument
         protected abstract object GetEventSender();
-
-
 
         public void Dispose()
         {
@@ -126,8 +115,7 @@ namespace System.Windows.Forms
 
         public void FireEvent(object key, EventArgs e)
         {
-
-            System.Delegate delegateToInvoke = (System.Delegate)Events[key];
+            Delegate delegateToInvoke = (Delegate)Events[key];
 
             if (delegateToInvoke != null)
             {
@@ -137,7 +125,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    // Note: this check is for the debugger, so we can catch exceptions in the debugger instead of 
+                    // Note: this check is for the debugger, so we can catch exceptions in the debugger instead of
                     // throwing a thread exception.
                     if (NativeWindow.WndProcShouldBeDebuggable)
                     {
@@ -189,7 +177,5 @@ namespace System.Windows.Forms
     }
 
 }
-
-
 
 

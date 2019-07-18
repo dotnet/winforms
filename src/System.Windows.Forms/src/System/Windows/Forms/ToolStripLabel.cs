@@ -2,24 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms.Design;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Windows.Forms.Design;
-
     /// <summary>
     /// A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripLabel : ToolStripItem
     {
-
         private LinkBehavior linkBehavior = LinkBehavior.SystemDefault;
         private bool isLink = false, linkVisited = false;
 
@@ -28,9 +22,6 @@ namespace System.Windows.Forms
         private Color visitedLinkColor = Color.Empty;
         private Font hoverLinkFont, linkFont;
         private Cursor lastCursor;
-
-
-
 
         /// <summary>
         /// A non selectable ToolStrip item
@@ -50,11 +41,9 @@ namespace System.Windows.Forms
         public ToolStripLabel(string text, Image image, bool isLink) : this(text, image, isLink, null)
         {
         }
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick) : this(text, image, isLink, onClick, null)
         {
         }
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text, image, onClick, name)
         {
             IsLink = isLink;
@@ -238,12 +227,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Invalidates the current set of fonts we use when painting
-        ///     links.  The fonts will be recreated when needed.
+        ///  Invalidates the current set of fonts we use when painting
+        ///  links.  The fonts will be recreated when needed.
         /// </summary>
         private void InvalidateLinkFonts()
         {
-
             if (linkFont != null)
             {
                 linkFont.Dispose();
@@ -263,7 +251,6 @@ namespace System.Windows.Forms
             InvalidateLinkFonts();
             base.OnFontChanged(e);
         }
-
 
         protected override void OnMouseEnter(EventArgs e)
         {
@@ -327,8 +314,6 @@ namespace System.Windows.Forms
             return !visitedLinkColor.IsEmpty;
         }
 
-
-
         /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
@@ -347,9 +332,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-
             if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
@@ -397,7 +381,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode)
         {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
@@ -418,9 +401,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-
-        [System.Runtime.InteropServices.ComVisible(true)]
-        [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+        [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripLabel ownerItem = null;
@@ -513,6 +494,5 @@ namespace System.Windows.Forms
     }
 
 }
-
 
 

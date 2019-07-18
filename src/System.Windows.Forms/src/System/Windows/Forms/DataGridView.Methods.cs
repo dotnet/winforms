@@ -2,28 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms.Layout;
+using System.Windows.Forms.VisualStyles;
+using Microsoft.Win32;
+
 namespace System.Windows.Forms
 {
-    using System.Text;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Collections;
-    using System.Windows.Forms.Design;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using System.Windows.Forms.ComponentModel;
-    using System.Globalization;
-    using System.Diagnostics;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Forms.Layout;
-    using Microsoft.Win32;
-    using System.Collections.Specialized;
-    using System.Windows.Forms.Internal;
-    using System.Runtime.Versioning;
-    using Runtime.CompilerServices;
-
     public partial class DataGridView
     {
         protected virtual void AccessibilityNotifyCurrentCellChanged(Point cellAddress)
@@ -419,7 +411,6 @@ namespace System.Windows.Forms
             return preferredThickness;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops")] // Can't cache DataGridViewRow object because rowIndex is changing in loop.
         private void AdjustExpandingRows(int columnIndex, bool fixedWidth)
         {
             if ((((DataGridViewAutoSizeRowsModeInternal)autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) != 0 ||
@@ -1350,7 +1341,6 @@ namespace System.Windows.Forms
         }
 
         // Does not seem to be a valid fxcop violation report. Contacting fxcop team to double-check.
-        [SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops")]
         public bool AreAllCellsSelected(bool includeInvisibleCells)
         {
             if (Columns.Count == 0 && Rows.Count == 0)
@@ -1472,7 +1462,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Assigns a new parent control to the DataGridView.</para>
+        ///  Assigns a new parent control to the DataGridView.
         /// </summary>
         internal override void AssignParent(Control value)
         {
@@ -1490,7 +1480,6 @@ namespace System.Windows.Forms
             int clonedColumnsCount = 0;
             int i;
 
-
             // 1. Clone all the columns which are currently bound and will also be bound under the new DataSource/DataMember combination.
             // 2. Delete all the currently bound columns.
             // 3. Sort the cloned columns in order of their DisplayIndex.
@@ -1501,7 +1490,7 @@ namespace System.Windows.Forms
             // 5. Add the remaining cloned columns in the order of their DisplayIndex.
 
             // 1. Clone all the currently bound columns.
-            // 
+            //
             // We can't do 1. and 2. in the same loop because we need to save the DisplayIndex.
             for (i = 0; i < dataGridViewCols.Count; i++)
             {
@@ -1961,7 +1950,6 @@ namespace System.Windows.Forms
             {
                 throw new InvalidEnumArgumentException(nameof(rowHeadersWidthSizeMode), (int)rowHeadersWidthSizeMode, typeof(DataGridViewRowHeadersWidthSizeMode));
             }
-
 
             if (!RowHeadersVisible)
             {
@@ -2613,7 +2601,7 @@ namespace System.Windows.Forms
                     dataGridViewCell = CurrentCellInternal;
                     if (previousCurrentCell != dataGridViewCell)
                     {
-                        // The new current cell can be a whole different cell. 
+                        // The new current cell can be a whole different cell.
                         // In that case, all tests previously done are no longer valid.
                         if (IsSharedCellReadOnly(dataGridViewCell, ptCurrentCell.Y) ||
                             !ColumnEditable(ptCurrentCell.X))
@@ -3160,20 +3148,7 @@ namespace System.Windows.Forms
 
             if (IsCurrentCellInEditMode)
             {
-                /* Do not push original value back into the cell 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                /* Do not push original value back into the cell
 
 */
                 if (editingControl != null)
@@ -3364,7 +3339,7 @@ namespace System.Windows.Forms
             if (dataConnection.PositionChangingOutsideDataGridView)
             {
                 // the position changed outside the data grid view and we haven't validated the data grid view cell already
-                // we can't validate it now because if the user cancels validation then we end up 
+                // we can't validate it now because if the user cancels validation then we end up
                 // with a position different than the position in the currency manager
                 return false;
             }
@@ -3818,8 +3793,8 @@ namespace System.Windows.Forms
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(null,
                                                                                     ptCurrentCell.X,
                                                                                     ptCurrentCell.Y,
-                                                                                    // null, 
-                                                                                    // null, 
+                                                                                    // null,
+                                                                                    // null,
                                                                                     context)
                         {
                             Cancel = true
@@ -3973,7 +3948,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell, 
+                dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell,
                                            DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll*/);    // restore old value
                 if (null != dgvdee)
                 {
@@ -4099,7 +4074,7 @@ namespace System.Windows.Forms
             {
                 // CurrentCell was reset because the commit deleted row(s).
                 // Since the user wants to change the current cell, we don't
-                // want to end up with no CurrentCell. We pick the last visible 
+                // want to end up with no CurrentCell. We pick the last visible
                 // row in the grid which may be the 'new row'.
                 int lastVisibleRowIndex = Rows.GetLastRow(DataGridViewElementStates.Visible);
                 if (forCurrentCellChange &&
@@ -4143,8 +4118,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Determines which column is the first visible scrolling 
-        ///      column given the object's horizontalOffset.
+        ///  Determines which column is the first visible scrolling
+        ///  column given the object's horizontalOffset.
         /// </summary>
         private int ComputeFirstVisibleScrollingColumn()
         {
@@ -4203,7 +4178,7 @@ namespace System.Windows.Forms
 
         private int ComputeHeightOfFittingTrailingScrollingRows(int totalVisibleFrozenHeight)
         {
-            // 
+            //
             int displayHeight = layout.Data.Height - totalVisibleFrozenHeight;
             int rowHeight = 0, rowHeights = 0;
             int indexTmp = Rows.Count;
@@ -4255,7 +4230,7 @@ namespace System.Windows.Forms
 
         private int ComputeHeightOfScrolledOffRows()
         {
-            // 
+            //
             int height = 0;
             if (displayedBandsInfo.FirstDisplayedScrollingRow >= 0)
             {
@@ -4418,7 +4393,7 @@ namespace System.Windows.Forms
             // resize area. however, we need to invalidate the left upper corner in the new ResizeArea
             // note that we can't take the Invalidate call from the OnResize method, because if the
             // user enlarges the form then the old area will not be invalidated.
-            // 
+            //
             if (!oldResizeRect.Equals(layout.ResizeBoxRect) && !layout.ResizeBoxRect.IsEmpty)
             {
                 Invalidate(layout.ResizeBoxRect);
@@ -4429,8 +4404,8 @@ namespace System.Windows.Forms
 
         private void ComputeLayoutShortcut(bool computeVisibleRows)
         {
-            // Called instead of ComputeLayout when a row is added, inserted or deleted beyond the limits of 
-            // the layout.Data area. 
+            // Called instead of ComputeLayout when a row is added, inserted or deleted beyond the limits of
+            // the layout.Data area.
             // this.layout is unchanged - only the potential vertical scrollbar is affected.
 
             if (computeVisibleRows)
@@ -4717,10 +4692,7 @@ namespace System.Windows.Forms
             int rowIndex;
 
             // when minimizing the dataGridView window, we will get negative values for the
-            // layout.Data.Width and layout.Data.Height 
-
-
-
+            // layout.Data.Width and layout.Data.Height
 
             if (displayHeight <= 0 || nRows == 0)
             {
@@ -5359,14 +5331,14 @@ namespace System.Windows.Forms
             return new DataGridViewAccessibleObject(this);
         }
 
-        protected override Control.ControlCollection CreateControlsInstance()
+        protected override ControlCollection CreateControlsInstance()
         {
             return new DataGridViewControlCollection(this);
         }
 
         /// <summary>
-        ///     Constructs the new instance of the Columns collection objects. Subclasses
-        ///     should not call base.CreateColumnsInstance.
+        ///  Constructs the new instance of the Columns collection objects. Subclasses
+        ///  should not call base.CreateColumnsInstance.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewColumnCollection CreateColumnsInstance()
@@ -5375,8 +5347,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Constructs the new instance of the Rows collection objects. Subclasses
-        ///     should not call base.CreateRowsInstance.
+        ///  Constructs the new instance of the Rows collection objects. Subclasses
+        ///  should not call base.CreateRowsInstance.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewRowCollection CreateRowsInstance()
@@ -5685,8 +5657,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Draws an XOR region to give UI feedback for Column Resizing.
-        ///      This looks just like the Splitter control's UI when resizing.
+        ///  Draws an XOR region to give UI feedback for Column Resizing.
+        ///  This looks just like the Splitter control's UI when resizing.
         /// </summary>
         private void DrawColSplitBar(int mouseX)
         {
@@ -5695,8 +5667,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Draws an XOR region to give UI feedback for Row Resizing.
-        ///      This looks just like the Splitter control's UI when resizing.
+        ///  Draws an XOR region to give UI feedback for Row Resizing.
+        ///  This looks just like the Splitter control's UI when resizing.
         /// </summary>
         private void DrawRowSplitBar(int mouseY)
         {
@@ -5724,8 +5696,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Draws an XOR region to give UI feedback for Column/Row Resizing.
-        ///      This looks just like the Splitter control's UI when resizing.
+        ///  Draws an XOR region to give UI feedback for Column/Row Resizing.
+        ///  This looks just like the Splitter control's UI when resizing.
         /// </summary>
         private void DrawSplitBar(Rectangle r)
         {
@@ -5924,45 +5896,45 @@ namespace System.Windows.Forms
             }
         }
 
-        private void EditingControls_Click(object sender, System.EventArgs e)
+        private void EditingControls_Click(object sender, EventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             Debug.Assert(ptCurrentCell.X != -1);
-            if (e is System.Windows.Forms.MouseEventArgs me)
+            if (e is MouseEventArgs me)
             {
                 EditingControls_CommonMouseEventHandler(sender, me, DataGridViewMouseEvent.Click);
             }
         }
 
-        private void EditingControls_DoubleClick(object sender, System.EventArgs e)
+        private void EditingControls_DoubleClick(object sender, EventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             Debug.Assert(ptCurrentCell.X != -1);
-            if (e is System.Windows.Forms.MouseEventArgs me)
+            if (e is MouseEventArgs me)
             {
                 EditingControls_CommonMouseEventHandler(sender, me, DataGridViewMouseEvent.DoubleClick);
             }
         }
 
-        private void EditingControls_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void EditingControls_MouseClick(object sender, MouseEventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseClick);
         }
 
-        private void EditingControls_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void EditingControls_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseDoubleClick);
         }
 
-        private void EditingControls_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void EditingControls_MouseDown(object sender, MouseEventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseDown);
         }
 
-        private void EditingControls_MouseEnter(object sender, System.EventArgs e)
+        private void EditingControls_MouseEnter(object sender, EventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             if (sender == editingPanel)
@@ -5981,7 +5953,7 @@ namespace System.Windows.Forms
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
         }
 
-        private void EditingControls_MouseLeave(object sender, System.EventArgs e)
+        private void EditingControls_MouseLeave(object sender, EventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             if (sender == editingPanel)
@@ -6003,13 +5975,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void EditingControls_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void EditingControls_MouseMove(object sender, MouseEventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseMove);
         }
 
-        private void EditingControls_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void EditingControls_MouseUp(object sender, MouseEventArgs e)
         {
             Debug.Assert(sender == editingControl || sender == editingPanel);
             EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseUp);
@@ -6755,8 +6727,6 @@ namespace System.Windows.Forms
             return AccessibilityObject.GetChild(objectId - 1);
         }
 
-
-
         internal SolidBrush GetCachedBrush(Color color)
         {
             SolidBrush brush = (SolidBrush)brushes[color];
@@ -6780,8 +6750,6 @@ namespace System.Windows.Forms
             return brush;
         }
 #endif // DGV_GDI
-
-
 
         internal Pen GetCachedPen(Color color)
         {
@@ -6841,9 +6809,6 @@ namespace System.Windows.Forms
             return rect;
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes"), // using specialized DataGridViewCellLinkedList class instead of generics
-        ]
         public int GetCellCount(DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -6864,7 +6829,7 @@ namespace System.Windows.Forms
                     {
                         case DataGridViewSelectionMode.CellSelect:
                             {
-                                // If we change the design and decide that SelectAll() should use band selection, 
+                                // If we change the design and decide that SelectAll() should use band selection,
                                 // we need to take the bands into account.
                                 return cellCount;
                             }
@@ -6898,7 +6863,7 @@ namespace System.Windows.Forms
                 {
                     case DataGridViewSelectionMode.CellSelect:
                         {
-                            // If we change the design and decide that SelectAll() should use band selection, 
+                            // If we change the design and decide that SelectAll() should use band selection,
                             // we need to take the bands into account.
                             return cellCount;
                         }
@@ -7142,9 +7107,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes"), // using specialized DataGridViewCellLinkedList class instead of generics
-        ]
         public virtual DataObject GetClipboardContent()
         {
             if (ClipboardCopyMode == DataGridViewClipboardCopyMode.Disable)
@@ -8143,7 +8105,7 @@ namespace System.Windows.Forms
             return dataObject;
         }
 
-        private static void GetClipboardContentForHtml(StringBuilder sbContent, out System.IO.MemoryStream utf8Stream)
+        private static void GetClipboardContentForHtml(StringBuilder sbContent, out IO.MemoryStream utf8Stream)
         {
             byte[] sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
             byte[] destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
@@ -8157,7 +8119,7 @@ namespace System.Windows.Forms
             sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
             destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
 
-            utf8Stream = new System.IO.MemoryStream(bytecountEndOfHtml + 1);
+            utf8Stream = new IO.MemoryStream(bytecountEndOfHtml + 1);
             utf8Stream.Write(destinationBytes, 0, bytecountEndOfHtml);
             utf8Stream.WriteByte((byte)0);
 
@@ -8442,12 +8404,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Returns the coordinate of the left edge of the given column. Note that
-        ///      the column does not need to be completely visible on the display area.
-        ///      Value returned is not necessarily within layout.Data because of the
-        ///      this.negOffset value, or because the column may start to the right of
-        ///      data area, or behind the frozen area, or completely on the left of the control.
-        ///      The right edge is returned in RightToLeft mode.
+        ///  Returns the coordinate of the left edge of the given column. Note that
+        ///  the column does not need to be completely visible on the display area.
+        ///  Value returned is not necessarily within layout.Data because of the
+        ///  this.negOffset value, or because the column may start to the right of
+        ///  data area, or behind the frozen area, or completely on the left of the control.
+        ///  The right edge is returned in RightToLeft mode.
         /// </summary>
         internal int GetColumnXFromIndex(int index)
         {
@@ -9201,10 +9163,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Returns the coordinate of the upper edge of the given row. Note that
-        ///      the row does not need to be completely visible on the display area.
-        ///      Value returned is not necessarily within layout.Data because the row 
-        ///      may start below the data area.
+        ///  Returns the coordinate of the upper edge of the given row. Note that
+        ///  the row does not need to be completely visible on the display area.
+        ///  Value returned is not necessarily within layout.Data because the row
+        ///  may start below the data area.
         /// </summary>
         internal int GetRowYFromIndex(int index)
         {
@@ -9407,7 +9369,6 @@ namespace System.Windows.Forms
                 {
                     //hti.edge = DataGridViewHitTestTypeCloseEdge.Left;
                     DataGridViewColumn dataGridViewColumn = null;
-
 
                     dataGridViewColumn = Columns.GetPreviousColumn(Columns[hti.col],
                                                                                  DataGridViewElementStates.Visible,
@@ -9700,7 +9661,7 @@ namespace System.Windows.Forms
             return hti;
         }
 
-        private void HorizScrollTimer_Tick(object sender, System.EventArgs e)
+        private void HorizScrollTimer_Tick(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(HorizScrollTimerHandler));
         }
@@ -9898,7 +9859,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Invalidate the painting region for the column specified.
+        ///  Invalidate the painting region for the column specified.
         /// </summary>
         public void InvalidateColumn(int columnIndex)
         {
@@ -9932,7 +9893,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Invalidates the scrollable area of the DataGridView.
+        ///  Invalidates the scrollable area of the DataGridView.
         /// </summary>
         private void InvalidateInside()
         {
@@ -9943,7 +9904,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Invalidate the painting region for the row specified.
+        ///  Invalidate the painting region for the row specified.
         /// </summary>
         public void InvalidateRow(int rowIndex)
         {
@@ -10228,9 +10189,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Determines if Scrollbars should be visible,
-        ///      updates their bounds and the bounds of all
-        ///      other regions in the dataGridView's Layout.
+        ///  Determines if Scrollbars should be visible,
+        ///  updates their bounds and the bounds of all
+        ///  other regions in the dataGridView's Layout.
         /// </summary>
         private void LayoutScrollBars()
         {
@@ -10911,9 +10872,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // not legitimate
-        ]
         internal void OnAddingColumns(DataGridViewColumn[] dataGridViewColumns)
         {
             // Make sure the sum of the column weights does not exceed ushort.MaxValue
@@ -11314,7 +11272,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.PreviousModes is more precise than just e
         protected virtual void OnAutoSizeColumnsModeChanged(DataGridViewAutoSizeColumnsModeEventArgs e)
         {
             DataGridViewAutoSizeColumnMode[] previousModes = e.PreviousModes;
@@ -11599,7 +11556,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellBeginEdit(DataGridViewCellCancelEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11632,7 +11588,6 @@ namespace System.Windows.Forms
             OnCellClick(e);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellClick(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11716,7 +11671,6 @@ namespace System.Windows.Forms
             OnCellContentClick(e);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContentClick(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11750,7 +11704,6 @@ namespace System.Windows.Forms
             OnCellContentDoubleClick(e);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContentDoubleClick(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11785,7 +11738,6 @@ namespace System.Windows.Forms
             OnCellContextMenuStripChanged(dgvce);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContextMenuStripChanged(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11809,7 +11761,6 @@ namespace System.Windows.Forms
             return dgvccmsne.ContextMenuStrip;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContextMenuStripNeeded(DataGridViewCellContextMenuStripNeededEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11826,7 +11777,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellDoubleClick(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11855,7 +11805,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellEndEdit(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11889,7 +11838,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellEnter(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11924,7 +11872,6 @@ namespace System.Windows.Forms
             OnCellErrorTextChanged(dgvce);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellErrorTextChanged(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11952,7 +11899,6 @@ namespace System.Windows.Forms
             return dgvcetne.ErrorText;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellErrorTextNeeded(DataGridViewCellErrorTextNeededEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -11980,7 +11926,6 @@ namespace System.Windows.Forms
             return dgvcfe;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellFormatting(DataGridViewCellFormattingEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12014,7 +11959,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellLeave(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12041,7 +11985,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseClick(DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12071,7 +12014,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseDoubleClick(DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12101,7 +12043,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12327,7 +12268,7 @@ namespace System.Windows.Forms
                 {
                     // CurrentCell was reset because CommitEdit deleted row(s).
                     // Since the user clicked on a cell, we don't want to end up
-                    // with no CurrentCell. We pick the last visible row in the 
+                    // with no CurrentCell. We pick the last visible row in the
                     // grid which may be the 'new row'.
                     hti.row = lastVisibleRowIndex;
                 }
@@ -12760,7 +12701,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseEnter(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12792,7 +12732,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseLeave(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12824,7 +12763,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseMove(DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12890,7 +12828,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseUp(DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12919,7 +12856,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected internal virtual void OnCellPainting(DataGridViewCellPaintingEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -12946,7 +12882,6 @@ namespace System.Windows.Forms
             return dgvcpe;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellParsing(DataGridViewCellParsingEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13040,7 +12975,6 @@ namespace System.Windows.Forms
             OnCellStyleChanged(dgvce);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellStyleChanged(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13222,7 +13156,6 @@ namespace System.Windows.Forms
             OnCellToolTipTextChanged(dgvce);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellToolTipTextChanged(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13246,7 +13179,6 @@ namespace System.Windows.Forms
             return dgvctttne.ToolTipText;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellToolTipTextNeeded(DataGridViewCellToolTipTextNeededEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13280,7 +13212,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValidated(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13331,7 +13262,6 @@ namespace System.Windows.Forms
             return dgvcfvce.Cancel;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValidating(DataGridViewCellValidatingEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13367,7 +13297,6 @@ namespace System.Windows.Forms
             OnCellValueChanged(e);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValueChanged(DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= Columns.Count)
@@ -13394,7 +13323,6 @@ namespace System.Windows.Forms
             return dgvcve.Value;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValueNeeded(DataGridViewCellValueEventArgs e)
         {
             if (e.ColumnIndex < 0 || e.ColumnIndex >= Columns.Count)
@@ -13406,7 +13334,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
             //#if DEBUG
-            // Some customer scenarios may result in accessing cell values while this.dataStoreAccessAllowed is false. This is bad practice, 
+            // Some customer scenarios may result in accessing cell values while this.dataStoreAccessAllowed is false. This is bad practice,
             // but since we're late in Whidbey, throwing an exception would be destabilizing our internal customers.
             // Debug.Assert(this.dataStoreAccessAllowed);
             //#endif
@@ -13423,7 +13351,6 @@ namespace System.Windows.Forms
             OnCellValuePushed(dgvcve);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValuePushed(DataGridViewCellValueEventArgs e)
         {
             if (e.ColumnIndex < 0 || e.ColumnIndex >= Columns.Count)
@@ -13469,9 +13396,6 @@ namespace System.Windows.Forms
             // selectedBandIndexes, individualSelectedCells & individualReadOnlyCells cleared in OnClearingRows.
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // Illegitimate report.
-        ]
         internal void OnClearingRows()
         {
             // Build a list of displayed rows in order to be able to raise their RowStateChanged(Displayed->false) events later on
@@ -14561,7 +14485,7 @@ namespace System.Windows.Forms
             DataGridViewColumn dataGridViewColumn = e.Column;
             switch (e.StateChanged)
             {
-                // At this point we assume that only the Selected state has an influence on the rendering of the column. 
+                // At this point we assume that only the Selected state has an influence on the rendering of the column.
                 // If there is a customer scenario where another state has an influence, the dev must invalidate the column by hand.
                 // case DataGridViewElementStates.ReadOnly:
                 // case DataGridViewElementStates.Resizable:
@@ -14815,7 +14739,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(newRowIndex != -1);
                 Debug.Assert(AllowUserToAddRowsInternal);
-                // First time the 'new' row gets edited. 
+                // First time the 'new' row gets edited.
                 // It becomes a regular row and a new 'new' row is appened.
                 newRowIndex = -1;
                 AddNewRow(true /*createdByEditing*/);
@@ -14849,9 +14773,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions") // Not using options when RightToLeft == false
-        ]
         protected virtual void OnDataError(bool displayErrorDialogIfNoHandler, DataGridViewDataErrorEventArgs e)
         {
             if (!dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
@@ -15024,7 +14945,7 @@ namespace System.Windows.Forms
                             if (elementState == DataGridViewElementStates.Visible && ptCurrentCell.Y == rowIndex)
                             {
                                 Debug.Assert((Rows.GetRowState(rowIndex) & DataGridViewElementStates.Visible) != 0);
-                                // Row of the current cell is made invisible. 
+                                // Row of the current cell is made invisible.
                                 if (DataSource != null)
                                 {
                                     Debug.Assert(dataConnection != null);
@@ -16400,21 +16321,7 @@ namespace System.Windows.Forms
                 CursorInternal = Cursors.SizeNS;
                 return;
             }
-            /* Whidbey 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            /* Whidbey
 
 */
             else if (dataGridViewState1[DATAGRIDVIEWSTATE1_customCursorSet])
@@ -16548,7 +16455,7 @@ namespace System.Windows.Forms
                     }
                     else if (hti.Type == DataGridViewHitTestType.None)
                     {
-                        // VS Whidbey 
+                        // VS Whidbey
                         CorrectFocus(true /*onlyIfGridHasFocus*/);
                     }
                 }
@@ -16579,7 +16486,7 @@ namespace System.Windows.Forms
                         EndRowHeadersResize(e);
                     }
 
-                    // VS Whidbey 
+                    // VS Whidbey
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
 
                     // Updating the hit test info since the EndXXX operation above may have invalidated the previously
@@ -16895,7 +16802,7 @@ namespace System.Windows.Forms
             return ShowFocusCues && CurrentCell == null;
         }
 
-        // Creates a rectangle by merging row headers, column headers 
+        // Creates a rectangle by merging row headers, column headers
         // and cells rectangles (from layout data)
         private Rectangle GetGridRectangle()
         {
@@ -17850,7 +17757,7 @@ namespace System.Windows.Forms
                         {
                             Debug.Assert(newRowIndex == -1, "newRowIndex and AllowUserToAddRowsInternal became out of sync");
                         }
-#endif // 
+#endif //
                     }
                 }
 
@@ -18168,8 +18075,8 @@ namespace System.Windows.Forms
                                             if (ptCurrentCell.X == -1 && lastVisibleRowIndex != -1)
                                             {
                                                 // CurrentCell was reset because commit deleted row(s).
-                                                // Since the user wants to select a row, we don't want to 
-                                                // end up with no CurrentCell. We pick the last visible 
+                                                // Since the user wants to select a row, we don't want to
+                                                // end up with no CurrentCell. We pick the last visible
                                                 // row in the grid which may be the 'new row'.
                                                 if (IsColumnOutOfBounds(oldCurrentCellX))
                                                 {
@@ -19310,7 +19217,7 @@ namespace System.Windows.Forms
 
         private void OnVisibleChangedPrivate()
         {
-            // Debug.Assert(!this.displayedBandsInfo.Dirty);   Not valid because EnsureDirtyState can potentially be called 
+            // Debug.Assert(!this.displayedBandsInfo.Dirty);   Not valid because EnsureDirtyState can potentially be called
             //                                                 for example when RowHeadersVisible is changed while the control is invisible.
             int rowIndexTmp;
 
@@ -19752,7 +19659,7 @@ namespace System.Windows.Forms
                 rowBounds = boundingRect;
 
                 // DataGridView AutoSizeRowsMode does not work properly after column sort
-                // Should unshared the row and set the thickness to a perfect value 
+                // Should unshared the row and set the thickness to a perfect value
                 // every time user scroll to display the specific row.
 
                 DataGridViewAutoSizeRowsModeInternal autoSizeRowsModeInternal = (DataGridViewAutoSizeRowsModeInternal)autoSizeRowsMode;
@@ -19805,7 +19712,7 @@ namespace System.Windows.Forms
                     rowBounds = boundingRect;
 
                     // DataGridView AutoSizeRowsMode does not work properly after column sort
-                    // Should unshared the row and set the thickness to a perfect value 
+                    // Should unshared the row and set the thickness to a perfect value
                     // every time user scroll to display the specific row.
 
                     DataGridViewAutoSizeRowsModeInternal autoSizeRowsModeInternal = (DataGridViewAutoSizeRowsModeInternal)autoSizeRowsMode;
@@ -19940,9 +19847,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // Illegitimate report.
-        ]
         private void PopulateNewRowWithDefaultValues()
         {
             if (newRowIndex != -1)
@@ -20081,9 +19985,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
-        ]
         protected bool ProcessDeleteKey(Keys keyData)
         {
             if (AllowUserToDeleteRowsInternal)
@@ -20155,8 +20056,8 @@ namespace System.Windows.Forms
                                                 dgvdee = new DataGridViewDataErrorEventArgs(exception,
                                                                                             -1,
                                                                                             rowIndex,
-                                                                                            // null, 
-                                                                                            // null, 
+                                                                                            // null,
+                                                                                            // null,
                                                                                             DataGridViewDataErrorContexts.RowDeletion);
                                                 OnDataErrorInternal(dgvdee);
 
@@ -20207,10 +20108,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value that indicates whether a key should be processed
-        ///       further.
-        ///    </para>
+        ///  Gets or sets a value that indicates whether a key should be processed
+        ///  further.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -21515,9 +21414,6 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
-        ]
         protected bool ProcessEscapeKey(Keys keyData)
         {
             if (IsEscapeKeyEffective)
@@ -21535,9 +21431,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
-        ]
         protected bool ProcessF2Key(Keys keyData)
         {
             if (ptCurrentCell.X != -1 &&
@@ -21563,9 +21456,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts the current column.
-        ///     'UseLegacyAccessibilityFeatures2' accessibility switch 
-        ///     should be set to false to enable the feature.
+        ///  Sorts the current column.
+        ///  'UseLegacyAccessibilityFeatures2' accessibility switch
+        ///  should be set to false to enable the feature.
         /// </summary>
         protected bool ProcessF3Key(Keys keyData)
         {
@@ -24087,9 +23980,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a value indicating whether the Tab key should be processed.
-        ///    </para>
+        ///  Gets a value indicating whether the Tab key should be processed.
         /// </summary>
         protected bool ProcessTabKey(Keys keyData)
         {
@@ -24188,9 +24079,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Processes keys for dataGridView navigation.
-        ///    </para>
+        ///  Processes keys for dataGridView navigation.
         /// </summary>
         protected virtual bool ProcessDataGridViewKey(KeyEventArgs e)
         {
@@ -25475,7 +25364,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Re-initializes all tracking related state.
+        ///  Re-initializes all tracking related state.
         /// </summary>
         private void ResetTrackingState()
         {
@@ -25550,7 +25439,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Re-initializes all UI related state.
+        ///  Re-initializes all UI related state.
         /// </summary>
         internal void ResetUIState(bool useRowShortcut, bool computeVisibleRows)
         {
@@ -25629,7 +25518,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private void ScrollBar_MouseEnter(object sender, System.EventArgs e)
+        private void ScrollBar_MouseEnter(object sender, EventArgs e)
         {
             if (dataGridViewState2[DATAGRIDVIEWSTATE2_mouseEnterExpected])
             {
@@ -25638,7 +25527,7 @@ namespace System.Windows.Forms
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
         }
 
-        private void ScrollBar_MouseLeave(object sender, System.EventArgs e)
+        private void ScrollBar_MouseLeave(object sender, EventArgs e)
         {
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
             Point ptMouse = PointToClient(Control.MousePosition);
@@ -26161,7 +26050,6 @@ namespace System.Windows.Forms
         }
 
         // Does not seem to be a valid fxcop violation report. Contacting fxcop team to double-check.
-        [SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops")]
         public void SelectAll()
         {
             if (!MultiSelect)
@@ -27001,9 +26889,6 @@ namespace System.Windows.Forms
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // Illegitimate report.
-        ]
         internal void SetReadOnlyCellCore(int columnIndex, int rowIndex, bool readOnly)
         {
             Debug.Assert(columnIndex >= 0 && rowIndex >= 0 &&
@@ -27147,9 +27032,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // Illegitimate report.
-        ]
         protected virtual void SetSelectedCellCore(int columnIndex, int rowIndex, bool selected)
         {
             if (columnIndex < 0 || columnIndex >= Columns.Count)
@@ -27911,36 +27793,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            /* VS Whidbey 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            /* VS Whidbey
 
 */
 
@@ -27964,36 +27817,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            /* VS Whidbey 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            /* VS Whidbey
 
 */
 
@@ -28364,7 +28188,7 @@ namespace System.Windows.Forms
                 }
                 success = SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
                 // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                // DataGridView changes.                
+                // DataGridView changes.
                 // Debug.Assert(success);
             }
 
@@ -28374,39 +28198,39 @@ namespace System.Windows.Forms
         private void UnwireEditingControlEvents()
         {
             Debug.Assert(editingPanel != null);
-            editingPanel.Click -= new System.EventHandler(EditingControls_Click);
-            editingPanel.DoubleClick -= new System.EventHandler(EditingControls_DoubleClick);
-            editingPanel.MouseClick -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseClick);
-            editingPanel.MouseDoubleClick -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDoubleClick);
-            editingPanel.MouseDown -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDown);
-            editingPanel.MouseEnter -= new System.EventHandler(EditingControls_MouseEnter);
-            editingPanel.MouseLeave -= new System.EventHandler(EditingControls_MouseLeave);
-            editingPanel.MouseMove -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseMove);
-            editingPanel.MouseUp -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseUp);
+            editingPanel.Click -= new EventHandler(EditingControls_Click);
+            editingPanel.DoubleClick -= new EventHandler(EditingControls_DoubleClick);
+            editingPanel.MouseClick -= new MouseEventHandler(EditingControls_MouseClick);
+            editingPanel.MouseDoubleClick -= new MouseEventHandler(EditingControls_MouseDoubleClick);
+            editingPanel.MouseDown -= new MouseEventHandler(EditingControls_MouseDown);
+            editingPanel.MouseEnter -= new EventHandler(EditingControls_MouseEnter);
+            editingPanel.MouseLeave -= new EventHandler(EditingControls_MouseLeave);
+            editingPanel.MouseMove -= new MouseEventHandler(EditingControls_MouseMove);
+            editingPanel.MouseUp -= new MouseEventHandler(EditingControls_MouseUp);
 
             Debug.Assert(editingControl != null);
-            editingControl.Click -= new System.EventHandler(EditingControls_Click);
-            editingControl.DoubleClick -= new System.EventHandler(EditingControls_DoubleClick);
-            editingControl.MouseClick -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseClick);
-            editingControl.MouseDoubleClick -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDoubleClick);
-            editingControl.MouseDown -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDown);
-            editingControl.MouseEnter -= new System.EventHandler(EditingControls_MouseEnter);
-            editingControl.MouseLeave -= new System.EventHandler(EditingControls_MouseLeave);
-            editingControl.MouseMove -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseMove);
-            editingControl.MouseUp -= new System.Windows.Forms.MouseEventHandler(EditingControls_MouseUp);
+            editingControl.Click -= new EventHandler(EditingControls_Click);
+            editingControl.DoubleClick -= new EventHandler(EditingControls_DoubleClick);
+            editingControl.MouseClick -= new MouseEventHandler(EditingControls_MouseClick);
+            editingControl.MouseDoubleClick -= new MouseEventHandler(EditingControls_MouseDoubleClick);
+            editingControl.MouseDown -= new MouseEventHandler(EditingControls_MouseDown);
+            editingControl.MouseEnter -= new EventHandler(EditingControls_MouseEnter);
+            editingControl.MouseLeave -= new EventHandler(EditingControls_MouseLeave);
+            editingControl.MouseMove -= new MouseEventHandler(EditingControls_MouseMove);
+            editingControl.MouseUp -= new MouseEventHandler(EditingControls_MouseUp);
         }
 
         private void UnwireScrollBarsEvents()
         {
             if (horizScrollBar != null)
             {
-                horizScrollBar.MouseEnter -= new System.EventHandler(ScrollBar_MouseEnter);
-                horizScrollBar.MouseLeave -= new System.EventHandler(ScrollBar_MouseLeave);
+                horizScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
+                horizScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
             }
             if (vertScrollBar != null)
             {
-                vertScrollBar.MouseEnter -= new System.EventHandler(ScrollBar_MouseEnter);
-                vertScrollBar.MouseLeave -= new System.EventHandler(ScrollBar_MouseLeave);
+                vertScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
+                vertScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
             }
         }
 
@@ -29247,7 +29071,7 @@ namespace System.Windows.Forms
             oldEdgeRowIndex = newEdgeRowIndex;
         }
 
-        private void VertScrollTimer_Tick(object sender, System.EventArgs e)
+        private void VertScrollTimer_Tick(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(VertScrollTimerHandler));
         }
@@ -29310,44 +29134,44 @@ namespace System.Windows.Forms
         private void WireEditingControlEvents()
         {
             Debug.Assert(editingPanel != null);
-            editingPanel.Click += new System.EventHandler(EditingControls_Click);
-            editingPanel.DoubleClick += new System.EventHandler(EditingControls_DoubleClick);
-            editingPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseClick);
-            editingPanel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDoubleClick);
-            editingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDown);
-            editingPanel.MouseEnter += new System.EventHandler(EditingControls_MouseEnter);
-            editingPanel.MouseLeave += new System.EventHandler(EditingControls_MouseLeave);
-            editingPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseMove);
-            editingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseUp);
+            editingPanel.Click += new EventHandler(EditingControls_Click);
+            editingPanel.DoubleClick += new EventHandler(EditingControls_DoubleClick);
+            editingPanel.MouseClick += new MouseEventHandler(EditingControls_MouseClick);
+            editingPanel.MouseDoubleClick += new MouseEventHandler(EditingControls_MouseDoubleClick);
+            editingPanel.MouseDown += new MouseEventHandler(EditingControls_MouseDown);
+            editingPanel.MouseEnter += new EventHandler(EditingControls_MouseEnter);
+            editingPanel.MouseLeave += new EventHandler(EditingControls_MouseLeave);
+            editingPanel.MouseMove += new MouseEventHandler(EditingControls_MouseMove);
+            editingPanel.MouseUp += new MouseEventHandler(EditingControls_MouseUp);
 
             Debug.Assert(editingControl != null);
-            editingControl.Click += new System.EventHandler(EditingControls_Click);
-            editingControl.DoubleClick += new System.EventHandler(EditingControls_DoubleClick);
-            editingControl.MouseClick += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseClick);
-            editingControl.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDoubleClick);
-            editingControl.MouseDown += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseDown);
-            editingControl.MouseEnter += new System.EventHandler(EditingControls_MouseEnter);
-            editingControl.MouseLeave += new System.EventHandler(EditingControls_MouseLeave);
-            editingControl.MouseMove += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseMove);
-            editingControl.MouseUp += new System.Windows.Forms.MouseEventHandler(EditingControls_MouseUp);
+            editingControl.Click += new EventHandler(EditingControls_Click);
+            editingControl.DoubleClick += new EventHandler(EditingControls_DoubleClick);
+            editingControl.MouseClick += new MouseEventHandler(EditingControls_MouseClick);
+            editingControl.MouseDoubleClick += new MouseEventHandler(EditingControls_MouseDoubleClick);
+            editingControl.MouseDown += new MouseEventHandler(EditingControls_MouseDown);
+            editingControl.MouseEnter += new EventHandler(EditingControls_MouseEnter);
+            editingControl.MouseLeave += new EventHandler(EditingControls_MouseLeave);
+            editingControl.MouseMove += new MouseEventHandler(EditingControls_MouseMove);
+            editingControl.MouseUp += new MouseEventHandler(EditingControls_MouseUp);
         }
 
         private void WireScrollBarsEvents()
         {
             if (horizScrollBar != null)
             {
-                horizScrollBar.MouseEnter += new System.EventHandler(ScrollBar_MouseEnter);
-                horizScrollBar.MouseLeave += new System.EventHandler(ScrollBar_MouseLeave);
+                horizScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
+                horizScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
             }
             if (vertScrollBar != null)
             {
-                vertScrollBar.MouseEnter += new System.EventHandler(ScrollBar_MouseEnter);
-                vertScrollBar.MouseLeave += new System.EventHandler(ScrollBar_MouseLeave);
+                vertScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
+                vertScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
             }
         }
 
         /// <summary>
-        ///     Handles the WM_CONTEXTMENU message
+        ///  Handles the WM_CONTEXTMENU message
         /// </summary>
         internal override void WmContextMenu(ref Message m)
         {
@@ -29411,7 +29235,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_GETDLGCODE message
+        ///  Handles the WM_GETDLGCODE message
         /// </summary>
         private void WmGetDlgCode(ref Message m)
         {

@@ -13,7 +13,6 @@ namespace System.Windows.Forms.Design
     /// Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
     /// property.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     [CLSCompliant(false)]
     public sealed class AnchorEditor : UITypeEditor
     {

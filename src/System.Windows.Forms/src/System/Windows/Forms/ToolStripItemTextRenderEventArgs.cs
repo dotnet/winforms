@@ -43,7 +43,6 @@ namespace System.Windows.Forms
             TextDirection = item.TextDirection;
         }
 
-
         /// <summary>
         /// The string to draw
         /// </summary>

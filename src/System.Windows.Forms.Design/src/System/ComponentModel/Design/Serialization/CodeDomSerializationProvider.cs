@@ -8,16 +8,16 @@ using System.Resources;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///     This is the serialization provider for all code dom serializers.
+    ///  This is the serialization provider for all code dom serializers.
     /// </summary>
     internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvider
     {
         /// <summary>
-        ///     This will be called by the serialization manager when it 
-        ///     is trying to locate a serialzer for an object type.
-        ///     If this serialization provider can provide a serializer
-        ///     that is of the correct type, it should return it.
-        ///     Otherwise, it should return null.
+        ///  This will be called by the serialization manager when it
+        ///  is trying to locate a serialzer for an object type.
+        ///  If this serialization provider can provide a serializer
+        ///  that is of the correct type, it should return it.
+        ///  Otherwise, it should return null.
         /// </summary>
         object IDesignerSerializationProvider.GetSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
@@ -38,7 +38,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    Returns a code dom serializer
+        ///  Returns a code dom serializer
         /// </summary>
         private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    Returns a code dom serializer for members
+        ///  Returns a code dom serializer for members
         /// </summary>
         private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
@@ -125,7 +125,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    Returns a code dom serializer for types
+        ///  Returns a code dom serializer for types
         /// </summary>
         private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {

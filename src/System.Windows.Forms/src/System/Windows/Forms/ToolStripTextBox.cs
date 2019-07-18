@@ -15,7 +15,6 @@ namespace System.Windows.Forms
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     public class ToolStripTextBox : ToolStripControlHost
     {
-
         internal static readonly object EventTextBoxTextAlignChanged = new object();
         internal static readonly object EventAcceptsTabChanged = new object();
         internal static readonly object EventBorderStyleChanged = new object();
@@ -127,7 +126,7 @@ namespace System.Windows.Forms
             return new ToolStripTextBoxAccessibleObject(this);
         }
 
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         internal class ToolStripTextBoxAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripTextBox ownerItem = null;
@@ -173,7 +172,6 @@ namespace System.Windows.Forms
             };
             return textBox;
         }
-
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
@@ -234,13 +232,12 @@ namespace System.Windows.Forms
             RaiseEvent(EventReadOnlyChanged, e);
         }
 
-
         protected override void OnSubscribeControlEvents(Control control)
         {
             if (control is TextBox textBox)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
-                // 
+                //
                 textBox.AcceptsTabChanged += new EventHandler(HandleAcceptsTabChanged);
                 textBox.BorderStyleChanged += new EventHandler(HandleBorderStyleChanged);
                 textBox.HideSelectionChanged += new EventHandler(HandleHideSelectionChanged);
@@ -259,7 +256,7 @@ namespace System.Windows.Forms
             if (control is TextBox textBox)
             {
                 // Please keep this alphabetized and in sync with Subscribe
-                // 
+                //
                 textBox.AcceptsTabChanged -= new EventHandler(HandleAcceptsTabChanged);
                 textBox.BorderStyleChanged -= new EventHandler(HandleBorderStyleChanged);
                 textBox.HideSelectionChanged -= new EventHandler(HandleHideSelectionChanged);
@@ -277,9 +274,7 @@ namespace System.Windows.Forms
             return Font != ToolStripManager.DefaultFont;
         }
 
-
-
-        #region WrappedProperties   
+        #region WrappedProperties
         [
          SRCategory(nameof(SR.CatBehavior)),
          DefaultValue(false),
@@ -309,7 +304,7 @@ namespace System.Windows.Forms
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource
+        public AutoCompleteStringCollection AutoCompleteCustomSource
         {
             get { return TextBox.AutoCompleteCustomSource; }
             set { TextBox.AutoCompleteCustomSource = value; }
@@ -518,10 +513,7 @@ namespace System.Windows.Forms
             set { TextBox.WordWrap = value; }
         }
 
-
-        #endregion WrappedProperties      
-
-
+        #endregion WrappedProperties
 
         #region WrappedEvents
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
@@ -530,7 +522,6 @@ namespace System.Windows.Forms
             add => Events.AddHandler(EventAcceptsTabChanged, value);
             remove => Events.RemoveHandler(EventAcceptsTabChanged, value);
         }
-
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged
@@ -567,7 +558,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventReadOnlyChanged, value);
         }
 
-
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripTextBoxTextBoxTextAlignChangedDescr))]
         public event EventHandler TextBoxTextAlignChanged
         {
@@ -583,12 +573,12 @@ namespace System.Windows.Forms
         public void Copy() { TextBox.Copy(); }
         public void Cut() { TextBox.Copy(); }
         public void DeselectAll() { TextBox.DeselectAll(); }
-        public char GetCharFromPosition(System.Drawing.Point pt) { return TextBox.GetCharFromPosition(pt); }
-        public int GetCharIndexFromPosition(System.Drawing.Point pt) { return TextBox.GetCharIndexFromPosition(pt); }
+        public char GetCharFromPosition(Point pt) { return TextBox.GetCharFromPosition(pt); }
+        public int GetCharIndexFromPosition(Point pt) { return TextBox.GetCharIndexFromPosition(pt); }
         public int GetFirstCharIndexFromLine(int lineNumber) { return TextBox.GetFirstCharIndexFromLine(lineNumber); }
         public int GetFirstCharIndexOfCurrentLine() { return TextBox.GetFirstCharIndexOfCurrentLine(); }
         public int GetLineFromCharIndex(int index) { return TextBox.GetLineFromCharIndex(index); }
-        public System.Drawing.Point GetPositionFromCharIndex(int index) { return TextBox.GetPositionFromCharIndex(index); }
+        public Point GetPositionFromCharIndex(int index) { return TextBox.GetPositionFromCharIndex(index); }
         public void Paste() { TextBox.Paste(); }
         public void ScrollToCaret() { TextBox.ScrollToCaret(); }
         public void Select(int start, int length) { TextBox.Select(start, length); }
@@ -602,14 +592,12 @@ namespace System.Windows.Forms
             private bool isFontSet = true;
             private bool alreadyHooked;
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily")]  // FXCop doesnt understand that setting Font changes the value of isFontSet
             public ToolStripTextBoxControl()
             {
                 // required to make the text box height match the combo.
                 Font = ToolStripManager.DefaultFont;
                 isFontSet = false;
             }
-
 
             // returns the distance from the client rect to the upper left hand corner of the control
             private NativeMethods.RECT AbsoluteClientRECT
@@ -644,7 +632,6 @@ namespace System.Windows.Forms
                     return Rectangle.FromLTRB(rect.top, rect.top, rect.right, rect.bottom);
                 }
             }
-
 
             private ProfessionalColorTable ColorTable
             {
@@ -790,7 +777,6 @@ namespace System.Windows.Forms
                 MouseIsOver = false;
             }
 
-
             private void HookStaticEvents(bool hook)
             {
                 if (hook)
@@ -866,7 +852,7 @@ namespace System.Windows.Forms
 
                 // Paint over the edges of the text box.
 
-                // Using GetWindowDC instead of GetDCEx as GetDCEx seems to return a null handle and a last error of 
+                // Using GetWindowDC instead of GetDCEx as GetDCEx seems to return a null handle and a last error of
                 // the operation succeeded.  We're not going to use the clipping rect anyways - so it's not
                 // that bigga deal.
                 HandleRef hdc = new HandleRef(this, UnsafeNativeMethods.GetWindowDC(new HandleRef(this, m.HWnd)));
@@ -929,7 +915,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         private class ToolStripTextBoxControlAccessibleObject : Control.ControlAccessibleObject
         {

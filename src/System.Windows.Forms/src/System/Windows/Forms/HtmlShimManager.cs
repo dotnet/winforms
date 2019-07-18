@@ -2,25 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Collections.Generic;
-    using System.Collections;
-    using System.Diagnostics;
-
     /// <summary>
     ///  HtmlShimManager - this class manages the shims for HtmlWindows, HtmlDocuments, and HtmlElements.
-    ///  essentially we need a long-lasting object to call back on events from the web browser, and the 
-    ///  manager is the one in charge of making sure this list stays around as long as needed.  
+    ///  essentially we need a long-lasting object to call back on events from the web browser, and the
+    ///  manager is the one in charge of making sure this list stays around as long as needed.
     ///
     ///  When a HtmlWindow unloads we prune our list of corresponding document, window, and element shims.
-    ///
     /// </summary>
     internal sealed class HtmlShimManager : IDisposable
     {
-
         private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim> htmlWindowShims;
         private Dictionary<HtmlElement, HtmlElement.HtmlElementShim> htmlElementShims;
         private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim> htmlDocumentShims;
@@ -29,8 +24,8 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage 
-        ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
+        /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage
+        ///  Can create a WindowShim as a side effect so it knows when to self prune from the list.
         ///</summary>
         public void AddDocumentShim(HtmlDocument doc)
         {
@@ -54,7 +49,7 @@ namespace System.Windows.Forms
 
         }
 
-        /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage 
+        /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage
         ///</summary>
 
         public void AddWindowShim(HtmlWindow window)
@@ -78,8 +73,8 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage 
-        ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
+        /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage
+        ///  Can create a WindowShim as a side effect so it knows when to self prune from the list.
         ///</summary>
         public void AddElementShim(HtmlElement element)
         {
@@ -144,7 +139,6 @@ namespace System.Windows.Forms
 
         private void OnShimAdded(HtmlShim addedShim)
         {
-
             Debug.Assert(addedShim != null, "Why are we calling this with a null shim?");
             if (addedShim != null)
             {
@@ -159,7 +153,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to 
+        /// HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to
         /// walk through our lists and make sure we've cleaned up
         /// </summary>
         internal void OnWindowUnloaded(HtmlWindow unloadedWindow)
@@ -203,7 +197,7 @@ namespace System.Windows.Forms
                 }
 
                 //
-                // prune the particular window from the list.  
+                // prune the particular window from the list.
                 //
                 if (htmlWindowShims != null)
                 {
@@ -253,15 +247,12 @@ namespace System.Windows.Forms
                 htmlDocumentShims = null;
                 htmlWindowShims = null;
 
-
             }
         }
         ~HtmlShimManager()
         {
             Dispose(false);
         }
-
-
 
     }
 }

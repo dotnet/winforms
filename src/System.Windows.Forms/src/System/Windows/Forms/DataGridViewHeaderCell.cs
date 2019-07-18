@@ -2,20 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms.VisualStyles;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>Identifies a cell in the dataGridView.</para>
+    ///  Identifies a cell in the dataGridView.
     /// </summary>
-    /// 
     public class DataGridViewHeaderCell : DataGridViewCell
     {
         private const byte DATAGRIDVIEWHEADERCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
@@ -48,9 +45,6 @@ namespace System.Windows.Forms
 
         private ButtonState ButtonStatePrivate
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible") // Enum.IsDefined is OK here. Only specific flag combinations are allowed, and it's debug only anyways.
-            ]
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(ButtonState), value));
@@ -281,7 +275,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewHeaderCell)System.Activator.CreateInstance(thisType);
             }
@@ -461,7 +455,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         internal static Rectangle GetThemeMargins(Graphics g)
         {
             if (rectThemeMargins.X == -1)
@@ -637,9 +630,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the row Index and column Index of the cell.
-        ///    </para>
+        ///  Gets the row Index and column Index of the cell.
         /// </summary>
         public override string ToString()
         {

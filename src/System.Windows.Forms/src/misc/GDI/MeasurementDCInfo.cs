@@ -8,26 +8,14 @@
 #define GDI_FONT_CACHE_TRACK
 #endif
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 {
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal {
-#else
-namespace System.Experimental.Gdi {
-#endif
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    static class MeasurementDCInfo
+    internal static class MeasurementDCInfo
     {
-
         /// MeasurementDCInfo
         /// This class optimizes the MeasurmentGraphics as it caches in the last used font and TextMargins used.
-        /// This prevents unnecessary p/invoke calls to GetCurrentObject, etc 
-        /// It has been found to give close to 2x performance when drawing lots of text in rapid succession 
+        /// This prevents unnecessary p/invoke calls to GetCurrentObject, etc
+        /// It has been found to give close to 2x performance when drawing lots of text in rapid succession
         /// DataGridView with lots of text, etc.
         /// To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
 
@@ -62,13 +50,11 @@ namespace System.Experimental.Gdi {
             }
         }
 
-
         /// GetTextMargins - checks to see if we have cached information about the current font,
         /// returns info about it.
         /// An MRU of Font margins was considered, but seems like overhead.
         internal static IntNativeMethods.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont font)
         {
-
             // PERF: operate on a local reference rather than party directly on the thread static one.
             CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
 

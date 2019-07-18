@@ -4,33 +4,26 @@
 
 //#define PBRS_PAINT_DEBUG
 
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.Globalization;
-
-    using System.Drawing.Design;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.Internal;
-    using System.Windows.Forms.VisualStyles;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///     Base Entry for properties to be displayed in properties window.
+    ///  Base Entry for properties to be displayed in properties window.
     /// </summary>
     internal abstract class GridEntry : GridItem, ITypeDescriptorContext
     {
-
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
         private static readonly BooleanSwitch PbrsAssertPropsSwitch = new BooleanSwitch("PbrsAssertProps", "PropertyBrowser : Assert on broken properties");
 
@@ -103,7 +96,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         private CacheItems cacheItems;
-
 
         // instance variables.
         protected TypeConverter converter = null;
@@ -191,7 +183,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public AccessibleObject AccessibilityObject
         {
-
             get
             {
                 if (accessibleObject == null)
@@ -245,8 +236,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return GridEntryHost.GetBackgroundBrush(g);
         }
 
-        /// <summary>
-        /// </summary>
         protected virtual Color LabelTextColor
         {
             get
@@ -282,10 +271,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      Retrieves the component that is invoking the
-        ///      method on the formatter object.  This may
-        ///      return null if there is no component
-        ///      responsible for the call.
+        ///  Retrieves the component that is invoking the
+        ///  method on the formatter object.  This may
+        ///  return null if there is no component
+        ///  responsible for the call.
         /// </summary>
         public virtual IComponent Component
         {
@@ -314,11 +303,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      Retrieves the container that contains the
-        ///      set of objects this formatter may work
-        ///      with.  It may return null if there is no
-        ///      container, or of the formatter should not
-        ///      use any outside objects.
+        ///  Retrieves the container that contains the
+        ///  set of objects this formatter may work
+        ///  with.  It may return null if there is no
+        ///  container, or of the formatter should not
+        ///  use any outside objects.
         /// </summary>
         public virtual IContainer Container
         {
@@ -452,7 +441,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return (Flags & GridEntry.FLAG_ENUMERABLE) != 0;
             }
         }
-
 
         public override bool Expandable
         {
@@ -779,8 +767,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Retrieves the keyword that the VS help dynamic help window will
-        ///     use when this IPE is selected.
+        ///  Retrieves the keyword that the VS help dynamic help window will
+        ///  use when this IPE is selected.
         /// </summary>
         public virtual string HelpKeyword
         {
@@ -824,7 +812,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return (flags & GridEntry.FLAG_CUSTOM_PAINT) != 0;
                         }
-
 
                         if (typeEd.GetPaintValueSupported(this))
                         {
@@ -875,10 +862,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      Retrieves the component that is invoking the
-        ///      method on the formatter object.  This may
-        ///      return null if there is no component
-        ///      responsible for the call.
+        ///  Retrieves the component that is invoking the
+        ///  method on the formatter object.  This may
+        ///  return null if there is no component
+        ///  responsible for the call.
         /// </summary>
         public virtual object Instance
         {
@@ -903,7 +890,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      Retrieves the PropertyDescriptor that is surfacing the given object/
+        ///  Retrieves the PropertyDescriptor that is surfacing the given object/
         /// </summary>
         public override PropertyDescriptor PropertyDescriptor
         {
@@ -912,8 +899,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
         }
-
-
 
         /// <summary>
         /// Returns the pixel indent of the current GridEntry's label.
@@ -1064,7 +1049,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         /// <summary>
         /// Returns the description helpstring for this GridEntry.
         /// </summary>
@@ -1186,7 +1170,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (editor == null && PropertyType != null)
                 {
-                    editor = (UITypeEditor)TypeDescriptor.GetEditor(PropertyType, typeof(System.Drawing.Design.UITypeEditor));
+                    editor = (UITypeEditor)TypeDescriptor.GetEditor(PropertyType, typeof(UITypeEditor));
                 }
 
                 return editor;
@@ -1232,7 +1216,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         /// <summary>
         /// Add an event handler to be invoked when the label portion of
         /// the prop entry is clicked
@@ -1259,7 +1242,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             AddEventHandler(EVENT_VALUE_CLICK, h);
         }
-
 
         /// <summary>
         /// Add an event handler to be invoked when the value portion of
@@ -1375,7 +1357,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         protected virtual bool CreateChildren(bool diffOldChildren)
         {
-
             Debug.Assert(!Disposed, "Why are we creating children after we are disposed?");
 
             if (!GetFlagSet(FL_EXPANDABLE))
@@ -1391,17 +1372,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-
             if (!diffOldChildren && childCollection != null && childCollection.Count > 0)
             {
                 return true;
             }
 
-
             GridEntry[] childProps = GetPropEntries(this,
                                                         PropertyValue,
                                                         PropertyType);
-
 
             bool fExpandable = (childProps != null && childProps.Length > 0);
 
@@ -1429,8 +1407,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return true;
                 }
             }
-
-
 
             if (!fExpandable)
             {
@@ -1489,7 +1465,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         /// <summary>
         /// Disposes the array of children
         /// </summary>
@@ -1502,12 +1477,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         ~GridEntry()
         {
             Dispose(false);
         }
-
 
         /// <summary>
         /// Invokes the type editor for editing this item.
@@ -1574,7 +1547,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public override bool Equals(object obj)
         {
-
             if (NonParentEquals(obj))
             {
                 return ((GridEntry)obj).ParentGridEntry == ParentGridEntry;
@@ -1627,7 +1599,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected int GetLabelTextWidth(string labelText, Graphics g, Font f)
         {
-
             if (cacheItems == null)
             {
                 cacheItems = new CacheItems();
@@ -1649,7 +1620,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal int GetValueTextWidth(string valueString, Graphics g, Font f)
         {
-
             if (cacheItems == null)
             {
                 cacheItems = new CacheItems();
@@ -1669,7 +1639,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         //
         internal bool GetMultipleLines(string valueString)
         {
-
             if (valueString.IndexOf('\n') > 0 || valueString.IndexOf('\r') > 0)
             {
                 return true;
@@ -1713,14 +1682,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual object GetChildValueOwner(GridEntry childEntry)
         {
-
             /*// make sure this is one of our children
             int index = GetChildIndex(childEntry);
 
             if (index != -1){
                return this.PropertyValue;
             }
-
 
             Debug.Fail(childEntry.PropertyLabel + " is not a child of " + this.PropertyLabel);
             return null;*/
@@ -1767,8 +1734,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         protected virtual GridEntry[] GetPropEntries(GridEntry peParent, object obj, Type objType)
         {
-
-
             // we don't want to create subprops for null objects.
             if (obj == null)
             {
@@ -1855,7 +1820,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     else
                     {
                         // otherwise, create the proper GridEntries.
-                        // 
+                        //
                         bool createInstanceSupported = TypeConverter.GetCreateInstanceSupported(this);
                         entries = new GridEntry[props.Count];
                         int index = 0;
@@ -1922,14 +1887,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     // Checked builds are not giving us enough information here.  So, output as much stuff as
                     // we can.
-                    System.Text.StringBuilder b = new System.Text.StringBuilder();
+                    Text.StringBuilder b = new Text.StringBuilder();
                     b.Append(string.Format(CultureInfo.CurrentCulture, "********* Debug log written on {0} ************\r\n", DateTime.Now));
                     b.Append(string.Format(CultureInfo.CurrentCulture, "Exception '{0}' reading properties for object {1}.\r\n", e.GetType().Name, obj));
                     b.Append(string.Format(CultureInfo.CurrentCulture, "Exception Text: \r\n{0}", e.ToString()));
                     b.Append(string.Format(CultureInfo.CurrentCulture, "Exception stack: \r\n{0}", e.StackTrace));
                     string path = string.Format(CultureInfo.CurrentCulture, "{0}\\PropertyGrid.log", Environment.GetEnvironmentVariable("SYSTEMDRIVE"));
-                    System.IO.FileStream s = new System.IO.FileStream(path, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.None);
-                    System.IO.StreamWriter w = new System.IO.StreamWriter(s);
+                    IO.FileStream s = new IO.FileStream(path, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.None);
+                    IO.StreamWriter w = new IO.StreamWriter(s);
                     w.Write(b.ToString());
                     w.Close();
                     s.Close();
@@ -1993,7 +1958,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             return NotifyValue(NOTIFY_DBL_CLICK);
         }
-
 
         /// <summary>
         /// Returns the text value of this property.
@@ -2087,13 +2051,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      Retrieves the requested service.  This may
-        ///      return null if the requested service is not
-        ///      available.
+        ///  Retrieves the requested service.  This may
+        ///  return null if the requested service is not
+        ///  available.
         /// </summary>
         public virtual object GetService(Type serviceType)
         {
-
             if (serviceType == typeof(GridItem))
             {
                 return (GridItem)this;
@@ -2129,13 +2092,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                    pe.PropertyType.Equals(PropertyType) && pe.PropertyDepth == PropertyDepth;
         }
 
-
         /// <summary>
         /// Paints the label portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
         /// to be painted.
         /// </summary>
-        public virtual void PaintLabel(System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+        public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
             PropertyGridView gridHost = GridEntryHost;
             Debug.Assert(gridHost != null, "No propEntryHost");
@@ -2200,7 +2162,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             int maxSpace = Math.Min(rect.Width - stringX - 1, labelWidth + PropertyGridView.GDIPLUS_SPACE);
             Rectangle textRect = new Rectangle(stringX, rect.Y + 1, maxSpace, rect.Height - 1);
 
-
             if (!Rectangle.Intersect(textRect, clipRect).IsEmpty)
             {
                 Region oldClip = g.Clip;
@@ -2257,7 +2218,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
         /// to be painted.
         /// </summary>
-        public virtual void PaintOutline(System.Drawing.Graphics g, Rectangle r)
+        public virtual void PaintOutline(Graphics g, Rectangle r)
         {
             // draw tree-view glyphs as triangles on Vista and Windows afterword
             // when Vistual style is enabled
@@ -2266,7 +2227,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
-                // we need to recaculate outlineRect 
+                // we need to recaculate outlineRect
                 if (!lastPaintWithExplorerStyle)
                 {
                     outlineRect = Rectangle.Empty;
@@ -2280,7 +2241,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
-                // we need to recaculate outlineRect 
+                // we need to recaculate outlineRect
                 if (lastPaintWithExplorerStyle)
                 {
                     outlineRect = Rectangle.Empty;
@@ -2291,7 +2252,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void PaintOutlineWithExplorerTreeStyle(System.Drawing.Graphics g, Rectangle r, IntPtr handle)
+        private void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, IntPtr handle)
         {
             if (Expandable)
             {
@@ -2332,7 +2293,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void PaintOutlineWithClassicStyle(System.Drawing.Graphics g, Rectangle r)
+        private void PaintOutlineWithClassicStyle(Graphics g, Rectangle r)
         {
             // draw outline box.
             if (Expandable)
@@ -2362,7 +2323,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Filling rectangle as it was in all cases where we do not invert colors.
                     g.FillRectangle(b, outline);
                 }
-
 
                 if (penColor.IsSystemColor)
                 {
@@ -2399,7 +2359,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
         /// to be painted.
         /// </summary>
-        public virtual void PaintValue(object val, System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
+        public virtual void PaintValue(object val, Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
         {
             PropertyGridView gridHost = GridEntryHost;
             Debug.Assert(gridHost != null, "No propEntryHost");
@@ -2566,7 +2526,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     g.ReleaseHdcInternal(hdc);
                 }
 
-
 #if PBRS_PAINT_DEBUG
                     rect.Width --;
                     rect.Height--;
@@ -2648,7 +2607,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return false;
             }
-
 
             int labelWidth = gridHost.GetLabelWidth();
 
@@ -2756,8 +2714,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             RaiseEvent(EVENT_VALUE_DBLCLICK, e);
         }
 
-
-
         internal bool OnValueReturnKey()
         {
             return NotifyValue(NOTIFY_RETURN);
@@ -2811,7 +2767,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         internal virtual bool ShouldSerializePropertyValue()
         {
-
             if (cacheItems != null)
             {
                 if (cacheItems.useShouldSerialize)
@@ -2837,10 +2792,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private PropertyDescriptor[] SortParenProperties(PropertyDescriptor[] props)
         {
-
             PropertyDescriptor[] newProps = null;
             int newPos = 0;
-
 
             // first scan the list and move any parentesized properties to the front.
             for (int i = 0; i < props.Length; i++)
@@ -2855,7 +2808,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     props[i] = null;
                 }
             }
-
 
             // second pass, copy any that didn't have the parens.
             if (newPos > 0)
@@ -2885,7 +2837,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         internal virtual bool NotifyChildValue(GridEntry pe, int type)
         {
-
             return pe.NotifyValueGivenParent(pe.GetValueOwner(), type);
         }
 
@@ -2908,7 +2859,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal void RecreateChildren(int oldCount)
         {
-
             // cause the flags to be rebuilt as well...
             bool wasExpanded = InternalExpanded || oldCount > 0;
 
@@ -2938,7 +2888,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual void Refresh()
         {
-
             Type type = PropertyType;
             if (type != null && type.IsArray)
             {
@@ -3042,8 +2991,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return GetType().FullName + " " + PropertyLabel;
         }
 
-
-
 #if !DONT_SUPPORT_ADD_EVENT_HANDLER
         private EventEntry eventList;
 
@@ -3131,8 +3078,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             eventList = null;
         }
 
-        /// <summary>
-        /// </summary>
         private sealed class EventEntry
         {
             internal EventEntry next;
@@ -3151,7 +3096,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         [ComVisible(true)]
         public class GridEntryAccessibleObject : AccessibleObject
         {
-
             protected GridEntry owner = null;
             private delegate void SelectDelegate(AccessibleSelection flags);
             private int[] runtimeId = null; // Used by UIAutomation
@@ -3492,8 +3436,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///      Returns the currently focused child, if any.
-            ///      Returns this if the object itself is focused.
+            ///  Returns the currently focused child, if any.
+            ///  Returns this if the object itself is focused.
             /// </summary>
             public override AccessibleObject GetFocused()
             {
@@ -3508,9 +3452,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-
             /// <summary>
-            ///      Navigate to the next or previous grid entry.
+            ///  Navigate to the next or previous grid entry.
             /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir)
             {
@@ -3587,15 +3530,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
     internal class AttributeTypeSorter : IComparer
     {
-
         private static IDictionary typeIds;
 
         private static string GetTypeIdString(Attribute a)
         {
-
             string result;
             object typeId = a.TypeId;
-
 
             if (typeId == null)
             {

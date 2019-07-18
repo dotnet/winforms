@@ -2,22 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Diagnostics.CodeAnalysis;
-
     internal class ButtonFlatAdapter : ButtonBaseAdapter
     {
-
         private const int BORDERSIZE = 1;
 
         internal ButtonFlatAdapter(ButtonBase control) : base(control) { }
@@ -39,8 +31,7 @@ namespace System.Windows.Forms.ButtonInternal
                 !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
                 Control.FlatAppearance.BorderSize).Layout();
 
-            //Paint with the BorderColor if Set.
-            ///
+            // Paint with the BorderColor if Set.
             if (!Control.FlatAppearance.BorderColor.IsEmpty)
             {
                 colors.windowFrame = Control.FlatAppearance.BorderColor;
@@ -92,7 +83,6 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 DrawFlatFocus(g, layout.focus, colors.options.highContrast ? colors.windowText : colors.constrastButtonShadow);
             }
-
 
             if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
             {
@@ -314,7 +304,6 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-
         #region LayoutData
 
         protected override LayoutOptions Layout(PaintEventArgs e)
@@ -331,9 +320,8 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-
-        // used by DataGridViewButtonCell        
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
+        // used by DataGridViewButtonCell
+// removed graphics, may have to put it back
         internal static LayoutOptions PaintFlatLayout(Graphics g, bool up, bool check, int borderSize, Rectangle clientRectangle, Padding padding,
                                                       bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
         {
@@ -347,8 +335,7 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
+// removed graphics, may have to put it back
         private LayoutOptions PaintFlatLayout(PaintEventArgs e, bool up, bool check, int borderSize)
         {
             LayoutOptions layout = CommonLayout();

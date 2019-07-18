@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch)
@@ -149,7 +147,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.Down:
-                    // If the end of the selection is on the last line of the text then 
+                    // If the end of the selection is on the last line of the text then
                     // send this character to the dataGridView, else process the key event
                     int end = SelectionStart + SelectionLength;
                     if (Text.IndexOf("\r\n", end) != -1)
@@ -159,7 +157,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.Up:
-                    // If the end of the selection is on the first line of the text then 
+                    // If the end of the selection is on the first line of the text then
                     // send this character to the dataGridView, else process the key event
                     if (!(Text.IndexOf("\r\n") < 0 || SelectionStart + SelectionLength < Text.IndexOf("\r\n")))
                     {

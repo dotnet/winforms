@@ -6,21 +6,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    partial class IntNativeMethods
+    internal partial class IntNativeMethods
     {
         public const int
         DT_TOP = 0x00000000,
@@ -78,7 +66,6 @@ namespace System.Experimental.Gdi
         WHITENESS = 0x00FF0062, /* dest = WHITE                    */
         CAPTUREBLT = 0x40000000, /* Include layered windows */
 
-
         /* FONT WEIGHT (BOLD) VALUES */
         FW_DONTCARE = 0,
         FW_NORMAL = 400,
@@ -134,7 +121,6 @@ namespace System.Experimental.Gdi
         // Code page
         CP_ACP = 0, // ANSI
 
-
         FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
         FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
         FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
@@ -165,7 +151,7 @@ namespace System.Experimental.Gdi
                 this.bottom = bottom;
             }
 
-            public RECT(System.Drawing.Rectangle r)
+            public RECT(Rectangle r)
             {
                 left = r.Left;
                 top = r.Top;
@@ -189,14 +175,6 @@ namespace System.Experimental.Gdi
                     return new Size(right - left, bottom - top);
                 }
             }
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                Size size = this.Size;
-                return string.Format("{0}=[left={1}, top={2}, width={3}, height={4}]", this.GetType().Name, left, top, size.Width, size.Height);
-            }
-#endif
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -215,16 +193,10 @@ namespace System.Experimental.Gdi
                 this.y = y;
             }
 
-            public System.Drawing.Point ToPoint()
+            public Point ToPoint()
             {
-                return new System.Drawing.Point(x, y);
+                return new Point(x, y);
             }
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                return string.Format("{0}=[x={1}, y={2}]", this.GetType().Name, x, y);
-            }
-#endif
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -236,9 +208,9 @@ namespace System.Experimental.Gdi
             public int iRightMargin;
 
             /// <summary>
-            ///     Receives the number of characters processed by DrawTextEx, including white-space characters. 
-            ///     The number can be the length of the string or the index of the first line that falls below the drawing area. 
-            ///     Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified. 
+            ///  Receives the number of characters processed by DrawTextEx, including white-space characters.
+            ///  The number can be the length of the string or the index of the first line that falls below the drawing area.
+            ///  Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified.
             /// </summary>
             public int uiLengthDrawn;
 
@@ -257,13 +229,6 @@ namespace System.Experimental.Gdi
                 iLeftMargin = leftMargin;
                 iRightMargin = rightMargin;
             }
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                return string.Format("{0}=[tabLength={1}, leftMargin={2}, rightMargin={3}, lengthDrawn={4}]", this.GetType().Name, iTabLength, iLeftMargin, iRightMargin, uiLengthDrawn);
-            }
-#endif
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -316,40 +281,6 @@ namespace System.Experimental.Gdi
                 lfPitchAndFamily = lf.lfPitchAndFamily;
                 lfFaceName = lf.lfFaceName;
             }
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString() 
-            {
-                return 
-                    "FaceName="  + lfFaceName + ", " +
-                    "Height="    + lfHeight   + ", " +
-                    "Width="     + lfWidth    + ", " +
-                    "Bold="      + (lfWeight    <= FW_NORMAL ? false : true) + ", " +
-                    "Italic="    + (lfItalic    == 0 ? false : true) + ", " +
-                    "Underline=" + (lfUnderline == 0 ? false : true) + ", " +
-                    "StrikeOut=" + (lfStrikeOut == 0 ? false : true) + ", " +
-                    "CharSet="   + lfCharSet;
-            }
-
-            public string DumpObject() 
-            {
-                return 
-                    "Height="         + lfHeight         + ", " +
-                    "Width="          + lfWidth          + ", " +
-                    "Escapement="     + lfEscapement     + ", " +
-                    "Orientation="    + lfOrientation    + ", " +
-                    "Weight="         + lfWeight         + ", " +
-                    "Italic="         + lfItalic         + ", " +
-                    "Underline="      + lfUnderline      + ", " +
-                    "StrikeOut="      + lfStrikeOut      + ", " +
-                    "CharSet="        + lfCharSet        + ", " +
-                    "OutPrecision="   + lfOutPrecision   + ", " +
-                    "ClipPrecision="  + lfClipPrecision  + ", " +
-                    "Quality="        + lfQuality        + ", " +
-                    "PitchAndFamily=" + lfPitchAndFamily + ", " +
-                    "FaceName="       + lfFaceName;
-            }
-#endif
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -418,16 +349,10 @@ namespace System.Experimental.Gdi
                 this.cy = cy;
             }
 
-            public System.Drawing.Size ToSize()
+            public Size ToSize()
             {
-                return new System.Drawing.Size(cx, cy);
+                return new Size(cx, cy);
             }
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                return string.Format("{0}=[width={1}, height={2}]", this.GetType().Name, cx, cy);
-            }
-#endif
         }
     }
 }

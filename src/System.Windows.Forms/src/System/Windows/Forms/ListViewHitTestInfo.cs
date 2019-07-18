@@ -4,25 +4,17 @@
 
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-    using System;
-
-
     /// <summary>
-    ///    <para>
-    ///       Specifies the return value for HITTEST on ListView.
-    ///    </para>
+    ///  Specifies the return value for HITTEST on ListView.
     /// </summary>
     public class ListViewHitTestInfo
     {
-
         private readonly ListViewHitTestLocations loc;
         private readonly ListViewItem item;
         private readonly ListViewItem.ListViewSubItem subItem;
 
         /// <summary>
-        ///     Creates a ListViewHitTestInfo instance.
+        ///  Creates a ListViewHitTestInfo instance.
         /// </summary>
         public ListViewHitTestInfo(ListViewItem hitItem, ListViewItem.ListViewSubItem hitSubItem, ListViewHitTestLocations hitLocation)
         {
@@ -31,9 +23,8 @@ namespace System.Windows.Forms
             loc = hitLocation;
         }
 
-
         /// <summary>
-        ///     This gives the exact location returned by hit test on listview.
+        ///  This gives the exact location returned by hit test on listview.
         /// </summary>
         public ListViewHitTestLocations Location
         {
@@ -44,7 +35,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This gives the ListViewItem returned by hit test on listview.
+        ///  This gives the ListViewItem returned by hit test on listview.
         /// </summary>
         public ListViewItem Item
         {
@@ -55,7 +46,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This gives the ListViewSubItem returned by hit test on listview.
+        ///  This gives the ListViewSubItem returned by hit test on listview.
         /// </summary>
         public ListViewItem.ListViewSubItem SubItem
         {

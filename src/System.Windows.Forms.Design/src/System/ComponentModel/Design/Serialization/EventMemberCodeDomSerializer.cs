@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,7 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///    A MemberCodeDomSerializer for events.
+    ///  A MemberCodeDomSerializer for events.
     /// </summary>
     internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
     {
@@ -32,10 +32,9 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    This method actually performs the serialization.  When the member is serialized
-        ///    the necessary statements will be added to the statements collection.
+        ///  This method actually performs the serialization.  When the member is serialized
+        ///  the necessary statements will be added to the statements collection.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
             if (manager == null)
@@ -85,8 +84,8 @@ namespace System.ComponentModel.Design.Serialization
             }
             catch (Exception e)
             {
-                // Since we usually go through reflection, don't 
-                // show what our engine does, show what caused 
+                // Since we usually go through reflection, don't
+                // show what our engine does, show what caused
                 // the problem.
                 //
                 if (e is TargetInvocationException)
@@ -99,8 +98,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    This method returns true if the given member descriptor should be serialized,
-        ///    or false if there is no need to serialize the member.
+        ///  This method returns true if the given member descriptor should be serialized,
+        ///  or false if there is no need to serialize the member.
         /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor) => true;
     }

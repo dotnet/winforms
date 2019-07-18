@@ -219,14 +219,13 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider?.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
             {
                 _currentContext = context;
 
-                // child modal dialog -launching in System Aware mode 
+                // child modal dialog -launching in System Aware mode
                 CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
                 ITypeDescriptorContext lastContext = _currentContext;
                 localCollectionForm.EditValue = value;
@@ -297,7 +296,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Gets the editing style of the Edit method.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
@@ -306,7 +304,7 @@ namespace System.ComponentModel.Design
         private bool IsAnyObjectInheritedReadOnly(object[] items)
         {
             // If the object implements IComponent, and is not sited, check with the inheritance service (if it exists) to see if this is a component
-            // that is being inherited from another class. 
+            // that is being inherited from another class.
             // If it is, then we do not want to place it in the collection editor. If the inheritance service
             // chose not to site the component, that indicates it should be hidden from  the user.
             IInheritanceService inheritanceService = null;
@@ -626,7 +624,6 @@ namespace System.ComponentModel.Design
 
                 _dropDownRectangle = new Rectangle(bounds.Right - PushButtonWidth - 1, 4, PushButtonWidth, bounds.Height - 8);
 
-
                 if (RightToLeft == RightToLeft.Yes)
                 {
                     _dropDownRectangle.X = bounds.Left + 1;
@@ -857,7 +854,7 @@ namespace System.ComponentModel.Design
 
                 if (instances.Count == 1)
                 {
-                    // optimize for the case where we just added one thing... 
+                    // optimize for the case where we just added one thing...
                     UpdateItemWidths(_listbox.Items[_listbox.Items.Count - 1] as ListItem);
                 }
                 else
@@ -936,7 +933,6 @@ namespace System.ComponentModel.Design
             /// <summary>
             /// Aborts changes made in the editor.
             /// </summary>
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CancelButton_click(object sender, EventArgs e)
             {
                 try
@@ -974,7 +970,6 @@ namespace System.ComponentModel.Design
                         _removedItems.Clear();
                     }
 
-
                     // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
                     // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,
                     // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
@@ -1004,7 +999,6 @@ namespace System.ComponentModel.Design
             /// <summary>
             /// Performs a create instance and then adds the instance to the list box.
             /// </summary>
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CreateAndAddInstance(Type type)
             {
                 try
@@ -1378,7 +1372,6 @@ namespace System.ComponentModel.Design
             /// <summary>
             /// Commits the changes to the editor.
             /// </summary>
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void OKButton_Click(object sender, EventArgs e)
             {
                 try
@@ -1586,7 +1579,6 @@ namespace System.ComponentModel.Design
             /// <summary>
             /// Used to actually remove the items, one by one.
             /// </summary>
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void RemoveInternal(ListItem item)
             {
                 if (item != null)
@@ -1671,7 +1663,7 @@ namespace System.ComponentModel.Design
             private void SuspendEnabledUpdates() => _suspendEnabledCount++;
 
             /// <summary>
-            /// Called to show the dialog via the IWindowsFormsEditorService 
+            /// Called to show the dialog via the IWindowsFormsEditorService
             /// </summary>
             protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
@@ -2017,7 +2009,7 @@ namespace System.ComponentModel.Design
                 /// <summary>
                 /// Retrieves the object that directly depends on this value being edited.
                 /// This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-                /// If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object, 
+                /// If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object,
                 /// that is the main object that exposes the properties and attributes
                 /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
@@ -2195,7 +2187,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "This would be a breaking change")]
         protected abstract class CollectionForm : Form
         {
             private readonly CollectionEditor _editor;
@@ -2272,7 +2263,6 @@ namespace System.ComponentModel.Design
             protected object[] Items
             {
                 get => _editor.GetItems(EditValue);
-                [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
                 set
                 {
                     // Request our desire to make a change.

@@ -4,8 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    using System.Diagnostics.CodeAnalysis;
-
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DataGridViewColumnDesignTimeVisibleAttribute : Attribute
     {
@@ -28,22 +26,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute 
-                                                                                                        // actually immutable.
-        ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute Yes = new DataGridViewColumnDesignTimeVisibleAttribute(true);
 
-        [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute 
-                                                                                                        // actually immutable.
-        ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute No = new DataGridViewColumnDesignTimeVisibleAttribute(false);
 
-        [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute 
-                                                                                                        // actually immutable.
-        ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute Default = Yes;
 
         public override bool Equals(object obj)

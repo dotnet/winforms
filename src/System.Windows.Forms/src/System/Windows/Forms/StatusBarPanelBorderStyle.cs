@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///   Specifies the border style of a panel on the <see cref='System.Windows.Forms.StatusBar'/>.
+    ///  Specifies the border style of a panel on the <see cref='StatusBar'/>.
     /// </summary>
     public enum StatusBarPanelBorderStyle
     {

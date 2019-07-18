@@ -5,7 +5,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
@@ -22,11 +21,11 @@ namespace System.Windows.Forms
         private static readonly Padding CheckPadding = new Padding(5, 2, 2, 2);
         private static readonly Padding ArrowPadding = new Padding(0, 0, 8, 0);
 
-        // This is totally a UI Fudge - if we have an image or check margin with 
-        // no image or checks in it use this - which is consistent with office 
+        // This is totally a UI Fudge - if we have an image or check margin with
+        // no image or checks in it use this - which is consistent with office
         // and an image margin with a 16x16 icon in it.
         private static readonly int DefaultImageMarginWidth = 24; // 24+1px border - with scaling we add this 1px to new, scaled, field value
-        private static readonly int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value    
+        private static readonly int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value
 
         private static readonly int ArrowSize = 10;
 
@@ -90,10 +89,10 @@ namespace System.Windows.Forms
             set => RequiresScrollButtons = !value;
         }
 
-        internal Rectangle ArrowRectangle 
+        internal Rectangle ArrowRectangle
             => arrowRectangle;
 
-        internal Rectangle CheckRectangle 
+        internal Rectangle CheckRectangle
             => checkRectangle;
 
         protected override Padding DefaultPadding
@@ -150,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  the rectangle representing 
+        ///  the rectangle representing
         /// </summary>
         internal Rectangle ImageRectangle => imageRectangle;
 
@@ -237,8 +236,7 @@ namespace System.Windows.Forms
             }
         }
 
-
-        internal Rectangle TextRectangle 
+        internal Rectangle TextRectangle
             => textRectangle;
 
         private ToolStripScrollButton UpScrollButton
@@ -256,17 +254,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// this takes a native menu and builds up a managed toolstrip around it.
-        /// Scenario: showing the items from the SystemMenu. 
-        /// targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to 
+        /// Scenario: showing the items from the SystemMenu.
+        /// targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to
         /// hmenu is a handle to the native menu.
         /// </summary>
         internal static ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
         {
             ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
             managedDropDown.SuspendLayout();
-
 
             HandleRef menuHandle = new HandleRef(null, hmenu);
             int count = UnsafeNativeMethods.GetMenuItemCount(menuHandle);
@@ -329,7 +326,6 @@ namespace System.Windows.Forms
             return managedDropDown;
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // using "\t" to figure out the width of tab
         private void CalculateInternalLayoutMetrics()
         {
             Size maxTextSize = Size.Empty;
@@ -358,7 +354,7 @@ namespace System.Windows.Forms
                         menuItemTextSize.Height = Math.Max(menuItemTextSize.Height, shortcutTextSize.Height);
                     }
 
-                    // we truly only care about the maximum size we find. 
+                    // we truly only care about the maximum size we find.
                     maxTextSize.Width = Math.Max(maxTextSize.Width, menuItemTextSize.Width);
                     maxTextSize.Height = Math.Max(maxTextSize.Height, menuItemTextSize.Height);
 
@@ -457,7 +453,7 @@ namespace System.Windows.Forms
                 // NOTE due to the Padding property, we're going to have to recalc the vertical alignment in ToolStripMenuItemInternalLayout.
                 // Dont fuss here over the Y, X is what's critical.
 
-                // check and image rect are the same - take the max of the image size and the check size and align 
+                // check and image rect are the same - take the max of the image size and the check size and align
                 nextPoint = new Point(1, scaledCheckPadding.Top);
                 checkRectangle = LayoutUtils.Align(LayoutUtils.UnionSizes(maxCheckSize, maxImageSize), new Rectangle(nextPoint.X, nextPoint.Y, checkAndImageMarginWidth - 1, maxItemSize.Height), ContentAlignment.MiddleCenter);
 
@@ -510,7 +506,7 @@ namespace System.Windows.Forms
                 trimPadding += scaledTextPadding.Left;
             }
 
-            // We need to make sure that the text really appears vertically centered - this can be a problem in 
+            // We need to make sure that the text really appears vertically centered - this can be a problem in
             // systems which force the text rectangle to be odd.
 
             // force this to be an even height.
@@ -667,7 +663,7 @@ namespace System.Windows.Forms
                 }
             }
 
-        internal void ResetScrollPosition() 
+        internal void ResetScrollPosition()
             => scrollAmount = 0;
 
         internal void RestoreScrollPosition()
@@ -677,7 +673,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // We don't just scroll by the amount, because that might 
+            // We don't just scroll by the amount, because that might
             // cause the bottom of the menu to be blank if some items have
             // been removed/hidden since the last time we were displayed.
             // This also deals with items of different height, so that we don't truncate
@@ -824,11 +820,10 @@ namespace System.Windows.Forms
 
         private void UpdateScrollButtonLocations()
         {
-
             if (GetToolStripState(STATE_SCROLLBUTTONS))
             {
                 Size upSize = UpScrollButton.GetPreferredSize(Size.Empty);
-                // 
+                //
                 Point upLocation = new Point(1, 0);
 
                 UpScrollButton.SetBounds(new Rectangle(upLocation, upSize));
@@ -881,7 +876,6 @@ namespace System.Windows.Forms
 
         internal sealed class ToolStripDropDownLayoutEngine : FlowLayout
         {
-
             public static ToolStripDropDownLayoutEngine LayoutInstance = new ToolStripDropDownLayoutEngine();
 
             internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)

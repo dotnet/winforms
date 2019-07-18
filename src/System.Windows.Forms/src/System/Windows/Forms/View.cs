@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how list items are displayed in a <see cref='System.Windows.Forms.ListView'/> control.
+    /// Specifies how list items are displayed in a <see cref='ListView'/> control.
     /// </summary>
     public enum View
     {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         List = NativeMethods.LVS_LIST,
 
         /// <summary>
-        ///   Tile view.
+        ///  Tile view.
         /// </summary>
         Tile = NativeMethods.LV_VIEW_TILE,
     }

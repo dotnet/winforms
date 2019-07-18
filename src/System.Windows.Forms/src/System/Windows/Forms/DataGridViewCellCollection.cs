@@ -2,24 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
-    /// control.</para>
+    /// Represents a collection of <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
+    /// control.
     /// </summary>
-    [
-        ListBindable(false),
-        SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewCellCollection> implementation
-    ]
+    [ListBindable(false)]
     public class DataGridViewCellCollection : BaseCollection, IList
     {
         CollectionChangeEventHandler onCollectionChanged;
@@ -117,7 +110,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the DataGridViewCell with the specified index.
+        ///  Retrieves the DataGridViewCell with the specified index.
         /// </summary>
         public DataGridViewCell this[int index]
         {
@@ -171,7 +164,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the DataGridViewCell with the specified column name.
+        ///  Retrieves the DataGridViewCell with the specified column name.
         /// </summary>
         public DataGridViewCell this[string columnName]
         {
@@ -210,7 +203,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridViewCell dataGridViewCell)
         {
@@ -306,7 +299,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridViewCell is contained in this collection.
+        ///  Checks to see if a DataGridViewCell is contained in this collection.
         /// </summary>
         public virtual bool Contains(DataGridViewCell dataGridViewCell)
         {

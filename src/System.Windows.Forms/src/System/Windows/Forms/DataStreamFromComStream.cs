@@ -2,20 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.IO;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-    using System;
-    using System.IO;
-
-
-    /// <summary>
-    /// </summary>
     internal class DataStreamFromComStream : Stream
     {
-
         private UnsafeNativeMethods.IStream comStream;
 
         public DataStreamFromComStream(UnsafeNativeMethods.IStream comStream) : base()
@@ -70,13 +62,6 @@ namespace System.Windows.Forms
                 return endPos - curPos;
             }
         }
-
-        /*
-        private void _NotImpl(string message) {
-            NotSupportedException ex = new NotSupportedException(message, new ExternalException(SR.ExternalException, NativeMethods.E_NOTIMPL));
-            throw ex;
-        }
-        */
 
         private unsafe int _Read(void* handle, int bytes)
         {
@@ -160,7 +145,6 @@ namespace System.Windows.Forms
 
             throw new IOException(SR.DataStreamWrite);
         }
-
 
         /// <summary>
         /// Writes the data contained in the given buffer

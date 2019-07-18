@@ -2,37 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using Microsoft.Win32;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Reflection;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>Manages the position and bindings of a
-    ///       list.</para>
+    ///  Manages the position and bindings of a list.
     /// </summary>
     public class CurrencyManager : BindingManagerBase
     {
-
         private object dataSource;
         private IList list;
 
         private bool bound = false;
         private bool shouldBind = true;
 
-        /// <summary>
-        /// </summary>
-        [
-            SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields") // We can't make CurrencyManager.listposition internal
-                                                                                            // because it would be a breaking change.
-        ]
         protected int listposition = -1;
 
         private int lastGoodKnownRow = -1;
@@ -49,14 +36,14 @@ namespace System.Windows.Forms
         private EventHandler onMetaDataChangedHandler;
 
         /// <summary>
-        ///    <para>Gets the type of the list.</para>
+        ///  Gets the type of the list.
         /// </summary>
         protected Type finalType;
 
         /// <summary>
-        ///    <para>Occurs when the
-        ///       current item has been
-        ///       altered.</para>
+        ///  Occurs when the
+        ///  current item has been
+        ///  altered.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         public event ItemChangedEventHandler ItemChanged
@@ -71,20 +58,14 @@ namespace System.Windows.Forms
             remove => onListChanged -= value;
         }
 
-        /// <summary>
-        /// </summary>
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
-                                                                                                    // it would be a breaking change.
-        ]
         internal CurrencyManager(object dataSource)
         {
             SetDataSource(dataSource);
         }
 
         /// <summary>
-        ///    <para>Gets a value indicating
-        ///       whether items can be added to the list.</para>
+        ///  Gets a value indicating
+        ///  whether items can be added to the list.
         /// </summary>
         internal bool AllowAdd
         {
@@ -104,8 +85,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets a value
-        ///       indicating whether edits to the list are allowed.</para>
+        ///  Gets a value
+        ///  indicating whether edits to the list are allowed.
         /// </summary>
         internal bool AllowEdit
         {
@@ -125,7 +106,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets a value indicating whether items can be removed from the list.</para>
+        ///  Gets a value indicating whether items can be removed from the list.
         /// </summary>
         internal bool AllowRemove
         {
@@ -145,7 +126,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the number of items in the list.</para>
+        ///  Gets the number of items in the list.
         /// </summary>
         public override int Count
         {
@@ -163,7 +144,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the current item in the list.</para>
+        ///  Gets the current item in the list.
         /// </summary>
         public override object Current
         {
@@ -182,7 +163,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the data source of the list.</para>
+        ///  Gets the data source of the list.
         /// </summary>
         internal override object DataSource
         {
@@ -247,7 +228,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets a value indicating whether the list is bound to a data source.</para>
+        ///  Gets a value indicating whether the list is bound to a data source.
         /// </summary>
         internal override bool IsBinding
         {
@@ -267,14 +248,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the list as an object.</para>
+        ///  Gets the list as an object.
         /// </summary>
         public IList List
         {
             get
             {
                 // NOTE: do not change this to throw an exception if the list is not IBindingList.
-                // doing this will cause a major performance hit when wiring the 
+                // doing this will cause a major performance hit when wiring the
                 // dataGrid to listen for MetaDataChanged events from the IBindingList
                 // (basically we would have to wrap all calls to CurrencyManager::List with
                 // a try/catch block.)
@@ -284,7 +265,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Gets or sets the position you are at within the list.</para>
+        ///  Gets or sets the position you are at within the list.
         /// </summary>
         public override int Position
         {
@@ -317,7 +298,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the object at the specified index.</para>
+        ///  Gets or sets the object at the specified index.
         /// </summary>
         internal object this[int index]
         {
@@ -356,7 +337,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Cancels the current edit operation.</para>
+        ///  Cancels the current edit operation.
         /// </summary>
         public override void CancelCurrentEdit()
         {
@@ -421,7 +402,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // we pull the data from the controls only when the ListManager changes the list. when the backEnd changes the list we do not 
+            // we pull the data from the controls only when the ListManager changes the list. when the backEnd changes the list we do not
             // pull the data from the controls
             if (validating && pullData)
             {
@@ -444,7 +425,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Throws an exception if there is no list.</para>
+        ///  Throws an exception if there is no list.
         /// </summary>
         protected void CheckEmpty()
         {
@@ -522,7 +503,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Ends the current edit operation.</para>
+        ///  Ends the current edit operation.
         /// </summary>
         public override void EndCurrentEdit()
         {
@@ -572,7 +553,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Sets the column to sort by, and the direction of the sort.</para>
+        ///  Sets the column to sort by, and the direction of the sort.
         /// </summary>
         internal void SetSort(PropertyDescriptor property, ListSortDirection sortDirection)
         {
@@ -583,7 +564,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets a <see cref='System.ComponentModel.PropertyDescriptor'/> for a CurrencyManager.</para>
+        /// Gets a <see cref='PropertyDescriptor'/> for a CurrencyManager.
         /// </summary>
         internal PropertyDescriptor GetSortProperty()
         {
@@ -595,7 +576,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the sort direction of a list.</para>
+        ///  Gets the sort direction of a list.
         /// </summary>
         internal ListSortDirection GetSortDirection()
         {
@@ -607,7 +588,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Find the position of a desired list item.</para>
+        ///  Find the position of a desired list item.
         /// </summary>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex)
         {
@@ -637,7 +618,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the name of the list.</para>
+        ///  Gets the name of the list.
         /// </summary>
         internal override string GetListName()
         {
@@ -652,7 +633,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the name of the specified list.</para>
+        ///  Gets the name of the specified list.
         /// </summary>
         protected internal override string GetListName(ArrayList listAccessors)
         {
@@ -665,16 +646,14 @@ namespace System.Windows.Forms
             return "";
         }
 
-        /// <summary>
-        /// </summary>
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {
             return ListBindingHelper.GetListItemProperties(list, listAccessors);
         }
 
         /// <summary>
-        /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for
-        ///    the list.</para>
+        /// Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for
+        ///  the list.
         /// </summary>
         public override PropertyDescriptorCollection GetItemProperties()
         {
@@ -682,19 +661,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.</para>
+        /// Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.
         /// </summary>
-        private void List_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
+        private void List_ListChanged(object sender, ListChangedEventArgs e)
         {
-            // If you change the assert below, better change the 
+            // If you change the assert below, better change the
             // code in the OnCurrentChanged that deals w/ firing the OnCurrentChanged event
             Debug.Assert(lastGoodKnownRow == -1 || lastGoodKnownRow == listposition, "if we have a valid lastGoodKnownRow, then it should equal the position in the list");
 
-            // 
-
-
-
-
+            //
 
             ListChangedEventArgs dbe;
 
@@ -747,8 +722,7 @@ namespace System.Windows.Forms
                     OnMetaDataChanged(EventArgs.Empty);
                 }
 
-                // 
-
+                //
 
                 OnListChanged(dbe);
                 return;
@@ -809,7 +783,7 @@ namespace System.Windows.Forms
                         UpdateIsBinding();
                         // put the call to OnItemChanged after setting the position, so the
                         // controls would use the actual position.
-                        // if we have a control bound to a dataView, and then we add a row to a the dataView, 
+                        // if we have a control bound to a dataView, and then we add a row to a the dataView,
                         // then the control will use the old listposition to get the data. and this is bad.
                         //
                         OnItemChanged(resetEvent);
@@ -885,8 +859,7 @@ namespace System.Windows.Forms
                         break;
                 }
                 // send the ListChanged notification after the position changed in the list
-                // 
-
+                //
 
                 OnListChanged(dbe);
             }
@@ -897,7 +870,6 @@ namespace System.Windows.Forms
             Debug.Assert(lastGoodKnownRow == -1 || listposition == lastGoodKnownRow, "how did they get out of sync?");
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
         [SRCategory(nameof(SR.CatData))]
         public event EventHandler MetaDataChanged
         {
@@ -906,7 +878,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Causes the CurrentChanged event to occur. </para>
+        /// Causes the CurrentChanged event to occur.
         /// </summary>
         internal protected override void OnCurrentChanged(EventArgs e)
         {
@@ -957,8 +929,6 @@ namespace System.Windows.Forms
             _onCurrentItemChangedHandler?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// </summary>
         protected virtual void OnItemChanged(ItemChangedEventArgs e)
         {
             // It is possible that CurrencyManager_PushData will change the position
@@ -994,14 +964,12 @@ namespace System.Windows.Forms
             onListChanged?.Invoke(this, e);
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
+//Exists in Everett
         internal protected void OnMetaDataChanged(EventArgs e)
         {
             onMetaDataChangedHandler?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// </summary>
         protected virtual void OnPositionChanged(EventArgs e)
         {
             // if (!inChangeRecordState) {
@@ -1018,9 +986,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Forces a repopulation of the CurrencyManager
-        ///    </para>
+        ///  Forces a repopulation of the CurrencyManager
         /// </summary>
         public void Refresh()
         {
@@ -1036,7 +1002,7 @@ namespace System.Windows.Forms
             {
                 listposition = -1;
             }
-            List_ListChanged(list, new System.ComponentModel.ListChangedEventArgs(System.ComponentModel.ListChangedType.Reset, -1));
+            List_ListChanged(list, new ListChangedEventArgs(System.ComponentModel.ListChangedType.Reset, -1));
         }
 
         internal void Release()
@@ -1045,7 +1011,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Resumes binding of component properties to list items.</para>
+        ///  Resumes binding of component properties to list items.
         /// </summary>
         public override void ResumeBinding()
         {
@@ -1069,7 +1035,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Suspends binding.</para>
+        ///  Suspends binding.
         /// </summary>
         public override void SuspendBinding()
         {
@@ -1085,7 +1051,7 @@ namespace System.Windows.Forms
         {
             if ((list is IBindingList) && ((IBindingList)list).SupportsChangeNotification)
             {
-                ((IBindingList)list).ListChanged -= new System.ComponentModel.ListChangedEventHandler(List_ListChanged);
+                ((IBindingList)list).ListChanged -= new ListChangedEventHandler(List_ListChanged);
                 /*
                 ILiveList liveList = (ILiveList) list;
                 liveList.TableChanged -= new TableChangedEventHandler(List_TableChanged);
@@ -1125,7 +1091,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateLastGoodKnownRow(System.ComponentModel.ListChangedEventArgs e)
+        private void UpdateLastGoodKnownRow(ListChangedEventArgs e)
         {
             switch (e.ListChangedType)
             {
@@ -1167,7 +1133,7 @@ namespace System.Windows.Forms
         {
             if ((list is IBindingList) && ((IBindingList)list).SupportsChangeNotification)
             {
-                ((IBindingList)list).ListChanged += new System.ComponentModel.ListChangedEventHandler(List_ListChanged);
+                ((IBindingList)list).ListChanged += new ListChangedEventHandler(List_ListChanged);
                 /*
                 ILiveList liveList = (ILiveList) list;
                 liveList.TableChanged += new TableChangedEventHandler(List_TableChanged);

@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -129,7 +127,7 @@ namespace System.Windows.Forms
         }
 
         [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
-        public static extern SafeNativeMethods.IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
+        public static extern IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateSolidBrush", CharSet = CharSet.Auto)]
         private static extern IntPtr IntCreateSolidBrush(int crColor);
@@ -153,7 +151,7 @@ namespace System.Windows.Forms
         public static extern bool InitCommonControlsEx(NativeMethods.INITCOMMONCONTROLSEX icc);
 
 #if DEBUG
-        private static readonly System.Collections.ArrayList validImageListHandles = ArrayList.Synchronized(new System.Collections.ArrayList());
+        private static readonly ArrayList validImageListHandles = ArrayList.Synchronized(new ArrayList());
 
         [DllImport(ExternDll.Comctl32, EntryPoint = "ImageList_Create")]
         private static extern IntPtr IntImageList_Create(int cx, int cy, int flags, int cInitial, int cGrow);
@@ -184,8 +182,8 @@ namespace System.Windows.Forms
         public static extern bool ImageList_Destroy(HandleRef himl);
 #endif
 
-        // unfortunately, the neat wrapper to Assert for DEBUG assumes that this was created by 
-        // our version of ImageList_Create, which is not always the case for the TreeView's internal 
+        // unfortunately, the neat wrapper to Assert for DEBUG assumes that this was created by
+        // our version of ImageList_Create, which is not always the case for the TreeView's internal
         // native state image list. Use separate EntryPoint thunk to skip this check:
         [DllImport(ExternDll.Comctl32, EntryPoint = "ImageList_Destroy")]
         public static extern bool ImageList_Destroy_Native(HandleRef himl);
@@ -387,7 +385,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool AdjustWindowRectEx(ref NativeMethods.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle);
 
-        // This API is available only starting Windows 10 RS1 
+        // This API is available only starting Windows 10 RS1
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool AdjustWindowRectExForDpi(ref NativeMethods.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle, uint dpi);
 
@@ -552,8 +550,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool KillTimer(HandleRef hwnd, int idEvent);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto),
-            SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api")]
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int MessageBox(HandleRef hWnd, string text, string caption, int type);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -679,7 +676,7 @@ namespace System.Windows.Forms
         public static extern int GetThemeInt(HandleRef hTheme, int iPartId, int iStateId, int iPropId, ref int piVal);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, System.Windows.Forms.VisualStyles.ThemeSizeType eSize, [Out] NativeMethods.SIZE psz);
+        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, [Out] NativeMethods.SIZE psz);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, [Out] NativeMethods.POINT pPoint);
@@ -694,7 +691,7 @@ namespace System.Windows.Forms
         public static extern int GetThemeTextExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [MarshalAs(UnmanagedType.LPWStr)] string pszText, int iCharCount, int dwTextFlags, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pExtentRect);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref System.Windows.Forms.VisualStyles.TextMetrics ptm);
+        public static extern int GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref VisualStyles.TextMetrics ptm);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, [In] NativeMethods.POINTSTRUCT ptTest, ref int pwHitTestCode);
@@ -728,11 +725,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool SetProcessDPIAware();
 
-        // for Windows 8.1 and above 
+        // for Windows 8.1 and above
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         public static extern int SetProcessDpiAwareness(NativeMethods.PROCESS_DPI_AWARENESS awareness);
 
-        // for Windows 8.1 and above 
+        // for Windows 8.1 and above
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
 
@@ -758,7 +755,6 @@ namespace System.Windows.Forms
         // Color conversion
         public static int RGBToCOLORREF(int rgbValue)
         {
-
             // clear the A value, swap R & B values
             int bValue = (rgbValue & 0xFF) << 16;
 
@@ -785,7 +781,6 @@ namespace System.Windows.Forms
         [ComImport(), Guid("BEF6E003-A874-101A-8BBA-00AA00300CAB"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
         public interface IFontDisp
         {
-
             string Name { get; set; }
 
             long Size { get; set; }

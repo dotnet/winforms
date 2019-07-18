@@ -5,8 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
@@ -38,29 +36,29 @@ namespace System.Windows.Forms
         IBindableComponent
     {
         /// <summary>
-        ///     Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.
+        ///  Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.
         /// </summary>
         private const int ImeCharsToIgnoreDisabled = -1;
         private const int ImeCharsToIgnoreEnabled = 0;
 
         /// <summary>
-        ///     The ImeMode value for controls with ImeMode = ImeMode.NoControl.  See PropagatingImeMode property.
+        ///  The ImeMode value for controls with ImeMode = ImeMode.NoControl.  See PropagatingImeMode property.
         /// </summary>
         private static ImeMode propagatingImeMode = ImeMode.Inherit; // Inherit means uninitialized.
 
         /// <summary>
-        ///     This flag prevents resetting ImeMode value of the focused control.  See IgnoreWmImeNotify property.
+        ///  This flag prevents resetting ImeMode value of the focused control.  See IgnoreWmImeNotify property.
         /// </summary>
         private static bool ignoreWmImeNotify;
 
         /// <summary>
-        ///     This flag works around an Issue with the Chinese IME sending IMENotify messages prior to WmInputLangChange
-        ///     which would cause this code to use OnHalf as the default mode overriding .ImeMode property. See WmImeNotify
+        ///  This flag works around an Issue with the Chinese IME sending IMENotify messages prior to WmInputLangChange
+        ///  which would cause this code to use OnHalf as the default mode overriding .ImeMode property. See WmImeNotify
         /// </summary>
         private static bool lastLanguageChinese = false;
 
         /// <summary>
-        ///     The ImeMode in the property store.
+        ///  The ImeMode in the property store.
         /// </summary>
         internal ImeMode CachedImeMode
         {
@@ -120,9 +118,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether the ImeMode property value can be changed to an active value.
-        ///     Added to support Password & ReadOnly (and maybe other) properties, which when set, should force disabling
-        ///     the IME if using one.
+        ///  Specifies whether the ImeMode property value can be changed to an active value.
+        ///  Added to support Password & ReadOnly (and maybe other) properties, which when set, should force disabling
+        ///  the IME if using one.
         /// </summary>
         protected virtual bool CanEnableIme
         {
@@ -139,7 +137,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets the current IME context mode.  If no IME associated, ImeMode.Inherit is returned.
+        ///  Gets the current IME context mode.  If no IME associated, ImeMode.Inherit is returned.
         /// </summary>
         internal ImeMode CurrentImeContextMode
         {
@@ -153,22 +151,20 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // window is not yet created hence no IME associated yet. 
+                    // window is not yet created hence no IME associated yet.
                     return ImeMode.Inherit;
                 }
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected virtual ImeMode DefaultImeMode
         {
             get { return ImeMode.Inherit; }
         }
 
         /// <summary>
-        ///     Flag used to avoid re-entrancy during WM_IME_NOTFIY message processing - see WmImeNotify().
-        ///     Also to avoid raising the ImeModeChanged event more than once during the process of changing the ImeMode.
+        ///  Flag used to avoid re-entrancy during WM_IME_NOTFIY message processing - see WmImeNotify().
+        ///  Also to avoid raising the ImeModeChanged event more than once during the process of changing the ImeMode.
         /// </summary>
         internal int DisableImeModeChangedCount
         {
@@ -193,8 +189,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Flag used to prevent setting ImeMode in focused control when losing focus and hosted in a non-Form shell.
-        ///     See WmImeKillFocus() for more info.
+        ///  Flag used to prevent setting ImeMode in focused control when losing focus and hosted in a non-Form shell.
+        ///  See WmImeKillFocus() for more info.
         /// </summary>
         private static bool IgnoreWmImeNotify
         {
@@ -218,8 +214,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies a value that determines the IME (Input Method Editor) status of the
-        ///     object when that object is selected.
+        ///  Specifies a value that determines the IME (Input Method Editor) status of the
+        ///  object when that object is selected.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -247,8 +243,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Internal version of ImeMode property.  This is provided for controls that override CanEnableIme and that
-        ///     return ImeMode.Disable for the ImeMode property when CanEnableIme is false - See TextBoxBase controls.
+        ///  Internal version of ImeMode property.  This is provided for controls that override CanEnableIme and that
+        ///  return ImeMode.Disable for the ImeMode property when CanEnableIme is false - See TextBoxBase controls.
         /// </summary>
         protected virtual ImeMode ImeModeBase
         {
@@ -320,7 +316,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the Control supports IME handling by default.
+        ///  Determines whether the Control supports IME handling by default.
         /// </summary>
         private bool ImeSupported
         {
@@ -338,13 +334,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the current number of WM_CHAR messages to ignore after processing corresponding WM_IME_CHAR msgs.
+        ///  Returns the current number of WM_CHAR messages to ignore after processing corresponding WM_IME_CHAR msgs.
         /// </summary>
         internal int ImeWmCharsToIgnore
         {
             // The IME sends WM_IME_CHAR messages for each character in the composition string, and then
-            // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode 
-            // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter 
+            // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode
+            // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter
             // not to process each character twice or more.
             get
             {
@@ -368,9 +364,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets the last value CanEnableIme property when it was last checked for ensuring IME context restriction mode.
-        ///     This is used by controls that implement some sort of IME restriction mode (like TextBox on Password/ReadOnly mode).
-        ///     See the VerifyImeRestrictedModeChanged() method.
+        ///  Gets the last value CanEnableIme property when it was last checked for ensuring IME context restriction mode.
+        ///  This is used by controls that implement some sort of IME restriction mode (like TextBox on Password/ReadOnly mode).
+        ///  See the VerifyImeRestrictedModeChanged() method.
         /// </summary>
         private bool LastCanEnableIme
         {
@@ -403,9 +399,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Represents the internal ImeMode value for controls with ImeMode = ImeMode.NoControl.  This property is changed
-        ///     only by user interaction and is required to set the IME context appropriately while keeping the ImeMode property
-        ///     unchanged.
+        ///  Represents the internal ImeMode value for controls with ImeMode = ImeMode.NoControl.  This property is changed
+        ///  only by user interaction and is required to set the IME context appropriately while keeping the ImeMode property
+        ///  unchanged.
         /// </summary>
         protected static ImeMode PropagatingImeMode
         {
@@ -476,8 +472,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the IME context to the appropriate ImeMode according to the control's ImeMode state.
-        ///     This method is commonly used when attaching the IME to the control's window.
+        ///  Sets the IME context to the appropriate ImeMode according to the control's ImeMode state.
+        ///  This method is commonly used when attaching the IME to the control's window.
         /// </summary>
         internal void UpdateImeContextMode()
         {
@@ -505,12 +501,12 @@ namespace System.Windows.Forms
                 if (CurrentImeContextMode != newImeContextMode && newImeContextMode != ImeMode.Inherit)
                 {
                     // If the context changes the window will receive one or more WM_IME_NOTIFY messages and as part of its
-                    // processing it will raise the ImeModeChanged event if needed.  We need to prevent the event from been 
+                    // processing it will raise the ImeModeChanged event if needed.  We need to prevent the event from been
                     // raised here from here.
                     DisableImeModeChangedCount++;
 
-                    // Setting IME status to Disable will first close the IME and then disable it.  For CHN IME, the first action will 
-                    // update the PropagatingImeMode to ImeMode.Close which is incorrect.  We need to save the PropagatingImeMode in 
+                    // Setting IME status to Disable will first close the IME and then disable it.  For CHN IME, the first action will
+                    // update the PropagatingImeMode to ImeMode.Close which is incorrect.  We need to save the PropagatingImeMode in
                     // this case and restore it after the context has been changed.
                     // Also this call here is very important since it will initialize the PropagatingImeMode if not already initialized
                     // before setting the IME context to the control's ImeMode value which could be different from the propagating value.
@@ -557,7 +553,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Checks if specified ImeMode values are different and raise the event if true.
+        ///  Checks if specified ImeMode values are different and raise the event if true.
         /// </summary>
         private void VerifyImeModeChanged(ImeMode oldMode, ImeMode newMode)
         {
@@ -576,8 +572,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Verifies whether the IME context mode is correct based on the control's Ime restriction mode (CanEnableIme) 
-        ///     and updates the IME context if needed.
+        ///  Verifies whether the IME context mode is correct based on the control's Ime restriction mode (CanEnableIme)
+        ///  and updates the IME context if needed.
         /// </summary>
         internal void VerifyImeRestrictedModeChanged()
         {
@@ -626,9 +622,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Update internal ImeMode properties (PropagatingImeMode/CachedImeMode) with actual IME context mode if needed.
-        ///     This method can be used with a child control when the IME mode is more relevant to it than to the control itself,
-        ///     for instance ComboBox and its native ListBox/Edit controls.
+        ///  Update internal ImeMode properties (PropagatingImeMode/CachedImeMode) with actual IME context mode if needed.
+        ///  This method can be used with a child control when the IME mode is more relevant to it than to the control itself,
+        ///  for instance ComboBox and its native ListBox/Edit controls.
         /// </summary>
         internal void OnImeContextStatusChanged(IntPtr handle)
         {
@@ -664,8 +660,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.OnImeModeChanged'/>
-        /// event.</para>
+        /// Raises the <see cref='OnImeModeChanged'/>
+        /// event.
         /// </summary>
         protected virtual void OnImeModeChanged(EventArgs e)
         {
@@ -675,7 +671,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the Ime mode.
+        ///  Resets the Ime mode.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetImeMode()
@@ -685,7 +681,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns true if the ImeMode should be persisted in code gen.
+        ///  Returns true if the ImeMode should be persisted in code gen.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeImeMode()
@@ -698,7 +694,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_INPUTLANGCHANGE message
+        ///  Handles the WM_INPUTLANGCHANGE message
         /// </summary>
         private void WmInputLangChange(ref Message m)
         {
@@ -734,9 +730,8 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-
         /// <summary>
-        ///     Handles the WM_INPUTLANGCHANGEREQUEST message
+        ///  Handles the WM_INPUTLANGCHANGEREQUEST message
         /// </summary>
         private void WmInputLangChangeRequest(ref Message m)
         {
@@ -765,7 +760,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_IME_CHAR message
+        ///  Handles the WM_IME_CHAR message
         /// </summary>
         private void WmImeChar(ref Message m)
         {
@@ -777,7 +772,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_IME_ENDCOMPOSITION message
+        ///  Handles the WM_IME_ENDCOMPOSITION message
         /// </summary>
         private void WmImeEndComposition(ref Message m)
         {
@@ -787,20 +782,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_IME_NOTIFY message
+        ///  Handles the WM_IME_NOTIFY message
         /// </summary>
         private void WmImeNotify(ref Message m)
         {
-
             ImeMode[] inputLanguageTable = ImeModeConversion.InputLanguageTable;
 
-            // During a change to the Chinese language with Focus already set, the Chinese IME will send several WmImeNotify messages 
-            // before ever sending a WmInputLangChange event. Also, the IME will report an IME input context during this time that we 
-            // interpret as On = 'OnHalf'. The combination of these causes us to update the default Cached ImeMode to OnHalf, overriding 
+            // During a change to the Chinese language with Focus already set, the Chinese IME will send several WmImeNotify messages
+            // before ever sending a WmInputLangChange event. Also, the IME will report an IME input context during this time that we
+            // interpret as On = 'OnHalf'. The combination of these causes us to update the default Cached ImeMode to OnHalf, overriding
             // the control's ImeMode property -- unwanted behavior. We workaround this by skipping our mode synchronization during these
             // IMENotify messages until we get a WmInputLangChange event.
             //
-            // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange 
+            // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange
             // before listening to WmImeNotifys.
             if ((inputLanguageTable == ImeModeConversion.ChineseTable) && !lastLanguageChinese)
             {
@@ -815,19 +809,19 @@ namespace System.Windows.Forms
 
                 // The WM_IME_NOTIFY message is not consistent across the different IMEs, particularly the notification type
                 // we care about (IMN_SETCONVERSIONMODE & IMN_SETOPENSTATUS).
-                // The IMN_SETOPENSTATUS command is sent when the open status of the input context is updated. 
+                // The IMN_SETOPENSTATUS command is sent when the open status of the input context is updated.
                 // The IMN_SETCONVERSIONMODE command is sent when the conversion mode of the input context is updated.
                 // - The Korean IME sents both msg notifications when changing the conversion mode (From/To Hangul/Alpha).
-                // - The Chinese IMEs sends the IMN_SETCONVERSIONMODE when changing mode (On/Close, Full Shape/Half Shape) 
+                // - The Chinese IMEs sends the IMN_SETCONVERSIONMODE when changing mode (On/Close, Full Shape/Half Shape)
                 //   and IMN_SETOPENSTATUS when getting disabled/enabled or closing/opening as well, but it does not send any
                 //   WM_IME_NOTIFY when associating an IME to the app for the first time; setting the IME mode to direct input
                 //   during WM_INPUTLANGCHANGED forces the IMN_SETOPENSTATUS message to be sent.
-                // - The Japanese IME sends IMN_SETCONVERSIONMODE when changing from Off to one of the active modes (Katakana..) 
+                // - The Japanese IME sends IMN_SETCONVERSIONMODE when changing from Off to one of the active modes (Katakana..)
                 //   and IMN_SETOPENSTATUS when changing beteween the active modes or when enabling/disabling the IME.
-                // In any case we update the cache. 
-                // Warning: 
+                // In any case we update the cache.
+                // Warning:
                 // Attempting to change the IME mode from here will cause re-entrancy - WM_IME_NOTIFY is resent.
-                // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could 
+                // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
                 // lead to another WM_IME_NOTIFY loop.
 
                 if (wparam == NativeMethods.IMN_SETCONVERSIONMODE || wparam == NativeMethods.IMN_SETOPENSTATUS)
@@ -846,7 +840,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_SETFOCUS message for IME related stuff.
+        ///  Handles the WM_SETFOCUS message for IME related stuff.
         /// </summary>
         internal void WmImeSetFocus()
         {
@@ -865,7 +859,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_IME_STARTCOMPOSITION message
+        ///  Handles the WM_IME_STARTCOMPOSITION message
         /// </summary>
         private void WmImeStartComposition(ref Message m)
         {
@@ -877,7 +871,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_KILLFOCUS message
+        ///  Handles the WM_KILLFOCUS message
         /// </summary>
         private void WmImeKillFocus()
         {
@@ -890,11 +884,11 @@ namespace System.Windows.Forms
             if ((appForm == null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
             {
                 // This means the winforms component container is not a WinForms host and it is no longer focused.
-                // Or it is not the main app host. 
+                // Or it is not the main app host.
 
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Unfocused TopMostParent = " + topMostWinformsParent);
 
-                // We need to reset the PropagatingImeMode to force reinitialization when the winforms component gets focused again; 
+                // We need to reset the PropagatingImeMode to force reinitialization when the winforms component gets focused again;
                 // this enables inheritting the propagating mode from an unmanaged application hosting a winforms component.
                 // But before leaving the winforms container we need to set the IME to the propagating IME mode since the focused control
                 // may not support IME which would leave the IME disabled.
@@ -922,26 +916,24 @@ namespace System.Windows.Forms
                 }
             }
 
-
             Debug.Unindent();
         }
     } // end class Control
 
-
     ///////////////////////////////////////////////////////// ImeContext class /////////////////////////////////////////////////////////
 
     /// <summary>
-    ///     Represents the native IME context.
+    ///  Represents the native IME context.
     /// </summary>
     public static class ImeContext
     {
         /// <summary>
-        ///     The IME context handle obtained when first associating an IME.
+        ///  The IME context handle obtained when first associating an IME.
         /// </summary>
         private static IntPtr originalImeContext;
 
         /// <summary>
-        ///     Disable the IME
+        ///  Disable the IME
         /// </summary>
         public static void Disable(IntPtr handle)
         {
@@ -972,7 +964,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Enable the IME
+        ///  Enable the IME
         /// </summary>
         public static void Enable(IntPtr handle)
         {
@@ -1022,7 +1014,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets the ImeMode that corresponds to ImeMode.Disable based on the current input language ImeMode table.
+        ///  Gets the ImeMode that corresponds to ImeMode.Disable based on the current input language ImeMode table.
         /// </summary>
         public static ImeMode GetImeMode(IntPtr handle)
         {
@@ -1037,7 +1029,7 @@ namespace System.Windows.Forms
             ImeMode[] countryTable = ImeModeConversion.InputLanguageTable;
             if (countryTable == ImeModeConversion.UnsupportedTable)
             {
-                // No IME associated with current culture. 
+                // No IME associated with current culture.
                 retval = ImeMode.Inherit;
                 goto cleanup;
             }
@@ -1109,7 +1101,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Get the actual IME status - This method is for debugging purposes only.
+        ///  Get the actual IME status - This method is for debugging purposes only.
         /// </summary>
         [Conditional("DEBUG")]
         internal static void TraceImeStatus(Control ctl)
@@ -1194,7 +1186,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns true if the IME is currently open
+        ///  Returns true if the IME is currently open
         /// </summary>
         public static bool IsOpen(IntPtr handle)
         {
@@ -1222,7 +1214,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the actual IME context value.
+        ///  Sets the actual IME context value.
         /// </summary>
         public static void SetImeStatus(ImeMode imeMode, IntPtr handle)
         {
@@ -1325,7 +1317,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Opens or closes the IME context.
+        ///  Opens or closes the IME context.
         /// </summary>
         public static void SetOpenStatus(bool open, IntPtr handle)
         {
@@ -1358,14 +1350,12 @@ namespace System.Windows.Forms
         }
     }// end ImeContext class
 
-
     ///////////////////////////////////////////////////////// ImeModeConversion structure /////////////////////////////////////////////////////////
 
     /// <summary>
-    ///     Helper class that provides information about IME convertion mode.  Convertion mode refers to how IME interprets input like
-    ///     ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME convertion window appropriately.
+    ///  Helper class that provides information about IME convertion mode.  Convertion mode refers to how IME interprets input like
+    ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME convertion window appropriately.
     /// </summary>
-    [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")] // this class has no public instance memebers.
     public struct ImeModeConversion
     {
         private static Dictionary<ImeMode, ImeModeConversion> imeModeConversionBits;
@@ -1388,7 +1378,7 @@ namespace System.Windows.Forms
         internal const int ImeAlphaHalf = 9;
 
         /// <summary>
-        ///     Supported input language ImeMode tables.
+        ///  Supported input language ImeMode tables.
         ///		WARNING: Do not try to map 'active' IME modes from one table to another since they can have a different
         ///				 meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
         ///				 but to Japanese it is 'alpha' and to Korean it has no meaning.
@@ -1435,7 +1425,6 @@ namespace System.Windows.Forms
         private static readonly ImeMode[] unsupportedTable = {
         };
 
-
         internal static ImeMode[] ChineseTable
         {
             get
@@ -1469,11 +1458,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets the ImeMode table of the current input language.  
-        ///     Although this property is per-thread based we cannot cache it and share it among controls running in the same thread
-        ///     for two main reasons: we still have some controls that don't handle IME properly (TabControl, ComboBox, TreeView...)
-        ///     and would render it invalid and since the IME API is not public third party controls would not have a way to update
-        ///     the cached value.
+        ///  Gets the ImeMode table of the current input language.
+        ///  Although this property is per-thread based we cannot cache it and share it among controls running in the same thread
+        ///  for two main reasons: we still have some controls that don't handle IME properly (TabControl, ComboBox, TreeView...)
+        ///  and would render it invalid and since the IME API is not public third party controls would not have a way to update
+        ///  the cached value.
         /// </summary>
         internal static ImeMode[] InputLanguageTable
         {
@@ -1507,7 +1496,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Dictionary of ImeMode and corresponding convertion flags.
+        ///  Dictionary of ImeMode and corresponding convertion flags.
         /// </summary>
         public static Dictionary<ImeMode, ImeModeConversion> ImeModeConversionBits
         {

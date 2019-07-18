@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// test results while still being able to use memberdata to parameterize the xUnit test,
     /// but the normal MemberData attribute resolves before anything else (even the constructor)
     /// is invoked.
-    /// 
+    ///
     /// This code is based on an example at https://tpodolak.com/blog/2017/06/19/xunit-memberdataattribute-generic-type-inheritance/
     /// </summary>
     [DataDiscoverer("Xunit.Sdk.MemberDataDiscoverer", "xunit.core")]
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
 
         /// <summary>
         /// This is the method that actually returns the data that will be parameterized into the
-        /// xUnit test method. We actually don't use the base class logic at all, 
+        /// xUnit test method. We actually don't use the base class logic at all,
         /// we just get the scenarios for the specified project name and return them.
         /// </summary>
         /// <param name="testMethod">MethodInfo of the method being decorated</param>

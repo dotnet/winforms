@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design.Behavior
             public Point originalControlLocation; //the original control of the control in AdornerWindow coordinates
             public Point draggedLocation; //the location of the component after each drag - in AdornerWindow coordinates
             public Image dragImage; //bitblt'd image of control
-            public Point positionOffset; //control position offset from primary selection            
+            public Point positionOffset; //control position offset from primary selection
         };
 
         private readonly DragComponent[] dragComponents;
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private bool targetAllowsSnapLines;//indicates if the drop target allows snaplines (flowpanels don't for ex)
         private IComponent lastDropTarget;//indicates the drop target on the last 'give feedback' event
-        private Point lastSnapOffset;//the last snapoffset we used. 
+        private Point lastSnapOffset;//the last snapoffset we used.
         // These 2 could be different (e.g. if dropping between forms)
         private readonly BehaviorService behaviorServiceSource;//ptr back to the BehaviorService in the drop source
         private BehaviorService behaviorServiceTarget;//ptr back to the BehaviorService in the drop target
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design.Behavior
         //this object will integrate SnapLines into the drag
         private DragAssistanceManager dragAssistanceManager;
 
-        private Graphics graphicsTarget;//graphics object of the adornerwindows (via BehaviorService) in drop target        
+        private Graphics graphicsTarget;//graphics object of the adornerwindows (via BehaviorService) in drop target
 
         private readonly IServiceProvider serviceProviderSource;
         private IServiceProvider serviceProviderTarget;
@@ -74,7 +74,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal DropSourceBehavior(ICollection dragComponents, Control source, Point initialMouseLocation)
         {
-
             serviceProviderSource = source.Site as IServiceProvider;
             if (serviceProviderSource == null)
             {
@@ -511,7 +510,7 @@ namespace System.Windows.Forms.Design.Behavior
                             originalControls = null;
                         }
 
-                        // Rearrange the Component Tray - if we have to                        
+                        // Rearrange the Component Tray - if we have to
                         if (performCopy)
                         {
                             if (tray == null)
@@ -575,7 +574,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                // Even though we call CleanupDrag(false) twice (see above), this method guards against doing the wrong thing.  
+                // Even though we call CleanupDrag(false) twice (see above), this method guards against doing the wrong thing.
                 CleanupDrag(false);
                 if (statusCommandUITarget != null)
                 {
@@ -766,7 +765,7 @@ namespace System.Windows.Forms.Design.Behavior
                     lastSnapOffset = AdjustToGrid(newPosition);
                 }
 
-                // Set the new location after the drag (only need to do this for the primary control) adjusted for a snap offset       
+                // Set the new location after the drag (only need to do this for the primary control) adjusted for a snap offset
                 newPosition.X += lastSnapOffset.X;
                 newPosition.Y += lastSnapOffset.Y;
 
@@ -1135,7 +1134,7 @@ namespace System.Windows.Forms.Design.Behavior
                         behaviorServiceTarget.SyncSelection();
                     }
 
-                    // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong.  We need to sync these.                    
+                    // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong.  We need to sync these.
                     if (behaviorServiceSource != null)
                     {
                         behaviorServiceSource.SyncSelection();

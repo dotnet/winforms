@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-
     /// <summary>
     /// EventArgs for onerror event of HtmlElement
     /// </summary>
@@ -26,7 +25,7 @@ namespace System.Windows.Forms
         public string Description { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.HtmlWindow.Error'/>
+        /// Gets or sets a value indicating whether the <see cref='HtmlWindow.Error'/>
         /// event was handled.
         /// </summary>
         public bool Handled { get; set; }

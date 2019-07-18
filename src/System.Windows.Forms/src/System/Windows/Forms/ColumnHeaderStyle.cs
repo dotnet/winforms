@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how <see cref='System.Windows.Forms.ListView'/> column headers
+    /// Specifies how <see cref='ListView'/> column headers
     /// behave.
     /// </summary>
     public enum ColumnHeaderStyle

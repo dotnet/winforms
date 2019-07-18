@@ -267,11 +267,11 @@ namespace System.Windows.Forms.Tests
                 Checked = value
             };
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);
@@ -287,11 +287,11 @@ namespace System.Windows.Forms.Tests
 
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);
@@ -308,11 +308,11 @@ namespace System.Windows.Forms.Tests
 
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);
@@ -330,11 +330,11 @@ namespace System.Windows.Forms.Tests
 
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);

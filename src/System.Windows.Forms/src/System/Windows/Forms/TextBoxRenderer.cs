@@ -2,25 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.Internal;
-    using System.Windows.Forms.VisualStyles;
-    using Microsoft.Win32;
-
-
     /// <summary>
-    ///    <para>
-    ///       This is a rendering class for the TextBox control.
-    ///    </para>
+    ///  This is a rendering class for the TextBox control.
     /// </summary>
     public sealed class TextBoxRenderer
     {
-
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
@@ -32,10 +23,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns true if this class is supported for the current OS and user/application settings, 
-        ///       otherwise returns false.
-        ///    </para>
+        ///  Returns true if this class is supported for the current OS and user/application settings,
+        ///  otherwise returns false.
         /// </summary>
         public static bool IsSupported
         {
@@ -64,13 +53,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a TextBox control.
-        ///    </para>
+        ///  Renders a TextBox control.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
-        ]
         public static void DrawTextBox(Graphics g, Rectangle bounds, TextBoxState state)
         {
             InitializeRenderer((int)state);
@@ -78,9 +62,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a TextBox control.
-        ///    </para>
+        ///  Renders a TextBox control.
         /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, TextBoxState state)
         {
@@ -88,9 +70,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a TextBox control.
-        ///    </para>
+        ///  Renders a TextBox control.
         /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, Rectangle textBounds, TextBoxState state)
         {
@@ -98,9 +78,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a TextBox control.
-        ///    </para>
+        ///  Renders a TextBox control.
         /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, TextFormatFlags flags, TextBoxState state)
         {
@@ -111,13 +89,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a TextBox control.
-        ///    </para>
+        ///  Renders a TextBox control.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
-        ]
         public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, Rectangle textBounds, TextFormatFlags flags, TextBoxState state)
         {
             InitializeRenderer((int)state);
@@ -126,7 +99,6 @@ namespace System.Windows.Forms
             Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
             TextRenderer.DrawText(g, textBoxText, font, textBounds, textColor, flags);
         }
-
 
         private static void InitializeRenderer(int state)
         {

@@ -90,7 +90,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private Rectangle AdjustToGrid(Rectangle controlBounds, SelectionRules rules)
         {
-
             Rectangle rect = controlBounds;
 
             if ((rules & SelectionRules.RightSizeable) != 0)
@@ -414,7 +413,6 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         internal static int AdjustPixelsForIntegralHeight(Control control, int pixelsMoved)
         {
             PropertyDescriptor propIntegralHeight = TypeDescriptor.GetProperties(control)["IntegralHeight"];
@@ -474,7 +472,6 @@ namespace System.Windows.Forms.Design.Behavior
                     return true;
                 }
             }
-
 
             if (!_dragging)
             {

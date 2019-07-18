@@ -2,15 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
     /// This class defines the possible kinds of punctuation tables that
     /// can be used with the RichTextBox word wrapping and word breaking features.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum RichTextBoxWordPunctuations
     {
         /// <summary>

@@ -2,25 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Collections;
-    using System.Globalization;
-    using System.Reflection;
-
     public class ListBindingConverter : TypeConverter
     {
-
         private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
         private static string[] ctorParamProps = null; // the name of each property to check to see if we need to init with a ctor.
 
         /// <summary>
-        ///      Creates our array of types on demand.
+        ///  Creates our array of types on demand.
         /// </summary>
         private static Type[] ConstructorParamaterTypes
         {
@@ -35,9 +32,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Creates our array of param names on demand.
+        ///  Creates our array of param names on demand.
         /// </summary>
-
         private static string[] ConstructorParameterProperties
         {
             get
@@ -50,10 +46,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>Gets a value indicating whether this converter can
-        ///       convert an object to the given destination type using the context.</para>
+        ///  Gets a value indicating whether this converter can
+        ///  convert an object to the given destination type using the context.
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
@@ -65,11 +60,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Converts the given object to another type.  The most common types to convert
-        ///      are to and from a string object.  The default implementation will make a call
-        ///      to ToString on the object if the object is valid and if the destination
-        ///      type is string.  If this cannot convert to the desitnation type, this will
-        ///      throw a NotSupportedException.
+        ///  Converts the given object to another type.  The most common types to convert
+        ///  are to and from a string object.  The default implementation will make a call
+        ///  to ToString on the object if the object is valid and if the destination
+        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
@@ -88,9 +83,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Creates an instance of this type given a set of property values
-        ///      for the object.  This is useful for objects that are immutable, but still
-        ///      want to provide changable properties.
+        ///  Creates an instance of this type given a set of property values
+        ///  for the object.  This is useful for objects that are immutable, but still
+        ///  want to provide changable properties.
         /// </summary>
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
@@ -111,8 +106,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Determines if changing a value on this object should require a call to
-        ///      CreateInstance to create a new value.
+        ///  Determines if changing a value on this object should require a call to
+        ///  CreateInstance to create a new value.
         /// </summary>
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
         {
@@ -120,12 +115,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Gets the best matching ctor for a given binding and fills it out, based on the 
-        ///      state of the Binding and the optimal ctor.
+        ///  Gets the best matching ctor for a given binding and fills it out, based on the
+        ///  state of the Binding and the optimal ctor.
         /// </summary>
         private InstanceDescriptor GetInstanceDescriptorFromValues(Binding b)
         {
-
             // The BindingFormattingDialog turns on Binding::FormattingEnabled property.
             // however, when the user data binds a property using the PropertyBrowser, Binding::FormattingEnabled is set to false
             // The Binding class is not a component class, so we don't have the ComponentInitialize method where we can set FormattingEnabled to true
@@ -200,4 +194,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

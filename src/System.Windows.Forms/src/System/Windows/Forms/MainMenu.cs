@@ -2,19 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para> 
-    ///       Represents
-    ///       a menu structure for a form.</para>
+    ///  Represents a menu structure for a form.
     /// </summary>
     [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
     public class MainMenu : Menu
@@ -25,16 +18,15 @@ namespace System.Windows.Forms
         private EventHandler onCollapse;
 
         /// <summary>
-        ///     Creates a new MainMenu control.
+        ///  Creates a new MainMenu control.
         /// </summary>
         public MainMenu()
             : base(null)
         {
-
         }
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.MainMenu'/> class with the specified container.</para>
+        /// Initializes a new instance of the <see cref='MainMenu'/> class with the specified container.
         /// </summary>
         public MainMenu(IContainer container) : this()
         {
@@ -47,13 +39,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a new MainMenu control with the given items to start
-        ///     with.
+        ///  Creates a new MainMenu control with the given items to start
+        ///  with.
         /// </summary>
         public MainMenu(MenuItem[] items)
             : base(items)
         {
-
         }
 
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
@@ -63,11 +54,10 @@ namespace System.Windows.Forms
             remove => onCollapse -= value;
         }
 
-
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
-        ///     text alignment and reading order will be from right to left.
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
+        ///  text alignment and reading order will be from right to left.
         /// </summary>
         // Add an AmbientValue attribute so that the Reset context menu becomes available in the Property Grid.
         [
@@ -121,7 +111,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a new MainMenu object which is a dupliate of this one.
+        ///  Creates a new MainMenu object which is a dupliate of this one.
         /// </summary>
         public virtual MainMenu CloneMenu()
         {
@@ -130,19 +120,15 @@ namespace System.Windows.Forms
             return newMenu;
         }
 
-        /// <summary>
-        /// </summary>
-
-
         protected override IntPtr CreateMenuHandle()
         {
             return UnsafeNativeMethods.CreateMenu();
         }
 
         /// <summary>
-        ///     Clears out this MainMenu object and discards all of it's resources.
-        ///     If the menu is parented in a form, it is disconnected from that as
-        ///     well.
+        ///  Clears out this MainMenu object and discards all of it's resources.
+        ///  If the menu is parented in a form, it is disconnected from that as
+        ///  well.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -157,7 +143,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates which form in which we are currently residing [if any]
+        ///  Indicates which form in which we are currently residing [if any]
         /// </summary>
         public Form GetForm()
         {
@@ -169,8 +155,6 @@ namespace System.Windows.Forms
             return form;
         }
 
-        /// <summary>
-        /// </summary>
         internal override void ItemsChanged(int change)
         {
             base.ItemsChanged(change);
@@ -180,8 +164,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal virtual void ItemsChanged(int change, Menu menu)
         {
             if (form != null)
@@ -191,7 +173,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Fires the collapse event
+        ///  Fires the collapse event
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
@@ -199,7 +181,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns true if the RightToLeft should be persisted in code gen.
+        ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
         internal virtual bool ShouldSerializeRightToLeft()
         {
@@ -211,11 +193,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-            // Removing GetForm information 
+            // Removing GetForm information
             return base.ToString();
         }
     }

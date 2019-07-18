@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -129,12 +128,10 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.collectionChangedEventDescr)), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public event CollectionChangeEventHandler CollectionChanged
         {
-            [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
             add
             {
                 throw new NotImplementedException();
             }
-            [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
             remove
             {
             }
@@ -252,9 +249,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Create a suitable binding manager for the specified dataSource/dataMember combination.
         /// - If one has already been created and cached by this BindingContext, return that
-        ///   instead.
+        ///  instead.
         /// - If the data source is an ICurrencyManagerProvider, just delegate to the data
-        ///   source.
+        ///  source.
         /// </summary>
         internal BindingManagerBase EnsureListManager(object dataSource, string dataMember)
         {

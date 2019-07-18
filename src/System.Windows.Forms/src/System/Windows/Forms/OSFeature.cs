@@ -23,14 +23,14 @@ namespace System.Windows.Forms
         private static OSFeature _feature = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.OSFeature'/> class.
+        /// Initializes a new instance of the <see cref='OSFeature'/> class.
         /// </summary>
         protected OSFeature()
         {
         }
 
         /// <summary>
-        /// Represents the <see langword='static'/> instance of <see cref='System.Windows.Forms.OSFeature'/>
+        /// Represents the <see langword='static'/> instance of <see cref='OSFeature'/>
         /// to use for feature queries. This property is read-only.
         /// </summary>
         public static OSFeature Feature => _feature ?? (_feature = new OSFeature());

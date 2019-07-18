@@ -2,24 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    static partial class IntUnsafeNativeMethods
+    internal static partial class IntUnsafeNativeMethods
     {
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, EntryPoint = "GetDC", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr IntGetDC(HandleRef hWnd);
@@ -32,8 +20,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     NOTE: DeleteDC is to be used to delete the hdc created from CreateCompatibleDC ONLY.  All other hdcs should be
-        ///     deleted with DeleteHDC.
+        ///  NOTE: DeleteDC is to be used to delete the hdc created from CreateCompatibleDC ONLY.  All other hdcs should be
+        ///  deleted with DeleteHDC.
         /// </summary>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteDC", CharSet = CharSet.Auto)]
         public static extern bool IntDeleteDC(HandleRef hDC);
@@ -85,8 +73,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     CreateCompatibleDC requires to add a GDI handle instead of an HDC handle to avoid perf penalty in HandleCollector.
-        ///     The hdc obtained from this method needs to be deleted with DeleteDC instead of DeleteHDC.
+        ///  CreateCompatibleDC requires to add a GDI handle instead of an HDC handle to avoid perf penalty in HandleCollector.
+        ///  The hdc obtained from this method needs to be deleted with DeleteDC instead of DeleteHDC.
         /// </summary>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateCompatibleDC", CharSet = CharSet.Auto)]
         public static extern IntPtr IntCreateCompatibleDC(HandleRef hDC);
@@ -97,7 +85,6 @@ namespace System.Experimental.Gdi
             DbgUtil.AssertWin32(compatibleDc != IntPtr.Zero, "CreateCompatibleDC([hdc=0x{0:X8}]) failed", hDC.Handle);
             return compatibleDc;
         }
-
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SaveDC", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int IntSaveDC(HandleRef hDC);

@@ -2,22 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Diagnostics.CodeAnalysis;
-
-
     internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
-
         internal CheckBoxPopupAdapter(ButtonBase control) : base(control) { }
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
@@ -29,7 +21,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                System.Drawing.Graphics g = e.Graphics;
+                Graphics g = e.Graphics;
                 ColorData colors = PaintPopupRender(e.Graphics).Calculate();
                 LayoutData layout = PaintPopupLayout(e, false).Layout();
 
@@ -50,7 +42,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal override void PaintOver(PaintEventArgs e, CheckState state)
         {
-            System.Drawing.Graphics g = e.Graphics;
+            Graphics g = e.Graphics;
             if (Control.Appearance == Appearance.Button)
             {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
@@ -90,7 +82,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                System.Drawing.Graphics g = e.Graphics;
+                Graphics g = e.Graphics;
                 ColorData colors = PaintPopupRender(e.Graphics).Calculate();
                 LayoutData layout = PaintPopupLayout(e, true).Layout();
 
@@ -124,8 +116,6 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
         internal static LayoutOptions PaintPopupLayout(Graphics g, bool show3D, int checkSize, Rectangle clientRectangle, Padding padding,
                                                        bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl,
                                                        Control control = null)
@@ -144,7 +134,6 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
         private LayoutOptions PaintPopupLayout(PaintEventArgs e, bool show3D)
         {
             LayoutOptions layout = CommonLayout();

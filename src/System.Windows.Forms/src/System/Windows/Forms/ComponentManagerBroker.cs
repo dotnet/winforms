@@ -2,87 +2,76 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Versioning;
-    using System.Threading;
-    using System.Globalization;
-
     /// <summary>
-    ///    Ok, this class needs some explanation.  We share message loops with other applications through 
-    ///    an interface called IMsoComponentManager. A "component' is fairly coarse here:  Windows Forms
-    ///    is a single component.  The component manager is the application that owns and runs the message
-    ///    loop.  And, consequently, an IMsoComponent is a component that plugs into that message loop
-    ///    to listen in on Windows messages.  So far, so good.
-    /// 
-    ///    Because message loops are per-thread, IMsoComponentManager is also per-thread, which means
-    ///    we will register a new IMsoComponent for each thread that is running a message loop.
-    /// 
-    ///    In a purely managed application, we satisfy both halves of the equation:  Windows Forms
-    ///    implements both the IMsoComponentManager and the IMsoComponent.  Things start
-    ///    to get complicated when the IMsoComponentManager comes from the COM world.
-    /// 
-    ///    There's a wrinkle with this design, however:  It is illegal to call IMsoComponentManager on a
-    ///    different thread than it expects. In fact, it will throw an exception.  That's a probolem for key
-    ///    events that we receive during shutdown, like app domain unload and process exit.  These
-    ///    events occur on a thread pool thread, and because as soon as we return from that thread the
-    ///    domain will typically be torn down, we don't have much of a chance to marshal the call to
-    ///    the right thread.
-    /// 
-    ///    That's where this set of classes comes in.  We actually maintain a single process-wide
-    ///    application domain, and within this app domain is where we keep all of our precious
-    ///    IMsoComponent objects.  These objects can marshal to other domains and that is how
-    ///    all other user-created Windows Forms app domains talke to the component manager.
-    ///    When one of these user-created domains is shut down, it notifies a proxied 
-    ///    IMsoComponent, which simply decrements a ref count.  When the ref count reaches zero,
-    ///    the component waits until a new message comes into it from the component manager.
-    ///    At that point it knows that it is on the right thread, and it unregisters itself from the
-    ///    component manager.
-    /// 
-    ///    If all this sounds expensive and complex, you should get a gold star.  It is.  But, we take
-    ///    some care to only do it if we absolutely have to. For example, If we only need the additional
-    ///    app domain if there is no executing assembly (so there is no managed entry point) and if
-    ///    the component manager we get is a native COM object.
-    /// 
-    /// 
-    ///    There are two main classes here:  ComponentManagerBroker and ComponentManagerProxy.
-    /// 
-    ///    ComponentManagerBroker:
-    ///    This class has a static API that can be used to retrieve a component manager proxy.
-    ///    The API uses managed remoting to attempt to communicate with our secondary domain.
-    ///    It will create the domain if it doesn't exist.  It communicates with an instance of itself
-    ///    on the other side of the domain.  That instance maintains a ComponentManagerProxy
-    ///    object for each thread that comes in with a request.
-    /// 
-    ///    ComponentManagerProxy:
-    ///    This class implements both IMsoComponentManager and IMsoComponent. It implements
-    ///    IMsoComponent so it can register with with the real IMsoComponentManager that was
-    ///    passed into this method.  After registering itself it will return an instance of itself
-    ///    as IMsoComponentManager.  After that the component manager broker stays
-    ///    out of the picture.  Here's a diagram to help:
-    /// 
-    ///    UCM <-> CProxy / CMProxy <-> AC
-    /// 
-    ///    UCM: Unmanaged component manager
-    ///    CProxy: IMsoComponent half of ComponentManagerProxy
-    ///    CMProxy: IMsoComponentManager half of ComponentManagerProxy
-    ///    AC: Application's IMsoComponent implementation
+    ///  Ok, this class needs some explanation.  We share message loops with other applications through
+    ///  an interface called IMsoComponentManager. A "component' is fairly coarse here:  Windows Forms
+    ///  is a single component.  The component manager is the application that owns and runs the message
+    ///  loop.  And, consequently, an IMsoComponent is a component that plugs into that message loop
+    ///  to listen in on Windows messages.  So far, so good.
+    ///
+    ///  Because message loops are per-thread, IMsoComponentManager is also per-thread, which means
+    ///  we will register a new IMsoComponent for each thread that is running a message loop.
+    ///
+    ///  In a purely managed application, we satisfy both halves of the equation:  Windows Forms
+    ///  implements both the IMsoComponentManager and the IMsoComponent.  Things start
+    ///  to get complicated when the IMsoComponentManager comes from the COM world.
+    ///
+    ///  There's a wrinkle with this design, however:  It is illegal to call IMsoComponentManager on a
+    ///  different thread than it expects. In fact, it will throw an exception.  That's a probolem for key
+    ///  events that we receive during shutdown, like app domain unload and process exit.  These
+    ///  events occur on a thread pool thread, and because as soon as we return from that thread the
+    ///  domain will typically be torn down, we don't have much of a chance to marshal the call to
+    ///  the right thread.
+    ///
+    ///  That's where this set of classes comes in.  We actually maintain a single process-wide
+    ///  application domain, and within this app domain is where we keep all of our precious
+    ///  IMsoComponent objects.  These objects can marshal to other domains and that is how
+    ///  all other user-created Windows Forms app domains talke to the component manager.
+    ///  When one of these user-created domains is shut down, it notifies a proxied
+    ///  IMsoComponent, which simply decrements a ref count.  When the ref count reaches zero,
+    ///  the component waits until a new message comes into it from the component manager.
+    ///  At that point it knows that it is on the right thread, and it unregisters itself from the
+    ///  component manager.
+    ///
+    ///  If all this sounds expensive and complex, you should get a gold star.  It is.  But, we take
+    ///  some care to only do it if we absolutely have to. For example, If we only need the additional
+    ///  app domain if there is no executing assembly (so there is no managed entry point) and if
+    ///  the component manager we get is a native COM object.
+    ///
+    ///
+    ///  There are two main classes here:  ComponentManagerBroker and ComponentManagerProxy.
+    ///
+    ///  ComponentManagerBroker:
+    ///  This class has a static API that can be used to retrieve a component manager proxy.
+    ///  The API uses managed remoting to attempt to communicate with our secondary domain.
+    ///  It will create the domain if it doesn't exist.  It communicates with an instance of itself
+    ///  on the other side of the domain.  That instance maintains a ComponentManagerProxy
+    ///  object for each thread that comes in with a request.
+    ///
+    ///  ComponentManagerProxy:
+    ///  This class implements both IMsoComponentManager and IMsoComponent. It implements
+    ///  IMsoComponent so it can register with with the real IMsoComponentManager that was
+    ///  passed into this method.  After registering itself it will return an instance of itself
+    ///  as IMsoComponentManager.  After that the component manager broker stays
+    ///  out of the picture.  Here's a diagram to help:
+    ///
+    ///  UCM <-> CProxy / CMProxy <-> AC
+    ///
+    ///  UCM: Unmanaged component manager
+    ///  CProxy: IMsoComponent half of ComponentManagerProxy
+    ///  CMProxy: IMsoComponentManager half of ComponentManagerProxy
+    ///  AC: Application's IMsoComponent implementation
     /// </summary>
     internal sealed class ComponentManagerBroker : MarshalByRefObject
     {
-
-        // These are constants per process and are initialized in 
+        // These are constants per process and are initialized in
         // a class cctor below.
         private static readonly object _syncObject;
         private static readonly string _remoteObjectName;
@@ -101,7 +90,7 @@ namespace System.Windows.Forms
         private ComponentManagerProxy _proxy;
 
         /// <summary>
-        ///    Static ctor.  We just set up a few per-process globals here
+        ///  Static ctor.  We just set up a few per-process globals here
         /// </summary>
         static ComponentManagerBroker()
         {
@@ -111,22 +100,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Ctor.  Quite a bit happens here. Here, we register a channel so 
-        ///     we can be found and we publish ouru object by calling Marshal.
+        ///  Ctor.  Quite a bit happens here. Here, we register a channel so
+        ///  we can be found and we publish ouru object by calling Marshal.
         ///
-        ///     Note that we have a single static _broker field.  We assign this
-        ///     If it is already assigned that means that someone in the default
-        ///     app domain needed a component manger broker and craeted it directly,
-        ///     passing in false for "remoteObject".  Therefore, all we need to do
-        ///     is remote the existing broker.  This makes the instance of
-        ///     ComponentManagerBroker we are creating in this ctor a temporary
-        ///     object, because the calling code will use the Singleton property
-        ///     to extract the actual _broker value.
-        ///    NOTE: ctor must be public here for remoting to grab hold.
+        ///  Note that we have a single static _broker field.  We assign this
+        ///  If it is already assigned that means that someone in the default
+        ///  app domain needed a component manger broker and craeted it directly,
+        ///  passing in false for "remoteObject".  Therefore, all we need to do
+        ///  is remote the existing broker.  This makes the instance of
+        ///  ComponentManagerBroker we are creating in this ctor a temporary
+        ///  object, because the calling code will use the Singleton property
+        ///  to extract the actual _broker value.
+        ///  NOTE: ctor must be public here for remoting to grab hold.
         /// </summary>
         public ComponentManagerBroker()
         {
-
             // Note that we only ever configure a single broker object.
             // We could be extremely transient here.
             if (_broker == null)
@@ -136,9 +124,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Called during creation to account for an existing component manager
-        ///     broker that was never remoted.  We try not to remote the broker
-        ///     until we need to because it is very expensive.
+        ///  Called during creation to account for an existing component manager
+        ///  broker that was never remoted.  We try not to remote the broker
+        ///  until we need to because it is very expensive.
         /// </summary>
         internal ComponentManagerBroker Singleton
         {
@@ -148,8 +136,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal void ClearComponentManager()
         {
             _proxy = null;
@@ -157,8 +143,6 @@ namespace System.Windows.Forms
 
         #region Instance API only callable from a proxied object
 
-        /// <summary>
-        /// </summary>
         public UnsafeNativeMethods.IMsoComponentManager GetProxy(long pCM)
         {
             if (_proxy == null)
@@ -175,14 +159,13 @@ namespace System.Windows.Forms
         #region Static API callable from any domain
 
         /// <summary>
-        ///    This method locates our per-process app domain and connects to a running
-        ///    instance of ComponentManagerBroker.  That instance then demand-
-        ///    creates an instance of ComponentManagerProxy for the calling thread
-        ///    and returns it.
+        ///  This method locates our per-process app domain and connects to a running
+        ///  instance of ComponentManagerBroker.  That instance then demand-
+        ///  creates an instance of ComponentManagerProxy for the calling thread
+        ///  and returns it.
         /// </summary>
         internal static UnsafeNativeMethods.IMsoComponentManager GetComponentManager(IntPtr pOriginal)
         {
-
             lock (_syncObject)
             {
 
@@ -203,7 +186,7 @@ namespace System.Windows.Forms
                         domain = AppDomain.CurrentDomain;
                     }
 
-                    // Ok, we have a domain.  Next, check to see if it is our current domain.  
+                    // Ok, we have a domain.  Next, check to see if it is our current domain.
                     // If it is, we bypass the CreateInstanceAndUnwrap logic because we
                     // can directly go with the broker.  In this case we will create a broker
                     // and  NOT remote it.  We will defer the remoting until we have a different
@@ -229,12 +212,11 @@ namespace System.Windows.Forms
 
     #region ComponentManagerProxy Class
     /// <summary>
-    ///   The proxy object. This acts as, well, a proxy between the unmanaged IMsoComponentManager and zero or more
-    ///    managed components.  
+    ///  The proxy object. This acts as, well, a proxy between the unmanaged IMsoComponentManager and zero or more
+    ///  managed components.
     /// </summary>
     internal class ComponentManagerProxy : MarshalByRefObject, UnsafeNativeMethods.IMsoComponentManager, UnsafeNativeMethods.IMsoComponent
     {
-
         private readonly ComponentManagerBroker _broker;
         private UnsafeNativeMethods.IMsoComponentManager _original;
         private int _refCount;
@@ -554,7 +536,6 @@ namespace System.Windows.Forms
 
         bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate(IntPtr dwComponentID)
         {
-
             int dwLocalComponentID = unchecked((int)(long)dwComponentID);
             if (_original == null)
             {
@@ -705,7 +686,7 @@ namespace System.Windows.Forms
 
             if (_original.FGetActiveComponent(dwgac, ppic, info, dwReserved))
             {
-                // We got a component.  See if it's our proxy, and if it is, 
+                // We got a component.  See if it's our proxy, and if it is,
                 // return what we think is currently active.  We need only
                 // check for "this", because we only have one of these
                 // doo jabbers per process.

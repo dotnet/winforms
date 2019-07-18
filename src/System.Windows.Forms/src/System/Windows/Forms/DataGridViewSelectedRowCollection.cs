@@ -2,24 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
-    /// control.</para>
+    /// Represents a collection of selected <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
+    /// control.
     /// </summary>
-    [
-        ListBindable(false),
-        SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewSelectedRowCollection> implementation
-    ]
+    [ListBindable(false)]
     public class DataGridViewSelectedRowCollection : BaseCollection, IList
     {
         readonly ArrayList items = new ArrayList();
@@ -121,7 +113,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         internal int Add(DataGridViewRow dataGridViewRow)
         {
@@ -132,7 +124,7 @@ namespace System.Windows.Forms
         internal void AddRange(DataGridViewRow[] dataGridViewRows)
         {
             Debug.Assert(dataGridViewRows != null);
-            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows) 
+            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows)
             {
                 this.items.Add(dataGridViewRow);
             }
@@ -141,7 +133,7 @@ namespace System.Windows.Forms
         internal void AddRowCollection(DataGridViewRowCollection dataGridViewRows)
         {
             Debug.Assert(dataGridViewRows != null);
-            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows) 
+            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows)
             {
                 this.items.Add(dataGridViewRow);
             }
@@ -157,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridViewCell is contained in this collection.
+        ///  Checks to see if a DataGridViewCell is contained in this collection.
         /// </summary>
         public bool Contains(DataGridViewRow dataGridViewRow)
         {
@@ -169,10 +161,7 @@ namespace System.Windows.Forms
             items.CopyTo(array, index);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Never),
-            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Insert(int index, DataGridViewRow dataGridViewRow)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));

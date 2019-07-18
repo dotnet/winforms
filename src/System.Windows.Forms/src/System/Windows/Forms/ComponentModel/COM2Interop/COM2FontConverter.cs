@@ -2,24 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
-
     /// <summary>
     /// This class maps an OLE_COLOR to a managed Color editor.
     /// </summary>
     internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter
     {
-
         private IntPtr lastHandle = IntPtr.Zero;
         private Font lastFont = null;
 
@@ -32,7 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Returns the managed type that this editor maps the property type to.
+        ///  Returns the managed type that this editor maps the property type to.
         /// </summary>
         public override Type ManagedType
         {
@@ -43,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Converts the native value into a managed value
+        ///  Converts the native value into a managed value
         /// </summary>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
@@ -68,7 +59,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                // this wasn't working because it was converting everything to 
+                // this wasn't working because it was converting everything to
                 // world units.
                 //
                 Font font = Font.FromHfont(lastHandle);
@@ -83,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             catch (ArgumentException)
             {
-                // we will fail on non-truetype fonts, so 
+                // we will fail on non-truetype fonts, so
                 // just use the default font.
                 lastFont = Control.DefaultFont;
             }
@@ -92,11 +83,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Converts the managed value into a native value
+        ///  Converts the managed value into a native value
         /// </summary>
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
-
             // we default to black.
             //
             if (managedValue == null)

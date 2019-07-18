@@ -33,8 +33,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Disposes all resources and unhooks all events.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// </summary>
         public void Dispose()
         {
             if (_serviceProvider != null)
@@ -55,7 +54,6 @@ namespace System.Windows.Forms.Design
             add => _designerActionUIStateChangedEventHandler += value;
             remove => _designerActionUIStateChangedEventHandler -= value;
         }
-
 
         public void HideUI(IComponent component)
         {

@@ -65,7 +65,6 @@ namespace System.Windows.Forms
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IModalWindow
         {
-
             [PreserveSig]
             int Show([In] IntPtr parent);
         }
@@ -290,8 +289,8 @@ namespace System.Windows.Forms
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IFileDialogEvents
         {
-            // NOTE: some of these callbacks are cancelable - returning S_FALSE means that 
-            // the dialog should not proceed (e.g. with closing, changing folder); to 
+            // NOTE: some of these callbacks are cancelable - returning S_FALSE means that
+            // the dialog should not proceed (e.g. with closing, changing folder); to
             // support this, we need to use the PreserveSig attribute to enable us to return
             // the proper HRESULT
             [PreserveSig]

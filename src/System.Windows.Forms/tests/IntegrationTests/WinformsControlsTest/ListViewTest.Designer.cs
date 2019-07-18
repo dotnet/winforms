@@ -44,9 +44,9 @@ namespace WinformsControlsTest
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
-            // 
+            //
             // listView1
-            // 
+            //
             this.listView1.CheckBoxes = true;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
@@ -62,19 +62,19 @@ namespace WinformsControlsTest
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // columnHeader1
-            // 
+            //
             this.columnHeader1.Text = "Header 1";
             this.columnHeader1.Width = 190;
-            // 
+            //
             // columnHeader2
-            // 
+            //
             this.columnHeader2.Text = "Header 2";
             this.columnHeader2.Width = 222;
-            // 
+            //
             // ListViewTest
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(844, 558);

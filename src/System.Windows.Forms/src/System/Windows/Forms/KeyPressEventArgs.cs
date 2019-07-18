@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/> event.
+    /// Provides data for the <see cref='Control.KeyPress'/> event.
     /// </summary>
     [ComVisible(true)]
     public class KeyPressEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.KeyPressEventArgs'/>
+        /// Initializes a new instance of the <see cref='KeyPressEventArgs'/>
         /// class.
         /// </summary>
         public KeyPressEventArgs(char keyChar)
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         public char KeyChar { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>
+        /// Gets or sets a value indicating whether the <see cref='Control.KeyPress'/>
         /// event was handled.
         /// </summary>
         public bool Handled { get; set; }

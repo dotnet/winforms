@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the style of gridlines in a <see cref='System.Windows.Forms.DataGrid'/>.
+    /// Specifies the style of gridlines in a <see cref='DataGrid'/>.
     /// </summary>
     public enum DataGridLineStyle
     {

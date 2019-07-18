@@ -39,9 +39,9 @@ namespace WinformsControlsTest
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // dataGridView1
-            // 
+            //
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -51,32 +51,32 @@ namespace WinformsControlsTest
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(283, 150);
             this.dataGridView1.TabIndex = 0;
-            // 
+            //
             // Column1
-            // 
+            //
             this.Column1.HeaderText = "Column1";
             this.Column1.Name = "Column1";
-            // 
+            //
             // Column2
-            // 
+            //
             this.Column2.HeaderText = "Column2";
             this.Column2.Name = "Column2";
-            // 
+            //
             // Column3
-            // 
+            //
             this.Column3.HeaderText = "Column3";
             this.Column3.Name = "Column3";
-            // 
+            //
             // currentDPILabel1
-            // 
+            //
             this.currentDPILabel1.Location = new System.Drawing.Point(0, 176);
             this.currentDPILabel1.Name = "currentDPILabel1";
             this.currentDPILabel1.Size = new System.Drawing.Size(283, 23);
             this.currentDPILabel1.TabIndex = 1;
             this.currentDPILabel1.Text = "currentDPILabel1";
-            // 
+            //
             // DataGridViewHeaders
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;

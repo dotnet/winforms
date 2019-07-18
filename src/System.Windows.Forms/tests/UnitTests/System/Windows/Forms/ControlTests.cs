@@ -289,7 +289,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(cont.Created);
         }
 
-
         /// <summary>
         /// Data for the CreateControlInternal test
         /// </summary>
@@ -1693,8 +1692,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.Width);
         }
 
-
-
         #endregion
 
         #region Events
@@ -2061,7 +2058,6 @@ namespace System.Windows.Forms.Tests
             control.Hide();
             Assert.False(control.Visible);
         }
-
 
         [Fact]
         public void Control_Hide_InvokeWithHandler_CallsVisibleChanged()
@@ -2875,7 +2871,6 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, cont.UseWaitCursor);
         }
-
 
         [Theory]
         [InlineData(true, true)]

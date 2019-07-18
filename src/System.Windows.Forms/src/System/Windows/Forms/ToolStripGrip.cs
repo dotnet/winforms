@@ -2,18 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms.Layout;
-
-    /// <summary>
-    /// 
-
     internal class ToolStripGrip : ToolStripButton
     {
-
         private Cursor oldCursor;
         private int gripThickness = 0;
         Point startLocation = Point.Empty;
@@ -28,7 +23,6 @@ namespace System.Windows.Forms
         private int scaledGripThickness = gripThicknessDefault;
         private int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripGrip()
         {
             if (DpiHelper.IsScalingRequirementMet)
@@ -111,7 +105,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new ToolStripGripAccessibleObject(this);
@@ -152,27 +145,25 @@ namespace System.Windows.Forms
             return (Control.MouseButtons == MouseButtons.Left) && (Control.ModifierKeys == Keys.None);
         }
 
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            // all the grip painting should be on the ToolStrip itself. 
+            // all the grip painting should be on the ToolStrip itself.
             if (ParentInternal != null)
             {
                 ParentInternal.OnPaintGrip(e);
             }
         }
 
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="mea"></param>
-        protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs mea)
+        protected override void OnMouseDown(MouseEventArgs mea)
         {
             startLocation = TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
             base.OnMouseDown(mea);
         }
 
-        protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs mea)
+        protected override void OnMouseMove(MouseEventArgs mea)
         {
             bool leftMouseButtonDown = LeftMouseButtonIsDown();
             if (!MovingToolStrip && leftMouseButtonDown)
@@ -230,9 +221,8 @@ namespace System.Windows.Forms
             base.OnMouseMove(mea);
         }
 
-        protected override void OnMouseEnter(System.EventArgs e)
+        protected override void OnMouseEnter(EventArgs e)
         {
-
             // only switch the cursor if we've got a rafting row.
             if ((ParentInternal != null) && (ToolStripPanelRow != null) && (!ParentInternal.IsInDesignMode))
             {
@@ -248,10 +238,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnMouseLeave(System.EventArgs e)
+        protected override void OnMouseLeave(EventArgs e)
         {
             if (oldCursor != null && !ParentInternal.IsInDesignMode)
             {
@@ -264,9 +253,7 @@ namespace System.Windows.Forms
             base.OnMouseLeave(e);
         }
 
-
-
-        protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs mea)
+        protected override void OnMouseUp(MouseEventArgs mea)
         {
             if (MovingToolStrip)
             {
@@ -327,7 +314,6 @@ namespace System.Windows.Forms
                     base.Name = value;
                 }
             }
-
 
             public override AccessibleRole Role
             {

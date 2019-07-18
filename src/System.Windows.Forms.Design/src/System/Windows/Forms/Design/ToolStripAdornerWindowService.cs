@@ -72,8 +72,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Disposes the behavior service.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// </summary>
         public void Dispose()
         {
             if (_overlayService != null)
@@ -183,7 +182,6 @@ namespace System.Windows.Forms.Design
         {
             private Control _designerFrame; //the designer's frame
 
-            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             internal ToolStripAdornerWindow(Control designerFrame)
             {
                 _designerFrame = designerFrame;

@@ -2,22 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing.Printing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Printing;
-    using System.Runtime.InteropServices;
-    using System.Text;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para> Represents
-    ///       a dialog box that allows users to manipulate page settings, including margins and paper orientation.</para>
+    ///  Represents a dialog box that allows users to manipulate page settings,
+    ///  including margins and paper orientation.
     /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPageSetupDialog))]
@@ -39,7 +34,7 @@ namespace System.Windows.Forms
         private bool enableMetric;
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PageSetupDialog'/> class.</para>
+        /// Initializes a new instance of the <see cref='PageSetupDialog'/> class.
         /// </summary>
         public PageSetupDialog()
         {
@@ -47,10 +42,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the margins section of the dialog box is enabled.
-        ///       
-        ///    </para>
+        ///  Gets or sets a value indicating whether the margins section of the dialog box is enabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -70,10 +62,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Gets or sets a value indicating whether the orientation section of the dialog box (landscape vs. portrait)
-        ///       is enabled.
-        ///       </para>
-        /// </summary>
+        ///  Gets or sets a value indicating whether the orientation section of the dialog box (landscape vs. portrait)
+        ///  is enabled.
+            /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -86,11 +77,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the paper section of the dialog box (paper size and paper source)
-        ///       is enabled.
-        ///       
-        ///    </para>
+        ///  Gets or sets a value indicating whether the paper section of the dialog box (paper size and paper source)
+        ///  is enabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -104,10 +92,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Printer button is enabled.
-        ///       
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Printer button is enabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -121,9 +106,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> 
+        /// Gets or sets a value indicating the <see cref='PrintDocument'/>
         /// to get page settings from.
-        /// </para>
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -145,8 +129,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    This allows the user to override the current behavior where the Metric is converted to ThousandOfInch even for METRIC MEASUREMENTSYSTEM
-        ///    which returns a HUNDREDSOFMILLIMETER value.
+        ///  This allows the user to override the current behavior where the Metric is converted to ThousandOfInch even for METRIC MEASUREMENTSYSTEM
+        ///  which returns a HUNDREDSOFMILLIMETER value.
         /// </summary>
         [
         DefaultValue(false),
@@ -160,11 +144,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating the minimum margins the
-        ///       user is allowed to select, in hundredths of an inch.
-        ///       
-        ///    </para>
+        ///  Gets or sets a value indicating the minimum margins the
+        ///  user is allowed to select, in hundredths of an inch.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -185,13 +166,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets
-        ///       a value indicating
-        ///       the page settings modified by the dialog box.
-        ///       
-        ///    </para>
+        ///  Gets
+        ///  or sets
+        ///  a value indicating
+        ///  the page settings modified by the dialog box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -211,11 +189,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets the printer
-        ///       settings the dialog box will modify if the user clicks the Printer button.
-        ///    </para>
+        ///  Gets
+        ///  or sets the printer
+        ///  settings the dialog box will modify if the user clicks the Printer button.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -235,9 +211,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Help button is visible.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Help button is visible.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -251,9 +225,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Network button is visible.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Network button is visible.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -311,14 +283,12 @@ namespace System.Windows.Forms
                 flags |= NativeMethods.PSD_MARGINS;
             }
 
-            // 
+            //
             return flags;
         }
 
         /// <summary>
-        ///    <para>
-        ///       Resets all options to their default values.
-        ///    </para>
+        ///  Resets all options to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -340,11 +310,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Indicates whether the <see cref='System.Windows.Forms.PageSetupDialog.MinMargins'/>
-        ///       property should be
-        ///       persisted.
-        ///    </para>
+        ///  Indicates whether the <see cref='MinMargins'/>
+        ///  property should be
+        ///  persisted.
         /// </summary>
         private bool ShouldSerializeMinMargins()
         {
@@ -379,12 +347,8 @@ namespace System.Windows.Forms
             pageSettings.Margins = PrinterUnitConvert.Convert(newMargins, fromUnit, PrinterUnit.Display);
         }
 
-
-        /// <summary>
-        /// </summary>
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             if (pageSettings == null)
             {

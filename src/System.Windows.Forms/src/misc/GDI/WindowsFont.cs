@@ -8,30 +8,17 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Globalization;
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
     /// <summary>
-    ///     <para>
-    ///         Encapsulates a GDI Font object.
-    ///     </para>
+    ///  Encapsulates a GDI Font object.
     /// </summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    sealed partial class WindowsFont : MarshalByRefObject, ICloneable, IDisposable
+    internal sealed partial class WindowsFont : MarshalByRefObject, ICloneable, IDisposable
     {
         const int LogFontNameOffset = 28;
 
         // Handle to the native Windows font object.
-        // 
+        //
         private IntPtr hFont;
         private float fontSize = -1.0f; //invalid value.
         private int lineSpacing;
@@ -53,10 +40,8 @@ namespace System.Experimental.Gdi
 #endif
 
         /// <summary>
-        ///     Creates the font handle.
+        ///  Creates the font handle.
         /// </summary>
-
-
         private void CreateFont()
         {
             Debug.Assert(hFont == IntPtr.Zero, "hFont is not null, this will generate a handle leak.");
@@ -91,42 +76,34 @@ namespace System.Experimental.Gdi
         /// Constructors.
 
         /// <summary>
-        ///     Contructor to construct font from a face name.
-        /// </summary>>
-
-
+        ///  Contructor to construct font from a face name.
+        /// </summary>
         public WindowsFont(string faceName) :
             this(faceName, defaultFontSize, FontStyle.Regular, IntNativeMethods.DEFAULT_CHARSET, WindowsFontQuality.Default)
         {
-            // Default size in WinForms is 8.25f.  
+            // Default size in WinForms is 8.25f.
         }
 
         /// <summary>
-        ///     Contructor to construct font from a face name, a desired size and with the specified style.
-        /// </summary>>
-
-
+        ///  Contructor to construct font from a face name, a desired size and with the specified style.
+        /// </summary>
         public WindowsFont(string faceName, float size) :
             this(faceName, size, FontStyle.Regular, IntNativeMethods.DEFAULT_CHARSET, WindowsFontQuality.Default)
         {
         }
 
         /// <summary>
-        ///     Contructor to construct font from a face name, a desired size and with the specified style.
-        /// </summary>>
-
-
+        ///  Contructor to construct font from a face name, a desired size and with the specified style.
+        /// </summary>
         public WindowsFont(string faceName, float size, FontStyle style) :
             this(faceName, size, style, IntNativeMethods.DEFAULT_CHARSET, WindowsFontQuality.Default)
         {
         }
 
         /// <summary>
-        ///     Contructor to construct font from a face name, a desired size in points and with the specified style
-        ///     and character set. The screen dc is used for calculating the font em height.
-        /// </summary>>
-
-
+        ///  Contructor to construct font from a face name, a desired size in points and with the specified style
+        ///  and character set. The screen dc is used for calculating the font em height.
+        /// </summary>
         public WindowsFont(string faceName, float size, FontStyle style, byte charSet, WindowsFontQuality fontQuality)
         {
             Debug.Assert(size > 0.0f, "size has a negative value.");
@@ -135,15 +112,15 @@ namespace System.Experimental.Gdi
             logFont = new IntNativeMethods.LOGFONT();
 
             //
-            // Get the font height from the specified size.  size is in point units and height in logical 
-            // units (pixels when using MM_TEXT) so we need to make the conversion using the number of 
+            // Get the font height from the specified size.  size is in point units and height in logical
+            // units (pixels when using MM_TEXT) so we need to make the conversion using the number of
             // pixels per logical inch along the screen height.
             //
             int pixelsY = (int)Math.Ceiling(WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.DpiY * size / 72); // 1 point = 1/72 inch.;
 
             //
-            // The lfHeight represents the font cell height (line spacing) which includes the internal 
-            // leading; we specify a negative size value (in pixels) for the height so the font mapper 
+            // The lfHeight represents the font cell height (line spacing) which includes the internal
+            // leading; we specify a negative size value (in pixels) for the height so the font mapper
             // provides the closest match for the character height rather than the cell height (MSDN).
             //
             logFont.lfHeight = -pixelsY;
@@ -164,12 +141,10 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Contructor to construct font from a LOGFONT structure.
-        ///     Pass false in the createHandle param to create a 'compatible' font (handle-less, to be used for measuring/comparing) or
-        ///     when the handle has already been created.
+        ///  Contructor to construct font from a LOGFONT structure.
+        ///  Pass false in the createHandle param to create a 'compatible' font (handle-less, to be used for measuring/comparing) or
+        ///  when the handle has already been created.
         /// </summary>
-
-
         private WindowsFont(IntNativeMethods.LOGFONT lf, bool createHandle)
         {
             Debug.Assert(lf != null, "lf is null");
@@ -206,16 +181,13 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Contructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc MapMode
-        ///     and resolution (normally: MM_TEXT and 96 dpi).
+        ///  Contructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc MapMode
+        ///  and resolution (normally: MM_TEXT and 96 dpi).
         /// </summary>
-
-
         public static WindowsFont FromFont(Font font)
         {
             return FromFont(font, WindowsFontQuality.Default);
         }
-
 
         public static WindowsFont FromFont(Font font, WindowsFontQuality fontQuality)
         {
@@ -229,19 +201,16 @@ namespace System.Experimental.Gdi
 
             // Note: Creating the WindowsFont from Font using a LOGFONT structure from GDI+ (Font.ToLogFont(logFont)) may sound like
             // a better choice (more accurate) for doing this but tests show that is not the case (see WindowsFontTests test suite),
-            // the results are the same.  Also, that approach has some issues when the Font is created in a different application 
+            // the results are the same.  Also, that approach has some issues when the Font is created in a different application
             // domain since the LOGFONT cannot be marshalled properly.
             // Now, creating it using the Font.SizeInPoints makes it GraphicsUnit-independent.
 
             return new WindowsFont(familyName, font.SizeInPoints, font.Style, font.GdiCharSet, fontQuality);
         }
 
-
         /// <summary>
-        ///     Creates a WindowsFont from the font selected in the supplied dc.
+        ///  Creates a WindowsFont from the font selected in the supplied dc.
         /// </summary>
-
-
         public static WindowsFont FromHdc(IntPtr hdc)
         {
             IntPtr hFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, hdc), IntNativeMethods.OBJ_FONT);
@@ -252,22 +221,18 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Creates a WindowsFont from the handle to a native GDI font.  It does not take ownership of the 
-        ///     passed-in handle, the caller needs to delete the hFont when done with the WindowsFont.
+        ///  Creates a WindowsFont from the handle to a native GDI font.  It does not take ownership of the
+        ///  passed-in handle, the caller needs to delete the hFont when done with the WindowsFont.
         /// </summary>
-
-
         public static WindowsFont FromHfont(IntPtr hFont)
         {
             return FromHfont(hFont, false);
         }
 
         /// <summary>
-        ///     Creates a WindowsFont from the handle to a native GDI font and optionally takes ownership of managing
-        ///     the lifetime of the handle. 
+        ///  Creates a WindowsFont from the handle to a native GDI font and optionally takes ownership of managing
+        ///  the lifetime of the handle.
         /// </summary>
-
-
         public static WindowsFont FromHfont(IntPtr hFont, bool takeOwnership)
         {
             IntNativeMethods.LOGFONT lf = new IntNativeMethods.LOGFONT();
@@ -301,7 +266,7 @@ namespace System.Experimental.Gdi
                 {
 
                     // If we were ever owned by the CacheManger and we're being disposed
-                    // we can be sure that we're not in use by any DC's (otherwise Dispose() wouldn't have been called)                    
+                    // we can be sure that we're not in use by any DC's (otherwise Dispose() wouldn't have been called)
                     // skip the check IsFontInUse check in this case.
                     // Also skip the check if disposing == false, because the cache is thread-static
                     // and that means we're being called from the finalizer.
@@ -328,7 +293,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///    Returns a value indicating whether the specified object is a WindowsFont equivalent to this object.
+        ///  Returns a value indicating whether the specified object is a WindowsFont equivalent to this object.
         /// </summary>
         public override bool Equals(object font)
         {
@@ -354,7 +319,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///    Gets the hash code for this WindowsFont.
+        ///  Gets the hash code for this WindowsFont.
         /// </summary>
         public override int GetHashCode()
         {
@@ -365,10 +330,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Clones this object.
+        ///  Clones this object.
         /// </summary>
-
-
         public object Clone()
         {
             return new WindowsFont(logFont, true);
@@ -383,8 +346,8 @@ namespace System.Experimental.Gdi
         ///  Properties
 
         /// <summary>
-        ///       Returns this object's native Win32 font handle.  Should NOT be deleted externally.
-        ///       Compare with ToHfont method.
+        ///  Returns this object's native Win32 font handle.  Should NOT be deleted externally.
+        ///  Compare with ToHfont method.
         /// </summary>
         public IntPtr Hfont
         {
@@ -397,7 +360,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Determines whether the font has the italic style or not.
+        ///  Determines whether the font has the italic style or not.
         /// </summary>
         public bool Italic
         {
@@ -424,7 +387,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Rendering quality.
+        ///  Rendering quality.
         /// </summary>
         public WindowsFontQuality Quality
         {
@@ -435,7 +398,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Gets the font style.
+        ///  Gets the font style.
         /// </summary>
         public FontStyle Style
         {
@@ -446,15 +409,15 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Gets the line spacing (cell height) of this font in (screen) pixels using the screen resolution.
-        ///     Gets the line spacing (cell height), in pixels (using the screen DC resolution), of this font. 
-        ///     The line spacing is the vertical distance between the base lines of two consecutive lines of text. 
-        ///     Thus, the line spacing includes the blank space between lines along with the height of the character 
-        ///     itself.
+        ///  Gets the line spacing (cell height) of this font in (screen) pixels using the screen resolution.
+        ///  Gets the line spacing (cell height), in pixels (using the screen DC resolution), of this font.
+        ///  The line spacing is the vertical distance between the base lines of two consecutive lines of text.
+        ///  Thus, the line spacing includes the blank space between lines along with the height of the character
+        ///  itself.
         /// </summary>
         public int Height
         {
-            // 
+            //
 
             get
             {
@@ -476,8 +439,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Gets the font character set.  
-        ///     This is used by the system font mapper when searching for the physical font that best matches the logical font.
+        ///  Gets the font character set.
+        ///  This is used by the system font mapper when searching for the physical font that best matches the logical font.
         /// </summary>
         public byte CharSet
         {
@@ -488,8 +451,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Specifies the height, in logical units, of the font's character cell or character. The character height value (em height)
-        ///     is the character cell height value minus the internal-leading value. 
+        ///  Specifies the height, in logical units, of the font's character cell or character. The character height value (em height)
+        ///  is the character cell height value minus the internal-leading value.
         /// </summary>
         public int LogFontHeight
         {
@@ -500,7 +463,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     The font's face name.
+        ///  The font's face name.
         /// </summary>
         public string Name
         {
@@ -511,8 +474,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Gets the character height (as opposed to the cell height) of the font represented by this object in points.
-        ///     Consider
+        ///  Gets the character height (as opposed to the cell height) of the font represented by this object in points.
+        ///  Consider
         /// </summary>
         public float Size
         {
@@ -529,24 +492,12 @@ namespace System.Experimental.Gdi
                     IntNativeMethods.TEXTMETRIC tm = (IntNativeMethods.TEXTMETRIC)wg.GetTextMetrics();
 
                     //
-                    // Convert the font character height to points.  If lfHeight is negative, Windows 
-                    // treats the absolute value of that number as a desired font height compatible with 
-                    // the point size; in this case lfHeight will roughly match the tmHeight field of 
-                    // the TEXTMETRIC structure less the tmInternalLeading field. 
+                    // Convert the font character height to points.  If lfHeight is negative, Windows
+                    // treats the absolute value of that number as a desired font height compatible with
+                    // the point size; in this case lfHeight will roughly match the tmHeight field of
+                    // the TEXTMETRIC structure less the tmInternalLeading field.
                     //
                     int height = logFont.lfHeight > 0 ? tm.tmHeight : (tm.tmHeight - tm.tmInternalLeading);
-
-                    // 
-                    /*
-                    switch (this.unit)
-                    {
-                        case GraphicsUnit.Pixel:       worldEmSize = height * dpi / 72.0f;   break;
-                        case GraphicsUnit.Point:       worldEmSize = height * dpi / 72.0f;   break;
-                        case GraphicsUnit.Inch:        worldEmSize = height * dpi;           break;
-                        case GraphicsUnit.Document:    worldEmSize = height * dpi / 300.0f;  break;
-                        case GraphicsUnit.Millimeter:  worldEmSize = height * dpi / 25.4f;   break;
-                    }
-                    */
 
                     fontSize = height * 72f / wg.DeviceContext.DpiY;
                 }
@@ -556,7 +507,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
+        ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
         /// </summary>
         public static WindowsFontQuality WindowsFontQualityFromTextRenderingHint(Graphics g)
         {
@@ -569,23 +520,17 @@ namespace System.Experimental.Gdi
             {
                 case TextRenderingHint.ClearTypeGridFit:
                     return WindowsFontQuality.ClearType;
-
                 case TextRenderingHint.AntiAliasGridFit:
                     return WindowsFontQuality.AntiAliased;
-
                 case TextRenderingHint.AntiAlias:
                     return WindowsFontQuality.AntiAliased;
-
                 case TextRenderingHint.SingleBitPerPixelGridFit:
                     return WindowsFontQuality.Proof;
-
                 case TextRenderingHint.SingleBitPerPixel:
                     return WindowsFontQuality.Draft;
-
                 default:
                 case TextRenderingHint.SystemDefault:
                     return WindowsFontQuality.Default;
-
             }
         }
     }

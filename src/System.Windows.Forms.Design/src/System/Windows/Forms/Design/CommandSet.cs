@@ -245,8 +245,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Disposes of this object, removing all commands from the menu service.
         /// </summary>
-        // We don't need to Dispose snapLineTimer
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public virtual void Dispose()
         {
             if (_menuService != null)
@@ -1674,8 +1672,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Called when the paste menu item is selected.
         /// </summary>
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -3223,7 +3219,6 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Creates a new CommandSetItem.
             /// </summary>
-            [SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, bool optimizeStatus, IUIService uiService)
             : base(invokeHandler, id)
             {

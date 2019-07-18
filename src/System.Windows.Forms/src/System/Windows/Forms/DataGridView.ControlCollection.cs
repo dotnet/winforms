@@ -4,17 +4,13 @@
 
 using System.Collections;
 using System.Runtime.InteropServices;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        [
-            ComVisible(false),
-            SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")    // Consider adding an IList<DataGridViewControlCollection> implementation
-        ]
-        public class DataGridViewControlCollection : Control.ControlCollection
+        [ComVisible(false)]
+        public class DataGridViewControlCollection : ControlCollection
         {
             readonly DataGridView owner;
 

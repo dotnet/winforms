@@ -2,18 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Globalization;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Globalization;
-    using Microsoft.Win32;
-
     internal class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler
     {
-
         public override Type Interface
         {
             get
@@ -91,7 +86,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-
             string cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
 
             if (cat != null && cat.Length > 0)

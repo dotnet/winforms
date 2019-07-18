@@ -897,7 +897,7 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var item = new ListViewItem();
             listView.Items.Add(item);
-            
+
             item.BackColor = value;
             Assert.Equal(expected, item.BackColor);
 
@@ -951,7 +951,7 @@ namespace System.Windows.Forms.Tests
             var listView = new ListView();
             var item = new ListViewItem();
             listView.Items.Add(item);
-            
+
             item.ForeColor = value;
             Assert.Equal(expected, item.ForeColor);
 
@@ -1002,7 +1002,7 @@ namespace System.Windows.Forms.Tests
             };
             var item = new ListViewItem();
             listView.Items.Add(item);
-            
+
             item.Font = value;
             Assert.Equal(value ?? SystemFonts.CaptionFont, item.Font);
 

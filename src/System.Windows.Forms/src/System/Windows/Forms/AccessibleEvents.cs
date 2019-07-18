@@ -2,15 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies events that are reported by accessible applications.</para>
+    /// Specifies events that are reported by accessible applications.
     /// </summary>
-
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum AccessibleEvents
     {
         /// <summary>>
@@ -20,21 +16,21 @@ namespace System.Windows.Forms
         /// and will use this at that time. Applications implementing WinEvents
         /// are perfectly welcome to use it. Clients of IAccessible* will simply
         /// turn around and get back a non-visual object that describes the sound.
-        /// </summary>>
+        /// </summary>
         SystemSound = 0x0001,
 
         /// <summary>>
         /// EVENT_SYSTEM_ALERT
         /// Sent when an alert needs to be given to the user. MessageBoxes generate
         /// alerts for example.
-        /// </summary>>
+        /// </summary>
         SystemAlert = 0x0002,
 
         /// <summary>>
         /// EVENT_SYSTEM_FOREGROUND
         /// Sent when the foreground (active) window changes, even if it is changing
         /// to another window in the same thread as the previous one.
-        /// </summary>>
+        /// </summary>
         SystemForeground = 0x0003,
 
         /// <summary>>
@@ -42,7 +38,7 @@ namespace System.Windows.Forms
         /// EVENT_SYSTEM_MENUEND
         /// Sent when entering into and leaving from menu mode (system, app bar, and
         /// track popups).
-        /// </summary>>
+        /// </summary>
         SystemMenuStart = 0x0004,
         SystemMenuEnd = 0x0005,
 
@@ -53,20 +49,19 @@ namespace System.Windows.Forms
         /// that for a call to TrackPopupMenu(), a client will see EVENT_SYSTEM_MENUSTART
         /// followed almost immediately by EVENT_SYSTEM_MENUPOPUPSTART for the popup
         /// being shown.
-        /// </summary>>
+        /// </summary>
         SystemMenuPopupStart = 0x0006,
         SystemMenuPopupEnd = 0x0007,
-
 
         /// <summary>>
         /// EVENT_SYSTEM_CAPTURESTART
         /// EVENT_SYSTEM_CAPTUREEND
         /// Sent when a window takes the capture and releases the capture.
-        /// </summary>>
+        /// </summary>
         SystemCaptureStart = 0x0008,
         SystemCaptureEnd = 0x0009,
 
-        /// </summary>>
+        /// </summary>
         /// EVENT_SYSTEM_MOVESIZESTART
         /// EVENT_SYSTEM_MOVESIZEEND
         /// Sent when a window enters and leaves move-size dragging mode.
@@ -78,7 +73,7 @@ namespace System.Windows.Forms
         /// EVENT_SYSTEM_CONTEXTHELPSTART
         /// EVENT_SYSTEM_CONTEXTHELPEND
         /// Sent when a window enters and leaves context sensitive help mode.
-        /// </summary>>
+        /// </summary>
         SystemContextHelpStart = 0x000C,
         SystemContextHelpEnd = 0x000D,
 
@@ -88,7 +83,7 @@ namespace System.Windows.Forms
         /// Sent when a window enters and leaves drag drop mode. Note that it is up
         /// to apps and OLE to generate this, since the system doesn't know. Like
         /// EVENT_SYSTEM_SOUND, it will be a while before this is prevalent.
-        /// </summary>>
+        /// </summary>
         SystemDragDropStart = 0x000E,
         SystemDragDropEnd = 0x000F,
 
@@ -96,7 +91,7 @@ namespace System.Windows.Forms
         /// EVENT_SYSTEM_DIALOGSTART
         /// EVENT_SYSTEM_DIALOGEND
         /// Sent when a dialog comes up and just before it goes away.
-        /// </summary>>
+        /// </summary>
         SystemDialogStart = 0x0010,
         SystemDialogEnd = 0x0011,
 
@@ -105,7 +100,7 @@ namespace System.Windows.Forms
         /// EVENT_SYSTEM_SCROLLINGEND
         /// Sent when beginning and ending the tracking of a scrollbar in a window,
         /// and also for scrollbar controls.
-        /// </summary>>
+        /// </summary>
         SystemScrollingStart = 0x0012,
         SystemScrollingEnd = 0x0013,
 
@@ -113,7 +108,7 @@ namespace System.Windows.Forms
         /// EVENT_SYSTEM_SWITCHSTART
         /// EVENT_SYSTEM_SWITCHEND
         /// Sent when beginning and ending alt-tab mode with the switch window.
-        /// </summary>>
+        /// </summary>
         SystemSwitchStart = 0x0014,
         SystemSwitchEnd = 0x0015,
 
@@ -121,7 +116,7 @@ namespace System.Windows.Forms
         /// EVENT_SYSTEM_MINIMIZESTART
         /// EVENT_SYSTEM_MINIMIZEEND
         /// Sent when a window minimizes and just before it restores.
-        /// </summary>>
+        /// </summary>
         SystemMinimizeStart = 0x0016,
         SystemMinimizeEnd = 0x0017,
 
@@ -177,29 +172,29 @@ namespace System.Windows.Forms
         /// notifications. Here's when to use each:
         ///
         /// (1) Send a SELECTION notification in the simple single selection
-        ///     case (like the focus) when the item with the selection is
-        ///     merely moving to a different item within a container. hwnd + ID
-        ///     is the container control, idChildItem is the new child with the
-        ///     selection.
+        ///  case (like the focus) when the item with the selection is
+        ///  merely moving to a different item within a container. hwnd + ID
+        ///  is the container control, idChildItem is the new child with the
+        ///  selection.
         ///
         /// (2) Send a SELECTIONADD notification when a new item has simply been added
-        ///     to the selection within a container. This is appropriate when the
-        ///     number of newly selected items is very small. hwnd + ID is the
-        ///     container control, idChildItem is the new child added to the selection.
+        ///  to the selection within a container. This is appropriate when the
+        ///  number of newly selected items is very small. hwnd + ID is the
+        ///  container control, idChildItem is the new child added to the selection.
         ///
         /// (3) Send a SELECTIONREMOVE notification when a new item has simply been
-        ///     removed from the selection within a container. This is appropriate
-        ///     when the number of newly selected items is very small, just like
-        ///     SELECTIONADD. hwnd + ID is the container control, idChildItem is the
-        ///     new child removed from the selection.
+        ///  removed from the selection within a container. This is appropriate
+        ///  when the number of newly selected items is very small, just like
+        ///  SELECTIONADD. hwnd + ID is the container control, idChildItem is the
+        ///  new child removed from the selection.
         ///
         /// (4) Send a SELECTIONWITHIN notification when the selected items within a
-        ///     control have changed substantially. Rather than propagate a large
-        ///     number of changes to reflect removal for some items, addition of
-        ///     others, just tell somebody who cares that a lot happened. It will
-        ///     be faster an easier for somebody watching to just turn around and
-        ///     query the container control what the new bunch of selected items
-        ///     are.
+        ///  control have changed substantially. Rather than propagate a large
+        ///  number of changes to reflect removal for some items, addition of
+        ///  others, just tell somebody who cares that a lot happened. It will
+        ///  be faster an easier for somebody watching to just turn around and
+        ///  query the container control what the new bunch of selected items
+        ///  are.
         /// </summary>
         StateChange = 0x800A,  // hwnd + ID + idChild is item w/ state change
         LocationChange = 0x800B,  // hwnd + ID + idChild is moved/sized item

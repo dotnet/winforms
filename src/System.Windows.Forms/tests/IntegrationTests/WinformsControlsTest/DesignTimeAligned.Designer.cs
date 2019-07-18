@@ -38,9 +38,9 @@ namespace WinformsControlsTest
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(72, 18);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -49,9 +49,9 @@ namespace WinformsControlsTest
             this.label1.TabIndex = 0;
             this.label1.Text = "LL";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(72, 76);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -60,9 +60,9 @@ namespace WinformsControlsTest
             this.label2.TabIndex = 2;
             this.label2.Text = "LL";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.Location = new System.Drawing.Point(122, 66);
             this.button1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.button1.Name = "button1";
@@ -71,27 +71,27 @@ namespace WinformsControlsTest
             this.button1.Text = "LL";
             this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.UseVisualStyleBackColor = true;
-            // 
+            //
             // textBox1
-            // 
+            //
             this.textBox1.Location = new System.Drawing.Point(122, 12);
             this.textBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(56, 31);
             this.textBox1.TabIndex = 4;
             this.textBox1.Text = "LLL";
-            // 
+            //
             // currentDPILabel1
-            // 
+            //
             this.currentDPILabel1.AutoSize = true;
             this.currentDPILabel1.Location = new System.Drawing.Point(25, 159);
             this.currentDPILabel1.Name = "currentDPILabel1";
             this.currentDPILabel1.Size = new System.Drawing.Size(178, 25);
             this.currentDPILabel1.TabIndex = 5;
             this.currentDPILabel1.Text = "currentDPILabel1";
-            // 
+            //
             // DesignTimeAligned
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(490, 196);

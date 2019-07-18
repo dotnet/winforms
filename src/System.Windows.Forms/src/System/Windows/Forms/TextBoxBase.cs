@@ -2,33 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    using System.Text;
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Collections.Specialized;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.Layout;
-    using System.ComponentModel.Design;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Design;
-    using Microsoft.Win32;
-    using System.Reflection;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       Implements the basic functionality required by text
-    ///       controls.
-    ///    </para>
+    ///  Implements the basic functionality required by text
+    ///  controls.
     /// </summary>
     [
     ComVisible(true),
@@ -39,7 +27,6 @@ namespace System.Windows.Forms
     ]
     public abstract class TextBoxBase : Control
     {
-
         // The boolean properties for this control are contained in the textBoxFlags bit
         // vector.  We can store up to 32 boolean values in this one vector.  Here we
         // create the bitmasks for each bit in the vector.
@@ -65,7 +52,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_READONLYCHANGED = new object();
 
         /// <summary>
-        ///     The current border for this edit control.
+        ///  The current border for this edit control.
         /// </summary>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
@@ -76,8 +63,8 @@ namespace System.Windows.Forms
         private int maxLength = 32767;
 
         /// <summary>
-        ///     Used by the autoSizing code to help figure out the desired height of
-        ///     the edit box.
+        ///  Used by the autoSizing code to help figure out the desired height of
+        ///  the edit box.
         /// </summary>
         private int requestedHeight;
         bool integralHeightAdjust = false;
@@ -88,9 +75,9 @@ namespace System.Windows.Forms
         private int selectionLength = 0;
 
         /// <summary>
-        ///     Controls firing of click event (Left click).
-        ///     This is used by TextBox, RichTextBox and MaskedTextBox, code was moved down from TextBox/RichTextBox
-        ///     but cannot make it as default behavior to avoid introducing breaking changes.
+        ///  Controls firing of click event (Left click).
+        ///  This is used by TextBox, RichTextBox and MaskedTextBox, code was moved down from TextBox/RichTextBox
+        ///  but cannot make it as default behavior to avoid introducing breaking changes.
         /// </summary>
         private bool doubleClickFired = false;
 
@@ -101,12 +88,11 @@ namespace System.Windows.Forms
         private BitVector32 textBoxFlags = new BitVector32();
 
         /// <summary>
-        ///     Creates a new TextBox control.  Uses the parent's current font and color
-        ///     set.
+        ///  Creates a new TextBox control.  Uses the parent's current font and color
+        ///  set.
         /// </summary>
         internal TextBoxBase() : base()
         {
-
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
@@ -117,7 +103,6 @@ namespace System.Windows.Forms
                     | ControlStyles.UseTextForAccessibility
                     | ControlStyles.UserPaint, false);
 
-
             // cache requestedHeight. Note: Control calls DefaultSize (overridable) in the constructor
             // to set the control's cached height that is returned when calling Height, so we just
             // need to get the cached height here.
@@ -125,13 +110,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       a value indicating whether pressing the TAB key
-        ///       in a multiline text box control types
-        ///       a TAB character in the control instead of moving the focus to the next control
-        ///       in the tab order.
-        ///    </para>
+        ///  Gets or sets
+        ///  a value indicating whether pressing the TAB key
+        ///  in a multiline text box control types
+        ///  a TAB character in the control instead of moving the focus to the next control
+        ///  in the tab order.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -161,13 +144,10 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the following shortcuts should be enabled or not:
-        ///       Ctrl-Z, Ctrl-C, Ctrl-X, Ctrl-V, Ctrl-A, Ctrl-L, Ctrl-R, Ctrl-E, Ctrl-I, Ctrl-Y,
-        ///       Ctrl-BackSpace, Ctrl-Del, Shift-Del, Shift-Ins.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the following shortcuts should be enabled or not:
+        ///  Ctrl-Z, Ctrl-C, Ctrl-X, Ctrl-V, Ctrl-A, Ctrl-L, Ctrl-R, Ctrl-E, Ctrl-I, Ctrl-Y,
+        ///  Ctrl-BackSpace, Ctrl-Del, Shift-Del, Shift-Ins.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -194,7 +174,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Implements the <see cref='System.Windows.Forms.TextBoxBase.ShortcutsEnabled'/> property.
+        ///  Implements the <see cref='ShortcutsEnabled'/> property.
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -252,14 +232,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the size
-        ///       of the control automatically adjusts when the font assigned to the control
-        ///       is changed.
+        ///  Gets or sets a value indicating whether the size
+        ///  of the control automatically adjusts when the font assigned to the control
+        ///  is changed.
         ///
-        ///       Note: this works differently than other Controls' AutoSize, so we're hiding
-        ///       it to avoid confusion.
-        ///    </para>
+        ///  Note: this works differently than other Controls' AutoSize, so we're hiding
+        ///  it to avoid confusion.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -299,10 +277,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       the background color of the control.
-        ///    </para>
+        ///  Gets or sets
+        ///  the background color of the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -332,9 +308,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
@@ -347,8 +320,6 @@ namespace System.Windows.Forms
                 base.BackgroundImage = value;
             }
         }
-
-
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
@@ -364,8 +335,6 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
@@ -387,10 +356,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the border type
-        ///       of the text box control.
-        ///    </para>
+        ///  Gets or sets the border type
+        ///  of the text box control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -447,7 +414,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether the ImeMode can be enabled - See also ImeModeBase.
+        ///  Specifies whether the ImeMode can be enabled - See also ImeModeBase.
         /// </summary>
         protected override bool CanEnableIme
         {
@@ -466,10 +433,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a value
-        ///       indicating whether the user can undo the previous operation in a text box control.
-        ///    </para>
+        ///  Gets a value
+        ///  indicating whether the user can undo the previous operation in a text box control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -493,12 +458,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns the parameters needed to create the handle. Inheriting classes
-        ///       can override this to provide extra functionality. They should not,
-        ///       however, forget to call base.getCreateParams() first to get the struct
-        ///       filled up with the basic info.
-        ///    </para>
+        ///  Returns the parameters needed to create the handle. Inheriting classes
+        ///  can override this to provide extra functionality. They should not,
+        ///  however, forget to call base.getCreateParams() first to get the struct
+        ///  filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -543,8 +506,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This property is overridden and hidden from statement completion
-        ///     on controls that are based on Win32 Native Controls.
+        ///  This property is overridden and hidden from statement completion
+        ///  on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
@@ -582,8 +545,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -594,9 +557,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the foreground color of the control.
-        ///    </para>
+        ///  Gets or sets the foreground color of the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -623,10 +584,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the selected
-        ///       text in the text box control remains highlighted when the control loses focus.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the selected
+        ///  text in the text box control remains highlighted when the control loses focus.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -659,9 +618,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Internal version of ImeMode property.  The ImeMode of TextBoxBase controls depend on its IME restricted
-        ///     mode which is determined by the CanEnableIme property which checks whether the control is in Password or
-        ///     ReadOnly mode.
+        ///  Internal version of ImeMode property.  The ImeMode of TextBoxBase controls depend on its IME restricted
+        ///  mode which is determined by the CanEnableIme property which checks whether the control is in Password or
+        ///  ReadOnly mode.
         /// </summary>
         protected override ImeMode ImeModeBase
         {
@@ -689,10 +648,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets the lines of text in an text box control.
-        ///    </para>
+        ///  Gets or
+        ///  sets the lines of text in an text box control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -747,10 +704,6 @@ namespace System.Windows.Forms
 
                 return (string[])list.ToArray(typeof(string));
             }
-            [
-                SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // We append a new line to the Text property.
-                                                                                                            // Don't localize the new line character.
-            ]
             set
             {
                 //unparse this string list...
@@ -775,10 +728,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the maximum number of
-        ///       characters the user can type into the text box control.
-        ///    </para>
+        ///  Gets or sets the maximum number of
+        ///  characters the user can type into the text box control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -808,10 +759,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value that indicates that the text box control has been modified by the user since
-        ///       the control was created or its contents were last set.
-        ///    </para>
+        ///  Gets or sets a value that indicates that the text box control has been modified by the user since
+        ///  the control was created or its contents were last set.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -866,10 +815,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether this
-        ///       is a multiline text box control.
-        ///    </para>
+        ///  Gets or sets a value indicating whether this
+        ///  is a multiline text box control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -943,9 +890,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if the control is in password protect mode.  This is overridden in TextBox and
-        ///     MaskedTextBox and is false by default so RichTextBox that doesn't support Password doesn't
-        ///     have to care about this.
+        ///  Determines if the control is in password protect mode.  This is overridden in TextBox and
+        ///  MaskedTextBox and is false by default so RichTextBox that doesn't support Password doesn't
+        ///  have to care about this.
         /// </summary>
         virtual internal bool PasswordProtect
         {
@@ -956,10 +903,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns the preferred
-        ///       height for a single-line text box.
-        ///    </para>
+        ///  Returns the preferred
+        ///  height for a single-line text box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -972,7 +917,7 @@ namespace System.Windows.Forms
             get
             {
                 // COMPAT we must return the same busted height we did in Everett, even
-                // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use 
+                // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use
                 // GetPreferredSize instead.
                 int height = FontHeight;
                 if (borderStyle != BorderStyle.None)
@@ -1011,7 +956,7 @@ namespace System.Windows.Forms
             proposedConstraints -= bordersAndPadding;
 
             // Fit the text to the remaining space
-            // Fix for Dev10 
+            // Fix for Dev10
 
             TextFormatFlags format = TextFormatFlags.NoPrefix;
             if (!Multiline)
@@ -1031,9 +976,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Get the currently selected text start position and length.  Use this method internally
-        ///     to avoid calling SelectionStart + SelectionLength each of which does essentially the
-        ///     same (save one message round trip).
+        ///  Get the currently selected text start position and length.  Use this method internally
+        ///  to avoid calling SelectionStart + SelectionLength each of which does essentially the
+        ///  same (save one message round trip).
         /// </summary>
         internal void GetSelectionStartAndLength(out int start, out int length)
         {
@@ -1087,9 +1032,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether text in the text box is read-only.
-        ///    </para>
+        ///  Gets or sets a value indicating whether text in the text box is read-only.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1128,9 +1071,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       The currently selected text in the control.
-        ///    </para>
+        ///  The currently selected text in the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1152,7 +1093,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Replaces the selected text with the one passed in.
+        ///  Replaces the selected text with the one passed in.
         /// </summary>
         internal virtual void SetSelectedTextInternal(string text, bool clearUndo)
         {
@@ -1187,12 +1128,9 @@ namespace System.Windows.Forms
             SendMessage(Interop.EditMessages.EM_LIMITTEXT, maxLength, 0);
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the number of characters selected in the text
-        ///       box.
-        ///    </para>
+        ///  Gets or sets the number of characters selected in the text
+        ///  box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1227,11 +1165,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the starting
-        ///       point of text selected in the text
-        ///       box.
-        ///    </para>
+        ///  Gets or sets the starting
+        ///  point of text selected in the text
+        ///  box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1268,10 +1204,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       the current text in the text box.
-        ///    </para>
+        ///  Gets or sets
+        ///  the current text in the text box.
         /// </summary>
         [
         Localizable(true),
@@ -1309,8 +1243,6 @@ namespace System.Windows.Forms
         // and prevent the event from getting fired, or we get
         // double "TextChanged" events.
         //
-        /// <summary>
-        /// </summary>
         internal override string WindowText
         {
             get
@@ -1341,10 +1273,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     In certain circumstances we might have to force
-        ///     text into the window whether or not the text is the same.
-        ///     Make this a method on TextBoxBase rather than RichTextBox (which is the only
-        ///     control that needs this at this point), since we need to set codeUpdateText.
+        ///  In certain circumstances we might have to force
+        ///  text into the window whether or not the text is the same.
+        ///  Make this a method on TextBoxBase rather than RichTextBox (which is the only
+        ///  control that needs this at this point), since we need to set codeUpdateText.
         /// </summary>
         internal void ForceWindowText(string value)
         {
@@ -1379,11 +1311,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether a
-        ///       multiline text box control automatically wraps words to the beginning of the next
-        ///       line when necessary.
-        ///    </para>
+        ///  Gets or sets a value indicating whether a
+        ///  multiline text box control automatically wraps words to the beginning of the next
+        ///  line when necessary.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1411,12 +1341,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adjusts the height of a single-line edit control to match the height of
-        ///     the control's font.
+        ///  Adjusts the height of a single-line edit control to match the height of
+        ///  the control's font.
         /// </summary>
         private void AdjustHeight(bool returnIfAnchored)
         {
-
             // If we're anchored to two opposite sides of the form, don't adjust the size because
             // we'll lose our anchored size by resetting to the requested width.
             //
@@ -1464,9 +1393,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Append text to the current text of text box.
-        ///    </para>
+        ///  Append text to the current text of text box.
         /// </summary>
         public void AppendText(string text)
         {
@@ -1498,9 +1425,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Clears all text from the text box control.
-        ///    </para>
+        ///  Clears all text from the text box control.
         /// </summary>
         public void Clear()
         {
@@ -1508,10 +1433,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Clears information about the most recent operation
-        ///       from the undo buffer of the text box.
-        ///    </para>
+        ///  Clears information about the most recent operation
+        ///  from the undo buffer of the text box.
         /// </summary>
         public void ClearUndo()
         {
@@ -1522,17 +1445,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Copies the current selection in the text box to the Clipboard.
-        ///    </para>
+        ///  Copies the current selection in the text box to the Clipboard.
         /// </summary>
         public void Copy()
         {
             SendMessage(Interop.WindowMessages.WM_COPY, 0, 0);
         }
 
-        /// <summary>
-        /// </summary>
         protected override void CreateHandle()
         {
             // This "creatingHandle" stuff is to avoid property change events
@@ -1556,9 +1475,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Moves the current selection in the text box to the Clipboard.
-        ///    </para>
+        ///  Moves the current selection in the text box to the Clipboard.
         /// </summary>
         public void Cut()
         {
@@ -1566,8 +1483,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
-        ///     to set the last input char position as opposed to the last char position which may be a mask character.
+        ///  Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
+        ///  to set the last input char position as opposed to the last char position which may be a mask character.
         /// </summary>
         internal virtual int GetEndPosition()
         {
@@ -1576,7 +1493,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overridden to handle TAB key.
+        ///  Overridden to handle TAB key.
         /// </summary>
         protected override bool IsInputKey(Keys keyData)
         {
@@ -1614,8 +1531,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overridden to update the newly created handle with the settings of the
-        ///    MaxLength and PasswordChar properties.
+        ///  Overridden to update the newly created handle with the settings of the
+        ///  MaxLength and PasswordChar properties.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -1637,8 +1554,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
             textBoxFlags[modified] = Modified;
@@ -1649,9 +1564,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Replaces the current selection in the text box with the contents of the Clipboard.
-        ///    </para>
+        ///  Replaces the current selection in the text box with the contents of the Clipboard.
         /// </summary>
         public void Paste()
         {
@@ -1673,7 +1586,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     TextBox / RichTextBox Onpaint.
+        ///  TextBox / RichTextBox Onpaint.
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1682,7 +1595,6 @@ namespace System.Windows.Forms
             add => base.Paint += value;
             remove => base.Paint -= value;
         }
-
 
         protected virtual void OnAcceptsTabChanged(EventArgs e)
         {
@@ -1723,7 +1635,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Raises the MouseUp event.
+        ///  Raises the MouseUp event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -1758,7 +1670,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         protected override void OnPaddingChanged(EventArgs e)
         {
             base.OnPaddingChanged(e);
@@ -1775,16 +1686,16 @@ namespace System.Windows.Forms
 
         protected override void OnTextChanged(EventArgs e)
         {
-            // since AutoSize existed in Everett, (and is the default) we can't 
+            // since AutoSize existed in Everett, (and is the default) we can't
             // relayout the parent when the "preferredsize" of the control changes.
-            // this means a multiline = true textbox wont natrually grow in height when 
+            // this means a multiline = true textbox wont natrually grow in height when
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
         }
 
         /// <summary>
-        ///     Returns the character nearest to the given point.
+        ///  Returns the character nearest to the given point.
         /// </summary>
         public virtual char GetCharFromPosition(Point pt)
         {
@@ -1794,7 +1705,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the index of the character nearest to the given point.
+        ///  Returns the index of the character nearest to the given point.
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
@@ -1821,12 +1732,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the number of the line containing a specified character position
-        ///     in a textbox. Note that this returns the physical line number
-        ///     and not the conceptual line number. For example, if the first conceptual
-        ///     line (line number 0) word-wraps and extends to the second line, and if
-        ///     you pass the index of a overflowed character, GetLineFromCharIndex would
-        ///     return 1 and not 0.
+        ///  Returns the number of the line containing a specified character position
+        ///  in a textbox. Note that this returns the physical line number
+        ///  and not the conceptual line number. For example, if the first conceptual
+        ///  line (line number 0) word-wraps and extends to the second line, and if
+        ///  you pass the index of a overflowed character, GetLineFromCharIndex would
+        ///  return 1 and not 0.
         /// </summary>
         public virtual int GetLineFromCharIndex(int index)
         {
@@ -1834,7 +1745,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the location of the character at the given index.
+        ///  Returns the location of the character at the given index.
         /// </summary>
         public virtual Point GetPositionFromCharIndex(int index)
         {
@@ -1848,7 +1759,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the index of the first character of a given line. Returns -1 of lineNumber is invalid.
+        ///  Returns the index of the first character of a given line. Returns -1 of lineNumber is invalid.
         /// </summary>
         public int GetFirstCharIndexFromLine(int lineNumber)
         {
@@ -1860,18 +1771,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the index of the first character of the line where the caret is.
+        ///  Returns the index of the first character of the line where the caret is.
         /// </summary>
         public int GetFirstCharIndexOfCurrentLine()
         {
             return unchecked((int)(long)SendMessage(Interop.EditMessages.EM_LINEINDEX, -1, 0));
         }
 
-
-
         /// <summary>
-        ///     Ensures that the caret is visible in the TextBox window, by scrolling the
-        ///     TextBox control surface if necessary.
+        ///  Ensures that the caret is visible in the TextBox window, by scrolling the
+        ///  TextBox control surface if necessary.
         /// </summary>
         public void ScrollToCaret()
         {
@@ -1901,7 +1810,6 @@ namespace System.Windows.Forms
                             try
                             {
                                 Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
-
 
                                 if (Marshal.GetObjectForIUnknown(iTextDocument) is UnsafeNativeMethods.ITextDocument textDocument)
                                 {
@@ -1969,9 +1877,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Sets the SelectionLength to 0.
-        ///    </para>
+        ///  Sets the SelectionLength to 0.
         /// </summary>
         public void DeselectAll()
         {
@@ -1979,9 +1885,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Selects a range of text in the text box.
-        ///    </para>
+        ///  Selects a range of text in the text box.
         /// </summary>
         public void Select(int start, int length)
         {
@@ -2012,12 +1916,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Performs the actual select without doing arg checking.
+        ///  Performs the actual select without doing arg checking.
         ///
-        ///     Send in -1 for the textLen parameter if you don't have the text
-        ///     length cached when calling this method. It will be computed.
-        ///     But if you do have it cached, please pass it in. This will avoid
-        ///     the expensive call to the TextLength property.
+        ///  Send in -1 for the textLen parameter if you don't have the text
+        ///  length cached when calling this method. It will be computed.
+        ///  But if you do have it cached, please pass it in. This will avoid
+        ///  the expensive call to the TextLength property.
         /// </summary>
         internal virtual void SelectInternal(int start, int length, int textLen)
         {
@@ -2027,7 +1931,7 @@ namespace System.Windows.Forms
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
                 SendMessage(Interop.EditMessages.EM_SETSEL, s, e);
-                // 
+                //
 
             }
             else
@@ -2041,9 +1945,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Selects all text in the text box.
-        ///    </para>
+        ///  Selects all text in the text box.
         /// </summary>
         public void SelectAll()
         {
@@ -2052,11 +1954,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overrides Control.setBoundsCore to enforce autoSize.
+        ///  Overrides Control.setBoundsCore to enforce autoSize.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-
             if (!integralHeightAdjust && height != Height)
             {
                 requestedHeight = height;
@@ -2148,10 +2049,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Converts byte offsset to unicode offsets.
-        ///     When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
-        ///     as opposed to RICHEDIT which does it always as character positions.  
-        ///     This method is used when handling the WM_GETSEL message.
+        ///  Converts byte offsset to unicode offsets.
+        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  as opposed to RICHEDIT which does it always as character positions.
+        ///  This method is used when handling the WM_GETSEL message.
         /// </summary>
         static void ToUnicodeOffsets(string str, ref int start, ref int end)
         {
@@ -2180,7 +2081,7 @@ namespace System.Windows.Forms
                 end = bytes.Length;
             }
 
-            // IMPORTANT: Avoid off-by-1 errors! 
+            // IMPORTANT: Avoid off-by-1 errors!
             // The end value passed in is the character immediately after the last character selected.
 
             int newStart = start == 0 ? 0 : e.GetCharCount(bytes, 0, start);
@@ -2194,10 +2095,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Converts unicode offsset to byte offsets.
-        ///     When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
-        ///     as opposed to RICHEDIT which does it always as character positions.  
-        ///     This method is used when handling the WM_SETSEL message.
+        ///  Converts unicode offsset to byte offsets.
+        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  as opposed to RICHEDIT which does it always as character positions.
+        ///  This method is used when handling the WM_SETSEL message.
         /// </summary>
         static internal void ToDbcsOffsets(string str, ref int start, ref int end)
         {
@@ -2241,15 +2142,12 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
-        ///    Provides some interesting information for the TextBox control in
-        ///    String form.
+        ///  Provides some interesting information for the TextBox control in
+        ///  String form.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
 
             string txt = Text;
@@ -2262,9 +2160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Undoes the last edit operation in the text box.
-        ///    </para>
+        ///  Undoes the last edit operation in the text box.
         /// </summary>
         public void Undo()
         {
@@ -2278,7 +2174,6 @@ namespace System.Windows.Forms
                 SendMessage(Interop.EditMessages.EM_LIMITTEXT, maxLength, 0);
             }
         }
-
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
         {
@@ -2295,8 +2190,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         private void WmReflectCommand(ref Message m)
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
@@ -2314,8 +2207,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         void WmSetFont(ref Message m)
         {
             base.WndProc(ref m);
@@ -2341,15 +2232,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_CONTEXTMENU message based on this
-        ///     table:
-        ///     ShortcutsEnabled    #1      #2      #3
-        ///     Yes                 strip   context system
-        ///     No                  strip   context N/A
+        ///  Handles the WM_CONTEXTMENU message based on this
+        ///  table:
+        ///  ShortcutsEnabled    #1      #2      #3
+        ///  Yes                 strip   context system
+        ///  No                  strip   context N/A
         /// </summary>
         private void WmTextBoxContextMenu(ref Message m)
         {
-
             if (ContextMenu != null || ContextMenuStrip != null)
             {
                 int x = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2369,7 +2259,7 @@ namespace System.Windows.Forms
                     client = PointToClient(new Point(x, y));
                 }
 
-                // 
+                //
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains(client))
@@ -2392,9 +2282,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    The control's window procedure.  Inheriting classes can override this
-        ///    to add extra functionality, but should not forget to call
-        ///    base.wndProc(m); to ensure the control continues to function properly.
+        ///  The control's window procedure.  Inheriting classes can override this
+        ///  to add extra functionality, but should not forget to call
+        ///  base.wndProc(m); to ensure the control continues to function properly.
         /// </summary>
         protected override void WndProc(ref Message m)
         {

@@ -2,27 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Windows.Forms;
-
-    /// <summary>
-    ///    <para> 
-    ///       Summary to
-    ///       Come</para>
-    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -31,15 +17,13 @@ namespace System.Windows.Forms
     ]
     public sealed class MdiClient : Control
     {
-
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
         //
         private readonly ArrayList children = new ArrayList();
 
-
         /// <summary>
-        ///     Creates a new MdiClient.
+        ///  Creates a new MdiClient.
         /// </summary>
         public MdiClient() : base()
         {
@@ -49,7 +33,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Use parent's BackgroundImage if our BackgroundImage isn't set.
+        ///  Use parent's BackgroundImage if our BackgroundImage isn't set.
         /// </summary>
         [
         Localizable(true)
@@ -96,8 +80,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -106,10 +88,10 @@ namespace System.Windows.Forms
 
                 cp.ClassName = "MDICLIENT";
 
-                // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting activated 
+                // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting activated
                 // when made visible (no WM_MDIACTIVATE sent to it), and forcing activation on it changes the activation event sequence
                 // (MdiChildActivate/Enter/Focus/Activate/etc.).
-                // Comment for removed code: 
+                // Comment for removed code:
                 // Add the style MDIS_ALLCHILDSTYLES
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
@@ -136,9 +118,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The list of MDI children contained. This list
-        ///     will be sorted by the order in which the children were
-        ///     added to the form, not the current ZOrder.
+        ///  The list of MDI children contained. This list
+        ///  will be sorted by the order in which the children were
+        ///  added to the form, not the current ZOrder.
         /// </summary>
         public Form[] MdiChildren
         {
@@ -156,8 +138,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Arranges the MDI child forms according to value, which should be a
-        ///     member of the MdiLayout enum.
+        ///  Arranges the MDI child forms according to value, which should be a
+        ///  member of the MdiLayout enum.
         /// </summary>
         public void LayoutMdi(MdiLayout value)
         {
@@ -183,9 +165,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <summary>
-        /// </summary>
         protected override void OnResize(EventArgs e)
         {
             ISite site = ParentInternal?.Site;
@@ -196,14 +175,12 @@ namespace System.Windows.Forms
             base.OnResize(e);
         }
 
-
         /// <summary>
-        ///     Performs the work of scaling the entire control and any child controls.
+        ///  Performs the work of scaling the entire control and any child controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
-
             // Don't scale child forms...
             //
 
@@ -224,7 +201,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
+        ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
@@ -293,7 +270,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This code is required to set the correct window region during the resize of the Form at design time.
-        /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
+        /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to
         /// resize and hence draw the correct backcolor.
         /// </summary>
         private void SetWindowRgn()
@@ -350,7 +327,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         internal override bool ShouldSerializeBackColor()
         {
             return BackColor != SystemColors.AppWorkspace;
@@ -366,9 +342,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-
-        /// <summary>
-        /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -398,7 +371,7 @@ namespace System.Windows.Forms
                     }
 
                     // Do not use control's implementation of WmSetFocus
-                    // as it will improperly activate this control. 
+                    // as it will improperly activate this control.
                     WmImeSetFocus();
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);
@@ -422,7 +395,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Collection of controls...
+        ///  Collection of controls...
         /// </summary>
         [ComVisible(false)]
         new public class ControlCollection : Control.ControlCollection
@@ -438,17 +411,17 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds a control to the MDI Container. This child must be
-            ///     a Form that is marked as an MDI Child to be added to the
-            ///     container. You should not call this directly, but rather
-            ///     set the child form's (ctl) MDIParent property:
+            ///  Adds a control to the MDI Container. This child must be
+            ///  a Form that is marked as an MDI Child to be added to the
+            ///  container. You should not call this directly, but rather
+            ///  set the child form's (ctl) MDIParent property:
             /// <code>
-            ///     //     wrong
-            ///     Form child = new ChildForm();
-            ///     this.getMdiClient().add(child);
-            ///     //     right
-            ///     Form child = new ChildForm();
-            ///     child.setMdiParent(this);
+            ///  //     wrong
+            ///  Form child = new ChildForm();
+            ///  this.getMdiClient().add(child);
+            ///  //     right
+            ///  Form child = new ChildForm();
+            ///  child.setMdiParent(this);
             /// </code>
             /// </summary>
             public override void Add(Control value)
@@ -470,7 +443,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes a child control.
+            ///  Removes a child control.
             /// </summary>
             public override void Remove(Control value)
             {

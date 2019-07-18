@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     {
         private readonly DataGridView _dataGridView;
 
-
         public DataGridViewRowPostPaintEventArgs(DataGridView dataGridView,
                                                  Graphics graphics,
                                                  Rectangle clipBounds,
@@ -59,7 +58,6 @@ namespace System.Windows.Forms
 
         public bool IsLastVisibleRow { get; private set; }
 
-
         public void DrawFocus(Rectangle bounds, bool cellsPaintSelectionBackground)
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
@@ -92,7 +90,6 @@ namespace System.Windows.Forms
                                                               IsLastVisibleRow,
                                                               paintParts);
         }
-
 
         public void PaintCellsBackground(Rectangle clipBounds, bool cellsPaintSelectionBackground)
         {

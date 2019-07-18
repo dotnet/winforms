@@ -2,24 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Text;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.Windows.Forms.ComponentModel;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-
-    using Microsoft.Win32;
-
     /// <summary>
-    /// <para>Represents the table drawn by the <see cref='System.Windows.Forms.DataGrid'/> control at run time.</para>
+    ///  Represents the table drawn by the <see cref='Forms.DataGrid'/> control at run time.
     /// </summary>
     [
     ToolboxItem(false),
@@ -28,7 +19,6 @@ namespace System.Windows.Forms
     ]
     public class DataGridTableStyle : Component, IDataGridEditingService
     {
-
         // internal for DataGridColumn accessibility...
         //
         internal DataGrid dataGrid = null;
@@ -81,7 +71,6 @@ namespace System.Windows.Forms
         private const int defaultRowHeaderWidth = 35;
         internal static readonly Font defaultFont = Control.DefaultFont;
         internal static readonly int defaultFontHeight = defaultFont.Height;
-
 
         // the actual place holders for properties
         //
@@ -137,7 +126,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>[To be  supplied]</para>
+        /// [To be  supplied]
         /// </summary>
         public event EventHandler AllowSortingChanged
         {
@@ -552,7 +541,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
                 }
 
-                //valid values are 0x0 to 0x1. 
+                //valid values are 0x0 to 0x1.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridLineStyle.None, (int)DataGridLineStyle.Solid))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
@@ -843,7 +832,6 @@ namespace System.Windows.Forms
             {
                 return LinkColor;
             }
-            [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
             set
             {
             }
@@ -1286,14 +1274,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // This has already shipped so we can't change it.
-        ]
         public static readonly DataGridTableStyle DefaultTableStyle = new DataGridTableStyle(true);
 
-
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class.</para>
+        /// Initializes a new instance of the <see cref='DataGridTableStyle'/> class.
         /// </summary>
         public DataGridTableStyle(bool isDefaultTableStyle)
         {
@@ -1307,13 +1291,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class with the specified
-        /// <see cref='System.Windows.Forms.CurrencyManager'/>.</para>
+        /// Initializes a new instance of the <see cref='DataGridTableStyle'/> class with the specified
+        /// <see cref='CurrencyManager'/>.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the GridColumnStyles
-                                                                                                    // it would be a breaking change.
-        ]
         public DataGridTableStyle(CurrencyManager listManager) : this()
         {
             Debug.Assert(listManager != null, "the DataGridTabel cannot use a null listManager");
@@ -1456,9 +1436,9 @@ namespace System.Windows.Forms
         // =------------------------------------------------------------------
 
         /// <summary>
-        ///    <para>Gets the name of this grid table.</para>
+        ///  Gets the name of this grid table.
         /// </summary>
-        [Editor("System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)), DefaultValue("")]
+        [Editor("System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)), DefaultValue("")]
         public string MappingName
         {
             get
@@ -1504,8 +1484,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the
-        ///       list of relation objects for the grid table.</para>
+        ///  Gets the
+        ///  list of relation objects for the grid table.
         /// </summary>
         internal ArrayList RelationsList
         {
@@ -1516,7 +1496,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the collection of columns drawn for this table.</para>
+        ///  Gets the collection of columns drawn for this table.
         /// </summary>
         [
         Localizable(true),
@@ -1531,12 +1511,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.DataGrid'/>
-        ///       control displaying the table.
-        ///    </para>
+        ///  Gets or sets the <see cref='Forms.DataGrid'/>
+        ///  control displaying the table.
         /// </summary>
-
         internal void SetInternalDataGrid(DataGrid dG, bool force)
         {
             if (dataGrid != null && dataGrid.Equals(dG) && !force)
@@ -1560,7 +1537,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets the <see cref='System.Windows.Forms.DataGrid'/> control for the drawn table.</para>
+        /// Gets or sets the <see cref='Forms.DataGrid'/> control for the drawn table.
         /// </summary>
         [Browsable(false)]
         public virtual DataGrid DataGrid
@@ -1576,8 +1553,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether columns can be
-        ///       edited.</para>
+        ///  Gets or sets a value indicating whether columns can be
+        ///  edited.
         /// </summary>
         [DefaultValue(false)]
         public virtual bool ReadOnly
@@ -1607,7 +1584,7 @@ namespace System.Windows.Forms
         // =------------------------------------------------------------------
 
         /// <summary>
-        ///    <para>Requests an edit operation.</para>
+        ///  Requests an edit operation.
         /// </summary>
         public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber)
         {
@@ -1623,8 +1600,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Requests an end to an edit
-        ///       operation.</para>
+        ///  Requests an end to an edit
+        ///  operation.
         /// </summary>
         public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort)
         {
@@ -1647,7 +1624,6 @@ namespace System.Windows.Forms
                 DataGrid.InvalidateColumn(index);
             }
         }
-
 
         private void OnColumnCollectionChanged(object sender, CollectionChangeEventArgs e)
         {
@@ -1699,9 +1675,9 @@ namespace System.Windows.Forms
 
 #if false
         /// <summary>
-        ///      The DataColumnCollection class actually wires up this
-        ///      event handler to the PropertyChanged events of
-        ///      a DataGridTable's columns.
+        ///  The DataColumnCollection class actually wires up this
+        ///  event handler to the PropertyChanged events of
+        ///  a DataGridTable's columns.
         /// </summary>
         internal void OnColumnChanged(object sender, PropertyChangedEvent event) {
             if (event.PropertyName.Equals("Visible"))

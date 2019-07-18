@@ -4,11 +4,6 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.ComponentModel;
-
-    using System.Diagnostics;
-    using System;
-
     /// <summary>
     /// This is the base class for handlers for COM2 extended browsing interface
     /// such as IPerPropertyBrowsing, etc.
@@ -22,7 +17,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal abstract class Com2ExtendedBrowsingHandler
     {
-
         /// <summary>
         /// The interface that this handler managers
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.

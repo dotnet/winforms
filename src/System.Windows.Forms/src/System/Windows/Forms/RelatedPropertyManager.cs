@@ -2,27 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using Microsoft.Win32;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel;
-    using System.Collections;
-
     internal class RelatedPropertyManager : PropertyManager
     {
-
         BindingManagerBase parentManager;
         string dataField;
         PropertyDescriptor fieldInfo;
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
-                                                                                                    // it would be a breaking change.
-        ]
         internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField) : base(GetCurrentOrNull(parentManager), dataField)
         {
             Bind(parentManager, dataField);
@@ -91,7 +82,6 @@ namespace System.Windows.Forms
             SetDataSource(GetCurrentOrNull(parentManager));
             OnCurrentChanged(EventArgs.Empty);
         }
-
 
         internal override Type BindType
         {

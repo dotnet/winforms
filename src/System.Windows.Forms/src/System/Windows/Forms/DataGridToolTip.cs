@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-    using System.Drawing;
-
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Diagnostics;
-    using System.ComponentModel;
-
     // this class is basically a NativeWindow that does toolTipping
     // should be one for the entire grid
     internal class DataGridToolTip : MarshalByRefObject

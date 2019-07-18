@@ -64,7 +64,6 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
-
         // [Fact]
         // Commenting out until this gets fixed
         // public void WinformsControlsTest_TreeViewAndImageListTest()
@@ -239,7 +238,7 @@ namespace System.Windows.Forms.IntegrationTests
             TestHelpers.PressEnterOnProcess(process);
 
             TestHelpers.PressTabOnProcess(process);
-            TestHelpers.PressRightOnProcess(process); // once   
+            TestHelpers.PressRightOnProcess(process); // once
             TestHelpers.PressRightOnProcess(process); // twice
             TestHelpers.PressTabsOnProcess(process, 2);
             TestHelpers.PressEnterOnProcess(process);

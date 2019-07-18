@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -441,7 +441,6 @@ namespace System.Windows.Forms
         FSHIFT = 0x04,
         FALT = 0x10;
 
-
         public const int GMEM_FIXED = 0x0000,
         GMEM_MOVEABLE = 0x0002,
         GMEM_NOCOMPACT = 0x0010,
@@ -595,7 +594,7 @@ namespace System.Windows.Forms
         ILD_MASK = 0x0010,
         ILD_ROP = 0x0040,
 
-        // ImageList 
+        // ImageList
         //
         ILP_NORMAL = 0,
         ILP_DOWNLEVEL = 1,
@@ -896,7 +895,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates an LCID from a LangId
+        ///  Creates an LCID from a LangId
         /// </summary>
         public static int MAKELCID(int lgid)
         {
@@ -904,13 +903,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates an LCID from a LangId
+        ///  Creates an LCID from a LangId
         /// </summary>
         public static int MAKELCID(int lgid, int sort)
         {
             return ((0xFFFF & lgid) | (((0x000f) & sort) << 16));
         }
-
 
         public const int MEMBERID_NIL = (-1),
         ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
@@ -1787,7 +1785,6 @@ namespace System.Windows.Forms
         //IMN_GUIDELINE            = 0x000D,
         //IMN_PRIVATE              = 0x000E;
 
-
         public static int START_PAGE_GENERAL = unchecked((int)0xffffffff);
 
         //  Result action ids for PrintDlgEx.
@@ -1908,8 +1905,6 @@ namespace System.Windows.Forms
             public bool fStrikethrough;
         }
 
-        /// <summary>
-        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCbmp
         {
@@ -1919,15 +1914,13 @@ namespace System.Windows.Forms
             internal IntPtr hpalette = IntPtr.Zero;
             internal int unused = 0;
 
-            public PICTDESCbmp(System.Drawing.Bitmap bitmap)
+            public PICTDESCbmp(Drawing.Bitmap bitmap)
             {
                 hbitmap = bitmap.GetHbitmap();
                 // gpr: What about palettes?
             }
         }
 
-        /// <summary>
-        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCicon
         {
@@ -1937,14 +1930,12 @@ namespace System.Windows.Forms
             internal int unused1 = 0;
             internal int unused2 = 0;
 
-            public PICTDESCicon(System.Drawing.Icon icon)
+            public PICTDESCicon(Drawing.Icon icon)
             {
                 hicon = SafeNativeMethods.CopyImage(new HandleRef(icon, icon.Handle), NativeMethods.IMAGE_ICON, icon.Size.Width, icon.Size.Height, 0);
             }
         }
 
-        /// <summary>
-        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCemf
         {
@@ -1954,7 +1945,7 @@ namespace System.Windows.Forms
             internal int unused1 = 0;
             internal int unused2 = 0;
 
-            public PICTDESCemf(System.Drawing.Imaging.Metafile metafile)
+            public PICTDESCemf(Drawing.Imaging.Metafile metafile)
             {
                 //gpr                hemf = metafile.CopyHandle();
             }
@@ -2013,11 +2004,10 @@ namespace System.Windows.Forms
             internal POINT pt;
             internal int clrForeground = -1;
             internal int clrBackground = -1;
-            internal RECT rcMargins = RECT.FromXYWH(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore            
+            internal RECT rcMargins = RECT.FromXYWH(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
             internal string pszFont = null;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public const int HH_FTS_DEFAULT_PROXIMITY = -1;
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -2169,7 +2159,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// Checks whether the given property can be reset to some default value.
-            /// If return value is non-S_OK or *pfCanReset is 
+            /// If return value is non-S_OK or *pfCanReset is
             /// </summary>
             [PreserveSig]
             int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
@@ -2332,7 +2322,7 @@ namespace System.Windows.Forms
                 this.bottom = bottom;
             }
 
-            public RECT(System.Drawing.Rectangle r)
+            public RECT(Drawing.Rectangle r)
             {
                 left = r.Left;
                 top = r.Top;
@@ -2345,11 +2335,11 @@ namespace System.Windows.Forms
                 return new RECT(x, y, x + width, y + height);
             }
 
-            public System.Drawing.Size Size
+            public Drawing.Size Size
             {
                 get
                 {
-                    return new System.Drawing.Size(right - left, bottom - top);
+                    return new Drawing.Size(right - left, bottom - top);
                 }
             }
         }
@@ -2404,8 +2394,8 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.Struct)]
             public LOGFONT lfStatusFont = null;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfMessageFont = null; 
-            // Necessary since Windows Vista. 
+            public LOGFONT  lfMessageFont = null;
+            // Necessary since Windows Vista.
             // Since we are supporting >= Windows 7, this is safe to add.
             public int iPaddedBorderWidth = 0;
         }
@@ -2541,17 +2531,17 @@ namespace System.Windows.Forms
             public IntPtr hDevNames;
             public int Flags;
 
-            //POINT           ptPaperSize; 
+            //POINT           ptPaperSize;
             public int paperSizeX = 0;
             public int paperSizeY = 0;
 
-            // RECT            rtMinMargin; 
+            // RECT            rtMinMargin;
             public int minMarginLeft;
             public int minMarginTop;
             public int minMarginRight;
             public int minMarginBottom;
 
-            // RECT            rtMargin; 
+            // RECT            rtMargin;
             public int marginLeft;
             public int marginTop;
             public int marginRight;
@@ -2956,7 +2946,7 @@ namespace System.Windows.Forms
         }
 
         // This version allows you to read the string that's stuffed
-        // in the native menu item.  You have to do the marshaling on 
+        // in the native menu item.  You have to do the marshaling on
         // your own though.
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class MENUITEMINFO_T_RW
@@ -3100,7 +3090,6 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class STATSTG
         {
-
             [MarshalAs(UnmanagedType.LPWStr)]
             public string pwcsName = null;
 
@@ -3201,7 +3190,7 @@ namespace System.Windows.Forms
             {
             }
 
-            public COMRECT(System.Drawing.Rectangle r)
+            public COMRECT(Rectangle r)
             {
                 left = r.X;
                 top = r.Y;
@@ -3733,17 +3722,17 @@ namespace System.Windows.Forms
             // MSO Component Host flags
             public const int msochostfExclusiveBorderSpace = 1;
 
-            // MSO idle flags, passed to IMsoComponent::FDoIdle and 
+            // MSO idle flags, passed to IMsoComponent::FDoIdle and
             // IMsoStdComponentMgr::FDoIdle.
             public const int msoidlefPeriodic = 1;
             public const int msoidlefNonPeriodic = 2;
             public const int msoidlefPriority = 4;
             public const int msoidlefAll = -1;
 
-            // MSO Reasons for pushing a message loop, passed to 
-            // IMsoComponentManager::FPushMessageLoop and 
+            // MSO Reasons for pushing a message loop, passed to
+            // IMsoComponentManager::FPushMessageLoop and
             // IMsoComponentHost::FPushMessageLoop.  The host should remain in message
-            // loop until IMsoComponent::FContinueMessageLoop 
+            // loop until IMsoComponent::FContinueMessageLoop
             public const int msoloopDoEventsModal = -2; // Note this is not an official MSO loop -- it just must be distinct.
             public const int msoloopMain = -1; // Note this is not an official MSO loop -- it just must be distinct.
             public const int msoloopFocusWait = 1;
@@ -3752,21 +3741,20 @@ namespace System.Windows.Forms
             public const int msoloopModalForm = 4;
             public const int msoloopModalAlert = 5;
 
-
-            /* msocstate values: state IDs passed to 
-                IMsoComponent::OnEnterState, 
+            /* msocstate values: state IDs passed to
+                IMsoComponent::OnEnterState,
                 IMsoComponentManager::OnComponentEnterState/FOnComponentExitState/FInState,
                 IMsoComponentHost::OnComponentEnterState,
                 IMsoStdComponentMgr::OnHostEnterState/FOnHostExitState/FInState.
-                When the host or a component is notified through one of these methods that 
-                another entity (component or host) is entering or exiting a state 
+                When the host or a component is notified through one of these methods that
+                another entity (component or host) is entering or exiting a state
                 identified by one of these state IDs, the host/component should take
                 appropriate action:
                     msocstateModal (modal state):
                         If app is entering modal state, host/component should disable
                         its toplevel windows, and reenable them when app exits this
                         state.  Also, when this state is entered or exited, host/component
-                        should notify approprate inplace objects via 
+                        should notify approprate inplace objects via
                         IOleInPlaceActiveObject::EnableModeless.
                     msocstateRedrawOff (redrawOff state):
                         If app is entering redrawOff state, host/component should disable
@@ -3783,11 +3771,10 @@ namespace System.Windows.Forms
             public const int msocstateWarningsOff = 3;
             public const int msocstateRecording = 4;
 
-
             /*             ** Comments on State Contexts **
-            IMsoComponentManager::FCreateSubComponentManager allows one to create a 
-            hierarchical tree of component managers.  This tree is used to maintain 
-            multiple contexts with regard to msocstateXXX states.  These contexts are 
+            IMsoComponentManager::FCreateSubComponentManager allows one to create a
+            hierarchical tree of component managers.  This tree is used to maintain
+            multiple contexts with regard to msocstateXXX states.  These contexts are
             referred to as 'state contexts'.
             Each component manager in the tree defines a state context.  The
             components registered with a particular component manager or any of its
@@ -3797,11 +3784,11 @@ namespace System.Windows.Forms
             manager's state context, or only those components that are outside of the
             component manager's state context.  IMsoComponentManager::FInState is used
             to query the state of the component manager's state context at its root.
-        
-            msoccontext values: context indicators passed to 
+
+            msoccontext values: context indicators passed to
             IMsoComponentManager::OnComponentEnterState/FOnComponentExitState.
             These values indicate the state context that is to be affected by the
-            state change. 
+            state change.
             In IMsoComponentManager::OnComponentEnterState/FOnComponentExitState,
             the comp mgr informs only those components/host that are within the
             specified state context. */
@@ -3811,15 +3798,15 @@ namespace System.Windows.Forms
 
             /*     ** WM_MOUSEACTIVATE Note (for top level compoenents and host) **
             If the active (or tracking) comp's reg info indicates that it
-            wants mouse messages, then no MA_xxxANDEAT value should be returned 
+            wants mouse messages, then no MA_xxxANDEAT value should be returned
             from WM_MOUSEACTIVATE, so that the active (or tracking) comp will be able
             to process the resulting mouse message.  If one does not want to examine
-            the reg info, no MA_xxxANDEAT value should be returned from 
+            the reg info, no MA_xxxANDEAT value should be returned from
             WM_MOUSEACTIVATE if any comp is active (or tracking).
             One can query the reg info of the active (or tracking) component at any
             time via IMsoComponentManager::FGetActiveComponent. */
 
-            /* msogac values: values passed to 
+            /* msogac values: values passed to
             IMsoComponentManager::FGetActiveComponent. */
             public const int msogacActive = 0;
             public const int msogacTracking = 1;
@@ -3914,7 +3901,7 @@ namespace System.Windows.Forms
             public TV_ITEM itemOld;
             public TV_ITEM itemNew;
             public int ptDrag_X; // This should be declared as POINT
-            public int ptDrag_Y; // we use unsafe blocks to manipulate 
+            public int ptDrag_Y; // we use unsafe blocks to manipulate
                                  // NMTREEVIEW quickly, and POINT is declared
                                  // as a class.  Too much churn to change POINT
                                  // now.
@@ -4045,7 +4032,7 @@ namespace System.Windows.Forms
             public short oVft;
             [MarshalAs(UnmanagedType.I2)]
             public short cScodesi;
-            public NativeMethods.tagELEMDESC elemdescFunc;
+            public tagELEMDESC elemdescFunc;
             [MarshalAs(UnmanagedType.U2)]
             public short wFuncFlags;
         }
@@ -4056,7 +4043,7 @@ namespace System.Windows.Forms
             public int memid;
             public IntPtr lpstrSchema;
             public IntPtr unionMember;
-            public NativeMethods.tagELEMDESC elemdescVar;
+            public tagELEMDESC elemdescVar;
             [MarshalAs(UnmanagedType.U2)]
             public short wVarFlags;
             public    /*NativeMethods.tagVARKIND*/ int varkind;
@@ -4142,7 +4129,7 @@ namespace System.Windows.Forms
         {
             void GetPages(
                [Out]
-                NativeMethods.tagCAUUID pPages);
+                tagCAUUID pPages);
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
@@ -4323,7 +4310,7 @@ namespace System.Windows.Forms
             public int clrTextBk;
             public int iSubItem;
             public int dwItemType;
-            // Item Custom Draw    
+            // Item Custom Draw
             public int clrFace;
             public int iIconEffect;
             public int iIconPhase;
@@ -4717,8 +4704,8 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class GETTEXTLENGTHEX
         {                               // Taken from richedit.h:
-            public uint flags;          // Flags (see GTL_XXX defines)              
-            public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)                         
+            public uint flags;          // Flags (see GTL_XXX defines)
+            public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 4)]
@@ -4897,7 +4884,6 @@ namespace System.Windows.Forms
             public byte[] contents = new byte[56];
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
@@ -5242,7 +5228,6 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U2)]
             public short idldescType_wIDLFlags;
 
-
             public tagTYPEDESC Get_tdescAlias()
             {
                 tagTYPEDESC td;
@@ -5281,8 +5266,8 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct tagELEMDESC
         {
-            public NativeMethods.tagTYPEDESC tdesc;
-            public NativeMethods.tagPARAMDESC paramdesc;
+            public tagTYPEDESC tdesc;
+            public tagPARAMDESC paramdesc;
         }
 
         public enum tagVARKIND
@@ -5339,9 +5324,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This method takes a file URL and converts it to a local path.  The trick here is that
-        ///     if there is a '#' in the path, everything after this is treated as a fragment.  So
-        ///     we need to append the fragment to the end of the path.
+        ///  This method takes a file URL and converts it to a local path.  The trick here is that
+        ///  if there is a '#' in the path, everything after this is treated as a fragment.  So
+        ///  we need to append the fragment to the end of the path.
         /// </summary>
         internal static string GetLocalPath(string fileName)
         {
@@ -5411,7 +5396,7 @@ namespace System.Windows.Forms
             public double width;
             public double height;
 
-            public UiaRect(System.Drawing.Rectangle r)
+            public UiaRect(Drawing.Rectangle r)
             {
                 left = r.Left;
                 top = r.Top;
@@ -5709,7 +5694,7 @@ namespace System.Windows.Forms
         internal const int UIA_SemanticZoomControlTypeId = 50039;
         internal const int UIA_AppBarControlTypeId = 50040;
 
-        // If this value is used, %windows%\system32 is searched for the DLL 
+        // If this value is used, %windows%\system32 is searched for the DLL
         // and its dependencies. Directories in the standard search path are not searched.
         // Windows 7: this value requires KB2533623 to be installed.
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;

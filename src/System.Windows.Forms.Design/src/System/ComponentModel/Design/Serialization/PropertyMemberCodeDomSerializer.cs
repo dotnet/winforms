@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,7 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///    A MemberCodeDomSerializer for properties.
+    ///  A MemberCodeDomSerializer for properties.
     /// </summary>
     internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     {
@@ -31,11 +31,10 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This retrieves the value of this property.  If the property returns false
-        ///     from ShouldSerializeValue (indicating the ambient value for this property)
-        ///     This will look for an AmbientValueAttribute and use it if it can.
+        ///  This retrieves the value of this property.  If the property returns false
+        ///  from ShouldSerializeValue (indicating the ambient value for this property)
+        ///  This will look for an AmbientValueAttribute and use it if it can.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private object GetPropertyValue(IDesignerSerializationManager manager, PropertyDescriptor property, object value, out bool validValue)
         {
             object propertyValue = null;
@@ -44,7 +43,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (!property.ShouldSerializeValue(value))
                 {
-                    // We aren't supposed to be serializing this property, but we decided to do 
+                    // We aren't supposed to be serializing this property, but we decided to do
                     // it anyway.  Check the property for an AmbientValue attribute and if we
                     // find one, use it's value to serialize.
                     AmbientValueAttribute attr = (AmbientValueAttribute)property.Attributes[typeof(AmbientValueAttribute)];
@@ -81,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if ((propertyValue != null) && (!propertyValue.GetType().IsValueType) && !(propertyValue is Type))
             {
-                // DevDiv2 (Dev11) bug 187766 : property whose type implements ISupportInitialize is not 
+                // DevDiv2 (Dev11) bug 187766 : property whose type implements ISupportInitialize is not
                 // serialized with Begin/EndInit.
                 Type type = TypeDescriptor.GetProvider(propertyValue).GetReflectionType(typeof(object));
                 if (!type.IsDefined(typeof(ProjectTargetFrameworkAttribute), false))
@@ -100,10 +99,9 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    This method actually performs the serialization.  When the member is serialized
-        ///    the necessary statements will be added to the statements collection.
+        ///  This method actually performs the serialization.  When the member is serialized
+        ///  the necessary statements will be added to the statements collection.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
             if (manager == null)
@@ -145,8 +143,8 @@ namespace System.ComponentModel.Design.Serialization
             }
             catch (Exception e)
             {
-                // Since we usually go through reflection, don't 
-                // show what our engine does, show what caused 
+                // Since we usually go through reflection, don't
+                // show what our engine does, show what caused
                 // the problem.
                 if (e is TargetInvocationException)
                 {
@@ -158,7 +156,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This serializes the given property on this object as a content property.
+        ///  This serializes the given property on this object as a content property.
         /// </summary>
         private void SerializeContentProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, bool isExtender, CodeStatementCollection statements)
         {
@@ -256,7 +254,6 @@ namespace System.ComponentModel.Design.Serialization
                                 manager.Context.Pop();
                             }
 
-
                             if (result is CodeStatementCollection csc)
                             {
                                 foreach (CodeStatement statement in csc)
@@ -284,7 +281,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This serializes the given property on this object.
+        ///  This serializes the given property on this object.
         /// </summary>
         private void SerializeExtenderProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
         {
@@ -350,11 +347,10 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This serializes the given property on this object.
+        ///  This serializes the given property on this object.
         /// </summary>
         private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
         {
-
             using (CodeDomSerializer.TraceScope("CodeDomSerializer::" + nameof(SerializeProperty)))
             {
                 CodeExpression target = SerializeToExpression(manager, value);
@@ -367,7 +363,7 @@ namespace System.ComponentModel.Design.Serialization
                     CodeExpression serializedPropertyValue = null;
 
                     // First check for a member relationship service to see if this property
-                    // is related to another member.  If it is, then we will use that 
+                    // is related to another member.  If it is, then we will use that
                     // relationship to construct the property assign statement.  if
                     // it isn't, then we're serialize ourselves.
 
@@ -430,8 +426,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    This method returns true if the given member descriptor should be serialized,
-        ///    or false if there is no need to serialize the member.
+        ///  This method returns true if the given member descriptor should be serialized,
+        ///  or false if there is no need to serialize the member.
         /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor)
         {
@@ -457,9 +453,9 @@ namespace System.ComponentModel.Design.Serialization
                 if (absolute != null && absolute.ShouldSerialize(propertyToSerialize))
                 {
 
-                    // For ReadOnly properties, we only want to override the value returned from 
+                    // For ReadOnly properties, we only want to override the value returned from
                     // ShouldSerializeValue() if the property is marked with DesignerSerializationVisibilityAttribute(Content).
-                    // Consider the case of a property with just a getter - we only want to serialize those                    
+                    // Consider the case of a property with just a getter - we only want to serialize those
                     // if they're marked in this way (see ReflectPropertyDescriptor::ShouldSerializeValue())
                     if (!propertyToSerialize.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
                     {
@@ -484,7 +480,6 @@ namespace System.ComponentModel.Design.Serialization
             // If we don't have to serialize, we need to make sure there isn't a member
             // relationship with this property.  If there is, we still need to serialize.
 
-
             if (manager.GetService(typeof(MemberRelationshipService)) is MemberRelationshipService relationships)
             {
                 MemberRelationship relationship = relationships[value, descriptor];
@@ -494,7 +489,6 @@ namespace System.ComponentModel.Design.Serialization
                     return true;
                 }
             }
-
 
             return false;
         }

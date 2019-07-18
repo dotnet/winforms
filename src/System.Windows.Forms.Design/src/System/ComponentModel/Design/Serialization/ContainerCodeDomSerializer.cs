@@ -13,8 +13,8 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///    This class is used to serialize things of type "IContainer".  We route all containers
-    ///    to the designer host's container.
+    ///  This class is used to serialize things of type "IContainer".  We route all containers
+    ///  to the designer host's container.
     /// </summary>
     internal class ContainerCodeDomSerializer : CodeDomSerializer
     {
@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design.Serialization
         private static ContainerCodeDomSerializer s_defaultSerializer;
 
         /// <summary>
-        ///     Retrieves a default static instance of this serializer.
+        ///  Retrieves a default static instance of this serializer.
         /// </summary>
         internal new static ContainerCodeDomSerializer Default
         {
@@ -38,7 +38,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     We override this so we can always provide the correct container as a reference.
+        ///  We override this so we can always provide the correct container as a reference.
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
@@ -59,8 +59,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    Serializes the given object into a CodeDom object.  We serialize an IContainer by
-        ///    declaring an IContainer member variable and then assigning a Container into it.
+        ///  Serializes the given object into a CodeDom object.  We serialize an IContainer by
+        ///  declaring an IContainer member variable and then assigning a Container into it.
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {

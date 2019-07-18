@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///   Provides a <see cref="T:System.Drawing.Design.UITypeEditor" /> that paints a glyph for the font name.
+    ///  Provides a <see cref="T:System.Drawing.Design.UITypeEditor" /> that paints a glyph for the font name.
     /// </summary>
     public class FontNameEditor : UITypeEditor
     {
@@ -22,11 +22,11 @@ namespace System.Drawing.Design
         };
 
         /// <summary>
-        ///   Determines if this editor supports the painting of a representation of an object's value.
+        ///  Determines if this editor supports the painting of a representation of an object's value.
         /// </summary>
         /// <param name="context">A type descriptor context that can be used to provide additional context information.</param>
         /// <returns>
-        ///   <see langword="true" /> as this editor supports the painting of a representation of an object's value.
+        ///  <see langword="true" /> as this editor supports the painting of a representation of an object's value.
         /// </returns>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
@@ -34,8 +34,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///   Paints a representative value of the given object to the provided canvas. 
-        ///   Painting should be done within the boundaries of the provided rectangle.
+        ///  Paints a representative value of the given object to the provided canvas.
+        ///  Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         /// <param name="e">What to paint and where to paint it. </param>
         public override void PaintValue(PaintValueEventArgs e)
@@ -53,7 +53,7 @@ namespace System.Drawing.Design
                 {
                     e.Graphics.FillRectangle(SystemBrushes.ActiveCaption, e.Bounds);
 
-                    // Believe it or not, not all font families have a "normal" face.  Try normal, then italic, 
+                    // Believe it or not, not all font families have a "normal" face.  Try normal, then italic,
                     // then bold, then bold italic, then give up.
                     foreach (var fontStyle in s_FontStyles)
                     {
@@ -87,7 +87,7 @@ namespace System.Drawing.Design
             {
                 var sf = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.NoFontFallback)
                 {
-                    LineAlignment = StringAlignment.Far 
+                    LineAlignment = StringAlignment.Far
                 };
                 e.Graphics.DrawString("abcd", font, SystemBrushes.ActiveCaptionText, e.Bounds, sf);
             }

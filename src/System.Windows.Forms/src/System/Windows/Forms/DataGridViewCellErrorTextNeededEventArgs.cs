@@ -6,7 +6,6 @@ namespace System.Windows.Forms
 {
     public class DataGridViewCellErrorTextNeededEventArgs : DataGridViewCellEventArgs
     {
-
         internal DataGridViewCellErrorTextNeededEventArgs(int columnIndex, int rowIndex, string errorText) : base(columnIndex, rowIndex)
         {
             ErrorText = errorText;

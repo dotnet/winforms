@@ -16,7 +16,6 @@ namespace System.Windows.Forms
         None = 0,
 
         /// <summary>
-        ///    <para>
         /// Assigns focus to an object and makes it the anchor, which is the
         /// starting point for the selection. Can be combined with
         /// <see cref='TakeSelection'/>, <see cref='ExtendSelection'/>,

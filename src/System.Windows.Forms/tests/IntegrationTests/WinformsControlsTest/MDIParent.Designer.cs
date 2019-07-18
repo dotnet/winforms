@@ -37,9 +37,9 @@ namespace WinformsControlsTest
             this.newChildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // menuStrip1
-            // 
+            //
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -47,25 +47,25 @@ namespace WinformsControlsTest
             this.menuStrip1.Size = new System.Drawing.Size(466, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
-            // 
+            //
             // toolStripMenuItem1
-            // 
+            //
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newChildToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(125, 20);
             this.toolStripMenuItem1.Text = "toolStripMenuItem1";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
-            // 
+            //
             // newChildToolStripMenuItem
-            // 
+            //
             this.newChildToolStripMenuItem.Name = "newChildToolStripMenuItem";
             this.newChildToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newChildToolStripMenuItem.Text = "new child";
             this.newChildToolStripMenuItem.Click += new System.EventHandler(this.newChildToolStripMenuItem_Click);
-            // 
+            //
             // MDIParent
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(466, 305);

@@ -33,7 +33,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets a value indicating whether this converter can convert an object to the given
-        /// destination type using the context.</para>
+        /// destination type using the context.
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
