@@ -509,7 +509,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView != null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
                         else
                         {
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView != null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
                         else
                         {
@@ -553,7 +553,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView != null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         }
                         else
                         {
@@ -563,7 +563,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.Single:
-                        if (!isFirstDisplayedRow || DataGridView.ColumnHeadersVisible)
+                        if (!isFirstDisplayedRow || (DataGridView != null && DataGridView.ColumnHeadersVisible))
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
@@ -1800,6 +1800,11 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
+                    if (owner.DataGridView == null)
+                    {
+                        return Rectangle.Empty;
+                    }
+
                     Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
 
                     int horizontalScrollBarHeight = 0;
@@ -1870,7 +1875,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    return owner.DataGridView.AccessibilityObject;
+                    return owner.DataGridView?.AccessibilityObject;
                 }
             }
             public override AccessibleRole Role => AccessibleRole.Row;
@@ -1943,10 +1948,13 @@ namespace System.Windows.Forms
                         accState |= AccessibleStates.Selected;
                     }
 
-                    Rectangle rowBounds = owner.DataGridView.GetRowDisplayRectangle(owner.Index, true /*cutOverflow*/);
-                    if (!rowBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
+                    if (owner.DataGridView != null)
                     {
-                        accState |= AccessibleStates.Offscreen;
+                        Rectangle rowBounds = owner.DataGridView.GetRowDisplayRectangle(owner.Index, true /*cutOverflow*/);
+                        if (!rowBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
+                        {
+                            accState |= AccessibleStates.Offscreen;
+                        }
                     }
 
                     return accState;
@@ -1960,7 +1968,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    if (owner.DataGridView.AllowUserToAddRows && owner.Index == owner.DataGridView.NewRowIndex)
+                    if (owner.DataGridView != null && owner.DataGridView.AllowUserToAddRows && owner.Index == owner.DataGridView.NewRowIndex)
                     {
                         return SR.DataGridView_AccRowCreateNew;
                     }
@@ -1970,7 +1978,7 @@ namespace System.Windows.Forms
                     int childCount = GetChildCount();
 
                     // filter out the row header acc object even when DataGridView::RowHeadersVisible is turned on
-                    int startIndex = owner.DataGridView.RowHeadersVisible ? 1 : 0;
+                    int startIndex = owner.DataGridView != null && owner.DataGridView.RowHeadersVisible ? 1 : 0;
 
                     for (int i = startIndex; i < childCount; i++)
                     {
@@ -2001,6 +2009,11 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
+                if (owner.DataGridView == null)
+                {
+                    return null;
+                }
+
                 if (index == 0 && owner.DataGridView.RowHeadersVisible)
                 {
                     return owner.HeaderCell.AccessibilityObject;
@@ -2024,6 +2037,10 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
+                if (owner.DataGridView == null)
+                {
+                    return 0;
+                }
 
                 int result = owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
                 if (owner.DataGridView.RowHeadersVisible)
@@ -2044,7 +2061,10 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                if (owner.DataGridView.Focused && owner.DataGridView.CurrentCell != null && owner.DataGridView.CurrentCell.RowIndex == owner.Index)
+                if (owner.DataGridView != null &&
+                    owner.DataGridView.Focused &&
+                    owner.DataGridView.CurrentCell != null &&
+                    owner.DataGridView.CurrentCell.RowIndex == owner.Index)
                 {
                     return owner.DataGridView.CurrentCell.AccessibilityObject;
                 }
@@ -2059,6 +2079,11 @@ namespace System.Windows.Forms
                 if (owner == null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
+                }
+
+                if (owner.DataGridView == null)
+                {
+                    return null;
                 }
 
                 switch (navigationDirection)
