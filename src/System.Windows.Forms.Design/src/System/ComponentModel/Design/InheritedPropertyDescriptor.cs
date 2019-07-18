@@ -142,12 +142,10 @@ namespace System.ComponentModel.Design
 
         internal PropertyDescriptor PropertyDescriptor
         {
-//property/reflection.
             get
             {
                 return propertyDescriptor;
             }
-//property/reflection.
             set
             {
                 Debug.Assert(!(value is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
