@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
     {
-        private readonly ContentAlignment _textAlignment;
         private Color _textColor = SystemColors.ControlText;
         private bool _textColorChanged = false;
 
@@ -20,11 +19,15 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format) : base(g, item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Text = text;
             TextRectangle = textRectangle;
             DefaultTextColor = textColor;
             TextFont = textFont;
-            _textAlignment = item.TextAlign;
             TextFormat = format;
             TextDirection = item.TextDirection;
         }
@@ -34,6 +37,11 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign) : base(g, item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Text = text;
             TextRectangle = textRectangle;
             DefaultTextColor = textColor;

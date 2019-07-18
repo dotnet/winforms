@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         {
             Graphics = g;
             ToolStrip = toolStrip;
-            AffectedBounds = new Rectangle(Point.Empty, toolStrip.Size);
+            AffectedBounds = new Rectangle(Point.Empty, toolStrip?.Size ?? Size.Empty);
         }
 
         /// <summary>
@@ -53,25 +53,35 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_backColor == Color.Empty)
+                if (_backColor != Color.Empty)
                 {
-                    // get the user specified color
-                    _backColor = ToolStrip.RawBackColor;
-                    if (_backColor == Color.Empty)
-                    {
-                        if (ToolStrip is ToolStripDropDown)
-                        {
-                            _backColor = SystemColors.Menu;
-                        }
-                        else if (ToolStrip is MenuStrip)
-                        {
-                            _backColor = SystemColors.MenuBar;
-                        }
-                        else
-                        {
-                            _backColor = SystemColors.Control;
-                        }
-                    }
+                    return _backColor;
+                }
+
+                // get the user specified color
+                if (ToolStrip == null)
+                {
+                    _backColor = SystemColors.Control;
+                    return _backColor;
+                }
+
+                _backColor = ToolStrip.RawBackColor;
+                if (_backColor != Color.Empty)
+                {
+                    return _backColor;
+                }
+
+                if (ToolStrip is ToolStripDropDown)
+                {
+                    _backColor = SystemColors.Menu;
+                }
+                else if (ToolStrip is MenuStrip)
+                {
+                    _backColor = SystemColors.MenuBar;
+                }
+                else
+                {
+                    _backColor = SystemColors.Control;
                 }
 
                 return _backColor;
