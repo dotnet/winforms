@@ -15,6 +15,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
@@ -76,19 +77,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="SmallA.bmp">
+    <EmbeddedResource Include="Images\SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="SmallABlue.bmp">
+    <EmbeddedResource Include="Images\SmallABlue.bmp">
       <LogicalName>WinformsControlsTest.SmallABlue.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="LargeA.bmp">
+    <EmbeddedResource Include="Images\LargeA.bmp">
       <LogicalName>WinformsControlsTest.LargeA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="LargeABlue.bmp">
+    <EmbeddedResource Include="Images\LargeABlue.bmp">
       <LogicalName>WinformsControlsTest.LargeABlue.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
