@@ -2,51 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-    using System.Runtime.Versioning;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Drawing;
-
-    using System.ComponentModel;
-    using System.Windows.Forms;
-
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>
-    ///       Represents a common dialog box that displays available colors along with
-    ///       controls that allow the user to define custom colors.
-    ///    </para>
+    ///  Represents a common dialog box that displays available colors along with
+    ///  controls that allow the user to define custom colors.
     /// </summary>
     [DefaultProperty(nameof(Color))]
     [SRDescription(nameof(SR.DescriptionColorDialog))]
     // The only event this dialog has is HelpRequest, which isn't very useful
     public class ColorDialog : CommonDialog
     {
-
         private int options;
         private readonly int[] customColors;
 
-        /// <summary>
-        /// </summary>
         private Color color;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.ColorDialog'/>
-        ///       class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='ColorDialog'/>
+        ///  class.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not call Reset
-                                                                                                    // it would be a breaking change.
-        ]
         public ColorDialog()
         {
             customColors = new int[16];
@@ -54,10 +33,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the user can use the dialog box
-        ///       to define custom colors.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the user can use the dialog box
+        ///  to define custom colors.
         /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
@@ -78,10 +55,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog box displays all available colors in
-        ///       the set of basic colors.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the dialog box displays all available colors in
+        ///  the set of basic colors.
         /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
@@ -102,9 +77,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the color selected by the user.
-        ///    </para>
+        ///  Gets or sets the color selected by the user.
         /// </summary>
         [
             SRCategory(nameof(SR.CatData)),
@@ -130,10 +103,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the set of
-        ///       custom colors shown in the dialog box.
-        ///    </para>
+        ///  Gets or sets the set of
+        ///  custom colors shown in the dialog box.
         /// </summary>
         [
             Browsable(false),
@@ -159,10 +130,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the controls used to create custom
-        ///       colors are visible when the dialog box is opened
-        ///    </para>
+        ///  Gets or sets a value indicating whether the controls used to create custom
+        ///  colors are visible when the dialog box is opened
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -183,9 +152,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Our HINSTANCE from Windows.
-        ///    </para>
+        ///  Our HINSTANCE from Windows.
         /// </summary>
         protected virtual IntPtr Instance
         {
@@ -193,7 +160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Returns our CHOOSECOLOR options.
+        ///  Returns our CHOOSECOLOR options.
         /// </summary>
         protected virtual int Options
         {
@@ -204,10 +171,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether a Help button appears
-        ///       in the color dialog box.
-        ///    </para>
+        ///  Gets or sets a value indicating whether a Help button appears
+        ///  in the color dialog box.
         /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
@@ -227,12 +192,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets a value indicating
-        ///       whether the dialog
-        ///       box will restrict users to selecting solid colors only.
-        ///    </para>
+        ///  Gets
+        ///  or sets a value indicating
+        ///  whether the dialog
+        ///  box will restrict users to selecting solid colors only.
         /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
@@ -252,7 +215,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Lets us control the CHOOSECOLOR options.
+        ///  Lets us control the CHOOSECOLOR options.
         /// </summary>
         private bool GetOption(int option)
         {
@@ -260,12 +223,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Resets
-        ///       all options to their
-        ///       default values, the last selected color to black, and the custom
-        ///       colors to their default values.
-        ///    </para>
+        ///  Resets
+        ///  all options to their
+        ///  default values, the last selected color to black, and the custom
+        ///  colors to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -279,11 +240,8 @@ namespace System.Windows.Forms
             Color = Color.Black;
         }
 
-        /// <summary>
-        /// </summary>
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             NativeMethods.CHOOSECOLOR cc = new NativeMethods.CHOOSECOLOR();
             IntPtr custColorPtr = Marshal.AllocCoTaskMem(64);
@@ -325,7 +283,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows us to manipulate the CHOOSECOLOR options
+        ///  Allows us to manipulate the CHOOSECOLOR options
         /// </summary>
         private void SetOption(int option, bool value)
         {
@@ -340,10 +298,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Indicates whether the <see cref='System.Windows.Forms.ColorDialog.Color'/> property should be
-        ///       persisted.
-        ///    </para>
+        ///  Indicates whether the <see cref='Color'/> property should be
+        ///  persisted.
         /// </summary>
         private bool ShouldSerializeColor()
         {
@@ -351,9 +307,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Provides a string version of this object.
-        ///    </para>
+        ///  Provides a string version of this object.
         /// </summary>
         public override string ToString()
         {

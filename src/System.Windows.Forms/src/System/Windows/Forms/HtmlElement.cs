@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -77,7 +76,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         public HtmlDocument Document
         {
             get
@@ -142,7 +140,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         public string InnerHtml
         {
             get
@@ -201,7 +198,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private UnsafeNativeMethods.IHTMLElement NativeHtmlElement
         {
             get
@@ -223,7 +219,6 @@ namespace System.Windows.Forms
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
-
 
         public Rectangle OffsetRectangle
         {
@@ -297,8 +292,6 @@ namespace System.Windows.Forms
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
-
-
 
         public Rectangle ScrollRectangle
         {
@@ -374,7 +367,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         public object DomElement
         {
             get
@@ -382,7 +374,6 @@ namespace System.Windows.Forms
                 return NativeHtmlElement;
             }
         }
-
 
         public HtmlElement AppendChild(HtmlElement newElement)
         {
@@ -393,7 +384,6 @@ namespace System.Windows.Forms
         {
             ElementShim.AttachEventHandler(eventName, eventHandler);
         }
-
 
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
@@ -497,19 +487,16 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-
         public void RemoveFocus()
         {
             ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).Blur();
         }
 
         // PM review done
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         public void RaiseEvent(string eventName)
         {
             ((UnsafeNativeMethods.IHTMLElement3)NativeHtmlElement).FireEvent(eventName, IntPtr.Zero);
         }
-
 
         public void ScrollIntoView(bool alignWithTop)
         {
@@ -532,7 +519,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         //
         // Events:
         //
@@ -542,7 +528,6 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(EventClick, value);
 
         }
-
 
         public event HtmlElementEventHandler DoubleClick
         {
@@ -556,13 +541,11 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(EventDrag, value);
         }
 
-
         public event HtmlElementEventHandler DragEnd
         {
             add => ElementShim.AddHandler(EventDragEnd, value);
             remove => ElementShim.RemoveHandler(EventDragEnd, value);
         }
-
 
         public event HtmlElementEventHandler DragLeave
         {
@@ -642,7 +625,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Fires when the mouse enters the element</para>
+        ///  Fires when the mouse enters the element
         /// </summary>
         public event HtmlElementEventHandler MouseEnter
         {
@@ -651,7 +634,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Fires when the mouse leaves the element</para>
+        ///  Fires when the mouse leaves the element
         /// </summary>
         public event HtmlElementEventHandler MouseLeave
         {
@@ -686,7 +669,6 @@ namespace System.Windows.Forms
                                            UnsafeNativeMethods.DHTMLTextContainerEvents2,
                                            UnsafeNativeMethods.DHTMLScriptEvents2
         {
-
             private readonly HtmlElement parent;
 
             public HTMLElementEvents2(HtmlElement htmlElement)
@@ -700,7 +682,6 @@ namespace System.Windows.Forms
                     parent.ElementShim.FireEvent(key, e);
                 }
             }
-
 
             public bool onclick(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
@@ -1026,18 +1007,16 @@ namespace System.Windows.Forms
             public void onstart(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
         }
 
-
         ///<summary>
         /// HtmlElementShim - this is the glue between the DOM eventing mechanisms
-        ///                    and our CLR callbacks.  
-        ///             
-        ///     HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-        ///                        on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
+        ///          and our CLR callbacks.
         ///
-        ///</summary>  
+        ///  HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
+        ///              on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
+        ///
+        ///</summary>
         internal class HtmlElementShim : HtmlShim
         {
-
             private static readonly Type[] dispInterfaceTypes = {typeof(UnsafeNativeMethods.DHTMLElementEvents2),
                                                     typeof(UnsafeNativeMethods.DHTMLAnchorEvents2),
                                                     typeof(UnsafeNativeMethods.DHTMLAreaEvents2),
@@ -1099,11 +1078,11 @@ namespace System.Windows.Forms
             }
 
             /// Support IHTMLElement2.AttachEventHandler
-            public override void AttachEventHandler(string eventName, System.EventHandler eventHandler)
+            public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event, 
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on 
+                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
+                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
@@ -1130,7 +1109,7 @@ namespace System.Windows.Forms
             }
 
             /// Support IHTMLElement2.DetachHandler
-            public override void DetachEventHandler(string eventName, System.EventHandler eventHandler)
+            public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
                 if (proxy != null)
@@ -1138,7 +1117,6 @@ namespace System.Windows.Forms
                     ((UnsafeNativeMethods.IHTMLElement2)NativeHtmlElement).DetachEvent(eventName, proxy);
                 }
             }
-
 
             public override void DisconnectFromEvents()
             {
@@ -1167,7 +1145,6 @@ namespace System.Windows.Forms
         }
 
         #region operators
-        [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlElement left, HtmlElement right)
         {
             //Not equal if only one's null.
@@ -1221,8 +1198,6 @@ namespace System.Windows.Forms
             return this == (obj as HtmlElement);
         }
         #endregion
-
-
 
     }
 }

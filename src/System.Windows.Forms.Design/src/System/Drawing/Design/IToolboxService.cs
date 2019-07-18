@@ -157,7 +157,7 @@ namespace System.Drawing.Design
         object SerializeToolboxItem(ToolboxItem toolboxItem);
 
         /// <summary>
-        /// Sets the current application's cursor to a cursor that represents the 
+        /// Sets the current application's cursor to a cursor that represents the
         /// currently selected tool.
         /// </summary>
         /// <returns>bool</returns>

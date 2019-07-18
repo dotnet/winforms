@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how the column headers are autoresized in a <see cref='System.Windows.Forms.ListView'/>
+    /// Specifies how the column headers are autoresized in a <see cref='ListView'/>
     /// control.
     /// </summary>
     public enum ColumnHeaderAutoResizeStyle

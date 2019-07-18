@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design
         private bool dropDownSetFailed = false;
 
         /// <summary>
-        /// The ToolStripDropDownItems are the associated components.  
+        /// The ToolStripDropDownItems are the associated components.
         /// We want those to come with in any cut, copy opreations.
         /// </summary>
         public override ICollection AssociatedComponents
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ToolStripEditorManager used this internal property to 
+        /// ToolStripEditorManager used this internal property to
         /// Activate the editor.
         /// </summary>
         internal override ToolStripTemplateNode Editor
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// True if the MenuItem is on ContextMenu.
-        /// </summary>        
+        /// </summary>
         private bool IsOnContextMenu
         {
             get
@@ -339,7 +339,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal void AddNewTemplateNode(ToolStripDropDown dropDown)
         {
-
             //Check if the DropDown contains a typehereNode....
             foreach (ToolStripItem currentItem in dropDown.Items)
             {
@@ -404,8 +403,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// This is called by the TemplateNode to Commit the Edit. This function creates a NEW ToolStripDropDownItem if we are committing a dummy node or else just replaces the TEXT and IMAGE if we are changing  an existing MenuItem.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         internal override void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
         {
             IsEditorActive = false;
@@ -436,7 +433,7 @@ namespace System.Windows.Forms.Design
                         commitedEditorNode.Dispose();
                         commitedEditorNode = null;
                     }
-                    // If we have type "-" this means the user wants to add a Separator.                    
+                    // If we have type "-" this means the user wants to add a Separator.
                     if (text == "-")
                     {
                         if (designerHost.GetDesigner(editedItem) is ToolStripItemDesigner itemDesigner)
@@ -444,7 +441,7 @@ namespace System.Windows.Forms.Design
                             try
                             {
                                 editedItem = itemDesigner.MorphCurrentItem(typeof(ToolStripSeparator));
-                                //Remove the ActionGlyph Added by morphing 
+                                //Remove the ActionGlyph Added by morphing
                                 RemoveItemBodyGlyph(editedItem);
                             }
                             catch
@@ -473,7 +470,7 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        // We are adding the item through INSITU for the first time 
+                        // We are adding the item through INSITU for the first time
                         if (dummyItem)
                         {
                             try
@@ -481,7 +478,7 @@ namespace System.Windows.Forms.Design
                                 dummyItemAdded = true;
                                 CreateNewItem(type, index, text);
                                 designerHost.DestroyComponent(editedItem);
-                                // One place where we need to call this explicitly since the selection doesnt change. 
+                                // One place where we need to call this explicitly since the selection doesnt change.
                                 if (enterKeyPressed)
                                 {
                                     typeHereNode.SelectControl();
@@ -740,8 +737,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// This helper function creates a dummyItem for Insitu editing.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private ToolStripItem CreateDummyItem(Type t, int dummyIndex)
         {
             if (designerHost == null)
@@ -818,8 +813,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Asks the host to create a new DropDownItem, inserts the item into the collection & selects it.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private ToolStripItem CreateNewItem(Type t, int dummyIndex, string newText)
         {
             if (designerHost == null)
@@ -1197,7 +1190,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // Refresh the state of the 'TypeHere' node to NotSelected state            
+            // Refresh the state of the 'TypeHere' node to NotSelected state
             typeHereNode.RefreshSelectionGlyph();
             // Commit any InsituEdit Node.
             if (KeyboardHandlingService != null && KeyboardHandlingService.TemplateNodeActive)
@@ -1216,7 +1209,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // always select the parent item... but dont redraw the control during this Selection Change as this causes flicker 
+            // always select the parent item... but dont redraw the control during this Selection Change as this causes flicker
             try
             {
                 ToolStripDesigner.s_editTemplateNode = true;
@@ -1397,8 +1390,6 @@ namespace System.Windows.Forms.Design
         /// Helper function to Hide the Active Dropdown from the given DropDownItem.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void HideAllDropDowns(ToolStripDropDownItem item)
         {
             try
@@ -1435,8 +1426,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Helper function to Hide the Active Dropdown for all the siblings of the given DropDownItem.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void HideSiblingDropDowns(ToolStripDropDownItem item)
         {
             try
@@ -1637,7 +1626,7 @@ namespace System.Windows.Forms.Design
             Rectangle boundstoInvalidate = Rectangle.Union(hostingDropDownBounds, itemDropDownBounds);
             ToolStripAdornerWindowService toolStripservice = toolStripAdornerWindowService;
             ToolStripItem newItem = base.MorphCurrentItem(t);
-            // We loose the ToolStripWindowService after Morphing... so use the cached one. 
+            // We loose the ToolStripWindowService after Morphing... so use the cached one.
             if (toolStripservice != null)
             {
                 toolStripservice.Invalidate(boundstoInvalidate);
@@ -1649,7 +1638,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
         {
             IComponentChangeService changeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
@@ -1894,7 +1882,7 @@ namespace System.Windows.Forms.Design
                             itemIndex = -1;
                         }
 
-                        // Looks like we need to invalidate the entire 
+                        // Looks like we need to invalidate the entire
                         if (toolStripAdornerWindowService != null && boundsToInvalidateOnRemove != Rectangle.Empty)
                         {
                             using (Region regionToInvalidate = new Region(boundsToInvalidateOnRemove))
@@ -2629,7 +2617,6 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Drag drop support on the DropDown...
             /// </summary>
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
             public override void OnDragDrop(Glyph g, DragEventArgs e)
             {
                 if (e.Data is ToolStripItemDataObject data)

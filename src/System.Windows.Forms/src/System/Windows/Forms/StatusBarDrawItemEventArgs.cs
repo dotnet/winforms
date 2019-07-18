@@ -7,13 +7,13 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
+    /// Provides data for the <see cref='StatusBar.OnDrawItem'/>
     /// event.
     /// </summary>
     public class StatusBarDrawItemEventArgs : DrawItemEventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
+        /// Initializes a new instance of the <see cref='StatusBarDrawItemEventArgs'/>
         /// class.
         /// </summary>
         public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
+        /// Initializes a new instance of the <see cref='StatusBarDrawItemEventArgs'/>
         /// class using the Forecolor and Backcolor.
         /// </summary>
         public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/> to draw.
+        /// Specifies the <see cref='StatusBarPanel'/> to draw.
         /// </summary>
         public StatusBarPanel Panel { get; }
     }

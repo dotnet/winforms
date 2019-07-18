@@ -53,9 +53,9 @@ namespace WinformsControlsTest
             this.collectionEditors = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // buttonsButton
-            // 
+            //
             this.buttonsButton.Location = new System.Drawing.Point(3, 3);
             this.buttonsButton.Name = "buttonsButton";
             this.buttonsButton.Size = new System.Drawing.Size(259, 23);
@@ -63,9 +63,9 @@ namespace WinformsControlsTest
             this.buttonsButton.Text = "Buttons";
             this.buttonsButton.UseVisualStyleBackColor = true;
             this.buttonsButton.Click += new System.EventHandler(this.button1_Click);
-            // 
+            //
             // calendar
-            // 
+            //
             this.calendar.Location = new System.Drawing.Point(3, 32);
             this.calendar.Name = "calendar";
             this.calendar.Size = new System.Drawing.Size(259, 23);
@@ -73,9 +73,9 @@ namespace WinformsControlsTest
             this.calendar.Text = "Calendar";
             this.calendar.UseVisualStyleBackColor = true;
             this.calendar.Click += new System.EventHandler(this.calendar_Click);
-            // 
+            //
             // button3
-            // 
+            //
             this.button3.Location = new System.Drawing.Point(3, 235);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(258, 23);
@@ -83,9 +83,9 @@ namespace WinformsControlsTest
             this.button3.Text = "TreeView, ImageList";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
+            //
             // button4
-            // 
+            //
             this.button4.Location = new System.Drawing.Point(268, 3);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(258, 23);
@@ -93,9 +93,9 @@ namespace WinformsControlsTest
             this.button4.Text = "Content alignment";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
+            //
             // multipleControls
-            // 
+            //
             this.multipleControls.Location = new System.Drawing.Point(3, 61);
             this.multipleControls.Name = "multipleControls";
             this.multipleControls.Size = new System.Drawing.Size(259, 23);
@@ -103,9 +103,9 @@ namespace WinformsControlsTest
             this.multipleControls.Text = "Multiple controls";
             this.multipleControls.UseVisualStyleBackColor = true;
             this.multipleControls.Click += new System.EventHandler(this.multipleControls_Click);
-            // 
+            //
             // dataGridViewButton
-            // 
+            //
             this.dataGridViewButton.Location = new System.Drawing.Point(3, 206);
             this.dataGridViewButton.Name = "dataGridViewButton";
             this.dataGridViewButton.Size = new System.Drawing.Size(258, 23);
@@ -113,9 +113,9 @@ namespace WinformsControlsTest
             this.dataGridViewButton.Text = "DataGridView";
             this.dataGridViewButton.UseVisualStyleBackColor = true;
             this.dataGridViewButton.Click += new System.EventHandler(this.dataGridViewButton_Click);
-            // 
+            //
             // menuesButton
-            // 
+            //
             this.menuesButton.Location = new System.Drawing.Point(268, 32);
             this.menuesButton.Name = "menuesButton";
             this.menuesButton.Size = new System.Drawing.Size(258, 23);
@@ -123,9 +123,9 @@ namespace WinformsControlsTest
             this.menuesButton.Text = "Menus";
             this.menuesButton.UseVisualStyleBackColor = true;
             this.menuesButton.Click += new System.EventHandler(this.menuesButton_Click);
-            // 
+            //
             // panelsButton
-            // 
+            //
             this.panelsButton.Location = new System.Drawing.Point(268, 61);
             this.panelsButton.Name = "panelsButton";
             this.panelsButton.Size = new System.Drawing.Size(258, 23);
@@ -133,9 +133,9 @@ namespace WinformsControlsTest
             this.panelsButton.Text = "Panels";
             this.panelsButton.UseVisualStyleBackColor = true;
             this.panelsButton.Click += new System.EventHandler(this.panelsButton_Click);
-            // 
+            //
             // splitterButton
-            // 
+            //
             this.splitterButton.Location = new System.Drawing.Point(268, 90);
             this.splitterButton.Name = "splitterButton";
             this.splitterButton.Size = new System.Drawing.Size(258, 23);
@@ -143,9 +143,9 @@ namespace WinformsControlsTest
             this.splitterButton.Text = "Splitter";
             this.splitterButton.UseVisualStyleBackColor = true;
             this.splitterButton.Click += new System.EventHandler(this.splitterButton_Click);
-            // 
+            //
             // ComboBoxesButton
-            // 
+            //
             this.ComboBoxesButton.Location = new System.Drawing.Point(3, 90);
             this.ComboBoxesButton.Name = "ComboBoxesButton";
             this.ComboBoxesButton.Size = new System.Drawing.Size(259, 23);
@@ -153,9 +153,9 @@ namespace WinformsControlsTest
             this.ComboBoxesButton.Text = "ComboBoxes";
             this.ComboBoxesButton.UseVisualStyleBackColor = true;
             this.ComboBoxesButton.Click += new System.EventHandler(this.ComboBoxesButton_Click);
-            // 
+            //
             // mdiParent
-            // 
+            //
             this.mdiParent.Location = new System.Drawing.Point(268, 119);
             this.mdiParent.Name = "mdiParent";
             this.mdiParent.Size = new System.Drawing.Size(258, 23);
@@ -163,9 +163,9 @@ namespace WinformsControlsTest
             this.mdiParent.Text = "MDI Parent";
             this.mdiParent.UseVisualStyleBackColor = true;
             this.mdiParent.Click += new System.EventHandler(this.mdiParent_Click);
-            // 
+            //
             // propertyGrid
-            // 
+            //
             this.propertyGrid.Location = new System.Drawing.Point(267, 147);
             this.propertyGrid.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid.Name = "propertyGrid";
@@ -174,9 +174,9 @@ namespace WinformsControlsTest
             this.propertyGrid.Text = "PropertyGrid";
             this.propertyGrid.UseVisualStyleBackColor = true;
             this.propertyGrid.Click += new System.EventHandler(this.propertyGrid_Click);
-            // 
+            //
             // listViewButton
-            // 
+            //
             this.listViewButton.Location = new System.Drawing.Point(267, 174);
             this.listViewButton.Margin = new System.Windows.Forms.Padding(2);
             this.listViewButton.Name = "listViewButton";
@@ -185,9 +185,9 @@ namespace WinformsControlsTest
             this.listViewButton.Text = "ListVew";
             this.listViewButton.UseVisualStyleBackColor = true;
             this.listViewButton.Click += new System.EventHandler(this.listViewButton_Click);
-            // 
+            //
             // DateTimePickerButton
-            // 
+            //
             this.DateTimePickerButton.Location = new System.Drawing.Point(3, 119);
             this.DateTimePickerButton.Name = "DateTimePickerButton";
             this.DateTimePickerButton.Size = new System.Drawing.Size(259, 23);
@@ -195,9 +195,9 @@ namespace WinformsControlsTest
             this.DateTimePickerButton.Text = "DateTimePickerButton";
             this.DateTimePickerButton.UseVisualStyleBackColor = true;
             this.DateTimePickerButton.Click += new System.EventHandler(this.button1_Click_1);
-            // 
+            //
             // FolderBrowserDialogButton
-            // 
+            //
             this.FolderBrowserDialogButton.Location = new System.Drawing.Point(3, 148);
             this.FolderBrowserDialogButton.Name = "FolderBrowserDialogButton";
             this.FolderBrowserDialogButton.Size = new System.Drawing.Size(259, 23);
@@ -205,9 +205,9 @@ namespace WinformsControlsTest
             this.FolderBrowserDialogButton.Text = "FolderBrowserDialog";
             this.FolderBrowserDialogButton.UseVisualStyleBackColor = true;
             this.FolderBrowserDialogButton.Click += new System.EventHandler(this.folderBrowserDialogButton_Click);
-            // 
+            //
             // ShowExceptionDialogButton
-            // 
+            //
             this.ShowExceptionDialogButton.Location = new System.Drawing.Point(3, 177);
             this.ShowExceptionDialogButton.Name = "ShowExceptionDialogButton";
             this.ShowExceptionDialogButton.Size = new System.Drawing.Size(259, 23);
@@ -215,9 +215,9 @@ namespace WinformsControlsTest
             this.ShowExceptionDialogButton.Text = "ThreadException dialog";
             this.ShowExceptionDialogButton.UseVisualStyleBackColor = true;
             this.ShowExceptionDialogButton.Click += new System.EventHandler(this.ShowExceptionDialogButton_Click);
-            // 
+            //
             // flowLayoutPanelUITypeEditors
-            // 
+            //
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.buttonsButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.calendar);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.multipleControls);
@@ -242,9 +242,9 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Name = "flowLayoutPanelUITypeEditors";
             this.flowLayoutPanelUITypeEditors.Size = new System.Drawing.Size(538, 275);
             this.flowLayoutPanelUITypeEditors.TabIndex = 116;
-            // 
+            //
             // fontNameEditor
-            // 
+            //
             this.fontNameEditor.Location = new System.Drawing.Point(267, 201);
             this.fontNameEditor.Margin = new System.Windows.Forms.Padding(2);
             this.fontNameEditor.Name = "fontNameEditor";
@@ -253,9 +253,9 @@ namespace WinformsControlsTest
             this.fontNameEditor.Text = "FontNameEditor";
             this.fontNameEditor.UseVisualStyleBackColor = true;
             this.fontNameEditor.Click += new System.EventHandler(this.FontNameEditor_Click);
-            // 
+            //
             // collectionEditors
-            // 
+            //
             this.collectionEditors.Location = new System.Drawing.Point(267, 228);
             this.collectionEditors.Margin = new System.Windows.Forms.Padding(2);
             this.collectionEditors.Name = "collectionEditors";
@@ -264,9 +264,9 @@ namespace WinformsControlsTest
             this.collectionEditors.Text = "CollectionEditors";
             this.collectionEditors.UseVisualStyleBackColor = true;
             this.collectionEditors.Click += new System.EventHandler(this.CollectionEditors_Click);
-            // 
+            //
             // MainForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(554, 291);

@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms.Layout
 {
-
     using System.Collections;
 
     public class ArrangedElementCollection : IList

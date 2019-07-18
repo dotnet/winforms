@@ -4,16 +4,14 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Represents a group within a ListView.
     /// </summary>
-    [TypeConverterAttribute(typeof(ListViewGroupConverter))]
+    [TypeConverter(typeof(ListViewGroupConverter))]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Header))]

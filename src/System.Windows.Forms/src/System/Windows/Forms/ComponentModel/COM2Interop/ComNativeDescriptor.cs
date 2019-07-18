@@ -2,26 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel.Design;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///     Top level mapping layer between COM Object and TypeDescriptor.
-    ///
+    ///  Top level mapping layer between COM Object and TypeDescriptor.
     /// </summary>
     internal class ComNativeDescriptor : TypeDescriptionProvider
     {
-
         private static ComNativeDescriptor handler = null;
 
         private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
@@ -56,30 +49,24 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-
-        [
-            System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")
-        ]
-        // called via reflection for AutomationExtender stuff. Don't delete!
-        //
+        // Called via reflection for AutomationExtender stuff. Don't delete!
         public static object GetNativePropertyValue(object component, string propertyName, ref bool succeeded)
         {
             return Instance.GetPropertyValue(component, propertyName, ref succeeded);
         }
 
-
         /// <summary>
-        ///     This method returns a custom type descriptor for the given type / object.  
-        ///     The objectType parameter is always valid, but the instance parameter may 
-        ///     be null if no instance was passed to TypeDescriptor.  The method should 
-        ///     return a custom type descriptor for the object.  If the method is not 
-        ///     interested in providing type information for the object it should 
-        ///     return null.
+        ///  This method returns a custom type descriptor for the given type / object.
+        ///  The objectType parameter is always valid, but the instance parameter may
+        ///  be null if no instance was passed to TypeDescriptor.  The method should
+        ///  return a custom type descriptor for the object.  If the method is not
+        ///  interested in providing type information for the object it should
+        ///  return null.
         ///
-        ///     This method is prototyped as virtual, and by default returns null 
-        ///     if no parent provider was passed.  If a parent provider was passed, 
-        ///     this method will invoke the parent provider's GetTypeDescriptor 
-        ///     method.
+        ///  This method is prototyped as virtual, and by default returns null
+        ///  if no parent provider was passed.  If a parent provider was passed,
+        ///  this method will invoke the parent provider's GetTypeDescriptor
+        ///  method.
         /// </summary>
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
         {
@@ -88,7 +75,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal string GetClassName(object component)
         {
-
             string name = null;
 
             // does IVsPerPropretyBrowsing supply us a name?
@@ -143,7 +129,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal string GetName(object component)
         {
-
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
                 return "";
@@ -165,7 +150,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal object GetPropertyValue(object component, string propertyName, ref bool succeeded)
         {
-
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
                 return null;
@@ -276,7 +260,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void CheckClear(object component)
         {
-
             // walk the list every so many calls
             if ((++clearCount % CLEAR_INTERVAL) == 0)
             {
@@ -362,7 +345,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         internal AttributeCollection GetAttributes(object component)
         {
-
             ArrayList attrs = new ArrayList();
 
             if (component is NativeMethods.IManagedPerPropertyBrowsing)
@@ -425,10 +407,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// Props!
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
         {
-
             Com2Properties propsInfo = GetPropsInfo(component);
 
             if (propsInfo == null)
@@ -452,7 +432,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         /// Fired when the property info gets disposed.
-        /// </summary>        
+        /// </summary>
         private void OnPropsInfoDisposed(object sender, EventArgs e)
         {
             if (sender is Com2Properties propsInfo)
@@ -500,7 +480,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor)
         {
-
             object curValue = propertyValue;
             if (curValue != null && curValue != null && !Convert.IsDBNull(curValue))
             {
@@ -519,7 +498,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     This type descriptor sits on top of a ComNativeDescriptor
+        ///  This type descriptor sits on top of a ComNativeDescriptor
         /// </summary>
         private sealed class ComTypeDescriptor : ICustomTypeDescriptor
         {
@@ -527,7 +506,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             private readonly object _instance;
 
             /// <summary>
-            ///     Creates a new WalkingTypeDescriptor.
+            ///  Creates a new WalkingTypeDescriptor.
             /// </summary>
             internal ComTypeDescriptor(ComNativeDescriptor handler, object instance)
             {
@@ -536,7 +515,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             AttributeCollection ICustomTypeDescriptor.GetAttributes()
             {
@@ -544,7 +523,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             string ICustomTypeDescriptor.GetClassName()
             {
@@ -552,7 +531,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             string ICustomTypeDescriptor.GetComponentName()
             {
@@ -560,7 +539,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
@@ -568,7 +547,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
@@ -576,7 +555,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
             {
@@ -584,7 +563,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
@@ -592,7 +571,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
             {
@@ -600,7 +579,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
@@ -608,7 +587,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
             {
@@ -616,7 +595,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
@@ -624,7 +603,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            ///     ICustomTypeDescriptor implementation.
+            ///  ICustomTypeDescriptor implementation.
             /// </summary>
             object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
             {

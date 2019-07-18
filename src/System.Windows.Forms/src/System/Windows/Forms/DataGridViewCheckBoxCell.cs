@@ -2,21 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.ButtonInternal;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms.VisualStyles;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Internal;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>Identifies a checkbox cell in the DataGridView.</para>
+    ///  Identifies a checkbox cell in the DataGridView.
     /// </summary>
     public class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewEditingCell
     {
@@ -43,7 +40,7 @@ namespace System.Windows.Forms
 
         private byte flags;  // see DATAGRIDVIEWCHECKBOXCELL_ consts above
         private static bool mouseInContentBounds = false;
-        private static readonly Type defaultCheckStateType = typeof(System.Windows.Forms.CheckState);
+        private static readonly Type defaultCheckStateType = typeof(CheckState);
         private static readonly Type defaultBooleanType = typeof(bool);
         private static readonly Type cellType = typeof(DataGridViewCheckBoxCell);
 
@@ -77,14 +74,14 @@ namespace System.Windows.Forms
                     // is feeding wrong values to the cell in virtual / databound mode.
                     throw new ArgumentException(string.Format(SR.DataGridViewCheckBoxCell_InvalidValueType));
                 }
-                if (value is System.Windows.Forms.CheckState)
+                if (value is CheckState)
                 {
-                    if (((System.Windows.Forms.CheckState)value) == System.Windows.Forms.CheckState.Checked)
+                    if (((CheckState)value) == System.Windows.Forms.CheckState.Checked)
                     {
                         flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_checked;
                         flags = (byte)(flags & ~DATAGRIDVIEWCHECKBOXCELL_indeterminate);
                     }
-                    else if (((System.Windows.Forms.CheckState)value) == System.Windows.Forms.CheckState.Indeterminate)
+                    else if (((CheckState)value) == System.Windows.Forms.CheckState.Indeterminate)
                     {
                         flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_indeterminate;
                         flags = (byte)(flags & ~DATAGRIDVIEWCHECKBOXCELL_checked);
@@ -468,7 +465,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewCheckBoxCell)System.Activator.CreateInstance(thisType);
             }
@@ -515,7 +512,6 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -578,8 +574,6 @@ namespace System.Windows.Forms
                 // So don't set the ErrorIconBounds either.
                 return Rectangle.Empty;
             }
-
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -1048,7 +1042,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -1394,7 +1388,6 @@ namespace System.Windows.Forms
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
-
                             if (paint && DataGridViewCell.PaintContentForeground(paintParts))
                             {
                                 ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintPopupRender(g,
@@ -1426,7 +1419,7 @@ namespace System.Windows.Forms
                                  DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
                                  mouseInContentBounds)
                         {
-                            // paint over 
+                            // paint over
 
                             ButtonBaseAdapter.LayoutOptions options = ButtonInternal.CheckBoxPopupAdapter.PaintPopupLayout(g,
                                                                                                                         true /*show3D*/,
@@ -1633,9 +1626,6 @@ namespace System.Windows.Forms
             return base.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter);
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // no much choice here.
-        ]
         private bool SwitchFormattedValue()
         {
             if (FormattedValueType == null)
@@ -1643,7 +1633,7 @@ namespace System.Windows.Forms
                 return false;
             }
             IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
-            if (FormattedValueType.IsAssignableFrom(typeof(System.Windows.Forms.CheckState)))
+            if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
             {
                 if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
                 {
@@ -1666,9 +1656,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the row Index and column Index of the cell.
-        ///    </para>
+        ///  Gets the row Index and column Index of the cell.
         /// </summary>
         public override string ToString()
         {
@@ -1752,7 +1740,7 @@ namespace System.Windows.Forms
 
                         object formattedValue = Owner.FormattedValue;
 
-                        if (formattedValue is System.Windows.Forms.CheckState)
+                        if (formattedValue is CheckState)
                         {
                             switchToCheckedState = ((CheckState)formattedValue) == CheckState.Unchecked;
                         }
@@ -1875,7 +1863,7 @@ namespace System.Windows.Forms
                     bool toggledState = true;
                     object formattedValue = Owner.FormattedValue;
 
-                    if (formattedValue is System.Windows.Forms.CheckState)
+                    if (formattedValue is CheckState)
                     {
                         toggledState = ((CheckState)formattedValue) == CheckState.Checked;
                     }

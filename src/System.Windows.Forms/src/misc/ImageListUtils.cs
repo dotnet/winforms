@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-
     // Miscellaneous utilities
     static internal class ImageListUtils
     {
-
         public static PropertyDescriptor GetImageListProperty(PropertyDescriptor currentComponent, ref object instance)
         {
             if (instance is object[]) //multiple selection is not supported by this class

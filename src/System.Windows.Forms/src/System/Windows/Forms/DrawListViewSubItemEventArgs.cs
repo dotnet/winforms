@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -115,7 +114,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Draws the sub-item's text (overloaded) - takes a TextFormatFlags argument.
         /// </summary>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank spaces o we don't have to localize it.
         public void DrawText(TextFormatFlags flags)
         {
             string text = (ItemIndex == -1) ? Item.Text : SubItem.Text;

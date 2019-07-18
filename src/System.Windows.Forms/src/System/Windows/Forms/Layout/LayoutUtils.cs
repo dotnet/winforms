@@ -2,24 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms.Layout
 {
-    using System;
-    using System.Collections;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Text;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using System.Windows.Forms.ComponentModel;
-    using System.Collections.Generic;
-
     // Utilities used by layout code.  If you use these outside of the layout
     // namespace, you should probably move them to WindowsFormsUtils.
     internal class LayoutUtils
     {
-
         public static readonly Size MaxSize = new Size(int.MaxValue, int.MaxValue);
         public static readonly Size InvalidSize = new Size(int.MinValue, int.MinValue);
 
@@ -47,7 +39,6 @@ namespace System.Windows.Forms.Layout
         // A good, short test string for measuring control height.
         public readonly static string TestString = "j^";
 
-
         // Returns the size of the largest string in the given collection. Non-string objects are converted
         // with ToString(). Uses OldMeasureString, not GDI+. Does not support multiline.
         public static Size OldGetLargestStringSizeInCollection(Font font, ICollection objects)
@@ -64,8 +55,6 @@ namespace System.Windows.Forms.Layout
             }
             return largestSize;
         }
-
-
 
         /*
          *  We can cut ContentAlignment from a max index of 1024 (12b) down to 11 (4b) through
@@ -169,7 +158,6 @@ namespace System.Windows.Forms.Layout
          *  Left    = 0x04
          *  Right   = 0x08
          */
-
 
         // Returns the positive opposite of the given anchor (e.g., L -> R, LT -> RB, LTR -> LBR, etc.).  None return none.
         private static AnchorStyles GetOppositeAnchor(AnchorStyles anchor)
@@ -607,7 +595,7 @@ namespace System.Windows.Forms.Layout
             return bounds;
         }
 
-        /// MeasureTextCache       
+        /// MeasureTextCache
         /// 3000 character strings take 9 seconds to load the form
         public sealed class MeasureTextCache
         {
@@ -617,7 +605,6 @@ namespace System.Windows.Forms.Layout
 
             private PreferredSizeCache[] sizeCacheList;   // MRU of size MaxCacheSize
 
-
             /// InvalidateCache
             /// Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
             public void InvalidateCache()
@@ -626,24 +613,22 @@ namespace System.Windows.Forms.Layout
                 sizeCacheList = null;
             }
 
-
             /// GetTextSize
             /// Given constraints, format flags a font and text, determine the size of the string
             /// employs an MRU of the last several constraints passed in via a ring-buffer of size MaxCacheSize.
-            /// Assumes Text and TextFormatFlags are the same, if either were to change, a call to 
+            /// Assumes Text and TextFormatFlags are the same, if either were to change, a call to
             /// InvalidateCache should be made
             public Size GetTextSize(string text, Font font, Size proposedConstraints, TextFormatFlags flags)
             {
-
 
                 if (!TextRequiresWordBreak(text, font, proposedConstraints, flags))
                 {
                     // Text fits within proposed width
 
                     // IF we're here, this means we've got text that can fit into the proposedConstraints
-                    // without wrapping.  We've determined this because our 
+                    // without wrapping.  We've determined this because our
 
-                    // as a side effect of calling TextRequiresWordBreak, 
+                    // as a side effect of calling TextRequiresWordBreak,
                     // unconstrainedPreferredSize is set.
                     return unconstrainedPreferredSize;
                 }
@@ -651,12 +636,11 @@ namespace System.Windows.Forms.Layout
                 {
                     // Text does NOT fit within proposed width - requires WordBreak
 
-                    // IF we're here, this means that the wrapping width is smaller 
+                    // IF we're here, this means that the wrapping width is smaller
                     // than our max width.  For example: we measure the text with infinite
-                    // bounding box and we determine the width to fit all the characters 
+                    // bounding box and we determine the width to fit all the characters
                     // to be 200 px wide.  We would come here only for proposed widths less
                     // than 200 px.
-
 
                     // Create our ring buffer if we dont have one
                     if (sizeCacheList == null)
@@ -676,14 +660,14 @@ namespace System.Windows.Forms.Layout
                                   && (sizeCache.PreferredSize.Height <= proposedConstraints.Height))
                         {
 
-                            // Caching a common case where the width matches perfectly, and the stored preferred height 
-                            // is smaller or equal to the constraining size.                             
+                            // Caching a common case where the width matches perfectly, and the stored preferred height
+                            // is smaller or equal to the constraining size.
                             //        prefSize = GetPreferredSize(w,Int32.MaxValue);
                             //        prefSize = GetPreferredSize(w,prefSize.Height);
 
                             return sizeCache.PreferredSize;
                         }
-                        // 
+                        //
                     }
 
                     // if we've gotten here, it means we dont have a cache entry, therefore
@@ -714,7 +698,6 @@ namespace System.Windows.Forms.Layout
                 return unconstrainedPreferredSize;
             }
 
-
             /// TextRequiresWordBreak
             /// If you give the text all the space in the world it wants, then there should be no reason
             /// for it to break on a word.  So we find out what the unconstrained size is (Int32.MaxValue, Int32.MaxValue)
@@ -740,7 +723,6 @@ namespace System.Windows.Forms.Layout
             }
 
         }
-
 
     }
 
@@ -827,7 +809,6 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-
         public static void DoLayout(IArrangedElement elementToLayout, IArrangedElement elementCausingLayout, string property)
         {
             if (elementCausingLayout != null)
@@ -843,7 +824,6 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(elementCausingLayout != null, "LayoutTransaction.DoLayout - elementCausingLayout is null, no layout performed - did you mix up your parameters?");
 
         }
-
 
         // This overload should be used when a property has changed that affects preferred size,
         // but you only want to layout if a certain condition exists (say you want to layout your

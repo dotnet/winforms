@@ -2,20 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing.Printing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Printing;
-    using System.Runtime.InteropServices;
-
     /// <summary>
-    ///    <para> Allows users to select a printer and choose which
-    ///       portions of the document to print.</para>
+    ///  Allows users to select a printer and choose which
+    ///  portions of the document to print.
     /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintDialog))]
@@ -41,18 +36,15 @@ namespace System.Windows.Forms
         private bool showNetwork;
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintDialog'/> class.</para>
+        /// Initializes a new instance of the <see cref='PrintDialog'/> class.
         /// </summary>
         public PrintDialog()
         {
             Reset();
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Current Page option button is enabled.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Current Page option button is enabled.
         /// </summary>
         [
         DefaultValue(false),
@@ -64,11 +56,8 @@ namespace System.Windows.Forms
             set { allowCurrentPage = value; }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Pages option button is enabled.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Pages option button is enabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -82,7 +71,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
+        ///  Gets or sets a value indicating whether the Print to file check box is enabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -96,9 +85,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the From... To... Page option button is enabled.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the From... To... Page option button is enabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -112,9 +99,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> used to obtain <see cref='System.Drawing.Printing.PrinterSettings'/>.
-        ///    </para>
+        ///  Gets or sets a value indicating the <see cref='PrintDocument'/> used to obtain <see cref='Drawing.Printing.PrinterSettings'/>.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -154,10 +139,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Drawing.Printing.PrinterSettings'/> the
-        ///       dialog box will be modifying.
-        ///    </para>
+        ///  Gets or sets the <see cref='Drawing.Printing.PrinterSettings'/> the
+        ///  dialog box will be modifying.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -188,7 +171,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
+        ///  Gets or sets a value indicating whether the Print to file check box is checked.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -202,9 +185,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Help button is displayed.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Help button is displayed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -218,9 +199,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Network button is displayed.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Network button is displayed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -233,10 +212,9 @@ namespace System.Windows.Forms
             set { showNetwork = value; }
         }
 
-
         /// <summary>
         /// UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
-        /// ShowHelp & ShowNetwork properties. 
+        /// ShowHelp & ShowNetwork properties.
         /// UseEXDialog = false means to never use the EX versions of the dialog.
         /// ShowHelp & ShowNetwork will work in this case.
         /// </summary>
@@ -295,10 +273,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Resets all options, the last selected printer, and the page
-        ///       settings to their default values.
-        ///    </para>
+        ///  Resets all options, the last selected printer, and the page
+        ///  settings to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -392,7 +368,6 @@ namespace System.Windows.Forms
 
         private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data)
         {
-
             data.Flags = GetFlags();
             data.nCopies = (short)PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
@@ -464,7 +439,7 @@ namespace System.Windows.Forms
 
                 // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
-                // to print, and the PD_COLLATE flag in the Flags member indicates 
+                // to print, and the PD_COLLATE flag in the Flags member indicates
                 // whether the user wants to print them collated.
                 if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
                 {
@@ -485,7 +460,6 @@ namespace System.Windows.Forms
         // are required for showing the print dialog on Win2k and newer OS'.
         private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.PRINTDLGEX data)
         {
-
             data.Flags = GetFlags();
             data.nCopies = PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
@@ -573,7 +547,7 @@ namespace System.Windows.Forms
 
                 // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
-                // to print, and the PD_COLLATE flag in the Flags member indicates 
+                // to print, and the PD_COLLATE flag in the Flags member indicates
                 // whether the user wants to print them collated.
                 if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
                 {

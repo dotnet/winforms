@@ -166,7 +166,6 @@ namespace System.Windows.Forms.Design
                 return DockStyle.None;
             }
 
-            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             private void InitializeComponent()
             {
                 SetBounds(0, 0, controlWidth, controlHeight);

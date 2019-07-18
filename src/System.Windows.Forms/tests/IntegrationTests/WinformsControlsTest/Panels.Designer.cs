@@ -44,9 +44,9 @@ namespace WinformsControlsTest
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // tableLayoutPanel1
-            // 
+            //
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel1.ColumnCount = 2;
@@ -61,9 +61,9 @@ namespace WinformsControlsTest
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.32813F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(570, 512);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
+            //
             // tableLayoutPanel2
-            // 
+            //
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.tableLayoutPanel2.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel2.ColumnCount = 2;
@@ -79,10 +79,10 @@ namespace WinformsControlsTest
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.8371F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(521, 439);
             this.tableLayoutPanel2.TabIndex = 0;
-            
-            // 
+
+            //
             // tableLayoutPanel3
-            // 
+            //
             this.tableLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tableLayoutPanel3.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.InsetDouble;
             this.tableLayoutPanel3.ColumnCount = 2;
@@ -98,25 +98,25 @@ namespace WinformsControlsTest
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.Size = new System.Drawing.Size(400, 200);
             this.tableLayoutPanel3.TabIndex = 0;
-            // 
+            //
             // numericUpDown1
-            // 
+            //
             this.numericUpDown1.Location = new System.Drawing.Point(207, 9);
             this.numericUpDown1.Margin = new System.Windows.Forms.Padding(6);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(184, 31);
             this.numericUpDown1.TabIndex = 6;
-            // 
+            //
             // numericUpDown2
-            // 
+            //
             this.numericUpDown2.Location = new System.Drawing.Point(207, 55);
             this.numericUpDown2.Margin = new System.Windows.Forms.Padding(6);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(184, 31);
             this.numericUpDown2.TabIndex = 7;
-            // 
+            //
             // currentDPILabel1
-            // 
+            //
             this.currentDPILabel1.AutoSize = true;
             this.currentDPILabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.currentDPILabel1.Location = new System.Drawing.Point(16, 383);
@@ -125,9 +125,9 @@ namespace WinformsControlsTest
             this.currentDPILabel1.Size = new System.Drawing.Size(240, 25);
             this.currentDPILabel1.TabIndex = 1;
             this.currentDPILabel1.Text = "Current scaling is 200%";
-            // 
+            //
             // Panels
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(568, 522);

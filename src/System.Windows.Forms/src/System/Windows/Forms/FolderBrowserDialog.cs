@@ -5,7 +5,6 @@
 using System.Buffers;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -32,7 +31,7 @@ namespace System.Windows.Forms
         private string _selectedPath;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.FolderBrowserDialog'/> class.
+        /// Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
         /// </summary>
         public FolderBrowserDialog()
         {
@@ -92,7 +91,6 @@ namespace System.Windows.Forms
         public Environment.SpecialFolder RootFolder
         {
             get => _rootFolder;
-            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
                 if (!Enum.IsDefined(typeof(Environment.SpecialFolder), value))
@@ -229,7 +227,6 @@ namespace System.Windows.Forms
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-
             Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
             if (listHandle.IsInvalid)
             {
@@ -254,7 +251,7 @@ namespace System.Windows.Forms
                 // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
                 if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
-                    throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                    throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
                 var callback = new Interop.Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);

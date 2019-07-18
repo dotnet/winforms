@@ -738,7 +738,7 @@ namespace System.ComponentModel.Design.Tests
                 .Verifiable();
             designer.Initialize(mockComponent.Object);
             Assert.Same(mockComponent.Object, designer.Component);
-            
+
             designer.Dispose(disposing);
             Assert.Same(disposing ? null : mockComponent.Object, designer.Component);
             mockComponent.Verify(c => c.Dispose(), Times.Never());
@@ -1632,7 +1632,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("StringValue", component.StringProperty);
             Assert.Equal(0, component.StringPropertySetCount);
         }
-        
+
         public static IEnumerable<object[]> DoDefaultAction_InvalidProperty_TestData()
         {
             yield return new object[] { null };
@@ -1719,7 +1719,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("StringValue", component.StringProperty);
             Assert.Equal(0, component.StringPropertySetCount);
         }
-        
+
         public static IEnumerable<object[]> DoDefaultAction_InvalidSelectedComponents_TestData()
         {
             yield return new object[] { null };

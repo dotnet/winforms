@@ -20,7 +20,6 @@ namespace System.Windows.Forms.Design
         private IComponentChangeService _componentChangeSvc;
         private readonly PropertyDescriptor _targetProperty;
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal EditorServiceContext(ComponentDesigner designer)
         {
             _designer = designer;

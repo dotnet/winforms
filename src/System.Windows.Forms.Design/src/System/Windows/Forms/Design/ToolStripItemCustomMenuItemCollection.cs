@@ -35,7 +35,6 @@ namespace System.Windows.Forms.Design
         private ToolStripMenuItem convertToolStripMenuItem;
         private ToolStripMenuItem insertToolStripMenuItem;
 
-
         private ToolStripMenuItem leftToolStripMenuItem;
         private ToolStripMenuItem rightToolStripMenuItem;
 
@@ -87,7 +86,7 @@ namespace System.Windows.Forms.Design
             return item;
         }
 
-        /// <summary> 
+        /// <summary>
         /// creates an item that when clicked changes the enum value.
         /// </summary>
         private ToolStripMenuItem CreateEnumValueItem(string propertyName, string name, object value)
@@ -112,7 +111,6 @@ namespace System.Windows.Forms.Design
         }
 
         // Property names are hard-coded intentionally
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void PopulateList()
         {
             ToolStripItem selectedItem = currentItem;
@@ -286,7 +284,7 @@ namespace System.Windows.Forms.Design
             Type t = senderItem.ItemType;
             if (senderItem.ConvertTo)
             {
-                //we are morphing the currentItem 
+                //we are morphing the currentItem
                 MorphToolStripItem(t);
             }
             else
@@ -349,7 +347,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void TryCancelTransaction(ref DesignerTransaction transaction)
         {
             if (transaction != null)
@@ -368,7 +365,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Insert Item into DropDownMenu.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void InsertIntoDropDown(ToolStripDropDown parent, Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
@@ -437,7 +433,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Insert Item into Main MenuStrip.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void InsertIntoMainMenu(MenuStrip parent, Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
@@ -483,7 +478,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Insert Item into StatusStrip.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void InsertIntoStatusStrip(StatusStrip parent, Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
@@ -529,8 +523,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Insert Item into ToolStrip.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void InsertToolStripItem(Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
@@ -612,7 +604,6 @@ namespace System.Windows.Forms.Design
             }
             return true;
         }
-
 
         //helper function to get the property on the actual Control
         private object GetProperty(string propertyName)

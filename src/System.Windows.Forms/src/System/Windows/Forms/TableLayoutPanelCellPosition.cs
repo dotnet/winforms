@@ -51,7 +51,6 @@ namespace System.Windows.Forms
             return !(p1 == p2);
         }
 
-
         public override string ToString()
         {
             return Column + "," + Row;

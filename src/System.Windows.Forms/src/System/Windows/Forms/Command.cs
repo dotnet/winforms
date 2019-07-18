@@ -2,23 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using System.Drawing;
-
-    using Microsoft.Win32;
-
     internal class Command : WeakReference
     {
-
         private static Command[] cmds;
         private static int icmdTry;
         private static readonly object internalSyncObject = new object();
@@ -41,7 +30,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
         protected static void AssignID(Command cmd)
         {
             lock (internalSyncObject)

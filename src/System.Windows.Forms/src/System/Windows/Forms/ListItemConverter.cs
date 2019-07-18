@@ -187,7 +187,6 @@ namespace System.Windows.Forms
 
     internal class ListViewSubItemConverter : ExpandableObjectConverter
     {
-
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))

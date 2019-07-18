@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Handler for the ListView's DrawColumnHeader event. 
+    /// Handler for the ListView's DrawColumnHeader event.
     /// </summary>
     public delegate void DrawListViewColumnHeaderEventHandler(object sender, DrawListViewColumnHeaderEventArgs e);
 }

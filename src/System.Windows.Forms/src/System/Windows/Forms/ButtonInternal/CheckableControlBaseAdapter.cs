@@ -2,18 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-
     /// <summary>
-    ///     Common class for RadioButtonBaseAdapter and CheckBoxBaseAdapter
+    ///  Common class for RadioButtonBaseAdapter and CheckBoxBaseAdapter
     /// </summary>
     internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
     {
@@ -91,7 +86,6 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static double GetDpiScaleRatio(Graphics g, Control control)
         {
-
             if (DpiHelper.IsPerMonitorV2Awareness
                 && control != null && control.IsHandleCreated)
             {

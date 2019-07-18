@@ -2,22 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Versioning;
-
-    /// <summary> this is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an 
-    ///          mdi parent when an MDI child is maximized.
+    /// <summary>
+    /// This is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an
+    ///  mdi parent when an MDI child is maximized.
     /// </summary>
     internal class MdiControlStrip : MenuStrip
     {
-
         private readonly ToolStripMenuItem system;
         private readonly ToolStripMenuItem close;
         private readonly ToolStripMenuItem minimize;
@@ -27,8 +23,8 @@ namespace System.Windows.Forms
         private IWin32Window target;
 
         /// <summary> target is ideally the MDI Child to send the system commands to.
-        ///          although there's nothing MDI child specific to it... you could have this
-        ///          a toplevel window.
+        ///  although there's nothing MDI child specific to it... you could have this
+        ///  a toplevel window.
         /// </summary>
         public MdiControlStrip(IWin32Window target)
         {
@@ -61,12 +57,11 @@ namespace System.Windows.Forms
                 item.Overflow = ToolStripItemOverflow.Never;
                 item.Alignment = ToolStripItemAlignment.Right;
                 item.Padding = Padding.Empty;
-                // image is not scaled well on high dpi devices. Setting property to fit to size.                    
+                // image is not scaled well on high dpi devices. Setting property to fit to size.
                 item.ImageScaling = ToolStripItemImageScaling.SizeToFit;
             }
 
             // set up the sytem menu
-
 
             system.Image = GetTargetWindowIcon();
             system.Alignment = ToolStripItemAlignment.Left;
@@ -78,7 +73,6 @@ namespace System.Windows.Forms
             system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
             ResumeLayout(false);
         }
-
 
         #region Buttons
         /* Unused
@@ -118,7 +112,7 @@ namespace System.Windows.Forms
         /* PERF: consider shutting off layout
         #region ShutOffLayout
                     protected override void OnLayout(LayoutEventArgs e) {
-                        return;  // if someone attempts 
+                        return;  // if someone attempts
                     }
 
                     protected override Size GetPreferredSize(Size proposedSize) {
@@ -154,8 +148,7 @@ namespace System.Windows.Forms
 
         private void OnTargetWindowHandleRecreated(object sender, EventArgs e)
         {
-
-            // in the case that the handle for the form is recreated we need to set 
+            // in the case that the handle for the form is recreated we need to set
             // up the handles to point to the new window handle for the form.
 
             system.SetNativeTargetWindow(target);
@@ -221,7 +214,7 @@ namespace System.Windows.Forms
 
         }
 
-        // when the system menu item shortcut is evaluated - pop the dropdown          
+        // when the system menu item shortcut is evaluated - pop the dropdown
         internal class ControlBoxMenuItem : ToolStripMenuItem
         {
             internal ControlBoxMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow) :
@@ -238,7 +231,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // when the system menu item shortcut is evaluated - pop the dropdown          
+        // when the system menu item shortcut is evaluated - pop the dropdown
         internal class SystemMenuItem : ToolStripMenuItem
         {
             public SystemMenuItem()

@@ -157,7 +157,6 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new NullIListSource(), null };
             yield return new object[] { typeof(NullIListSource), null };
 
-
             // Type that wraps an enumerable but ONLY implements non-generic IEnumerable.
             yield return new object[] { new IEnumerableWrapper(null), typeof(object) };
             yield return new object[] { new IEnumerableWrapper(Array.Empty<object>()), typeof(object) };

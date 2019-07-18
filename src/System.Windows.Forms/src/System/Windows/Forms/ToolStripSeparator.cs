@@ -2,19 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms.Design;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms.Design;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>
-    ///      Called when the background of the ToolStrip is being rendered
-    ///    </para>
+    ///  Called when the background of the ToolStrip is being rendered
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     public class ToolStripSeparator : ToolStripItem
@@ -22,7 +17,6 @@ namespace System.Windows.Forms
         private const int ToolStrip_SEPARATORTHICKNESS = 6;
         private const int ToolStrip_SEPARATORHEIGHT = 23;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripSeparator()
         {
             ForeColor = SystemColors.ControlDark;
@@ -44,7 +38,6 @@ namespace System.Windows.Forms
                 base.AutoToolTip = value;
             }
         }
-
 
         [
         Browsable(false),
@@ -89,10 +82,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -102,7 +94,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         protected internal override Padding DefaultMargin
         {
             get
@@ -110,7 +101,6 @@ namespace System.Windows.Forms
                 return Padding.Empty;
             }
         }
-
 
         [
         Browsable(false),
@@ -219,8 +209,6 @@ namespace System.Windows.Forms
         ]
         public override Image Image
         {
-
-
             get
             {
                 return base.Image;
@@ -300,7 +288,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private bool IsVertical
         {
             get
@@ -327,7 +314,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         [
         Browsable(false),
@@ -369,7 +355,6 @@ namespace System.Windows.Forms
                 base.TextAlign = value;
             }
         }
-
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DefaultValue(ToolStripTextDirection.Horizontal)]
         public override ToolStripTextDirection TextDirection
@@ -441,7 +426,6 @@ namespace System.Windows.Forms
             return new ToolStripSeparatorAccessibleObject(this);
         }
 
-
         public override Size GetPreferredSize(Size constrainingSize)
         {
             ToolStrip parent = ParentInternal;
@@ -479,8 +463,7 @@ namespace System.Windows.Forms
 
         }
 
-
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
             if (Owner != null && ParentInternal != null)
             {
@@ -491,11 +474,10 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnFontChanged(EventArgs e)
         {
-            // PERF: dont call base, we dont care if the font changes             
+            // PERF: dont call base, we dont care if the font changes
             RaiseEvent(EventFontChanged, e);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeForeColor()
         {
@@ -507,7 +489,7 @@ namespace System.Windows.Forms
             if (Owner is ToolStripDropDownMenu dropDownMenu)
             {
 
-                // Scooch over by the padding amount.  The padding is added to 
+                // Scooch over by the padding amount.  The padding is added to
                 // the ToolStripDropDownMenu to keep the non-menu item riffraff
                 // aligned to the text rectangle. When flow layout comes through to set our position
                 // via IArrangedElement DEFY IT!
@@ -521,9 +503,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of AccessibleChild for use with ToolStripItems        
+        /// An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripSeparator ownerItem = null;

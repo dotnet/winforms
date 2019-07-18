@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Windows.Forms.Layout;
-    using System.Drawing;
-
     /// <summary>
     /// Summary description for ToolStripItemCollection.
     /// </summary>
@@ -22,7 +19,6 @@ namespace System.Windows.Forms
     ]
     public class ToolStripItemCollection : ArrangedElementCollection, IList
     {
-
         private readonly ToolStrip owner;
         private readonly bool itemsCollection;
         private readonly bool isReadOnly = false;
@@ -32,11 +28,9 @@ namespace System.Windows.Forms
         /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
         private int lastAccessedIndex = -1;
 
-
         internal ToolStripItemCollection(ToolStrip owner, bool itemsCollection) : this(owner, itemsCollection, /*isReadOnly=*/false)
         {
         }
-
 
         internal ToolStripItemCollection(ToolStrip owner, bool itemsCollection, bool isReadOnly)
         {
@@ -45,7 +39,6 @@ namespace System.Windows.Forms
             this.isReadOnly = isReadOnly;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value)
         {
             this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
@@ -53,7 +46,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para></para>
         /// </summary>
         public new virtual ToolStripItem this[int index]
         {
@@ -64,7 +56,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Retrieves the child control with the specified key.</para>
+        /// Retrieves the child control with the specified key.
         /// </summary>
         public virtual ToolStripItem this[string key]
         {
@@ -89,7 +81,6 @@ namespace System.Windows.Forms
 
             }
         }
-
 
         public ToolStripItem Add(string text)
         {
@@ -176,7 +167,6 @@ namespace System.Windows.Forms
             return InnerList.Contains(value);
         }
 
-
         public virtual void Clear()
         {
             if (IsReadOnly)
@@ -219,7 +209,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
+        /// Returns true if the collection contains an item with the specified key, false otherwise.
         /// </summary>
         public virtual bool ContainsKey(string key)
         {
@@ -237,7 +227,6 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
 
-
             if (owner is ToolStripDropDown dropDown)
             {
                 // If we're on a dropdown, we can only add non-control host items
@@ -252,15 +241,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Searches for Items by their Name property, builds up an array 
-        /// of all the controls that match. 
-        /// </para>
-        /// </summary>
+        /// Searches for Items by their Name property, builds up an array
+        /// of all the controls that match.
+            /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
             if ((key == null) || (key.Length == 0))
             {
-                throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
+                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
             }
 
             ArrayList foundItems = FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -273,15 +261,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>Searches for Items by their Name property, builds up an array list
-        ///           of all the items that match. 
-        ///     </para>
-        /// </summary>
+        ///  Searches for Items by their Name property, builds up an array list
+        ///  of all the items that match.
+            /// </summary>
         private ArrayList FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, ArrayList foundItems)
         {
             if ((itemsToLookIn == null) || (foundItems == null))
             {
-                return null;  // 
+                return null;  //
             }
 
             try
@@ -298,7 +285,6 @@ namespace System.Windows.Forms
                         foundItems.Add(itemsToLookIn[i]);
                     }
                 }
-
 
                 // Optional recurive search for controls in child collections.
 
@@ -329,8 +315,6 @@ namespace System.Windows.Forms
 
             return foundItems;
         }
-
-
 
         public override bool IsReadOnly { get { return isReadOnly; } }
 
@@ -375,7 +359,7 @@ namespace System.Windows.Forms
             return InnerList.IndexOf(value);
         }
         /// <summary>
-        /// <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
+        /// The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
         /// </summary>
         public virtual int IndexOfKey(string key)
         {
@@ -410,7 +394,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>Determines if the index is valid for the collection.</para>
+        ///  Determines if the index is valid for the collection.
         /// </summary>
         private bool IsValidIndex(int index)
         {
@@ -478,7 +462,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Removes the child item with the specified key.</para>
+        /// Removes the child item with the specified key.
         /// </summary>
         public virtual void RemoveByKey(string key)
         {
@@ -498,7 +482,7 @@ namespace System.Windows.Forms
             InnerList.CopyTo(array, index);
         }
 
-        // 
+        //
         internal void MoveItem(ToolStripItem value)
         {
             if (value.ParentInternal != null)
@@ -515,7 +499,6 @@ namespace System.Windows.Forms
 
         internal void MoveItem(int index, ToolStripItem value)
         {
-
             // if moving to the end - call add instead.
             if (index == Count)
             {
@@ -543,7 +526,6 @@ namespace System.Windows.Forms
 
         private void SetOwner(ToolStripItem item)
         {
-
             if (itemsCollection)
             {
 
@@ -564,7 +546,6 @@ namespace System.Windows.Forms
         }
 
     }
-
 
 }
 

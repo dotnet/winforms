@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         /// <summary>
         /// Simple painting logic for locked Glyphs.
-        /// </summary>        
+        /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
             pe.Graphics.FillRectangle(new SolidBrush(SystemColors.ControlText), bounds);

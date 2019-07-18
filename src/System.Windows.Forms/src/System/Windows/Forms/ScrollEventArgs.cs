@@ -7,14 +7,14 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.ScrollBar.Scroll'/>
+    /// Provides data for the <see cref='ScrollBar.Scroll'/>
     /// event.
     /// </summary>
     [ComVisible(true)]
     public class ScrollEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
+        /// Initializes a new instance of the <see cref='ScrollEventArgs'/>class.
         /// </summary>
         public ScrollEventArgs(ScrollEventType type, int newValue)
         {
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
+        /// Initializes a new instance of the <see cref='ScrollEventArgs'/>class.
         /// </summary>
         public ScrollEventArgs(ScrollEventType type, int newValue, ScrollOrientation scroll)
         {
@@ -40,7 +40,6 @@ namespace System.Windows.Forms
             NewValue = newValue;
             OldValue = oldValue;
         }
-
 
         public ScrollEventArgs(ScrollEventType type, int oldValue, int newValue, ScrollOrientation scroll)
         {

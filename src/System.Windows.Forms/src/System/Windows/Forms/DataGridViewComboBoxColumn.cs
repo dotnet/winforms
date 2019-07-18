@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Globalization;
-
     [
         Designer("System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, " + AssemblyRef.SystemDesign),
-        ToolboxBitmapAttribute(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")
+        ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")
     ]
     public class DataGridViewComboBoxColumn : DataGridViewColumn
     {
@@ -141,8 +139,8 @@ namespace System.Windows.Forms
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr)),
-            TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
-            Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
+            Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public string DisplayMember
         {
@@ -355,8 +353,8 @@ namespace System.Windows.Forms
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr)),
-            TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
-            Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
+            Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public string ValueMember
         {
@@ -477,7 +475,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewColumn = (DataGridViewComboBoxColumn)System.Activator.CreateInstance(thisType);
             }
@@ -512,7 +510,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para></para>
         /// </summary>
         public override string ToString()
         {

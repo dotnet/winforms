@@ -105,7 +105,7 @@ namespace System
 
         public static bool IsInAppContainer
         {
-            // This actually checks whether code is running in a modern app. 
+            // This actually checks whether code is running in a modern app.
             // Currently this is the only situation where we run in app container.
             // If we want to distinguish the two cases in future,
             // EnvironmentHelpers.IsAppContainerProcess in desktop code shows how to check for the AC token.

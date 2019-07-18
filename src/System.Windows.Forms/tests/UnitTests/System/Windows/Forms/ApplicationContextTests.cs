@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
                 MainForm = value
             };
             Assert.Equal(value, context.MainForm);
-            
+
             // Set same
             context.MainForm = value;
             Assert.Equal(value, context.MainForm);
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
 
             context.MainForm = value;
             Assert.Equal(value, context.MainForm);
-            
+
             // Set same
             context.MainForm = value;
             Assert.Equal(value, context.MainForm);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
                 Tag = value
             };
             Assert.Equal(value, context.Tag);
-            
+
             // Set same
             context.Tag = value;
             Assert.Equal(value, context.Tag);

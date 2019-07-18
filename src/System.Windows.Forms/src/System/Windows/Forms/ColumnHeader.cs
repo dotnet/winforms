@@ -2,37 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       Displays a single column header in a <see cref='System.Windows.Forms.ListView'/>
-    ///       control.
-    ///
-    ///    </para>
+    ///  Displays a single column header in a <see cref='Forms.ListView'/> control.
     /// </summary>
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
     DefaultProperty(nameof(Text)),
-    TypeConverterAttribute(typeof(ColumnHeaderConverter))
+    TypeConverter(typeof(ColumnHeaderConverter))
     ]
     public class ColumnHeader : Component, ICloneable
     {
-
         // disable csharp compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
         internal int index = -1;
@@ -68,7 +55,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a new ColumnHeader object
+        ///  Creates a new ColumnHeader object
         /// </summary>
         public ColumnHeader()
         {
@@ -76,7 +63,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a new ColumnHeader object
+        ///  Creates a new ColumnHeader object
         /// </summary>
         public ColumnHeader(int imageIndex) : this()
         {
@@ -84,7 +71,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a new ColumnHeader object
+        ///  Creates a new ColumnHeader object
         /// </summary>
         public ColumnHeader(string imageKey) : this()
         {
@@ -107,7 +94,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         [
             Localizable(true),
@@ -184,9 +170,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The index of this column.  This index does not necessarily correspond
-        ///     to the current visual position of the column in the ListView, because the
-        ///     user may orerder columns if the allowColumnReorder property is true.
+        ///  The index of this column.  This index does not necessarily correspond
+        ///  to the current visual position of the column in the ListView, because the
+        ///  user may orerder columns if the allowColumnReorder property is true.
         /// </summary>
         [Browsable(false)]
         public int Index
@@ -204,7 +190,7 @@ namespace System.Windows.Forms
 
         [
         DefaultValue(-1),
-        TypeConverterAttribute(typeof(ImageIndexConverter)),
+        TypeConverter(typeof(ImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -250,7 +236,7 @@ namespace System.Windows.Forms
 
         [
         DefaultValue(""),
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        TypeConverter(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -276,7 +262,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the ListView control that this column is displayed in.  May be null
+        ///  Returns the ListView control that this column is displayed in.  May be null
         /// </summary>
         [Browsable(false)]
         public ListView ListView
@@ -288,7 +274,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The Name of the column header
+        ///  The Name of the column header
         /// </summary>
         [
         Browsable(false),
@@ -319,7 +305,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The text displayed in the column header
+        ///  The text displayed in the column header
         /// </summary>
         [
         Localizable(true),
@@ -350,7 +336,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The horizontal alignment of the text contained in this column
+        ///  The horizontal alignment of the text contained in this column
         /// </summary>
         [
         SRDescription(nameof(SR.ColumnAlignment)),
@@ -375,7 +361,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2. 
+                //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
@@ -425,7 +411,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     The width of the column in pixels.
+        ///  The width of the column in pixels.
         /// </summary>
         [
         SRDescription(nameof(SR.ColumnWidth)),
@@ -470,7 +456,6 @@ namespace System.Windows.Forms
 
         public void AutoResize(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
-
             if (headerAutoResize < ColumnHeaderAutoResizeStyle.None || headerAutoResize > ColumnHeaderAutoResizeStyle.ColumnContent)
             {
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
@@ -482,9 +467,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Creates an identical ColumnHeader, unattached to any ListView
+        ///  Creates an identical ColumnHeader, unattached to any ListView
         /// </summary>
         public object Clone()
         {
@@ -530,7 +514,6 @@ namespace System.Windows.Forms
         // Set the display indices of the listview columns
         private void SetDisplayIndices(int[] cols)
         {
-
             if (listview.IsHandleCreated && !listview.Disposing)
             {
                 UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), NativeMethods.LVM_SETCOLUMNORDERARRAY, cols.Length, cols);
@@ -553,7 +536,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation of this column header
+        ///  Returns a string representation of this column header
         /// </summary>
         public override string ToString()
         {

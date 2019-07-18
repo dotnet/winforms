@@ -87,7 +87,6 @@ namespace System.Windows.Forms.Tests
                        .Returns((MessageCallback)((ref Message m) => m.Msg == filterId3));
             threadContext.AddMessageFilter(mockContext3.Object);
 
-
             NativeMethods.MSG msg = new NativeMethods.MSG
             {
                 message = TestMessageId1
@@ -97,7 +96,6 @@ namespace System.Windows.Forms.Tests
 
             mockContext2.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
             mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
-
 
             msg = new NativeMethods.MSG
             {

@@ -2,40 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Drawing.Imaging;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using System.Windows.Forms.ComponentModel.Com2Interop;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms
 {
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Configuration.Assemblies;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.Drawing.Design;
-    using System.Globalization;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Runtime.Serialization;
-    using System.Threading;
-    using System.Windows.Forms.ComponentModel;
-    using System.Windows.Forms.ComponentModel.Com2Interop;
-    using System.Windows.Forms.Design;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>
-    ///
-    ///       Wraps ActiveX controls and exposes them as
-    ///       fully featured windows forms controls.
-    ///    </para>
+    ///  Wraps ActiveX controls and exposes them as
+    ///  fully featured windows forms controls.
     /// </summary>
     [
     ComVisible(true),
@@ -47,7 +36,6 @@ namespace System.Windows.Forms
     ]
     public abstract class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
-
         private static readonly TraceSwitch AxHTraceSwitch = new TraceSwitch("AxHTrace", "ActiveX handle tracing");
         private static readonly TraceSwitch AxPropTraceSwitch = new TraceSwitch("AxPropTrace", "ActiveX property tracing");
         private static readonly TraceSwitch AxHostSwitch = new TraceSwitch("AxHost", "ActiveX host creation");
@@ -55,27 +43,26 @@ namespace System.Windows.Forms
         private static readonly BooleanSwitch AxAlwaysSaveSwitch = new BooleanSwitch("AxAlwaysSave", "ActiveX to save all controls regardless of their IsDirty function return value");
 
         /// <summary>
-        ///     Flags which may be passed to the AxHost constructor
+        ///  Flags which may be passed to the AxHost constructor
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class AxFlags
         {
             /// <summary>
-            ///     Indicates that the context menu for the control should not contain an
-            ///     "Edit" verb unless the activeX controls itself decides to proffer it.
-            ///     By default, all wrapped activeX controls will contain an edit verb.
+            ///  Indicates that the context menu for the control should not contain an
+            ///  "Edit" verb unless the activeX controls itself decides to proffer it.
+            ///  By default, all wrapped activeX controls will contain an edit verb.
             /// </summary>
             internal const int PreventEditMode = 0x1;
 
             /// <summary>
-            ///     Indicated that the context menu for the control should contain
-            ///     a "Properties..." verb which may be used to show the property
-            ///     pages for the control.  Note that even if this flag is
-            ///     specified, the verb will not appear unless the control
-            ///     proffers a set of property pages.
-            ///     [Since most activeX controls alreay have their own properties verb
-            ///     on the context menu, the default is not to include one specified by
-            ///     this flag.]
+            ///  Indicated that the context menu for the control should contain
+            ///  a "Properties..." verb which may be used to show the property
+            ///  pages for the control.  Note that even if this flag is
+            ///  specified, the verb will not appear unless the control
+            ///  proffers a set of property pages.
+            ///  [Since most activeX controls alreay have their own properties verb
+            ///  on the context menu, the default is not to include one specified by
+            ///  this flag.]
             /// </summary>
             internal const int IncludePropertiesVerb = 0x2;
 
@@ -166,7 +153,6 @@ namespace System.Windows.Forms
         private static readonly int processingKeyUp = BitVector32.CreateMask(inTransition);
         private static readonly int assignUniqueID = BitVector32.CreateMask(processingKeyUp);
         private static readonly int renameEventHooked = BitVector32.CreateMask(assignUniqueID);
-
 
         private BitVector32 axState = new BitVector32();
 
@@ -259,19 +245,19 @@ namespace System.Windows.Forms
             Debug.Assert((int)Keys.Control == 0x00020000, "key.control mismatch");
             Debug.Assert((int)Keys.Alt == 0x00040000, "key.alt mismatch");
         }
-#endif 
+#endif
 
         /// <summary>
-        ///     Creates a new instance of a control which wraps an activeX control given by the
-        ///     clsid parameter and flags of 0.
+        ///  Creates a new instance of a control which wraps an activeX control given by the
+        ///  clsid parameter and flags of 0.
         /// </summary>
         protected AxHost(string clsid) : this(clsid, 0)
         {
         }
 
         /// <summary>
-        ///    <para>Creates a new instance of a control which wraps an activeX control given by the
-        ///       clsid and flags parameters.</para>
+        ///  Creates a new instance of a control which wraps an activeX control given by the
+        ///  clsid and flags parameters.
         /// </summary>
         protected AxHost(string clsid, int flags) : base()
         {
@@ -302,7 +288,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the CreateParams used to create the handle for this control.
+        ///  Returns the CreateParams used to create the handle for this control.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -328,10 +314,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     AxHost will call this when it is ready to create the underlying ActiveX object.
-        ///     Wrappers will override this and cast the pointer obtained by calling getOcx() to
-        ///     their own interfaces.  getOcx() should not usually be called before this function.
-        ///     Note: calling begin will result in a call to this function.
+        ///  AxHost will call this when it is ready to create the underlying ActiveX object.
+        ///  Wrappers will override this and cast the pointer obtained by calling getOcx() to
+        ///  their own interfaces.  getOcx() should not usually be called before this function.
+        ///  Note: calling begin will result in a call to this function.
         /// </summary>
         protected virtual void AttachInterfaces()
         {
@@ -395,7 +381,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>Hide ImeMode: it doesn't make sense for this control</para>
+        ///  Hide ImeMode: it doesn't make sense for this control
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -454,8 +440,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -526,7 +512,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text
         {
@@ -564,11 +549,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Signals the object that loading of all peer components and property
-        ///     sets are complete.
-        ///     It should be possible to invoke any property get or set after calling this method.
-        ///     Note that a sideeffect of this method is the creation of the parent control's
-        ///     handle, therefore, this control must be parented before begin is called
+        ///  Signals the object that loading of all peer components and property
+        ///  sets are complete.
+        ///  It should be possible to invoke any property get or set after calling this method.
+        ///  Note that a sideeffect of this method is the creation of the parent control's
+        ///  handle, therefore, this control must be parented before begin is called
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void EndInit()
@@ -607,7 +592,7 @@ namespace System.Windows.Forms
 
         //
         /// <summary>
-        ///      Determines if the control is in edit mode.
+        ///  Determines if the control is in edit mode.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -621,7 +606,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Determines if this control has an about box.
+        ///  Determines if this control has an about box.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -649,7 +634,7 @@ namespace System.Windows.Forms
 
         //
         /// <summary>
-        ///      Shows the about box for this control.
+        ///  Shows the about box for this control.
         /// </summary>
         public void ShowAboutBox()
         {
@@ -658,7 +643,7 @@ namespace System.Windows.Forms
 
         //
         /// <summary>
-        ///      Retrieves the OCX control flags.
+        ///  Retrieves the OCX control flags.
         /// </summary>
 #if false
         // FxCop: Currently not used
@@ -715,7 +700,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the control is enabled.</para>
+        ///  Occurs when the control is enabled.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged
@@ -753,7 +738,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the control is clicked.</para>
+        ///  Occurs when the control is clicked.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click
@@ -769,7 +754,6 @@ namespace System.Windows.Forms
             remove { }
         }
 
-
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter
         {
@@ -783,7 +767,6 @@ namespace System.Windows.Forms
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
             remove { }
         }
-
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave
@@ -828,7 +811,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the control is double clicked.</para>
+        ///  Occurs when the control is double clicked.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick
@@ -844,9 +827,8 @@ namespace System.Windows.Forms
             remove { }
         }
 
-
         /// <summary>
-        ///    <para>Occurs when a key is pressed down while the control has focus.</para>
+        ///  Occurs when a key is pressed down while the control has focus.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown
@@ -855,9 +837,8 @@ namespace System.Windows.Forms
             remove { }
         }
 
-
         /// <summary>
-        ///    <para> Occurs when a key is pressed while the control has focus.</para>
+        ///  Occurs when a key is pressed while the control has focus.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress
@@ -866,9 +847,8 @@ namespace System.Windows.Forms
             remove { }
         }
 
-
         /// <summary>
-        ///    <para> Occurs when a key is released while the control has focus.</para>
+        ///  Occurs when a key is released while the control has focus.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp
@@ -877,9 +857,6 @@ namespace System.Windows.Forms
             remove { }
         }
 
-
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout
         {
@@ -888,8 +865,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the mouse pointer is over the control and a mouse button is 
-        ///       pressed.</para>
+        ///  Occurs when the mouse pointer is over the control and a mouse button is
+        ///  pressed.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown
@@ -899,7 +876,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the mouse pointer enters the AxHost.</para>
+        ///  Occurs when the mouse pointer enters the AxHost.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter
@@ -909,7 +886,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the mouse pointer leaves the AxHost.</para>
+        ///  Occurs when the mouse pointer leaves the AxHost.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave
@@ -919,7 +896,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the mouse pointer hovers over the contro.</para>
+        ///  Occurs when the mouse pointer hovers over the contro.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover
@@ -929,7 +906,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the mouse pointer is moved over the AxHost.</para>
+        ///  Occurs when the mouse pointer is moved over the AxHost.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove
@@ -939,7 +916,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
+        ///  Occurs when the mouse pointer is over the control and a mouse button is released.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp
@@ -949,7 +926,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the mouse wheel moves while the control has focus.</para>
+        ///  Occurs when the mouse wheel moves while the control has focus.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel
@@ -1071,7 +1048,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private bool RemoveSelectionHandler()
         {
             if (!axState[addedSelectionHandler])
@@ -1112,9 +1088,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the site of this component. A non-null value indicates that the
-        ///     component has been added to a container, and a null value indicates that
-        ///     the component is being removed from a container.
+        ///  Sets the site of this component. A non-null value indicates that the
+        ///  component has been added to a container, and a null value indicates that
+        ///  the component is being removed from a container.
         /// </summary>
         public override ISite Site
         {
@@ -1176,7 +1152,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
+        /// Raises the <see cref='Control.LostFocus'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e)
@@ -1238,8 +1214,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // The AX Host designer will offer an extender property called "SelectionStyle" 
-                    // 
+                    // The AX Host designer will offer an extender property called "SelectionStyle"
+                    //
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
 
                     if (prop != null && prop.PropertyType == typeof(int))
@@ -1263,8 +1239,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a handle for this control. This method is called by the .NET framework, this should
-        ///     not be called.
+        ///  Creates a handle for this control. This method is called by the .NET framework, this should
+        ///  not be called.
         /// </summary>
         protected override void CreateHandle()
         {
@@ -1382,7 +1358,6 @@ namespace System.Windows.Forms
             return (int)(((((double)v) / 20.0) / 72.0) * logP);
         }
 
-
         private Size SetExtent(int width, int height)
         {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "setting extent to " + width.ToString(CultureInfo.InvariantCulture) + " " + height.ToString(CultureInfo.InvariantCulture));
@@ -1416,7 +1391,6 @@ namespace System.Windows.Forms
             return GetExtent();
         }
 
-
         private Size GetExtent()
         {
             NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
@@ -1426,8 +1400,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     ActiveX controls scale themselves, so GetScaledBounds simply returns their
-        ///     original unscaled bounds.
+        ///  ActiveX controls scale themselves, so GetScaledBounds simply returns their
+        ///  original unscaled bounds.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
@@ -1446,12 +1420,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Performs the work of setting the bounds of this control.
-        ///     User code should usually not call this function.
+        ///  Performs the work of setting the bounds of this control.
+        ///  User code should usually not call this function.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            // We have already been in this Code so please avoid re-entering this CODE PATH or else the 
+            // We have already been in this Code so please avoid re-entering this CODE PATH or else the
             // IOleObject will "give a Catastrophic error" in SetObjectRects( ).
 
             if (GetAxState(AxHost.handlePosRectChanged))
@@ -1515,7 +1489,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private bool CheckSubclassing()
         {
             if (!IsHandleCreated || wndprocAddr == IntPtr.Zero)
@@ -1550,7 +1523,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Destroys the handle associated with this control.
         /// User code should in general not call this function.
-        /// </summary>        
+        /// </summary>
         protected override void DestroyHandle()
         {
             if (axState[fOwnWindow])
@@ -1760,7 +1733,6 @@ namespace System.Windows.Forms
             EnsureWindowPresent();
         }
 
-
         private void InPlaceDeactivate()
         {
             axState[ownDisposing] = true;
@@ -1943,15 +1915,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if charCode is an input character that the control
-        ///     wants. This method is called during window message pre-processing to
-        ///     determine whether the given input character should be pre-processed or
-        ///     sent directly to the control. If isInputChar returns true, the
-        ///     given character is sent directly to the control. If isInputChar
-        ///     returns false, the character is pre-processed and only sent to the
-        ///     control if it is not consumed by the pre-processing phase. The
-        ///     pre-processing of a character includes checking whether the character
-        ///     is a mnemonic of another control.
+        ///  Determines if charCode is an input character that the control
+        ///  wants. This method is called during window message pre-processing to
+        ///  determine whether the given input character should be pre-processed or
+        ///  sent directly to the control. If isInputChar returns true, the
+        ///  given character is sent directly to the control. If isInputChar
+        ///  returns false, the character is pre-processed and only sent to the
+        ///  control if it is not consumed by the pre-processing phase. The
+        ///  pre-processing of a character includes checking whether the character
+        ///  is a mnemonic of another control.
         /// </summary>
         protected override bool IsInputChar(char charCode)
         {
@@ -1969,27 +1941,27 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This method is called by the application's message loop to pre-process
-        ///     input messages before they are dispatched. Possible values for the
-        ///     msg.message field are WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, and WM_SYSCHAR.
-        ///     If this method processes the message it must return true, in which case
-        ///     the message loop will not dispatch the message.
-        ///     This method should not be called directly by the user.
+        ///  This method is called by the application's message loop to pre-process
+        ///  input messages before they are dispatched. Possible values for the
+        ///  msg.message field are WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, and WM_SYSCHAR.
+        ///  If this method processes the message it must return true, in which case
+        ///  the message loop will not dispatch the message.
+        ///  This method should not be called directly by the user.
         ///
-        ///     The keyboard processing of input keys to AxHost controls go in 3 steps inside AxHost.PreProcessMessage()
+        ///  The keyboard processing of input keys to AxHost controls go in 3 steps inside AxHost.PreProcessMessage()
         ///
-        ///    (1) Call the OCX's TranslateAccelarator. This may or may not call back into us using IOleControlSite::TranslateAccelarator()
+        ///  (1) Call the OCX's TranslateAccelarator. This may or may not call back into us using IOleControlSite::TranslateAccelarator()
         ///
-        ///    (2) If the control completely processed this without calling us back: 
-        ///         -- If this returns S_OK, then it means that the control already processed this message and we return true,
-        ///            forcing us to not do any more processing or dispatch the message.
-        ///         -- If this returns S_FALSE, then it means that the control wants us to dispatch the message without doing any processing on our side.
+        ///  (2) If the control completely processed this without calling us back:
+        ///  -- If this returns S_OK, then it means that the control already processed this message and we return true,
+        ///  forcing us to not do any more processing or dispatch the message.
+        ///  -- If this returns S_FALSE, then it means that the control wants us to dispatch the message without doing any processing on our side.
         ///
-        ///    (3) If the control completely processed this by calling us back: 
-        ///         -- If this returns S_OK, then it means that the control processed this message and we return true,
-        ///            forcing us to not do any more processing or dispatch the message.
-        ///         -- If this returns S_FALSE, then it means that the control did not process this message,
-        ///            but we did, and so we should route it through our PreProcessMessage().
+        ///  (3) If the control completely processed this by calling us back:
+        ///  -- If this returns S_OK, then it means that the control processed this message and we return true,
+        ///  forcing us to not do any more processing or dispatch the message.
+        ///  -- If this returns S_FALSE, then it means that the control did not process this message,
+        ///  but we did, and so we should route it through our PreProcessMessage().
         /// </summary>
         public override bool PreProcessMessage(ref Message msg)
         {
@@ -2125,8 +2097,8 @@ namespace System.Windows.Forms
         // misc methods:
 
         /// <summary>
-        ///     Sets the delegate which will be called when the user selects the "About..."
-        ///     entry on the context menu.
+        ///  Sets the delegate which will be called when the user selects the "About..."
+        ///  entry on the context menu.
         /// </summary>
         protected void SetAboutBoxDelegate(AboutBoxDelegate d)
         {
@@ -2134,15 +2106,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the persisted state of the control.
-        ///     This should either be null, obtained from getOcxState, or
-        ///     read from a resource.  The value of this property will
-        ///     be used after the control is created but before it is
-        ///     shown.
-        ///     Computes the persisted state of the underlying ActiveX control and
-        ///     returns it in the encapsulated State object.
-        ///     If the control has been modified since it was last saved to a
-        ///     persisted state, it will be asked to save itself.
+        ///  Sets the persisted state of the control.
+        ///  This should either be null, obtained from getOcxState, or
+        ///  read from a resource.  The value of this property will
+        ///  be used after the control is created but before it is
+        ///  shown.
+        ///  Computes the persisted state of the underlying ActiveX control and
+        ///  returns it in the encapsulated State object.
+        ///  If the control has been modified since it was last saved to a
+        ///  persisted state, it will be asked to save itself.
         /// </summary>
         [
         DefaultValue(null),
@@ -2272,18 +2244,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns this control's logicaly containing form.
-        ///     At design time this is always the form being designed.
-        ///     At runtime it is either the form set with setContainingForm or,
-        ///     by default, the parent form.
-        ///     Sets the form which is the logical container of this control.
-        ///     By default, the parent form performs that function.  It is
-        ///     however possible for another form higher in the parent chain
-        ///     to serve in that role.  The logical container of this
-        ///     control determines the set of logical sibling control.
-        ///     In general this property exists only to enable some speficic
-        ///     behaviours of ActiveX controls and should in general not be set
-        ///     by the user.
+        ///  Returns this control's logicaly containing form.
+        ///  At design time this is always the form being designed.
+        ///  At runtime it is either the form set with setContainingForm or,
+        ///  by default, the parent form.
+        ///  Sets the form which is the logical container of this control.
+        ///  By default, the parent form performs that function.  It is
+        ///  however possible for another form higher in the parent chain
+        ///  to serve in that role.  The logical container of this
+        ///  control determines the set of logical sibling control.
+        ///  In general this property exists only to enable some speficic
+        ///  behaviours of ActiveX controls and should in general not be set
+        ///  by the user.
         /// </summary>
         [
             Browsable(false),
@@ -2309,7 +2281,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Determines if the Text property needs to be persisted.</para>
+        /// Determines if the Text property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeText()
@@ -2326,7 +2298,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether to persist the ContainingControl property.
+        ///  Determines whether to persist the ContainingControl property.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeContainingControl()
@@ -2403,7 +2375,7 @@ namespace System.Windows.Forms
             {
                 // NOTE: This was a note from the old AxHost codebase. The problem
                 // with doing this is that the some controls that do not run in
-                // unlicensed mode (e.g. ProtoView ScheduleX pvtaskpad.ocx) will 
+                // unlicensed mode (e.g. ProtoView ScheduleX pvtaskpad.ocx) will
                 // always return S_FALSE to disallow design-time support.
 
                 // Sadly, some controls lie and never say that they are dirty...
@@ -2426,7 +2398,6 @@ namespace System.Windows.Forms
 
         private object GetAmbientProperty(int dispid)
         {
-
             Control richParent = ParentInternal;
 
             switch (dispid)
@@ -2508,7 +2479,6 @@ namespace System.Windows.Forms
                     return null;
             }
         }
-
 
         public void DoVerb(int verb)
         {
@@ -2682,11 +2652,10 @@ namespace System.Windows.Forms
             SetOcState(OC_LOADED);
         }
 
-
         /// <summary>
-        ///    Called to create the ActiveX control.  Override this member to perform your own creation logic
-        ///    or call base to do the default creation logic.
-        /// </summary>        
+        ///  Called to create the ActiveX control.  Override this member to perform your own creation logic
+        ///  or call base to do the default creation logic.
+        /// </summary>
         protected virtual object CreateInstanceCore(Guid clsid)
         {
             if (IsUserMode())
@@ -2699,7 +2668,6 @@ namespace System.Windows.Forms
             }
             return instance;
         }
-
 
         private CategoryAttribute GetCategoryForDispid(int dispid)
         {
@@ -2763,8 +2731,8 @@ namespace System.Windows.Forms
                 this.selectionStyle = selectionStyle;
                 if (iss != null && iss.GetComponentSelected(this))
                 {
-                    // The AX Host designer will offer an extender property called "SelectionStyle" 
-                    // 
+                    // The AX Host designer will offer an extender property called "SelectionStyle"
+                    //
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
                     if (prop != null && prop.PropertyType == typeof(int))
                     {
@@ -3143,7 +3111,7 @@ namespace System.Windows.Forms
             if (AxIgnoreTMSwitch.Enabled) return;
 #endif
             if ((flags & AxFlags.IgnoreThreadModel) != 0) return;
-            
+
             bool singleThreaded = true;
 
             try {
@@ -3151,8 +3119,8 @@ namespace System.Windows.Forms
                     object value = rk.GetValue("ThreadingModel");
 
                     if (value != null && value is string) {
-                        if (value.Equals("Both") 
-                            || value.Equals("Apartment") 
+                        if (value.Equals("Both")
+                            || value.Equals("Apartment")
                             || value.Equals("Free")) {
 
                             singleThreaded = false;
@@ -3184,7 +3152,6 @@ namespace System.Windows.Forms
 
             SetOcState(OC_RUNNING);
         }
-
 
         private void DepersistFromIPropertyBag(UnsafeNativeMethods.IPropertyBag propBag)
         {
@@ -3349,7 +3316,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the IUnknown pointer to the enclosed ActiveX control.
+        ///  Returns the IUnknown pointer to the enclosed ActiveX control.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public object GetOcx()
@@ -3409,7 +3376,6 @@ namespace System.Windows.Forms
         {
             // nop...  windows forms wrapper will override...
         }
-
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void DetachSink()
@@ -3600,15 +3566,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     AxHost wndProc. All messages are sent to wndProc after getting filtered
-        ///     through the preProcessMessage function.
-        ///     Certain messages are forwarder directly to the ActiveX control,
-        ///     others are first processed by the wndProc of Control
+        ///  AxHost wndProc. All messages are sent to wndProc after getting filtered
+        ///  through the preProcessMessage function.
+        ///  Certain messages are forwarder directly to the ActiveX control,
+        ///  others are first processed by the wndProc of Control
         /// </summary>
-
         protected override void WndProc(ref Message m)
         {
-
 #pragma warning disable 162, 429
             // Ignore the warnings generated by the following code (unreachable code, and unreachable expression)
             if (false && (axState[manualUpdate] && IsUserMode()))
@@ -3848,14 +3812,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Inheriting classes should override this method to find out when the
-        ///     handle has been created.
-        ///     Call base.OnHandleCreated first.
+        ///  Inheriting classes should override this method to find out when the
+        ///  handle has been created.
+        ///  Call base.OnHandleCreated first.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
-            // This is needed to prevent some controls (for e.g. Office Web Components) from 
-            // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call 
+            // This is needed to prevent some controls (for e.g. Office Web Components) from
+            // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call
             // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
             // that is not good enough for DragDrop.
             //
@@ -4121,12 +4085,9 @@ namespace System.Windows.Forms
         // This private class encapsulates all of the ole interfaces so that users
         // will not be able to access and call them directly...
 
-        /// <summary>
-        /// </summary>
         private class OleInterfaces
             : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IPropertyNotifySink, IReflect, IDisposable
         {
-
             private readonly AxHost host;
             private ConnectionPointCookie connectionPoint;
 
@@ -4823,7 +4784,7 @@ namespace System.Windows.Forms
             {
                 // Can't set ui dead becuase MFC controls return NOWHERE on NCHITTEST which
                 // messes up the designer...
-                // But, without this the FarPoint SpreadSheet and the Office SpreadSheet 
+                // But, without this the FarPoint SpreadSheet and the Office SpreadSheet
                 // controls take keyboard input at design time.
                 //qaContainer.dwAmbientFlags |= NativeMethods.ActiveX.QACONTAINER_UIDEAD;
                 // qaContainer.dwAmbientFlags |= ActiveX.QACONTAINER_SHOWHATCHING;
@@ -4875,14 +4836,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Frees all resources assocaited with this control. This method may not be
-        ///     called at runtime. Any resources used by the control should be setup to
-        ///     be released when the control is garbage collected. Inheriting classes should always
-        ///     call base.dispose.
+        ///  Frees all resources assocaited with this control. This method may not be
+        ///  called at runtime. Any resources used by the control should be setup to
+        ///  be released when the control is garbage collected. Inheriting classes should always
+        ///  call base.dispose.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-
             if (disposing)
             {
                 TransitionDownTo(OC_PASSIVE);
@@ -4977,7 +4937,6 @@ namespace System.Windows.Forms
 
         private void SlowActivate()
         {
-
             bool setClientSite = false;
 
             if ((miscStatusBits & NativeMethods.ActiveX.OLEMISC_SETCLIENTSITEFIRST) != 0)
@@ -5162,7 +5121,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from a System.Drawing.Image to an OLE IPicture
+        ///  Maps from a System.Drawing.Image to an OLE IPicture
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromPicture(Image image)
@@ -5177,7 +5136,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from a System.Drawing.Cursor to an OLE IPicture
+        ///  Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromCursor(Cursor cursor)
@@ -5192,7 +5151,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from a System.Drawing.Image to an OLE IPictureDisp
+        ///  Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureDispFromPicture(Image image)
@@ -5207,7 +5166,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from an OLE IPicture to a System.Drawing.Image
+        ///  Maps from an OLE IPicture to a System.Drawing.Image
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Image GetPictureFromIPicture(object picture)
@@ -5234,7 +5193,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from an OLE IPictureDisp to a System.Drawing.Image
+        ///  Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Image GetPictureFromIPictureDisp(object picture)
@@ -5323,9 +5282,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from an OLE COLOR to a System.Drawing.Color
+        ///  Maps from an OLE COLOR to a System.Drawing.Color
         /// </summary>
-        [CLSCompliantAttribute(false)]
+        [CLSCompliant(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Color GetColorFromOleColor(uint color)
         {
@@ -5333,9 +5292,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from an System.Drawing.Color to an OLE COLOR
+        ///  Maps from an System.Drawing.Color to an OLE COLOR
         /// </summary>
-        [CLSCompliantAttribute(false)]
+        [CLSCompliant(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static uint GetOleColorFromColor(Color color)
         {
@@ -5343,7 +5302,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from a System.Drawing.Font object to an OLE IFont
+        ///  Maps from a System.Drawing.Font object to an OLE IFont
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIFontFromFont(Font font)
@@ -5369,9 +5328,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Maps from an OLE IFont to a System.Drawing.Font object
+        ///  Maps from an OLE IFont to a System.Drawing.Font object
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Font GetFontFromIFont(object font)
@@ -5400,9 +5358,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Maps from a System.Drawing.Font object to an OLE IFontDisp
+        ///  Maps from a System.Drawing.Font object to an OLE IFontDisp
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIFontDispFromFont(Font font)
@@ -5422,7 +5379,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from an IFontDisp to a System.Drawing.Font object
+        ///  Maps from an IFontDisp to a System.Drawing.Font object
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Font GetFontFromIFontDisp(object font)
@@ -5478,9 +5435,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Maps from a DateTime object to an OLE DATE (expressed as a double)
+        ///  Maps from a DateTime object to an OLE DATE (expressed as a double)
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static double GetOADateFromTime(DateTime time)
@@ -5489,7 +5445,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps from an OLE DATE (expressed as a double) to a DateTime object
+        ///  Maps from an OLE DATE (expressed as a double) to a DateTime object
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static DateTime GetTimeFromOADate(double date)
@@ -5497,8 +5453,6 @@ namespace System.Windows.Forms
             return DateTime.FromOADate(date);
         }
 
-        /// <summary>
-        /// </summary>
         private int Convert2int(object o, bool xDirection)
         {
             o = ((Array)o).GetValue(0);
@@ -5512,91 +5466,68 @@ namespace System.Windows.Forms
             return Convert.ToInt32(o, CultureInfo.InvariantCulture);
         }
 
-        /// <summary>
-        /// </summary>
         private short Convert2short(object o)
         {
             o = ((Array)o).GetValue(0);
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);
         }
 
-        /// <summary>
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(object o1, object o2, object o3, object o4)
         {
             RaiseOnMouseMove(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, float x, float y)
         {
             RaiseOnMouseMove(button, shift, Twip2Pixel((int)x, true), Twip2Pixel((int)y, false));
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, int x, int y)
         {
             base.OnMouseMove(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <summary>
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(object o1, object o2, object o3, object o4)
         {
             RaiseOnMouseUp(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, float x, float y)
         {
             RaiseOnMouseUp(button, shift, Twip2Pixel((int)x, true), Twip2Pixel((int)y, false));
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, int x, int y)
         {
             base.OnMouseUp(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <summary>
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(object o1, object o2, object o3, object o4)
         {
             RaiseOnMouseDown(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, float x, float y)
         {
             RaiseOnMouseDown(button, shift, Twip2Pixel((int)x, true), Twip2Pixel((int)y, false));
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, int x, int y)
         {
             base.OnMouseDown(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <summary>
-        /// </summary>
         private class VBFormat : UnsafeNativeMethods.IVBFormat
         {
-
             // IVBFormat methods:
             //
             int UnsafeNativeMethods.IVBFormat.Format(ref object var, IntPtr pszFormat, IntPtr lpBuffer, short cpBuffer, int lcid, short firstD, short firstW, short[] result)
@@ -5640,8 +5571,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal class EnumUnknown : UnsafeNativeMethods.IEnumUnknown
         {
             private readonly object[] arr;
@@ -5724,8 +5653,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal class AxContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame, IReflect
         {
             internal ContainerControl parent;
@@ -5884,7 +5811,7 @@ namespace System.Windows.Forms
 
             internal void AddControl(Control ctl)
             {
-                // 
+                //
                 lock (this)
                 {
                     if (containerCache.Contains(ctl))
@@ -5922,7 +5849,7 @@ namespace System.Windows.Forms
 
             internal void RemoveControl(Control ctl)
             {
-                // 
+                //
                 lock (this)
                 {
                     if (containerCache.Contains(ctl))
@@ -6474,7 +6401,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
 
             // IOleContainer methods:
 
@@ -7100,17 +7026,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      StateConverter is a class that can be used to convert
-        ///      State from one data type to another.  Access this
-        ///      class through the TypeDescriptor.
+        ///  StateConverter is a class that can be used to convert
+        ///  State from one data type to another.  Access this
+        ///  class through the TypeDescriptor.
         /// </summary>
         public class StateConverter : TypeConverter
         {
-
             /// <summary>
-            ///    <para>Gets a value indicating whether this converter can
-            ///       convert an object in the given source type to the native type of the converter
-            ///       using the context.</para>
+            ///  Gets a value indicating whether this converter can
+            ///  convert an object in the given source type to the native type of the converter
+            ///  using the context.
             /// </summary>
             public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
             {
@@ -7123,8 +7048,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>Gets a value indicating whether this converter can
-            ///       convert an object to the given destination type using the context.</para>
+            ///  Gets a value indicating whether this converter can
+            ///  convert an object to the given destination type using the context.
             /// </summary>
             public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
             {
@@ -7137,7 +7062,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>Converts the given object to the converter's native type.</para>
+            ///  Converts the given object to the converter's native type.
             /// </summary>
             public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
             {
@@ -7151,11 +7076,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///      Converts the given object to another type.  The most common types to convert
-            ///      are to and from a string object.  The default implementation will make a call
-            ///      to ToString on the object if the object is valid and if the destination
-            ///      type is string.  If this cannot convert to the desitnation type, this will
-            ///      throw a NotSupportedException.
+            ///  Converts the given object to another type.  The most common types to convert
+            ///  are to and from a string object.  The default implementation will make a call
+            ///  to ToString on the object if the object is valid and if the destination
+            ///  type is string.  If this cannot convert to the desitnation type, this will
+            ///  throw a NotSupportedException.
             /// </summary>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
             {
@@ -7185,15 +7110,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The class which encapsulates the persisted state of the underlying activeX control
-        ///       An instance of this class my be obtained either by calling getOcxState on an
-        ///       AxHost object, or by reading in from a stream.</para>
+        ///  The class which encapsulates the persisted state of the underlying activeX control
+        ///  An instance of this class my be obtained either by calling getOcxState on an
+        ///  AxHost object, or by reading in from a stream.
         /// </summary>
         [
-            TypeConverterAttribute(typeof(TypeConverter)),
+            TypeConverter(typeof(TypeConverter)),
             Serializable
         ]
-        [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
         public class State : ISerializable
         {
             private readonly int VERSION = 1;
@@ -7634,8 +7558,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal class AxPropertyDescriptor : PropertyDescriptor
         {
             private readonly PropertyDescriptor baseProp;
@@ -7653,9 +7575,6 @@ namespace System.Windows.Forms
             private const int FlagIgnoreCanAccessProperties = 0x00000008;
             private const int FlagSettingValue = 0x00000010;
 
-            [
-                SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped in Everett
-            ]
             internal AxPropertyDescriptor(PropertyDescriptor baseProp, AxHost owner) : base(baseProp)
             {
                 this.baseProp = baseProp;
@@ -7923,7 +7842,6 @@ namespace System.Windows.Forms
                 updateAttrs.Clear();
             }
 
-
             /// <summary>
             /// Called externally to update the editor or type converter.
             /// This simply sets flags so this will happen, it doesn't actually to the update...
@@ -7932,7 +7850,7 @@ namespace System.Windows.Forms
             internal void UpdateTypeConverterAndTypeEditor(bool force)
             {
                 // if this is an external request, flip the flag to false so we do the update on demand.
-                // 
+                //
                 if (GetFlag(FlagUpdatedEditorAndConverter) && force)
                 {
                     SetFlag(FlagUpdatedEditorAndConverter, false);
@@ -8032,7 +7950,7 @@ namespace System.Windows.Forms
                         {
                             // if we didn't get any strings, try the proppage edtior
                             //
-                            // Check to see if this is a property that we have already massaged to be a 
+                            // Check to see if this is a property that we have already massaged to be a
                             // .Net type. If it is, don't bother with custom property pages. We already
                             // have a .Net Editor for this type.
                             //
@@ -8045,7 +7963,7 @@ namespace System.Windows.Forms
                                 {
                                     editor = new AxPropertyTypeEditor(this, g);
 
-                                    // Show any non-browsable property that has an editor through a 
+                                    // Show any non-browsable property that has an editor through a
                                     // property page.
                                     //
                                     if (!IsBrowsable)
@@ -8079,11 +7997,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
-            ///     the value, passing the result into valueAccess.setValue().  This is where
-            ///     an editor can launch a modal dialog or create a drop down editor to allow
-            ///     the user to modify the value.  Host assistance in presenting UI to the user
-            ///     can be found through the valueAccess.getService function.
+            ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
+            ///  the value, passing the result into valueAccess.setValue().  This is where
+            ///  an editor can launch a modal dialog or create a drop down editor to allow
+            ///  the user to modify the value.  Host assistance in presenting UI to the user
+            ///  can be found through the valueAccess.getService function.
             /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
@@ -8107,8 +8025,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///      Retrieves the editing style of the Edit method.  If the method
-            ///      is not supported, this will return None.
+            ///  Retrieves the editing style of the Edit method.  If the method
+            ///  is not supported, this will return None.
             /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
             {
@@ -8116,7 +8034,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// simple derivation of the com2enumconverter that allows us to intercept
         /// the call to GetStandardValues so we can on-demand update the enum values.
         /// </summary>
@@ -8144,8 +8062,8 @@ namespace System.Windows.Forms
         }
 
         // This exists for perf reasons.   We delay doing this until we
-        // are actually asked for the array of values. 
-        // 
+        // are actually asked for the array of values.
+        //
         private class AxPerPropertyBrowsingEnum : Com2Enum
         {
             private readonly AxPropertyDescriptor target;
@@ -8238,7 +8156,7 @@ namespace System.Windows.Forms
                             itemCount++;
                         }
 
-                        // pass this data down to the base Com2Enum object... 
+                        // pass this data down to the base Com2Enum object...
                         if (itemCount > 0)
                         {
                             string[] strings = new string[itemCount];
@@ -8273,7 +8191,7 @@ namespace System.Windows.Forms
                 }
                 else {
                     success = false;
-                }   
+                }
                 return null;
             }
 #endif

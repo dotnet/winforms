@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Reflection;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -10,7 +9,7 @@ using System.Collections;
 
 namespace System.Windows.Forms
 {
-    [TypeConverterAttribute(typeof(LinkArea.LinkAreaConverter))]
+    [TypeConverter(typeof(LinkAreaConverter))]
     [Serializable]
     public struct LinkArea
     {
@@ -222,7 +221,6 @@ namespace System.Windows.Forms
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);
                 return props.Sort(new string[] { nameof(LinkArea.Start), nameof(LinkArea.Length) });
             }
-
 
             /// <summary>
             /// Determines if this object supports properties. By default, this is false.

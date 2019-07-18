@@ -2,31 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing.Design;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Text;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization.Formatters;
-    using System.Text;
-    using System.Windows.Forms.ComponentModel;
-    using System.Globalization;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Windows.Forms.Internal;
-    using System;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///   <para>
-    ///      Displays text that can contain a hyperlink.
-    ///   </para>
+    ///  Displays text that can contain a hyperlink.
     /// </summary>
     [
     ComVisible(true),
@@ -37,15 +26,14 @@ namespace System.Windows.Forms
     ]
     public class LinkLabel : Label, IButtonControl
     {
-
         static readonly object EventLinkClicked = new object();
         static Color iedisabledLinkColor = Color.Empty;
 
         static readonly LinkComparer linkComparer = new LinkComparer();
 
         /// <summary>
-        ///    The dialog result that will be sent to the parent dialog form when
-        ///    we are clicked.
+        ///  The dialog result that will be sent to the parent dialog form when
+        ///  we are clicked.
         /// </summary>
         DialogResult dialogResult;
 
@@ -71,9 +59,7 @@ namespace System.Windows.Forms
         LinkBehavior linkBehavior = System.Windows.Forms.LinkBehavior.SystemDefault;
 
         /// <summary>
-        ///   <para>
-        ///      Initializes a new default instance of the <see cref='System.Windows.Forms.LinkLabel'/> class.
-        ///   </para>
+        ///  Initializes a new default instance of the <see cref='LinkLabel'/> class.
         /// </summary>
         public LinkLabel() : base()
         {
@@ -87,10 +73,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets or sets the color used to display active links.
-        ///   </para>
-        /// </summary>
+            ///  Gets or sets the color used to display active links.
+            /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))
@@ -119,10 +103,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets or sets the color used to display disabled links.
-        ///   </para>
-        /// </summary>
+            ///  Gets or sets the color used to display disabled links.
+            /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))
@@ -235,10 +217,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets or sets the range in the text that is treated as a link.
-        ///   </para>
-        /// </summary>
+            ///  Gets or sets the range in the text that is treated as a link.
+            /// </summary>
         [
         Editor("System.Windows.Forms.Design.LinkAreaEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -297,10 +277,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets ir sets a value that represents how the link will be underlined.
-        ///   </para>
-        /// </summary>
+            ///  Gets ir sets a value that represents how the link will be underlined.
+            /// </summary>
         [
         DefaultValue(LinkBehavior.SystemDefault),
         SRCategory(nameof(SR.CatBehavior)),
@@ -329,10 +307,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets or sets the color used to display links in normal cases.
-        ///   </para>
-        /// </summary>
+            ///  Gets or sets the color used to display links in normal cases.
+            /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelLinkColorDescr))
@@ -365,9 +341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets the collection of links used in a <see cref='System.Windows.Forms.LinkLabel'/>.
-        ///   </para>
+        ///  Gets the collection of links used in a <see cref='LinkLabel'/>.
         /// </summary>
         [
         Browsable(false),
@@ -386,10 +360,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets or sets a value indicating whether the link should be displayed as if it was visited.
-        ///   </para>
-        /// </summary>
+            ///  Gets or sets a value indicating whether the link should be displayed as if it was visited.
+            /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -421,7 +393,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         // link labels must always ownerdraw
         //
         internal override bool OwnerDraw
@@ -431,7 +402,6 @@ namespace System.Windows.Forms
                 return true;
             }
         }
-
 
         protected Cursor OverrideCursor
         {
@@ -454,7 +424,7 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.GetCursorPos(p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
-                        // 
+                        //
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                         {
                             SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
@@ -506,10 +476,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Gets or sets the color used to display the link once it has been visited.
-        ///   </para>
-        /// </summary>
+            ///  Gets or sets the color used to display the link once it has been visited.
+            /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))
@@ -542,10 +510,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Occurs when the link is clicked.
-        ///   </para>
-        /// </summary>
+            ///  Occurs when the link is clicked.
+            /// </summary>
         [WinCategory("Action"), SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
         public event LinkLabelLinkClickedEventHandler LinkClicked
         {
@@ -608,8 +574,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Constructs the new instance of the accessibility object for this control. Subclasses
-        ///   should not call base.CreateAccessibilityObject.
+        ///  Constructs the new instance of the accessibility object for this control. Subclasses
+        ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
@@ -617,12 +583,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Creates a handle for this control. This method is called by the .NET,
-        ///      this should not be called. Inheriting classes should always call
-        ///      base.createHandle when overriding this method.
-        ///   </para>
-        /// </summary>
+            ///  Creates a handle for this control. This method is called by the .NET,
+        ///  this should not be called. Inheriting classes should always call
+        ///  base.createHandle when overriding this method.
+            /// </summary>
         protected override void CreateHandle()
         {
             base.CreateHandle();
@@ -630,12 +594,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Determines whether the current state of the control allows for rendering text using 
-        ///    TextRenderer (GDI).
-        ///    The Gdi library doesn't currently have a way to calculate character ranges so we cannot 
-        ///    use it for painting link(s) within the text, but if the link are is null or covers the
-        ///    entire text we are ok since it is just one area with the same size of the text binding
-        ///    area.
+        ///  Determines whether the current state of the control allows for rendering text using
+        ///  TextRenderer (GDI).
+        ///  The Gdi library doesn't currently have a way to calculate character ranges so we cannot
+        ///  use it for painting link(s) within the text, but if the link are is null or covers the
+        ///  entire text we are ok since it is just one area with the same size of the text binding
+        ///  area.
         /// </summary>
         internal override bool CanUseTextRenderer
         {
@@ -654,13 +618,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Converts the character index into char index of the string
-        ///    This method is copied in LinkCollectionEditor.cs. Update the other
-        ///    one as well if you change this method.
-        ///    This method mainly deal with surrogate. Suppose we 
-        ///    have a string consisting of 3 surrogates, and we want the
-        ///    second character, then the index we need should be 2 instead of
-        ///    1, and this method returns the correct index.
+        ///  Converts the character index into char index of the string
+        ///  This method is copied in LinkCollectionEditor.cs. Update the other
+        ///  one as well if you change this method.
+        ///  This method mainly deal with surrogate. Suppose we
+        ///  have a string consisting of 3 surrogates, and we want the
+        ///  second character, then the index we need should be 2 instead of
+        ///  1, and this method returns the correct index.
         /// </summary>
         private static int ConvertToCharIndex(int index, string text)
         {
@@ -691,14 +655,12 @@ namespace System.Windows.Forms
             return sub.Length;
         }
 
-
         /// <summary>
-        ///    Ensures that we have analyzed the text run so that we can render each segment
-        ///    and link.
+        ///  Ensures that we have analyzed the text run so that we can render each segment
+        ///  and link.
         /// </summary>
         private void EnsureRun(Graphics g)
         {
-
             // bail early if everything is valid!
             //
             if (textLayoutValid)
@@ -793,8 +755,7 @@ namespace System.Windows.Forms
                                                                   textSize.Width - iRightMargin - iLeftMargin,
                                                                   textSize.Height);
                         visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
-                        // 
-
+                        //
 
                         Region visualRegion = new Region(visualRectangle);
                         if (links != null && links.Count == 1)
@@ -824,8 +785,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         internal override StringFormat CreateStringFormat()
         {
             StringFormat stringFormat = base.CreateStringFormat();
@@ -841,7 +800,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Calculate character ranges taking into account the locale.  Provided for surrogate chars support.
+        ///  Calculate character ranges taking into account the locale.  Provided for surrogate chars support.
         /// </summary>
         private CharacterRange[] AdjustCharacterRangesForSurrogateChars()
         {
@@ -875,8 +834,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Determines whether the whole link label contains only one link,
-        ///    and the link runs from the beginning of the label to the end of it
+        ///  Determines whether the whole link label contains only one link,
+        ///  and the link runs from the beginning of the label to the end of it
         /// </summary>
         private bool IsOneLink()
         {
@@ -893,8 +852,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Determines if the given client coordinates is contained within a portion
-        ///    of a link area.
+        ///  Determines if the given client coordinates is contained within a portion
+        ///  of a link area.
         /// </summary>
         protected Link PointInLink(int x, int y)
         {
@@ -921,9 +880,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Invalidates only the portions of the text that is linked to
-        ///    the specified link. If link is null, then all linked text
-        ///    is invalidated.
+        ///  Invalidates only the portions of the text that is linked to
+        ///  the specified link. If link is null, then all linked text
+        ///  is invalidated.
         /// </summary>
         private void InvalidateLink(Link link)
         {
@@ -941,12 +900,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Invalidates the current set of fonts we use when painting
-        ///    links.  The fonts will be recreated when needed.
+        ///  Invalidates the current set of fonts we use when painting
+        ///  links.  The fonts will be recreated when needed.
         /// </summary>
         private void InvalidateLinkFonts()
         {
-
             if (linkFont != null)
             {
                 linkFont.Dispose();
@@ -972,12 +930,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>
-        /// Gets or sets a value that is returned to the
+            /// Gets or sets a value that is returned to the
         /// parent form when the link label.
         /// is clicked.
-        /// </para>
-        /// </summary>
+            /// </summary>
         DialogResult IButtonControl.DialogResult
         {
             get
@@ -1002,7 +958,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.
+        /// Raises the <see cref='Control.GotFocus'/> event.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -1017,7 +973,7 @@ namespace System.Windows.Forms
                 Link focusLink = FocusLink;
                 if (focusLink == null)
                 {
-                    // Set focus on first link.  
+                    // Set focus on first link.
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
                     Select(true /*directed*/, true /*forward*/);
                 }
@@ -1037,10 +993,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.LostFocus'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.LostFocus'/>
+        ///  event.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
@@ -1053,10 +1007,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.OnKeyDown'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.OnKeyDown'/>
+        ///  event.
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -1072,10 +1024,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.OnMouseLeave'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -1104,10 +1054,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.OnMouseDown'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -1138,17 +1086,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseUp'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.OnMouseUp'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
-
             base.OnMouseUp(e);
 
-            // 
+            //
             if (Disposing || IsDisposed)
             {
                 return;
@@ -1179,10 +1124,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.OnMouseMove'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -1239,9 +1182,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.LinkLabel.OnLinkClicked'/> event.
-        ///   </para>
+        ///  Raises the <see cref='OnLinkClicked'/> event.
         /// </summary>
         protected virtual void OnLinkClicked(LinkLabelLinkClickedEventArgs e)
         {
@@ -1255,10 +1196,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.OnPaint'/>
-        ///      event.
-        ///   </para>
+        ///  Raises the <see cref='Control.OnPaint'/>
+        ///  event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -1356,7 +1295,7 @@ namespace System.Windows.Forms
                             }
 
                             // When there is only one link in link label,
-                            // it's not necessary to paint with forebrush first 
+                            // it's not necessary to paint with forebrush first
                             // as it will be overlapped by linkbrush in the following steps
 
                             if (!IsOneLink())
@@ -1486,8 +1425,6 @@ namespace System.Windows.Forms
             Invalidate();
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnAutoSizeChanged(EventArgs e)
         {
             base.OnAutoSizeChanged(e);
@@ -1495,7 +1432,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overriden by LinkLabel.
+        ///  Overriden by LinkLabel.
         /// </summary>
         internal override void OnAutoEllipsisChanged(/*EventArgs e*/)
         {
@@ -1535,7 +1472,6 @@ namespace System.Windows.Forms
 
         private void PaintLink(Graphics g, Link link, SolidBrush foreBrush, SolidBrush linkBrush, bool optimizeBackgroundRendering, RectangleF finalrect)
         {
-
             // link = null means paint the whole text
 
             Debug.Assert(g != null, "Must pass valid graphics");
@@ -1703,7 +1639,6 @@ namespace System.Windows.Forms
 
         void IButtonControl.PerformClick()
         {
-
             // If a link is not currently focused, focus on the first link
             //
             if (FocusLink == null && Links.Count > 0)
@@ -1730,19 +1665,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Processes a dialog key. This method is called during message pre-processing
-        ///      to handle dialog characters, such as TAB, RETURN, ESCAPE, and arrow keys. This
-        ///      method is called only if the isInputKey() method indicates that the control
-        ///      isn't interested in the key. processDialogKey() simply sends the character to
-        ///      the parent's processDialogKey() method, or returns false if the control has no
-        ///      parent. The Form class overrides this method to perform actual processing
-        ///      of dialog keys. When overriding processDialogKey(), a control should return true
-        ///      to indicate that it has processed the key. For keys that aren't processed by the
-        ///      control, the result of "base.processDialogChar()" should be returned. Controls
-        ///      will seldom, if ever, need to override this method.
-        ///   </para>
-        /// </summary>
+            ///  Processes a dialog key. This method is called during message pre-processing
+        ///  to handle dialog characters, such as TAB, RETURN, ESCAPE, and arrow keys. This
+        ///  method is called only if the isInputKey() method indicates that the control
+        ///  isn't interested in the key. processDialogKey() simply sends the character to
+        ///  the parent's processDialogKey() method, or returns false if the control has no
+        ///  parent. The Form class overrides this method to perform actual processing
+        ///  of dialog keys. When overriding processDialogKey(), a control should return true
+        ///  to indicate that it has processed the key. For keys that aren't processed by the
+        ///  control, the result of "base.processDialogChar()" should be returned. Controls
+        ///  will seldom, if ever, need to override this method.
+            /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt)
@@ -1891,20 +1824,16 @@ namespace System.Windows.Forms
             visitedLinkColor = Color.Empty;
         }
 
-
         /// <summary>
-        ///   <para>
-        ///      Performs the work of setting the bounds of this control. Inheriting classes
-        ///      can overide this function to add size restrictions. Inheriting classes must call
-        ///      base.setBoundsCore to actually cause the bounds of the control to change.
-        ///   </para>
-        /// </summary>
+            ///  Performs the work of setting the bounds of this control. Inheriting classes
+        ///  can overide this function to add size restrictions. Inheriting classes must call
+        ///  base.setBoundsCore to actually cause the bounds of the control to change.
+            /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-
-            // we cache too much state to try and optimize this (regions, etc)... it is best 
-            // to always relayout here... If we want to resurect this code in the future, 
-            // remember that we need to handle a word wrapped top aligned text that 
+            // we cache too much state to try and optimize this (regions, etc)... it is best
+            // to always relayout here... If we want to resurect this code in the future,
+            // remember that we need to handle a word wrapped top aligned text that
             // will become newly exposed (and therefore layed out) when we resize...
             //
             /*
@@ -1924,10 +1853,9 @@ namespace System.Windows.Forms
 
         protected override void Select(bool directed, bool forward)
         {
-
             if (directed)
             {
-                // In a multi-link label, if the tab came from another control, we want to keep the currently 
+                // In a multi-link label, if the tab came from another control, we want to keep the currently
                 // focused link, otherwise, we set the focus to the next link.
                 if (links.Count > 0)
                 {
@@ -1941,7 +1869,7 @@ namespace System.Windows.Forms
                     }
 
                     // We could be getting focus from ourself, so we must
-                    // invalidate each time.                                   
+                    // invalidate each time.
                     //
                     FocusLink = null;
 
@@ -1968,31 +1896,25 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Determines if the color for active links should remain the same.
-        ///   </para>
-        /// </summary>
+            ///  Determines if the color for active links should remain the same.
+            /// </summary>
         internal bool ShouldSerializeActiveLinkColor()
         {
             return !activeLinkColor.IsEmpty;
         }
 
         /// <summary>
-        ///   <para>
-        ///      Determines if the color for disabled links should remain the same.
-        ///   </para>
-        /// </summary>
+            ///  Determines if the color for disabled links should remain the same.
+            /// </summary>
         internal bool ShouldSerializeDisabledLinkColor()
         {
             return !disabledLinkColor.IsEmpty;
         }
 
         /// <summary>
-        ///   <para>
-        ///      Determines if the range in text that is treated as a
-        ///      link should remain the same.      
-        ///   </para>
-        /// </summary>
+            ///  Determines if the range in text that is treated as a
+        ///  link should remain the same.
+            /// </summary>
         private bool ShouldSerializeLinkArea()
         {
             if (links.Count == 1)
@@ -2005,18 +1927,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Determines if the color of links in normal cases should remain the same.
-        ///   </para>
-        /// </summary>
+            ///  Determines if the color of links in normal cases should remain the same.
+            /// </summary>
         internal bool ShouldSerializeLinkColor()
         {
             return !linkColor.IsEmpty;
         }
 
         /// <summary>
-        ///    Determines whether designer should generate code for setting the UseCompatibleTextRendering or not.
-        ///    DefaultValue(false)
+        ///  Determines whether designer should generate code for setting the UseCompatibleTextRendering or not.
+        ///  DefaultValue(false)
         /// </summary>
         private bool ShouldSerializeUseCompatibleTextRendering()
         {
@@ -2025,25 +1945,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   <para>
-        ///      Determines if the color of links that have been visited should remain the same.
-        ///   </para>
-        /// </summary>
+            ///  Determines if the color of links that have been visited should remain the same.
+            /// </summary>
         private bool ShouldSerializeVisitedLinkColor()
         {
             return !visitedLinkColor.IsEmpty;
         }
 
-
-
         /// <summary>
-        ///   <para>
-        ///      Update accessibility with the currently focused link.
-        ///   </para>
-        /// </summary>
+            ///  Update accessibility with the currently focused link.
+            /// </summary>
         private void UpdateAccessibilityLink(Link focusLink)
         {
-
             if (!IsHandleCreated)
             {
 
@@ -2062,8 +1975,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Validates that no links overlap. This will throw an exception if
-        ///    they do.
+        ///  Validates that no links overlap. This will throw an exception if
+        ///  they do.
         /// </summary>
         private void ValidateNoOverlappingLinks()
         {
@@ -2093,9 +2006,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Updates the label's ability to get focus. If there are
-        ///    any links in the label, then the label can get focus,
-        ///    else it can't.
+        ///  Updates the label's ability to get focus. If there are
+        ///  any links in the label, then the label can get focus,
+        ///  else it can't.
         /// </summary>
         private void UpdateSelectability()
         {
@@ -2125,7 +2038,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
+        ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
         [
         // DefaultValue(false), - // See ShouldSerailizeUseCompatibleTextRendering method.
@@ -2154,11 +2067,10 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => false;
 
         /// <summary>
-        ///    Handles the WM_SETCURSOR message
+        ///  Handles the WM_SETCURSOR message
         /// </summary>
         private void WmSetCursor(ref Message m)
         {
-
             // Accessing through the Handle property has side effects that break this
             // logic. You must use InternalHandle.
             //
@@ -2180,8 +2092,6 @@ namespace System.Windows.Forms
 
         }
 
-        /// <summary>
-        /// </summary>
         protected override void WndProc(ref Message msg)
         {
             switch (msg.Msg)
@@ -2248,7 +2158,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>Retrieves the child control with the specified key.</para>
+            ///  Retrieves the child control with the specified key.
             /// </summary>
             public virtual Link this[string key]
             {
@@ -2274,7 +2184,6 @@ namespace System.Windows.Forms
                 }
             }
 
-
             [Browsable(false)]
             public int Count
             {
@@ -2285,9 +2194,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///   <para>whether we have added a non-trivial link to the collection</para>
+            ///  whether we have added a non-trivial link to the collection
             /// </summary>
-
             public bool LinksAdded
             {
                 get
@@ -2447,7 +2355,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
+            ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
             public virtual bool ContainsKey(string key)
             {
@@ -2484,7 +2392,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
+            ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
             public virtual int IndexOfKey(string key)
             {
@@ -2519,16 +2427,15 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>Determines if the index is valid for the collection.</para>
+            ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index)
             {
                 return ((index >= 0) && (index < Count));
             }
 
-
             /// <summary>
-            ///   Remove all links from the linkLabel.
+            ///  Remove all links from the linkLabel.
             /// </summary>
             public virtual void Clear()
             {
@@ -2600,7 +2507,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>Removes the child control with the specified key.</para>
+            ///  Removes the child control with the specified key.
             /// </summary>
             public virtual void RemoveByKey(string key)
             {
@@ -2837,7 +2744,7 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            public override System.Windows.Forms.AccessibleObject HitTest(int x, int y)
+            public override AccessibleObject HitTest(int x, int y)
             {
                 Point p = Owner.PointToClient(new Point(x, y));
                 Link hit = ((LinkLabel)Owner).PointInLink(p.X, p.Y);
@@ -2860,12 +2767,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         internal class LinkAccessibleObject : AccessibleObject
         {
-
             private readonly Link link;
 
             public LinkAccessibleObject(Link link) : base()
@@ -2902,7 +2806,6 @@ namespace System.Windows.Forms
                     {
                         g.Dispose();
                     }
-
 
                     // Translate rect to screen coordinates
                     //

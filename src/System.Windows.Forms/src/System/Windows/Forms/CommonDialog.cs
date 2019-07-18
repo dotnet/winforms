@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -14,7 +13,6 @@ namespace System.Windows.Forms
     /// Specifies the base class used for displaying dialog boxes on the screen.
     /// </summary>
     [ToolboxItemFilter("System.Windows.Forms")]
-    [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Fixing this would be a breaking change")]
     public abstract class CommonDialog : Component
     {
         private static readonly object s_helpRequestEvent = new object();
@@ -23,13 +21,12 @@ namespace System.Windows.Forms
 
         private IntPtr _defOwnerWndProc;
 
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         private IntPtr _hookedWndProc;
 
         private IntPtr _defaultControlHwnd;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.CommonDialog'/> class.
+        /// Initializes a new instance of the <see cref='CommonDialog'/> class.
         /// </summary>
         public CommonDialog()
         {
@@ -101,7 +98,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.CommonDialog.HelpRequest'/> event.
+        /// Raises the <see cref='HelpRequest'/> event.
         /// </summary>
         protected virtual void OnHelpRequest(EventArgs e)
         {
@@ -159,7 +156,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Runs a common dialog box, parented to the given IWin32Window.
         /// </summary>
-        [SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")]
         public DialogResult ShowDialog(IWin32Window owner)
         {
             if (!SystemInformation.UserInteractive)

@@ -114,7 +114,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// If set, all control painting will be double buffered. You must also
         /// set the UserPaint and AllPaintingInWmPaint style. Note: This is
-        /// obsolete, please 
+        /// obsolete, please
         /// use OptimizedDoubleBuffer instead.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)] // It is recommended that you use the DoubleBuffer property instead.

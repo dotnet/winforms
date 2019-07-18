@@ -2,23 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Globalization;
-    using System.Windows.Forms.VisualStyles;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-
-    /// <summary>
-    ///    <para></para>
-    /// </summary>
     public class DataGridViewComboBoxCell : DataGridViewCell
     {
         private static readonly int PropComboBoxCellDataSource = PropertyStore.CreateKey();
@@ -53,7 +46,7 @@ namespace System.Windows.Forms
         internal const int DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems = 8;
 
         private static readonly Type defaultFormattedValueType = typeof(string);
-        private static readonly Type defaultEditType = typeof(System.Windows.Forms.DataGridViewComboBoxEditingControl);
+        private static readonly Type defaultEditType = typeof(DataGridViewComboBoxEditingControl);
         private static readonly Type defaultValueType = typeof(object);
         private static readonly Type cellType = typeof(DataGridViewComboBoxCell);
 
@@ -61,7 +54,7 @@ namespace System.Windows.Forms
         private static bool mouseInDropDownButtonBounds = false;
         private static int cachedDropDownWidth = -1;
 
-        // Autosizing changed for VS 
+        // Autosizing changed for VS
         // We need to make ItemFromComboBoxDataSource as fast as possible because ItemFromComboBoxDataSource is getting called a lot
         // during AutoSize. To do that we keep a copy of the key and the value.
         //private object keyUsedDuringAutoSize    = null;
@@ -674,7 +667,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         public override Type ValueType
         {
             get
@@ -833,7 +825,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
                 dataGridViewCell = (DataGridViewComboBoxCell)System.Activator.CreateInstance(thisType);
             }
             base.CloneInternal(dataGridViewCell);
@@ -934,7 +926,6 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetEditedFormattedValue(value, rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting);
 
-
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle contentBounds = PaintPrivate(graphics,
@@ -997,9 +988,6 @@ namespace System.Windows.Forms
             return cm;
         }
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // Hard coded space is OK here.
-        ]
         private int GetDropDownButtonHeight(Graphics graphics, DataGridViewCellStyle cellStyle)
         {
             int adjustment = 4;
@@ -1035,7 +1023,6 @@ namespace System.Windows.Forms
 
             object value = GetValue(rowIndex);
             object formattedValue = GetEditedFormattedValue(value, rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting);
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -1077,9 +1064,6 @@ namespace System.Windows.Forms
             return errorIconBounds;
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")   // OK to cast value into String twice.
-        ]
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
                                                     ref DataGridViewCellStyle cellStyle,
@@ -1302,9 +1286,6 @@ namespace System.Windows.Forms
             return value;
         }
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // Hard coded space is OK here.
-        ]
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (DataGridView == null)
@@ -1337,7 +1318,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, " ", cellStyle.Font, flags).Height, 
+                    preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, " ", cellStyle.Font, flags).Height,
                                              0);
                 }
             }
@@ -1467,7 +1448,7 @@ namespace System.Windows.Forms
                 }
 
                 // We need the comboBox to be parented by a control which has a handle or else the native ComboBox ends up
-                // w/ its parentHwnd pointing to the WinFormsParkingWindow.                
+                // w/ its parentHwnd pointing to the WinFormsParkingWindow.
                 IntPtr h;
                 if (comboBox.ParentInternal != null)
                 {
@@ -1482,7 +1463,7 @@ namespace System.Windows.Forms
                 comboBox.ValueMember = null;
                 comboBox.Items.Clear();
 
-                /* Don't set the position inside the currency manager blindly to 0 because it may be the case that 
+                /* Don't set the position inside the currency manager blindly to 0 because it may be the case that
                    the DataGridView and the DataGridViewComboBoxCell share the same DataManager.
                    Then setting the position on the DataManager will also set the position on the DataGridView.
                    And this causes problems when changing position inside the DataGridView.
@@ -1593,9 +1574,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Find the item in the ComboBox currency manager for the current cell
-        ///     This can be horribly inefficient and it uses reflection which makes it expensive 
-        ///     - ripe for optimization
+        ///  Find the item in the ComboBox currency manager for the current cell
+        ///  This can be horribly inefficient and it uses reflection which makes it expensive
+        ///  - ripe for optimization
         /// </summary>
         private object ItemFromComboBoxDataSource(PropertyDescriptor property, object key)
         {
@@ -1624,7 +1605,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                //Otherwise walk across the items looking for the item we want 
+                //Otherwise walk across the items looking for the item we want
                 for (int i = 0; i < DataManager.List.Count; i++)
                 {
                     object itemTmp = DataManager.List[i];
@@ -1715,11 +1696,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Lookup the display text for the given value.
-        ///     
-        ///     We use the value and ValueMember to look up the item in the 
-        ///     ComboBox datasource. We then use DisplayMember to get the 
-        ///     text to display.
+        ///  Lookup the display text for the given value.
+        ///
+        ///  We use the value and ValueMember to look up the item in the
+        ///  ComboBox datasource. We then use DisplayMember to get the
+        ///  text to display.
         /// </summary>
         private bool LookupDisplayValue(int rowIndex, object value, out object displayValue)
         {
@@ -1753,10 +1734,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Lookup the value for the given display value.
-        ///     
-        ///     We use the display value and DisplayMember to look up the item in the 
-        ///     ComboBox datasource. We then use ValueMember to get the value.
+        ///  Lookup the value for the given display value.
+        ///
+        ///  We use the display value and DisplayMember to look up the item in the
+        ///  ComboBox datasource. We then use ValueMember to get the value.
         /// </summary>
         private bool LookupValue(object formattedValue, out object value)
         {
@@ -2021,7 +2002,7 @@ namespace System.Windows.Forms
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
         // 4. DataGridViewCell::OnMouseMove - to compute the dropDownButtonRect
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -2234,7 +2215,7 @@ namespace System.Windows.Forms
 
                                     if (SystemInformation.HighContrast)
                                     {
-                                        // In the case of ComboBox style, background is not filled in, 
+                                        // In the case of ComboBox style, background is not filled in,
                                         // in the case of DrawReadOnlyButton uses theming API to render CP_READONLY COMBOBOX part that renders the background,
                                         // this API does not have "selected" state, thus always uses BackColor
                                         br = DataGridView.GetCachedBrush(cellStyle.BackColor);
@@ -2357,7 +2338,7 @@ namespace System.Windows.Forms
                                 g.DrawLine(pen, dropRect.X + 1, dropRect.Y + 1,
                                         dropRect.X + 1, dropRect.Y + dropRect.Height - 2);
                             }
-                            // Bottom + Right inset                        
+                            // Bottom + Right inset
                             if (stockColor)
                             {
                                 pen = SystemPens.ControlDark;
@@ -2520,7 +2501,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-
                 if (formattedValue is string formattedString)
                 {
                     // Font independent margins
@@ -2643,9 +2623,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the row Index and column Index of the cell.
-        ///    </para>
+        ///  Gets the row Index and column Index of the cell.
         /// </summary>
         public override string ToString()
         {
@@ -2680,9 +2658,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>
-        ///       A collection that stores objects.
-        ///    </para>
+            ///  A collection that stores objects.
         /// </summary>
         [ListBindable(false)]
         public class ObjectCollection : IList
@@ -2710,7 +2686,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the number of items.
+            ///  Retrieves the number of items.
             /// </summary>
             public int Count
             {
@@ -2721,7 +2697,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Internal access to the actual data store.
+            ///  Internal access to the actual data store.
             /// </summary>
             internal ArrayList InnerArray
             {
@@ -2768,11 +2744,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds an item to the collection. For an unsorted combo box, the item is
-            ///     added to the end of the existing list of items. For a sorted combo box,
-            ///     the item is inserted into the list according to its sorted position.
-            ///     The item's ToString() method is called to obtain the string that is
-            ///     displayed in the combo box.
+            ///  Adds an item to the collection. For an unsorted combo box, the item is
+            ///  added to the end of the existing list of items. For a sorted combo box,
+            ///  the item is inserted into the list according to its sorted position.
+            ///  The item's ToString() method is called to obtain the string that is
+            ///  displayed in the combo box.
             /// </summary>
             public int Add(object item)
             {
@@ -2830,7 +2806,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Add range that bypasses the data source check.
+            ///  Add range that bypasses the data source check.
             /// </summary>
             internal void AddRangeInternal(ICollection items)
             {
@@ -2861,7 +2837,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the item with the specified index.
+            ///  Retrieves the item with the specified index.
             /// </summary>
             public virtual object this[int index]
             {
@@ -2889,7 +2865,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes all items from the collection.
+            ///  Removes all items from the collection.
             /// </summary>
             public void Clear()
             {
@@ -2913,7 +2889,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Copies the DataGridViewComboBoxCell Items collection to a destination array.
+            ///  Copies the DataGridViewComboBoxCell Items collection to a destination array.
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
@@ -2934,7 +2910,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Returns an enumerator for the DataGridViewComboBoxCell Items collection.
+            ///  Returns an enumerator for the DataGridViewComboBoxCell Items collection.
             /// </summary>
             public IEnumerator GetEnumerator()
             {
@@ -2951,11 +2927,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds an item to the collection. For an unsorted combo box, the item is
-            ///     added to the end of the existing list of items. For a sorted combo box,
-            ///     the item is inserted into the list according to its sorted position.
-            ///     The item's toString() method is called to obtain the string that is
-            ///     displayed in the combo box.
+            ///  Adds an item to the collection. For an unsorted combo box, the item is
+            ///  added to the end of the existing list of items. For a sorted combo box,
+            ///  the item is inserted into the list according to its sorted position.
+            ///  The item's toString() method is called to obtain the string that is
+            ///  displayed in the combo box.
             /// </summary>
             public void Insert(int index, object item)
             {
@@ -2986,8 +2962,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes the given item from the collection, provided that it is
-            ///     actually in the list.
+            ///  Removes the given item from the collection, provided that it is
+            ///  actually in the list.
             /// </summary>
             public void Remove(object value)
             {
@@ -3000,7 +2976,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes an item from the collection at the given index.
+            ///  Removes an item from the collection at the given index.
             /// </summary>
             public void RemoveAt(int index)
             {
@@ -3016,7 +2992,7 @@ namespace System.Windows.Forms
             }
         } // end ObjectCollection
 
-        private sealed class ItemComparer : System.Collections.IComparer
+        private sealed class ItemComparer : IComparer
         {
             private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
 
@@ -3139,7 +3115,6 @@ namespace System.Windows.Forms
 
         protected class DataGridViewComboBoxCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-
             public DataGridViewComboBoxCellAccessibleObject(DataGridViewCell owner) : base(owner)
             {
             }

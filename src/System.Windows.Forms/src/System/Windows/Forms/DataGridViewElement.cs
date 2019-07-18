@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
         private DataGridView _dataGridView;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewElement'/> class.
+        /// Initializes a new instance of the <see cref='DataGridViewElement'/> class.
         /// </summary>
         public DataGridViewElement()
         {
@@ -68,37 +67,31 @@ namespace System.Windows.Forms
         {
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellClick(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellClickInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellContentClick(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellContentClickInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellContentDoubleClick(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellContentDoubleClickInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellValueChanged(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellValueChangedInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseDataError(DataGridViewDataErrorEventArgs e)
         {
             _dataGridView?.OnDataErrorInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseMouseWheel(MouseEventArgs e)
         {
             _dataGridView?.OnMouseWheelInternal(e);

@@ -21,13 +21,11 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Only vertical scroll bars are shown.
-        /// 
         /// </summary>
         Vertical = 2,
 
         /// <summary>
         /// Both horizontal and vertical scroll bars are shown.
-        /// 
         /// </summary>
         Both = 3,
 

@@ -4,7 +4,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 internal static partial class Interop
@@ -35,7 +34,6 @@ internal static partial class Interop
         /// <summary>
         /// Suspends GC.Collect
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal static void SuspendCollect()
         {
             lock (s_internalSyncObject)
@@ -46,9 +44,7 @@ internal static partial class Interop
 
         /// <summary>
         /// Resumes GC.Collect
-        /// </summary>        
-        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        /// </summary>
         internal static void ResumeCollect()
         {
             bool performCollect = false;
@@ -141,8 +137,7 @@ internal static partial class Interop
 
             /// <summary>
             /// Adds a handle to this handle type for monitoring.
-            /// </summary>            
-            [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
+            /// </summary>
             internal void Add(IntPtr handle)
             {
                 if (handle == IntPtr.Zero)
@@ -181,7 +176,7 @@ internal static partial class Interop
                     Debug.WriteLine("HC>     threshHold  :" + _threshHold.ToString());
                     Debug.WriteLine("HC>     handleCount :" + _handleCount).ToString());
                     Debug.WriteLine("HC>     deltaPercent:" + _deltaPercent.ToString());
-#endif                  
+#endif
                     GC.Collect();
 
                     // We just performed a GC. If the main thread is in a tight
@@ -199,7 +194,6 @@ internal static partial class Interop
             /// <summary>
             /// Retrieves the outstanding handle count for this handle type.
             /// </summary>
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             internal int GetHandleCount()
             {
                 lock (this)
@@ -222,7 +216,7 @@ internal static partial class Interop
                     _threshold = _handleCount + ((_handleCount * _deltaPercent) / 100);
 #if DEBUG_HANDLECOLLECTOR
                     Debug.WriteLine("HC> NeedCollection: increase threshHold to " + _threshjold);
-#endif                  
+#endif
                     return true;
                 }
 
@@ -235,7 +229,7 @@ internal static partial class Interop
                 {
 #if DEBUG_HANDLECOLLECTOR
                     Debug.WriteLine("HC> NeedCollection: throttle threshhold " + _threshHold + " down to " + oldThreshHold);
-#endif                  
+#endif
                     _threshold = oldThreshHold;
                 }
 

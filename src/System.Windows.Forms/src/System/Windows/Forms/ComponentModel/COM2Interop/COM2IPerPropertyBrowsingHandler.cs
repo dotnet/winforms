@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Globalization;
-    using System.Drawing.Design;
-
     internal class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
         public override Type Interface
@@ -163,7 +160,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     OleStrCAMarshaler stringMarshaler = new OleStrCAMarshaler(caStrings);
                     Int32CAMarshaler intMarshaler = new Int32CAMarshaler(caCookies);
 
-
                     if (stringMarshaler.Count > 0 && intMarshaler.Count > 0)
                     {
                         gveevent.TypeConverter = new Com2IPerPropertyEnumConverter(new Com2IPerPropertyBrowsingEnum(sender, this, stringMarshaler, intMarshaler, true));
@@ -200,7 +196,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-
         // this is just here so we can identify the enums that we added
         private class Com2IPerPropertyEnumConverter : Com2EnumConverter
         {
@@ -230,13 +225,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-
         // This exists for perf reasons.   We delay doing this until we
-        // are actually asked for the array of values. 
-        // 
+        // are actually asked for the array of values.
+        //
         private class Com2IPerPropertyBrowsingEnum : Com2Enum
         {
-
             internal Com2PropertyDescriptor target;
             private readonly Com2IPerPropertyBrowsingHandler handler;
             private readonly OleStrCAMarshaler nameMarshaller;
@@ -283,7 +276,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                }
             } */
 
-
             // ensure that we have processed the caStructs into arrays
             // of values and strings
             //
@@ -306,7 +298,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     int itemCount = 0;
 
                     Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
-
 
                     if (nameItems.Length > 0)
                     {
@@ -370,7 +361,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         }
 
-                        // pass this data down to the base Com2Enum object... 
+                        // pass this data down to the base Com2Enum object...
                         string[] strings = new string[itemCount];
                         Array.Copy(nameItems, 0, strings, 0, itemCount);
                         base.PopulateArrays(strings, valueItems);

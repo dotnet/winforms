@@ -2,33 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using Microsoft.Win32;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Collections.Generic;
-
     /// <summary>
-    /// <para>Represents the child version of the System.Windows.Forms.ListManager
-    /// that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.</para>
+    /// Represents the child version of the System.Windows.Forms.ListManager
+    /// that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.
     /// </summary>
     internal class RelatedCurrencyManager : CurrencyManager
     {
-
         BindingManagerBase parentManager;
         string dataField;
         PropertyDescriptor fieldInfo;
         static readonly List<BindingManagerBase> IgnoreItemChangedTable = new List<BindingManagerBase>();
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
-                                                                                                    // it would be a breaking change.
-        ]
         internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField) : base(null)
         {
             Bind(parentManager, dataField);
@@ -104,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the properties of the item.</para>
+        ///  Gets the properties of the item.
         /// </summary>
         public override PropertyDescriptorCollection GetItemProperties()
         {
@@ -112,7 +103,7 @@ namespace System.Windows.Forms
         }
 
         // <summary>
-        //    <para>Gets the name of the list.</para>
+        //    Gets the name of the list.
         // </summary>
         internal override string GetListName()
         {
@@ -125,7 +116,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the name of the specified list.</para>
+        ///  Gets the name of the specified list.
         /// </summary>
         protected internal override string GetListName(ArrayList listAccessors)
         {
@@ -169,13 +160,13 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and 
+                    // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and
                     // then it cancels the addition.
-                    // 
+                    //
                     // really, really hocky.
                     // will throw if the list in the curManager is not IBindingList
                     // and this will fail if the IBindingList does not have list change notification. read on....
-                    // when a new item will get added to an empty parent table, 
+                    // when a new item will get added to an empty parent table,
                     // the table will fire OnCurrentChanged and this method will get executed again
                     // allowing us to set the data source to an object with the right properties (so we can show
                     // metadata at design time).

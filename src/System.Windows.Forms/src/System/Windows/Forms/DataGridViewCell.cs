@@ -2,27 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Reflection;
-    using System.Globalization;
-    using System.ComponentModel;
-    using System.Windows.Forms.Internal;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>Identifies a cell in the dataGridView.</para>
+    ///  Identifies a cell in the dataGridView.
     /// </summary>
-    [
-        TypeConverterAttribute(typeof(DataGridViewCellConverter))
-    ]
+    [TypeConverter(typeof(DataGridViewCellConverter))]
     public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable
     {
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
@@ -64,9 +57,7 @@ namespace System.Windows.Forms
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCell'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='DataGridViewCell'/> class.
         /// </summary>
         protected DataGridViewCell() : base()
         {
@@ -108,7 +99,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets the Index of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
+        /// Gets or sets the Index of a column in the <see cref='DataGrid'/> control.
         /// </summary>
         public int ColumnIndex
         {
@@ -252,7 +243,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return typeof(System.Windows.Forms.DataGridViewTextBoxEditingControl);
+                return typeof(DataGridViewTextBoxEditingControl);
             }
         }
 
@@ -271,7 +262,6 @@ namespace System.Windows.Forms
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // ErrorIconBounds/GetErrorIconBounds existence is intentional
         ]
         public Rectangle ErrorIconBounds
         {
@@ -395,9 +385,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public bool HasStyle
         {
             get
@@ -430,10 +418,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // InheritedState/GetInheritedState existence is intentional
-        ]
+        [Browsable(false)]
         public DataGridViewElementStates InheritedState
         {
             get
@@ -442,10 +427,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // InheritedStyle/GetInheritedStyle existence is intentional
-        ]
+        [Browsable(false)]
         public DataGridViewCellStyle InheritedStyle
         {
             get
@@ -641,7 +623,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets the index of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
+        /// Gets or sets the index of a row in the <see cref='DataGrid'/> control.
         /// </summary>
         [
             Browsable(false)
@@ -723,10 +705,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // Size/GetSize existence is intentional
-        ]
+        [Browsable(false)]
         public Size Size
         {
             get
@@ -945,7 +924,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -1086,9 +1064,6 @@ namespace System.Windows.Forms
             return cellState;
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool ClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1220,9 +1195,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool ContentClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1233,9 +1205,6 @@ namespace System.Windows.Forms
             return ContentClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1277,7 +1246,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // We don't want the grid to get the keyboard focus
-                        // when the editing control gets parented to the parking window, 
+                        // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
                         UnsafeNativeMethods.SetFocus(new HandleRef(null, IntPtr.Zero));
                     }
@@ -1315,7 +1284,7 @@ namespace System.Windows.Forms
             Debug.Assert(dgv.EditingPanel.Controls.Count == 0);
 
             // Since the tooltip is removed when the editing control is shown,
-            // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet 
+            // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet
             // so that the tooltip appears again on mousemove after the editing.
             CurrentMouseLocation = DATAGRIDVIEWCELL_flagAreaNotSet;
         }
@@ -1338,9 +1307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool DoubleClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1351,9 +1317,6 @@ namespace System.Windows.Forms
             return DoubleClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool EnterUnsharesRow(int rowIndex, bool throughMouseClick)
         {
             return false;
@@ -1461,7 +1424,7 @@ namespace System.Windows.Forms
                     case '\n':
                         output.Write("<br>");
                         break;
-                    // 
+                    //
                     default:
                         // The seemingly arbitrary 160 comes from RFC
                         // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
@@ -1815,9 +1778,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")  // using ref is OK.
-        ]
         protected virtual object GetFormattedValue(object value,
                                                    int rowIndex,
                                                    ref DataGridViewCellStyle cellStyle,
@@ -1877,9 +1837,9 @@ namespace System.Windows.Forms
                 if (formattedValue == null &&
                     cellStyle.NullValue == null &&
                     FormattedValueType != null &&
-                    !typeof(System.ValueType).IsAssignableFrom(FormattedValueType))
+                    !typeof(ValueType).IsAssignableFrom(FormattedValueType))
                 {
-                    // null is an acceptable formatted value 
+                    // null is an acceptable formatted value
                     return null;
                 }
                 Exception exception = null;
@@ -2687,9 +2647,6 @@ namespace System.Windows.Forms
             AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, dgv.EditingControlAccessibleObject.RuntimeId);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return false;
@@ -2705,9 +2662,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool KeyPressUnsharesRow(KeyPressEventArgs e, int rowIndex)
         {
             return false;
@@ -2718,9 +2672,6 @@ namespace System.Windows.Forms
             return KeyPressUnsharesRow(e, rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return false;
@@ -2731,9 +2682,6 @@ namespace System.Windows.Forms
             return KeyUpUnsharesRow(e, rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool LeaveUnsharesRow(int rowIndex, bool throughMouseClick)
         {
             return false;
@@ -2752,11 +2700,7 @@ namespace System.Windows.Forms
             return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out bool widthTruncated);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), // We don't want to use IDeviceContext here.
-            SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters") // out param OK here.
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags, out bool widthTruncated)
         {
             if (graphics == null)
@@ -2786,9 +2730,7 @@ namespace System.Windows.Forms
             return requiredSize.Height;
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextPreferredSize(Graphics graphics, string text, Font font, float maxRatio, TextFormatFlags flags)
         {
             if (graphics == null)
@@ -2839,10 +2781,7 @@ namespace System.Windows.Forms
             return textSize;
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // We don't want to use IDeviceContext here.
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextSize(Graphics graphics, string text, Font font, TextFormatFlags flags)
         {
             if (graphics == null)
@@ -2906,9 +2845,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseClickUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2919,9 +2855,6 @@ namespace System.Windows.Forms
             return MouseClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseDoubleClickUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2932,9 +2865,6 @@ namespace System.Windows.Forms
             return MouseDoubleClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2945,9 +2875,6 @@ namespace System.Windows.Forms
             return MouseDownUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseEnterUnsharesRow(int rowIndex)
         {
             return false;
@@ -2958,9 +2885,6 @@ namespace System.Windows.Forms
             return MouseEnterUnsharesRow(rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseLeaveUnsharesRow(int rowIndex)
         {
             return false;
@@ -2971,9 +2895,6 @@ namespace System.Windows.Forms
             return MouseLeaveUnsharesRow(rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseMoveUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2984,9 +2905,6 @@ namespace System.Windows.Forms
             return MouseMoveUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -4197,7 +4115,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
         private static void PaintErrorIcon(Graphics graphics, Rectangle iconBounds)
         {
             if (graphics == null)
@@ -4408,10 +4325,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters") // singleVerticalBorderAdded/singleHorizontalBorderAdded names are OK
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         // Positions the editing panel and returns the normal bounds of the editing control, within the editing panel.
         public virtual Rectangle PositionEditingPanel(Rectangle cellBounds,
                                                       Rectangle cellClip,
@@ -4491,7 +4405,7 @@ namespace System.Windows.Forms
             hEditingControl = cellBounds.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height;
             DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
-            /* 
+            /*
             if (this.DataGridView.RightToLeftInternal)
             {
                 xEditingControl = wEditingPanel - xEditingControl - wEditingControl;
@@ -4532,7 +4446,7 @@ namespace System.Windows.Forms
                             // As a result of pushing the value in the back end, the data grid view row and/or data grid view cell
                             // became disconnected from the DataGridView.
                             // Return true because the operation succeded.
-                            // However, because the row which was edited became disconnected  from the DataGridView, 
+                            // However, because the row which was edited became disconnected  from the DataGridView,
                             // do not mark the current row in the data grid view as being dirty.
                             // And because the data grid view cell which was edited became disconnected from the data grid view
                             // do not fire CellValueChanged event.
@@ -4593,9 +4507,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the row Index and column Index of the cell.
-        ///    </para>
+        ///  Gets the row Index and column Index of the cell.
         /// </summary>
         public override string ToString()
         {
@@ -4626,7 +4538,7 @@ namespace System.Windows.Forms
         }
 
         [
-            System.Runtime.InteropServices.ComVisible(true)
+            ComVisible(true)
         ]
         protected class DataGridViewCellAccessibleObject : AccessibleObject
         {
@@ -4982,7 +4894,6 @@ namespace System.Windows.Forms
                     cellLeft = rowRect.Left + leftToRightRowHeadersWidth;
                 }
                 cellRect.X = cellLeft;
-
 
                 if (cellRight > rowRect.Right - rightToLeftRowHeadersWidth)
                 {

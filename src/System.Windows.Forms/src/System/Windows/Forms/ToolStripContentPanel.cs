@@ -2,17 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Collections.Specialized;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel.Design;
-
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -33,13 +29,12 @@ namespace System.Windows.Forms
 
         public ToolStripContentPanel()
         {
-
             // Consider: OptimizedDoubleBuffer
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -114,7 +109,6 @@ namespace System.Windows.Forms
             set { base.AutoSize = value; }
         }
 
-
         public override Color BackColor
         {
             get
@@ -126,7 +120,7 @@ namespace System.Windows.Forms
             {
 
                 // To support transparency on ToolStripContainer, we need this check
-                // to ensure that background color of the container reflects the 
+                // to ensure that background color of the container reflects the
                 // ContentPanel
                 if (ParentInternal is ToolStripContainer && value == Color.Transparent)
                 {
@@ -135,7 +129,6 @@ namespace System.Windows.Forms
                 base.BackColor = value;
             }
         }
-
 
         [
         Browsable(false),
@@ -226,7 +219,6 @@ namespace System.Windows.Forms
             set { base.MinimumSize = value; }
         }
 
-
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -253,7 +245,6 @@ namespace System.Windows.Forms
                 base.Name = value;
             }
         }
-
 
         [
         Browsable(false),
@@ -317,10 +308,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public ToolStripRenderer Renderer
         {
             get
@@ -332,7 +321,6 @@ namespace System.Windows.Forms
                 RendererSwitcher.Renderer = value;
             }
         }
-
 
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
@@ -351,7 +339,6 @@ namespace System.Windows.Forms
         }
 
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged
         {
             add => Events.AddHandler(EventRendererChanged, value);
@@ -394,10 +381,8 @@ namespace System.Windows.Forms
 
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void OnRendererChanged(EventArgs e)
         {
-
             // we dont want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else dont.
             if (Renderer is ToolStripProfessionalRenderer)
             {

@@ -8,11 +8,8 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-
     /// <summary>
-    ///    <para>
-    ///         Encapsulates insertion-mark information    
-    ///    </para>
+    ///  Encapsulates insertion-mark information
     /// </summary>
     public sealed class ListViewInsertionMark
     {
@@ -28,9 +25,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether the insertion mark appears
-    	///     after the item - otherwise it appears
-    	///     before the item (the default).
+        ///  Specifies whether the insertion mark appears
+    	///  after the item - otherwise it appears
+    	///  before the item (the default).
         /// </summary>
         ///
     	public bool AppearsAfterItem
@@ -54,7 +51,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns bounds of the insertion-mark.
+        ///  Returns bounds of the insertion-mark.
         /// </summary>
         ///
         public Rectangle Bounds
@@ -68,7 +65,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The color of the insertion-mark.
+        ///  The color of the insertion-mark.
         /// </summary>
         ///
         public Color Color
@@ -95,7 +92,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Item next to which the insertion-mark appears.
+        ///  Item next to which the insertion-mark appears.
         /// </summary>
         ///
         public int Index
@@ -118,8 +115,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Performs a hit-test at the specified insertion point
-        ///     and returns the closest item.
+        ///  Performs a hit-test at the specified insertion point
+        ///  and returns the closest item.
         /// </summary>
         ///
         public int NearestIndex(Point pt)

@@ -2,28 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
     /// <summary>
-    ///   This is an extract of the System.Drawing IntNativeMethods in the CommonUI tree.
-    ///   This is done to be able to compile the GDI code in both assemblies System.Drawing
-    ///   and System.Windows.Forms.
+    ///  This is an extract of the System.Drawing IntNativeMethods in the CommonUI tree.
+    ///  This is done to be able to compile the GDI code in both assemblies System.Drawing
+    ///  and System.Windows.Forms.
     /// </summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    static partial class IntSafeNativeMethods
+    internal static partial class IntSafeNativeMethods
     {
         // Brush.
 

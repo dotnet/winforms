@@ -2,18 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Imaging;
-    using System.Windows.Forms.VisualStyles;
-
-    /// <summary>
-    ///    <para></para>
-    /// </summary>
     internal class DataGridViewUtilities
     {
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
@@ -27,7 +20,7 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight = 2;
         private const byte DATAGRIDVIEWROWHEADERCELL_verticalTextMargin = 1;
 
-        internal static System.Drawing.ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment)
+        internal static ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment)
         {
             // Why isn't the DataGridView using System.Drawing.ContentAlignment?
             switch (alignment)
@@ -158,7 +151,6 @@ namespace System.Windows.Forms
             }
             return tff;
         }
-
 
         internal static Size GetPreferredRowHeaderSize(Graphics graphics,
                                                        string val,

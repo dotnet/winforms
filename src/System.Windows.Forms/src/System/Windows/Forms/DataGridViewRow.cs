@@ -8,14 +8,13 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Identifies a row in the dataGridView.
     /// </summary>
-    [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
+    [TypeConverter(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
         private static readonly Type s_rowType = typeof(DataGridViewRow);
@@ -29,7 +28,7 @@ namespace System.Windows.Forms
         private DataGridViewCellCollection _rowCells;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
+        /// Initializes a new instance of the <see cref='DataGridViewRow'/> class.
         /// </summary>
         public DataGridViewRow() : base()
         {
@@ -1823,8 +1822,6 @@ namespace System.Windows.Forms
                         rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
                     }
 
-
-
                     if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
                     {
                         rowRect.Height = 0;
@@ -2219,7 +2216,6 @@ namespace System.Windows.Forms
                     return owner.DataGridView.AccessibilityObject;
                 }
             }
-
 
             internal override bool IsPatternSupported(int patternId)
             {

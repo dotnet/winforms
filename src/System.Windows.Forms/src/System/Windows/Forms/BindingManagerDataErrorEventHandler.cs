@@ -4,11 +4,6 @@
 
 namespace System.Windows.Forms
 {
-
-    using System;
-
-    /// <summary>
-    /// </summary>
     public delegate void BindingManagerDataErrorEventHandler(object sender, BindingManagerDataErrorEventArgs e);
 
 }

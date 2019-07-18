@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
@@ -1314,8 +1313,6 @@ namespace System.ComponentModel.Design
                 return linkLabelSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
             }
 
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void OnLinkLabelLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
             {
                 Debug.Assert(!ActionPanel.InMethodInvoke, "Nested method invocation");
@@ -1331,7 +1328,7 @@ namespace System.ComponentModel.Design
                         ex = ex.InnerException;
                     }
                     //NOTE: We had code to rethrow if this was one of [NullReferenceException, StackOverflowException, OutOfMemoryException,
-                    //ThreadAbortException].  Removing this rethrow.  StackOverflow and ThreadAbort can't be meaningfully caught, and 
+                    //ThreadAbortException].  Removing this rethrow.  StackOverflow and ThreadAbort can't be meaningfully caught, and
                     //NullRef and OutOfMemory really shouldn't be caught.  Out of these, OOM is the most correct one to call, but OOM is
                     //thrown by GDI+ for pretty much any problem, so isn't reliable as an actual indicator that you're out of memory.  If
                     //you really are out of memory, it's very likely you'll get another OOM shortly.
@@ -1428,7 +1425,6 @@ namespace System.ComponentModel.Design
 
             protected abstract void OnValueChanged();
 
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
             protected void SetValue(object newValue)
             {
                 if (_pushingValue || ActionPanel.DropDownActive)
@@ -1919,7 +1915,6 @@ namespace System.ComponentModel.Design
             {
             }
 
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
             private void ActivateDropDown()
             {
                 if (_editor != null)

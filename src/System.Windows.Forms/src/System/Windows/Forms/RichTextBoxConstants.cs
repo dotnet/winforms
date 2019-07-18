@@ -4,18 +4,8 @@
 
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-    /// <summary>
-    /// </summary>
     internal static class RichTextBoxConstants
     {
-
         // flags for enum that we don't want public
         //
         internal const int RTB_HORIZ = 0x0001;
@@ -186,7 +176,6 @@ namespace System.Windows.Forms
         internal const int ECO_SAVESEL = 0x00008000;
         internal const int ECO_SELECTIONBAR = 0x01000000; // guessing this is selection margin
         internal const int ECO_VERTICAL = 0x00400000;   /* FE specific */
-
 
         /* ECO operations */
         internal const int ECOOP_SET = 0x0001;

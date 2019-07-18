@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Globalization;
-    using Microsoft.Win32;
-
     /// <summary>
     /// This is the base class for handlers for Com2 extended browsing interface
     /// such as IPerPropertyBrowsing, etc.
@@ -23,7 +21,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
-
         /// <summary>
         /// The interface that this handler managers
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
@@ -90,14 +87,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-
         /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-
             if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
             {
                 int hr = NativeMethods.S_OK;

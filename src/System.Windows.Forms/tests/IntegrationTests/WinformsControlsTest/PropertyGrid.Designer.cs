@@ -34,9 +34,9 @@ namespace WinformsControlsTest
         {
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.SuspendLayout();
-            // 
+            //
             // propertyGrid1
-            // 
+            //
             this.propertyGrid1.CommandsBorderColor = System.Drawing.SystemColors.Control;
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
@@ -44,9 +44,9 @@ namespace WinformsControlsTest
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(465, 413);
             this.propertyGrid1.TabIndex = 0;
-            // 
+            //
             // PropertyGrid
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(465, 413);

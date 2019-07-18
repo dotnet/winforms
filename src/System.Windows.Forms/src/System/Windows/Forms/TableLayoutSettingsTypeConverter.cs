@@ -2,24 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA905:SystemAndMicrosoftNamespacesRequireApproval", Scope = "namespace", Target = "System.Windows.Forms.Layout")]
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Globalization;
+using System.Text;
+using System.Xml;
+
 namespace System.Windows.Forms.Layout
 {
-
-    using System;
-    using System.ComponentModel;
-    using System.Xml;
-    using System.Text;
-    using System.Globalization;
-    using System.Diagnostics;
-    using System.ComponentModel.Design.Serialization;
-
     public class TableLayoutSettingsTypeConverter : TypeConverter
     {
-
         /// <summary>
-        ///      Determines if this converter can convert an object in the given source
-        ///      type to the native type of the converter.
+        ///  Determines if this converter can convert an object in the given source
+        ///  type to the native type of the converter.
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -31,8 +26,8 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        ///    <para>Gets a value indicating whether this converter can
-        ///       convert an object to the given destination type using the context.</para>
+        ///  Gets a value indicating whether this converter can
+        ///  convert an object to the given destination type using the context.
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
@@ -44,11 +39,10 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        ///      Converts the given object to the converter's native type.
+        ///  Converts the given object to the converter's native type.
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-
             if (value is string)
             {
                 XmlDocument tableLayoutSettingsXml = new XmlDocument();
@@ -63,8 +57,6 @@ namespace System.Windows.Forms.Layout
             }
             return base.ConvertFrom(context, culture, value);
         }
-
-
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
@@ -82,13 +74,12 @@ namespace System.Windows.Forms.Layout
                 xmlWriter.WriteStartElement("TableLayoutSettings");
 
                 //
-                // write controls 
+                // write controls
                 //
                 xmlWriter.WriteStartElement("Controls");
 
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation())
                 {
-
 
                     xmlWriter.WriteStartElement("Control");
                     xmlWriter.WriteAttributeString("Name", c.Name.ToString());
@@ -104,7 +95,7 @@ namespace System.Windows.Forms.Layout
                 xmlWriter.WriteEndElement(); // end Controls
 
                 //
-                // write columns 
+                // write columns
                 //
                 xmlWriter.WriteStartElement("Columns");
                 StringBuilder columnStyles = new StringBuilder();
@@ -120,7 +111,7 @@ namespace System.Windows.Forms.Layout
                 xmlWriter.WriteEndElement(); // end columns
 
                 //
-                // write rows 
+                // write rows
                 //
                 xmlWriter.WriteStartElement("Rows");
                 StringBuilder rowStyles = new StringBuilder();
@@ -134,7 +125,6 @@ namespace System.Windows.Forms.Layout
                 }
                 xmlWriter.WriteAttributeString("Styles", rowStyles.ToString());
                 xmlWriter.WriteEndElement(); // end Rows
-
 
                 xmlWriter.WriteEndElement(); // end TableLayoutSettings
 
@@ -168,8 +158,6 @@ namespace System.Windows.Forms.Layout
             return valueIfNotFound;
         }
 
-
-
         private void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments)
         {
             foreach (XmlNode controlXmlNode in controlXmlFragments)
@@ -191,9 +179,7 @@ namespace System.Windows.Forms.Layout
 
             }
 
-
         }
-
 
         private void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns)
         {
@@ -271,11 +257,8 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-
     }
 
 }
-
-
 
 

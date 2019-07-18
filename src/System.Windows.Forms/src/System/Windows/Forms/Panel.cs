@@ -2,24 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Windows.Forms.Layout;
-
     /// <summary>
-    ///    <para>
-    ///       Represents a <see cref='System.Windows.Forms.Panel'/>
-    ///       control.</para>
+    ///  Represents a <see cref='Panel'/>
+    ///  control.
     /// </summary>
     [
     ComVisible(true),
@@ -32,11 +24,10 @@ namespace System.Windows.Forms
     ]
     public class Panel : ScrollableControl
     {
-
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Panel'/> class.</para>
+        /// Initializes a new instance of the <see cref='Panel'/> class.
         /// </summary>
         public Panel()
         : base()
@@ -50,7 +41,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Override to re-expose AutoSize.</para>
+        ///  Override to re-expose AutoSize.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -75,7 +66,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
@@ -115,8 +106,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Indicates the
-        ///       border style for the control.</para>
+        ///  Indicates the
+        ///  border style for the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -148,10 +139,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Returns the parameters needed to create the handle.  Inheriting classes
-        ///    can override this to provide extra functionality.  They should not,
-        ///    however, forget to call base.getCreateParams() first to get the struct
-        ///    filled up with the basic info.
+        ///  Returns the parameters needed to create the handle.  Inheriting classes
+        ///  can override this to provide extra functionality.  They should not,
+        ///  however, forget to call base.getCreateParams() first to get the struct
+        ///  filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -177,8 +168,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -222,8 +213,6 @@ namespace System.Windows.Forms
             remove => base.KeyPress -= value;
         }
 
-        /// <summary>
-        /// </summary>
         [DefaultValue(false)]
         new public bool TabStop
         {
@@ -237,8 +226,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text
         {
@@ -260,10 +247,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Fires the event indicating that the panel has been resized.
-        ///       Inheriting controls should use this in favour of actually listening to
-        ///       the event, but should not forget to call base.onResize() to
-        ///       ensure that the event is still fired for external listeners.</para>
+        ///  Fires the event indicating that the panel has been resized.
+        ///  Inheriting controls should use this in favour of actually listening to
+        ///  the event, but should not forget to call base.onResize() to
+        ///  ensure that the event is still fired for external listeners.
         /// </summary>
         protected override void OnResize(EventArgs eventargs)
         {
@@ -273,7 +260,6 @@ namespace System.Windows.Forms
             }
             base.OnResize(eventargs);
         }
-
 
         internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
         {
@@ -288,8 +274,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         private static string StringFromBorderStyle(BorderStyle value)
         {
             Type borderStyleType = typeof(BorderStyle);
@@ -297,11 +281,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", BorderStyle: " + StringFromBorderStyle(borderStyle);
         }

@@ -4,44 +4,35 @@
 
 //#define DEBUG_PAINT
 
-
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    using System.Drawing;
-    using System.Windows.Forms.Layout;
-    using System.Collections.Specialized;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel.Design.Serialization;
-    using System.Globalization;
-    using System.Windows.Forms.Internal;
-
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripPanelDesigner, " + AssemblyRef.SystemDesign)]
-    [ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
+    [ToolboxBitmap(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
     public class ToolStripPanel : ContainerControl, IArrangedElement
     {
-
-
         private Orientation orientation = Orientation.Horizontal;
         private static readonly Padding rowMargin = new Padding(3, 0, 0, 0);
         private Padding scaledRowMargin = rowMargin;
         private ToolStripRendererSwitcher rendererSwitcher = null;
-        private readonly Type currentRendererType = typeof(System.Type);
+        private readonly Type currentRendererType = typeof(Type);
         private BitVector32 state = new BitVector32();
         private readonly ToolStripContainer owner;
-
 
 #if DEBUG
         internal static TraceSwitch ToolStripPanelDebug = new TraceSwitch("ToolStripPanelDebug", "Debug code for rafting mouse movement");
         internal static TraceSwitch ToolStripPanelFeedbackDebug = new TraceSwitch("ToolStripPanelFeedbackDebug", "Debug code for rafting feedback");
         internal static TraceSwitch ToolStripPanelMissingRowDebug = new TraceSwitch("ToolStripPanelMissingRowDebug", "Debug code for rafting feedback");
-
 #else
         internal static TraceSwitch ToolStripPanelDebug;
         internal static TraceSwitch ToolStripPanelFeedbackDebug;
@@ -50,7 +41,6 @@ namespace System.Windows.Forms
 
         [ThreadStatic]
         private static Rectangle lastFeedbackRect = Rectangle.Empty;
-
 
         // properties
         private static readonly int PropToolStripPanelRowCollection = PropertyStore.CreateKey();
@@ -63,8 +53,6 @@ namespace System.Windows.Forms
         private static readonly int stateEndInit = BitVector32.CreateMask(stateInJoin);
         private static readonly int stateLayoutSuspended = BitVector32.CreateMask(stateEndInit);
         private static readonly int stateRightToLeftChanged = BitVector32.CreateMask(stateLayoutSuspended);
-
-
 
         // events
         internal static readonly Padding DragMargin = new Padding(10);
@@ -141,7 +129,6 @@ namespace System.Windows.Forms
             set { base.AutoScrollMinSize = value; }
         }
 
-
         [
             DefaultValue(true),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
@@ -158,7 +145,6 @@ namespace System.Windows.Forms
             }
 
         }
-
 
         /// Override base AutoSizeChanged to we can change visibility/browsability attributes
         [
@@ -253,7 +239,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         public Orientation Orientation
         {
             get
@@ -291,8 +276,6 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public ToolStripRenderer Renderer
         {
             get
@@ -304,7 +287,6 @@ namespace System.Windows.Forms
                 RendererSwitcher.Renderer = value;
             }
         }
-
 
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
@@ -323,8 +305,6 @@ namespace System.Windows.Forms
         }
 
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged
         {
             add => Events.AddHandler(EventRendererChanged, value);
@@ -358,9 +338,7 @@ namespace System.Windows.Forms
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ToolStripPanelRowsDescr)),
-        SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")
         ]
-
         public ToolStripPanelRow[] Rows
         {
             get
@@ -370,7 +348,6 @@ namespace System.Windows.Forms
                 return rows;
             }
         }
-
 
         [
         Browsable(false),
@@ -446,14 +423,12 @@ namespace System.Windows.Forms
             remove => base.TextChanged -= value;
         }
 
-
         #region ISupportInitialize
 
         public void BeginInit()
         {
             state[stateBeginInit] = true;
         }
-
 
         public void EndInit()
         {
@@ -475,23 +450,20 @@ namespace System.Windows.Forms
 
         #endregion ISupportInitialize
 
-
         private ToolStripPanelRowCollection CreateToolStripPanelRowCollection()
         {
             return new ToolStripPanelRowCollection(this);
         }
 
-        protected override Control.ControlCollection CreateControlsInstance()
+        protected override ControlCollection CreateControlsInstance()
         {
             return new ToolStripPanelControlCollection(this);
         }
 
-
-
         /// <summary>
-        ///    <para>Disposes of the resources (other than memory) used by
-        ///       the <see cref='System.Windows.Forms.ContainerControl'/>
-        ///       .</para>
+        ///  Disposes of the resources (other than memory) used by
+        ///  the <see cref='ContainerControl'/>
+        ///  .
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -531,9 +503,6 @@ namespace System.Windows.Forms
         {
             OnRendererChanged(e);
         }
-
-
-
 
 #if DEBUG_PAINT
                 protected  override void OnPaint(PaintEventArgs e) {
@@ -659,8 +628,6 @@ namespace System.Windows.Forms
 
         }
 
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void OnRendererChanged(EventArgs e)
         {
             Renderer.InitializePanel(this);
@@ -685,14 +652,12 @@ namespace System.Windows.Forms
             base.OnDockChanged(e);
         }
 
-
         internal void PerformUpdate()
         {
             PerformUpdate(false);
         }
         internal void PerformUpdate(bool forceLayout)
         {
-
             if (!state[stateBeginInit] && !state[stateInJoin])
             {
                 JoinControls(forceLayout);
@@ -775,7 +740,6 @@ namespace System.Windows.Forms
 
         private void GiveToolStripPanelFeedback(ToolStrip toolStripToDrag, Point screenLocation)
         {
-
             if (Orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes)
             {
                 // paint the feedback in the correct location when RTL.Yes
@@ -810,16 +774,14 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         internal static void ClearDragFeedback()
         {
-#if DEBUG            
+#if DEBUG
             if (ToolStripPanelFeedbackDebug.TraceVerbose)
             {
                 Debug.WriteLine("FEEDBACK:  clearing old feedback at "/*+ new StackTrace().ToString()*/);
             }
-#endif            
+#endif
             FeedbackRectangle oldFeedback = feedbackRect;
             feedbackRect = null;
             if (oldFeedback != null)
@@ -828,7 +790,6 @@ namespace System.Windows.Forms
             }
 
         }
-
 
         private static FeedbackRectangle CurrentFeedbackRect
         {
@@ -841,7 +802,6 @@ namespace System.Windows.Forms
                 feedbackRect = value;
             }
         }
-
 
         // The FeedbackRectangle happens to encapsulate a toolstripdropdown
         // with a special region. The feedback rectangle exposes the minimum
@@ -928,17 +888,17 @@ namespace System.Windows.Forms
                     Rectangle regionRect = bounds;    //create a region the size of the client area
                     regionRect.Inflate(-1, -1);        //squish down by one pixel
 
-                    Region rgn = new Region(bounds);  // create region 
+                    Region rgn = new Region(bounds);  // create region
                     rgn.Exclude(regionRect);          // exclude the center part
 
                     // set it into the toolstripdropdown’s region
                     Region = rgn;
                 }
 
-                // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs 
-                // calls UpdateWindow on the hwnd to force the paint to happen now.  
+                // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs
+                // calls UpdateWindow on the hwnd to force the paint to happen now.
                 //
-                // When we're changing the location of the feedback dropdown, we need to 
+                // When we're changing the location of the feedback dropdown, we need to
                 // force WM_PAINTS to happen, as things that dont respond to WM_ERASEBKGND
                 // have bits of the dropdown region drawn all over them.
                 private void ForceSynchronousPaint()
@@ -1051,9 +1011,6 @@ namespace System.Windows.Forms
             Join(toolStripToDrag, new Point(x, y));
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using ToolStrip instead of Control intentionally
-        ]
         public void Join(ToolStrip toolStripToDrag, Point location)
         {
             if (toolStripToDrag == null)
@@ -1131,7 +1088,6 @@ namespace System.Windows.Forms
                 }
             }
 
-
             //
             // Point INSIDE this rafting container
             //
@@ -1167,8 +1123,6 @@ namespace System.Windows.Forms
             else
             {
                 // Point OUTSIDE current rafting row.
-
-
 
                 Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, "RC.MoveControl - Point " + clientLocation + " is outside the current rafting row.");
 
@@ -1280,7 +1234,6 @@ namespace System.Windows.Forms
                         LayoutTransaction.DoLayout(RowsInternal[i], this, PropertyNames.Rows);
                     }
 
-
                     if (RowsInternal.IndexOf(row) > 0)
                     {
                         // When joining a new row, move the cursor to to the location of
@@ -1302,21 +1255,19 @@ namespace System.Windows.Forms
 
             }
 
-
 #if DEBUG
             Debug_VerifyOneToOneCellRowControlMatchup();
-            //            Debug_VerifyCountRows();            
+            //            Debug_VerifyCountRows();
             if (draggedControl.IsCurrentlyDragging && changedRow && !debugModeOnly_ChangedContainers)
             {
                 // if we have changed containers, we're in a SuspendLayout.
                 Debug_VerifyNoOverlaps();
             }
-#endif            
+#endif
         }
 
         private void MoveOutsideContainer(ToolStrip toolStripToDrag, Point screenLocation)
         {
-
             // look for another rafting container.
             ToolStripPanel panel = ToolStripManager.ToolStripPanelFromPoint(toolStripToDrag, screenLocation);
             if (panel != null)
@@ -1326,7 +1277,7 @@ namespace System.Windows.Forms
                     panel.MoveControl(toolStripToDrag, screenLocation);
                 }
                 toolStripToDrag.PerformLayout();
-#if DEBUG             
+#if DEBUG
                 ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
                 if (draggedControl.IsCurrentlyDragging)
                 {
@@ -1366,7 +1317,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-
                 if (bounds.Contains(clientLocation))
                 {
                     return row;
@@ -1375,9 +1325,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-
         #endregion JoinAndMove
-
 
         [Conditional("DEBUG")]
         private void Debug_VerifyOneToOneCellRowControlMatchup()
@@ -1485,10 +1433,8 @@ namespace System.Windows.Forms
         ListBindable(false),
         ComVisible(false)
         ]
-        [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
         public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
         {
-
             private readonly ToolStripPanel owner;
             public ToolStripPanelRowCollection(ToolStripPanel owner)
             {
@@ -1502,7 +1448,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// <para></para>
+            ///
             /// </summary>
             public new virtual ToolStripPanelRow this[int index]
             {
@@ -1523,7 +1469,6 @@ namespace System.Windows.Forms
                 return retVal;
 
             }
-
 
             public void AddRange(ToolStripPanelRow[] value)
             {
@@ -1625,7 +1570,6 @@ namespace System.Windows.Forms
                 set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
             }
 
-
             public int IndexOf(ToolStripPanelRow value)
             {
                 return InnerList.IndexOf(value);
@@ -1688,20 +1632,15 @@ namespace System.Windows.Forms
                 OnAfterRemove(item);
             }
 
-
-
             public void CopyTo(ToolStripPanelRow[] array, int index)
             {
                 InnerList.CopyTo(array, index);
             }
 
-
-
         }
 
         internal class ToolStripPanelControlCollection : WindowsFormsUtils.TypedControlCollection
         {
-
             private readonly ToolStripPanel owner;
 
             public ToolStripPanelControlCollection(ToolStripPanel owner)
@@ -1737,7 +1676,6 @@ namespace System.Windows.Forms
                     InnerList.Sort(new XYComparer());
                 }
             }
-
 
             // sort by X, then Y
             public class XYComparer : IComparer

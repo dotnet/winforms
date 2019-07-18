@@ -33,7 +33,6 @@ namespace System.Windows.Forms
         /// Properties are under category groups, which are defined by the
         /// properties themselves, and are alphabetical within those groups.
         /// </summary>
-
         CategorizedAlphabetical = Alphabetical | Categorized,
     }
 }

@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Layout
                     {
                         proposedConstraints.Height = bounds.Height;
                     }
-    
+
                     Size prefSize = element.GetPreferredSize(proposedConstraints);
                     Rectangle newBounds = bounds;
                     if (CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink)
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Layout
                     }
                     else
                     {
-                        // we had whacked this check, but it turns out it causes undesirable 
+                        // we had whacked this check, but it turns out it causes undesirable
                         // behavior in things like panel. a panel with no elements sizes to 0,0.
                         if (bounds.Width < prefSize.Width || bounds.Height < prefSize.Height)
                         {
@@ -954,7 +954,7 @@ namespace System.Windows.Forms.Layout
                     if (IsAnchored(anchor, AnchorStyles.Right))
                     {
                         // If we are right anchored, see what the anchor distance between our right edge and
-                        // the container is, and make sure our container is large enough to accomodate us.                           
+                        // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
                         if (anchorDest.Width < 0)
                         {
@@ -969,7 +969,7 @@ namespace System.Windows.Forms.Layout
                     if (IsAnchored(anchor, AnchorStyles.Bottom))
                     {
                         // If we are right anchored, see what the anchor distance between our right edge and
-                        // the container is, and make sure our container is large enough to accomodate us.                           
+                        // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
                         if (anchorDest.Height < 0)
                         {
@@ -1001,7 +1001,6 @@ namespace System.Windows.Forms.Layout
             Right = 0x08
         }
 
-
 #if DEBUG_PAINT_ANCHOR
 	    // handy method for drawing out the child anchor infos
         internal static void  DebugPaintAnchor(Graphics g, Control parent)
@@ -1019,7 +1018,7 @@ namespace System.Windows.Forms.Layout
                 int top = layout.Top + displayRect.Y;
                 int right = layout.Right + displayRect.X;
                 int bottom = layout.Bottom + displayRect.Y;
-     
+
                 AnchorStyles anchor = GetAnchor(child as IArrangedElement);
 
                 // Repeat of GetAnchorDestination
@@ -1027,7 +1026,7 @@ namespace System.Windows.Forms.Layout
                 {
                     Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting right");
                     right += displayRect.Width;
-     
+
                     if (!IsAnchored(anchor, AnchorStyles.Left))
                     {
                         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left");
@@ -1040,12 +1039,12 @@ namespace System.Windows.Forms.Layout
                     right += (displayRect.Width / 2);
                     left += (displayRect.Width / 2);
                 }
-     
+
                 if (IsAnchored(anchor, AnchorStyles.Bottom))
                 {
                     Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting bottom");
                     bottom += displayRect.Height;
-     
+
                     if (!IsAnchored(anchor, AnchorStyles.Top))
                     {
                         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top");
@@ -1067,18 +1066,18 @@ namespace System.Windows.Forms.Layout
                 if (IsAnchored(anchor, AnchorStyles.Left))
                 {
                     TextRenderer.DrawText(g, "left " + layout.Left.ToString(), parent.Font, new Point(left/2, child.Top - 16), Color.Green);
-                    g.FillRectangle(Brushes.Green, 0, child.Top -2, left, 1);                    
-                }                          
+                    g.FillRectangle(Brushes.Green, 0, child.Top -2, left, 1);
+                }
                 if (IsAnchored(anchor, AnchorStyles.Top))
                 {
                     TextRenderer.DrawText(g, "top " + layout.Top.ToString(), parent.Font, new Point(child.Left -100, top/2), Color.Blue);
 
-                    g.FillRectangle(Brushes.Blue, child.Left -1, 0, 1, top);                    
+                    g.FillRectangle(Brushes.Blue, child.Left -1, 0, 1, top);
                 }
                 if (IsAnchored(anchor, AnchorStyles.Bottom))
                 {
                     TextRenderer.DrawText(g, "bottom " + layout.Bottom.ToString(), parent.Font, new Point(child.Left -100, right/2), Color.Red);
-                    g.FillRectangle(Brushes.Red, child.Left -2, 1, 1, bottom);                    
+                    g.FillRectangle(Brushes.Red, child.Left -2, 1, 1, bottom);
                 }
             }
         }
@@ -1110,7 +1109,7 @@ namespace System.Windows.Forms.Layout
         internal static string Debug_GetLayoutInfo(Control control, int indents)
         {
             string lineBreak = Environment.NewLine + Debug_GetIndents(indents + 1);
-            string layoutInfo = string.Format(System.Globalization.CultureInfo.CurrentCulture, 
+            string layoutInfo = string.Format(System.Globalization.CultureInfo.CurrentCulture,
                                             "Handle {9} Name {1} Type {2} {0} Bounds {3} {0} AutoSize {4} {0} Dock [{5}] Anchor [{6}] {0} Padding [{7}] Margin [{8}]",
                                                 lineBreak,
                                                 control.Name,

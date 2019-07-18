@@ -27,8 +27,8 @@ namespace System.Windows.Forms.Design
         protected override CollectionForm CreateCollectionForm() => new StringCollectionForm(this);
 
         /// <summary>
-        ///   Gets the help topic to display for the dialog help button or pressing F1. 
-        ///   Override to display a different help topic.
+        ///  Gets the help topic to display for the dialog help button or pressing F1.
+        ///  Override to display a different help topic.
         /// </summary>
         protected override string HelpTopic => "net.ComponentModel.StringCollectionEditor";
 
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  NOTE: The following code is required by the form designer. 
+            ///  NOTE: The following code is required by the form designer.
             ///  It can be modified using the form editor.  Do not modify it using the code editor.
             /// </summary>
             private void InitializeComponent()
@@ -101,42 +101,42 @@ namespace System.Windows.Forms.Design
                 _overarchingLayoutPanel.SuspendLayout();
                 SuspendLayout();
                 // instruction
-                // 
+                //
                 resources.ApplyResources(_instruction, "instruction");
                 _overarchingLayoutPanel.SetColumnSpan(_instruction, 2);
                 _instruction.Name = "instruction";
-                // 
+                //
                 // textEntry
-                // 
+                //
                 resources.ApplyResources(_textEntry, "textEntry");
                 _overarchingLayoutPanel.SetColumnSpan(_textEntry, 2);
                 _textEntry.AcceptsTab = true;
                 _textEntry.AcceptsReturn = true;
                 _textEntry.Name = "textEntry";
-                // 
+                //
                 // okButton
-                // 
+                //
                 resources.ApplyResources(_okButton, "okButton");
                 _okButton.DialogResult = Forms.DialogResult.OK;
                 _okButton.Name = "okButton";
-                // 
+                //
                 // cancelButton
-                // 
+                //
                 resources.ApplyResources(_cancelButton, "cancelButton");
                 _cancelButton.DialogResult = Forms.DialogResult.Cancel;
                 _cancelButton.Name = "cancelButton";
-                // 
+                //
                 // overarchingLayoutPanel
-                // 
+                //
                 resources.ApplyResources(_overarchingLayoutPanel, "overarchingLayoutPanel");
                 _overarchingLayoutPanel.Controls.Add(_instruction, 0, 0);
                 _overarchingLayoutPanel.Controls.Add(_textEntry, 0, 2);
                 _overarchingLayoutPanel.Controls.Add(_okButton, 0, 3);
                 _overarchingLayoutPanel.Controls.Add(_cancelButton, 1, 3);
                 _overarchingLayoutPanel.Name = "overarchingLayoutPanel";
-                // 
+                //
                 // StringCollectionEditor
-                // 
+                //
                 resources.ApplyResources(this, "$this");
                 AutoScaleMode = Forms.AutoScaleMode.Font;
                 Controls.Add(_overarchingLayoutPanel);

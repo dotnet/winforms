@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.ComponentModel.Design
@@ -113,7 +112,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Returns true if DTEL (WSOD) is currently loading.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtel", Justification = "DTEL - is an abbreviation for Design Time Error Loader")]
         public bool DtelLoading
         {
             get;
@@ -379,8 +377,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Protected override of Dispose that allows for cleanup.
         /// </summary>
-        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -516,7 +513,6 @@ namespace System.ComponentModel.Design
         /// Called when the loading process has completed.  This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.  It can also be used to create a view for this design surface.  If code in this event handler or override throws an exception,
         /// the designer will be unloaded.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoaded(LoadedEventArgs e)
         {
             Loaded?.Invoke(this, e);
@@ -533,7 +529,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when the loading process is about to begin.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoading(EventArgs e)
         {
             Loading?.Invoke(this, e);
@@ -550,7 +545,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when a designer has finished unloading a document.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloaded(EventArgs e)
         {
             Unloaded?.Invoke(this, e);
@@ -568,7 +562,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloading(EventArgs e)
         {
             Unloading?.Invoke(this, e);
@@ -577,7 +570,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnViewActivate(EventArgs e)
         {
             ViewActivated?.Invoke(this, e);

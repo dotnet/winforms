@@ -2,29 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewRow'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
-    /// control.</para>
+    /// Represents a collection of <see cref='DataGridViewRow'/> objects in the <see cref='DataGrid'/>
+    /// control.
     /// </summary>
     [
         ListBindable(false),
-        DesignerSerializerAttribute("System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign,
+        DesignerSerializer("System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign,
                                     "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-        SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewRowCollection> implementation
     ]
     public class DataGridViewRowCollection : ICollection, IList
     {
@@ -146,7 +140,6 @@ namespace System.Windows.Forms
             return new UnsharingRowEnumerator(this);
         }
 
-
         public DataGridViewRowCollection(DataGridView dataGridView)
         {
             InvalidateCachedRowCounts();
@@ -174,9 +167,6 @@ namespace System.Windows.Forms
 
         protected ArrayList List
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // Illegitimate report.
-            ]
             get
             {
                 // All rows need to be unshared
@@ -212,7 +202,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the DataGridViewRow with the specified index.
+        ///  Retrieves the DataGridViewRow with the specified index.
         /// </summary>
         public DataGridViewRow this[int index]
         {
@@ -410,7 +400,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewRow'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridViewRow dataGridViewRow)
         {
@@ -928,7 +918,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridViewRow is contained in this collection.
+        ///  Checks to see if a DataGridViewRow is contained in this collection.
         /// </summary>
         public virtual bool Contains(DataGridViewRow dataGridViewRow)
         {
@@ -1428,7 +1418,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Inserts a <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
+        /// Inserts a <see cref='DataGridViewRow'/> to this collection.
         /// </summary>
         public virtual void Insert(int rowIndex, DataGridViewRow dataGridViewRow)
         {
@@ -1794,7 +1784,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Inserts a range of <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
+        /// Inserts a range of <see cref='DataGridViewRow'/> to this collection.
         /// </summary>
         public virtual void InsertRange(int rowIndex, params DataGridViewRow[] dataGridViewRows)
         {
@@ -2180,9 +2170,6 @@ namespace System.Windows.Forms
             DataGridView.OnRowCollectionChanged_PostNotification(recreateNewRow, newCurrentCell.X == -1, cca, dataGridViewRow, rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // We don't want to use DataGridViewBand here.
-        ]
         public virtual void Remove(DataGridViewRow dataGridViewRow)
         {
             if (dataGridViewRow == null)
@@ -2267,7 +2254,7 @@ namespace System.Windows.Forms
                 dataGridViewRow.DetachFromDataGridView();
             }
             // Note: cannot set dataGridViewRow.DataGridView to null because this row may be shared and still be used.
-            // Note that OnCollectionChanged takes care of calling this.items.RemoveAt(index) & 
+            // Note that OnCollectionChanged takes care of calling this.items.RemoveAt(index) &
             // this.rowStates.RemoveAt(index). Can't do it here since OnCollectionChanged uses the arrays.
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewRow), index, 1, true, false, false, newCurrentCell);
         }
@@ -2513,7 +2500,7 @@ namespace System.Windows.Forms
                     if (inVerifyRowFrozenStates) return;
 
                     inVerifyRowFrozenStates = true;
-                    try 
+                    try
                     {
                         bool previousVisibleRowFrozen = true;
                         for (int rowIndex = 0; rowIndex < this.items.Count; rowIndex++)
@@ -2671,7 +2658,7 @@ namespace System.Windows.Forms
 
             private object Pivot(int left, int center, int right)
             {
-                // find median-of-3 (left, center and right) and sort these 3 elements          
+                // find median-of-3 (left, center and right) and sort these 3 elements
                 if (rowComparer.CompareObjects(rowComparer.GetComparedObject(left), rowComparer.GetComparedObject(center), left, center) > 0)
                 {
                     owner.SwapSortedRows(left, center);
@@ -2799,8 +2786,7 @@ namespace System.Windows.Forms
                     Debug.Assert(value2 is DataGridViewRow);
                     Debug.Assert(value1 != null);
                     Debug.Assert(value2 != null);
-                    // 
-
+                    //
 
                     result = customComparer.Compare(value1, value2);
                 }
@@ -2827,7 +2813,7 @@ namespace System.Windows.Forms
             private int current;
 
             /// <summary>
-            ///     Creates a new enumerator that will enumerate over the rows and unshare the accessed rows if needed.
+            ///  Creates a new enumerator that will enumerate over the rows and unshare the accessed rows if needed.
             /// </summary>
             public UnsharingRowEnumerator(DataGridViewRowCollection owner)
             {
@@ -2836,7 +2822,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Moves to the next element, or returns false if at the end.
+            ///  Moves to the next element, or returns false if at the end.
             /// </summary>
             bool IEnumerator.MoveNext()
             {
@@ -2854,7 +2840,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Resets the enumeration back to the beginning.
+            ///  Resets the enumeration back to the beginning.
             /// </summary>
             void IEnumerator.Reset()
             {
@@ -2862,7 +2848,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the current value in the enumerator.
+            ///  Retrieves the current value in the enumerator.
             /// </summary>
             object IEnumerator.Current
             {

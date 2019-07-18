@@ -6,21 +6,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ISupportInitialize.EndInit():System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ICancelAddNew.CancelNew(System.Int32):System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ICancelAddNew.EndNew(System.Int32):System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ISupportInitialize.BeginInit():System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ISupportInitializeNotification.get_IsInitialized():System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.IBindingList.AddIndex(System.ComponentModel.PropertyDescriptor):System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ISupportInitializeNotification.add_Initialized(System.EventHandler):System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.ISupportInitializeNotification.remove_Initialized(System.EventHandler):System.Void")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.Windows.Forms.BindingSource.System.ComponentModel.IBindingList.RemoveIndex(System.ComponentModel.PropertyDescriptor):System.Void")]
 
 namespace System.Windows.Forms
 {
@@ -29,9 +18,6 @@ namespace System.Windows.Forms
     [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
     [Designer("System.Windows.Forms.Design.BindingSourceDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionBindingSource))]
-    [SuppressMessage("Microsoft.Design", "CA1035:ICollectionImplementationsHaveStronglyTypedMembers", Justification = "ICollection.CopyTo: Its just a wrapper class, it doesn't have a specific member type")]
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "ICollection: We don't want class name to have to end in 'Collection'")]
-    [SuppressMessage("Microsoft.Design", "CA1039:ListsAreStronglyTyped", Justification = "IList.Add: Its just a wrapper class, it doesn't have a specific member type")]
     public class BindingSource : Component,
                                  IBindingListView,
                                  ITypedList,
@@ -95,7 +81,6 @@ namespace System.Windows.Forms
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Indirect call to OnListChanged virtual. Unavoidable but quite acceptible.")]
         public BindingSource(object dataSource, string dataMember) : base()
         {
             // Set data source and data member
@@ -119,7 +104,7 @@ namespace System.Windows.Forms
             WireDataSource();
         }
 
-        public BindingSource(System.ComponentModel.IContainer container) : this()
+        public BindingSource(IContainer container) : this()
         {
             if (container == null)
             {
@@ -691,7 +676,6 @@ namespace System.Windows.Forms
         /// Otherwise we assume the type represents the item type, in which case we create
         /// a typed BindingList of that item type.
         /// </summary>
-
         private static IList GetListFromType(Type type)
         {
             if (typeof(ITypedList).IsAssignableFrom(type) && typeof(IList).IsAssignableFrom(type))
@@ -1100,7 +1084,6 @@ namespace System.Windows.Forms
         /// Binds the BindingSource to the list specified by its DataSource and DataMember
         /// properties.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "List is cast to IEnumerable twice. Acceptible trade-off versus code clarity (this method contains *critical* logic).")]
         private void ResetList()
         {
             // Don't bind during initialization, since the data source may not have been initialized yet.
@@ -1495,7 +1478,7 @@ namespace System.Windows.Forms
             int ret = -1;
 
             // Special case: If no data source has been assigned, the inner list will just
-            // be an empty un-typed binding list. 
+            // be an empty un-typed binding list.
             if (_dataSource == null && List.Count == 0)
             {
                 SetList(CreateBindingList((value == null) ? typeof(object) : value.GetType()), true, true);
@@ -1803,7 +1786,6 @@ namespace System.Windows.Forms
 
             iblv.ApplySort(sorts);
         }
-
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual ListSortDescriptionCollection SortDescriptions

@@ -2,16 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Windows.Forms.ButtonInternal;
-
-
     /// <summary>
     /// A non selectable ToolStrip item
     /// </summary>
@@ -28,14 +22,12 @@ namespace System.Windows.Forms
         const int AUTOSCROLL_UPDATE = 50;
         private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
 
-
         private Timer mouseDownTimer;
 
         public ToolStripScrollButton(bool up) : base(CreateControlInstance(up))
         {
             this.up = up;
         }
-
 
         private static Control CreateControlInstance(bool up)
         {
@@ -77,7 +69,6 @@ namespace System.Windows.Forms
                 return downScrollImage;
             }
         }
-
 
         internal StickyLabel Label
         {
@@ -185,7 +176,6 @@ namespace System.Windows.Forms
 
         internal class StickyLabel : Label
         {
-
             public StickyLabel()
             {
             }
@@ -210,7 +200,7 @@ namespace System.Windows.Forms
 
                 if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
                 {
-                    // 
+                    //
 
                     DefWndProc(ref m);
                     return;

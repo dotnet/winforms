@@ -2,26 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using Microsoft.Win32;
-    using System.Globalization;
-
-
     /// <summary>
-    ///   This class performs basic operation for marshaling data passed
-    ///   in from native in one of the CA*** structs (CADWORD, CAUUID, etc),
-    ///   which are structs in which the first word is the number of elements
-    ///   and the second is a pointer to an array of such elements.
-    ///
+    ///  This class performs basic operation for marshaling data passed
+    ///  in from native in one of the CA*** structs (CADWORD, CAUUID, etc),
+    ///  which are structs in which the first word is the number of elements
+    ///  and the second is a pointer to an array of such elements.
     /// </summary>
     internal abstract class BaseCAMarshaler
     {
-
         private static readonly TraceSwitch CAMarshalSwitch = new TraceSwitch("CAMarshal", "BaseCAMarshaler: Debug CA* struct marshaling");
 
         private IntPtr caArrayAddress;
@@ -29,7 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private object[] itemArray;
 
         /// <summary>
-        ///     Base ctor
+        ///  Base ctor
         /// </summary>
         protected BaseCAMarshaler(NativeMethods.CA_STRUCT caStruct) : base()
         {
@@ -62,18 +56,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         protected abstract Array CreateArray();
 
         /// <summary>
-        ///     Returns the type of item this marshaler will
-        ///     return in the items array.
+        ///  Returns the type of item this marshaler will
+        ///  return in the items array.
         /// </summary>
         public abstract Type ItemType
         {
             get;
         }
 
-
         /// <summary>
-        ///     Returns the count of items that will be or have been
-        ///     marshaled.
+        ///  Returns the count of items that will be or have been
+        ///  marshaled.
         /// </summary>
         public int Count
         {
@@ -83,10 +76,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-
-
         /// <summary>
-        ///     The marshaled items.
+        ///  The marshaled items.
         /// </summary>
         public virtual object[] Items
         {
@@ -113,10 +104,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-
         /// <summary>
-        ///     Override this member to perform marshalling of a single item
-        ///     given it's native address.
+        ///  Override this member to perform marshalling of a single item
+        ///  given it's native address.
         /// </summary>
         protected abstract object GetItemFromAddress(IntPtr addr);
 

@@ -69,7 +69,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         protected override bool DefaultAutoToolTip
         {
             get
@@ -107,7 +106,6 @@ namespace System.Windows.Forms
             return new ToolStripDropDownButtonInternalLayout(this);
         }
 
-
         protected override ToolStripDropDown CreateDefaultDropDown()
         {
             // AutoGenerate a ToolStrip DropDown - set the property so we hook events
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // opening should happen on mouse down.  
+                    // opening should happen on mouse down.
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
@@ -170,9 +168,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-
             if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
@@ -207,9 +204,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode)
         {
             // checking IsMnemonic is not necesssary - toolstrip does this for us.
@@ -223,9 +217,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of Accessibleobject for use with ToolStripDropDownButton        
+        /// An implementation of Accessibleobject for use with ToolStripDropDownButton
         /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
             private readonly ToolStripDropDownButton ownerItem = null;
@@ -257,7 +251,7 @@ namespace System.Windows.Forms
             private static Padding             dropDownArrowPadding = new Padding(DROP_DOWN_ARROW_PADDING);
             private Padding                    scaledDropDownArrowPadding = dropDownArrowPadding;
             private Rectangle                  dropDownArrowRect    = Rectangle.Empty;
-            
+
             public ToolStripDropDownButtonInternalLayout(ToolStripDropDownButton ownerItem) : base(ownerItem) {
                 if (DpiHelper.IsPerMonitorV2Awareness)
                 {
@@ -322,7 +316,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // else we're rendering vertically. 
+                        // else we're rendering vertically.
                         int heightOfDropDown = dropDownArrowSize.Height + scaledDropDownArrowPadding.Vertical;
 
                         options.client.Height -= heightOfDropDown;
@@ -348,6 +342,5 @@ namespace System.Windows.Forms
 
     }
 }
-
 
 

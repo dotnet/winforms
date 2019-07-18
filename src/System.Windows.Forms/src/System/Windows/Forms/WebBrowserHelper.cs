@@ -44,7 +44,6 @@ namespace System.Windows.Forms
             Active = 2
         };
 
-
         //
         // Static members:
         //
@@ -75,7 +74,6 @@ namespace System.Windows.Forms
         // Window message to check if we have already sub-classed
         internal static readonly int REGMSG_MSG = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_subclassCheck");
         internal const int REGMSG_RETVAL = 123;
-
 
         //
         // Static helper methods:
@@ -136,7 +134,6 @@ namespace System.Windows.Forms
         {
             logPixelsY = -1;
         }
-
 
         //
         // Gets the selection service from the control's site

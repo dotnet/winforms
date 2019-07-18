@@ -2,30 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Reflection;
-    using System.Text;
-    using System.Runtime.InteropServices;
-    using System.Collections.Specialized;
-    using System.Drawing.Design;
-    using System.Windows.Forms.VisualStyles;
-
     /// <summary>
-    ///    <para>
-    ///       Represents a Windows text box control.
-    ///    </para>
+    ///  Represents a Windows text box control.
     /// </summary>
-
-
     [
       ClassInterface(ClassInterfaceType.AutoDispatch),
       ComVisible(true),
@@ -34,61 +21,60 @@ namespace System.Windows.Forms
     ]
     public class TextBox : TextBoxBase
     {
-
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
 
         /// <summary>
-        ///     Controls whether or not the edit box consumes/respects ENTER key
-        ///     presses.  While this is typically desired by multiline edits, this
-        ///     can interfere with normal key processing in a dialog.
+        ///  Controls whether or not the edit box consumes/respects ENTER key
+        ///  presses.  While this is typically desired by multiline edits, this
+        ///  can interfere with normal key processing in a dialog.
         /// </summary>
         private bool acceptsReturn = false;
 
         /// <summary>
-        ///     Indicates what the current special password character is.  This is 
-        ///     displayed instead of any other text the user might enter.
+        ///  Indicates what the current special password character is.  This is
+        ///  displayed instead of any other text the user might enter.
         /// </summary>
         private char passwordChar = (char)0;
 
         private bool useSystemPasswordChar;
 
         /// <summary>
-        ///     Controls whether or not the case of characters entered into the edit
-        ///     box is forced to a specific case.
+        ///  Controls whether or not the case of characters entered into the edit
+        ///  box is forced to a specific case.
         /// </summary>
         private CharacterCasing characterCasing = System.Windows.Forms.CharacterCasing.Normal;
 
         /// <summary>
-        ///     Controls which scrollbars appear by default.
+        ///  Controls which scrollbars appear by default.
         /// </summary>
         private ScrollBars scrollBars = System.Windows.Forms.ScrollBars.None;
 
         /// <summary>
-        ///     Controls text alignment in the edit box.
+        ///  Controls text alignment in the edit box.
         /// </summary>
         private HorizontalAlignment textAlign = HorizontalAlignment.Left;
 
         /// <summary>
-        ///     True if the selection has been set by the user.  If the selection has
-        ///     never been set and we get focus, we focus all the text in the control
-        ///     so we mimic the Windows dialog manager.
+        ///  True if the selection has been set by the user.  If the selection has
+        ///  never been set and we get focus, we focus all the text in the control
+        ///  so we mimic the Windows dialog manager.
         /// </summary>
         private bool selectionSet = false;
 
         /// <summary>
-        ///     This stores the value for the autocomplete mode which can be either
-        ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
+        ///  This stores the value for the autocomplete mode which can be either
+        ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </summary>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
 
         /// <summary>
-        ///     This stores the value for the autoCompleteSource mode which can be one of the values
-        ///     from AutoCompleteSource enum.
+        ///  This stores the value for the autoCompleteSource mode which can be one of the values
+        ///  from AutoCompleteSource enum.
         /// </summary>
         private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
 
         /// <summary>
-        ///     This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
+        ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </summary>
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private bool fromHandleCreate = false;
@@ -99,14 +85,11 @@ namespace System.Windows.Forms
         {
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether pressing ENTER
-        ///       in a multiline <see cref='System.Windows.Forms.TextBox'/>
-        ///       control creates a new line of text in the control or activates the default button
-        ///       for the form.
-        ///    </para>
+        ///  Gets or sets a value indicating whether pressing ENTER
+        ///  in a multiline <see cref='TextBox'/>
+        ///  control creates a new line of text in the control or activates the default button
+        ///  for the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -126,11 +109,10 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     This is the AutoCompleteMode which can be either
-        ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend. 
-        ///     This property in conjunction with AutoCompleteSource enables the AutoComplete feature for TextBox.
+        ///  This is the AutoCompleteMode which can be either
+        ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
+        ///  This property in conjunction with AutoCompleteSource enables the AutoComplete feature for TextBox.
         /// </summary>
         [
         DefaultValue(AutoCompleteMode.None),
@@ -160,14 +142,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the AutoCompleteSource which can be one of the 
-        ///     values from AutoCompleteSource enumeration. 
-        ///     This property in conjunction with AutoCompleteMode enables the AutoComplete feature for TextBox.
+        ///  This is the AutoCompleteSource which can be one of the
+        ///  values from AutoCompleteSource enumeration.
+        ///  This property in conjunction with AutoCompleteMode enables the AutoComplete feature for TextBox.
         /// </summary>
         [
         DefaultValue(AutoCompleteSource.None),
         SRDescription(nameof(SR.TextBoxAutoCompleteSourceDescr)),
-        TypeConverterAttribute(typeof(TextBoxAutoCompleteSourceConverter)),
+        TypeConverter(typeof(TextBoxAutoCompleteSourceConverter)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource
@@ -204,8 +186,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the 
-        ///     AutoCompleteSource is CustomSource. 
+        ///  This is the AutoCompleteCustomSource which is custom StringCollection used when the
+        ///  AutoCompleteSource is CustomSource.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -247,10 +229,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets whether the TextBox control
-        ///       modifies the case of characters as they are typed.
-        ///    </para>
+        ///  Gets or sets whether the TextBox control
+        ///  modifies the case of characters as they are typed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -301,7 +281,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if the control is in password protect mode.
+        ///  Determines if the control is in password protect mode.
         /// </summary>
         internal override bool PasswordProtect
         {
@@ -311,14 +291,11 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Returns the parameters needed to create the handle. Inheriting classes
-        ///       can override this to provide extra functionality. They should not,
-        ///       however, forget to call base.getCreateParams() first to get the struct
-        ///       filled up with the basic info.
-        ///    </para>
+        ///  Returns the parameters needed to create the handle. Inheriting classes
+        ///  can override this to provide extra functionality. They should not,
+        ///  however, forget to call base.getCreateParams() first to get the struct
+        ///  filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -377,10 +354,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the character used to mask characters in a single-line text box
-        ///       control used to enter passwords.
-        ///    </para>
+        ///  Gets or sets the character used to mask characters in a single-line text box
+        ///  control used to enter passwords.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -423,11 +398,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets which scroll bars should
-        ///       appear in a multiline <see cref='System.Windows.Forms.TextBox'/>
-        ///       control.
-        ///    </para>
+        ///  Gets or sets which scroll bars should
+        ///  appear in a multiline <see cref='TextBox'/>
+        ///  control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -479,10 +452,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       the current text in the text box.
-        ///    </para>
+        ///  Gets or sets
+        ///  the current text in the text box.
         /// </summary>
         public override string Text
         {
@@ -498,12 +469,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets how text is
-        ///       aligned in a <see cref='System.Windows.Forms.TextBox'/>
-        ///       control.
-        ///       Note: This code is duplicated in MaskedTextBox for simplicity.
-        ///    </para>
+        ///  Gets or sets how text is
+        ///  aligned in a <see cref='TextBox'/>
+        ///  control.
+        ///  Note: This code is duplicated in MaskedTextBox for simplicity.
         /// </summary>
         [
         Localizable(true),
@@ -537,13 +506,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///    Indicates if the text in the edit control should appear as
-        ///    the default password character. This property has precedence
-        ///    over the PasswordChar property.  Whenever the UseSystemPasswordChar
-        ///    is set to true, the default system password character is used,
-        ///    any character set into PasswordChar is ignored.
-        ///    </para>
+        ///  Indicates if the text in the edit control should appear as
+        ///  the default password character. This property has precedence
+        ///  over the PasswordChar property.  Whenever the UseSystemPasswordChar
+        ///  is set to true, the default system password character is used,
+        ///  any character set into PasswordChar is ignored.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -605,9 +572,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Overridden to handle RETURN key.
-        ///    </para>
+        ///  Overridden to handle RETURN key.
         /// </summary>
         protected override bool IsInputKey(Keys keyData)
         {
@@ -621,7 +586,6 @@ namespace System.Windows.Forms
             }
             return base.IsInputKey(keyData);
         }
-
 
         private void OnAutoCompleteCustomSourceChanged(object sender, CollectionChangeEventArgs e)
         {
@@ -652,7 +616,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overrideen to focus the text on first focus.
+        ///  Overrideen to focus the text on first focus.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -672,8 +636,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overridden to update the newly created handle with the settings of the
-        ///    PasswordChar properties.
+        ///  Overridden to update the newly created handle with the settings of the
+        ///  PasswordChar properties.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -726,11 +690,9 @@ namespace System.Windows.Forms
         /// Process a command key.
         /// Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
         /// Winforms TextBox supports this in .NET.
-        /// <para>
-        ///  m - the current windows message
+            ///  m - the current windows message
         /// keyData - bitmask containing one or more keys
-        /// </para>
-        /// </summary>
+            /// </summary>
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
@@ -745,11 +707,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Replaces the portion of the text specified by startPos and length with the one passed in,
-        ///     without resetting the undo buffer (if any).
-        ///     This method is provided as an alternative to SelectedText which clears the undo buffer.
-        ///     Observe that this method does not honor the MaxLength property as the parameter-less base's
-        ///     Paste does
+        ///  Replaces the portion of the text specified by startPos and length with the one passed in,
+        ///  without resetting the undo buffer (if any).
+        ///  This method is provided as an alternative to SelectedText which clears the undo buffer.
+        ///  Observe that this method does not honor the MaxLength property as the parameter-less base's
+        ///  Paste does
         /// </summary>
         public void Paste(string text)
         {
@@ -757,8 +719,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Performs the actual select without doing arg checking.
-        /// </summary>        
+        ///  Performs the actual select without doing arg checking.
+        /// </summary>
         internal override void SelectInternal(int start, int length, int textLen)
         {
             // If user set selection into text box, mark it so we don't
@@ -777,10 +739,8 @@ namespace System.Windows.Forms
             return strings;
         }
 
-
-
         /// <summary>
-        ///     Sets the AutoComplete mode in TextBox.
+        ///  Sets the AutoComplete mode in TextBox.
         /// </summary>
         internal void SetAutoComplete(bool reset)
         {
@@ -856,9 +816,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Resets the AutoComplete mode in TextBox.
+        ///  Resets the AutoComplete mode in TextBox.
         /// </summary>
         private void ResetAutoComplete(bool force)
         {
@@ -916,7 +875,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         //-------------------------------------------------------------------------------------------------
 
         /// <summary>
@@ -971,9 +929,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    The edits window procedure.  Inheritng classes can override this
-        ///    to add extra functionality, but should not forget to call
-        ///    base.wndProc(m); to ensure the combo continues to function properly.
+        ///  The edits window procedure.  Inheritng classes can override this
+        ///  to add extra functionality, but should not forget to call
+        ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
         protected override void WndProc(ref Message m)
         {

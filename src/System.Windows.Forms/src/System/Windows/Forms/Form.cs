@@ -2,32 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Globalization;
-    using System.Net;
-    using System.Reflection;
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.Layout;
-    using System.Windows.Forms.VisualStyles;
-
     /// <summary>
-    ///    <para>Represents a window or dialog box that makes up an application's user interface.</para>
+    ///  Represents a window or dialog box that makes up an application's user interface.
     /// </summary>
     [
     ComVisible(true),
@@ -163,7 +153,6 @@ namespace System.Windows.Forms
         private BitVector32 formState = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
         private BitVector32 formStateEx = new BitVector32();
 
-
         private Icon icon;
         private Icon smallIcon;
         private Size autoScaleBaseSize = System.Drawing.Size.Empty;
@@ -181,7 +170,7 @@ namespace System.Windows.Forms
         private VisualStyleRenderer sizeGripRenderer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Form'/> class.
+        /// Initializes a new instance of the <see cref='Form'/> class.
         /// </summary>
         public Form() : base()
         {
@@ -248,10 +237,10 @@ namespace System.Windows.Forms
 
 #if EVERETTROLLBACK
             // (MDI: Roll back feature to Everett + QFE source base).  Code left here for ref.
-            // Enabling this code introduces a breaking change that has was approved. 
+            // Enabling this code introduces a breaking change that has was approved.
             // If this needs to be enabled, also CanTabStop and TabStop code needs to be added back in Control.cs
             // and Form.cs.
-            
+
             // Set this value to false
             // so that the window style will not include the WS_TABSTOP bit, which is
             // identical to WS_MAXIMIZEBOX. Otherwise, our test suite won't be able to
@@ -262,8 +251,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Indicates the <see cref='System.Windows.Forms.Button'/> control on the form that is clicked when
-        ///    the user presses the ENTER key.</para>
+        /// Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  the user presses the ENTER key.
         /// </summary>
         [
         DefaultValue(null),
@@ -283,7 +272,7 @@ namespace System.Windows.Forms
                     UpdateDefaultButton();
 
                     // this was removed as it breaks any accept button that isn't
-                    // an OK, like in the case of wizards 'next' button. 
+                    // an OK, like in the case of wizards 'next' button.
                     /*
                     if (acceptButton != null && acceptButton.DialogResult == DialogResult.None) {
                         acceptButton.DialogResult = DialogResult.OK;
@@ -351,7 +340,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Gets the currently active form for this application.</para>
+        ///  Gets the currently active form for this application.
         /// </summary>
         public static Form ActiveForm
         {
@@ -368,10 +357,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> 
-        ///         Gets the currently active multiple document interface (MDI) child window.
-        ///         Note: Don't use this property internally, use ActiveMdiChildInternal instead (see comments below).
-        ///    </para>
+        ///
+        ///  Gets the currently active multiple document interface (MDI) child window.
+        ///  Note: Don't use this property internally, use ActiveMdiChildInternal instead (see comments below).
         /// </summary>
         [
         Browsable(false),
@@ -384,11 +372,11 @@ namespace System.Windows.Forms
             {
                 Form mdiChild = ActiveMdiChildInternal;
 
-                // We keep the active mdi child in the cached in the property store; when changing its value 
-                // (due to a change to one of the following properties/methods: Visible, Enabled, Active, Show/Hide, 
-                // Focus() or as the  result of WM_SETFOCUS/WM_ACTIVATE/WM_MDIACTIVATE) we temporarily set it to null 
-                // (to properly handle menu merging among other things) rendering the cache out-of-date; the problem 
-                // arises when the user has an event handler that is raised during this process; in that case we ask 
+                // We keep the active mdi child in the cached in the property store; when changing its value
+                // (due to a change to one of the following properties/methods: Visible, Enabled, Active, Show/Hide,
+                // Focus() or as the  result of WM_SETFOCUS/WM_ACTIVATE/WM_MDIACTIVATE) we temporarily set it to null
+                // (to properly handle menu merging among other things) rendering the cache out-of-date; the problem
+                // arises when the user has an event handler that is raised during this process; in that case we ask
                 // Windows for it (see ActiveMdiChildFromWindows).
 
                 if (mdiChild == null)
@@ -409,7 +397,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Property to be used internally.  See comments a on ActiveMdiChild property.
+        ///  Property to be used internally.  See comments a on ActiveMdiChild property.
         /// </summary>
         internal Form ActiveMdiChildInternal
         {
@@ -424,7 +412,7 @@ namespace System.Windows.Forms
             }
         }
 
-        //we don't repaint the mdi child that used to be active any more.  We used to do this in Activated, but no 
+        //we don't repaint the mdi child that used to be active any more.  We used to do this in Activated, but no
         //longer do because of added event Deactivate.
         private Form FormerlyActiveMdiChild
         {
@@ -440,10 +428,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       a value indicating whether the opacity of the form can be
-        ///       adjusted.</para>
+        ///  Gets or sets
+        ///  a value indicating whether the opacity of the form can be
+        ///  adjusted.
         /// </summary>
         [
         Browsable(false),
@@ -484,11 +471,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the form will adjust its size
-        ///       to fit the height of the font used on the form and scale
-        ///       its controls.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the form will adjust its size
+        ///  to fit the height of the font used on the form and scale
+        ///  its controls.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -519,7 +504,6 @@ namespace System.Windows.Forms
                         // don't compete.
                         AutoScaleMode = AutoScaleMode.None;
 
-
                     }
                     else
                     {
@@ -534,13 +518,13 @@ namespace System.Windows.Forms
         }
 
         // Our STRONG recommendation to customers is to upgrade to AutoScaleDimensions
-        // however, since this is generated by default in Everett, and there's not a 1:1 mapping of 
+        // however, since this is generated by default in Everett, and there's not a 1:1 mapping of
         // the old to the new, we are un-obsoleting the setter for AutoScaleBaseSize only.
 #pragma warning disable 618
         /// <summary>
-        ///     The base size used for autoscaling. The AutoScaleBaseSize is used
-        ///     internally to determine how much to scale the form when AutoScaling is
-        ///     used.
+        ///  The base size used for autoscaling. The AutoScaleBaseSize is used
+        ///  internally to determine how much to scale the form when AutoScaling is
+        ///  used.
         /// </summary>
         //
         // Virtual so subclasses like PrintPreviewDialog can prevent changes.
@@ -574,12 +558,9 @@ namespace System.Windows.Forms
         }
 #pragma warning restore 618
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the form implements
-        ///       autoscrolling.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the form implements
+        ///  autoscrolling.
         /// </summary>
         [
         Localizable(true)
@@ -631,10 +612,8 @@ namespace System.Windows.Forms
             remove => base.AutoSizeChanged -= value;
         }
 
-
-
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
@@ -678,7 +657,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates whether controls in this container will be automatically validated when the focus changes.
+        ///  Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </summary>
         [
         Browsable(true),
@@ -707,8 +686,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The background color of this control. This is an ambient property and
-        ///     will always return a non-null value.
+        ///  The background color of this control. This is an ambient property and
+        ///  will always return a non-null value.
         /// </summary>
         public override Color BackColor
         {
@@ -837,10 +816,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets
-        ///       or
-        ///       sets the button control that will be clicked when the
-        ///       user presses the ESC key.</para>
+        ///  Gets
+        ///  or
+        ///  sets the button control that will be clicked when the
+        ///  user presses the ESC key.
         /// </summary>
         [
         DefaultValue(null),
@@ -864,9 +843,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the size of the client area of the form.
-        ///    </para>
+        ///  Gets or sets the size of the client area of the form.
         /// </summary>
         [
         Localizable(true),
@@ -902,8 +879,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Retrieves the CreateParams used to create the window.
-        ///    If a subclass overrides this function, it must call the base implementation.
+        ///  Retrieves the CreateParams used to create the window.
+        ///  If a subclass overrides this function, it must call the base implementation.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -1012,7 +989,7 @@ namespace System.Windows.Forms
             set { closeReason = value; }
         }
         /// <summary>
-        ///     The default icon used by the Form. This is the standard "windows forms" icon.
+        ///  The default icon used by the Form. This is the standard "windows forms" icon.
         /// </summary>
         internal static Icon DefaultIcon
         {
@@ -1046,8 +1023,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -1058,7 +1035,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the size and location of the form on the Windows desktop.</para>
+        ///  Gets or sets the size and location of the form on the Windows desktop.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -1084,7 +1061,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the location of the form on the Windows desktop.</para>
+        ///  Gets or sets the location of the form on the Windows desktop.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -1110,7 +1087,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the dialog result for the form.</para>
+        ///  Gets or sets the dialog result for the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1157,10 +1134,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether a
-        ///       help button should be displayed in the caption box of the form.
-        ///    </para>
+        ///  Gets or sets a value indicating whether a
+        ///  help button should be displayed in the caption box of the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1245,7 +1220,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the window is closing.
+        ///  Determines whether the window is closing.
         /// </summary>
         private bool IsClosing
         {
@@ -1270,10 +1245,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a value indicating whether the form is a multiple document
-        ///       interface (MDI) child form.
-        ///    </para>
+        ///  Gets a value indicating whether the form is a multiple document
+        ///  interface (MDI) child form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1310,12 +1283,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the form is a container for multiple document interface
-        ///       (MDI) child forms.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the form is a container for multiple document interface
+        ///  (MDI) child forms.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1364,11 +1334,9 @@ namespace System.Windows.Forms
         public bool IsRestrictedWindow => false;
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value
-        ///       indicating whether the form will receive key events
-        ///       before the event is passed to the control that has focus.
-        ///    </para>
+        ///  Gets or sets a value
+        ///  indicating whether the form will receive key events
+        ///  before the event is passed to the control that has focus.
         /// </summary>
         [
         DefaultValue(false),
@@ -1394,9 +1362,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the location of the form.
-        ///    </para>
+        ///  Gets or sets the location of the form.
         /// </summary>
         [SettingsBindable(true)]
         public new Point Location
@@ -1412,10 +1378,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the size of the form when it is
-        ///       maximized.
-        ///    </para>
+        ///  Gets the size of the form when it is
+        ///  maximized.
         /// </summary>
         protected Rectangle MaximizedBounds
         {
@@ -1444,9 +1408,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the maximum size the form can be resized to.
-        ///    </para>
+        ///  Gets the maximum size the form can be resized to.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -1537,7 +1499,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Hide Margin/MarginChanged</para>
+        ///  Hide Margin/MarginChanged
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new Padding Margin
@@ -1549,9 +1511,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>Hide Margin/MarginChanged</para>
+        ///  Hide Margin/MarginChanged
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MarginChanged
@@ -1561,10 +1522,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.MainMenu'/>
-        ///       that is displayed in the form.
-        ///    </para>
+        ///  Gets or sets the <see cref='MainMenu'/>
+        ///  that is displayed in the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1605,7 +1564,6 @@ namespace System.Windows.Forms
                     {
                         ClientSize = ClientSize;
                     }
-
 
                     MenuChanged(Windows.Forms.Menu.CHANGE_ITEMS, value);
                 }
@@ -1693,8 +1651,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether the maximize button is
-        ///       displayed in the caption bar of the form.</para>
+        ///  Gets or sets a value indicating whether the maximize button is
+        ///  displayed in the caption bar of the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1722,11 +1680,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets an array of forms that represent the
-        ///       multiple document interface (MDI) child forms that are parented to this
-        ///       form.
-        ///    </para>
+        ///  Gets an array of forms that represent the
+        ///  multiple document interface (MDI) child forms that are parented to this
+        ///  form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1750,12 +1706,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>
-        ///         Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
-        ///         if this is an MDI container form.
-        ///         Represents the client area of a Multiple Document Interface (MDI) Form window, also known as the MDI child window.
-        ///     </para>
-        /// </summary>
+            ///  Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
+        ///  if this is an MDI container form.
+        ///  Represents the client area of a Multiple Document Interface (MDI) Form window, also known as the MDI child window.
+            /// </summary>
         internal MdiClient MdiClient
         {
             get
@@ -1765,8 +1719,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Indicates the current multiple document
-        ///       interface (MDI) parent form of this form.</para>
+        ///  Indicates the current multiple document
+        ///  interface (MDI) parent form of this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1836,10 +1790,10 @@ namespace System.Windows.Forms
 
                         // If it is an MDIChild, and it is not yet visible, we'll
                         // hold off on recreating the window handle. We'll do that
-                        // when MdiChild's visibility is set to true (see 
+                        // when MdiChild's visibility is set to true (see
 
                         // But if the handle has already been created, we need to destroy it
-                        // so the form gets MDI-parented properly. 
+                        // so the form gets MDI-parented properly.
                         if (ParentInternal.IsHandleCreated && IsMdiChild && IsHandleCreated)
                         {
                             DestroyHandle();
@@ -1870,10 +1824,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the merged menu for the
-        ///       form.
-        ///    </para>
+        ///  Gets the merged menu for the
+        ///  form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1931,7 +1883,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether the minimize button is displayed in the caption bar of the form.</para>
+        ///  Gets or sets a value indicating whether the minimize button is displayed in the caption bar of the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1959,10 +1911,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a value indicating whether this form is
-        ///       displayed modally.
-        ///    </para>
+        ///  Gets a value indicating whether this form is
+        ///  displayed modally.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1983,7 +1933,7 @@ namespace System.Windows.Forms
         /// Opacity requires Windows 2000 or later, and is ignored on earlier operating systems.
         /// </summary>
         [SRCategory(nameof(SR.CatWindowStyle))]
-        [TypeConverterAttribute(typeof(OpacityConverter))]
+        [TypeConverter(typeof(OpacityConverter))]
         [SRDescription(nameof(SR.FormOpacityDescr))]
         [DefaultValue(1.0)]
         public double Opacity
@@ -2052,7 +2002,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets an array of <see cref='System.Windows.Forms.Form'/> objects that represent all forms that are owned by this form.</para>
+        /// Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -2078,7 +2028,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the form that owns this form.</para>
+        ///  Gets or sets the form that owns this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -2135,7 +2085,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the restored bounds of the Form.</para>
+        ///  Gets or sets the restored bounds of the Form.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2160,10 +2110,10 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///     control placement and text will be from right to left.
+        ///  control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -2283,9 +2233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       When this property returns true, the internal ShowParams property will return NativeMethods.SW_SHOWNOACTIVATE.
-        ///    </para>
+        ///  When this property returns true, the internal ShowParams property will return NativeMethods.SW_SHOWNOACTIVATE.
         /// </summary>
         [Browsable(false)]
         protected virtual bool ShowWithoutActivation
@@ -2297,9 +2245,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the size of the form.
-        ///    </para>
+        ///  Gets or sets the size of the form.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2318,9 +2264,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the style of size grip to display in the lower-left corner of the form.
-        ///    </para>
+        ///  Gets or sets the style of size grip to display in the lower-left corner of the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -2352,10 +2296,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the
-        ///       starting position of the form at run time.
-        ///    </para>
+        ///  Gets or sets the
+        ///  starting position of the form at run time.
         /// </summary>
         [
         Localizable(true),
@@ -2380,8 +2322,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -2407,7 +2347,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This property has no effect on Form, we need to hide it from browsers.
+        ///  This property has no effect on Form, we need to hide it from browsers.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2437,8 +2377,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For forms that are show in task bar false, this returns a HWND
-        ///     they must be parented to in order for it to work.
+        ///  For forms that are show in task bar false, this returns a HWND
+        ///  they must be parented to in order for it to work.
         /// </summary>
         private HandleRef TaskbarOwner
         {
@@ -2476,10 +2416,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether to display the form as a top-level
-        ///       window.
-        ///    </para>
+        ///  Gets or sets a value indicating whether to display the form as a top-level
+        ///  window.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool TopLevel
@@ -2522,7 +2460,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the color that will represent transparent areas of the form.</para>
+        ///  Gets or sets the color that will represent transparent areas of the form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -2569,8 +2507,8 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
-            // If DialogResult.OK and the value == GetVisibleCore() then this code has been called either through 
-            // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again. 
+            // If DialogResult.OK and the value == GetVisibleCore() then this code has been called either through
+            // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again.
             // This will avoid flashing during closing the dialog;
             if (GetVisibleCore() == value && dialogResult == DialogResult.OK)
             {
@@ -2662,8 +2600,8 @@ namespace System.Windows.Forms
                             SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), NativeMethods.SW_SHOW);
                             CreateControl();
 
-                            // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to 
-                            // update the menu bar because we always create the window as if it were not maximized. 
+                            // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to
+                            // update the menu bar because we always create the window as if it were not maximized.
                             // See comment on CreateHandle about this.
                             if (WindowState == FormWindowState.Maximized)
                             {
@@ -2680,7 +2618,6 @@ namespace System.Windows.Forms
             }
 
             //(
-
 
             if (value && !IsMdiChild && (WindowState == FormWindowState.Maximized || TopMost))
             {
@@ -2769,7 +2706,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the form is activated in code or by the user.</para>
+        ///  Occurs when the form is activated in code or by the user.
         /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnActivateDescr))]
         public event EventHandler Activated
@@ -2778,9 +2715,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_ACTIVATED, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs when the form is closing.</para>
+        ///  Occurs when the form is closing.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2794,9 +2730,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_CLOSING, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs when the form is closed.</para>
+        ///  Occurs when the form is closed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2810,9 +2745,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_CLOSED, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs when the form loses focus and is not the active form.</para>
+        ///  Occurs when the form loses focus and is not the active form.
         /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnDeactivateDescr))]
         public event EventHandler Deactivate
@@ -2821,9 +2755,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_DEACTIVATE, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs when the form is closing.</para>
+        ///  Occurs when the form is closing.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosingDescr))]
         public event FormClosingEventHandler FormClosing
@@ -2832,9 +2765,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_FORMCLOSING, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs when the form is closed.</para>
+        ///  Occurs when the form is closed.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosedDescr))]
         public event FormClosedEventHandler FormClosed
@@ -2843,9 +2775,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_FORMCLOSED, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs before the form becomes visible.</para>
+        ///  Occurs before the form becomes visible.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnLoadDescr))]
         public event EventHandler Load
@@ -2855,8 +2786,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when a Multiple Document Interface (MDI) child form is activated or closed
-        ///       within an MDI application.</para>
+        ///  Occurs when a Multiple Document Interface (MDI) child form is activated or closed
+        ///  within an MDI application.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnMDIChildActivateDescr))]
         public event EventHandler MdiChildActivate
@@ -2866,7 +2797,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the menu of a form loses focus.</para>
+        ///  Occurs when the menu of a form loses focus.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2880,7 +2811,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the menu of a form receives focus.</para>
+        ///  Occurs when the menu of a form receives focus.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2893,9 +2824,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_MENUSTART, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs after the input language of the form has changed.</para>
+        ///  Occurs after the input language of the form has changed.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeDescr))]
         public event InputLanguageChangedEventHandler InputLanguageChanged
@@ -2904,10 +2834,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_INPUTLANGCHANGE, value);
         }
 
-
         /// <summary>
-        ///    <para>Occurs when the the user attempts to change the input language for the
-        ///       form.</para>
+        ///  Occurs when the the user attempts to change the input language for the
+        ///  form.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeRequestDescr))]
         public event InputLanguageChangingEventHandler InputLanguageChanging
@@ -2924,7 +2853,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs whenever the form is first shown.</para>
+        ///  Occurs whenever the form is first shown.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnShownDescr))]
         public event EventHandler Shown
@@ -2934,7 +2863,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Activates the form and gives it focus.</para>
+        ///  Activates the form and gives it focus.
         /// </summary>
         public void Activate()
         {
@@ -2992,8 +2921,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Adds
-        ///       an owned form to this form.</para>
+        ///  Adds
+        ///  an owned form to this form.
         /// </summary>
         public void AddOwnedForm(Form ownedForm)
         {
@@ -3033,7 +2962,6 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropOwnedForms, ownedForms);
             }
 
-
             ownedForms[ownedFormsCount] = ownedForm;
             Properties.SetInteger(PropOwnedFormsCount, ownedFormsCount + 1);
         }
@@ -3047,7 +2975,6 @@ namespace System.Windows.Forms
             // NOTE : This function is cloned in FormDocumentDesigner... remember to keep
             //      : them in sync
             //
-
 
             // Map 0.0 - .92... increment by 0.08
             //
@@ -3078,8 +3005,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void AdjustFormScrollbars(bool displayScrollbars)
         {
@@ -3096,7 +3021,6 @@ namespace System.Windows.Forms
             FormBorderStyle borderStyle = FormBorderStyle;
             bool sizableBorder = (borderStyle == FormBorderStyle.SizableToolWindow
                                   || borderStyle == FormBorderStyle.Sizable);
-
 
             bool showMin = MinimizeBox && winState != FormWindowState.Minimized;
             bool showMax = MaximizeBox && winState != FormWindowState.Maximized;
@@ -3158,7 +3082,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This forces the SystemMenu to look like we want.
+        ///  This forces the SystemMenu to look like we want.
         /// </summary>
         private void AdjustSystemMenu()
         {
@@ -3171,7 +3095,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This auto scales the form based on the AutoScaleBaseSize.
+        ///  This auto scales the form based on the AutoScaleBaseSize.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("This method has been deprecated. Use the ApplyAutoScaling method instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
@@ -3182,7 +3106,6 @@ namespace System.Windows.Forms
             // NOTE : This function is cloned in FormDocumentDesigner... remember to keep
             //      : them in sync
             //
-
 
             // We also don't do this if the property is empty.  Otherwise we will perform
             // two GetAutoScaleBaseSize calls only to find that they returned the same
@@ -3218,8 +3141,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This adjusts the size of the windowRect so that the client rect is the
-        ///     correct size.
+        ///  This adjusts the size of the windowRect so that the client rect is the
+        ///  correct size.
         /// </summary>
         private void ApplyClientSize()
         {
@@ -3310,12 +3233,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Assigns a new parent control. Sends out the appropriate property change
-        ///       notifications for properties that are affected by the change of parent.</para>
+        ///  Assigns a new parent control. Sends out the appropriate property change
+        ///  notifications for properties that are affected by the change of parent.
         /// </summary>
         internal override void AssignParent(Control value)
         {
-
             // If we are being unparented from the MDI client control, remove
             // formMDIParent as well.
             //
@@ -3329,19 +3251,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Checks whether a modal dialog is ready to close. If the dialogResult
-        ///     property is not DialogResult.None, the OnClosing and OnClosed events
-        ///     are fired. A return value of true indicates that both events were
-        ///     successfully dispatched and that event handlers did not cancel closing
-        ///     of the dialog. User code should never have a reason to call this method.
-        ///     It is internal only so that the Application class can call it from a
-        ///     modal message loop.
+        ///  Checks whether a modal dialog is ready to close. If the dialogResult
+        ///  property is not DialogResult.None, the OnClosing and OnClosed events
+        ///  are fired. A return value of true indicates that both events were
+        ///  successfully dispatched and that event handlers did not cancel closing
+        ///  of the dialog. User code should never have a reason to call this method.
+        ///  It is internal only so that the Application class can call it from a
+        ///  modal message loop.
         ///
-        ///     closingOnly is set when this is called from WmClose so that we can do just the beginning portion
-        ///     of this and then let the message loop finish it off with the actual close code.
+        ///  closingOnly is set when this is called from WmClose so that we can do just the beginning portion
+        ///  of this and then let the message loop finish it off with the actual close code.
         ///
-        ///     Note we set a flag to determine if we've already called close or not.
-        ///
+        ///  Note we set a flag to determine if we've already called close or not.
         /// </summary>
         internal bool CheckCloseDialog(bool closingOnly)
         {
@@ -3396,11 +3317,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Closes the form.</para>
+        ///  Closes the form.
         /// </summary>
         public void Close()
         {
-
             if (GetState(STATE_CREATINGHANDLE))
             {
                 throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Close"));
@@ -3420,8 +3340,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Computes the window size from the clientSize based on the styles
-        ///     returned from CreateParams.
+        ///  Computes the window size from the clientSize based on the styles
+        ///  returned from CreateParams.
         /// </summary>
         private Size ComputeWindowSize(Size clientSize)
         {
@@ -3430,8 +3350,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Computes the window size from the clientSize base on the specified
-        ///     window styles. This will not return the correct size if menus wrap.
+        ///  Computes the window size from the clientSize base on the specified
+        ///  window styles. This will not return the correct size if menus wrap.
         /// </summary>
         private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
         {
@@ -3440,8 +3360,6 @@ namespace System.Windows.Forms
             return new Size(result.right - result.left, result.bottom - result.top);
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Control.ControlCollection CreateControlsInstance()
         {
@@ -3449,8 +3367,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Cleans up form state after a control has been removed.
-        ///     Package scope for Control
+        ///  Cleans up form state after a control has been removed.
+        ///  Package scope for Control
         /// </summary>
         internal override void AfterControlRemoved(Control control, Control oldParent)
         {
@@ -3472,9 +3390,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Creates the handle for the Form. If a
-        ///       subclass overrides this function,
-        ///       it must call the base implementation.</para>
+        ///  Creates the handle for the Form. If a
+        ///  subclass overrides this function,
+        ///  it must call the base implementation.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void CreateHandle()
@@ -3539,7 +3457,6 @@ namespace System.Windows.Forms
                     Visible = true;
                 }
 
-
                 // avoid extra SetMenu calls for perf
                 if (Menu != null || !TopLevel || IsMdiContainer)
                 {
@@ -3553,7 +3470,7 @@ namespace System.Windows.Forms
                 {
                     UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, TaskbarOwner);
 
-                    // Make sure the large icon is set so the ALT+TAB icon 
+                    // Make sure the large icon is set so the ALT+TAB icon
                     // reflects the real icon of the application
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
@@ -3597,8 +3514,8 @@ namespace System.Windows.Forms
                 {
                     FormerlyActiveMdiChild = activeMdiChild;
                 }
-                // Enter/Leave events on child controls are raised from the ActivateMdiChild method, usually when another 
-                // Mdi child is getting activated after deactivating this one; but if this is the only visible MDI child 
+                // Enter/Leave events on child controls are raised from the ActivateMdiChild method, usually when another
+                // Mdi child is getting activated after deactivating this one; but if this is the only visible MDI child
                 // we need to fake the activation call so MdiChildActivate and Leave events are raised properly. (We say
                 // in the MSDN doc that the MdiChildActivate event is raised when an mdi child is activated or closed -
                 // we actually meant the last mdi child is closed).
@@ -3630,12 +3547,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Calls the default window proc for the form. If
-        ///       a
-        ///       subclass overrides this function,
-        ///       it must call the base implementation.
-        ///       </para>
-        /// </summary>
+        ///  Calls the default window proc for the form. If
+        ///  a
+        ///  subclass overrides this function,
+        ///  it must call the base implementation.
+            /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -3656,8 +3572,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Releases all the system resources associated with the Form. If a subclass
-        ///       overrides this function, it must call the base implementation.</para>
+        ///  Releases all the system resources associated with the Form. If a subclass
+        ///  overrides this function, it must call the base implementation.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -3867,7 +3783,6 @@ namespace System.Windows.Forms
         /// </summary>
         private void FillInCreateParamsStartPosition(CreateParams cp)
         {
-
             if (formState[FormStateSetClientSize] != 0)
             {
                 // When computing the client window size, don't tell them that
@@ -3952,7 +3867,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Attempts to set focus to this Form.</para>
+        /// Attempts to set focus to this Form.
         /// </summary>
         private protected override bool FocusInternal()
         {
@@ -3970,14 +3885,8 @@ namespace System.Windows.Forms
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("This method has been deprecated. Use the AutoScaleDimensions property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "The quick ..." is the archetipal string
-                                                                                                        // used to measure font height.
-                                                                                                        // So we don't have to localize it.
-        ]
         public static SizeF GetAutoScaleSize(Font font)
         {
-
             float height = font.Height;
             float width = 9.0f;
 
@@ -4002,13 +3911,12 @@ namespace System.Windows.Forms
 
         internal override Size GetPreferredSizeCore(Size proposedSize)
         {
-
-            // 
+            //
 
             Size preferredSize = base.GetPreferredSizeCore(proposedSize);
 
 #if MAGIC_PADDING
-//We are removing the magic padding in runtime.  
+//We are removing the magic padding in runtime.
 
             bool dialogFixRequired = false;
 
@@ -4063,7 +3971,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override since CanProcessMnemonic is overriden too (base.CanSelectCore calls CanProcessMnemonic).
+        ///  Override since CanProcessMnemonic is overriden too (base.CanSelectCore calls CanProcessMnemonic).
         /// </summary>
         internal override bool CanSelectCore()
         {
@@ -4075,8 +3983,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     When an MDI form is hidden it means its handle has not yet been created or has been destroyed (see
-        ///     SetVisibleCore).  If the handle is recreated, the form will be made visible which should be avoided.
+        ///  When an MDI form is hidden it means its handle has not yet been created or has been destroyed (see
+        ///  SetVisibleCore).  If the handle is recreated, the form will be made visible which should be avoided.
         /// </summary>
         internal bool CanRecreateHandle()
         {
@@ -4090,7 +3998,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overriden to handle MDI mnemonic processing properly.
+        ///  Overriden to handle MDI mnemonic processing properly.
         /// </summary>
         internal override bool CanProcessMnemonic()
         {
@@ -4107,8 +4015,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overriden to handle MDI mnemonic processing properly.
-        /// </summary>        
+        ///  Overriden to handle MDI mnemonic processing properly.
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
             // MDI container form has at least one control, the MDI client which contains the MDI children. We need
@@ -4147,7 +4055,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Centers the dialog to its parent.
+        ///  Centers the dialog to its parent.
         /// </summary>
         protected void CenterToParent()
         {
@@ -4196,10 +4104,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Centers the dialog to the screen. This will first attempt to use
-        ///     the owner property to determine the correct screen, then
-        ///     it will try the HWND owner of the form, and finally this will
-        ///     center the form on the same monitor as the mouse cursor.
+        ///  Centers the dialog to the screen. This will first attempt to use
+        ///  the owner property to determine the correct screen, then
+        ///  it will try the HWND owner of the form, and finally this will
+        ///  center the form on the same monitor as the mouse cursor.
         /// </summary>
         protected void CenterToScreen()
         {
@@ -4232,8 +4140,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Invalidates the merged menu, forcing the menu to be recreated if
-        ///     needed again.
+        ///  Invalidates the merged menu, forcing the menu to be recreated if
+        ///  needed again.
         /// </summary>
         private void InvalidateMergedMenu()
         {
@@ -4256,8 +4164,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Arranges the Multiple Document Interface
-        ///       (MDI) child forms according to value.</para>
+        ///  Arranges the Multiple Document Interface
+        ///  (MDI) child forms according to value.
         /// </summary>
         public void LayoutMdi(MdiLayout value)
         {
@@ -4330,7 +4238,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The activate event is fired when the form is activated.</para>
+        ///  The activate event is fired when the form is activated.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnActivated(EventArgs e)
@@ -4339,8 +4247,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override of AutoScaleModeChange method from ContainerControl.  We use
-        ///     this to keep our own AutoScale property in sync.
+        ///  Override of AutoScaleModeChange method from ContainerControl.  We use
+        ///  this to keep our own AutoScale property in sync.
         /// </summary>
         internal override void OnAutoScaleModeChanged()
         {
@@ -4378,7 +4286,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The Closing event is fired when the form is closed.</para>
+        ///  The Closing event is fired when the form is closed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClosing(CancelEventArgs e)
@@ -4387,7 +4295,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The Closed event is fired when the form is closed.</para>
+        ///  The Closed event is fired when the form is closed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClosed(EventArgs e)
@@ -4395,9 +4303,8 @@ namespace System.Windows.Forms
             ((EventHandler)Events[EVENT_CLOSED])?.Invoke(this, e);
         }
 
-
         /// <summary>
-        ///    <para>The Closing event is fired before the form is closed.</para>
+        ///  The Closing event is fired before the form is closed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFormClosing(FormClosingEventArgs e)
@@ -4406,7 +4313,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The Closed event is fired when the form is closed.</para>
+        ///  The Closed event is fired when the form is closed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFormClosed(FormClosedEventArgs e)
@@ -4418,7 +4325,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Raises the CreateControl event.</para>
+        ///  Raises the CreateControl event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnCreateControl()
@@ -4434,7 +4341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the Deactivate event.</para>
+        /// Raises the Deactivate event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDeactivate(EventArgs e)
@@ -4443,7 +4350,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the EnabledChanged event.</para>
+        /// Raises the EnabledChanged event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnEnabledChanged(EventArgs e)
@@ -4488,9 +4395,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Inheriting classes should override this method to find out when the
-        ///     handle has been created.
-        ///     Call base.OnHandleCreated first.
+        ///  Inheriting classes should override this method to find out when the
+        ///  handle has been created.
+        ///  Call base.OnHandleCreated first.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnHandleCreated(EventArgs e)
@@ -4516,7 +4423,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Handles the event that a helpButton is clicked
+        ///  Handles the event that a helpButton is clicked
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHelpButtonClicked(CancelEventArgs e)
@@ -4526,7 +4433,6 @@ namespace System.Windows.Forms
 
         protected override void OnLayout(LayoutEventArgs levent)
         {
-
             // Typically forms are either top level or parented to an MDIClient area.
             // In either case, forms a responsible for managing their own size.
             if (AutoSize /*&& DesignMode*/)
@@ -4549,7 +4455,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The Load event is fired before the form becomes visible for the first time.</para>
+        ///  The Load event is fired before the form becomes visible for the first time.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLoad(EventArgs e)
@@ -4578,18 +4484,7 @@ namespace System.Windows.Forms
             }
 
             /*
-                        /// 
-
-
-
-
-
-
-
-
-
-
-
+                        ///
 
             */
 
@@ -4618,7 +4513,6 @@ namespace System.Windows.Forms
                 string text = Text;
 
                 handler(this, e);
-
 
                 // It seems that if you set a window style during the onload
                 // event, we have a problem initially painting the window.
@@ -4668,10 +4562,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Form.InputLanguageChanged'/>
-        /// event.</para>
+        /// Raises the <see cref='InputLanguageChanged'/>
+        /// event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanged(InputLanguageChangedEventArgs e)
@@ -4680,8 +4573,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Form.InputLanguageChanging'/>
-        /// event.</para>
+        /// Raises the <see cref='InputLanguageChanging'/>
+        /// event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanging(InputLanguageChangingEventArgs e)
@@ -4726,7 +4619,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Form.MdiChildActivate'/> event.</para>
+        /// Raises the <see cref='MdiChildActivate'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMdiChildActivate(EventArgs e)
@@ -4737,7 +4630,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.Form.MenuStart'/> event.
+        /// Raises the <see cref='MenuStart'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuStart(EventArgs e)
@@ -4747,7 +4640,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the MenuComplete event.</para>
+        /// Raises the MenuComplete event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuComplete(EventArgs e)
@@ -4756,7 +4649,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Raises the Paint event.</para>
+        ///  Raises the Paint event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnPaint(PaintEventArgs e)
@@ -4787,7 +4680,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Raises the Resize event.</para>
+        ///  Raises the Resize event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnResize(EventArgs e)
@@ -4800,7 +4693,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Raises the DpiChanged event.</para>
+        ///  Raises the DpiChanged event.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -4841,9 +4734,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Occurs when the DPI resolution of the screen this top level window is displayed on changes, 
-        ///    either when the top level window is moved between monitors or when the OS settings are changed.
-        ///    </para>
+        ///  Occurs when the DPI resolution of the screen this top level window is displayed on changes,
+        ///  either when the top level window is moved between monitors or when the OS settings are changed.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnDpiChangedDescr))]
         public event DpiChangedEventHandler DpiChanged
@@ -4853,7 +4745,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_DPICHANGED message
+        ///  Handles the WM_DPICHANGED message
         /// </summary>
         private void WmDpiChanged(ref Message m)
         {
@@ -4866,7 +4758,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Allows derived form to handle WM_GETDPISCALEDSIZE message.</para>
+        ///  Allows derived form to handle WM_GETDPISCALEDSIZE message.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
@@ -4875,15 +4767,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_GETDPISCALEDSIZE message, this is a chance for the application to 
-        ///     scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
-        ///     This message is sent to top level windows before WM_DPICHANGED.
-        ///     If the application responds to this message, the resulting size will be the candidate rectangle 
-        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if 
-        ///     the window were to switch to this DPI. LPARAM is unused and will be zero. 
-        ///     The return value is a size, where the LOWORD is the desired width of the window and the HIWORD 
-        ///     is the desired height of the window. A return value of zero indicates that the app does not 
-        ///     want any special behavior and the candidate rectangle will be computed linearly.
+        ///  Handles the WM_GETDPISCALEDSIZE message, this is a chance for the application to
+        ///  scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
+        ///  This message is sent to top level windows before WM_DPICHANGED.
+        ///  If the application responds to this message, the resulting size will be the candidate rectangle
+        ///  sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if
+        ///  the window were to switch to this DPI. LPARAM is unused and will be zero.
+        ///  The return value is a size, where the LOWORD is the desired width of the window and the HIWORD
+        ///  is the desired height of the window. A return value of zero indicates that the app does not
+        ///  want any special behavior and the candidate rectangle will be computed linearly.
         /// </summary>
         private void WmGetDpiScaledSize(ref Message m)
         {
@@ -4930,7 +4822,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Thi event fires whenever the form is first shown.</para>
+        ///  Thi event fires whenever the form is first shown.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnShown(EventArgs e)
@@ -4954,8 +4846,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Simulates a InputLanguageChanged event. Used by Control to forward events
-        ///     to the parent form.
+        ///  Simulates a InputLanguageChanged event. Used by Control to forward events
+        ///  to the parent form.
         /// </summary>
         internal void PerformOnInputLanguageChanged(InputLanguageChangedEventArgs iplevent)
         {
@@ -4963,8 +4855,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Simulates a InputLanguageChanging event. Used by Control to forward
-        ///     events to the parent form.
+        ///  Simulates a InputLanguageChanging event. Used by Control to forward
+        ///  events to the parent form.
         /// </summary>
         internal void PerformOnInputLanguageChanging(InputLanguageChangingEventArgs iplcevent)
         {
@@ -4972,8 +4864,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Processes a command key. Overrides Control.processCmdKey() to provide
-        ///     additional handling of main menu command keys and Mdi accelerators.
+        ///  Processes a command key. Overrides Control.processCmdKey() to provide
+        ///  additional handling of main menu command keys and Mdi accelerators.
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -5016,10 +4908,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Processes a dialog key. Overrides Control.processDialogKey(). This
-        ///     method implements handling of the RETURN, and ESCAPE keys in dialogs.
+        ///  Processes a dialog key. Overrides Control.processDialogKey(). This
+        ///  method implements handling of the RETURN, and ESCAPE keys in dialogs.
         /// The method performs no processing on keys that include the ALT or
-        ///     CONTROL modifiers.
+        ///  CONTROL modifiers.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -5064,7 +4956,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Processes a dialog character For a MdiChild.
+        ///  Processes a dialog character For a MdiChild.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override bool ProcessDialogChar(char charCode)
@@ -5098,7 +4990,6 @@ namespace System.Windows.Forms
             return base.ProcessDialogChar(charCode);
         }
 
-
         protected override bool ProcessKeyPreview(ref Message m)
         {
             if (formState[FormStateKeyPreview] != 0 && ProcessKeyEventArgs(ref m))
@@ -5131,9 +5022,8 @@ namespace System.Windows.Forms
             return false;
         }
 
-
         /// <summary>
-        ///    <para>Raises the FormClosed event for this form when Application.Exit is called.</para>
+        ///  Raises the FormClosed event for this form when Application.Exit is called.
         /// </summary>
         internal void RaiseFormClosedOnAppExit()
         {
@@ -5171,8 +5061,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Raises the FormClosing event for this form when Application.Exit is called.
-        ///          Returns e.Cancel returned by the event handler.</para>
+        ///  Raises the FormClosing event for this form when Application.Exit is called.
+        ///  Returns e.Cancel returned by the event handler.
         /// </summary>
         internal bool RaiseFormClosingOnAppExit()
         {
@@ -5221,11 +5111,6 @@ namespace System.Windows.Forms
             return e.Cancel;
         }
 
-        /// <summary>
-        /// </summary>
-        [
-            SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")
-        ]
         internal override void RecreateHandleCore()
         {
             //Debug.Assert( CanRecreateHandle(), "Recreating handle when form is not ready yet." );
@@ -5265,7 +5150,6 @@ namespace System.Windows.Forms
 
             base.RecreateHandleCore();
 
-
             if (etwcb != null)
             {
                 // Set the owner of the windows in the list back to the new Form's handle
@@ -5289,10 +5173,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Removes a form from the list of owned forms. Also sets the owner of the
-        ///       removed form to null.
-        ///    </para>
+        ///  Removes a form from the list of owned forms. Also sets the owner of the
+        ///  removed form to null.
         /// </summary>
         public void RemoveOwnedForm(Form ownedForm)
         {
@@ -5337,7 +5219,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the form's icon the the default value.
+        ///  Resets the form's icon the the default value.
         /// </summary>
         private void ResetIcon()
         {
@@ -5352,7 +5234,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the TransparencyKey to Color.Empty.
+        ///  Resets the TransparencyKey to Color.Empty.
         /// </summary>
         private void ResetTransparencyKey()
         {
@@ -5360,7 +5242,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the form enters the sizing modal loop</para>
+        ///  Occurs when the form enters the sizing modal loop
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeBeginDescr))]
         public event EventHandler ResizeBegin
@@ -5370,7 +5252,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the control exits the sizing modal loop.</para>
+        ///  Occurs when the control exits the sizing modal loop.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeEndDescr))]
         public event EventHandler ResizeEnd
@@ -5380,8 +5262,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is called when we have just been restored after being
-        ///     minimized.  At this point we resume our layout.
+        ///  This is called when we have just been restored after being
+        ///  minimized.  At this point we resume our layout.
         /// </summary>
         private void ResumeLayoutFromMinimize()
         {
@@ -5420,9 +5302,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Decrements updateMenuHandleSuspendCount. If updateMenuHandleSuspendCount
-        ///     becomes zero and updateMenuHandlesDeferred is true, updateMenuHandles
-        ///     is called.
+        ///  Decrements updateMenuHandleSuspendCount. If updateMenuHandleSuspendCount
+        ///  becomes zero and updateMenuHandlesDeferred is true, updateMenuHandles
+        ///  is called.
         /// </summary>
         private void ResumeUpdateMenuHandles()
         {
@@ -5469,7 +5351,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Base function that performs scaling of the form.
+        ///  Base function that performs scaling of the form.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float x, float y)
@@ -5514,8 +5396,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     For overrides this to calculate scaled bounds based on the restored rect
-        ///     if it is maximized or minimized.
+        ///  For overrides this to calculate scaled bounds based on the restored rect
+        ///  if it is maximized or minimized.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
@@ -5530,12 +5412,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
+        ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
-
             formStateEx[FormStateExInScale] = 1;
             try
             {
@@ -5643,8 +5524,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the defaultButton for the form. The defaultButton is "clicked" when
-        ///     the user presses Enter.
+        ///  Sets the defaultButton for the form. The defaultButton is "clicked" when
+        ///  the user presses Enter.
         /// </summary>
         private void SetDefaultButton(IButtonControl button)
         {
@@ -5665,10 +5546,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Sets the clientSize of the form. This will adjust the bounds of the form
-        ///     to make the clientSize the requested size.
+        ///  Sets the clientSize of the form. This will adjust the bounds of the form
+        ///  to make the clientSize the requested size.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetClientSizeCore(int x, int y)
@@ -5703,8 +5583,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Sets the bounds of the form in desktop coordinates.</para>
+        ///  Sets the bounds of the form in desktop coordinates.
         /// </summary>
         public void SetDesktopBounds(int x, int y, int width, int height)
         {
@@ -5713,7 +5592,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Sets the location of the form in desktop coordinates.</para>
+        ///  Sets the location of the form in desktop coordinates.
         /// </summary>
         public void SetDesktopLocation(int x, int y)
         {
@@ -5721,9 +5600,8 @@ namespace System.Windows.Forms
             Location = new Point(workingArea.X + x, workingArea.Y + y);
         }
 
-
         /// <summary>
-        ///     Makes the control display by setting the visible property to true
+        ///  Makes the control display by setting the visible property to true
         /// </summary>
         public void Show(IWin32Window owner)
         {
@@ -5786,7 +5664,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Displays this form as a modal dialog box with no owner window.</para>
+        ///  Displays this form as a modal dialog box with no owner window.
         /// </summary>
         public DialogResult ShowDialog()
         {
@@ -5794,7 +5672,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Shows this form as a modal dialog with the specified owner.</para>
+        ///  Shows this form as a modal dialog with the specified owner.
         /// </summary>
         public DialogResult ShowDialog(IWin32Window owner)
         {
@@ -5909,7 +5787,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     // Call SetActiveWindow before setting Visible = false.
-                    // 
+                    //
 
                     if (!UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndActive)))
                     {
@@ -5953,8 +5831,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Indicates whether the <see cref='System.Windows.Forms.Form.AutoScaleBaseSize'/> property should be
-        ///    persisted.</para>
+        /// Indicates whether the <see cref='AutoScaleBaseSize'/> property should be
+        ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeAutoScaleBaseSize()
@@ -5968,7 +5846,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Indicates whether the <see cref='System.Windows.Forms.Form.Icon'/> property should be persisted.</para>
+        /// Indicates whether the <see cref='Icon'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeIcon()
         {
@@ -5976,7 +5854,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if the Location property needs to be persisted.
+        ///  Determines if the Location property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeLocation()
@@ -5985,7 +5863,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Indicates whether the <see cref='System.Windows.Forms.Form.Size'/> property should be persisted.</para>
+        /// Indicates whether the <see cref='Size'/> property should be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeSize()
@@ -5994,8 +5872,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Indicates whether the <see cref='System.Windows.Forms.Form.TransparencyKey'/> property should be
-        ///    persisted.</para>
+        /// Indicates whether the <see cref='TransparencyKey'/> property should be
+        ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal bool ShouldSerializeTransparencyKey()
@@ -6004,9 +5882,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is called when we are about to become minimized.  Laying out
-        ///     while minimized can be a problem because the physical dimensions
-        ///     of the window are very small.  So, we simply suspend.
+        ///  This is called when we are about to become minimized.  Laying out
+        ///  while minimized can be a problem because the physical dimensions
+        ///  of the window are very small.  So, we simply suspend.
         /// </summary>
         private void SuspendLayoutForMinimize()
         {
@@ -6019,7 +5897,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Increments updateMenuHandleSuspendCount.
+        ///  Increments updateMenuHandleSuspendCount.
         /// </summary>
         private void SuspendUpdateMenuHandles()
         {
@@ -6028,17 +5906,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Text: " + Text;
         }
 
         /// <summary>
-        ///     Updates the autoscalebasesize based on the current font.
+        ///  Updates the autoscalebasesize based on the current font.
         /// </summary>
         private void UpdateAutoScaleBaseSize()
         {
@@ -6088,8 +5965,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Updates the default button based on current selection, and the
-        ///     acceptButton property.
+        ///  Updates the default button based on current selection, and the
+        ///  acceptButton property.
         /// </summary>
         protected override void UpdateDefaultButton()
         {
@@ -6121,7 +5998,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Updates the underlying hWnd with the correct parent/owner of the form.
+        ///  Updates the underlying hWnd with the correct parent/owner of the form.
         /// </summary>
         private void UpdateHandleWithOwner()
         {
@@ -6148,8 +6025,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Updates the layered window attributes if the control
-        ///     is in layered mode.
+        ///  Updates the layered window attributes if the control
+        ///  is in layered mode.
         /// </summary>
         private void UpdateLayered()
         {
@@ -6249,7 +6126,7 @@ namespace System.Windows.Forms
             else
             {
                 Debug.Assert(IsMdiContainer, "Not an MDI container!");
-                // when both MainMenuStrip and Menu are set, we honor the win32 menu over 
+                // when both MainMenuStrip and Menu are set, we honor the win32 menu over
                 // the MainMenuStrip as the place to store the system menu controls for the maximized MDI child.
 
                 MenuStrip mainMenuStrip = MainMenuStrip;
@@ -6295,7 +6172,7 @@ namespace System.Windows.Forms
                         // Remove the current menu.
                         UnsafeNativeMethods.SetMenu(new HandleRef(this, Handle), NativeMethods.NullHandleRef);
 
-                        // because we have messed with the child's system menu by shoving in our own dummy menu, 
+                        // because we have messed with the child's system menu by shoving in our own dummy menu,
                         // once we clear the main menu we're in trouble - this eats the close, minimize, maximize gadgets
                         // of the child form. (See WM_MDISETMENU in MSDN)
                         Form activeMdiChild = ActiveMdiChildInternal;
@@ -6390,7 +6267,6 @@ namespace System.Windows.Forms
                 }
             }
 
-
             // add in the control gadgets for the mdi child form to the first menu strip
             Form activeMdiForm = ActiveMdiChildInternal;
             UpdateMdiControlStrip(activeMdiForm != null && activeMdiForm.IsMaximized);
@@ -6398,7 +6274,6 @@ namespace System.Windows.Forms
 
         private void UpdateMdiControlStrip(bool maximized)
         {
-
             if (formStateEx[FormStateExInUpdateMdiControlStrip] != 0)
             {
                 //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: Detected re-entrant call to UpdateMdiControlStrip, returning.");
@@ -6508,10 +6383,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Form.ResizeBegin'/>
-        /// event.</para>
+        /// Raises the <see cref='ResizeBegin'/>
+        /// event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResizeBegin(EventArgs e)
@@ -6523,8 +6397,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Form.ResizeEnd'/>
-        /// event.</para>
+        /// Raises the <see cref='ResizeEnd'/>
+        /// event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResizeEnd(EventArgs e)
@@ -6534,7 +6408,6 @@ namespace System.Windows.Forms
                 ((EventHandler)Events[EVENT_RESIZEEND])?.Invoke(this, e);
             }
         }
-
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnStyleChanged(EventArgs e)
@@ -6597,7 +6470,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Updated the window state from the handle, if created.
+        ///  Updated the window state from the handle, if created.
         /// </summary>
         //
         // This function is called from all over the place, including my personal favorite,
@@ -6693,9 +6566,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Validates all selectable child controls in the container, including descendants. This is
-        ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
-        ///     for details of exactly which child controls will be validated.
+        ///  Validates all selectable child controls in the container, including descendants. This is
+        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
+        ///  for details of exactly which child controls will be validated.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren()
@@ -6704,8 +6577,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Validates all the child controls in the container. Exactly which controls are
-        ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
+        ///  Validates all the child controls in the container. Exactly which controls are
+        ///  validated and which controls are skipped is determined by <paramref name="flags"/>.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren(ValidationConstraints validationConstraints)
@@ -6714,7 +6587,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_ACTIVATE handler
+        ///  WM_ACTIVATE handler
         /// </summary>
         private void WmActivate(ref Message m)
         {
@@ -6724,7 +6597,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_ENTERSIZEMOVE handler, so that user can hook up OnResizeBegin event.
+        ///  WM_ENTERSIZEMOVE handler, so that user can hook up OnResizeBegin event.
         /// </summary>
         private void WmEnterSizeMove(ref Message m)
         {
@@ -6733,7 +6606,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
+        ///  WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
         /// </summary>
         private void WmExitSizeMove(ref Message m)
         {
@@ -6742,7 +6615,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_CREATE handler
+        ///  WM_CREATE handler
         /// </summary>
         private void WmCreate(ref Message m)
         {
@@ -6768,7 +6641,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_CLOSE, WM_QUERYENDSESSION, and WM_ENDSESSION handler
+        ///  WM_CLOSE, WM_QUERYENDSESSION, and WM_ENDSESSION handler
         /// </summary>
         private void WmClose(ref Message m)
         {
@@ -6918,7 +6791,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_ENTERMENULOOP handler
+        ///  WM_ENTERMENULOOP handler
         /// </summary>
         private void WmEnterMenuLoop(ref Message m)
         {
@@ -6927,7 +6800,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_ERASEBKGND message
+        ///  Handles the WM_ERASEBKGND message
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
@@ -6936,7 +6809,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_EXITMENULOOP handler
+        ///  WM_EXITMENULOOP handler
         /// </summary>
         private void WmExitMenuLoop(ref Message m)
         {
@@ -7023,11 +6896,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_INITMENUPOPUP handler
+        ///  WM_INITMENUPOPUP handler
         /// </summary>
         private void WmInitMenuPopup(ref Message m)
         {
-
             MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
             if (curMenu != null)
             {
@@ -7043,7 +6915,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_MENUCHAR message
+        ///  Handles the WM_MENUCHAR message
         /// </summary>
         private void WmMenuChar(ref Message m)
         {
@@ -7073,7 +6945,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_MDIACTIVATE handler
+        ///  WM_MDIACTIVATE handler
         /// </summary>
         private void WmMdiActivate(ref Message m)
         {
@@ -7085,7 +6957,7 @@ namespace System.Windows.Forms
 
             if (formMdiParent != null)
             {
-                // This message is propagated twice by the MDIClient window. Once to the 
+                // This message is propagated twice by the MDIClient window. Once to the
                 // window being deactivated and once to the window being activated.
                 if (Handle == m.WParam)
                 {
@@ -7115,7 +6987,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_NCDESTROY handler
+        ///  WM_NCDESTROY handler
         /// </summary>
         private void WmNCDestroy(ref Message m)
         {
@@ -7161,7 +7033,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_NCHITTEST handler
+        ///  WM_NCHITTEST handler
         /// </summary>
         private void WmNCHitTest(ref Message m)
         {
@@ -7177,9 +7049,9 @@ namespace System.Windows.Forms
 
                 Size clientSize = ClientSize;
 
-                // If the grip is not fully visible the grip area could overlap with the system control box; we need to disable 
+                // If the grip is not fully visible the grip area could overlap with the system control box; we need to disable
                 // the grip area in this case not to get in the way of the control box.  We only need to check for the client's
-                // height since the window width will be at least the size of the control box which is always bigger than the 
+                // height since the window width will be at least the size of the control box which is always bigger than the
                 // grip width.
                 if (pt.x >= (clientSize.Width - SizeGripSize) &&
                     pt.y >= (clientSize.Height - SizeGripSize) &&
@@ -7206,9 +7078,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     WM_SHOWWINDOW handler
+        ///  WM_SHOWWINDOW handler
         /// </summary>
         private void WmShowWindow(ref Message m)
         {
@@ -7216,9 +7087,8 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-
         /// <summary>
-        ///     WM_SYSCOMMAND handler
+        ///  WM_SYSCOMMAND handler
         /// </summary>
         private void WmSysCommand(ref Message m)
         {
@@ -7269,11 +7139,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_SIZE handler
+        ///  WM_SIZE handler
         /// </summary>
         private void WmSize(ref Message m)
         {
-
             // If this is an MDI parent, don't pass WM_SIZE to the default
             // window proc. We handle resizing the MDIClient window ourselves
             // (using ControlDock.FILL).
@@ -7290,7 +7159,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_UNINITMENUPOPUP handler
+        ///  WM_UNINITMENUPOPUP handler
         /// </summary>
         private void WmUnInitMenuPopup(ref Message m)
         {
@@ -7302,11 +7171,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_WINDOWPOSCHANGED handler
+        ///  WM_WINDOWPOSCHANGED handler
         /// </summary>
         private void WmWindowPosChanged(ref Message m)
         {
-
             //           We must update the windowState, because resize is fired
             //           from here... (in Control)
             UpdateWindowState();
@@ -7316,7 +7184,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Base wndProc encapsulation.
+        ///  Base wndProc encapsulation.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
@@ -7430,18 +7298,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Represents a collection of controls on the form.</para>
+        ///  Represents a collection of controls on the form.
         /// </summary>
         [ComVisible(false)]
         public new class ControlCollection : Control.ControlCollection
         {
-
             private readonly Form owner;
 
             /*C#r:protected*/
 
             /// <summary>
-            /// <para>Initializes a new instance of the ControlCollection class.</para>
+            /// Initializes a new instance of the ControlCollection class.
             /// </summary>
             public ControlCollection(Form owner)
             : base(owner)
@@ -7450,8 +7317,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para> Adds a control
-            ///       to the form.</para>
+            ///  Adds a control
+            ///  to the form.
             /// </summary>
             public override void Add(Control value)
             {
@@ -7485,8 +7352,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Removes a control from the form.</para>
+                ///  Removes a control from the form.
             /// </summary>
             public override void Remove(Control value)
             {

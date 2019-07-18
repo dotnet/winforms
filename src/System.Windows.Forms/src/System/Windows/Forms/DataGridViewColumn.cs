@@ -2,22 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Text;
+using System.ComponentModel;
+using System.Globalization;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Globalization;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    ///    <para> Base class for the columns in a data grid view.</para>
+    ///  Base class for the columns in a data grid view.
     /// </summary>
     [
         Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign),
-        TypeConverterAttribute(typeof(DataGridViewColumnConverter)),
+        TypeConverter(typeof(DataGridViewColumnConverter)),
         ToolboxItem(false),
         DesignTimeVisible(false)
     ]
@@ -52,9 +49,7 @@ namespace System.Windows.Forms
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewColumn'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='DataGridViewColumn'/> class.
         /// </summary>
         public DataGridViewColumn() : this((DataGridViewCell)null)
         {
@@ -245,8 +240,8 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             DefaultValue(""),
-            TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
-            Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
+            Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)),
             SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr)),
             SRCategory(nameof(SR.CatData))
         ]
@@ -292,7 +287,6 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDefaultCellStyle()
         {
-
             if (!HasDefaultCellStyle)
             {
                 return false;
@@ -810,18 +804,18 @@ namespace System.Windows.Forms
                 // Change needed to bring the design time and the runtime "Name" property together.
                 // The ExtenderProvider adds a "Name" property of its own. It does this for all IComponents.
                 // The "Name" property added by the ExtenderProvider interacts only w/ the Site property.
-                // The Control class' Name property can be changed only thru the "Name" property provided by the 
+                // The Control class' Name property can be changed only thru the "Name" property provided by the
                 // Extender Service.
                 //
                 // However, the user can change the DataGridView::Name property in the DataGridViewEditColumnDialog.
-                // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name, 
+                // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name,
                 // the DataGridViewColumn should always go first to the Site.Name to retrieve the name.
                 //
                 // NOTE: one side effect of bringing together the design time and the run time "Name" properties is that DataGridViewColumn::Name changes.
                 // However, DataGridView does not fire ColumnNameChanged event.
                 // We can't fix this because ISite does not provide Name change notification. So in effect
                 // DataGridViewColumn does not know when its name changed.
-                // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged 
+                // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged
                 // being fired.
                 //
                 if (Site != null && !string.IsNullOrEmpty(Site.Name))
@@ -1062,7 +1056,7 @@ namespace System.Windows.Forms
 
         public override object Clone()
         {
-            // 
+            //
 
             DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
             if (dataGridViewColumn != null)
@@ -1107,7 +1101,7 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    // 
+                    //
                     lock (this)
                     {
                         if (site != null && site.Container != null)

@@ -96,7 +96,6 @@ namespace WinformsControlsTest
             };
             listView1.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
 
-
             // Add the ListView to the control collection.
             this.Controls.Add(listView1);
             listView1.Dock = DockStyle.Fill;

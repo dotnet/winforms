@@ -2,18 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.VisualStyles;
-    using System.ComponentModel;
-    using System.Windows.Forms.Internal;
-
-    /// <summary>
-    ///    <para></para>
-    /// </summary>
     public class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
     {
         private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
@@ -108,7 +102,6 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -223,7 +216,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -411,7 +404,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para></para>
         /// </summary>
         public override string ToString()
         {
@@ -475,7 +467,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
 
             public override string Name
             {

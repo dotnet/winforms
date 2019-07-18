@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is raised immediately before an undo action is performed. 
+        /// This event is raised immediately before an undo action is performed.
         /// </summary>
         public event EventHandler Undoing
         {
@@ -141,7 +141,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void CheckPopUnit(PopUnitReason reason)
         {
-
             // The logic in here is subtle.  This code handles both committing and cancelling of nested transactions.  Here's a summary of how it works:
             // 1.  Each time a transaction is opened, a new unit is pushed onto  the unit stack.
             // 2.  When a change occurs, the change event checks to see if there is a currently executing unit.  It also checks to see if the current unit stack is empty.  If there is no executing unit (meaning that nothing is performing an undo right now), and if the unit stack is empty, the change event will create a new undo unit and push it on the stack.
@@ -434,7 +433,7 @@ namespace System.ComponentModel.Design
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
-            // We need to keep track of all references in the container to the deleted component so  that those references can be fixed up if an undo of this "remove" occurs.       
+            // We need to keep track of all references in the container to the deleted component so  that those references can be fixed up if an undo of this "remove" occurs.
             if (_enabled && _host != null && _host.Container != null && _componentChangeService != null)
             {
                 List<ReferencingComponent> propsToUpdate = null;
@@ -481,7 +480,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            // Now walk all the units and notify them.  We don't care which order the units are notified.  By notifying all transactions we automatically support the cancelling of nested transactions.     
+            // Now walk all the units and notify them.  We don't care which order the units are notified.  By notifying all transactions we automatically support the cancelling of nested transactions.
             foreach (UndoUnit unit in _unitStack)
             {
                 unit.ComponentRemoving(e);
@@ -497,7 +496,7 @@ namespace System.ComponentModel.Design
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
-            // Now walk all the units and notify them.  We don't care which order the units are notified.  By notifying all transactions we automatically support the cancelling of nested transactions.  
+            // Now walk all the units and notify them.  We don't care which order the units are notified.  By notifying all transactions we automatically support the cancelling of nested transactions.
             foreach (UndoUnit unit in _unitStack)
             {
                 unit.ComponentRename(e);
@@ -523,7 +522,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is raised immediately before an undo action is performed. 
+        /// This event is raised immediately before an undo action is performed.
         /// </summary>
         protected virtual void OnUndoing(EventArgs e)
         {
@@ -570,7 +569,7 @@ namespace System.ComponentModel.Design
             private ArrayList _changeEvents; // the list of change events we're currently capturing.  Only valid until Commit is called.
             private ArrayList _removeEvents; // the list of remove events we're currently capturing.  Only valid until a matching Removed is encountered.
             private ArrayList _ignoreAddingList; // the list of objects that are currently being added.  We ignore change events between adding and added.
-            private ArrayList _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction 
+            private ArrayList _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction
             private bool _reverse; // if true, we walk the events list from the bottom up
             private readonly Hashtable _lastSelection; // the selection as it was before we gathered undo info
 
@@ -765,7 +764,7 @@ namespace System.ComponentModel.Design
                     _changeEvents = new ArrayList();
                 }
 
-                // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.  
+                // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
                 if (UndoEngine.GetName(e.Component, false) != null)
                 {
                     // The caller provided us with a component.  This is the common case.  We will add a new change event provided there is not already one open for this component.
@@ -1247,7 +1246,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Determines if this 
+                /// Determines if this
                 /// </summary>
                 public bool ContainsChange(MemberDescriptor desc)
                 {
@@ -1295,7 +1294,7 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    // It is OK for us to not find a component here.  That can happen if our "after" state is owned by another change, like an add of the component.  
+                    // It is OK for us to not find a component here.  That can happen if our "after" state is owned by another change, like an add of the component.
                     if (component != null)
                     {
                         _after = Serialize(engine, component, _member);

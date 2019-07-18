@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     public partial class DataGridView
     {
         [
-            System.Runtime.InteropServices.ComVisible(true)
+            ComVisible(true)
         ]
         protected class DataGridViewTopRowAccessibleObject : AccessibleObject
         {

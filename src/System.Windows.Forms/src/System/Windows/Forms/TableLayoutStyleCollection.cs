@@ -119,7 +119,7 @@ namespace System.Windows.Forms
 
         bool IList.IsReadOnly => _innerList.IsReadOnly;
 
-        void ICollection.CopyTo(System.Array array, int startIndex) => _innerList.CopyTo(array, startIndex);
+        void ICollection.CopyTo(Array array, int startIndex) => _innerList.CopyTo(array, startIndex);
 
         public int Count => _innerList.Count;
 

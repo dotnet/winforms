@@ -2,27 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Layout;
-    using System.Globalization;
-    using static UnsafeNativeMethods;
-
     /// <summary>
-    ///    <para>
-    ///       Represents a Windows progress bar control.
-    ///    </para>
+    ///  Represents a Windows progress bar control.
     /// </summary>
     [
     ComVisible(true),
@@ -33,8 +23,6 @@ namespace System.Windows.Forms
     ]
     public class ProgressBar : Control
     {
-
-
         //# VS7 205: simcooke
         //REMOVED: AddOnValueChanged, RemoveOnValueChanged, OnValueChanged and all designer plumbing associated with it.
         //         OnValueChanged event no longer exists.
@@ -57,12 +45,9 @@ namespace System.Windows.Forms
         private EventHandler onRightToLeftLayoutChanged;
         private bool rightToLeftLayout = false;
 
-
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.ProgressBar'/> class in its default
-        ///       state.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='ProgressBar'/> class in its default
+        ///  state.
         /// </summary>
         public ProgressBar()
         : base()
@@ -74,12 +59,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       This is called when creating a window. Inheriting classes can ovveride
-        ///       this to add extra functionality, but should not forget to first call
-        ///       base.getCreateParams() to make sure the control continues to work
-        ///       correctly.
-        ///    </para>
+        ///  This is called when creating a window. Inheriting classes can ovveride
+        ///  this to add extra functionality, but should not forget to first call
+        ///  base.getCreateParams() to make sure the control continues to work
+        ///  correctly.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -107,8 +90,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop
         {
@@ -122,8 +103,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
@@ -137,11 +116,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the style of the ProgressBar. This is can be either Blocks or Continuous.
-        ///    </para>
+        ///  Gets or sets the style of the ProgressBar. This is can be either Blocks or Continuous.
         /// </summary>
         [
         Browsable(true),
@@ -186,9 +162,6 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageChanged -= value;
         }
 
-
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
@@ -208,7 +181,6 @@ namespace System.Windows.Forms
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
-
 
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -240,8 +212,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -252,8 +224,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This property is overridden and hidden from statement completion
-        ///     on controls that are based on Win32 Native Controls.
+        ///  This property is overridden and hidden from statement completion
+        ///  on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
@@ -269,9 +241,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the font of text in the <see cref='System.Windows.Forms.ProgressBar'/>.
-        ///    </para>
+        ///  Gets or sets the font of text in the <see cref='ProgressBar'/>.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font
@@ -314,11 +284,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the marquee animation speed of the <see cref='System.Windows.Forms.ProgressBar'/>.
-        ///       Sets the value to a positive number causes the progressBar to move, while setting it to 0
-        ///       stops the progressBar.
-        ///    </para>
+        ///  Gets or sets the marquee animation speed of the <see cref='ProgressBar'/>.
+        ///  Sets the value to a positive number causes the progressBar to move, while setting it to 0
+        ///  stops the progressBar.
         /// </summary>
         [
         DefaultValue(100),
@@ -330,7 +298,6 @@ namespace System.Windows.Forms
             {
                 return marqueeSpeed;
             }
-            [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             set
             {
                 if (value < 0)
@@ -346,9 +313,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Start the Marquee rolling (or stop it, if the speed = 0)
-        ///    </para>
+        ///  Start the Marquee rolling (or stop it, if the speed = 0)
         /// </summary>
         private void StartMarquee()
         {
@@ -366,10 +331,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the maximum value of the <see cref='System.Windows.Forms.ProgressBar'/>.      
-        ///       Gets or sets the maximum value of the <see cref='System.Windows.Forms.ProgressBar'/>.
-        ///    </para>
+        ///  Gets or sets the maximum value of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the maximum value of the <see cref='ProgressBar'/>.
         /// </summary>
         [
         DefaultValue(100),
@@ -417,9 +380,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the minimum value of the <see cref='System.Windows.Forms.ProgressBar'/>.
-        ///    </para>
+        ///  Gets or sets the minimum value of the <see cref='ProgressBar'/>.
         /// </summary>
         [
         DefaultValue(0),
@@ -506,10 +467,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///     control placement and text will be from right to left.
+        ///  control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -538,7 +499,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
@@ -547,10 +507,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the amount that a call to <see cref='System.Windows.Forms.ProgressBar.PerformStep'/>
-        ///       increases the progress bar's current position.
-        ///    </para>
+        ///  Gets or sets the amount that a call to <see cref='PerformStep'/>
+        ///  increases the progress bar's current position.
         /// </summary>
         [
         DefaultValue(10),
@@ -573,8 +531,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
         {
@@ -595,8 +551,6 @@ namespace System.Windows.Forms
             remove => base.TabStopChanged -= value;
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text
         {
@@ -618,9 +572,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the current position of the <see cref='System.Windows.Forms.ProgressBar'/>.
-        ///    </para>
+        ///  Gets or sets the current position of the <see cref='ProgressBar'/>.
         /// </summary>
         [
         DefaultValue(0),
@@ -704,7 +656,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     ProgressBar Onpaint.
+        ///  ProgressBar Onpaint.
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -714,9 +666,6 @@ namespace System.Windows.Forms
             remove => base.Paint -= value;
         }
 
-
-        /// <summary>
-        /// </summary>
         protected override void CreateHandle()
         {
             if (!RecreatingHandle)
@@ -739,10 +688,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Advances the current position of the <see cref='System.Windows.Forms.ProgressBar'/> by the
-        ///       specified increment and redraws the control to reflect the new position.
-        ///    </para>
+        ///  Advances the current position of the <see cref='ProgressBar'/> by the
+        ///  specified increment and redraws the control to reflect the new position.
         /// </summary>
         public void Increment(int value)
         {
@@ -766,7 +713,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overridden to set up our properties.
+        ///  Overridden to set up our properties.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -781,7 +728,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overridden to remove event handler.
+        ///  Overridden to remove event handler.
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -805,14 +752,10 @@ namespace System.Windows.Forms
             onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
-
-
         /// <summary>
-        ///    <para>
-        ///       Advances the current position of the <see cref='System.Windows.Forms.ProgressBar'/>
-        ///       by the amount of the <see cref='System.Windows.Forms.ProgressBar.Step'/>
-        ///       property, and redraws the control to reflect the new position.
-        ///    </para>
+        ///  Advances the current position of the <see cref='ProgressBar'/>
+        ///  by the amount of the <see cref='Step'/>
+        ///  property, and redraws the control to reflect the new position.
         /// </summary>
         public void PerformStep()
         {
@@ -824,7 +767,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the fore color to be based on the parent's fore color.
+        ///  Resets the fore color to be based on the parent's fore color.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetForeColor()
@@ -832,9 +775,8 @@ namespace System.Windows.Forms
             ForeColor = defaultForeColor;
         }
 
-
         /// <summary>
-        ///     Returns true if the ForeColor should be persisted in code gen.
+        ///  Returns true if the ForeColor should be persisted in code gen.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeForeColor()
@@ -845,18 +787,17 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///    Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + value;
         }
 
         /// <summary>
-        ///     Sends the underlying window a PBM_SETPOS message to update
-        ///     the current value of the progressbar.
+        ///  Sends the underlying window a PBM_SETPOS message to update
+        ///  the current value of the progressbar.
         /// </summary>
         private void UpdatePos()
         {
@@ -867,7 +808,7 @@ namespace System.Windows.Forms
         }
 
         //Note: ProgressBar doesn't work like other controls as far as setting ForeColor/
-        //BackColor -- you need to send messages to update the colors 
+        //BackColor -- you need to send messages to update the colors
         private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
         {
             if (IsHandleCreated)
@@ -892,7 +833,6 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ProgressBarAccessibleObject : ControlAccessibleObject
         {
-
             internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner)
             {
             }

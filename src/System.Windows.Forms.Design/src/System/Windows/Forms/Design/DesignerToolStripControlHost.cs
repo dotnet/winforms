@@ -11,7 +11,6 @@ namespace System.Windows.Forms.Design
     /// <summary>
     /// This internal class is used by the new ToolStripDesigner to add a dummy node to the end. This class inherits from ToolStripControlHost and overrides the  CanSelect property so that the dummy Node when shown in the designer doesnt show selection on Mouse movements. The image is set to theDummyNodeImage embedded into the resources.
     /// </summary>
-
     internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
     {
         private BehaviorService _behaviorService;

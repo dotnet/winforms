@@ -122,7 +122,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void AddControlGlyphs(Control c, GlyphSelectionType selType)
         {
-
             ControlDesigner cd = (ControlDesigner)_componentToDesigner[c];
             if (cd != null)
             {
@@ -168,8 +167,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Unhook all of our event notifications, clear our adorner and remove it from the Beh.Svc.
         /// </summary>
-        // We don't need to Dispose rootComponent.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
             if (_designerHost != null)
@@ -380,7 +377,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
-            // Note: selectionChanging would guard against a re-entrant code... Since we dont want to be in messed up state when adding new Glyphs. 
+            // Note: selectionChanging would guard against a re-entrant code... Since we dont want to be in messed up state when adding new Glyphs.
             if (!_selectionChanging)
             {
                 _selectionChanging = true;
@@ -389,7 +386,7 @@ namespace System.Windows.Forms.Design
                 ArrayList selComps = new ArrayList(_selSvc.GetSelectedComponents());
                 object primarySelection = _selSvc.PrimarySelection;
 
-                //add all control glyphs to all controls on rootComp                                 
+                //add all control glyphs to all controls on rootComp
                 _curCompIndex = 0;
                 _curSelectionBounds = new Rectangle[selComps.Count];
                 AddAllControlGlyphs(_rootComponent, selComps, primarySelection);

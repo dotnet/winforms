@@ -10,7 +10,6 @@ namespace System.Windows.Forms.Tests
 {
     public class DpiHelperTests
     {
-
         /// <summary>
         /// Data for the LogicalToDeviceUnits test
         /// </summary>
