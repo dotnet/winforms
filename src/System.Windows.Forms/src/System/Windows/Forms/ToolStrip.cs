@@ -6222,6 +6222,11 @@ namespace System.Windows.Forms
 
             internal override bool SupportsUiaProviders => true;
 
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
+                return new ToolStripNumericUpDownAccessibleObject(this, Owner);
+            }
+
             private class ToolStripNumericUpDownAccessibleObject : ToolStripHostedControlAccessibleObject
             {
                 private ToolStripNumericUpDown _toolStripNumericUpDown;
