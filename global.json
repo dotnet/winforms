@@ -15,8 +15,8 @@
     "version": "3.0.100-preview6-012264"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19367.8",
-    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.19367.8",
+    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19368.7",
+    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.19368.7",
     "Microsoft.NET.Sdk.IL": "3.0.0-preview8.19366.3"
   },
   "native-tools": {
