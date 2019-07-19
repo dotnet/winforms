@@ -10,89 +10,77 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a <see cref='Panel'/>
-    ///  control.
+    /// Represents a <see cref='Panel'/> control.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(BorderStyle)),
-    DefaultEvent(nameof(Paint)),
-    Docking(DockingBehavior.Ask),
-    Designer("System.Windows.Forms.Design.PanelDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionPanel))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(BorderStyle))]
+    [DefaultEvent(nameof(Paint))]
+    [Docking(DockingBehavior.Ask)]
+    [Designer("System.Windows.Forms.Design.PanelDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionPanel))]
     public class Panel : ScrollableControl
     {
-        private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
+        private BorderStyle _borderStyle = BorderStyle.None;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='Panel'/> class.
         /// </summary>
-        public Panel()
-        : base()
+        public Panel() : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);
             TabStop = false;
-            SetStyle(ControlStyles.Selectable |
-                     ControlStyles.AllPaintingInWmPaint, false);
+            SetStyle(ControlStyles.Selectable | ControlStyles.AllPaintingInWmPaint, false);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
         /// <summary>
-        ///  Override to re-expose AutoSize.
+        /// Override to re-expose AutoSize.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
         /// <summary>
-        ///  Allows the control to optionally shrink when AutoSize is true.
+        /// Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
-        [
-        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(true),
-        DefaultValue(AutoSizeMode.GrowOnly),
-        Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ControlAutoSizeModeDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(true)]
+        [DefaultValue(AutoSizeMode.GrowOnly)]
+        [Localizable(true)]
         public virtual AutoSizeMode AutoSizeMode
         {
-            get
-            {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
+
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
                     if (ParentInternal != null)
                     {
-                        // DefaultLayout does not keep anchor information until it needs to.  When
+                        // DefaultLayout does not keep anchor information until it needs to. When
                         // AutoSize became a common property, we could no longer blindly call into
                         // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
                         if (ParentInternal.LayoutEngine == DefaultLayout.Instance)
@@ -106,43 +94,34 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates the
-        ///  border style for the control.
+        /// Indicates the border style for the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.None),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.PanelBorderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.None)]
+        [DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.PanelBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => _borderStyle;
             set
             {
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
-                    //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
 
-                    borderStyle = value;
+                    _borderStyle = value;
                     UpdateStyles();
                 }
             }
         }
 
         /// <summary>
-        ///  Returns the parameters needed to create the handle.  Inheriting classes
-        ///  can override this to provide extra functionality.  They should not,
-        ///  however, forget to call base.getCreateParams() first to get the struct
-        ///  filled up with the basic info.
+        /// Returns the parameters needed to create the handle. Inheriting classes can override
+        /// this to provide extra functionality. They should not, however, forget to call
+        /// base.getCreateParams() first to get the struct filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -154,7 +133,7 @@ namespace System.Windows.Forms
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
                 cp.Style &= (~NativeMethods.WS_BORDER);
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
@@ -168,16 +147,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Deriving classes can override this to configure a default size for their control.
-        ///  This is more efficient than setting the size in the control's constructor.
+        /// Deriving classes can override this to configure a default size for their control.
+        /// This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(200, 100);
-            }
-        }
+        protected override Size DefaultSize => new Size(200, 100);
 
         internal override Size GetPreferredSizeCore(Size proposedSize)
         {
@@ -189,24 +162,24 @@ namespace System.Windows.Forms
             return LayoutEngine.GetPreferredSize(this, proposedSize - totalPadding) + totalPadding;
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
@@ -214,50 +187,41 @@ namespace System.Windows.Forms
         }
 
         [DefaultValue(false)]
-        new public bool TabStop
+        public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
         /// <summary>
-        ///  Fires the event indicating that the panel has been resized.
-        ///  Inheriting controls should use this in favour of actually listening to
-        ///  the event, but should not forget to call base.onResize() to
-        ///  ensure that the event is still fired for external listeners.
+        /// Fires the event indicating that the panel has been resized.
+        /// Inheriting controls should use this in favour of actually listening to
+        /// the event, but should not forget to call base.onResize() to
+        /// ensure that the event is still fired for external listeners.
         /// </summary>
         protected override void OnResize(EventArgs eventargs)
         {
-            if (DesignMode && borderStyle == BorderStyle.None)
+            if (DesignMode && _borderStyle == BorderStyle.None)
             {
                 Invalidate();
             }
+
             base.OnResize(eventargs);
         }
 
@@ -274,20 +238,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private static string StringFromBorderStyle(BorderStyle value)
-        {
-            Type borderStyleType = typeof(BorderStyle);
-            return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
-        }
-
         /// <summary>
-        ///  Returns a string representation for this control.
+        /// Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", BorderStyle: " + StringFromBorderStyle(borderStyle);
+            return s + ", BorderStyle: " + typeof(BorderStyle).ToString() + "." + _borderStyle.ToString();
         }
-
     }
 }
