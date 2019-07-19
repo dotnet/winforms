@@ -236,8 +236,8 @@ namespace System.Windows.Forms
 
             InvalidateCachedColumnsOrder();
             int index = items.Add(dataGridViewColumn);
-            dataGridViewColumn.IndexInternal = index;
-            dataGridViewColumn.DataGridViewInternal = dataGridView;
+            dataGridViewColumn.Index = index;
+            dataGridViewColumn.DataGridView = dataGridView;
             UpdateColumnCaches(dataGridViewColumn, true);
             DataGridView.OnAddedColumn(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), false /*changeIsInsertion*/, new Point(-1, -1));
@@ -325,8 +325,8 @@ namespace System.Windows.Forms
             {
                 InvalidateCachedColumnsOrder();
                 index = items.Add(dataGridViewColumn);
-                dataGridViewColumn.IndexInternal = index;
-                dataGridViewColumn.DataGridViewInternal = dataGridView;
+                dataGridViewColumn.Index = index;
+                dataGridViewColumn.DataGridView = dataGridView;
                 UpdateColumnCaches(dataGridViewColumn, true);
                 DataGridView.OnAddedColumn(dataGridViewColumn);
             }
@@ -355,11 +355,11 @@ namespace System.Windows.Forms
                 {
                     DataGridViewColumn dataGridViewColumn = this[columnIndex];
                     // Detach the column...
-                    dataGridViewColumn.DataGridViewInternal = null;
+                    dataGridViewColumn.DataGridView = null;
                     // ...and its potential header cell
                     if (dataGridViewColumn.HasHeaderCell)
                     {
-                        dataGridViewColumn.HeaderCell.DataGridViewInternal = null;
+                        dataGridViewColumn.HeaderCell.DataGridView = null;
                     }
                 }
 
@@ -922,8 +922,8 @@ namespace System.Windows.Forms
             }
             InvalidateCachedColumnsOrder();
             items.Insert(columnIndex, dataGridViewColumn);
-            dataGridViewColumn.IndexInternal = columnIndex;
-            dataGridViewColumn.DataGridViewInternal = dataGridView;
+            dataGridViewColumn.Index = columnIndex;
+            dataGridViewColumn.DataGridView = dataGridView;
             UpdateColumnCaches(dataGridViewColumn, true);
             DataGridView.OnInsertedColumn_PreNotification(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), true /*changeIsInsertion*/, newCurrentCell);
@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms
             DataGridView.OnRemovingColumn(dataGridViewColumn, out Point newCurrentCell, force);
             InvalidateCachedColumnsOrder();
             items.RemoveAt(index);
-            dataGridViewColumn.DataGridViewInternal = null;
+            dataGridViewColumn.DataGridView = null;
             UpdateColumnCaches(dataGridViewColumn, false);
             DataGridView.OnRemovedColumn_PreNotification(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewColumn), false /*changeIsInsertion*/, newCurrentCell);

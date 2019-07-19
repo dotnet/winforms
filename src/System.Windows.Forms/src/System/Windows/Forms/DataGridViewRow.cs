@@ -198,7 +198,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool HasErrorText
+        private bool HasErrorText
         {
             get => Properties.ContainsObject(s_propRowErrorText) && Properties.GetObject(s_propRowErrorText) != null;
         }
@@ -1120,15 +1120,15 @@ namespace System.Windows.Forms
         {
             if (DataGridView != null)
             {
-                DataGridViewInternal = null;
-                IndexInternal = -1;
+                DataGridView = null;
+                Index = -1;
                 if (HasHeaderCell)
                 {
-                    HeaderCell.DataGridViewInternal = null;
+                    HeaderCell.DataGridView = null;
                 }
                 foreach (DataGridViewCell dataGridViewCell in Cells)
                 {
-                    dataGridViewCell.DataGridViewInternal = null;
+                    dataGridViewCell.DataGridView = null;
                     if (dataGridViewCell.Selected)
                     {
                         dataGridViewCell.SelectedInternal = false;

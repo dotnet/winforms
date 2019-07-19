@@ -140,18 +140,18 @@ namespace System.Windows.Forms
 
                 DataGridViewCell oldDataGridViewCell = (DataGridViewCell)items[index];
                 items[index] = dataGridViewCell;
-                dataGridViewCell.OwningRowInternal = owner;
-                dataGridViewCell.StateInternal = oldDataGridViewCell.State;
+                dataGridViewCell.OwningRow = owner;
+                dataGridViewCell.State = oldDataGridViewCell.State;
                 if (owner.DataGridView != null)
                 {
-                    dataGridViewCell.DataGridViewInternal = owner.DataGridView;
-                    dataGridViewCell.OwningColumnInternal = owner.DataGridView.Columns[index];
+                    dataGridViewCell.DataGridView = owner.DataGridView;
+                    dataGridViewCell.OwningColumn = owner.DataGridView.Columns[index];
                     owner.DataGridView.OnReplacedCell(owner, index);
                 }
 
-                oldDataGridViewCell.DataGridViewInternal = null;
-                oldDataGridViewCell.OwningRowInternal = null;
-                oldDataGridViewCell.OwningColumnInternal = null;
+                oldDataGridViewCell.DataGridView = null;
+                oldDataGridViewCell.OwningRow = null;
+                oldDataGridViewCell.OwningColumn = null;
                 if (oldDataGridViewCell.ReadOnly)
                 {
                     oldDataGridViewCell.ReadOnlyInternal = false;
@@ -223,11 +223,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!dataGridViewCell.Selected);
             int index = items.Add(dataGridViewCell);
-            dataGridViewCell.OwningRowInternal = owner;
+            dataGridViewCell.OwningRow = owner;
             DataGridView dataGridView = owner.DataGridView;
             if (dataGridView != null && dataGridView.Columns.Count > index)
             {
-                dataGridViewCell.OwningColumnInternal = dataGridView.Columns[index];
+                dataGridViewCell.OwningColumn = dataGridView.Columns[index];
             }
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
             return index;
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
             items.AddRange(dataGridViewCells);
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
-                dataGridViewCell.OwningRowInternal = owner;
+                dataGridViewCell.OwningRow = owner;
                 Debug.Assert(!dataGridViewCell.Selected);
             }
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
             }
             foreach (DataGridViewCell dataGridViewCell in items)
             {
-                dataGridViewCell.OwningRowInternal = null;
+                dataGridViewCell.OwningRow = null;
             }
             items.Clear();
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
             Debug.Assert(!dataGridViewCell.ReadOnly);
             Debug.Assert(!dataGridViewCell.Selected);
             items.Insert(index, dataGridViewCell);
-            dataGridViewCell.OwningRowInternal = owner;
+            dataGridViewCell.OwningRow = owner;
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
         }
 
@@ -333,11 +333,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!dataGridViewCell.Selected);
             items.Insert(index, dataGridViewCell);
-            dataGridViewCell.OwningRowInternal = owner;
+            dataGridViewCell.OwningRow = owner;
             DataGridView dataGridView = owner.DataGridView;
             if (dataGridView != null && dataGridView.Columns.Count > index)
             {
-                dataGridViewCell.OwningColumnInternal = dataGridView.Columns[index];
+                dataGridViewCell.OwningColumn = dataGridView.Columns[index];
             }
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
         }
@@ -386,8 +386,8 @@ namespace System.Windows.Forms
         {
             DataGridViewCell dataGridViewCell = (DataGridViewCell)items[index];
             items.RemoveAt(index);
-            dataGridViewCell.DataGridViewInternal = null;
-            dataGridViewCell.OwningRowInternal = null;
+            dataGridViewCell.DataGridView = null;
+            dataGridViewCell.OwningRow = null;
             if (dataGridViewCell.ReadOnly)
             {
                 dataGridViewCell.ReadOnlyInternal = false;
