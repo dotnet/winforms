@@ -1966,7 +1966,7 @@ namespace System.Windows.Forms
             public virtual object GetData(string format, bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetData: " + format + ", " + autoConvert.ToString());
-                if (format == null)
+                if (string.IsNullOrWhiteSpace(format))
                 {
                     return null;
                 }
@@ -2031,9 +2031,14 @@ namespace System.Windows.Forms
             public virtual void SetData(string format, bool autoConvert, object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
-                if (format == null)
+                if (string.IsNullOrWhiteSpace(format))
                 {
-                    throw new ArgumentNullException(nameof(format));
+                    if (format == null)
+                    {
+                        throw new ArgumentNullException(nameof(format));
+                    }
+
+                    throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
                 }
 
                 // We do not have proper support for Dibs, so if the user explicitly asked
@@ -2098,7 +2103,7 @@ namespace System.Windows.Forms
             public virtual bool GetDataPresent(string format, bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: " + format + ", " + autoConvert.ToString());
-                if (format == null)
+                if (string.IsNullOrWhiteSpace(format))
                 {
                     return false;
                 }

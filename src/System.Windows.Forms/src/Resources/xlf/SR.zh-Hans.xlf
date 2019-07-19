@@ -4544,6 +4544,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Bitmap 对象不直接支持与设备无关的位图格式。  请指定自动转换，或使用位图数据格式执行 SetData。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">在 DataSource 上未找到 DataMember 属性“{0}”。</target>

@@ -237,6 +237,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { format };
             }
 
+            yield return new object[] { "  " };
             yield return new object[] { string.Empty };
             yield return new object[] { null };
         }
@@ -251,9 +252,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetData_InvokeStringMocked_TestData()
         {
-            foreach (object result in new object[] { null, new object() })
+            foreach (object result in new object[] { new object(), null })
             {
                 yield return new object[] { "format", result };
+                yield return new object[] { "  ", result };
                 yield return new object[] { string.Empty, result };
                 yield return new object[] { null, result };
             }
@@ -277,9 +279,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetData_StringIDataObject_TestData()
         {
-            foreach (object result in new object[] { null, new object() })
+            foreach (object result in new object[] { new object(), null })
             {
                 yield return new object[] { "format", result };
+                yield return new object[] { "  ", result };
                 yield return new object[] { string.Empty, result };
                 yield return new object[] { null, result };
             }
@@ -312,6 +315,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { format, autoConvert };
                 }
 
+                yield return new object[] { "  ", autoConvert };
                 yield return new object[] { string.Empty, autoConvert };
                 yield return new object[] { null, autoConvert };
             }
@@ -329,9 +333,10 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool autoConvert in new bool[] { true, false })
             {
-                foreach (object result in new object[] { null, new object() })
+                foreach (object result in new object[] { new object(), null })
                 {
                     yield return new object[] { "format", autoConvert, result };
+                    yield return new object[] { "  ", autoConvert, result };
                     yield return new object[] { string.Empty, autoConvert, result };
                     yield return new object[] { null, autoConvert, result };
                 }
@@ -363,7 +368,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetData_InvokeTypeMocked_TestData()
         {
-            foreach (object result in new object[] { null, new object() })
+            foreach (object result in new object[] { new object(), null })
             {
                 yield return new object[] { typeof(int), result, 1, result };
                 yield return new object[] { null, result, 0, null };
@@ -398,6 +403,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { format };
             }
 
+            yield return new object[] { "  " };
             yield return new object[] { string.Empty };
             yield return new object[] { null };
         }
@@ -415,6 +421,7 @@ namespace System.Windows.Forms.Tests
             foreach (bool result in new bool[] { true, false })
             {
                 yield return new object[] { "format", result };
+                yield return new object[] { "  ", result };
                 yield return new object[] { string.Empty, result };
                 yield return new object[] { null, result };
             }
@@ -441,6 +448,7 @@ namespace System.Windows.Forms.Tests
             foreach (bool result in new bool[] { true, false })
             {
                 yield return new object[] { "format", result };
+                yield return new object[] { "  ", result };
                 yield return new object[] { string.Empty, result };
                 yield return new object[] { null, result };
             }
@@ -473,6 +481,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { format, autoConvert };
                 }
 
+                yield return new object[] { "  ", autoConvert };
                 yield return new object[] { string.Empty, autoConvert };
                 yield return new object[] { null, autoConvert };
             }
@@ -493,6 +502,7 @@ namespace System.Windows.Forms.Tests
                 foreach (bool result in new bool[] { true, false })
                 {
                     yield return new object[] { "format", autoConvert, result };
+                    yield return new object[] { "  ", autoConvert, result };
                     yield return new object[] { string.Empty, autoConvert, result };
                     yield return new object[] { null, autoConvert, result };
                 }
@@ -527,26 +537,25 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool result in new bool[] { true, false })
             {
-                yield return new object[] { typeof(int), result, 1, result };
-                yield return new object[] { null, result, 0, false };
+                yield return new object[] { typeof(int), result, 1, result, typeof(int).FullName };
+                yield return new object[] { null, result, 0, false, "(null)" };
             }
         }
 
         [Theory]
         [MemberData(nameof(GetDataPresent_InvokeTypeMocked_TestData))]
-        public void DataObject_GetDataPresent_InvokeTypeMocked_CallsGetDataPresent(Type format, bool result, int expectedCallCount, bool expectedResult)
+        public void DataObject_GetDataPresent_InvokeTypeMocked_CallsGetDataPresent(Type format, bool result, int expectedCallCount, bool expectedResult, string expectedFormatName)
         {
             var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
             mockDataObject
                 .Setup(o => o.GetDataPresent(It.IsAny<Type>()))
                 .CallBase();
-            string formatName = format?.FullName ?? "(null)";
             mockDataObject
-                .Setup(o => o.GetDataPresent(formatName))
+                .Setup(o => o.GetDataPresent(expectedFormatName))
                 .Returns(result)
                 .Verifiable();
             Assert.Equal(expectedResult, mockDataObject.Object.GetDataPresent(format));
-            mockDataObject.Verify(o => o.GetDataPresent(formatName), Times.Exactly(expectedCallCount));
+            mockDataObject.Verify(o => o.GetDataPresent(expectedFormatName), Times.Exactly(expectedCallCount));
         }
 
         [Fact]
@@ -561,7 +570,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, Array.Empty<string>() };
             yield return new object[] { new object(), Array.Empty<string>() };
 
-            var list = new string[] { "a", string.Empty, null };
+            var list = new string[] { "a", "  ", string.Empty, null };
             yield return new object[] { list, list };
         }
 
@@ -601,7 +610,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new string[0] };
-            yield return new object[] { new string[] { "a", string.Empty, null } };
+            yield return new object[] { new string[] { "a", "  ", string.Empty, null } };
         }
 
         [Theory]
@@ -625,6 +634,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null };
             yield return new object[] { new string[0] };
             yield return new object[] { new string[] { "a", string.Empty, null } };
+            yield return new object[] { new string[] { "a", "  ", string.Empty, null } };
         }
 
         [Theory]
@@ -655,7 +665,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { autoConvert, null };
                 yield return new object[] { autoConvert, new string[0] };
-                yield return new object[] { autoConvert, new string[] { "a" } };
+                yield return new object[] { autoConvert, new string[] { "a", "  ", string.Empty, null } };
             }
         }
 
@@ -725,6 +735,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null, string.Empty };
             yield return new object[] { string.Empty, string.Empty };
+            yield return new object[] { "  ", "  " };
             yield return new object[] { "a", "a" };
         }
 
@@ -765,22 +776,32 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, null, string.Empty };
             yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, new object(), string.Empty };
+            yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, string.Empty, string.Empty };
+            yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, "  ", "  " };
             yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, "a", "a" };
 
             yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, null, string.Empty };
             yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, new object(), string.Empty };
+            yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, string.Empty, string.Empty };
+            yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, "  ", "  " };
             yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, "a", "a" };
 
             yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, null, string.Empty };
             yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, new object(), string.Empty };
+            yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, string.Empty, string.Empty };
+            yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, "  ", "  " };
             yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, "a", "a" };
 
             yield return new object[] { TextDataFormat.Html, DataFormats.Html, null, string.Empty };
             yield return new object[] { TextDataFormat.Html, DataFormats.Html, new object(), string.Empty };
+            yield return new object[] { TextDataFormat.Html, DataFormats.Html, string.Empty, string.Empty };
+            yield return new object[] { TextDataFormat.Html, DataFormats.Html, "  ", "  " };
             yield return new object[] { TextDataFormat.Html, DataFormats.Html, "a", "a" };
 
             yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, null, string.Empty };
             yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, new object(), string.Empty };
+            yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, string.Empty, string.Empty };
+            yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, "  ", "  " };
             yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, "a", "a" };
         }
 
@@ -1072,7 +1093,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetData_StringObjectIDataObject_TestData()
         {
-            foreach (string format in new string[] { null, string.Empty, "format" })
+            foreach (string format in new string[] { "format", "  ", string.Empty, null })
             {
                 yield return new object[] { format, null };
                 yield return new object[] { format, new object() };
@@ -1165,7 +1186,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetData_StringBoolObjectIDataObject_TestData()
         {
-            foreach (string format in new string[] { null, string.Empty, "format" })
+            foreach (string format in new string[] { "format", "  ", string.Empty, null })
             {
                 foreach (bool autoConvert in new bool[] { true, false })
                 {
@@ -1190,7 +1211,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetData_TypeObjectIDataObject_TestData()
         {
-            foreach (Type format in new Type[] { null, typeof(int) })
+            foreach (Type format in new Type[] { typeof(int), null })
             {
                 yield return new object[] { format, null };
                 yield return new object[] { format, new object() };
@@ -1220,6 +1241,17 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("format", () => dataObject.SetData((Type)null, new object()));
         }
 
+        [Theory]
+        [InlineData("")]
+        [InlineData("  ")]
+        public void DataObject_SetData_WhitespaceOrEmptyFormat_ThrowsArgumentException(string format)
+        {
+            var dataObject = new DataObject();
+            Assert.Throws<ArgumentException>("format", () => dataObject.SetData(format, new object()));
+            Assert.Throws<ArgumentException>("format", () => dataObject.SetData(format, true, new object()));
+            Assert.Throws<ArgumentException>("format", () => dataObject.SetData(format, false, new object()));
+        }
+
         [Fact]
         public void DataObject_SetData_DibBitmapNoAutoConvert_ThrowsNotSupportedException()
         {
@@ -1230,7 +1262,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> SetFileDropList_TestData()
         {
             yield return new object[] { new StringCollection() };
-            yield return new object[] { new StringCollection { null, string.Empty, "file" } };
+            yield return new object[] { new StringCollection { "file", "  ", string.Empty, null } };
         }
 
         [Theory]
@@ -1356,6 +1388,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetText_String_TestData()
         {
+            yield return new object[] { "  " };
             yield return new object[] { "textData" };
         }
 
@@ -1424,11 +1457,14 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetText_StringTextDataFormat_TestData()
         {
-            yield return new object[] { "textData", TextDataFormat.Text, "textData", null, null, null };
-            yield return new object[] { "textData", TextDataFormat.UnicodeText, "textData", null, null, null };
-            yield return new object[] { "textData", TextDataFormat.Rtf, null, "textData", null, null };
-            yield return new object[] { "textData", TextDataFormat.Html, null, null, "textData", null };
-            yield return new object[] { "textData", TextDataFormat.CommaSeparatedValue, null, null, null, "textData" };
+            foreach (string textData in new string[] { "textData", "  " })
+            {
+                yield return new object[] { textData, TextDataFormat.Text, textData, null, null, null };
+                yield return new object[] { textData, TextDataFormat.UnicodeText, textData, null, null, null };
+                yield return new object[] { textData, TextDataFormat.Rtf, null, textData, null, null };
+                yield return new object[] { textData, TextDataFormat.Html, null, null, textData, null };
+                yield return new object[] { textData, TextDataFormat.CommaSeparatedValue, null, null, null, textData };
+            }
         }
 
         [Theory]
@@ -1468,11 +1504,14 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetText_StringTextDataFormatMocked_TestData()
         {
-            yield return new object[] { "textData", TextDataFormat.Text, DataFormats.UnicodeText };
-            yield return new object[] { "textData", TextDataFormat.UnicodeText, DataFormats.UnicodeText };
-            yield return new object[] { "textData", TextDataFormat.Rtf, DataFormats.Rtf };
-            yield return new object[] { "textData", TextDataFormat.Html, DataFormats.Html };
-            yield return new object[] { "textData", TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue };
+            foreach (string textData in new string[] { "textData", "  " })
+            {
+                yield return new object[] { textData, TextDataFormat.Text, DataFormats.UnicodeText };
+                yield return new object[] { textData, TextDataFormat.UnicodeText, DataFormats.UnicodeText };
+                yield return new object[] { textData, TextDataFormat.Rtf, DataFormats.Rtf };
+                yield return new object[] { textData, TextDataFormat.Html, DataFormats.Html };
+                yield return new object[] { textData, TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue };
+            }
         }
 
         [Theory]
