@@ -270,7 +270,7 @@ namespace System.Windows.Forms
             {
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(string.Format(SR.ToolTipEmptyColor, "ForeColor"));
+                    throw new ArgumentException(string.Format(SR.ToolTipEmptyColor, nameof(ForeColor)), nameof(value));
                 }
 
                 foreColor = value;
@@ -1582,14 +1582,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Shows a tooltip for specified text, window, and hotspot
         /// </summary>
-        private void ShowTooltip(string text, IWin32Window win, int duration)
+        private void ShowTooltip(string text, IWin32Window window, int duration)
         {
-            if (win == null)
+            if (window == null)
             {
-                throw new ArgumentNullException(nameof(win));
+                throw new ArgumentNullException(nameof(window));
             }
 
-            if (win is Control associatedControl)
+            if (window is Control associatedControl)
             {
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
@@ -1619,11 +1619,11 @@ namespace System.Windows.Forms
                     p.Y = visibleRect.top + (visibleRect.bottom - visibleRect.top) / 2;
                     associatedControl.PointToClient(p);
                     SetTrackPosition(p.X, p.Y);
-                    SetTool(win, text, TipInfo.Type.SemiAbsolute, p);
+                    SetTool(window, text, TipInfo.Type.SemiAbsolute, p);
 
                     if (duration > 0)
                     {
-                        StartTimer(window, duration);
+                        StartTimer(this.window, duration);
                     }
 
                 }
@@ -1674,6 +1674,10 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int duration)
         {
+            if (window == null)
+            {
+                throw new ArgumentNullException(nameof(window));
+            }
             if (duration < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
