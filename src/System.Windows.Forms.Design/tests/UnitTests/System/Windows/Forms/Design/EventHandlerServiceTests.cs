@@ -52,8 +52,9 @@ namespace System.Windows.Forms.Design.Tests
         {
             var service = new EventHandlerService(null);
             var handler = new Button();
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            service.GetTestAccessor().LastHandler = handler;
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
+            accessor.LastHandler = handler;
 
             Assert.Same(handler, service.GetHandler(typeof(Button)));
         }
@@ -62,10 +63,11 @@ namespace System.Windows.Forms.Design.Tests
         public void GetHandler_should_return_handler_from_stack_if_found()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
             var stackHead = CreateStack();
             var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            accessor.HandlerHead = stackHead;
 
             var foundHandler = service.GetHandler(handler.GetType());
 
@@ -76,34 +78,37 @@ namespace System.Windows.Forms.Design.Tests
         public void GetHandler_should_set_lastHandlerType_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            service.GetTestAccessor().HandlerHead = CreateStack();
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
+            accessor.HandlerHead = CreateStack();
 
             var foundHandler = service.GetHandler(typeof(TextBox));
 
-            Assert.Same(typeof(TextBox), service.GetTestAccessor().LastHandlerType);
+            Assert.Same(typeof(TextBox), accessor.LastHandlerType);
         }
 
         [Fact]
         public void GetHandler_should_set_lastHandler_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
             var stackHead = CreateStack();
             var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            accessor.HandlerHead = stackHead;
 
             var foundHandler = service.GetHandler(handler.GetType());
 
-            Assert.Same(handler, service.GetTestAccessor().LastHandler);
+            Assert.Same(handler, accessor.LastHandler);
         }
 
         [Fact]
         public void GetHandler_should_return_null_if_handler_not_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            service.GetTestAccessor().HandlerHead = CreateStack();
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
+            accessor.HandlerHead = CreateStack();
 
             Assert.Null(service.GetHandler(typeof(ComboBox)));
         }
@@ -132,14 +137,15 @@ namespace System.Windows.Forms.Design.Tests
             using (new TraceListenerlessContext())
             {
                 var service = new EventHandlerService(null);
-                service.GetTestAccessor().LastHandlerType = typeof(Button);
+                var accessor = service.GetTestAccessor();
+                accessor.LastHandlerType = typeof(Button);
                 var stackHead = CreateStack();
-                service.GetTestAccessor().HandlerHead = stackHead;
+                accessor.HandlerHead = stackHead;
 
                 service.PopHandler(typeof(ComboBox));
 
                 var depth = 0;
-                for (HandlerEntry entry = service.GetTestAccessor().HandlerHead; entry != null; entry = entry.next)
+                for (HandlerEntry entry = accessor.HandlerHead; entry != null; entry = entry.next)
                 {
                     depth++;
                 }
@@ -152,15 +158,16 @@ namespace System.Windows.Forms.Design.Tests
         public void PopHandler_should_pop_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
             var stackHead = CreateStack();
             var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            accessor.HandlerHead = stackHead;
 
             service.PopHandler(handler);
 
             var depth = 0;
-            for (HandlerEntry entry = service.GetTestAccessor().HandlerHead; entry != null; entry = entry.next)
+            for (HandlerEntry entry = accessor.HandlerHead; entry != null; entry = entry.next)
             {
                 depth++;
             }
@@ -172,38 +179,41 @@ namespace System.Windows.Forms.Design.Tests
         public void PopHandler_should_set_lastHandler_null_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
             var stackHead = CreateStack();
             var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            accessor.HandlerHead = stackHead;
 
             service.PopHandler(handler);
 
-            Assert.Null(service.GetTestAccessor().LastHandler);
+            Assert.Null(accessor.LastHandler);
         }
 
         [Fact]
         public void PopHandler_should_set_lastHandlerType_null_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
             var stackHead = CreateStack();
             var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            accessor.HandlerHead = stackHead;
 
             service.PopHandler(handler);
 
-            Assert.Null(service.GetTestAccessor().LastHandlerType);
+            Assert.Null(accessor.LastHandlerType);
         }
 
         [Fact]
         public void PopHandler_should_raise_changedEvent_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
+            var accessor = service.GetTestAccessor();
+            accessor.LastHandlerType = typeof(Button);
             var stackHead = CreateStack();
             var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            accessor.HandlerHead = stackHead;
             int callCount = 0;
             service.EventHandlerChanged += (s, e) => { callCount++; };
 
