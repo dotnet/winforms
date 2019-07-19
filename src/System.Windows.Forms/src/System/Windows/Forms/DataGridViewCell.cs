@@ -49,8 +49,6 @@ namespace System.Windows.Forms
         private static Bitmap errorBmp = null;
 
         private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
-        private DataGridViewRow owningRow;
-        private DataGridViewColumn owningColumn;
 
         private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
@@ -101,17 +99,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the Index of a column in the <see cref='DataGrid'/> control.
         /// </summary>
-        public int ColumnIndex
-        {
-            get
-            {
-                if (owningColumn == null)
-                {
-                    return -1;
-                }
-                return owningColumn.Index;
-            }
-        }
+        public int ColumnIndex => OwningColumn?.Index ?? -1;
 
         [
             Browsable(false)
@@ -210,7 +198,7 @@ namespace System.Windows.Forms
                 if (RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Displayed && owningRow.Displayed;
+                    return OwningColumn.Displayed && OwningRow.Displayed;
                 }
 
                 return false;
@@ -367,11 +355,11 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Frozen && owningRow.Frozen;
+                    return OwningColumn.Frozen && OwningRow.Frozen;
                 }
-                else if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0))
+                else if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0))
                 {
-                    return owningRow.Frozen;
+                    return OwningRow.Frozen;
                 }
                 return false;
             }
@@ -458,19 +446,11 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public DataGridViewColumn OwningColumn
-        {
-            get => owningColumn;
-            set => owningColumn = value;
-        }
+        public DataGridViewColumn OwningColumn { get; internal set; }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public DataGridViewRow OwningRow
-        {
-            get => owningRow;
-            internal set => owningRow = value;
-        }
+        public DataGridViewRow OwningRow { get; internal set; }
 
         [
             Browsable(false)
@@ -503,14 +483,14 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0) && owningRow.ReadOnly)
+                if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.ReadOnly)
                 {
                     return true;
                 }
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.ReadOnly;
+                    return OwningColumn.ReadOnly;
                 }
                 return false;
             }
@@ -532,17 +512,17 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (owningRow == null)
+                    if (OwningRow == null)
                     {
                         if (value != ReadOnly)
                         {
                             // We do not allow the read-only flag of a cell to be changed before it is added to a row.
-                            throw new InvalidOperationException(string.Format(SR.DataGridViewCell_CannotSetReadOnlyState));
+                            throw new InvalidOperationException(SR.DataGridViewCell_CannotSetReadOnlyState);
                         }
                     }
                     else
                     {
-                        owningRow.SetReadOnlyCellCore(this, value);
+                        OwningRow.SetReadOnlyCellCore(this, value);
                     }
                 }
             }
@@ -575,7 +555,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert((State & DataGridViewElementStates.Resizable) == 0);
 
-                if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0) && owningRow.Resizable == DataGridViewTriState.True)
+                if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.Resizable == DataGridViewTriState.True)
                 {
                     return true;
                 }
@@ -583,7 +563,7 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Resizable == DataGridViewTriState.True;
+                    return OwningColumn.Resizable == DataGridViewTriState.True;
                 }
 
                 return false;
@@ -593,20 +573,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the index of a row in the <see cref='DataGrid'/> control.
         /// </summary>
-        [
-            Browsable(false)
-        ]
-        public int RowIndex
-        {
-            get
-            {
-                if (owningRow == null)
-                {
-                    return -1;
-                }
-                return owningRow.Index;
-            }
-        }
+        [Browsable(false)]
+        public int RowIndex => OwningRow?.Index ?? -1;
 
         [
             Browsable(false),
@@ -621,7 +589,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0) && owningRow.Selected)
+                if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.Selected)
                 {
                     return true;
                 }
@@ -629,7 +597,7 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Selected;
+                    return OwningColumn.Selected;
                 }
 
                 return false;
@@ -883,11 +851,11 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Visible && owningRow.Visible;
+                    return OwningColumn.Visible && OwningRow.Visible;
                 }
-                else if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0))
+                else if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0))
                 {
-                    return owningRow.Visible;
+                    return OwningRow.Visible;
                 }
                 return false;
             }
@@ -996,20 +964,20 @@ namespace System.Windows.Forms
                 rect.Height++;
             }
 
-            if (owningColumn != null)
+            if (OwningColumn != null)
             {
                 if (DataGridView != null && DataGridView.RightToLeftInternal)
                 {
-                    rect.X += owningColumn.DividerWidth;
+                    rect.X += OwningColumn.DividerWidth;
                 }
                 else
                 {
-                    rect.Width += owningColumn.DividerWidth;
+                    rect.Width += OwningColumn.DividerWidth;
                 }
             }
-            if (owningRow != null)
+            if (OwningRow != null)
             {
-                rect.Height += owningRow.DividerHeight;
+                rect.Height += OwningRow.DividerHeight;
             }
 
             return rect;
@@ -1027,9 +995,9 @@ namespace System.Windows.Forms
             Debug.Assert(ColumnIndex >= 0);
             DataGridViewElementStates orFlags = DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.Selected;
             DataGridViewElementStates andFlags = DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Visible;
-            DataGridViewElementStates cellState = (owningColumn.State & orFlags);
+            DataGridViewElementStates cellState = (OwningColumn.State & orFlags);
             cellState |= (rowState & orFlags);
-            cellState |= ((owningColumn.State & andFlags) & (rowState & andFlags));
+            cellState |= ((OwningColumn.State & andFlags) & (rowState & andFlags));
             return cellState;
         }
 
@@ -1869,8 +1837,9 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
-            Debug.Assert(owningRow != null);
-            return owningRow.GetHeight(rowIndex);
+
+            Debug.Assert(OwningRow != null);
+            return OwningRow.GetHeight(rowIndex);
         }
 
         public virtual ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
@@ -1894,18 +1863,18 @@ namespace System.Windows.Forms
                 return contextMenuStrip;
             }
 
-            if (owningRow != null)
+            if (OwningRow != null)
             {
-                contextMenuStrip = owningRow.GetContextMenuStrip(rowIndex);
+                contextMenuStrip = OwningRow.GetContextMenuStrip(rowIndex);
                 if (contextMenuStrip != null)
                 {
                     return contextMenuStrip;
                 }
             }
 
-            if (owningColumn != null)
+            if (OwningColumn != null)
             {
-                contextMenuStrip = owningColumn.ContextMenuStrip;
+                contextMenuStrip = OwningColumn.ContextMenuStrip;
                 if (contextMenuStrip != null)
                 {
                     return contextMenuStrip;
@@ -1933,10 +1902,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
-                if (owningRow != null)
+                if (OwningRow != null)
                 {
-                    state |= (owningRow.GetState(-1) & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible));
-                    if (owningRow.GetResizable(rowIndex) == DataGridViewTriState.True)
+                    state |= (OwningRow.GetState(-1) & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible));
+                    if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True)
                     {
                         state |= DataGridViewElementStates.Resizable;
                     }
@@ -1950,33 +1919,33 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            Debug.Assert(owningColumn != null);
-            Debug.Assert(owningRow != null);
+            Debug.Assert(OwningColumn != null);
+            Debug.Assert(OwningRow != null);
             Debug.Assert(ColumnIndex >= 0);
 
-            if (DataGridView.Rows.SharedRow(rowIndex) != owningRow)
+            if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
             {
                 throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
             }
 
             DataGridViewElementStates rowEffectiveState = DataGridView.Rows.GetRowState(rowIndex);
             state |= (rowEffectiveState & (DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected));
-            state |= (owningColumn.State & (DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected));
+            state |= (OwningColumn.State & (DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected));
 
-            if (owningRow.GetResizable(rowIndex) == DataGridViewTriState.True ||
-                owningColumn.Resizable == DataGridViewTriState.True)
+            if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True ||
+                OwningColumn.Resizable == DataGridViewTriState.True)
             {
                 state |= DataGridViewElementStates.Resizable;
             }
-            if (owningColumn.Visible && owningRow.GetVisible(rowIndex))
+            if (OwningColumn.Visible && OwningRow.GetVisible(rowIndex))
             {
                 state |= DataGridViewElementStates.Visible;
-                if (owningColumn.Displayed && owningRow.GetDisplayed(rowIndex))
+                if (OwningColumn.Displayed && OwningRow.GetDisplayed(rowIndex))
                 {
                     state |= DataGridViewElementStates.Displayed;
                 }
             }
-            if (owningColumn.Frozen && owningRow.GetFrozen(rowIndex))
+            if (OwningColumn.Frozen && OwningRow.GetFrozen(rowIndex))
             {
                 state |= DataGridViewElementStates.Frozen;
             }
@@ -2060,9 +2029,9 @@ namespace System.Windows.Forms
             }
 
             DataGridViewCellStyle columnStyle = null;
-            if (owningColumn.HasDefaultCellStyle)
+            if (OwningColumn.HasDefaultCellStyle)
             {
-                columnStyle = owningColumn.DefaultCellStyle;
+                columnStyle = OwningColumn.DefaultCellStyle;
                 Debug.Assert(columnStyle != null);
             }
 
@@ -2504,9 +2473,10 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedCell, "Size"));
             }
-            Debug.Assert(owningColumn != null);
-            Debug.Assert(owningRow != null);
-            return new Size(owningColumn.Thickness, owningRow.GetHeight(rowIndex));
+
+            Debug.Assert(OwningColumn != null);
+            Debug.Assert(OwningRow != null);
+            return new Size(OwningColumn.Thickness, OwningRow.GetHeight(rowIndex));
         }
 
         private string GetToolTipText(int rowIndex)
@@ -3337,7 +3307,7 @@ namespace System.Windows.Forms
 
             GetContrastedPens(cellStyle.BackColor, ref penControlDark, ref penControlLightLight);
 
-            int dividerThickness = owningColumn == null ? 0 : owningColumn.DividerWidth;
+            int dividerThickness = OwningColumn?.DividerWidth ?? 0;
             if (dividerThickness != 0)
             {
                 if (dividerThickness > bounds.Width)
@@ -3375,7 +3345,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            dividerThickness = owningRow == null ? 0 : owningRow.DividerHeight;
+            dividerThickness = OwningRow?.DividerHeight ?? 0;
             if (dividerThickness != 0)
             {
                 if (dividerThickness > bounds.Height)
@@ -3700,7 +3670,7 @@ namespace System.Windows.Forms
 
             using (WindowsGraphics windowsGraphics = WindowsGraphics.FromGraphics(graphics))
             {
-                int dividerThickness = this.owningColumn == null ? 0 : this.owningColumn.DividerWidth;
+                int dividerThickness = this.owningColumn == null ? 0 : this.OwningColumn.DividerWidth;
                 if (dividerThickness != 0)
                 {
                     if (dividerThickness > bounds.Width)
@@ -3738,7 +3708,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                dividerThickness = this.owningRow == null ? 0 : this.owningRow.DividerHeight;
+                dividerThickness = OwningRow.DividerHeight ?? 0;
                 if (dividerThickness != 0)
                 {
                     if (dividerThickness > bounds.Height)
@@ -4621,16 +4591,10 @@ namespace System.Windows.Forms
                 {
                     if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    if (owner.OwningRow == null)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return owner.OwningRow.AccessibilityObject;
-                    }
+                    
+                    return owner.OwningRow?.AccessibilityObject;
                 }
             }
 
