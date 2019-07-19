@@ -3842,11 +3842,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, treeView.Text);
+            Assert.Equal(expected, treeView.Text);
 
             // Set same.
             treeView.Text = value;
-            Assert.Same(expected, treeView.Text);
+            Assert.Equal(expected, treeView.Text);
         }
 
         [Fact]
