@@ -422,8 +422,14 @@ namespace System.Windows.Forms
         public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
-                                               int x, int y, int cx, int cy, int flags);
+        public static extern bool SetWindowPos(
+            HandleRef hWnd,
+            HandleRef hWndInsertAfter,
+            int x = 0,
+            int y = 0,
+            int cx = 0,
+            int cy = 0,
+            int flags = 0);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,

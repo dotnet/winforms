@@ -25,10 +25,8 @@ namespace System.Windows.Forms
 
         private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
 
-        /**
-         * Table of prime numbers to use as hash table sizes. Each entry is the
-         * smallest prime number larger than twice the previous entry.
-         */
+        // Table of prime numbers to use as hash table sizes. Each entry is the
+        // smallest prime number larger than twice the previous entry.
         private readonly static int[] primes = {
             11,17,23,29,37,47,59,71,89,107,131,163,197,239,293,353,431,521,631,761,919,
             1103,1327,1597,1931,2333,2801,3371,4049,4861,5839,7013,8419,10103,12143,14591,
@@ -38,16 +36,15 @@ namespace System.Windows.Forms
             4999559, 5999471, 7199369
         };
 
-        const int InitializedFlags = 0x01;
-        const int UseDebuggableWndProc = 0x04;
+        private const int InitializedFlags = 0x01;
+        private const int UseDebuggableWndProc = 0x04;
 
         // do we have any active HWNDs?
-        //
         [ThreadStatic]
-        static bool anyHandleCreated;
-        static bool anyHandleCreatedInApp;
+        private static bool anyHandleCreated;
+        private static bool anyHandleCreatedInApp;
 
-        const float hashLoadFactor = .72F;
+        private const float hashLoadFactor = .72F;
 
         private static int handleCount;
         private static int hashLoadSize;
@@ -65,21 +62,14 @@ namespace System.Windows.Forms
         private static readonly object internalSyncObject = new object();
         private static readonly object createWindowSyncObject = new object();
 
-#if DEBUG
-        string subclassStatus = "None";
-#endif
-        IntPtr handle;
-        NativeMethods.WndProc windowProc;
-        IntPtr windowProcPtr;
-        IntPtr defWindowProc;
-        bool suppressedGC;
-        bool ownHandle;
-        NativeWindow previousWindow; // doubly linked list of subclasses.
-        NativeWindow nextWindow;
-        readonly WeakReference weakThisPtr;
-        private readonly DpiAwarenessContext windowDpiAwarenessContext = DpiHelper.IsScalingRequirementMet ?
-                                                                  CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext() :
-                                                                  DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+        private NativeMethods.WndProc windowProc;
+        private static IntPtr _defaultWindowProc;
+        private IntPtr windowProcPtr;
+        private IntPtr defWindowProc;
+        private bool suppressedGC;
+        private bool ownHandle;
+        private NativeWindow nextWindow;
+        private readonly WeakReference weakThisPtr;
 
         static NativeWindow()
         {
@@ -111,13 +101,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
-        internal DpiAwarenessContext DpiAwarenessContext
-        {
-            get
-            {
-                return windowDpiAwarenessContext;
-            }
-        }
+        internal DpiAwarenessContext DpiAwarenessContext { get; } = DpiHelper.IsScalingRequirementMet
+            ? CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext()
+            : DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
         /// <summary>
         ///  Override's the base object's finalize method.
@@ -139,19 +125,19 @@ namespace System.Windows.Forms
 
             lock (this)
             {
-                h = handle;
+                h = Handle;
                 ownedHandle = ownHandle;
             }
 
-            if (handle != IntPtr.Zero)
+            if (Handle != IntPtr.Zero)
             {
                 //now, before we set handle to zero and finish the finalizer, let's send
                 // a WM_NULL to the window.  Why?  Because if the main ui thread is INSIDE
                 // the wndproc for this control during our unsubclass, then we could AV
                 // when control finally reaches us.
-                if (UnsafeNativeMethods.IsWindow(new HandleRef(null, handle)))
+                if (UnsafeNativeMethods.IsWindow(new HandleRef(null, Handle)))
                 {
-                    int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int lpdwProcessId);
+                    int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, Handle), out int lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
                     IntPtr threadHandle = (ctx == null ? IntPtr.Zero : ctx.GetHandle());
 
@@ -160,7 +146,7 @@ namespace System.Windows.Forms
                         SafeNativeMethods.GetExitCodeThread(new HandleRef(null, threadHandle), out int exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && exitCode == NativeMethods.STATUS_PENDING)
                         {
-                            if (UnsafeNativeMethods.SendMessageTimeout(new HandleRef(null, handle),
+                            if (UnsafeNativeMethods.SendMessageTimeout(new HandleRef(null, Handle),
                                 NativeMethods.WM_UIUNSUBCLASS, IntPtr.Zero, IntPtr.Zero,
                                 UnsafeNativeMethods.SMTO_ABORTIFHUNG, 100, out IntPtr result) == IntPtr.Zero)
                             {
@@ -171,18 +157,16 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (handle != IntPtr.Zero)
+                if (Handle != IntPtr.Zero)
                 {
-                    //if the dest thread is gone, it should be safe to unsubclass here.
+                    // If the dest thread is gone, it should be safe to unsubclass here.
                     ReleaseHandle(true);
                 }
             }
 
             if (h != IntPtr.Zero && ownedHandle)
             {
-                // If we owned the handle, post a
-                // WM_CLOSE to get rid of it.
-                //
+                // If we owned the handle, post a WM_CLOSE to get rid of it.
                 UnsafeNativeMethods.PostMessage(new HandleRef(this, h), Interop.WindowMessages.WM_CLOSE, 0, 0);
             }
         }
@@ -201,21 +185,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the handle for this window.
         /// </summary>
-        public IntPtr Handle
-        {
-            get
-            {
-                // We cannot assert this here.  Consider the case where someone has created an HWND on a thread but
-                // never started a message pump.  When the thread is cleaned up by the OS USER will destroy all window
-                // handles. This happens long before we finalize, so when finalization does come along and we
-                // try to check to see if we should PostMessage(WM_CLOSE, this assert would fire.
-                //
-                // Debug.Assert(handle == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(this, handle)),
-                //             "Attempt to access a non-valid handle ");
-
-                return handle;
-            }
-        }
+        public IntPtr Handle { get; private set; }
 
         /// <summary>
         ///  This returns the previous NativeWindow in the chain of subclasses.
@@ -225,24 +195,37 @@ namespace System.Windows.Forms
         ///
         ///  This should be public, but it is way too late for that.
         /// </summary>
-        internal NativeWindow PreviousWindow
-        {
-            get
-            {
-                return previousWindow;
-            }
-        }
+        internal NativeWindow PreviousWindow { get; private set; }
 
         /// <summary>
         /// Address of the Windows default WNDPROC (DefWindowProcW).
         /// </summary>
-        internal static IntPtr DefaultWindowProc { get; private set; }
+        internal static IntPtr DefaultWindowProc
+        {
+            get
+            {
+                if (_defaultWindowProc == IntPtr.Zero)
+                {
+                    // Cache the default windows procedure address
+                    _defaultWindowProc = UnsafeNativeMethods.GetProcAddress(
+                        new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(ExternDll.User32)),
+                        "DefWindowProcW");
+
+                    if (_defaultWindowProc == IntPtr.Zero)
+                    {
+                        throw new Win32Exception();
+                    }
+                }
+
+                return _defaultWindowProc;
+            }
+        }
 
         private static int WndProcFlags
         {
             get
             {
-                // upcast for easy bit masking...
+                // Upcast for easy bit masking...
                 int intWndProcFlags = wndProcFlags;
 
                 // Check to see if a debugger is installed.  If there is, then use
@@ -321,7 +304,6 @@ namespace System.Windows.Forms
                 }
 
                 // set a flag that this thread is tracking an HWND
-                //
                 anyHandleCreated = true;
                 // ...same for the application
                 anyHandleCreatedInApp = true;
@@ -345,14 +327,15 @@ namespace System.Windows.Forms
                         emptySlotNumber = bucketNumber;
                     }
 
-                    //We need to check if the collision bit is set because we have the possibility where the first
-                    //item in the hash-chain has been deleted.
+                    // We need to check if the collision bit is set because we have the possibility where the first
+                    // item in the hash-chain has been deleted.
                     if ((hashBuckets[bucketNumber].handle == IntPtr.Zero) ||
                         (hashBuckets[bucketNumber].handle == new IntPtr(-1) && ((hashBuckets[bucketNumber].hash_coll & unchecked(0x80000000)) == 0)))
                     {
 
                         if (emptySlotNumber != -1)
-                        { // Reuse slot
+                        {
+                            // Reuse slot
                             bucketNumber = emptySlotNumber;
                         }
 
@@ -370,7 +353,6 @@ namespace System.Windows.Forms
 
                     // If there is an existing window in this slot, reuse it.  Be sure to hook up the previous and next
                     // window pointers so we can get back to the right window.
-                    //
                     if (((hashBuckets[bucketNumber].hash_coll & 0x7FFFFFFF) == hashcode) && handle == hashBuckets[bucketNumber].handle)
                     {
                         GCHandle prevWindow = hashBuckets[bucketNumber].window;
@@ -378,9 +360,9 @@ namespace System.Windows.Forms
                         {
                             if (prevWindow.Target != null)
                             {
-                                window.previousWindow = ((NativeWindow)prevWindow.Target);
-                                Debug.Assert(window.previousWindow.nextWindow == null, "Last window in chain should have null next ptr");
-                                window.previousWindow.nextWindow = window;
+                                window.PreviousWindow = ((NativeWindow)prevWindow.Target);
+                                Debug.Assert(window.PreviousWindow.nextWindow == null, "Last window in chain should have null next ptr");
+                                window.PreviousWindow.nextWindow = window;
                             }
                             prevWindow.Free();
                         }
@@ -391,7 +373,7 @@ namespace System.Windows.Forms
                         while (w != null)
                         {
                             ownerString += ("->" + w.ToString());
-                            w = w.previousWindow;
+                            w = w.PreviousWindow;
                         }
                         hashBuckets[bucketNumber].owner = ownerString;
 #endif
@@ -455,18 +437,7 @@ namespace System.Windows.Forms
                 CheckReleased();
                 Debug.Assert(handle != IntPtr.Zero, "handle is 0");
 
-                this.handle = handle;
-
-                if (DefaultWindowProc == IntPtr.Zero)
-                {
-                    string defproc = "DefWindowProcW";
-
-                    DefaultWindowProc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")), defproc);
-                    if (DefaultWindowProc == IntPtr.Zero)
-                    {
-                        throw new Win32Exception();
-                    }
-                }
+                this.Handle = handle;
 
                 defWindowProc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
                 Debug.Assert(defWindowProc != IntPtr.Zero, "defWindowProc is 0");
@@ -553,7 +524,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void CheckReleased()
         {
-            if (handle != IntPtr.Zero)
+            if (Handle != IntPtr.Zero)
             {
                 throw new InvalidOperationException(SR.HandleAlreadyExists);
             }
@@ -575,7 +546,7 @@ namespace System.Windows.Forms
                     // If a message comes through (say a WM_ACTIVATE for the parent) which
                     // causes the handle to be created, we can try to create the handle twice
                     // for NativeWindow. Check the handle again t avoid this.
-                    if (handle != IntPtr.Zero)
+                    if (Handle != IntPtr.Zero)
                     {
                         return;
                     }
@@ -585,7 +556,7 @@ namespace System.Windows.Forms
 
                     // Parking window dpi awarness context need to match with dpi awarenss context of control being
                     // parented to this parkign window. Otherwise, reparenting of control will fail.
-                    using (DpiHelper.EnterDpiAwarenessScope(windowDpiAwarenessContext))
+                    using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                     {
                         IntPtr modHandle = UnsafeNativeMethods.GetModuleHandle(null);
 
@@ -681,14 +652,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DefWndProc(ref Message m)
         {
-            if (previousWindow == null)
+            if (PreviousWindow == null)
             {
                 if (defWindowProc == IntPtr.Zero)
                 {
-
-#if DEBUG
-                    Debug.Fail("Can't find a default window procedure for message " + m.ToString() + " on class " + GetType().Name + " subclass status: " + subclassStatus);
-#endif
+                    Debug.Fail($"Can't find a default window procedure for message {m} on class {GetType().Name}");
 
                     // At this point, there isn't much we can do.  There's a
                     // small chance the following line will allow the rest of
@@ -700,8 +668,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.Assert(previousWindow != this, "Looping in our linked list");
-                m.Result = previousWindow.Callback(m.HWnd, m.Msg, m.WParam, m.LParam);
+                Debug.Assert(PreviousWindow != this, "Looping in our linked list");
+                m.Result = PreviousWindow.Callback(m.HWnd, m.Msg, m.WParam, m.LParam);
             }
         }
 
@@ -714,15 +682,15 @@ namespace System.Windows.Forms
             //
             lock (this)
             {
-                if (handle != IntPtr.Zero)
+                if (Handle != IntPtr.Zero)
                 {
-                    if (!UnsafeNativeMethods.DestroyWindow(new HandleRef(this, handle)))
+                    if (!UnsafeNativeMethods.DestroyWindow(new HandleRef(this, Handle)))
                     {
                         UnSubclass();
                         //then post a close and let it do whatever it needs to do on its own.
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
                     }
-                    handle = IntPtr.Zero;
+                    Handle = IntPtr.Zero;
                     ownHandle = false;
                 }
 
@@ -976,7 +944,7 @@ namespace System.Windows.Forms
                                 NativeWindow w = (NativeWindow)b.window.Target;
                                 if (w != null)
                                 {
-                                    w.handle = IntPtr.Zero;
+                                    w.Handle = IntPtr.Zero;
                                 }
                             }
 
@@ -1021,25 +989,25 @@ namespace System.Windows.Forms
         /// </summary>
         private void ReleaseHandle(bool handleValid)
         {
-            if (handle != IntPtr.Zero)
+            if (Handle != IntPtr.Zero)
             {
                 lock (this)
                 {
-                    if (handle != IntPtr.Zero)
+                    if (Handle != IntPtr.Zero)
                     {
                         if (handleValid)
                         {
                             UnSubclass();
                         }
 
-                        RemoveWindowFromTable(handle, this);
+                        RemoveWindowFromTable(Handle, this);
 
                         if (ownHandle)
                         {
                             ownHandle = false;
                         }
 
-                        handle = IntPtr.Zero;
+                        Handle = IntPtr.Zero;
                         //if not finalizing already.
                         if (weakThisPtr.IsAlive && weakThisPtr.Target != null)
                         {
@@ -1086,18 +1054,18 @@ namespace System.Windows.Forms
 
                         // We need to fixup the link pointers of window here.
                         //
-                        if (window.previousWindow != null)
+                        if (window.PreviousWindow != null)
                         {
-                            window.previousWindow.nextWindow = window.nextWindow;
+                            window.PreviousWindow.nextWindow = window.nextWindow;
                         }
                         if (window.nextWindow != null)
                         {
                             window.nextWindow.defWindowProc = window.defWindowProc;
-                            window.nextWindow.previousWindow = window.previousWindow;
+                            window.nextWindow.PreviousWindow = window.PreviousWindow;
                         }
 
                         window.nextWindow = null;
-                        window.previousWindow = null;
+                        window.PreviousWindow = null;
 
                         if (shouldReplaceBucket)
                         {
@@ -1242,19 +1210,15 @@ namespace System.Windows.Forms
         private void UnSubclass()
         {
             bool finalizing = (!weakThisPtr.IsAlive || weakThisPtr.Target == null);
-            HandleRef href = new HandleRef(this, handle);
+            HandleRef href = new HandleRef(this, Handle);
 
             // Don't touch if the current window proc is not ours.
 
-            IntPtr currentWinPrc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
+            IntPtr currentWinPrc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_WNDPROC);
             if (windowProcPtr == currentWinPrc)
             {
-                if (previousWindow == null)
+                if (PreviousWindow == null)
                 {
-#if DEBUG
-                    subclassStatus = "Unsubclassing back to native defWindowProc";
-#endif
-
                     // If the defWindowProc points to a native window proc, previousWindow will
                     // be null.  In this case, it is completely safe to assign defWindowProc
                     // to the current wndproc.
@@ -1264,11 +1228,6 @@ namespace System.Windows.Forms
                 {
                     if (finalizing)
                     {
-
-#if DEBUG
-                        subclassStatus = "Setting back to userDefWindowProc -- next chain is managed";
-#endif
-
                         // Here, we are finalizing and defWindowProc is pointing to a managed object.  We must assume
                         // that the object defWindowProc is pointing to is also finalizing.  Why?  Because we're
                         // holding a ref to it, and it is holding a ref to us.  The only way this cycle will
@@ -1278,15 +1237,10 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-
-#if DEBUG
-                        subclassStatus = "Setting back to next managed subclass object";
-#endif
-
                         // Here we are not finalizing so we use the windowProc for our previous window.  This may
                         // DIFFER from the value we are currently storing in defWindowProc because someone may
                         // have re-subclassed.
-                        UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, previousWindow.windowProc);
+                        UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, PreviousWindow.windowProc);
                     }
                 }
             }
@@ -1305,9 +1259,6 @@ namespace System.Windows.Forms
                     // we didn't find it... let's unhook anyway and cut the chain... this prevents crashes
                     UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(this, DefaultWindowProc));
                 }
-#if DEBUG
-                subclassStatus = "FORCE unsubclass -- we do not own the subclass";
-#endif
             }
         }
 
@@ -1360,7 +1311,8 @@ namespace System.Windows.Forms
             internal NativeMethods.WndProc _windowProc;
             internal NativeWindow _targetWindow;
 
-            private static string s_appDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
+            // There is only ever one AppDomain
+            private static string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
 
             private static readonly object s_wcInternalSyncObject = new object();
 
@@ -1445,9 +1397,9 @@ namespace System.Windows.Forms
 
                 const string versionSuffix = "_r3_ad1";
                 Debug.Assert(string.Equals(
-                    VersioningHelper.MakeVersionSafeName(s_appDomainHash, ResourceScope.Process, ResourceScope.AppDomain),
-                    s_appDomainHash + versionSuffix));
-                b.Append(s_appDomainHash);
+                    VersioningHelper.MakeVersionSafeName(s_currentAppDomainHash, ResourceScope.Process, ResourceScope.AppDomain),
+                    s_currentAppDomainHash + versionSuffix));
+                b.Append(s_currentAppDomainHash);
                 b.Append(versionSuffix);
 
                 return b.ToString();
@@ -1459,19 +1411,6 @@ namespace System.Windows.Forms
             private unsafe void RegisterClass()
             {
                 NativeMethods.WNDCLASS windowClass = new NativeMethods.WNDCLASS();
-
-                if (DefaultWindowProc == IntPtr.Zero)
-                {
-                    // Cache the default windows procedure address
-                    DefaultWindowProc = UnsafeNativeMethods.GetProcAddress(
-                        new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")),
-                        "DefWindowProcW");
-
-                    if (DefaultWindowProc == IntPtr.Zero)
-                    {
-                        throw new Win32Exception();
-                    }
-                }
 
                 string localClassName = _className;
 

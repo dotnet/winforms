@@ -5656,8 +5656,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel() && SafeNativeMethods.IsWindowEnabled(new HandleRef(window, Handle)))
             {
-                SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                               NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                SafeNativeMethods.SetWindowPos(
+                    new HandleRef(window, Handle),
+                    NativeMethods.HWND_TOP,
+                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
             }
         }
 
@@ -11846,8 +11848,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel())
             {
-                SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
-                                               NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                SafeNativeMethods.SetWindowPos(
+                    new HandleRef(window, Handle),
+                    NativeMethods.HWND_BOTTOM,
+                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
             }
         }
 
@@ -11980,7 +11984,14 @@ namespace System.Windows.Forms
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
-                            SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.NullHandleRef, x, y, width, height, flags);
+                            SafeNativeMethods.SetWindowPos(
+                                new HandleRef(window, Handle),
+                                NativeMethods.NullHandleRef,
+                                x,
+                                y,
+                                width,
+                                height,
+                                flags);
 
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
                             // synchonously so we effectively end up in UpdateBounds immediately following
@@ -12234,12 +12245,11 @@ namespace System.Windows.Forms
                         SafeNativeMethods.SetWindowPos(
                             new HandleRef(window, Handle),
                             NativeMethods.NullHandleRef,
-                            0, 0, 0, 0,
-                            NativeMethods.SWP_NOSIZE
-                            | NativeMethods.SWP_NOMOVE
-                            | NativeMethods.SWP_NOZORDER
-                            | NativeMethods.SWP_NOACTIVATE
-                            | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                            flags: NativeMethods.SWP_NOSIZE
+                                | NativeMethods.SWP_NOMOVE
+                                | NativeMethods.SWP_NOZORDER
+                                | NativeMethods.SWP_NOACTIVATE
+                                | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
                     }
                     catch
                     {
@@ -12289,13 +12299,16 @@ namespace System.Windows.Forms
                 // If the handle is already created, we need to update the window style.
                 // This situation occurs when the parent control is not currently visible,
                 // but the child control has already been created.
-                //
                 if (IsHandleCreated)
                 {
                     SafeNativeMethods.SetWindowPos(
-                        new HandleRef(window, Handle), NativeMethods.NullHandleRef, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE |
-                        NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE |
-                        (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                        new HandleRef(window, Handle),
+                        NativeMethods.NullHandleRef,
+                        flags: NativeMethods.SWP_NOSIZE
+                            | NativeMethods.SWP_NOMOVE
+                            | NativeMethods.SWP_NOZORDER
+                            | NativeMethods.SWP_NOACTIVATE
+                            | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
                 }
             }
         }
@@ -12820,8 +12833,10 @@ namespace System.Windows.Forms
                 state |= STATE_NOZORDER;
                 try
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(ctl.window, ctl.Handle), new HandleRef(null, prevHandle), 0, 0, 0, 0,
-                                                   NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    SafeNativeMethods.SetWindowPos(
+                        new HandleRef(ctl.window, ctl.Handle),
+                        new HandleRef(null, prevHandle),
+                        flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
                 }
                 finally
                 {
@@ -12875,9 +12890,13 @@ namespace System.Windows.Forms
                 }
 
                 SafeNativeMethods.SetWindowPos(
-                                              new HandleRef(this, Handle), NativeMethods.NullHandleRef, 0, 0, 0, 0,
-                                              NativeMethods.SWP_DRAWFRAME | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE
-                                              | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
+                    new HandleRef(this, Handle),
+                    NativeMethods.NullHandleRef,
+                    flags: NativeMethods.SWP_DRAWFRAME
+                        | NativeMethods.SWP_NOACTIVATE
+                        | NativeMethods.SWP_NOMOVE
+                        | NativeMethods.SWP_NOSIZE
+                        | NativeMethods.SWP_NOZORDER);
 
                 Invalidate(true);
             }
@@ -19325,9 +19344,7 @@ namespace System.Windows.Forms
             {
                 Font font = (Font)obj;
                 NativeMethods.tagFONTDESC fontDesc = new NativeMethods.tagFONTDESC();
-                NativeMethods.LOGFONT logFont = new NativeMethods.LOGFONT();
-
-                font.ToLogFont(logFont);
+                NativeMethods.LOGFONT logFont = NativeMethods.LOGFONT.FromFont(font);
 
                 fontDesc.lpstrName = font.Name;
                 fontDesc.cySize = (long)(font.SizeInPoints * 10000);

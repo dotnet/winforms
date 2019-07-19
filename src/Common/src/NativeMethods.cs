@@ -2362,32 +2362,27 @@ namespace System.Windows.Forms
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NONCLIENTMETRICS
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct NONCLIENTMETRICS
         {
-            public int cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
-            public int iBorderWidth = 0;
-            public int iScrollWidth = 0;
-            public int iScrollHeight = 0;
-            public int iCaptionWidth = 0;
-            public int iCaptionHeight = 0;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfCaptionFont = null;
-            public int iSmCaptionWidth = 0;
-            public int iSmCaptionHeight = 0;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfSmCaptionFont = null;
-            public int iMenuWidth = 0;
-            public int iMenuHeight = 0;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfMenuFont = null;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfStatusFont = null;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfMessageFont = null;
-            // Necessary since Windows Vista.
-            // Since we are supporting >= Windows 7, this is safe to add.
-            public int iPaddedBorderWidth = 0;
+            public uint cbSize;
+            public int iBorderWidth;
+            public int iScrollWidth;
+            public int iScrollHeight;
+            public int iCaptionWidth;
+            public int iCaptionHeight;
+            public LOGFONT lfCaptionFont;
+            public int iSmCaptionWidth;
+            public int iSmCaptionHeight;
+            public LOGFONT lfSmCaptionFont;
+            public int iMenuWidth;
+            public int iMenuHeight;
+            public LOGFONT lfMenuFont;
+            public LOGFONT lfStatusFont;
+            public LOGFONT lfMessageFont;
+
+            // This is supported on Windows vista and later
+            public int iPaddedBorderWidth;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2850,12 +2845,11 @@ namespace System.Windows.Forms
             public IntPtr lbHatch;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LOGFONT
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct LOGFONT
         {
-            public LOGFONT()
-            {
-            }
+            private const int LF_FACESIZE = 32;
+
             public int lfHeight;
             public int lfWidth;
             public int lfEscapement;
@@ -2869,8 +2863,34 @@ namespace System.Windows.Forms
             public byte lfClipPrecision;
             public byte lfQuality;
             public byte lfPitchAndFamily;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string lfFaceName;
+            private fixed char _lfFaceName[LF_FACESIZE];
+            private Span<char> lfFaceName
+            {
+                get { fixed (char* c = _lfFaceName) { return new Span<char>(c, LF_FACESIZE); } }
+            }
+
+            public ReadOnlySpan<char> FaceName
+            {
+                get => lfFaceName.TrimEnd('\0');
+                set => SpanHelpers.CopyAndTerminate(value, lfFaceName);
+            }
+
+            // Font.ToLogFont will copy LOGFONT into a blittable struct,
+            // but we need to box it upfront so we can unbox.
+
+            public static LOGFONT FromFont(Font font)
+            {
+                object logFont = new LOGFONT();
+                font.ToLogFont(logFont);
+                return (LOGFONT)logFont;
+            }
+
+            public static LOGFONT FromFont(Font font, Graphics graphics)
+            {
+                object logFont = new LOGFONT();
+                font.ToLogFont(logFont, graphics);
+                return (LOGFONT)logFont;
+            }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4629,19 +4649,31 @@ namespace System.Windows.Forms
             public int cpMax;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public class CHARFORMATW
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct CHARFORMATW
         {
-            public int cbSize = Marshal.SizeOf<CHARFORMATW>();
+            private const int LF_FACESIZE = 32;
+
+            public int cbSize;
             public int dwMask;
             public int dwEffects;
             public int yHeight;
-            public int yOffset = 0;
-            public int crTextColor = 0;
+            public int yOffset;
+            public int crTextColor;
             public byte bCharSet;
             public byte bPitchAndFamily;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] szFaceName = new byte[64];
+
+            private fixed char _szFaceName[LF_FACESIZE];
+            private Span<char> szFaceName
+            {
+                get { fixed (char* c = _szFaceName) { return new Span<char>(c, LF_FACESIZE); } }
+            }
+
+            public ReadOnlySpan<char> FaceName
+            {
+                get => szFaceName.TrimEnd('\0');
+                set => SpanHelpers.CopyAndTerminate(value, szFaceName);
+            }
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
@@ -4814,6 +4846,7 @@ namespace System.Windows.Forms
             SHOWCODE = 0x2
         }
 
+#pragma warning disable CA1712 // Don't prefix enum values with enum type
         public enum OLECMDID
         {
             OLECMDID_SAVEAS = 4,
@@ -4840,6 +4873,7 @@ namespace System.Windows.Forms
             OLECMDF_INVISIBLE = 0x00000010,
             OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
         }
+#pragma warning enable CA1712
 
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES

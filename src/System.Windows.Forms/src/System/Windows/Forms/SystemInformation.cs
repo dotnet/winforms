@@ -259,36 +259,34 @@ namespace System.Windows.Forms
             return GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
         }
 
-        private static Font GetMenuFontHelper(uint dpi, bool useDpi)
+        private unsafe static Font GetMenuFontHelper(uint dpi, bool useDpi)
         {
-            Font menuFont = null;
-
             // We can get the system's menu font through the NONCLIENTMETRICS structure
             // via SystemParametersInfo
-            var data = new NativeMethods.NONCLIENTMETRICS();
-            bool result;
-            if (useDpi)
-            {
-                result = UnsafeNativeMethods.TrySystemParametersInfoForDpi(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0, dpi);
-            }
-            else
-            {
-                result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-            }
+            var data = new NativeMethods.NONCLIENTMETRICS { cbSize = (uint)sizeof(NativeMethods.NONCLIENTMETRICS) };
 
-            if (result && data.lfMenuFont != null)
+            bool result = useDpi
+                ? UnsafeNativeMethods.TrySystemParametersInfoForDpi(NativeMethods.SPI_GETNONCLIENTMETRICS, (int)data.cbSize,
+                    ref data, 0, dpi)
+                : UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, (int)data.cbSize,
+                    ref data, 0);
+
+            if (result)
             {
                 try
                 {
-                    menuFont = Font.FromLogFont(data.lfMenuFont);
+                    return Font.FromLogFont(data.lfMenuFont);
                 }
-                catch
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch (ArgumentException)
                 {
-                    // Menu font is not true type. Default to standard control font.
-                    menuFont = Control.DefaultFont;
+                    // Font.FromLogFont throws ArgumentException when it finds
+                    // a font that is not TrueType. Default to standard control font.
                 }
+#pragma warning restore CA1031
             }
-            return menuFont;
+
+            return Control.DefaultFont;
         }
 
         /// <summary>
@@ -1359,7 +1357,7 @@ namespace System.Windows.Forms
             {
                 // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
                 var data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
+                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, (int)data.cbSize, ref data, 0);
                 return result && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
             }
         }
@@ -1373,7 +1371,7 @@ namespace System.Windows.Forms
             {
                 // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
                 var data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
+                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, (int)data.cbSize, ref data, 0);
                 if (result && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0)
                 {
                     return new Size(data.iSmCaptionWidth, data.iSmCaptionHeight);
@@ -1394,7 +1392,7 @@ namespace System.Windows.Forms
             {
                 // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
                 var data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
+                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, (int)data.cbSize, ref data, 0);
                 if (result && data.iMenuHeight > 0 && data.iMenuWidth > 0)
                 {
                     return new Size(data.iMenuWidth, data.iMenuHeight);

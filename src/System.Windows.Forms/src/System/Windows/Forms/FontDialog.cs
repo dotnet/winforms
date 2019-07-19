@@ -452,9 +452,9 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_COMMAND:
                     if ((int)wparam == 0x402)
                     {
-                        NativeMethods.LOGFONT lf = new NativeMethods.LOGFONT();
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), Interop.WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, lf);
-                        UpdateFont(lf);
+                        NativeMethods.LOGFONT logFont = new NativeMethods.LOGFONT();
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), Interop.WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        UpdateFont(ref logFont);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473, NativeMethods.CB_GETCURSEL, IntPtr.Zero, IntPtr.Zero);
                         if (index != NativeMethods.CB_ERR)
                         {
@@ -525,89 +525,55 @@ namespace System.Windows.Forms
         ///  should override this if they want to add more functionality, and call
         ///  base.runDialog() if necessary
         /// </summary>
-        protected override bool RunDialog(IntPtr hWndOwner)
+        protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
-            NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT();
-            IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-            NativeMethods.LOGFONT lf = new NativeMethods.LOGFONT();
+            NativeMethods.LOGFONT logFont;
 
-            Graphics graphics = Graphics.FromHdcInternal(screenDC);
-
-            try
+            using (ScreenDC dc = ScreenDC.Create())
+            using (Graphics graphics = Graphics.FromHdcInternal(dc))
             {
-                Font.ToLogFont(lf, graphics);
+                logFont = NativeMethods.LOGFONT.FromFont(Font, graphics);
             }
-            finally
+
+            NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT
             {
-                graphics.Dispose();
-            }
-            UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, screenDC));
+                lStructSize = Marshal.SizeOf<NativeMethods.CHOOSEFONT>(),
+                hwndOwner = hWndOwner,
+                hDC = IntPtr.Zero,
+                lpLogFont = new IntPtr(&logFont),
+                Flags = Options | NativeMethods.CF_INITTOLOGFONTSTRUCT | NativeMethods.CF_ENABLEHOOK,
+                lpfnHook = hookProcPtr,
+                hInstance = UnsafeNativeMethods.GetModuleHandle(null),
+                nSizeMin = minSize,
+                nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
+                rgbColors = ShowColor || ShowEffects
+                    ? ColorTranslator.ToWin32(color)
+                    : ColorTranslator.ToWin32(SystemColors.ControlText)
+            };
 
-            IntPtr logFontPtr = IntPtr.Zero;
-            try
+            if (minSize > 0 || maxSize > 0)
             {
-                logFontPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf<NativeMethods.LOGFONT>());
-                Marshal.StructureToPtr(lf, logFontPtr, false);
-
-                cf.lStructSize = Marshal.SizeOf<NativeMethods.CHOOSEFONT>();
-                cf.hwndOwner = hWndOwner;
-                cf.hDC = IntPtr.Zero;
-                cf.lpLogFont = logFontPtr;
-                cf.Flags = Options | NativeMethods.CF_INITTOLOGFONTSTRUCT | NativeMethods.CF_ENABLEHOOK;
-                if (minSize > 0 || maxSize > 0)
-                {
-                    cf.Flags |= NativeMethods.CF_LIMITSIZE;
-                }
-
-                //if ShowColor=true then try to draw the sample text in color,
-                //if ShowEffects=false then we will draw the sample text in standard control text color regardless.
-                //(limitation of windows control)
-                //
-                if (ShowColor || ShowEffects)
-                {
-                    cf.rgbColors = ColorTranslator.ToWin32(color);
-                }
-                else
-                {
-                    cf.rgbColors = ColorTranslator.ToWin32(SystemColors.ControlText);
-                }
-
-                cf.lpfnHook = hookProcPtr;
-                cf.hInstance = UnsafeNativeMethods.GetModuleHandle(null);
-                cf.nSizeMin = minSize;
-                if (maxSize == 0)
-                {
-                    cf.nSizeMax = int.MaxValue;
-                }
-                else
-                {
-                    cf.nSizeMax = maxSize;
-                }
-                Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-                if (!SafeNativeMethods.ChooseFont(cf))
-                {
-                    return false;
-                }
-
-                NativeMethods.LOGFONT lfReturned = Marshal.PtrToStructure<NativeMethods.LOGFONT>(logFontPtr);
-
-                if (lfReturned.lfFaceName != null && lfReturned.lfFaceName.Length > 0)
-                {
-                    lf = lfReturned;
-                    UpdateFont(lf);
-                    UpdateColor(cf.rgbColors);
-                }
-
-                return true;
+                cf.Flags |= NativeMethods.CF_LIMITSIZE;
             }
-            finally
+
+            // if ShowColor=true then try to draw the sample text in color,
+            // if ShowEffects=false then we will draw the sample text in standard control text color regardless.
+            // (limitation of windows control)
+
+            Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
+            if (!SafeNativeMethods.ChooseFont(cf))
             {
-                if (logFontPtr != IntPtr.Zero)
-                {
-                    Marshal.FreeCoTaskMem(logFontPtr);
-                }
+                return false;
             }
+
+            if (logFont.FaceName.Length > 0)
+            {
+                UpdateFont(ref logFont);
+                UpdateColor(cf.rgbColors);
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -653,33 +619,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateFont(NativeMethods.LOGFONT lf)
+        private void UpdateFont(ref NativeMethods.LOGFONT lf)
         {
-            IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-            try
+            using (ScreenDC dc = ScreenDC.Create())
+            using (Font fontInWorldUnits = Font.FromLogFont(lf, dc))
             {
-                Font fontInWorldUnits = null;
-                try
-                {
-                    fontInWorldUnits = Font.FromLogFont(lf, screenDC);
-
-                    // The dialog claims its working in points (a device-independent unit),
-                    // but actually gives us something in world units (device-dependent).
-                    font = ControlPaint.FontInPoints(fontInWorldUnits);
-                }
-                finally
-                {
-                    if (fontInWorldUnits != null)
-                    {
-                        fontInWorldUnits.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, screenDC));
+                // The dialog claims its working in points (a device-independent unit),
+                // but actually gives us something in world units (device-dependent).
+                font = ControlPaint.FontInPoints(fontInWorldUnits);
             }
         }
-
     }
 }

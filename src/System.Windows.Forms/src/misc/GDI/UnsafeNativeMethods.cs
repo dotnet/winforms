@@ -94,18 +94,11 @@ namespace System.Windows.Forms.Internal
         }
 
         // Font.
-        [DllImport(ExternDll.Gdi32, SetLastError = true)]
-        public static extern IntPtr CreateFontIndirect([In, Out, MarshalAs(UnmanagedType.AsAny)] object lf); // need object here since LOGFONT is not public.
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr CreateFontIndirectW(ref NativeMethods.LOGFONT lplf);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, EntryPoint = "GetObject", ExactSpelling = false, CharSet = CharSet.Unicode)]
-        public static extern int IntGetObject(HandleRef hFont, int nSize, [In, Out] NativeMethods.LOGFONT lf);
-
-        public static int GetObject(HandleRef hFont, NativeMethods.LOGFONT lp)
-        {
-            int retVal = IntGetObject(hFont, Marshal.SizeOf<NativeMethods.LOGFONT>(), lp);
-            DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGFONT]) failed.", hFont.Handle);
-            return retVal;
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern int GetObjectW(HandleRef hFont, int nSize, ref NativeMethods.LOGFONT pv);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SelectObject", CharSet = CharSet.Auto)]
         public static extern IntPtr IntSelectObject(HandleRef hdc, HandleRef obj);

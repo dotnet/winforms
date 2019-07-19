@@ -538,8 +538,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out, MarshalAs(UnmanagedType.LPStruct)] NativeMethods.CHARFORMAT2A lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out, MarshalAs(UnmanagedType.LPStruct)] NativeMethods.CHARFORMATW lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.CHARFORMATW lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, [Out, MarshalAs(UnmanagedType.IUnknown)]out object editOle);
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] NativeMethods.LOGFONT lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LOGFONT lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.MSG lParam);
@@ -727,25 +727,24 @@ namespace System.Windows.Forms
         public static extern bool SystemParametersInfo(int nAction, int nParam, ref NativeMethods.HIGHCONTRAST_I rc, int nUpdate);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, [In, Out] NativeMethods.NONCLIENTMETRICS metrics, int nUpdate);
+        public static extern bool SystemParametersInfo(int nAction, int nParam, ref NativeMethods.NONCLIENTMETRICS metrics, int nUpdate);
 
         // This API is available starting Windows10 RS1
         [DllImport(ExternDll.User32, SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false)]
-        public static extern bool SystemParametersInfoForDpi(int nAction, int nParam, [In, Out] NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi);
+        public static extern bool SystemParametersInfoForDpi(int nAction, int nParam, ref NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi);
 
         /// <summary>
         /// Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
         /// </summary>
-        public static bool TrySystemParametersInfoForDpi(int nAction, int nParam, [In, Out] NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi)
+        public static bool TrySystemParametersInfoForDpi(int nAction, int nParam, ref NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi)
         {
             if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.SystemParametersInfoForDpi)))
             {
-                return SystemParametersInfoForDpi(nAction, nParam, metrics, nUpdate, dpi);
+                return SystemParametersInfoForDpi(nAction, nParam, ref metrics, nUpdate, dpi);
             }
             else
             {
-                Debug.Assert(false, "SystemParametersInfoForDpi() is not available on this OS");
-                return SystemParametersInfo(nAction, nParam, metrics, nUpdate);
+                return SystemParametersInfo(nAction, nParam, ref metrics, nUpdate);
             }
         }
 
@@ -1042,9 +1041,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DestroyWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool UnregisterClass(string className, HandleRef hInstance);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetStockObject(int nIndex);
@@ -7618,6 +7614,7 @@ namespace System.Windows.Forms
             object /*IRawElementProviderFragment*/ GetFocus();
         }
 
+#pragma warning disable CA1712 // Don't prefix enum values with enum type
         [Flags]
         public enum ToggleState
         {
@@ -7625,6 +7622,7 @@ namespace System.Windows.Forms
             ToggleState_On = 1,
             ToggleState_Indeterminate = 2
         }
+#pragma warning enable CA1712
 
         [ComImport()]
         [ComVisible(true)]
@@ -7641,6 +7639,7 @@ namespace System.Windows.Forms
             }
         }
 
+#pragma warning disable CA1712 // Don't prefix enum values with enum type
         [Flags]
         public enum RowOrColumnMajor
         {
@@ -7648,6 +7647,7 @@ namespace System.Windows.Forms
             RowOrColumnMajor_ColumnMajor = 1,
             RowOrColumnMajor_Indeterminate = 2
         }
+#pragma warning enable CA1712
 
         [ComImport()]
         [ComVisible(true)]
