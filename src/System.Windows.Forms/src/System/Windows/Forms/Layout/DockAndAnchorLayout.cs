@@ -745,7 +745,6 @@ namespace System.Windows.Forms.Layout
                     LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Anchor);
                 }
             }
-            Debug.Assert(GetAnchor(element) == value, "Error setting Anchor value.");
         }
 
         public static DockStyle GetDock(IArrangedElement element) => CommonProperties.xGetDock(element);
