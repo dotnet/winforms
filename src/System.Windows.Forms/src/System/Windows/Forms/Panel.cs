@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPanel))]
     public class Panel : ScrollableControl
     {
-        private BorderStyle borderStyle = BorderStyle.None;
+        private BorderStyle _borderStyle = BorderStyle.None;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='Panel'/> class.
@@ -102,17 +102,17 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PanelBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
 
-                    borderStyle = value;
+                    _borderStyle = value;
                     UpdateStyles();
                 }
             }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
                 cp.Style &= (~NativeMethods.WS_BORDER);
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnResize(EventArgs eventargs)
         {
-            if (DesignMode && borderStyle == BorderStyle.None)
+            if (DesignMode && _borderStyle == BorderStyle.None)
             {
                 Invalidate();
             }
@@ -238,19 +238,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private static string StringFromBorderStyle(BorderStyle value)
-        {
-            Type borderStyleType = typeof(BorderStyle);
-            return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
-        }
-
         /// <summary>
         /// Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", BorderStyle: " + StringFromBorderStyle(borderStyle);
+            return s + ", BorderStyle: " + typeof(BorderStyle).ToString() + "." + _borderStyle.ToString();
         }
     }
 }
