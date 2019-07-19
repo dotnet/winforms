@@ -31,19 +31,13 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal = 0x10;
 
         private byte flags;  // see DATAGRIDVIEWCOLUMN_ consts above
-        private DataGridViewCell cellTemplate;
         private string name;
         private int displayIndex;
-        private int desiredFillWidth = 0;
-        private int desiredMinimumWidth = 0;
         private float fillWeight, usedFillWeight;
         private DataGridViewAutoSizeColumnMode autoSizeMode;
-        private int boundColumnIndex = -1;
         private string dataPropertyName = string.Empty;
-        private TypeConverter boundColumnConverter = null;
 
         // needed for IComponent
-        private ISite site = null;
         private EventHandler disposed = null;
 
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
@@ -63,7 +57,7 @@ namespace System.Windows.Forms
             MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
             name = string.Empty;
             displayIndex = -1;
-            this.cellTemplate = cellTemplate;
+            CellTemplate = cellTemplate;
             autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
         }
 
@@ -159,65 +153,18 @@ namespace System.Windows.Forms
 
         // TypeConverter of the PropertyDescriptor attached to this column
         // in databound cases. Null otherwise.
-        internal TypeConverter BoundColumnConverter
-        {
-            get
-            {
-                return boundColumnConverter;
-            }
-            set
-            {
-                boundColumnConverter = value;
-            }
-        }
+        internal TypeConverter BoundColumnConverter { get; set; }
 
-        internal int BoundColumnIndex
-        {
-            get
-            {
-                return boundColumnIndex;
-            }
-            set
-            {
-                boundColumnIndex = value;
-            }
-        }
+        internal int BoundColumnIndex { get; set; } = -1;
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public virtual DataGridViewCell CellTemplate
-        {
-            get
-            {
-                return cellTemplate;
-            }
-            set
-            {
-                cellTemplate = value;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual DataGridViewCell CellTemplate { get; set; }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-        ]
-        public Type CellType
-        {
-            get
-            {
-                if (cellTemplate != null)
-                {
-                    return cellTemplate.GetType();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public Type CellType => CellTemplate?.GetType();
 
         [
             DefaultValue(null),
@@ -308,29 +255,9 @@ namespace System.Windows.Forms
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        internal int DesiredFillWidth
-        {
-            get
-            {
-                return desiredFillWidth;
-            }
-            set
-            {
-                desiredFillWidth = value;
-            }
-        }
+        internal int DesiredFillWidth { get; set; }
 
-        internal int DesiredMinimumWidth
-        {
-            get
-            {
-                return desiredMinimumWidth;
-            }
-            set
-            {
-                desiredMinimumWidth = value;
-            }
-        }
+        internal int DesiredMinimumWidth { get; set; }
 
         [
             Browsable(false),
@@ -858,8 +785,8 @@ namespace System.Windows.Forms
                 if (IsDataBound &&
                     DataGridView != null &&
                     DataGridView.DataConnection != null &&
-                    boundColumnIndex != -1 &&
-                    DataGridView.DataConnection.DataFieldIsReadOnly(boundColumnIndex) &&
+                    BoundColumnIndex != -1 &&
+                    DataGridView.DataConnection.DataFieldIsReadOnly(BoundColumnIndex) &&
                     !value)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly));
@@ -884,21 +811,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public ISite Site
-        {
-            get
-            {
-                return site;
-            }
-            set
-            {
-                site = value;
-            }
-        }
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ISite Site { get; set; }
 
         [
             DefaultValue(DataGridViewColumnSortMode.NotSortable),
@@ -1065,7 +980,7 @@ namespace System.Windows.Forms
             return dataGridViewColumn;
         }
 
-        internal void CloneInternal(DataGridViewColumn dataGridViewColumn)
+        private protected void CloneInternal(DataGridViewColumn dataGridViewColumn)
         {
             base.CloneInternal(dataGridViewColumn);
 
@@ -1073,16 +988,7 @@ namespace System.Windows.Forms
             dataGridViewColumn.displayIndex = -1;
             dataGridViewColumn.HeaderText = HeaderText;
             dataGridViewColumn.DataPropertyName = DataPropertyName;
-
-            // dataGridViewColumn.boundColumnConverter = columnTemplate.BoundColumnConverter;  setting the DataPropertyName should also set the bound column converter later on.
-            if (dataGridViewColumn.CellTemplate != null)
-            {
-                dataGridViewColumn.cellTemplate = (DataGridViewCell)CellTemplate.Clone();
-            }
-            else
-            {
-                dataGridViewColumn.cellTemplate = null;
-            }
+            dataGridViewColumn.CellTemplate = (DataGridViewCell)CellTemplate?.Clone();
 
             if (HasHeaderCell)
             {
@@ -1103,11 +1009,7 @@ namespace System.Windows.Forms
                     //
                     lock (this)
                     {
-                        if (site != null && site.Container != null)
-                        {
-                            site.Container.Remove(this);
-                        }
-
+                        Site?.Container?.Remove(this);
                         disposed?.Invoke(this, EventArgs.Empty);
                     }
                 }

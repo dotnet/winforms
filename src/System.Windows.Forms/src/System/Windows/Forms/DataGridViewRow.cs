@@ -54,10 +54,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public DataGridViewCellCollection Cells
-        {
-            get => _rowCells ?? (_rowCells = CreateCellsInstance());
-        }
+        public DataGridViewCellCollection Cells => _rowCells ??= CreateCellsInstance();
 
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatBehavior))]
