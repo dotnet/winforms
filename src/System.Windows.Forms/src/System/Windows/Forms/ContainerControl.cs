@@ -13,55 +13,82 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Defines a
-    ///  base class for
-    ///  controls that can parent other controls.
+    /// Defines a base class for controls that can parent other controls.
     /// </summary>
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ContainerControl : ScrollableControl, IContainerControl
     {
-        private Control activeControl; // current active control
-        private Control focusedControl; // Current focused control. Do not directly edit this value.
-        private Control unvalidatedControl; // The last control that requires validation.  Do not directly edit this value.
-        private AutoValidate autoValidate = AutoValidate.Inherit; // Indicates whether automatic validation is turned on.
-        private EventHandler autoValidateChanged; // Event fired whenever the AutoValidate property changes.
+        private Control activeControl;
 
-        // Auto scaling property values
+        /// <remarks>
+        /// The current focused control. Do not directly edit this value.
+        /// </remarks>
+        private Control focusedControl; 
+
+        /// <remarks>
+        /// The last control that requires validation. Do not directly edit this value.
+        /// <remarks>
+        private Control unvalidatedControl;
+
+        /// <summary>
+        /// Indicates whether automatic validation is turned on.
+        /// </summary>
+        private AutoValidate autoValidate = AutoValidate.Inherit;
+
+        private EventHandler autoValidateChanged;
+
         private SizeF autoScaleDimensions = SizeF.Empty;
         private SizeF currentAutoScaleDimensions = SizeF.Empty;
         private AutoScaleMode autoScaleMode = AutoScaleMode.Inherit;
         private BitVector32 state = new BitVector32();
 
-        private static readonly int stateScalingNeededOnLayout = BitVector32.CreateMask(); // True if we need to perform scaling when layout resumes
-        private static readonly int stateValidating = BitVector32.CreateMask(stateScalingNeededOnLayout); // Indicates whether we're currently state[stateValidating].
-        private static readonly int stateProcessingMnemonic = BitVector32.CreateMask(stateValidating); // Indicates whether we or one of our children is currently processing a mnemonic.
-        private static readonly int stateScalingChild = BitVector32.CreateMask(stateProcessingMnemonic); // True while we are scaling a child control
-        private static readonly int stateParentChanged = BitVector32.CreateMask(stateScalingChild); // Flagged when a parent changes so we can adpat our scaling logic to match
+        /// <summary>
+        /// True if we need to perform scaling when layout resumes
+        /// </summary>
+        private static readonly int stateScalingNeededOnLayout = BitVector32.CreateMask();
+
+        /// <summary>
+        /// Indicates whether we're currently state[stateValidating].
+        /// </summary>
+        private static readonly int stateValidating = BitVector32.CreateMask(stateScalingNeededOnLayout);
+
+        /// <summary>
+        /// Indicates whether we or one of our children is currently processing a mnemonic.
+        /// </summary>
+        private static readonly int stateProcessingMnemonic = BitVector32.CreateMask(stateValidating);
+
+        /// <summary>
+        /// True while we are scaling a child control
+        /// </summary>
+        private static readonly int stateScalingChild = BitVector32.CreateMask(stateProcessingMnemonic);
+
+        /// <summary>
+        /// Flagged when a parent changes so we can adpat our scaling logic to match.
+        /// </summary>
+        private static readonly int stateParentChanged = BitVector32.CreateMask(stateScalingChild);
 
         private static readonly int PropAxContainer = PropertyStore.CreateKey();
         private const string fontMeasureString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='ContainerControl'/>
-        /// class.
+        /// Initializes a new instance of the <see cref="ContainerControl"/> class.
         /// </summary>
         public ContainerControl() : base()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint, false);
 
-            // this class overrides GetPreferredSizeCore, let Control automatically cache the result
+            // This class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);
         }
 
         /// <summary>
-        ///  AutoScaleDimensions represents the DPI or Font setting that the control has been scaled
-        ///  to or designed at. Specifically, at design time this property will be set by the
-        ///  designer to the value that the developer is designing at. Then, at runtime, when the
-        ///  form loads if the CurrentAutoScaleDimensions are different from the AutoScaleDimensions,
-        ///  PerformAutoScale will be called and AutoScaleDimensions will be set to the new value to
-        ///  match the CurrentAutoScaleDimensions by PerformAutoScale.
+        /// AutoScaleDimensions represents the DPI or Font setting that the control has been scaled
+        /// to or designed at. Specifically, at design time this property will be set by the
+        /// designer to the value that the developer is designing at. Then, at runtime, when the
+        /// form loads if the CurrentAutoScaleDimensions are different from the AutoScaleDimensions,
+        /// PerformAutoScale will be called and AutoScaleDimensions will be set to the new value to
+        /// match the CurrentAutoScaleDimensions by PerformAutoScale.
         /// </summary>
         [Localizable(true)]
         [Browsable(false)]
@@ -70,16 +97,14 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SizeF AutoScaleDimensions
         {
-            get
-            {
-                return autoScaleDimensions;
-            }
+            get => autoScaleDimensions;
             set
             {
                 if (value.Width < 0 || value.Height < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, SR.ContainerControlInvalidAutoScaleDimensions);
                 }
+
                 autoScaleDimensions = value;
                 if (!autoScaleDimensions.IsEmpty)
                 {
@@ -89,10 +114,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  AutoScaleFactor represents the scaling factor difference between
-        ///  CurrentAutoScaleDimensions and AutoScaleDimensions. This value is
-        ///  calculated on the fly. Eg: If CurrentAutoScaleDimensions is 192, 192
-        ///  and AutoScaleDimensions is 96, 96 then the AutoScaleFactor is 2.0, 2.0
+        /// AutoScaleFactor represents the scaling factor difference between
+        /// CurrentAutoScaleDimensions and AutoScaleDimensions. This value is
+        /// calculated on the fly. Eg: If CurrentAutoScaleDimensions is 192, 192
+        /// and AutoScaleDimensions is 96, 96 then the AutoScaleFactor is 2.0, 2.0
         /// </summary>
         protected SizeF AutoScaleFactor
         {
@@ -102,7 +127,7 @@ namespace System.Windows.Forms
                 SizeF saved = AutoScaleDimensions;
 
                 // If no one has configured auto scale dimensions yet, the scaling factor
-                // is unity.
+                // is the unit scale.
                 if (saved.IsEmpty)
                 {
                     return new SizeF(1.0F, 1.0F);
@@ -113,15 +138,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines the scaling mode of this control.  The default is no scaling.
-        ///
-        ///  Scaling by Font is useful if you wish to have a control
-        ///  or form stretch or shrink according to the size of the fonts in the system, and should
-        ///  be used when the control or form's size itself does not matter.
-        ///
-        ///  Scaling by DPI is useful when you wish to keep a control or form a specific size
-        ///  independent of font.  for example, a control displaying a chart or other graphic
-        ///  may want to use DPI scaling to increase in size to account for higher DPI monitors.
+        /// Determines the scaling mode of this control. The default is no scaling.
+        /// Scaling by Font is useful if you wish to have a control
+        /// or form stretch or shrink according to the size of the fonts in the system, and should
+        /// be used when the control or form's size itself does not matter.
+        /// Scaling by DPI is useful when you wish to keep a control or form a specific size
+        /// independent of font. for example, a control displaying a chart or other graphic
+        /// may want to use DPI scaling to increase in size to account for higher DPI monitors.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ContainerControlAutoScaleModeDescr))]
@@ -130,27 +153,20 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AutoScaleMode AutoScaleMode
         {
-            get
-            {
-                return autoScaleMode;
-            }
+            get => autoScaleMode;
             set
             {
-                //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoScaleMode.None, (int)AutoScaleMode.Inherit))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoScaleMode));
                 }
 
                 bool scalingNeeded = false;
-
                 if (value != autoScaleMode)
                 {
-
-                    // Invalidate any current scaling factors.  If we
-                    // are changing AutoScaleMode to anything other than
-                    // its default, we should clear out autoScaleDimensions as it is
-                    // nonsensical.
+                    // Invalidate any current scaling factors. If we are changing AutoScaleMode to
+                    // anything other than its default, we should clear out autoScaleDimensions as
+                    // it is nonsensical.
                     if (autoScaleMode != AutoScaleMode.Inherit)
                     {
                         autoScaleDimensions = SizeF.Empty;
@@ -162,7 +178,6 @@ namespace System.Windows.Forms
                 }
 
                 OnAutoScaleModeChanged();
-
                 if (scalingNeeded)
                 {
                     LayoutScalingNeeded();
@@ -171,56 +186,45 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether controls in this container will be automatically validated when the focus changes.
+        /// Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        AmbientValue(AutoValidate.Inherit),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ContainerControlAutoValidate)),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [AmbientValue(AutoValidate.Inherit)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ContainerControlAutoValidate))]
         public virtual AutoValidate AutoValidate
         {
             get
             {
-                if (autoValidate == AutoValidate.Inherit)
-                {
-                    return GetAutoValidateForControl(this);
-                }
-                else
+                if (autoValidate != AutoValidate.Inherit)
                 {
                     return autoValidate;
                 }
+
+                return GetAutoValidateForControl(this);
             }
             set
             {
-                // PERF/FXCop: dont use Enum.IsDefined.
-                switch (value)
+                if (value < AutoValidate.Inherit || value > AutoValidate.EnableAllowFocusChange)
                 {
-                    case AutoValidate.Disable:
-                    case AutoValidate.EnablePreventFocusChange:
-                    case AutoValidate.EnableAllowFocusChange:
-                    case AutoValidate.Inherit:
-                        break;
-                    default:
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoValidate));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoValidate));
                 }
 
-                if (autoValidate != value)
+                if (autoValidate == value)
                 {
-                    autoValidate = value;
-                    OnAutoValidateChanged(EventArgs.Empty);
+                    return;
                 }
+
+                autoValidate = value;
+                OnAutoValidateChanged(EventArgs.Empty);
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        SRCategory(nameof(SR.CatPropertyChanged)),
-        SRDescription(nameof(SR.ContainerControlOnAutoValidateChangedDescr)),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ContainerControlOnAutoValidateChangedDescr))]
         public event EventHandler AutoValidateChanged
         {
             add => autoValidateChanged += value;
@@ -228,12 +232,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The binding manager for the container control.
+        /// The binding manager for the container control.
         /// </summary>
-        [
-        Browsable(false),
-        SRDescription(nameof(SR.ContainerControlBindingContextDescr))
-        ]
+        [Browsable(false)]
+        [SRDescription(nameof(SR.ContainerControlBindingContextDescr))]
         public override BindingContext BindingContext
         {
             get
@@ -244,16 +246,14 @@ namespace System.Windows.Forms
                     bm = new BindingContext();
                     BindingContext = bm;
                 }
+
                 return bm;
             }
-            set
-            {
-                base.BindingContext = value;
-            }
+            set => base.BindingContext = value;
         }
 
         /// <summary>
-        ///  Container controls support ImeMode only to allow child controls to inherit it from their parents.
+        /// Container controls support ImeMode only to allow child controls to inherit it from their parents.
         /// </summary>
         protected override bool CanEnableIme
         {
@@ -270,25 +270,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates the current active control on the container control.
+        /// Indicates the current active control on the container control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ContainerControlActiveControlDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ContainerControlActiveControlDescr))]
         public Control ActiveControl
         {
-            get
-            {
-                return activeControl;
-            }
-
-            set
-            {
-                SetActiveControl(value);
-            }
+            get => activeControl;
+            set=> SetActiveControl(value);
         }
 
         protected override CreateParams CreateParams
@@ -302,9 +293,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  CurrentAutoScaleDimensions represent the actual DPI or Font settings
-        ///  of the display at runtime. If the AutoScaleMode is set to 'None' then
-        ///  the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions
+        /// Represent the actual DPI or Font settings of the display at runtime. If the AutoScaleMode
+        /// is set to 'None' then the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions.
         /// </summary>
         [Browsable(false)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -345,23 +335,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates the form that the scrollable control is assigned to. This property is read-only.
+        /// Indicates the form that the scrollable control is assigned to. This property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ContainerControlParentFormDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ContainerControlParentFormDescr))]
         public Form ParentForm
-        {
-            get
-            {
-                return ParentFormInternal;
-            }
-        }
-
-        internal Form ParentFormInternal
         {
             get
             {
@@ -369,37 +349,33 @@ namespace System.Windows.Forms
                 {
                     return ParentInternal.FindForm();
                 }
-                else
+                if (this is Form)
                 {
-                    if (this is Form)
-                    {
-                        return null;
-                    }
-
-                    return FindForm();
+                    return null;
                 }
+
+                return FindForm();
             }
         }
 
-        // Package scope for Control
         /// <summary>
         /// Activates the specified control.
         /// </summary>
         bool IContainerControl.ActivateControl(Control control)
         {
-            return ActivateControlInternal(control, true);
+            return ActivateControl(control, originator: true);
         }
 
-        internal bool ActivateControlInternal(Control control)
+        internal bool ActivateControl(Control control)
         {
-            return ActivateControlInternal(control, true);
+            return ActivateControl(control, originator: true);
         }
 
-        internal bool ActivateControlInternal(Control control, bool originator)
+        internal bool ActivateControl(Control control, bool originator)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::ActivateControlInternal(" + (control == null ? "null" : control.Name) + "," + originator.ToString() + ") - " + Name);
-            // Recursive function that makes sure that the chain of active controls
-            // is coherent.
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::ActivateControl(" + (control == null ? "null" : control.Name) + "," + originator.ToString() + ") - " + Name);
+
+            // Recursive function that makes sure that the chain of active controls is coherent.
             bool ret = true;
             bool updateContainerActiveControl = false;
             ContainerControl cc = null;
@@ -416,11 +392,12 @@ namespace System.Windows.Forms
             {
                 if (updateContainerActiveControl)
                 {
-                    if (!cc.ActivateControlInternal(this, false))
+                    if (!cc.ActivateControl(this, false))
                     {
                         return false;
                     }
                 }
+
                 ret = AssignActiveControlInternal((control == this) ? null : control);
             }
 
@@ -428,26 +405,25 @@ namespace System.Windows.Forms
             {
                 ScrollActiveControlIntoView();
             }
+
             return ret;
         }
 
         /// <summary>
-        ///  Used for UserControls - checks if the control
-        ///  has a focusable control inside or not
+        /// Used for UserControls - checks if the control has a focusable control inside or not
         /// </summary>
-        internal bool HasFocusableChild()
+        private bool HasFocusableChild()
         {
             Control ctl = null;
             do
             {
                 ctl = GetNextControl(ctl, true);
-                if (ctl != null &&
-                    ctl.CanSelect &&
-                    ctl.TabStop)
+                if (ctl != null && ctl.CanSelect && ctl.TabStop)
                 {
                     break;
                 }
             } while (ctl != null);
+
             return ctl != null;
         }
 
@@ -463,8 +439,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Cleans up form state after a control has been removed.
-        ///  Package scope for Control
+        /// Cleans up form state after a control has been removed.
         /// </summary>
         internal virtual void AfterControlRemoved(Control control, Control oldParent)
         {
@@ -474,7 +449,6 @@ namespace System.Windows.Forms
             if (control == activeControl || control.Contains(activeControl))
             {
                 bool selected = SelectNextControl(control, true, true, true, true);
-
                 if (selected && activeControl != control)
                 {
                     // Add the check. If it is set to true, do not call into FocusActiveControlInternal().
@@ -547,21 +521,13 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AssignActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + Name);
             if (activeControl != value)
             {
-                // cpb: #7318
-#if FALSE
-                if (activeControl != null) {
-                    AxHost.Container cont = FindAxContainer();
-                    if (cont != null) {
-                        cont.OnOldActiveControl(activeControl, value);
-                    }
-                }
-#endif
                 try
                 {
                     if (value != null)
                     {
                         value.BecomingActiveControl = true;
                     }
+
                     activeControl = value;
                     UpdateFocusedControl();
                 }
@@ -572,15 +538,9 @@ namespace System.Windows.Forms
                         value.BecomingActiveControl = false;
                     }
                 }
+
                 if (activeControl == value)
                 {
-                    // cpb: #7318
-#if FALSE
-                    AxHost.Container cont = FindAxContainer();
-                    if (cont != null) {
-                        cont.OnNewActiveControl(value);
-                    }
-#endif
                     Form form = FindForm();
                     if (form != null)
                     {
@@ -592,13 +552,13 @@ namespace System.Windows.Forms
             {
                 focusedControl = activeControl;
             }
-            return (activeControl == value);
+
+            return activeControl == value;
         }
 
         /// <summary>
-        ///  Used to notify the AxContainer that the form
-        ///  has been created.  This should only be called if
-        ///  there is an AX container.
+        /// Used to notify the AxContainer that the form has been created. This should only be called
+        /// if there is an AX container.
         /// </summary>
         private void AxContainerFormCreated()
         {
@@ -606,7 +566,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Specifies whether this control can process the mnemonic or not.
+        /// Specifies whether this control can process the mnemonic or not.
         /// </summary>
         internal override bool CanProcessMnemonic()
         {
@@ -629,13 +589,12 @@ namespace System.Windows.Forms
                 aXContainer = new AxHost.AxContainer(this);
                 Properties.SetObject(PropAxContainer, aXContainer);
             }
+
             return (AxHost.AxContainer)aXContainer;
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by
-        ///  the <see cref='ContainerControl'/>
-        ///  .
+        /// Disposes of the resources (other than memory) used by the <see cref="ContainerControl"/>.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -651,7 +610,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Recursively enables required scaling from the given control
+        /// Recursively enables required scaling from the given control
         /// </summary>
         private void EnableRequiredScaling(Control start, bool enable)
         {
@@ -663,9 +622,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Assigns focus to the activeControl. If there is no activeControl then
-        ///  focus is given to the form.
-        ///  package scope for Form
+        /// Assigns focus to the activeControl. If there is no activeControl then focus is given to
+        /// the form. package scope for Form
         /// </summary>
         internal void FocusActiveControlInternal()
         {
@@ -703,6 +661,7 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
+
                 if (cc != null && cc.Visible)
                 {
                     UnsafeNativeMethods.SetFocus(new HandleRef(cc, cc.Handle));
@@ -730,23 +689,19 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), topLeftPoint);
                 return new Rectangle(topLeftPoint.x, topLeftPoint.y, clientRectangle.right, clientRectangle.bottom);
             }
-            else
-            {
-                return base.GetToolNativeScreenRectangle();
-            }
+            
+            return base.GetToolNativeScreenRectangle();
         }
 
         /// <summary>
-        ///  This method calcuates the auto scale dimensions based on the
-        ///  control's current font.
+        /// This method calcuates the auto scale dimensions based on the control's current font.
         /// </summary>
         private SizeF GetFontAutoScaleDimensions()
         {
             SizeF retval = SizeF.Empty;
 
-            // Windows uses CreateCompatibleDC(NULL) to get a
-            // memory DC for the monitor the application is currently
-            // on.
+            // Windows uses CreateCompatibleDC(NULL) to get a memory DC for the monitor th
+            // application is currently on.
             IntPtr dc = UnsafeNativeMethods.CreateCompatibleDC(NativeMethods.NullHandleRef);
             if (dc == IntPtr.Zero)
             {
@@ -758,8 +713,8 @@ namespace System.Windows.Forms
             try
             {
                 // We clone the Windows scaling function here as closely as
-                // possible.  They use textmetric for height, and textmetric
-                // for width of fixed width fonts.  For variable width fonts
+                // possible. They use textmetric for height, and textmetric
+                // for width of fixed width fonts. For variable width fonts
                 // they use GetTextExtentPoint32 and pass in a long a-Z string.
                 // We must do the same here if our dialogs are to scale in a
                 // similar fashion.
@@ -801,8 +756,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This method is called when one of the auto scale properties changes, indicating
-        ///  that we should scale controls on the next layout.
+        /// This method is called when one of the auto scale properties changes, indicating that we
+        /// should scale controls on the next layout.
         /// </summary>
         private void LayoutScalingNeeded()
         {
@@ -818,21 +773,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  to maintain backwards compat with AutoScale on form, we need to keep the
-        ///  two models from conflicting.  This method is only here for Form to override
-        ///  it and update its AutoScale property appropriately.
+        /// To maintain backwards compat with AutoScale on form, we need to keep the
+        /// two models from conflicting. This method is only here for Form to override
+        /// it and update its AutoScale property appropriately.
         /// </summary>
-        internal virtual void OnAutoScaleModeChanged()
+        private protected virtual void OnAutoScaleModeChanged()
         {
         }
 
         /// <summary>
-        ///  Raises the AutoValidateChanged event.
+        /// Raises the AutoValidateChanged event.
         /// </summary>
-        protected virtual void OnAutoValidateChanged(EventArgs e)
-        {
-            autoValidateChanged?.Invoke(this, e);
-        }
+        protected virtual void OnAutoValidateChanged(EventArgs e) => autoValidateChanged?.Invoke(this, e);
 
         internal override void OnFrameWindowActivate(bool fActivate)
         {
@@ -847,8 +799,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Called when a child is about to resume its layout.  The default implementation
-        ///  calls OnChildLayoutResuming on the parent.
+        /// Called when a child is about to resume its layout. The default implementation
+        /// calls OnChildLayoutResuming on the parent.
         /// </summary>
         internal override void OnChildLayoutResuming(Control child, bool performLayout)
         {
@@ -880,7 +832,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the CreateControl event.
+        /// Raises the CreateControl event.
         /// </summary>
         protected override void OnCreateControl()
         {
@@ -894,7 +846,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We override this to clear the current autoscale cache.
+        /// We override this to clear the current autoscale cache.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnFontChanged(EventArgs e)
@@ -924,9 +876,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is called by the top level form to clear the current autoscale cache.
+        /// This is called by the top level form to clear the current autoscale cache.
         /// </summary>
-        internal void FormDpiChanged(float factor)
+        private protected void FormDpiChanged(float factor)
         {
             Debug.Assert(this is Form);
 
@@ -945,7 +897,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Container controls scale during layout.
+        /// Container controls scale during layout.
         /// </summary>
         protected override void OnLayout(LayoutEventArgs e)
         {
@@ -954,10 +906,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Called when the last resume layout call is made.  If performLayout is true
-        ///  a layout will occur as soon as this call returns.  Layout is
-        ///  still suspended when this call is made.  The default implementation
-        ///  calls OnChildLayoutResuming on the parent, if it exists.
+        /// Called when the last resume layout call is made. If performLayout is true a layout will
+        /// occur as soon as this call returns. Layout is still suspended when this call is made.
+        /// The default implementation calls OnChildLayoutResuming on the parent, if it exists.
         /// </summary>
         internal override void OnLayoutResuming(bool performLayout)
         {
@@ -966,12 +917,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Called when the parent changes.  Container controls prefer to have their parents
-        ///  scale themselves, but when a parent is first changed, and as a result the font
-        ///  changes as well, a container control should scale itself.  We save off this state
-        ///  so a later font change can trigger a scale of us.  We only set this state if
-        ///  required scaling is disabled:  if it is enabled we are still initializing and
-        ///  parent changes are normal.
+        /// Called when the parent changes. Container controls prefer to have their parents scale
+        /// themselves, but when a parent is first changed, and as a result the font changes as
+        /// well, a container control should scale itself. We save off this state so a later
+        /// font change can trigger a scale of us. We only set this state if required scaling is
+        /// disabled:  if it is enabled we are still initializing and parent changes are normal.
         /// </summary>
         protected override void OnParentChanged(EventArgs e)
         {
@@ -980,28 +930,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Performs scaling of this control.  Scaling works by scaling all children of this control.
-        ///  Those children that are ContainerControls will have their PerformAutoScale method called
-        ///  so they can scale their children.
+        /// Performs scaling of this control. Scaling works by scaling all children of this control.
+        /// Those children that are ContainerControls will have their PerformAutoScale method called
+        /// so they can scale their children.
         /// </summary>
-        public void PerformAutoScale()
-        {
-            PerformAutoScale(true, true);
-        }
+        public void PerformAutoScale() => PerformAutoScale(includedBounds: true, excludedBounds: true);
 
         /// <summary>
-        ///  Performs scaling of this control.  Scaling works by scaling all children of this control.
+        /// Performs scaling of this control. Scaling works by scaling all children of this control.
         ///
-        ///  If includedBounds is true those controls whose bounds have changed since
-        ///  they were last scaled will be auto scaled.  If excludedBounds is true those
-        ///  controls whose bounds have not changed since they were last scaled will be
-        ///  auto scaled.
+        /// If includedBounds is true those controls whose bounds have changed since
+        /// they were last scaled will be auto scaled. If excludedBounds is true those
+        /// controls whose bounds have not changed since they were last scaled will be
+        /// auto scaled.
         ///
-        ///  PerformAutoScale is automatically called during OnLayout.  The parameters to
-        ///  PerformAutoScale are passed as follows:
-        ///
-        ///  1.  If AutoScaleDimensions are set, includedBounds is set to true.
-        ///  2.  If a font change occurred, excludedBounds is set to true.
+        /// PerformAutoScale is automatically called during OnLayout. The parameters to
+        /// PerformAutoScale are passed as follows:
+        /// 1. If AutoScaleDimensions are set, includedBounds is set to true.
+        /// 2. If a font change occurred, excludedBounds is set to true.
         /// </summary>
         private void PerformAutoScale(bool includedBounds, bool excludedBounds)
         {
@@ -1014,24 +960,13 @@ namespace System.Windows.Forms
                     SuspendAllLayout(this);
                     suspended = true;
 
-                    // Walk each control recursively and scale.  We search the control
+                    // Walk each control recursively and scale. We search the control
                     // for its own set of scaling data; if we don't find it, we use the current
-                    // container control's scaling data.  Once we scale a control, we set
-                    // its scaling factors to unity.  As we walk out of a container control,
+                    // container control's scaling data. Once we scale a control, we set
+                    // its scaling factors to unity. As we walk out of a container control,
                     // we set its scaling factor to unity too.
-                    SizeF included = SizeF.Empty;
-                    SizeF excluded = SizeF.Empty;
-
-                    if (includedBounds)
-                    {
-                        included = AutoScaleFactor;
-                    }
-
-                    if (excludedBounds)
-                    {
-                        excluded = AutoScaleFactor;
-                    }
-
+                    SizeF included = includedBounds ? AutoScaleFactor : SizeF.Empty;
+                    SizeF excluded = excludedBounds ? AutoScaleFactor : SizeF.Empty;
                     Scale(included, excluded, this);
                     autoScaleDimensions = CurrentAutoScaleDimensions;
                 }
@@ -1041,20 +976,19 @@ namespace System.Windows.Forms
                 if (includedBounds)
                 {
                     state[stateScalingNeededOnLayout] = false;
-                    EnableRequiredScaling(this, false);
+                    EnableRequiredScaling(this, enable: false);
                 }
                 state[stateParentChanged] = false;
 
                 if (suspended)
                 {
-                    ResumeAllLayout(this, false);
+                    ResumeAllLayout(this, performLayout: false);
                 }
             }
         }
 
         /// <summary>
-        ///  Checks to see if we need to perform an autoscale in
-        ///  response to a layout.
+        /// Checks to see if we need to perform an autoscale in response to a layout.
         /// </summary>
         private void PerformNeededAutoScaleOnLayout()
         {
@@ -1065,13 +999,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Recursively resumes all layout.
+        /// Recursively resumes all layout.
         /// </summary>
         internal void ResumeAllLayout(Control start, bool performLayout)
         {
             ControlCollection controlsCollection = start.Controls;
             // This may have changed the sizes of our children.
-            // PERFNOTE: This is more efficient than using Foreach.  Foreach
+            // PERFNOTE: This is more efficient than using Foreach. Foreach
             // forces the creation of an array subset enum each time we
             // enumerate
             for (int i = 0; i < controlsCollection.Count; i++)
@@ -1083,7 +1017,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Recursively suspends all layout.
+        /// Recursively suspends all layout.
         /// </summary>
         internal void SuspendAllLayout(Control start)
         {
@@ -1091,10 +1025,9 @@ namespace System.Windows.Forms
             CommonProperties.xClearPreferredSizeCache(start);
 
             ControlCollection controlsCollection = start.Controls;
-            // This may have changed the sizes of our children.
-            // PERFNOTE: This is more efficient than using Foreach.  Foreach
-            // forces the creation of an array subset enum each time we
-            // enumerate
+            // This may have changed the sizes of our children. For performance, this is more
+            // efficient than using Foreach. Foreach forces the creation of an array subset enum
+            // each time we enumerate
             for (int i = 0; i < controlsCollection.Count; i++)
             {
                 SuspendAllLayout(controlsCollection[i]);
@@ -1102,10 +1035,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Overrides the default scaling mechanism to account for autoscaling.  This
-        ///  override behaves as follows:  any unchanged controls are always scaled
-        ///  according to the container control's AutoScaleFactor.  Any changed controls are
-        ///  scaled according to the provided scaling factor.
+        /// Overrides the default scaling mechanism to account for autoscaling. This override
+        /// behaves as follows: any unchanged controls are always scaled according to the container
+        /// control's AutoScaleFactor. Any changed controls are scaled according to the provided
+        /// scaling factor.
         /// </summary>
         internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl)
         {
@@ -1118,7 +1051,7 @@ namespace System.Windows.Forms
             else
             {
                 // We scale our controls based on our own auto scaling
-                // factor, not the one provided to us.  We only do this for
+                // factor, not the one provided to us. We only do this for
                 // controls that are not required to be scaled (excluded controls).
                 SizeF ourExcludedFactor = excludedFactor;
                 SizeF childIncludedFactor = includedFactor;
@@ -1128,19 +1061,17 @@ namespace System.Windows.Forms
                     ourExcludedFactor = AutoScaleFactor;
                 }
 
-                // If we're not supposed to be scaling, don't scale the internal
-                // ones either.
+                // If we're not supposed to be scaling, don't scale the internal ones either.
                 if (AutoScaleMode == AutoScaleMode.None)
                 {
                     childIncludedFactor = AutoScaleFactor;
                 }
 
                 // When we scale, we are establishing new baselines for the
-                // positions of all controls.  Therefore, we should resume(false).
+                // positions of all controls. Therefore, we should resume(false).
                 using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
                 {
-
-                    // Our own container control poses a problem.  We want
+                    // Our own container control poses a problem. We want
                     // an outer control to be responsible for scaling it,
                     // because the outer control knows the container's dimensions.
                     // We detect this by checking who is requesting that the
@@ -1157,21 +1088,8 @@ namespace System.Windows.Forms
                         // that is not part of the designer.
                         if (!scaleUs)
                         {
-                            bool dt = false;
-                            bool parentDt = false;
-                            ISite site = Site;
-                            ISite parentSite = ParentInternal.Site;
-
-                            if (site != null)
-                            {
-                                dt = site.DesignMode;
-                            }
-
-                            if (parentSite != null)
-                            {
-                                parentDt = parentSite.DesignMode;
-                            }
-
+                            bool dt = Site?.DesignMode ?? false;
+                            bool parentDt = ParentInternal.Site?.DesignMode ?? false;
                             if (dt && !parentDt)
                             {
                                 scaleUs = true;
@@ -1191,8 +1109,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Process an arrowKey press by selecting the next control in the group
-        ///  that the activeControl belongs to.
+        /// Process an arrowKey press by selecting the next control in the group that the activeControl
+        /// belongs to.
         /// </summary>
         private bool ProcessArrowKey(bool forward)
         {
@@ -1201,25 +1119,22 @@ namespace System.Windows.Forms
             {
                 group = activeControl.ParentInternal;
             }
+
             return group.SelectNextControl(activeControl, forward, false, false, true);
         }
 
         /// <summary>
-        ///  Processes a dialog character. Overrides Control.processDialogChar().
-        ///  This method calls the processMnemonic() method to check if the character
-        ///  is a mnemonic for one of the controls on the form. If processMnemonic()
-        ///  does not consume the character, then base.processDialogChar() is
-        ///  called.
+        /// Processes a dialog character. Overrides Control.processDialogChar(). This method calls
+        /// the ProcessMnemonic() method to check if the character is a mnemonic for one of the
+        /// controls on the form. If processMnemonic() does not consume the character, then
+        /// base.ProcessDialogChar() is called.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override bool ProcessDialogChar(char charCode)
         {
-#if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogChar [" + charCode.ToString() + "]");
 
-#endif
             // If we're the top-level form or control, we need to do the mnemonic handling
-            //
             if (GetContainerControl() is ContainerControl parent && charCode != ' ' && ProcessMnemonic(charCode))
             {
                 return true;
@@ -1229,19 +1144,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Processes a dialog key. Overrides Control.processDialogKey(). This
-        ///  method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
-        ///  keys in dialogs.
-        ///  The method performs no processing on keys that include the ALT or
-        ///  CONTROL modifiers. For the TAB key, the method selects the next control
-        ///  on the form. For the arrow keys,
-        ///  !!!
+        /// Processes a dialog key. Overrides Control.processDialogKey(). This method implements
+        /// handling of the TAB, LEFT, RIGHT, UP, and DOWN keys in dialogs.
+        /// The method performs no processing on keys that include the ALT or CONTROL modifiers.
+        /// For the TAB key, the method selects the next control on the form. For the arrow keys, !!!
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
-#if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
-#endif
+
             LastKeyData = keyData;
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
             {
@@ -1268,6 +1179,7 @@ namespace System.Windows.Forms
                         break;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -1281,24 +1193,24 @@ namespace System.Windows.Forms
             }
             if (ParentInternal == null)
             {
-                // unfortunately, we have to stick this here for the case where we're hosted without
-                // a form in the chain.  This would be something like a context menu strip with shortcuts
+                // Unfortunately, we have to stick this here for the case where we're hosted without
+                // a form in the chain. This would be something like a context menu strip with shortcuts
                 // hosted within Office, VS or IE.
                 //
                 // this is an optimized search O(number of ToolStrips in thread)
                 // that happens only if the key routing makes it to the top.
                 return ToolStripManager.ProcessCmdKey(ref msg, keyData);
             }
+
             return false;
         }
 
         protected internal override bool ProcessMnemonic(char charCode)
         {
-#if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessMnemonic [" + charCode.ToString() + "]");
             Debug.Indent();
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "this == " + ToString());
-#endif
+
             if (!CanProcessMnemonic())
             {
                 return false;
@@ -1316,7 +1228,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
             int count = 0;
-#endif //DEBUG
+#endif
 
             // Set the processing mnemonic flag so child controls don't check for it when checking if they
             // can process the mnemonic.
@@ -1326,7 +1238,7 @@ namespace System.Windows.Forms
 
             try
             {
-                // safety flag to avoid infinite loop when testing controls in a container.
+                // Safety flag to avoid infinite loop when testing controls in a container.
                 bool wrapped = false;
 
                 Control ctl = start;
@@ -1340,11 +1252,8 @@ namespace System.Windows.Forms
                     // mnemonic (bad UI design but supported) to be processed sequentially
 #if DEBUG
                     count++;
-                    if (count > 9999)
-                    {
-                        Debug.Fail("Infinite loop trying to find controls which can ProcessMnemonic()!!!");
-                    }
-#endif //DEBUG
+                    Debug.Assert(count <= 999, "Infinite loop trying to find controls which can ProcessMnemonic()!!!");
+#endif
                     ctl = GetNextControl(ctl, true);
 
                     if (ctl != null)
@@ -1359,7 +1268,7 @@ namespace System.Windows.Forms
                         {
 #if DEBUG
                             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "  ...mnemonics found");
-                            Debug.Assert((Control.TraceMnemonicProcessing.Enabled || canProcess), "ProcessMnemonic returned true, even though CanProcessMnemonic() is false.  Someone probably overrode ProcessMnemonic and forgot to test CanSelect or CanProcessMnemonic().");
+                            Debug.Assert((Control.TraceMnemonicProcessing.Enabled || canProcess), "ProcessMnemonic returned true, even though CanProcessMnemonic() is false. Someone probably overrode ProcessMnemonic and forgot to test CanSelect or CanProcessMnemonic().");
                             Debug.Unindent();
 #endif
                             processed = true;
@@ -1367,10 +1276,11 @@ namespace System.Windows.Forms
                         }
                     }
                     else
-                    { // ctl is null
+                    {
                         if (wrapped)
                         {
-                            break;      // This avoids infinite loops
+                            // This avoids infinite loops
+                            break;
                         }
 
                         wrapped = true;
@@ -1387,16 +1297,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Selects the next available control and makes it the active control.
+        /// Selects the next available control and makes it the active control.
         /// </summary>
         protected virtual bool ProcessTabKey(bool forward)
         {
-            if (SelectNextControl(activeControl, forward, true, true, false))
-            {
-                return true;
-            }
-
-            return false;
+            return SelectNextControl(activeControl, forward, tabStopOnly: true, nested: true, wrap: false);
         }
 
         private ScrollableControl FindScrollableParent(Control ctl)
@@ -1406,11 +1311,8 @@ namespace System.Windows.Forms
             {
                 current = current.ParentInternal;
             }
-            if (current != null)
-            {
-                return (ScrollableControl)current;
-            }
-            return null;
+            
+            return (ScrollableControl)current;
         }
 
         private void ScrollActiveControlIntoView()
@@ -1443,7 +1345,7 @@ namespace System.Windows.Forms
             }
             if (directed && correctParentActiveControl)
             {
-                SelectNextControl(null, forward, true, true, false);
+                SelectNextControl(null, forward, tabStopOnly: true, nested: true, wrap: false);
             }
         }
 
@@ -1470,9 +1372,8 @@ namespace System.Windows.Forms
                 }
                 if (cc != null)
                 {
-                    // Call to the recursive function that corrects the chain
-                    // of active controls
-                    ret = cc.ActivateControlInternal(value, false);
+                    // Call to the recursive function that corrects the chain of active controls
+                    ret = cc.ActivateControl(value, false);
                 }
                 else
                 {
@@ -1500,7 +1401,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal ContainerControl InnerMostActiveContainerControl
+        private protected ContainerControl InnerMostActiveContainerControl
         {
             get
             {
@@ -1509,11 +1410,12 @@ namespace System.Windows.Forms
                 {
                     ret = (ContainerControl)ret.ActiveControl;
                 }
+
                 return ret;
             }
         }
 
-        internal ContainerControl InnerMostFocusedContainerControl
+        private ContainerControl InnerMostFocusedContainerControl
         {
             get
             {
@@ -1522,23 +1424,21 @@ namespace System.Windows.Forms
                 {
                     ret = (ContainerControl)ret.focusedControl;
                 }
+
                 return ret;
             }
         }
 
         /// <summary>
-        ///  Updates the default button based on current selection, and the
-        ///  acceptButton property.
+        /// Updates the default button based on current selection, and the acceptButton property.
         /// </summary>
         protected virtual void UpdateDefaultButton()
         {
-            // hook for form
         }
 
         /// <summary>
-        ///  Updates the focusedControl variable by walking towards the
-        ///  activeControl variable, firing enter and leave events and validation
-        ///  as necessary.
+        /// Updates the focusedControl variable by walking towards the activeControl variable, firing
+        /// enter and leave events and validation as necessary.
         /// </summary>
         internal void UpdateFocusedControl()
         {
@@ -1552,7 +1452,7 @@ namespace System.Windows.Forms
             {
                 if (pathControl == null || pathControl.IsDescendant(activeControl))
                 {
-                    // heading down. find next control on path.
+                    // Heading down. Find next control on path.
                     Control nextControlDown = activeControl;
                     while (true)
                     {
@@ -1593,7 +1493,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // heading up.
+                    // Heading up.
                     ContainerControl innerMostFCC = InnerMostFocusedContainerControl;
                     Control stopControl = null;
 
@@ -1681,7 +1581,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Make sure we have a valid choice of last unvalidated control if at all possible.
+        /// Make sure we have a valid choice of last unvalidated control if at all possible.
         /// </summary>
         private void EnsureUnvalidatedControl(Control candidate)
         {
@@ -1735,8 +1635,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Validates the last unvalidated control and its ancestors (up through the ancestor in common
-        ///  with enterControl) if enterControl causes validation.
+        /// Validates the last unvalidated control and its ancestors (up through the ancestor in common
+        /// with enterControl) if enterControl causes validation.
         /// </summary>
         private void EnterValidation(Control enterControl)
         {
@@ -1776,28 +1676,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Validates the last unvalidated control and its ancestors up through, but not including the current control.
+        /// Validates the last unvalidated control and its ancestors up through, but not including the current control.
         ///
-        ///  This version always performs validation, regardless of the AutoValidate setting of the control's parent.
-            /// </summary>
-        //
-        // -------------------------------
-        // INTERNAL NOTE FOR WINFORMS DEVS: This version is intended for user code that wants to force validation, even
-        // while auto-validation is turned off. When adding any explicit Validate() calls to our code, consider using
-        // Validate(true) rather than Validate(), so that you will be sensitive to the current auto-validation setting.
-        // -------------------------------
-        //
-        public bool Validate()
-        {
-            return Validate(false);
-        }
+        /// This version always performs validation, regardless of the AutoValidate setting of the control's parent.
+        /// </summary>
+        /// <remarks>
+        /// This version is intended for user code that wants to force validation, even
+        /// while auto-validation is turned off. When adding any explicit Validate() calls to our code, consider using
+        /// Validate(true) rather than Validate(), so that you will be sensitive to the current auto-validation setting.
+        /// </remarks>
+        public bool Validate() => Validate(checkAutoValidate: false);
 
         /// <summary>
-            ///  Validates the last unvalidated control and its ancestors up through, but not including the current control.
-        ///
-        ///  This version will skip validation if checkAutoValidate is true and the effective AutoValidate setting, as
-        ///  determined by the control's parent, is AutoValidate.Disable.
-            /// </summary>
+        /// Validates the last unvalidated control and its ancestors up through, but not including the current control.
+        /// This version will skip validation if checkAutoValidate is true and the effective AutoValidate setting, as
+        /// determined by the control's parent, is AutoValidate.Disable.
         public bool Validate(bool checkAutoValidate)
         {
             return ValidateInternal(checkAutoValidate, out bool validatedControlAllowsFocusChange);
@@ -1841,40 +1734,38 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     preventFocusChangeOnError = (autoValidateMode == AutoValidate.EnablePreventFocusChange);
                     validatedControlAllowsFocusChange = (autoValidateMode == AutoValidate.EnableAllowFocusChange);
                 }
 
                 return ValidateThroughAncestor(null, preventFocusChangeOnError);
             }
+
             return true;
         }
 
         /// <summary>
-        ///  Validates all selectable child controls in the container, including descendants. This is
-        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
-        ///  for details of exactly which child controls will be validated.
+        /// Validates all selectable child controls in the container, including descendants. This is
+        /// equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
+        /// for details of exactly which child controls will be validated.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual bool ValidateChildren()
-        {
-            return ValidateChildren(ValidationConstraints.Selectable);
-        }
+        public virtual bool ValidateChildren() => ValidateChildren(ValidationConstraints.Selectable);
 
         /// <summary>
-        ///  Validates all the child controls in the container. Exactly which controls are
-        ///  validated and which controls are skipped is determined by <paramref name="flags"/>.
+        /// Validates all the child controls in the container. Exactly which controls are
+        /// validated and which controls are skipped is determined by <paramref name="flags"/>.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual bool ValidateChildren(ValidationConstraints validationConstraints)
         {
-            // validationConstraints must be a combination of
-            // None = 0x00, Selectable = 0x01, Enabled = 0x02, Visible = 0x04, TabStop = 0x08, ImmediateChildren = 0x10
-            // Not using ClientUtils.IsValidEnum here because this is a flags enum and everything is valid between 0x00 and 0x1F.
             if ((int)validationConstraints < 0x00 || (int)validationConstraints > 0x1F)
             {
                 throw new InvalidEnumArgumentException(nameof(validationConstraints), (int)validationConstraints, typeof(ValidationConstraints));
             }
+
             return !PerformContainerValidation(validationConstraints);
         }
 
@@ -1894,8 +1785,8 @@ namespace System.Windows.Forms
             {
                 unvalidatedControl = focusedControl;
             }
-            //return true for a Container Control with no controls to validate....
-            //
+
+            // Return true for a Container Control with no controls to validate.
             if (unvalidatedControl == null)
             {
                 return true;
@@ -1914,10 +1805,8 @@ namespace System.Windows.Forms
             if (currentActiveControl != null)
             {
                 currentActiveControl.ValidationCancelled = false;
-                if (currentActiveControl is ContainerControl)
+                if (currentActiveControl is ContainerControl currentActiveContainerControl)
                 {
-                    ContainerControl currentActiveContainerControl = currentActiveControl as ContainerControl;
-
                     currentActiveContainerControl.ResetValidationFlag();
                 }
             }
@@ -1972,6 +1861,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     // This bit forces the focus to move back to the invalid control
                     SetActiveControl(unvalidatedControl);
                 }
@@ -1987,9 +1877,8 @@ namespace System.Windows.Forms
 
         private void ResetValidationFlag()
         {
-            // PERFNOTE: This is more efficient than using Foreach.  Foreach
-            // forces the creation of an array subset enum each time we
-            // enumerate
+            // Performance: This is more efficient than using Foreach. Foreach forces the creation of
+            // an array subset enum each time we enumerate
             ControlCollection children = Controls;
             int count = children.Count;
             for (int i = 0; i < count; i++)
@@ -2000,22 +1889,20 @@ namespace System.Windows.Forms
 
         internal void ResetActiveAndFocusedControlsRecursive()
         {
-            if (activeControl is ContainerControl)
+            if (activeControl is ContainerControl activeContainerControl)
             {
-                ((ContainerControl)activeControl).ResetActiveAndFocusedControlsRecursive();
+                activeContainerControl.ResetActiveAndFocusedControlsRecursive();
             }
+
             activeControl = null;
             focusedControl = null;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal virtual bool ShouldSerializeAutoValidate()
-        {
-            return autoValidate != AutoValidate.Inherit;
-        }
+        internal virtual bool ShouldSerializeAutoValidate() => autoValidate != AutoValidate.Inherit;
 
         /// <summary>
-        ///  WM_SETFOCUS handler
+        /// WM_SETFOCUS handler
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
@@ -2025,12 +1912,12 @@ namespace System.Windows.Forms
                 if (ActiveControl != null)
                 {
                     WmImeSetFocus();
-                    // Microsoft: Do not raise GotFocus event since the focus
-                    //         is given to the visible ActiveControl
+                    // Do not raise GotFocus event since the focus is given to the visible ActiveControl
                     if (!ActiveControl.Visible)
                     {
                         InvokeGotFocus(this, EventArgs.Empty);
                     }
+
                     FocusActiveControlInternal();
                 }
                 else
@@ -2044,7 +1931,7 @@ namespace System.Windows.Forms
 
                             if (c is ContainerControl knowncontainer)
                             {
-                                succeeded = knowncontainer.ActivateControlInternal(this);
+                                succeeded = knowncontainer.ActivateControl(this);
                             }
                             else
                             {
@@ -2056,6 +1943,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     base.WndProc(ref m);
                 }
             }
