@@ -25,14 +25,12 @@ namespace System.Windows.Forms
 
         private int _thickness;
         private int _minimumThickness;
-        private int _bandIndex;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='DataGridViewBand'/> class.
         /// </summary>
         internal DataGridViewBand()
         {
-            _bandIndex = -1;
         }
 
         ~DataGridViewBand() => Dispose(false);
@@ -361,11 +359,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public int Index
-        {
-            get => _bandIndex;
-            internal set => _bandIndex = value;
-        }
+        public int Index { get; internal set; } = -1;
 
         [Browsable(false)]
         public virtual DataGridViewCellStyle InheritedStyle => null;
@@ -376,9 +370,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (IsRow && _bandIndex > -1)
+                if (IsRow && Index > -1)
                 {
-                    GetHeightInfo(_bandIndex, out int height, out int minimumHeight);
+                    GetHeightInfo(Index, out int height, out int minimumHeight);
                     return minimumHeight;
                 }
 
@@ -446,19 +440,19 @@ namespace System.Windows.Forms
                     // this may trigger a call to set_ReadOnlyInternal
                     if (IsRow)
                     {
-                        if (_bandIndex == -1)
+                        if (Index == -1)
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(ReadOnly)));
                         }
 
                         OnStateChanging(DataGridViewElementStates.ReadOnly);
-                        DataGridView.SetReadOnlyRowCore(_bandIndex, value);
+                        DataGridView.SetReadOnlyRowCore(Index, value);
                     }
                     else
                     {
-                        Debug.Assert(_bandIndex >= 0);
+                        Debug.Assert(Index >= 0);
                         OnStateChanging(DataGridViewElementStates.ReadOnly);
-                        DataGridView.SetReadOnlyColumnCore(_bandIndex, value);
+                        DataGridView.SetReadOnlyColumnCore(Index, value);
                     }
                 }
                 else
@@ -575,21 +569,21 @@ namespace System.Windows.Forms
                     // this may trigger a call to set_SelectedInternal
                     if (IsRow)
                     {
-                        if (_bandIndex == -1)
+                        if (Index == -1)
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(Selected)));
                         }
                         if (DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect || DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                         {
-                            DataGridView.SetSelectedRowCoreInternal(_bandIndex, value);
+                            DataGridView.SetSelectedRowCoreInternal(Index, value);
                         }
                     }
                     else
                     {
-                        Debug.Assert(_bandIndex >= 0);
+                        Debug.Assert(Index >= 0);
                         if (DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect || DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                         {
-                            DataGridView.SetSelectedColumnCoreInternal(_bandIndex, value);
+                            DataGridView.SetSelectedColumnCoreInternal(Index, value);
                         }
                     }
                 }
@@ -640,9 +634,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (IsRow && _bandIndex > -1)
+                if (IsRow && Index > -1)
                 {
-                    GetHeightInfo(_bandIndex, out int height, out int minimumHeight);
+                    GetHeightInfo(Index, out int height, out int minimumHeight);
                     return height;
                 }
 
@@ -735,7 +729,7 @@ namespace System.Windows.Forms
                     if (DataGridView != null &&
                         IsRow &&
                         DataGridView.NewRowIndex != -1 &&
-                        DataGridView.NewRowIndex == _bandIndex &&
+                        DataGridView.NewRowIndex == Index &&
                         !value)
                     {
                         // the 'new' row cannot be made invisble.
@@ -769,8 +763,8 @@ namespace System.Windows.Forms
         private protected void CloneInternal(DataGridViewBand dataGridViewBand)
         {
             dataGridViewBand.Properties = new PropertyStore();
-            dataGridViewBand._bandIndex = -1;
-            if (!IsRow || _bandIndex >= 0 || DataGridView == null)
+            dataGridViewBand.Index = -1;
+            if (!IsRow || Index >= 0 || DataGridView == null)
             {
                 dataGridViewBand.State = State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
             }
@@ -844,7 +838,7 @@ namespace System.Windows.Forms
                     // we could be smarter about what needs to be invalidated.
                     DataGridView.Rows.InvalidateCachedRowCount(elementState);
                     DataGridView.Rows.InvalidateCachedRowsHeight(elementState);
-                    if (_bandIndex != -1)
+                    if (Index != -1)
                     {
                         DataGridView.OnDataGridViewElementStateChanged(this, -1, elementState);
                     }
@@ -865,7 +859,7 @@ namespace System.Windows.Forms
             {
                 if (IsRow)
                 {
-                    if (_bandIndex != -1)
+                    if (Index != -1)
                     {
                         DataGridView.OnDataGridViewElementStateChanging(this, -1, elementState);
                     }
