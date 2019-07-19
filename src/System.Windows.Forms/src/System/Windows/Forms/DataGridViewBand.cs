@@ -23,8 +23,6 @@ namespace System.Windows.Forms
         internal const int MinBandThickness = 2;
         internal const int MaxBandThickness = 65536;
 
-        // Contains all properties that are not always set.
-        private PropertyStore _propertyStore;
         private int _thickness;
         private int _minimumThickness;
         private int _bandIndex;
@@ -419,7 +417,10 @@ namespace System.Windows.Forms
             }
         }
 
-        internal PropertyStore Properties => _propertyStore;
+        /// <summary>
+        /// Contains all properties that are not always set.
+        /// </summary>
+        private protected PropertyStore Properties { get; private set; } = new PropertyStore();
 
         [DefaultValue(false)]
         public virtual bool ReadOnly
@@ -767,7 +768,7 @@ namespace System.Windows.Forms
 
         private protected void CloneInternal(DataGridViewBand dataGridViewBand)
         {
-            dataGridViewBand._propertyStore = new PropertyStore();
+            dataGridViewBand.Properties = new PropertyStore();
             dataGridViewBand._bandIndex = -1;
             if (!IsRow || _bandIndex >= 0 || DataGridView == null)
             {
