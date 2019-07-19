@@ -142,7 +142,15 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Decrements the loading counter, which determines whether a page is in loading mode.
         /// </summary>
-        protected void ExitLoadingMode() => Loading--;
+        protected void ExitLoadingMode()
+        {
+            if (Loading == 0)
+            {
+                return;
+            }
+
+            Loading--;
+        }
 
         /// <summary>
         /// Gets the control that represents the window for this page

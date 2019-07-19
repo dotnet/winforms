@@ -511,26 +511,26 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Fact]
-        public void ComponentEditorPage_ExitLoadingMode_Invoke_DecrementsLoading()
+        public void ComponentEditorPage_ExitLoadingMode_Invoke_DoesNotDecrementLoading()
         {
             var page = new SubComponentEditorPage();
             page.ExitLoadingMode();
-            Assert.Equal(-1, page.Loading);
+            Assert.Equal(0, page.Loading);
 
             // Call again.
             page.ExitLoadingMode();
-            Assert.Equal(-2, page.Loading);
+            Assert.Equal(0, page.Loading);
         }
 
         [Fact]
-        public void ComponentEditorPage_ExitLoadingMode_EnterLoadingMode_Resets()
+        public void ComponentEditorPage_ExitLoadingMode_EnterLoadingMode_IncrementsLoading()
         {
             var page = new SubComponentEditorPage();
             page.ExitLoadingMode();
-            Assert.Equal(-1, page.Loading);
+            Assert.Equal(0, page.Loading);
 
             page.EnterLoadingMode();
-            Assert.Equal(0, page.Loading);
+            Assert.Equal(1, page.Loading);
         }
 
         [Fact]
