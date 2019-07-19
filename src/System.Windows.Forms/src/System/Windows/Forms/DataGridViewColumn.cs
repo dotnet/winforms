@@ -62,7 +62,6 @@ namespace System.Windows.Forms
             Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
             MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
             name = string.Empty;
-            _bandIsRow = false;
             displayIndex = -1;
             this.cellTemplate = cellTemplate;
             autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;

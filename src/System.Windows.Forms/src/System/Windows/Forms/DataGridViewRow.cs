@@ -32,7 +32,6 @@ namespace System.Windows.Forms
         /// </summary>
         public DataGridViewRow() : base()
         {
-            _bandIsRow = true;
             MinimumThickness = DefaultMinRowThickness;
             Thickness = Control.DefaultFont.Height + 9;
         }

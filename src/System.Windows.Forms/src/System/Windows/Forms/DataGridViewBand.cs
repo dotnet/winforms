@@ -28,14 +28,12 @@ namespace System.Windows.Forms
         private int _thickness;
         private int _minimumThickness;
         private int _bandIndex;
-        private protected bool _bandIsRow;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='DataGridViewBand'/> class.
         /// </summary>
         internal DataGridViewBand()
         {
-            _propertyStore = new PropertyStore();
             _bandIndex = -1;
         }
 
@@ -48,7 +46,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_bandIsRow)
+                if (IsRow)
                 {
                     return ((DataGridViewRow)this).GetContextMenuStrip(Index);
                 }
@@ -92,7 +90,7 @@ namespace System.Windows.Forms
                 if (style == null)
                 {
                     style = new DataGridViewCellStyle();
-                    style.AddScope(DataGridView, _bandIsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
+                    style.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                     Properties.SetObject(s_propDefaultCellStyle, style);
                 }
 
@@ -104,11 +102,11 @@ namespace System.Windows.Forms
                 if (HasDefaultCellStyle)
                 {
                     style = DefaultCellStyle;
-                    style.RemoveScope(_bandIsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
+                    style.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                 }
                 if (value != null || Properties.ContainsObject(s_propDefaultCellStyle))
                 {
-                    value?.AddScope(DataGridView, _bandIsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
+                    value?.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                     Properties.SetObject(s_propDefaultCellStyle, value);
                 }
 
@@ -132,7 +130,7 @@ namespace System.Windows.Forms
                     return type;
                 }
 
-                if (_bandIsRow)
+                if (IsRow)
                 {
                     return typeof(DataGridViewRowHeaderCell);
                 }
@@ -161,7 +159,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!_bandIsRow);
+                Debug.Assert(!IsRow);
                 return (State & DataGridViewElementStates.Displayed) != 0;
             }
             internal set
@@ -193,7 +191,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    if (_bandIsRow)
+                    if (IsRow)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(DataGridViewRow.DividerHeight), value, 0));
                     }
@@ -204,7 +202,7 @@ namespace System.Windows.Forms
                 }
                 if (value > MaxBandThickness)
                 {
-                    if (_bandIsRow)
+                    if (IsRow)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewRow.DividerHeight), value, MaxBandThickness));
                     }
@@ -227,7 +225,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!_bandIsRow);
+                Debug.Assert(!IsRow);
                 return (State & DataGridViewElementStates.Frozen) != 0;
             }
             set
@@ -277,7 +275,7 @@ namespace System.Windows.Forms
 
                     headerCell = (DataGridViewHeaderCell)Activator.CreateInstance(cellType);
                     headerCell.DataGridView = DataGridView;
-                    if (_bandIsRow)
+                    if (IsRow)
                     {
                         headerCell.OwningRow = (DataGridViewRow)this;   // may be a shared row
                         Properties.SetObject(s_propHeaderCell, headerCell);
@@ -307,7 +305,7 @@ namespace System.Windows.Forms
                     if (headerCell != null)
                     {
                         headerCell.DataGridView = null;
-                        if (_bandIsRow)
+                        if (IsRow)
                         {
                             headerCell.OwningRow = null;
                         }
@@ -320,7 +318,7 @@ namespace System.Windows.Forms
 
                     if (value != null)
                     {
-                        if (_bandIsRow)
+                        if (IsRow)
                         {
                             if (!(value is DataGridViewRowHeaderCell))
                             {
@@ -374,13 +372,13 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public virtual DataGridViewCellStyle InheritedStyle => null;
 
-        protected bool IsRow => _bandIsRow;
+        protected bool IsRow => this is DataGridViewRow;
 
         internal int MinimumThickness
         {
             get
             {
-                if (_bandIsRow && _bandIndex > -1)
+                if (IsRow && _bandIndex > -1)
                 {
                     GetHeightInfo(_bandIndex, out int height, out int minimumHeight);
                     return minimumHeight;
@@ -394,7 +392,7 @@ namespace System.Windows.Forms
                 {
                     if (value < MinBandThickness)
                     {
-                        if (_bandIsRow)
+                        if (IsRow)
                         {
                             throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, DataGridViewBand.MinBandThickness));
                         }
@@ -407,7 +405,7 @@ namespace System.Windows.Forms
                     if (Thickness < value)
                     {
                         // Force the new minimum width on potential auto fill column.
-                        if (DataGridView != null && !_bandIsRow)
+                        if (DataGridView != null && !IsRow)
                         {
                             DataGridView.OnColumnMinimumWidthChanging((DataGridViewColumn)this, value);
                         }
@@ -428,7 +426,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!_bandIsRow);
+                Debug.Assert(!IsRow);
                 return ((State & DataGridViewElementStates.ReadOnly) != 0 ||
                     (DataGridView != null && DataGridView.ReadOnly));
             }
@@ -445,7 +443,7 @@ namespace System.Windows.Forms
                     }
 
                     // this may trigger a call to set_ReadOnlyInternal
-                    if (_bandIsRow)
+                    if (IsRow)
                     {
                         if (_bandIndex == -1)
                         {
@@ -468,7 +466,7 @@ namespace System.Windows.Forms
                     {
                         if (value)
                         {
-                            if (_bandIsRow)
+                            if (IsRow)
                             {
                                 foreach (DataGridViewCell dataGridViewCell in ((DataGridViewRow)this).Cells)
                                 {
@@ -513,7 +511,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!_bandIsRow);
+                Debug.Assert(!IsRow);
                 if ((State & DataGridViewElementStates.ResizableSet) != 0)
                 {
                     return ((State & DataGridViewElementStates.Resizable) != 0) ? DataGridViewTriState.True : DataGridViewTriState.False;
@@ -566,7 +564,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!_bandIsRow);
+                Debug.Assert(!IsRow);
                 return (State & DataGridViewElementStates.Selected) != 0;
             }
             set
@@ -574,7 +572,7 @@ namespace System.Windows.Forms
                 if (DataGridView != null)
                 {
                     // this may trigger a call to set_SelectedInternal
-                    if (_bandIsRow)
+                    if (IsRow)
                     {
                         if (_bandIndex == -1)
                         {
@@ -641,7 +639,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_bandIsRow && _bandIndex > -1)
+                if (IsRow && _bandIndex > -1)
                 {
                     GetHeightInfo(_bandIndex, out int height, out int minimumHeight);
                     return height;
@@ -658,7 +656,7 @@ namespace System.Windows.Forms
                 }
                 if (value > MaxBandThickness)
                 {
-                    if (_bandIsRow)
+                    if (IsRow)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewRow.Height), value, MaxBandThickness));
                     }
@@ -669,7 +667,7 @@ namespace System.Windows.Forms
                 }
 
                 bool setThickness = true;
-                if (_bandIsRow)
+                if (IsRow)
                 {
                     if (DataGridView != null && DataGridView.AutoSizeRowsMode != DataGridViewAutoSizeRowsMode.None)
                     {
@@ -726,7 +724,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!_bandIsRow);
+                Debug.Assert(!IsRow);
                 return (State & DataGridViewElementStates.Visible) != 0;
             }
             set
@@ -734,7 +732,7 @@ namespace System.Windows.Forms
                 if (((State & DataGridViewElementStates.Visible) != 0) != value)
                 {
                     if (DataGridView != null &&
-                        _bandIsRow &&
+                        IsRow &&
                         DataGridView.NewRowIndex != -1 &&
                         DataGridView.NewRowIndex == _bandIndex &&
                         !value)
@@ -771,8 +769,7 @@ namespace System.Windows.Forms
         {
             dataGridViewBand._propertyStore = new PropertyStore();
             dataGridViewBand._bandIndex = -1;
-            dataGridViewBand._bandIsRow = _bandIsRow;
-            if (!_bandIsRow || _bandIndex >= 0 || DataGridView == null)
+            if (!IsRow || _bandIndex >= 0 || DataGridView == null)
             {
                 dataGridViewBand.State = State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
             }
@@ -820,7 +817,7 @@ namespace System.Windows.Forms
 
         internal void GetHeightInfo(int rowIndex, out int height, out int minimumHeight)
         {
-            Debug.Assert(_bandIsRow);
+            Debug.Assert(IsRow);
             if (DataGridView != null &&
                 (DataGridView.VirtualMode || DataGridView.DataSource != null) &&
                 DataGridView.AutoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
@@ -841,7 +838,7 @@ namespace System.Windows.Forms
             if (DataGridView != null)
             {
                 // maybe move this code into OnDataGridViewElementStateChanged
-                if (_bandIsRow)
+                if (IsRow)
                 {
                     // we could be smarter about what needs to be invalidated.
                     DataGridView.Rows.InvalidateCachedRowCount(elementState);
@@ -865,7 +862,7 @@ namespace System.Windows.Forms
         {
             if (DataGridView != null)
             {
-                if (_bandIsRow)
+                if (IsRow)
                 {
                     if (_bandIndex != -1)
                     {
@@ -885,11 +882,11 @@ namespace System.Windows.Forms
             {
                 if (DataGridView == null)
                 {
-                    DefaultCellStyle.RemoveScope(_bandIsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
+                    DefaultCellStyle.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                 }
                 else
                 {
-                    DefaultCellStyle.AddScope(DataGridView, _bandIsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
+                    DefaultCellStyle.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                 }
             }
 
