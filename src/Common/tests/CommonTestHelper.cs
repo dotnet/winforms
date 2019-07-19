@@ -485,6 +485,26 @@ namespace WinForms.Common.Tests
             };
         }
 
+        public static TheoryData<KeyEventArgs> GetKeyEventArgsTheoryData()
+        {
+            var data = new TheoryData<KeyEventArgs>
+            {
+                null,
+                new KeyEventArgs(Keys.Cancel)
+            };
+            return data;
+        }
+
+        public static TheoryData<KeyPressEventArgs> GetKeyPressEventArgsTheoryData()
+        {
+            var data = new TheoryData<KeyPressEventArgs>
+            {
+                null,
+                new KeyPressEventArgs('1')
+            };
+            return data;
+        }
+
         public static TheoryData<MouseEventArgs> GetMouseEventArgsTheoryData()
         {
             return new TheoryData<MouseEventArgs>
