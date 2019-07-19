@@ -506,12 +506,7 @@ namespace System.Drawing.Design
                    (name1 != null && name2 != null && name1.FullName == name2.FullName);
         }
 
-        public override int GetHashCode()
-        {
-            int typeHash = TypeName?.GetHashCode() ?? 0;
-            int displayHash = DisplayName?.GetHashCode() ?? 0;
-            return unchecked(typeHash ^ displayHash);
-        }
+        public override int GetHashCode() => HashCode.Combine(TypeName, DisplayName);
 
         /// <summary>
         /// Filters a property value before returning it.  This allows a property to always clone values,

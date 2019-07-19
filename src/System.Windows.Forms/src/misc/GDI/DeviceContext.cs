@@ -584,10 +584,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  This allows collections to treat DeviceContext objects wrapping the same HDC as the same objects.
         /// </summary>
-        public override int GetHashCode()
-        {
-            return Hdc.GetHashCode();
-        }
+        public override int GetHashCode() => Hdc.GetHashCode();
 
         internal class GraphicsState
         {

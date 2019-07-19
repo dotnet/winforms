@@ -51,10 +51,7 @@ namespace System.Windows.Forms
             return !(p1 == p2);
         }
 
-        public override string ToString()
-        {
-            return Column + "," + Row;
-        }
+        public override string ToString() => $"{Column},{Row}";
 
         public override int GetHashCode() => HashCode.Combine(Row, Column);
     }

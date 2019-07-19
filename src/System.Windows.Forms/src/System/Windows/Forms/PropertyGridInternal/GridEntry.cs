@@ -2006,17 +2006,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return Array.Empty<object>();
         }
 
-        public override int GetHashCode()
-        {
-            // These can be null, so workaround giving hashcode = 0 for null objects.
-            object label = PropertyLabel;
-            object type = PropertyType;
-            uint h1 = (uint)((label == null) ? 0 : label.GetHashCode());
-            uint h2 = (uint)((type == null) ? 0 : type.GetHashCode());
-            uint h3 = (uint)GetType().GetHashCode();
-
-            return (int)(h1 ^ ((h2 << 13) | (h2 >> 19)) ^ ((h3 << 26) | (h3 >> 6)));
-        }
+        public override int GetHashCode() => HashCode.Combine(PropertyLabel, PropertyType, GetType());
 
         /// <summary>
         /// Checks if a given flag is set

@@ -1760,10 +1760,7 @@ namespace System.Windows.Forms
 
             internal void Scale(float dx, float dy) => _owner.Padding.Scale(dx, dy);
 
-            public override string ToString()
-            {
-                return $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
-            }
+            public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
 
             object ICloneable.Clone() => new DockPaddingEdges(Left, Right, Top, Bottom);
         }

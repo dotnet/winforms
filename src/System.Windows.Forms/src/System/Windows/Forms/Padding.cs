@@ -171,10 +171,7 @@ namespace System.Windows.Forms
 
         public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
-        public override string ToString()
-        {
-            return "{Left=" + Left + ",Top=" + Top + ",Right=" + Right + ",Bottom=" + Bottom + "}";
-        }
+        public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
 
         private void ResetAll() => All = 0;
 

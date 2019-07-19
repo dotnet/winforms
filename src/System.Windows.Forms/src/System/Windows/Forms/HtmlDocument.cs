@@ -987,10 +987,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode()
-        {
-            return htmlDocument2 == null ? 0 : htmlDocument2.GetHashCode();
-        }
+        public override int GetHashCode() => htmlDocument2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

@@ -359,10 +359,7 @@ namespace System.Windows.Forms
                 return obj is SmTransition && Equals((SmTransition)obj);
             }
 
-            public override int GetHashCode()
-            {
-                return (byte)currentState << 16 | (byte)@event;
-            }
+            public override int GetHashCode() => HashCode.Combine(@event, currentState);
         }
 
         private sealed class InternalStateMachineTimer : Timer

@@ -1456,8 +1456,6 @@ namespace System.Windows.Forms.Layout
             return new TableLayoutPanelCellPosition(layoutInfo.ColumnStart, layoutInfo.RowStart);
 
         }
-
-        #region LayoutInfo
         internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
         {
             LayoutInfo layoutInfo = (LayoutInfo)element.Properties.GetObject(_layoutInfoProperty);
@@ -1476,113 +1474,53 @@ namespace System.Windows.Forms.Layout
         }
 
         ///<summary>
-        /// This class contains layout related information pertaining
-        /// to a child control of the container being laid out.
-        /// it contains Row,column assignments as well as RowSpan/ColumnSpan.
-        /// This class is used from ContainerInfo as a way of caching information
-        /// about child controls.
+        /// This class contains layout related information pertaining to a child control of the
+        /// container being laid out. It contains Row,column assignments as well as RowSpan/ColumnSpan.
+        /// This class is used from ContainerInfo as a way of caching information about child controls.
         /// </summary>
         internal sealed class LayoutInfo
         {
-            //the actual row and column position of this control
-            private int _rowStart = -1;  //if change the default value, change the code in GetControlFromPosition also
-            private int _columnStart = -1;
-            private int _columnSpan = 1;
-            private int _rowSpan = 1;
-            //the row and column specified by the user. Only set when the element is absolutely positioned
-            private int _rowPos = -1;
-            private int _colPos = -1;
-
-            //the element which owns this layoutInfo
-            private readonly IArrangedElement _element;
-
             public LayoutInfo(IArrangedElement element)
             {
-                _element = element;
+                Element = element;
             }
 
-            internal bool IsAbsolutelyPositioned
-            {
-                get { return _rowPos >= 0 && _colPos >= 0; }
-            }
+            public bool IsAbsolutelyPositioned => RowPosition >= 0 && ColumnPosition >= 0;
 
-            internal IArrangedElement Element
-            {
-                get { return _element; }
-            }
+            public IArrangedElement Element { get; }
 
-            ///Corresponds to TableLayoutSettings.SetRow
-            ///Can be -1 indicating that it is a "flow" element and
-            ///will fit in as necessary.  This occurs when a control
-            ///is just added without specific position.
-            internal int RowPosition
-            {
-                get { return _rowPos; }
-                set
-                {
-                    // all validation should occur in TableLayoutSettings.
-                    _rowPos = value;
-                }
-            }
+            /// <summary>
+            /// Corresponds to TableLayoutSettings.SetRow. Can be -1 indicating that it is a
+            /// "flow" element and will fit in as necessary. This occurs when a control is
+            /// just added without specific position.
+            /// </summary>
+            public int RowPosition { get; set; } = -1;
 
-            ///Corresponds to TableLayoutSettings.SetColumn
-            ///Can be -1 indicating that it is a "flow" element and
-            ///will fit in as necessary.  This occurs when a control
-            ///is just added without specific position.
-            internal int ColumnPosition
-            {
-                get { return _colPos; }
-                set
-                {
-                    // all validation should occur in TableLayoutSettings.
-                    _colPos = value;
-                }
-            }
+            /// <summary>
+            /// Corresponds to TableLayoutSettings.SetColumn. Can be -1 indicating that it is a
+            /// "flow" element and will fit in as necessary. This occurs when a control is
+            /// just added without specific position.
+            /// </summary>
+            public int ColumnPosition { get; set; } = -1;
 
-            internal int RowStart
-            {
-                get { return _rowStart; }
-                set { _rowStart = value; }
-            }
+            public int RowStart { get; set; } = -1;
 
-            internal int ColumnStart
-            {
-                get { return _columnStart; }
-                set { _columnStart = value; }
-            }
+            public int ColumnStart { get; set; } = -1;
 
-            internal int ColumnSpan
-            {
-                get { return _columnSpan; }
-                set
-                {
-                    _columnSpan = value;
-                }
-            }
+            public int ColumnSpan { get; set; } = 1;
 
-            internal int RowSpan
-            {
-                get { return _rowSpan; }
-                set
-                {
-                    _rowSpan = value;
-                }
-            }
+            public int RowSpan { get; set; } = 1;
 
 #if DEBUG
-            public LayoutInfo Clone()
+            public LayoutInfo Clone() => new LayoutInfo(Element)
             {
-                LayoutInfo clone = new LayoutInfo(_element)
-                {
-                    RowStart = RowStart,
-                    ColumnStart = ColumnStart,
-                    RowSpan = RowSpan,
-                    ColumnSpan = ColumnSpan,
-                    RowPosition = RowPosition,
-                    ColumnPosition = ColumnPosition
-                };
-                return clone;
-            }
+                RowStart = RowStart,
+                ColumnStart = ColumnStart,
+                RowSpan = RowSpan,
+                ColumnSpan = ColumnSpan,
+                RowPosition = RowPosition,
+                ColumnPosition = ColumnPosition
+            };
 
             public override bool Equals(object obj)
             {
@@ -1599,11 +1537,19 @@ namespace System.Windows.Forms.Layout
                     && other.ColumnPosition == ColumnPosition;
             }
 
-            // Required if you override Equals()
-            public override int GetHashCode() { return base.GetHashCode(); }
+            public override int GetHashCode()
+            {
+                var hash = new HashCode();
+                hash.Add(RowStart);
+                hash.Add(ColumnStart);
+                hash.Add(RowSpan);
+                hash.Add(ColumnSpan);
+                hash.Add(RowPosition);
+                hash.Add(ColumnPosition);
+                return hash.ToHashCode();
+            }
 #endif
         }
-        #endregion
 
         #region ContainerInfo
         internal static bool HasCachedAssignments(ContainerInfo containerInfo)

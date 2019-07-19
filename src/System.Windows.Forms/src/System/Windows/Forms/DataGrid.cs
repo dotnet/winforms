@@ -10499,10 +10499,7 @@ namespace System.Windows.Forms
             /// <summary>
             /// Gets the hash code for the <see cref='HitTestInfo'/> instance.
             /// </summary>
-            public override int GetHashCode()
-            {
-                return (int)type + (row << 8) + (col << 16);
-            }
+            public override int GetHashCode() => HashCode.Combine(type, row, col);
 
             /// <summary>
             ///  Gets the type, row number, and column number.

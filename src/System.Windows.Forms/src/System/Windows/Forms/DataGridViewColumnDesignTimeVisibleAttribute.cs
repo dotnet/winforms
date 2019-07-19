@@ -7,24 +7,16 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DataGridViewColumnDesignTimeVisibleAttribute : Attribute
     {
-        private readonly bool visible;
-
-        public DataGridViewColumnDesignTimeVisibleAttribute(bool visible)
-        {
-            this.visible = visible;
-        }
-
         public DataGridViewColumnDesignTimeVisibleAttribute()
         {
         }
 
-        public bool Visible
+        public DataGridViewColumnDesignTimeVisibleAttribute(bool visible)
         {
-            get
-            {
-                return visible;
-            }
+            Visible = visible;
         }
+
+        public bool Visible { get; }
 
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute Yes = new DataGridViewColumnDesignTimeVisibleAttribute(true);
 
@@ -39,17 +31,11 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            return obj is DataGridViewColumnDesignTimeVisibleAttribute other && other.Visible == visible;
+            return obj is DataGridViewColumnDesignTimeVisibleAttribute other && other.Visible == Visible;
         }
 
-        public override int GetHashCode()
-        {
-            return typeof(DataGridViewColumnDesignTimeVisibleAttribute).GetHashCode() ^ (visible ? -1 : 0);
-        }
+        public override int GetHashCode() => HashCode.Combine(typeof(DataGridViewColumnDesignTimeVisibleAttribute), Visible);
 
-        public override bool IsDefaultAttribute()
-        {
-            return (Visible == Default.Visible);
-        }
+        public override bool IsDefaultAttribute() => Visible == Default.Visible;
     }
 }

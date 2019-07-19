@@ -321,13 +321,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Gets the hash code for this WindowsFont.
         /// </summary>
-        public override int GetHashCode()
-        {
-            // similar to Font.GetHashCode().
-            return (int)((((uint)Style << 13) | ((uint)Style >> 19)) ^
-                         (((uint)CharSet << 26) | ((uint)CharSet >> 6)) ^
-                         (((uint)Size << 7) | ((uint)Size >> 25)));
-        }
+        public override int GetHashCode() => HashCode.Combine(Style, CharSet, Size);
 
         /// <summary>
         ///  Clones this object.
