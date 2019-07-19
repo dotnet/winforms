@@ -3013,7 +3013,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class CHOOSEFONT
         {
-            public int lStructSize = Marshal.SizeOf<CHOOSEFONT>();   // ndirect.DllLib.sizeOf(this);
+            public int lStructSize = Marshal.SizeOf<CHOOSEFONT>();
             public IntPtr hwndOwner;
             public IntPtr hDC;
             public IntPtr lpLogFont;
@@ -3029,34 +3029,6 @@ namespace System.Windows.Forms
             public short ___MISSING_ALIGNMENT__ = 0;
             public int nSizeMin;
             public int nSizeMax;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class BITMAPINFO
-        {
-            // bmiHeader was a by-value BITMAPINFOHEADER structure
-            public int bmiHeader_biSize = 40;  // ndirect.DllLib.sizeOf( BITMAPINFOHEADER.class );
-            public int bmiHeader_biWidth = 0;
-            public int bmiHeader_biHeight = 0;
-            public short bmiHeader_biPlanes = 0;
-            public short bmiHeader_biBitCount = 0;
-            public int bmiHeader_biCompression = 0;
-            public int bmiHeader_biSizeImage = 0;
-            public int bmiHeader_biXPelsPerMeter = 0;
-            public int bmiHeader_biYPelsPerMeter = 0;
-            public int bmiHeader_biClrUsed = 0;
-            public int bmiHeader_biClrImportant = 0;
-
-            // bmiColors was an embedded array of RGBQUAD structures
-            public byte bmiColors_rgbBlue = 0;
-            public byte bmiColors_rgbGreen = 0;
-            public byte bmiColors_rgbRed = 0;
-            public byte bmiColors_rgbReserved = 0;
-
-            private BITMAPINFO()
-            {
-                //Added to make FxCop happy: doesn't really matter since it's internal...
-            }
         }
 
         [StructLayout(LayoutKind.Sequential)]

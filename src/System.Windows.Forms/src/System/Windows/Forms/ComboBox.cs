@@ -212,7 +212,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                // FxCop: Avoid usage of Enum.IsDefined - this looks like an enum that could grow
                 if (!ClientUtils.IsEnumValid_NotSequential(value, (int)value,
                                                     (int)AutoCompleteSource.None,
                                                     (int)AutoCompleteSource.AllSystemSources,
