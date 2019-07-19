@@ -62,15 +62,10 @@ namespace System.Windows.Forms.Tests.InteropTests
         [Fact]
         public unsafe void CreateFontIndirect()
         {
-            long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
             NativeMethods.LOGFONTW logFont = default;
             IntPtr handle = IntUnsafeNativeMethods.CreateFontIndirectW(ref logFont);
-            bool result = NativeMethods.DeleteObject(handle);
-            allocatedBytes -= GC.GetAllocatedBytesForCurrentThread();
-
             Assert.NotEqual(IntPtr.Zero, handle);
-            Assert.True(result);
-            Assert.Equal(0, allocatedBytes);
+            Assert.True(NativeMethods.DeleteObject(handle));
         }
     }
 }
