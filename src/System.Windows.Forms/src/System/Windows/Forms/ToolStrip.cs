@@ -158,8 +158,10 @@ namespace System.Windows.Forms
         /// <summary>
         /// Summary of ToolStrip.
         /// </devdoc>
-        public ToolStrip() {
-            if (DpiHelper.IsPerMonitorV2Awareness) {
+        public ToolStrip()
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
                 ToolStripManager.CurrentDpi = DeviceDpi;
                 defaultFont = ToolStripManager.DefaultFont;
                 iconWidth = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, DeviceDpi);
@@ -168,7 +170,8 @@ namespace System.Windows.Forms
                 scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, DeviceDpi);
                 scaledDefaultGripMargin = DpiHelper.LogicalToDeviceUnits(defaultGripMargin, DeviceDpi);
             }
-            else if (DpiHelper.IsScalingRequired) {
+            else if (DpiHelper.IsScalingRequired)
+            {
                 iconWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_DIMENSION);
                 iconHeight = DpiHelper.LogicalToDeviceUnitsY(ICON_DIMENSION);
                 insertionBeamWidth = DpiHelper.LogicalToDeviceUnitsX(INSERTION_BEAM_WIDTH);
@@ -2431,13 +2434,15 @@ namespace System.Windows.Forms
                 return null;
             }
 
+            ToolStripDropDown dropDown = this as ToolStripDropDown;
+
             if (start == null)
             {
-                // The navigation should be consisstent when navigating in forward and
+                // The navigation should be consistent when navigating in forward and
                 // backward direction entering the toolstrip, it means that the first
                 // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
                 // is pressed.
-                start = (forward) ? DisplayedItems[DisplayedItems.Count - 1] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
+                start = GetStartItem(forward, dropDown != null);
             }
 
             int current = DisplayedItems.IndexOf(start);
@@ -2462,13 +2467,12 @@ namespace System.Windows.Forms
                 {  // provide negative wrap if necessary
                     current = (--current < 0) ? count + current : current;
                 }
-                if (this is ToolStripDropDown dropDown)
+
+                if (dropDown?.OwnerItem != null && dropDown.OwnerItem.IsInDesignMode)
                 {
-                    if (dropDown.OwnerItem != null && dropDown.OwnerItem.IsInDesignMode)
-                    {
-                        return DisplayedItems[current];
-                    }
+                    return DisplayedItems[current];
                 }
+
                 if (DisplayedItems[current].CanKeyboardSelect)
                 {
                     Debug.WriteLineIf(SelectionDebug.TraceVerbose, "[SelectDBG GetNextToolStripItem] selecting " + DisplayedItems[current].Text);
@@ -2477,7 +2481,25 @@ namespace System.Windows.Forms
                 }
 
             } while (DisplayedItems[current] != start);
+
             return null;
+        }
+
+        private ToolStripItem GetStartItem(bool forward, bool isDropDown)
+        {
+            if (forward)
+            {
+                return DisplayedItems[DisplayedItems.Count - 1];
+            }
+
+            if (!isDropDown)
+            {
+                // For the drop-down up-directed loop should be preserved.
+                // So if the current item is topmost, then the bottom item should be selected on up-key press.
+                return DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
+            }
+
+            return DisplayedItems[0];
         }
 
         /// <remarks>
@@ -2499,13 +2521,10 @@ namespace System.Windows.Forms
                 return item;
             }
 
-            if (this is ToolStripDropDown dropDown)
+            if (this is ToolStripDropDown dropDown && dropDown.OwnerItem != null && (dropDown.OwnerItem.IsInDesignMode || (dropDown.OwnerItem.Owner != null && dropDown.OwnerItem.Owner.IsInDesignMode)))
             {
-                if (dropDown.OwnerItem != null && (dropDown.OwnerItem.IsInDesignMode || (dropDown.OwnerItem.Owner != null && dropDown.OwnerItem.Owner.IsInDesignMode)))
-                {
-                    ToolStripItem item = GetNextItemHorizontal(selectedItem, down);
-                    return item;
-                }
+                ToolStripItem item = GetNextItemHorizontal(selectedItem, down);
+                return item;
             }
 
             Point midPointOfCurrent = new Point(selectedItem.Bounds.X + selectedItem.Width / 2,
@@ -2580,41 +2599,38 @@ namespace System.Windows.Forms
                  string tanWinnerString = (tanWinner == null) ? "null" : tanWinner.ToString();
                  string hypWinnerString = (hypotenuseWinner == null) ? "null": hypotenuseWinner.ToString();
                  Debug.WriteLine(String.Format("Tangent winner is {0} Hyp winner is {1}",  tanWinnerString, hypWinnerString));
-
 #endif
+
             if ((tanWinner == null) || (hypotenuseWinner == null))
             {
                 return (GetNextItemHorizontal(null, down));
             }
-            else
-            {
-                // often times the guy with the best angle will be the guy with the closest hypotenuse.
-                // however in layouts where things are more randomly spaced, this is not necessarily the case.
-                if (tanOfHypotenuseWinner == minTan)
-                {
-                    // if the angles match up, such as in the case of items of the same width in vertical flow
-                    // then pick the closest one.
-                    return hypotenuseWinner;
-                }
-                else if ((!down && tanWinner.Bounds.Bottom <= hypotenuseWinner.Bounds.Top)
-                  || (down && tanWinner.Bounds.Top > hypotenuseWinner.Bounds.Bottom))
-                {
-                    // we prefer the case where the angle is smaller than
-                    // the case where the hypotenuse is smaller.  The only
-                    // scenarios where that is not the case is when the hypoteneuse
-                    // winner is clearly closer than the angle winner.
 
-                    //   [a.winner]                       |       [s]
-                    //                                    |         [h.winner]
-                    //       [h.winner]                   |
-                    //     [s]                            |    [a.winner]
-                    return hypotenuseWinner;
-                }
-                else
-                {
-                    return tanWinner;
-                }
+            // often times the guy with the best angle will be the guy with the closest hypotenuse.
+            // however in layouts where things are more randomly spaced, this is not necessarily the case.
+            if (tanOfHypotenuseWinner == minTan)
+            {
+                // if the angles match up, such as in the case of items of the same width in vertical flow
+                // then pick the closest one.
+                return hypotenuseWinner;
             }
+
+            if ((!down && tanWinner.Bounds.Bottom <= hypotenuseWinner.Bounds.Top)
+              || (down && tanWinner.Bounds.Top > hypotenuseWinner.Bounds.Bottom))
+            {
+                // we prefer the case where the angle is smaller than
+                // the case where the hypotenuse is smaller.  The only
+                // scenarios where that is not the case is when the hypoteneuse
+                // winner is clearly closer than the angle winner.
+
+                //   [a.winner]                       |       [s]
+                //                                    |         [h.winner]
+                //       [h.winner]                   |
+                //     [s]                            |    [a.winner]
+                return hypotenuseWinner;
+            }
+
+            return tanWinner;
         }
 
         internal override Size GetPreferredSizeCore(Size proposedSize)
@@ -3590,11 +3606,13 @@ namespace System.Windows.Forms
         internal void OnDefaultFontChanged()
         {
             defaultFont = null;
-            if (DpiHelper.IsPerMonitorV2Awareness) {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
                 ToolStripManager.CurrentDpi = DeviceDpi;
                 defaultFont = ToolStripManager.DefaultFont;
             }
-            if (!IsFontSet()) {
+            if (!IsFontSet())
+            {
                 OnFontChanged(EventArgs.Empty);
             }
         }
@@ -4207,10 +4225,13 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
         /// <param name="deviceDpiNew">New DPI value</param>
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            if (DpiHelper.IsPerMonitorV2Awareness) {
-                if (deviceDpiOld != deviceDpiNew) {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                if (deviceDpiOld != deviceDpiNew)
+                {
                     ToolStripManager.CurrentDpi = deviceDpiNew;
                     defaultFont = ToolStripManager.DefaultFont;
 
@@ -4218,7 +4239,8 @@ namespace System.Windows.Forms
                     ResetScaling(deviceDpiNew);
 
                     // We need to scale the one Grip per ToolStrip as well (if present).
-                    if (toolStripGrip != null) {
+                    if (toolStripGrip != null)
+                    {
                         toolStripGrip.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
                     }
 
@@ -4234,7 +4256,8 @@ namespace System.Windows.Forms
         /// Do only call from code which is quirked with PerMonitorV2 quirks for the ToolStrip.
         /// </summary>
         /// <param name="newDpi">The new DPI passed by WmDpiChangedBeforeParent.</param>
-        internal virtual void ResetScaling(int newDpi) {
+        internal virtual void ResetScaling(int newDpi)
+        {
             iconWidth = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, newDpi);
             iconHeight = DpiHelper.LogicalToDeviceUnits(ICON_DIMENSION, newDpi);
             insertionBeamWidth = DpiHelper.LogicalToDeviceUnits(INSERTION_BEAM_WIDTH, newDpi);
