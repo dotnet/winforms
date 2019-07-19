@@ -2276,7 +2276,7 @@ namespace System.Windows.Forms
                 changed = true;
             }
 
-            NativeMethods.LOGFONT logfont = NativeMethods.LOGFONT.FromFont(source);
+            NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(source);
 
             short fontWeight = target.GetWeight();
             if (fontWeight != logfont.lfWeight)

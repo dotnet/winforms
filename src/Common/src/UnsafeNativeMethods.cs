@@ -569,12 +569,12 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.GETTEXTLENGTHEX wParam, int lParam);
 
         // For Button
-        //
+
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] NativeMethods.SIZE lParam);
 
         // For ListView
-        //
+
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] ref NativeMethods.LVFINDINFO lParam);
 
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LOGFONT lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LOGFONTW lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.MSG lParam);
@@ -714,37 +714,101 @@ namespace System.Windows.Forms
             }
         }
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, ref NativeMethods.RECT rc, int nUpdate);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private unsafe static extern bool SystemParametersInfoW(uint uiAction, uint uiParam, void* pvParam, uint fWinIni);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, ref int value, int ignore);
+        public unsafe static bool SystemParametersInfoW(uint uiAction, ref NativeMethods.RECT rect)
+        {
+            fixed (void* p = &rect)
+            {
+                return SystemParametersInfoW(uiAction, 0, p, 0);
+            }
+        }
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, ref bool value, int ignore);
+        public unsafe static bool SystemParametersInfoW(uint uiAction, ref int value)
+        {
+            fixed (void* p = &value)
+            {
+                return SystemParametersInfoW(uiAction, 0, p, 0);
+            }
+        }
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, ref NativeMethods.HIGHCONTRAST_I rc, int nUpdate);
+        public unsafe static int SystemParametersInfoInt(uint uiAction)
+        {
+            int value = 0;
+            SystemParametersInfoW(uiAction, ref value);
+            return value;
+        }
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, ref NativeMethods.NONCLIENTMETRICS metrics, int nUpdate);
+        public unsafe static bool SystemParametersInfoW(uint uiAction, ref bool value)
+        {
+            Interop.BOOL nativeBool = value ? Interop.BOOL.TRUE : Interop.BOOL.FALSE;
+            bool result = SystemParametersInfoW(uiAction, 0, &nativeBool, 0);
+            value = nativeBool != Interop.BOOL.FALSE;
+            return result;
+        }
 
-        // This API is available starting Windows10 RS1
-        [DllImport(ExternDll.User32, SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false)]
-        public static extern bool SystemParametersInfoForDpi(int nAction, int nParam, ref NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi);
+        public unsafe static bool SystemParametersInfoBool(uint uiAction)
+        {
+            bool value = false;
+            SystemParametersInfoW(uiAction, ref value);
+            return value;
+        }
+
+        public unsafe static bool SystemParametersInfoW(ref NativeMethods.HIGHCONTRASTW highContrast)
+        {
+            fixed (void* p = &highContrast)
+            {
+                highContrast.cbSize = (uint)sizeof(NativeMethods.HIGHCONTRASTW);
+                return SystemParametersInfoW(
+                    NativeMethods.SPI_GETHIGHCONTRAST,
+                    highContrast.cbSize,
+                    p,
+                    0); // This has no meaning when getting values
+            }
+        }
+
+        public unsafe static bool SystemParametersInfoW(ref NativeMethods.NONCLIENTMETRICSW metrics)
+        {
+            fixed (void* p = &metrics)
+            {
+                metrics.cbSize = (uint)sizeof(NativeMethods.NONCLIENTMETRICSW);
+                return SystemParametersInfoW(
+                    NativeMethods.SPI_GETNONCLIENTMETRICS,
+                    metrics.cbSize,
+                    p,
+                    0); // This has no meaning when getting values
+            }
+        }
+
+        // This API is available starting Windows 10 Anniversary Update (Redstone 1 / 1607 / 14393).
+        // Unlike SystemParametersInfo, there is no "A/W" variance in this api.
+        [DllImport(ExternDll.User32, SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern bool SystemParametersInfoForDpi(
+            uint uiAction,
+            uint uiParam,
+            ref NativeMethods.NONCLIENTMETRICSW pvParam,
+            uint fWinIni,
+            uint dpi);
 
         /// <summary>
         /// Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
         /// </summary>
-        public static bool TrySystemParametersInfoForDpi(int nAction, int nParam, ref NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi)
+        public unsafe static bool TrySystemParametersInfoForDpi(ref NativeMethods.NONCLIENTMETRICSW metrics, uint dpi)
         {
             if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.SystemParametersInfoForDpi)))
             {
-                return SystemParametersInfoForDpi(nAction, nParam, ref metrics, nUpdate, dpi);
+                metrics.cbSize = (uint)sizeof(NativeMethods.NONCLIENTMETRICSW);
+                return SystemParametersInfoForDpi(
+                    NativeMethods.SPI_GETNONCLIENTMETRICS,
+                    metrics.cbSize,
+                    ref metrics,
+                    0,
+                    dpi);
             }
             else
             {
-                return SystemParametersInfo(nAction, nParam, ref metrics, nUpdate);
+                return SystemParametersInfoW(ref metrics);
             }
         }
 

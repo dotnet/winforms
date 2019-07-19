@@ -95,10 +95,10 @@ namespace System.Windows.Forms.Internal
 
         // Font.
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateFontIndirectW(ref NativeMethods.LOGFONT lplf);
+        public static extern IntPtr CreateFontIndirectW(ref NativeMethods.LOGFONTW lplf);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int GetObjectW(HandleRef hFont, int nSize, ref NativeMethods.LOGFONT pv);
+        public static extern int GetObjectW(HandleRef hFont, int nSize, ref NativeMethods.LOGFONTW pv);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SelectObject", CharSet = CharSet.Auto)]
         public static extern IntPtr IntSelectObject(HandleRef hdc, HandleRef obj);

@@ -1839,9 +1839,7 @@ namespace System.Windows.Forms
         WC_TREEVIEW = "SysTreeView32",
         WC_TABCONTROL = "SysTabControl32",
         MSH_MOUSEWHEEL = "MSWHEEL_ROLLMSG",
-        MSH_SCROLL_LINES = "MSH_SCROLL_LINES_MSG",
-        MOUSEZ_CLASSNAME = "MouseZ",
-        MOUSEZ_TITLE = "Magellan MSWHEEL";
+        MSH_SCROLL_LINES = "MSH_SCROLL_LINES_MSG";
 
         public const int CHILDID_SELF = 0;
 
@@ -2327,7 +2325,7 @@ namespace System.Windows.Forms
                 this.bottom = bottom;
             }
 
-            public RECT(Drawing.Rectangle r)
+            public RECT(Rectangle r)
             {
                 left = r.Left;
                 top = r.Top;
@@ -2335,18 +2333,14 @@ namespace System.Windows.Forms
                 bottom = r.Bottom;
             }
 
-            public static RECT FromXYWH(int x, int y, int width, int height)
-            {
-                return new RECT(x, y, x + width, y + height);
-            }
+            public static implicit operator Rectangle(RECT r)
+                => Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
 
-            public Drawing.Size Size
-            {
-                get
-                {
-                    return new Drawing.Size(right - left, bottom - top);
-                }
-            }
+            public static RECT FromXYWH(int x, int y, int width, int height)
+                => new RECT(x, y, x + width, y + height);
+
+            public Size Size
+                => new Size(right - left, bottom - top);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2363,7 +2357,7 @@ namespace System.Windows.Forms
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct NONCLIENTMETRICS
+        public struct NONCLIENTMETRICSW
         {
             public uint cbSize;
             public int iBorderWidth;
@@ -2371,15 +2365,15 @@ namespace System.Windows.Forms
             public int iScrollHeight;
             public int iCaptionWidth;
             public int iCaptionHeight;
-            public LOGFONT lfCaptionFont;
+            public LOGFONTW lfCaptionFont;
             public int iSmCaptionWidth;
             public int iSmCaptionHeight;
-            public LOGFONT lfSmCaptionFont;
+            public LOGFONTW lfSmCaptionFont;
             public int iMenuWidth;
             public int iMenuHeight;
-            public LOGFONT lfMenuFont;
-            public LOGFONT lfStatusFont;
-            public LOGFONT lfMessageFont;
+            public LOGFONTW lfMenuFont;
+            public LOGFONTW lfStatusFont;
+            public LOGFONTW lfMessageFont;
 
             // This is supported on Windows vista and later
             public int iPaddedBorderWidth;
@@ -2846,7 +2840,7 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public unsafe struct LOGFONT
+        public unsafe struct LOGFONTW
         {
             private const int LF_FACESIZE = 32;
 
@@ -2871,25 +2865,25 @@ namespace System.Windows.Forms
 
             public ReadOnlySpan<char> FaceName
             {
-                get => lfFaceName.TrimEnd('\0');
+                get => lfFaceName.SliceAtFirstNull();
                 set => SpanHelpers.CopyAndTerminate(value, lfFaceName);
             }
 
             // Font.ToLogFont will copy LOGFONT into a blittable struct,
             // but we need to box it upfront so we can unbox.
 
-            public static LOGFONT FromFont(Font font)
+            public static LOGFONTW FromFont(Font font)
             {
-                object logFont = new LOGFONT();
+                object logFont = new LOGFONTW();
                 font.ToLogFont(logFont);
-                return (LOGFONT)logFont;
+                return (LOGFONTW)logFont;
             }
 
-            public static LOGFONT FromFont(Font font, Graphics graphics)
+            public static LOGFONTW FromFont(Font font, Graphics graphics)
             {
-                object logFont = new LOGFONT();
+                object logFont = new LOGFONTW();
                 font.ToLogFont(logFont, graphics);
-                return (LOGFONT)logFont;
+                return (LOGFONTW)logFont;
             }
         }
 
@@ -3931,11 +3925,11 @@ namespace System.Windows.Forms
             public int y;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct HIGHCONTRAST_I
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct HIGHCONTRASTW
         {
-            public int cbSize;
-            public int dwFlags;
+            public uint cbSize;
+            public uint dwFlags;
             public IntPtr lpszDefaultScheme;
         }
 
@@ -4671,7 +4665,7 @@ namespace System.Windows.Forms
 
             public ReadOnlySpan<char> FaceName
             {
-                get => szFaceName.TrimEnd('\0');
+                get => szFaceName.SliceAtFirstNull();
                 set => SpanHelpers.CopyAndTerminate(value, szFaceName);
             }
         }

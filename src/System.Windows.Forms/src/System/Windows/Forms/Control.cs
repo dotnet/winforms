@@ -276,10 +276,6 @@ namespace System.Windows.Forms
         internal static readonly object EventPaddingChanged = new object();
         private static readonly object EventPreviewKeyDown = new object();
 
-        private static int mouseWheelMessage = Interop.WindowMessages.WM_MOUSEWHEEL;
-        private static bool mouseWheelRoutingNeeded;
-        private static bool mouseWheelInit;
-
         private static int threadCallbackMessage;
 
         // Initially check for illegal multithreading based on whether the
@@ -487,13 +483,11 @@ namespace System.Windows.Forms
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.Selectable, true);
 
-            InitMouseWheelSupport();
-
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
             // someone overrides these Default* methads, we need to write the default
             // value into the PropertyStore in the ctor.
-            //
+
             if (DefaultMargin != CommonProperties.DefaultMargin)
             {
                 Margin = DefaultMargin;
@@ -7314,46 +7308,6 @@ namespace System.Windows.Forms
             else
             {
                 return UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH);
-            }
-        }
-
-        /// <summary>
-        ///  Initializes mouse wheel support. This may involve registering some windows
-        ///  messages on older operating systems.
-        /// </summary>
-        private void InitMouseWheelSupport()
-        {
-            if (!mouseWheelInit)
-            {
-                // If we are running on a system without a mouse wheel then we must use
-                // manual mousewheel routines.
-                mouseWheelRoutingNeeded = !SystemInformation.NativeMouseWheelSupport;
-
-                if (mouseWheelRoutingNeeded)
-                {
-                    IntPtr hwndMouseWheel = IntPtr.Zero;
-
-                    // Check for the MouseZ "service". This is a little app that generated the
-                    // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                    // found, then there is no support for MouseWheels on the system.
-                    //
-                    hwndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-
-                    if (hwndMouseWheel != IntPtr.Zero)
-                    {
-
-                        // Register the MSH_MOUSEWHEEL message... we look for this in the
-                        // wndProc, and treat it just like WM_MOUSEWHEEL.
-                        //
-                        int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_MOUSEWHEEL);
-
-                        if (message != 0)
-                        {
-                            mouseWheelMessage = message;
-                        }
-                    }
-                }
-                mouseWheelInit = true;
             }
         }
 
@@ -14358,18 +14312,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void WndProc(ref Message m)
         {
-            /*
-            if( GetState(STATE_DISPOSED))
-            {
-                Debug.Fail("Attempting to process a windows message in a disposed control.  This may be OK if the app domain is being unloaded.");
-                DefWndProc(ref m);
-                return;
-            }
-            */
-
             // inlined code from GetStyle(...) to ensure no perf hit
             // for a method call...
-            //
+
             if ((controlStyle & ControlStyles.EnableNotifyMessage) == ControlStyles.EnableNotifyMessage)
             {
                 // pass message *by value* to avoid the possibility
@@ -14698,8 +14643,8 @@ namespace System.Windows.Forms
                     break;
 
                 default:
+
                     // If we received a thread execute message, then execute it.
-                    //
                     if (m.Msg == threadCallbackMessage && m.Msg != 0)
                     {
                         InvokeMarshaledCallbacks();
@@ -14716,40 +14661,6 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    // If we have to route the mousewheel messages, do it (this logic was taken
-                    // from the MFC sources...)
-                    //
-                    if (mouseWheelRoutingNeeded)
-                    {
-                        if (m.Msg == mouseWheelMessage)
-                        {
-                            Keys keyState = Keys.None;
-                            keyState |= (Keys)((UnsafeNativeMethods.GetKeyState((int)Keys.ControlKey) < 0) ? NativeMethods.MK_CONTROL : 0);
-                            keyState |= (Keys)((UnsafeNativeMethods.GetKeyState((int)Keys.ShiftKey) < 0) ? NativeMethods.MK_SHIFT : 0);
-
-                            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
-
-                            if (hwndFocus == IntPtr.Zero)
-                            {
-                                SendMessage(m.Msg, (IntPtr)((unchecked((int)(long)m.WParam) << 16) | (int)keyState), m.LParam);
-                            }
-                            else
-                            {
-                                IntPtr result = IntPtr.Zero;
-                                IntPtr hwndDesktop = UnsafeNativeMethods.GetDesktopWindow();
-
-                                while (result == IntPtr.Zero && hwndFocus != IntPtr.Zero && hwndFocus != hwndDesktop)
-                                {
-                                    result = UnsafeNativeMethods.SendMessage(new HandleRef(null, hwndFocus),
-                                                                       Interop.WindowMessages.WM_MOUSEWHEEL,
-                                                                       (unchecked((int)(long)m.WParam) << 16) | (int)keyState,
-                                                                       m.LParam);
-                                    hwndFocus = UnsafeNativeMethods.GetParent(new HandleRef(null, hwndFocus));
-                                }
-                            }
-                        }
-                    }
-
                     if (m.Msg == NativeMethods.WM_MOUSEENTER)
                     {
                         WmMouseEnter(ref m);
@@ -14759,7 +14670,6 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
             }
-
         }
 
         /// <summary>
@@ -19344,7 +19254,7 @@ namespace System.Windows.Forms
             {
                 Font font = (Font)obj;
                 NativeMethods.tagFONTDESC fontDesc = new NativeMethods.tagFONTDESC();
-                NativeMethods.LOGFONT logFont = NativeMethods.LOGFONT.FromFont(font);
+                NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(font);
 
                 fontDesc.lpstrName = font.Name;
                 fontDesc.cySize = (long)(font.SizeInPoints * 10000);

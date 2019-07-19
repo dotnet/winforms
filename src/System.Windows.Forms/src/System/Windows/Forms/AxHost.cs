@@ -5268,7 +5268,7 @@ namespace System.Windows.Forms
                     cySize = (long)(font.SizeInPoints * 10000)
                 };
 
-                NativeMethods.LOGFONT logfont = NativeMethods.LOGFONT.FromFont(font);
+                NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(font);
                 fdesc.sWeight = (short)logfont.lfWeight;
                 fdesc.sCharset = logfont.lfCharSet;
                 fdesc.fItalic = font.Italic;
