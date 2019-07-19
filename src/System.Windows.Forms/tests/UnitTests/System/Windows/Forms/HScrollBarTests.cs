@@ -15,19 +15,31 @@ namespace System.Windows.Forms.Tests
         public void HScrollBar_Ctor_Default()
         {
             var scrollBar = new SubHScrollBar();
+            Assert.False(scrollBar.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, scrollBar.Anchor);
             Assert.False(scrollBar.AutoSize);
             Assert.Equal(Control.DefaultBackColor, scrollBar.BackColor);
             Assert.Null(scrollBar.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, scrollBar.BackgroundImageLayout);
+            Assert.Null(scrollBar.BindingContext);
             Assert.Equal(0, scrollBar.Bounds.X);
             Assert.Equal(0, scrollBar.Bounds.Y);
             Assert.True(scrollBar.Bounds.Width > 0);
             Assert.True(scrollBar.Bounds.Height > 0);
             Assert.True(scrollBar.Bottom > 0);
+            Assert.True(scrollBar.CanRaiseEvents);
             Assert.Equal(0, scrollBar.ClientRectangle.X);
             Assert.Equal(0, scrollBar.ClientRectangle.Y);
             Assert.True(scrollBar.ClientRectangle.Width > 0);
             Assert.True(scrollBar.ClientRectangle.Height > 0);
+            Assert.True(scrollBar.ClientSize.Width > 0);
+            Assert.True(scrollBar.ClientSize.Height > 0);
+            Assert.Null(scrollBar.Container);
+            Assert.True(scrollBar.CausesValidation);
+            Assert.Empty(scrollBar.Controls);
+            Assert.Same(scrollBar.Controls, scrollBar.Controls);
+            Assert.False(scrollBar.Created);
+            Assert.Same(Cursors.Default, scrollBar.Cursor);
             Assert.Same(Cursors.Default, scrollBar.DefaultCursor);
             Assert.Equal(ImeMode.Disable, scrollBar.DefaultImeMode);
             Assert.Equal(Padding.Empty, scrollBar.DefaultMargin);
@@ -36,32 +48,42 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, scrollBar.DefaultPadding);
             Assert.True(scrollBar.DefaultSize.Width > 0);
             Assert.True(scrollBar.DefaultSize.Height > 0);
+            Assert.False(scrollBar.DesignMode);
             Assert.Equal(0, scrollBar.DisplayRectangle.X);
             Assert.Equal(0, scrollBar.DisplayRectangle.Y);
             Assert.True(scrollBar.DisplayRectangle.Width > 0);
             Assert.True(scrollBar.DisplayRectangle.Height > 0);
+            Assert.Equal(DockStyle.None, scrollBar.Dock);
             Assert.True(scrollBar.Enabled);
+            Assert.NotNull(scrollBar.Events);
+            Assert.Same(scrollBar.Events, scrollBar.Events);
             Assert.Equal(Control.DefaultFont, scrollBar.Font);
             Assert.Equal(Control.DefaultForeColor, scrollBar.ForeColor);
+            Assert.False(scrollBar.HasChildren);
             Assert.True(scrollBar.Height > 0);
             Assert.Equal(ImeMode.Disable, scrollBar.ImeMode);
             Assert.Equal(ImeMode.Disable, scrollBar.ImeModeBase);
             Assert.Equal(10, scrollBar.LargeChange);
             Assert.Equal(0, scrollBar.Left);
+            Assert.Equal(Point.Empty, scrollBar.Location);
+            Assert.Equal(Padding.Empty, scrollBar.Margin);
             Assert.Equal(100, scrollBar.Maximum);
             Assert.Equal(0, scrollBar.Minimum);
+            Assert.Equal(Padding.Empty, scrollBar.Padding);
             Assert.True(scrollBar.Right > 0);
             Assert.Equal(RightToLeft.No, scrollBar.RightToLeft);
             Assert.True(scrollBar.ScaleScrollBarForDpiChange);
+            Assert.Null(scrollBar.Site);
             Assert.True(scrollBar.Size.Width > 0);
             Assert.True(scrollBar.Size.Height > 0);
             Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(0, scrollBar.TabIndex);
             Assert.False(scrollBar.TabStop);
             Assert.Empty(scrollBar.Text);
             Assert.Equal(0, scrollBar.Top);
-            Assert.True(scrollBar.Width > 0);
             Assert.Equal(0, scrollBar.Value);
             Assert.True(scrollBar.Visible);
+            Assert.True(scrollBar.Width > 0);
         }
 
         [Fact]
@@ -143,6 +165,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubHScrollBar : HScrollBar
         {
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
             public new CreateParams CreateParams => base.CreateParams;
 
             public new Cursor DefaultCursor => base.DefaultCursor;
@@ -158,6 +182,10 @@ namespace System.Windows.Forms.Tests
             public new Padding DefaultPadding => base.DefaultPadding;
 
             public new Size DefaultSize => base.DefaultSize;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
 
             public new ImeMode ImeModeBase => base.ImeModeBase;
         }

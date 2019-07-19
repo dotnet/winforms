@@ -16,13 +16,24 @@ namespace System.Windows.Forms.Tests
         public void ScrollBar_Ctor_Default()
         {
             var scrollBar = new SubScrollBar();
+            Assert.False(scrollBar.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, scrollBar.Anchor);
             Assert.False(scrollBar.AutoSize);
             Assert.Equal(Control.DefaultBackColor, scrollBar.BackColor);
             Assert.Null(scrollBar.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, scrollBar.BackgroundImageLayout);
+            Assert.Null(scrollBar.BindingContext);
             Assert.Equal(0, scrollBar.Bottom);
             Assert.Equal(Rectangle.Empty, scrollBar.Bounds);
+            Assert.True(scrollBar.CanRaiseEvents);
+            Assert.True(scrollBar.CausesValidation);
             Assert.Equal(Rectangle.Empty, scrollBar.ClientRectangle);
+            Assert.Equal(Size.Empty, scrollBar.ClientSize);
+            Assert.Null(scrollBar.Container);
+            Assert.Empty(scrollBar.Controls);
+            Assert.Same(scrollBar.Controls, scrollBar.Controls);
+            Assert.False(scrollBar.Created);
+            Assert.Same(Cursors.Default, scrollBar.Cursor);
             Assert.Same(Cursors.Default, scrollBar.DefaultCursor);
             Assert.Equal(ImeMode.Disable, scrollBar.DefaultImeMode);
             Assert.Equal(Padding.Empty, scrollBar.DefaultMargin);
@@ -30,27 +41,38 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, scrollBar.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, scrollBar.DefaultPadding);
             Assert.Equal(Size.Empty, scrollBar.DefaultSize);
+            Assert.False(scrollBar.DesignMode);
             Assert.Equal(Rectangle.Empty, scrollBar.DisplayRectangle);
+            Assert.Equal(DockStyle.None, scrollBar.Dock);
             Assert.True(scrollBar.Enabled);
+            Assert.NotNull(scrollBar.Events);
+            Assert.Same(scrollBar.Events, scrollBar.Events);
             Assert.Equal(Control.DefaultFont, scrollBar.Font);
             Assert.Equal(Control.DefaultForeColor, scrollBar.ForeColor);
+            Assert.False(scrollBar.HasChildren);
             Assert.Equal(0, scrollBar.Height);
             Assert.Equal(ImeMode.Disable, scrollBar.ImeMode);
             Assert.Equal(ImeMode.Disable, scrollBar.ImeModeBase);
             Assert.Equal(10, scrollBar.LargeChange);
             Assert.Equal(0, scrollBar.Left);
+            Assert.Equal(Point.Empty, scrollBar.Location);
             Assert.Equal(100, scrollBar.Maximum);
+            Assert.Equal(Padding.Empty, scrollBar.Margin);
             Assert.Equal(0, scrollBar.Minimum);
+            Assert.Equal(Padding.Empty, scrollBar.Padding);
             Assert.Equal(0, scrollBar.Right);
             Assert.Equal(RightToLeft.No, scrollBar.RightToLeft);
             Assert.True(scrollBar.ScaleScrollBarForDpiChange);
+            Assert.Null(scrollBar.Site);
+            Assert.Equal(Size.Empty, scrollBar.Size);
             Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(0, scrollBar.TabIndex);
             Assert.False(scrollBar.TabStop);
             Assert.Empty(scrollBar.Text);
             Assert.Equal(0, scrollBar.Top);
-            Assert.Equal(0, scrollBar.Width);
             Assert.Equal(0, scrollBar.Value);
             Assert.True(scrollBar.Visible);
+            Assert.Equal(0, scrollBar.Width);
         }
 
         [Fact]
@@ -1932,6 +1954,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubScrollBar : ScrollBar
         {
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
             public new CreateParams CreateParams => base.CreateParams;
 
             public new Cursor DefaultCursor => base.DefaultCursor;
@@ -1947,6 +1971,10 @@ namespace System.Windows.Forms.Tests
             public new Padding DefaultPadding => base.DefaultPadding;
 
             public new Size DefaultSize => base.DefaultSize;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
 
             public new ImeMode ImeModeBase => base.ImeModeBase;
 
