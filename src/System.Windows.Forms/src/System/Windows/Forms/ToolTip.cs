@@ -482,38 +482,35 @@ namespace System.Windows.Forms
                 Control baseVar = null;
                 Control[] regions = new Control[_tools.Keys.Count];
                 _tools.Keys.CopyTo(regions, 0);
-                if (regions != null && regions.Length > 0)
+                for (int i = 0; i < regions.Length; i++)
                 {
-                    for (int i = 0; i < regions.Length; i++)
+                    Control ctl = regions[i];
+                    baseVar = ctl.TopLevelControlInternal;
+                    if (baseVar != null)
                     {
-                        Control ctl = regions[i];
-                        baseVar = ctl.TopLevelControlInternal;
-                        if (baseVar != null)
-                        {
-                            break;
-                        }
+                        break;
+                    }
 
-                        if (ctl.IsActiveX)
-                        {
-                            baseVar = ctl;
-                            break;
-                        }
+                    if (ctl.IsActiveX)
+                    {
+                        baseVar = ctl;
+                        break;
+                    }
 
-                        // In the designer, baseVar can be null since the Parent is not a TopLevel control
-                        if (baseVar == null)
+                    // In the designer, baseVar can be null since the Parent is not a TopLevel control
+                    if (baseVar == null)
+                    {
+                        if (ctl != null && ctl.ParentInternal != null)
                         {
-                            if (ctl != null && ctl.ParentInternal != null)
+                            while (ctl.ParentInternal != null)
                             {
-                                while (ctl.ParentInternal != null)
-                                {
-                                    ctl = ctl.ParentInternal;
-                                }
+                                ctl = ctl.ParentInternal;
+                            }
 
-                                baseVar = ctl;
-                                if (baseVar != null)
-                                {
-                                    break;
-                                }
+                            baseVar = ctl;
+                            if (baseVar != null)
+                            {
+                                break;
                             }
                         }
                     }
@@ -710,7 +707,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Returns true if the tooltip can offer an extender property to the specified target component.
         /// </summary>
-        public bool CanExtend(object target) => target is Control && !(target is ToolTip);
+        public bool CanExtend(object target) => target is Control;
 
         private void ClearTopLevelControlEvents()
         {
