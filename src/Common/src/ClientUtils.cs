@@ -309,7 +309,7 @@ namespace System.Windows.Forms
             /// Target becomes null. This makes the item unrecognizable by the collection and cannot be
             /// removed - Remove(item) and Contains(item) will not find it anymore.
             /// </summary>
-            public int RefCheckThreshold { get; set; } = int.MaxValue;
+            public int RefCheckThreshold { get; set; } = int.MaxValue; // this means this is disabled by default.
 
             public object this[int index]
             {
