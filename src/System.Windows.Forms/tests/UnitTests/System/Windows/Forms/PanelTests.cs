@@ -31,6 +31,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(BorderStyle.None, panel.BorderStyle);
             Assert.Equal(100, panel.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.Bounds);
+            Assert.True(panel.CanEnableIme);
             Assert.True(panel.CanRaiseEvents);
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.ClientRectangle);
             Assert.Equal(new Size(200, 100), panel.ClientSize);
@@ -575,6 +576,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubPanel : Panel
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;

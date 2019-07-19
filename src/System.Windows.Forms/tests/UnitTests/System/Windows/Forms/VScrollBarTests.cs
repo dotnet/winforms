@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(scrollBar.Bounds.Width > 0);
             Assert.True(scrollBar.Bounds.Height > 0);
             Assert.True(scrollBar.Bottom > 0);
+            Assert.False(scrollBar.CanEnableIme);
             Assert.True(scrollBar.CanRaiseEvents);
             Assert.True(scrollBar.CausesValidation);
             Assert.Equal(0, scrollBar.ClientRectangle.X);
@@ -158,6 +159,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubVScrollBar : VScrollBar
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;

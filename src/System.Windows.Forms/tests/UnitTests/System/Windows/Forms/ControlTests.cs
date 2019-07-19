@@ -26,6 +26,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.Equal(Size.Empty, control.ClientSize);
@@ -86,6 +87,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.Equal(Size.Empty, control.ClientSize);
@@ -154,6 +156,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(top + height, control.Bottom);
             Assert.Equal(new Rectangle(left, top, width, height), control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
@@ -222,6 +225,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
@@ -290,6 +294,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(top + height, control.Bottom);
             Assert.Equal(new Rectangle(left, top, width, height), control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
@@ -3975,6 +3980,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void Control_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
         {
@@ -4338,6 +4367,8 @@ namespace System.Windows.Forms.Tests
             {
             }
 
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;
@@ -4387,6 +4418,8 @@ namespace System.Windows.Forms.Tests
             public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
 
             public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
+
+            public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
