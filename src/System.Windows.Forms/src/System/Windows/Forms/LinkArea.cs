@@ -47,10 +47,7 @@ namespace System.Windows.Forms
             return this == a;
         }
 
-        public override string ToString()
-        {
-            return "{Start=" + Start + ", Length=" + Length + "}";
-        }
+        public override string ToString() => $"{{Start={Start}, Length={Length}}}";
 
         public static bool operator ==(LinkArea linkArea1, LinkArea linkArea2)
         {
@@ -62,7 +59,7 @@ namespace System.Windows.Forms
             return !(linkArea1 == linkArea2);
         }
 
-        public override int GetHashCode() => start << 4 | length;
+        public override int GetHashCode() => HashCode.Combine(start, length);
 
         /// <summary>
         /// LinkAreaConverter is a class that can be used to convert LinkArea from one data type

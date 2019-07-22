@@ -195,24 +195,7 @@ namespace System.ComponentModel
                 return false;
             }
 
-            public override int GetHashCode()
-            {
-                return _hashCode;
-            }
+            public override int GetHashCode() => _hashCode;
         }
-
-        /* The folowing code has been removed to prevent FXCOP violation
-           It is left here incase it needs to be resurected
-        /// <summary>
-        ///  Override of add that wraps a weak reference around the
-        ///  key and performs a scavenge.
-        /// </summary>
-        public void AddWeak(object key, object value)
-        {
-            ScavengeKeys();
-            base.Add(new EqualityWeakReference(key), value);
-        }
-        */
     }
 }
-

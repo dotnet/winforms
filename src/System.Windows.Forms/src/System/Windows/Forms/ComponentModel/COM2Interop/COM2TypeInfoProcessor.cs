@@ -1128,73 +1128,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             public const int ReadOnlyTrue = 1;
             public const int ReadOnlyFalse = 2;
 
-            string name = null;
-            int dispid = -1;
-            Type valueType = null;
-            readonly ArrayList attributes = new ArrayList();
-            int readOnly = ReadOnlyUnknown;
-            bool isDefault;
-            object typeData;
-            bool nonbrowsable = false;
-            int index;
+            public string Name { get; set; }
 
-            public string Name
-            {
-                get { return name; }
-                set { name = value; }
-            }
-            public int DispId
-            {
-                get { return dispid; }
-                set { dispid = value; }
-            }
-            public Type ValueType
-            {
-                get { return valueType; }
-                set { valueType = value; }
-            }
-            public ArrayList Attributes
-            {
-                get { return attributes; }
-            }
-            public int ReadOnly
-            {
-                get { return readOnly; }
-                set { readOnly = value; }
-            }
-            public bool IsDefault
-            {
-                get { return isDefault; }
-                set { isDefault = value; }
-            }
-            public object TypeData
-            {
-                get { return typeData; }
-                set { typeData = value; }
-            }
-            public bool NonBrowsable
-            {
-                get { return nonbrowsable; }
-                set { nonbrowsable = value; }
-            }
-            public int Index
-            {
-                get { return index; }
-                set { index = value; }
-            }
+            public int DispId { get; set; } = -1;
 
-            public override int GetHashCode()
-            {
-                if (name != null)
-                {
-                    return name.GetHashCode();
-                }
-                return base.GetHashCode();
-            }
+            public Type ValueType { get; set; }
+
+            public ArrayList Attributes { get; } = new ArrayList();
+
+            public int ReadOnly { get; set; } = ReadOnlyUnknown;
+
+            public bool IsDefault { get; set; }
+
+            public object TypeData { get; set; }
+
+            public bool NonBrowsable { get; set; }
+
+            public int Index { get; set; }
+
+            public override int GetHashCode() => Name?.GetHashCode() ?? base.GetHashCode();
         }
     }
 
-    // just so we can recognize a variant properly...
+    /// <summary>
+    /// A class included so we can recognize a variant properly.
+    /// </summary>
     public class Com2Variant
     {
     }

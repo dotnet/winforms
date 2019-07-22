@@ -3258,10 +3258,7 @@ namespace System.Windows.Forms
                 return !a.Equals(b);
             }
 
-            public override int GetHashCode()
-            {
-                return hue << 6 | saturation << 2 | luminosity;
-            }
+            public override int GetHashCode() => HashCode.Combine(hue, saturation, luminosity);
 
             /// <summary>
             /// </summary>

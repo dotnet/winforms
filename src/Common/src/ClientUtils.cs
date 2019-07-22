@@ -291,42 +291,25 @@ namespace System.Windows.Forms
         /// </summary>
         internal class WeakRefCollection : IList
         {
-            private int refCheckThreshold = int.MaxValue; // this means this is disabled by default.
-            private readonly ArrayList _innerList;
-
-            internal WeakRefCollection()
+            public WeakRefCollection()
             {
-                _innerList = new ArrayList(4);
+                InnerList = new ArrayList(4);
             }
 
-            internal WeakRefCollection(int size)
+            public WeakRefCollection(int size)
             {
-                _innerList = new ArrayList(size);
+                InnerList = new ArrayList(size);
             }
 
-            internal ArrayList InnerList
-            {
-                get { return _innerList; }
-            }
+            public ArrayList InnerList { get; }
 
             /// <summary>
-            ///  Indicates the value where the collection should check its items to remove dead weakref left over.
-            ///  Note: When GC collects weak refs from this collection the WeakRefObject identity changes since its
-            ///  Target becomes null.  This makes the item unrecognizable by the collection and cannot be
-            ///  removed - Remove(item) and Contains(item) will not find it anymore.
-            ///
+            /// Indicates the value where the collection should check its items to remove dead weakref left over.
+            /// Note: When GC collects weak refs from this collection the WeakRefObject identity changes since its
+            /// Target becomes null. This makes the item unrecognizable by the collection and cannot be
+            /// removed - Remove(item) and Contains(item) will not find it anymore.
             /// </summary>
-            public int RefCheckThreshold
-            {
-                get
-                {
-                    return refCheckThreshold;
-                }
-                set
-                {
-                    refCheckThreshold = value;
-                }
-            }
+            public int RefCheckThreshold { get; set; } = int.MaxValue; // this means this is disabled by default.
 
             public object this[int index]
             {
@@ -339,10 +322,7 @@ namespace System.Windows.Forms
 
                     return null;
                 }
-                set
-                {
-                    InnerList[index] = CreateWeakRefObject(value);
-                }
+                set => InnerList[index] = CreateWeakRefObject(value);
             }
 
             public void ScavengeReferences()
@@ -358,7 +338,8 @@ namespace System.Windows.Forms
                         InnerList.RemoveAt(currentIndex);
                     }
                     else
-                    {   // only incriment if we have not removed the item
+                    {
+                        // Only incriment if we have not removed the item
                         currentIndex++;
                     }
                 }
@@ -367,7 +348,6 @@ namespace System.Windows.Forms
             public override bool Equals(object obj)
             {
                 WeakRefCollection other = obj as WeakRefCollection;
-
                 if (other == this)
                 {
                     return true;
@@ -394,7 +374,13 @@ namespace System.Windows.Forms
 
             public override int GetHashCode()
             {
-                return base.GetHashCode();
+                var hash = new HashCode();
+                foreach (object o in InnerList)
+                {
+                    hash.Add(o);
+                }
+
+                return hash.ToHashCode();
             }
 
             private WeakRefObject CreateWeakRefObject(object value)
@@ -403,6 +389,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 return new WeakRefObject(value);
             }
 
@@ -430,10 +417,10 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Removes the value using its hash code as its identity.
-            ///  This is needed because the underlying item in the collection may have already been collected
-            ///  changing the identity of the WeakRefObject making it impossible for the collection to identify
-            ///  it.  See WeakRefObject for more info.
+            /// Removes the value using its hash code as its identity. This is needed because the
+            /// underlying item in the collection may have already been collected changing the
+            /// identity of the WeakRefObject making it impossible for the collection to identify
+            /// it. See WeakRefObject for more info.
             /// </summary>
             public void RemoveByHashCode(object value)
             {
@@ -443,7 +430,6 @@ namespace System.Windows.Forms
                 }
 
                 int hash = value.GetHashCode();
-
                 for (int idx = 0; idx < InnerList.Count; idx++)
                 {
                     if (InnerList[idx] != null && InnerList[idx].GetHashCode() == hash)
@@ -454,45 +440,47 @@ namespace System.Windows.Forms
                 }
             }
 
-            #region IList Members
-            public void Clear() { InnerList.Clear(); }
-            public bool IsFixedSize { get { return InnerList.IsFixedSize; } }
-            public bool Contains(object value) { return InnerList.Contains(CreateWeakRefObject(value)); }
-            public void RemoveAt(int index) { InnerList.RemoveAt(index); }
-            public void Remove(object value) { InnerList.Remove(CreateWeakRefObject(value)); }
-            public int IndexOf(object value) { return InnerList.IndexOf(CreateWeakRefObject(value)); }
-            public void Insert(int index, object value) { InnerList.Insert(index, CreateWeakRefObject(value)); }
+            public void Clear() => InnerList.Clear();
+
+            public bool IsFixedSize => InnerList.IsFixedSize;
+
+            public bool Contains(object value) => InnerList.Contains(CreateWeakRefObject(value));
+
+            public void RemoveAt(int index) => InnerList.RemoveAt(index);
+
+            public void Remove(object value) => InnerList.Remove(CreateWeakRefObject(value));
+
+            public int IndexOf(object value) => InnerList.IndexOf(CreateWeakRefObject(value));
+
+            public void Insert(int index, object value) => InnerList.Insert(index, CreateWeakRefObject(value));
+
             public int Add(object value)
             {
                 if (Count > RefCheckThreshold)
                 {
                     ScavengeReferences();
                 }
+
                 return InnerList.Add(CreateWeakRefObject(value));
             }
-            #endregion
 
-            #region ICollection Members
-            public int Count { get { return InnerList.Count; } }
-            object ICollection.SyncRoot { get { return InnerList.SyncRoot; } }
-            public bool IsReadOnly { get { return InnerList.IsReadOnly; } }
-            public void CopyTo(Array array, int index) { InnerList.CopyTo(array, index); }
-            bool ICollection.IsSynchronized { get { return InnerList.IsSynchronized; } }
-            #endregion
+            public int Count => InnerList.Count;
 
-            #region IEnumerable Members
-            public IEnumerator GetEnumerator()
-            {
-                return InnerList.GetEnumerator();
-            }
-            #endregion
+            object ICollection.SyncRoot => InnerList.SyncRoot;
+
+            public bool IsReadOnly => InnerList.IsReadOnly;
+
+            public void CopyTo(Array array, int index) => InnerList.CopyTo(array, index);
+
+            bool ICollection.IsSynchronized => InnerList.IsSynchronized;
+
+            public IEnumerator GetEnumerator() => InnerList.GetEnumerator();
 
             /// <summary>
-            ///  Wraps a weak ref object.
-            ///  WARNING: Use this class carefully!
-            ///  When the weak ref is collected, this object looses its identity. This is bad when the object
-            ///  has been added to a collection since Contains(WeakRef(item)) and Remove(WeakRef(item)) would
-            ///  not be able to identify the item.
+            /// Wraps a weak ref object. WARNING: Use this class carefully!
+            /// When the weak ref is collected, this object looses its identity. This is bad when the object
+            /// has been added to a collection since Contains(WeakRef(item)) and Remove(WeakRef(item)) would
+            /// not be able to identify the item.
             /// </summary>
             internal class WeakRefObject
             {
@@ -519,10 +507,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                public override int GetHashCode()
-                {
-                    return hash;
-                }
+                public override int GetHashCode() => hash;
 
                 public override bool Equals(object obj)
                 {

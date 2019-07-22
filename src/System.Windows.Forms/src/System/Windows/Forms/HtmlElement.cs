@@ -1186,10 +1186,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode()
-        {
-            return htmlElement == null ? 0 : htmlElement.GetHashCode();
-        }
+        public override int GetHashCode() => htmlElement?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

@@ -202,7 +202,7 @@ namespace System.Windows.Forms
                 _dataMember = dataMember.ToLower(CultureInfo.InvariantCulture);
             }
 
-            public override int GetHashCode() => _dataSourceHashCode * _dataMember.GetHashCode();
+            public override int GetHashCode() => HashCode.Combine(_dataSourceHashCode, _dataMember);
 
             public override bool Equals(object target)
             {

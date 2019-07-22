@@ -600,10 +600,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode()
-        {
-            return htmlWindow2 == null ? 0 : htmlWindow2.GetHashCode();
-        }
+        public override int GetHashCode() => htmlWindow2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

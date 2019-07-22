@@ -2,44 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+
 namespace System.Windows.Forms.Layout
 {
-    using System.Collections;
-
     public class ArrangedElementCollection : IList
     {
         internal static ArrangedElementCollection Empty = new ArrangedElementCollection(0);
 
-        // We wrap an ArrayList rather than inherit from CollectionBase because we
-        // do not want to break binary compatibility with ControlCollection.
-        private readonly ArrayList _innerList;
-
-        // Internal constructor prevents externals from getting a hold of one of these.
-        // We'll open this up in Orcas.
         internal ArrangedElementCollection()
         {
-            _innerList = new ArrayList(4);
+            InnerList = new ArrayList(4);
         }
 
         internal ArrangedElementCollection(ArrayList innerList)
         {
-            _innerList = innerList;
+            InnerList = innerList;
         }
 
         private ArrangedElementCollection(int size)
         {
-            _innerList = new ArrayList(size);
+            InnerList = new ArrayList(size);
         }
 
-        internal ArrayList InnerList
-        {
-            get { return _innerList; }
-        }
+        private protected ArrayList InnerList { get; }
 
-        internal virtual IArrangedElement this[int index]
-        {
-            get { return (IArrangedElement)InnerList[index]; }
-        }
+        internal virtual IArrangedElement this[int index] => (IArrangedElement)InnerList[index];
 
         public override bool Equals(object obj)
         {
@@ -55,14 +43,25 @@ namespace System.Windows.Forms.Layout
                     return false;
                 }
             }
+
             return true;
         }
 
-        // Required if you override Equals.
-        public override int GetHashCode() { return base.GetHashCode(); }
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            foreach (object o in InnerList)
+            {
+                hash.Add(o);
+            }
+            
+            return hash.ToHashCode();
+        }
 
-        // Repositions a element in this list.
-        internal void MoveElement(IArrangedElement element, int fromIndex, int toIndex)
+        /// <summary>
+        /// Repositions a element in this list.
+        /// </summary>
+        private protected void MoveElement(IArrangedElement element, int fromIndex, int toIndex)
         {
             int delta = toIndex - fromIndex;
 
@@ -70,7 +69,7 @@ namespace System.Windows.Forms.Layout
             {
                 case -1:
                 case 1:
-                    // simple swap
+                    // Simple swap
                     InnerList[fromIndex] = InnerList[toIndex];
                     break;
 
@@ -78,25 +77,27 @@ namespace System.Windows.Forms.Layout
                     int start = 0;
                     int dest = 0;
 
-                    // which direction are we moving?
+                    // Which direction are we moving?
                     if (delta > 0)
                     {
-                        // shift down by the delta to open the new spot
+                        // Shift down by the delta to open the new spot
                         start = fromIndex + 1;
                         dest = fromIndex;
                     }
                     else
                     {
-                        // shift up by the delta to open the new spot
+                        // Shift up by the delta to open the new spot
                         start = toIndex;
                         dest = toIndex + 1;
 
-                        // make it positive
+                        // Make it positive
                         delta = -delta;
                     }
+
                     Copy(this, start, this, dest, delta);
                     break;
             }
+
             InnerList[toIndex] = element;
         }
 
@@ -124,36 +125,38 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        #region IList Members
-        void IList.Clear() { InnerList.Clear(); }
-        bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
-        bool IList.Contains(object value) { return InnerList.Contains(value); }
-        public virtual bool IsReadOnly { get { return InnerList.IsReadOnly; } }
-        void IList.RemoveAt(int index) { InnerList.RemoveAt(index); }
-        void IList.Remove(object value) { InnerList.Remove(value); }
-        int IList.Add(object value) { return InnerList.Add(value); }
-        int IList.IndexOf(object value) { return InnerList.IndexOf(value); }
-        void IList.Insert(int index, object value) { throw new NotSupportedException(); /* InnerList.Insert(index, value); */ }
+        void IList.Clear() => InnerList.Clear();
+
+        bool IList.IsFixedSize => InnerList.IsFixedSize;
+
+        bool IList.Contains(object value) => InnerList.Contains(value);
+
+        public virtual bool IsReadOnly => InnerList.IsReadOnly;
+
+        void IList.RemoveAt(int index) => InnerList.RemoveAt(index);
+
+        void IList.Remove(object value) => InnerList.Remove(value);
+
+        int IList.Add(object value) => InnerList.Add(value);
+
+        int IList.IndexOf(object value) => InnerList.IndexOf(value);
+
+        void IList.Insert(int index, object value) => throw new NotSupportedException();
 
         object IList.this[int index]
         {
-            get { return InnerList[index]; }
-            set { throw new NotSupportedException(); }
+            get => InnerList[index];
+            set => throw new NotSupportedException();
         }
-        #endregion
 
-        #region ICollection Members
-        public virtual int Count
-        {
-            get { return InnerList.Count; }
-        }
-        object ICollection.SyncRoot { get { return InnerList.SyncRoot; } }
-        public void CopyTo(Array array, int index) { InnerList.CopyTo(array, index); }
-        bool ICollection.IsSynchronized { get { return InnerList.IsSynchronized; } }
-        #endregion
+        public virtual int Count => InnerList.Count;
 
-        #region IEnumerable Members
-        public virtual IEnumerator GetEnumerator() { return InnerList.GetEnumerator(); }
-        #endregion
+        object ICollection.SyncRoot => InnerList.SyncRoot;
+
+        public void CopyTo(Array array, int index) => InnerList.CopyTo(array, index);
+
+        bool ICollection.IsSynchronized => InnerList.IsSynchronized;
+
+        public virtual IEnumerator GetEnumerator() => InnerList.GetEnumerator();
     }
 }
