@@ -64,7 +64,8 @@ namespace System.Windows.Forms.Internal
             Point p = new Point(bounds.X + sideLength / 2, bounds.Y + sideLength / 2);
             int radius = sideLength / 2;
             IntUnsafeNativeMethods.BeginPath(hdc);
-            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, null);
+            Point oldPoint = default;
+            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, ref oldPoint);
             IntUnsafeNativeMethods.AngleArc(hdc, p.X, p.Y, radius, startAngle, sweepAngle);
             IntUnsafeNativeMethods.LineTo(hdc, p.X, p.Y);
             IntUnsafeNativeMethods.EndPath(hdc);
@@ -318,8 +319,7 @@ namespace System.Windows.Forms.Internal
                 return Size.Empty;
             }
 
-            IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
-
+            Size size = new Size();
             HandleRef hdc = new HandleRef(null, dc.Hdc);
 
             if (font != null)
@@ -327,7 +327,7 @@ namespace System.Windows.Forms.Internal
                 dc.SelectFont(font);
             }
 
-            IntUnsafeNativeMethods.GetTextExtentPoint32(hdc, text, size);
+            IntUnsafeNativeMethods.GetTextExtentPoint32W(hdc, text, text.Length, ref size);
 
             // Unselect, but not from Measurement DC as it keeps the same
             // font selected for perf reasons.
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.Internal
                 dc.ResetFont();
             }
 
-            return new Size(size.cx, size.cy);
+            return new Size(size.Width, size.Height);
         }
 
         /// <summary>
@@ -594,9 +594,9 @@ namespace System.Windows.Forms.Internal
                 dc.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
-            IntNativeMethods.POINT oldPoint = new IntNativeMethods.POINT();
+            Point oldPoint = new Point();
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, oldPoint);
+            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, ref oldPoint);
             IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
@@ -609,7 +609,7 @@ namespace System.Windows.Forms.Internal
                 dc.SetRasterOperation(rasterOp);
             }
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.x, oldPoint.y, null);
+            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, ref oldPoint);
         }
 
         /// <summary>

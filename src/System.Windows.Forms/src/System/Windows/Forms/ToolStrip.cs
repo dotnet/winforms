@@ -29,9 +29,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Items))]
     [SRDescription(nameof(SR.DescriptionToolStrip))]
     [DefaultEvent(nameof(ItemClicked))]
-    public class ToolStrip : ScrollableControl,
-                             IArrangedElement,
-                             ISupportToolStripPanel
+    public class ToolStrip : ScrollableControl, IArrangedElement, ISupportToolStripPanel
     {
         private static Size onePixel = new Size(1, 1);
         internal static Point InvalidMouseEnter = new Point(int.MaxValue, int.MaxValue);
@@ -5736,7 +5734,7 @@ namespace System.Windows.Forms
                     cachedItemBitmap = NativeMethods.NullHandleRef;
                 }
                 // delete the DC itself.
-                UnsafeNativeMethods.DeleteCompatibleDC(cachedItemHDC);
+                UnsafeNativeMethods.DeleteDC(cachedItemHDC);
             }
 
             cachedItemHDC = NativeMethods.NullHandleRef;
@@ -5749,7 +5747,6 @@ namespace System.Windows.Forms
             DeleteCachedItemHDC();
             GC.SuppressFinalize(this);
         }
-
     }
 
     internal class MouseHoverTimer : IDisposable

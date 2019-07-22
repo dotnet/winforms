@@ -4588,7 +4588,7 @@ namespace System.Windows.Forms
             }
             base.OnVisibleChanged(e);
 
-            // windows forms have to behave like dialog boxes sometimes. If the
+            // Windows forms have to behave like dialog boxes sometimes. If the
             // user has specified that the mouse should snap to the
             // Accept button using the Mouse applet in the control panel,
             // we have to respect that setting each time our form is made visible.
@@ -4596,7 +4596,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated
                     && Visible
                     && (AcceptButton != null)
-                    && UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSNAPTODEFBUTTON, 0, ref data, 0)
+                    && UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETSNAPTODEFBUTTON, ref data)
                     && data)
             {
 

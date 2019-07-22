@@ -86,19 +86,19 @@ namespace System.Windows.Forms.Internal
 
             if (wndBrush == null)
             {
-                nativeHandle = IntSafeNativeMethods.CreatePen((int)style, width, ColorTranslator.ToWin32(color));
+                nativeHandle = SafeNativeMethods.CreatePen((int)style, width, ColorTranslator.ToWin32(color));
             }
             else
             {
-                IntNativeMethods.LOGBRUSH lb = new IntNativeMethods.LOGBRUSH
+                NativeMethods.LOGBRUSH lb = new NativeMethods.LOGBRUSH
                 {
                     lbColor = ColorTranslator.ToWin32(wndBrush.Color),
                     lbStyle = IntNativeMethods.BS_SOLID,
-                    lbHatch = 0
+                    lbHatch = IntPtr.Zero
                 };
 
                 // Note: We currently don't support custom styles, that's why 0 and null for last two params.
-                nativeHandle = IntSafeNativeMethods.ExtCreatePen((int)style, width, lb, 0, null);
+                nativeHandle = SafeNativeMethods.ExtCreatePen((int)style, width, ref lb, 0, null);
             }
         }
 

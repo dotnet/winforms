@@ -4430,7 +4430,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
                     IntPtr hFont = Font.ToHfont();
-                    Interop.HandleCollector.Add(hFont, Interop.CommonHandles.GDI);
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     int iSel = -1;
                     try
@@ -4441,14 +4440,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         if (rgItems != null && rgItems.Length > 0)
                         {
                             string s;
-                            IntNativeMethods.SIZE textSize = new IntNativeMethods.SIZE();
+                            Size textSize = new Size();
 
                             for (int i = 0; i < rgItems.Length; i++)
                             {
                                 s = gridEntry.GetPropertyTextValue(rgItems[i]);
                                 DropDownListBox.Items.Add(s);
-                                IntUnsafeNativeMethods.GetTextExtentPoint32(new HandleRef(DropDownListBox, hdc), s, textSize);
-                                maxWidth = Math.Max((int)textSize.cx, maxWidth);
+                                IntUnsafeNativeMethods.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), s, s.Length, ref textSize);
+                                maxWidth = Math.Max(textSize.Width, maxWidth);
                             }
                         }
                         SafeNativeMethods.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
@@ -6355,7 +6354,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
-                        cp.ClassStyle |= NativeMethods.CS_DROPSHADOW;
+                        cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
                     }
                     if (gridView != null)
                     {

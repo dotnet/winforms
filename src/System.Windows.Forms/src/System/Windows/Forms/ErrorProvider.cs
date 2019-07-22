@@ -20,12 +20,12 @@ namespace System.Windows.Forms
     ///  icon, a tooltip will appear showing the error description string.
     /// </summary>
     [
-    ProvideProperty("IconPadding", typeof(Control)),
-    ProvideProperty("IconAlignment", typeof(Control)),
-    ProvideProperty("Error", typeof(Control)),
-    ToolboxItemFilter("System.Windows.Forms"),
-    ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
-    SRDescription(nameof(SR.DescriptionErrorProvider))
+        ProvideProperty("IconPadding", typeof(Control)),
+        ProvideProperty("IconAlignment", typeof(Control)),
+        ProvideProperty("Error", typeof(Control)),
+        ToolboxItemFilter("System.Windows.Forms"),
+        ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
+        SRDescription(nameof(SR.DescriptionErrorProvider))
     ]
     public class ErrorProvider : Component, IExtenderProvider, ISupportInitialize
     {
@@ -1003,7 +1003,7 @@ namespace System.Windows.Forms
                     {
                         Caption = string.Empty,
                         Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD,
-                        ClassStyle = NativeMethods.CS_DBLCLKS,
+                        ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS,
                         X = 0,
                         Y = 0,
                         Width = 0,
@@ -1349,7 +1349,6 @@ namespace System.Windows.Forms
                         try
                         {
                             windowRegionHandle = windowRegion.GetHrgn(graphics);
-                            Interop.HandleCollector.Add(windowRegionHandle, Interop.CommonHandles.GDI);
                         }
                         finally
                         {

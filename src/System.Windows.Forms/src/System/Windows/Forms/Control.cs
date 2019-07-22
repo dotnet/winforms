@@ -276,10 +276,6 @@ namespace System.Windows.Forms
         internal static readonly object EventPaddingChanged = new object();
         private static readonly object EventPreviewKeyDown = new object();
 
-        private static int mouseWheelMessage = Interop.WindowMessages.WM_MOUSEWHEEL;
-        private static bool mouseWheelRoutingNeeded;
-        private static bool mouseWheelInit;
-
         private static int threadCallbackMessage;
 
         // Initially check for illegal multithreading based on whether the
@@ -487,13 +483,11 @@ namespace System.Windows.Forms
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.Selectable, true);
 
-            InitMouseWheelSupport();
-
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
             // someone overrides these Default* methads, we need to write the default
             // value into the PropertyStore in the ctor.
-            //
+
             if (DefaultMargin != CommonProperties.DefaultMargin)
             {
                 Margin = DefaultMargin;
@@ -1917,7 +1911,7 @@ namespace System.Windows.Forms
                 {
                     cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
                 }
-                cp.ClassStyle = NativeMethods.CS_DBLCLKS;
+                cp.ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS;
 
                 if ((state & STATE_TOPLEVEL) == 0)
                 {
@@ -5656,8 +5650,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel() && SafeNativeMethods.IsWindowEnabled(new HandleRef(window, Handle)))
             {
-                SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                               NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                SafeNativeMethods.SetWindowPos(
+                    new HandleRef(window, Handle),
+                    NativeMethods.HWND_TOP,
+                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
             }
         }
 
@@ -6652,7 +6648,6 @@ namespace System.Windows.Forms
         {
             Graphics graphics = CreateGraphicsInternal();
             IntPtr handle = region.GetHrgn(graphics);
-            Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             graphics.Dispose();
             return handle;
         }
@@ -7313,46 +7308,6 @@ namespace System.Windows.Forms
             else
             {
                 return UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH);
-            }
-        }
-
-        /// <summary>
-        ///  Initializes mouse wheel support. This may involve registering some windows
-        ///  messages on older operating systems.
-        /// </summary>
-        private void InitMouseWheelSupport()
-        {
-            if (!mouseWheelInit)
-            {
-                // If we are running on a system without a mouse wheel then we must use
-                // manual mousewheel routines.
-                mouseWheelRoutingNeeded = !SystemInformation.NativeMouseWheelSupport;
-
-                if (mouseWheelRoutingNeeded)
-                {
-                    IntPtr hwndMouseWheel = IntPtr.Zero;
-
-                    // Check for the MouseZ "service". This is a little app that generated the
-                    // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                    // found, then there is no support for MouseWheels on the system.
-                    //
-                    hwndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-
-                    if (hwndMouseWheel != IntPtr.Zero)
-                    {
-
-                        // Register the MSH_MOUSEWHEEL message... we look for this in the
-                        // wndProc, and treat it just like WM_MOUSEWHEEL.
-                        //
-                        int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_MOUSEWHEEL);
-
-                        if (message != 0)
-                        {
-                            mouseWheelMessage = message;
-                        }
-                    }
-                }
-                mouseWheelInit = true;
             }
         }
 
@@ -11847,8 +11802,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel())
             {
-                SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
-                                               NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                SafeNativeMethods.SetWindowPos(
+                    new HandleRef(window, Handle),
+                    NativeMethods.HWND_BOTTOM,
+                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
             }
         }
 
@@ -11981,7 +11938,14 @@ namespace System.Windows.Forms
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
-                            SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.NullHandleRef, x, y, width, height, flags);
+                            SafeNativeMethods.SetWindowPos(
+                                new HandleRef(window, Handle),
+                                NativeMethods.NullHandleRef,
+                                x,
+                                y,
+                                width,
+                                height,
+                                flags);
 
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
                             // synchonously so we effectively end up in UpdateBounds immediately following
@@ -12198,117 +12162,108 @@ namespace System.Windows.Forms
 
         protected virtual void SetVisibleCore(bool value)
         {
-            try
+            if (GetVisibleCore() != value)
             {
-                Interop.HandleCollector.SuspendCollect();
+                if (!value)
+                {
+                    SelectNextIfFocused();
+                }
+
+                bool fireChange = false;
+
+                if (GetTopLevel())
+                {
+                    // The processing of WmShowWindow will set the visibility
+                    // bit and call CreateControl()
+
+                    if (IsHandleCreated || value)
+                    {
+                        SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), value ? ShowParams : NativeMethods.SW_HIDE);
+                    }
+                }
+                else if (IsHandleCreated || value && parent != null && parent.Created)
+                {
+                    // We want to mark the control as visible so that CreateControl
+                    // knows that we are going to be displayed... however in case
+                    // an exception is thrown, we need to back the change out.
+
+                    SetState(STATE_VISIBLE, value);
+                    fireChange = true;
+                    try
+                    {
+                        if (value)
+                        {
+                            CreateControl();
+                        }
+
+                        SafeNativeMethods.SetWindowPos(
+                            new HandleRef(window, Handle),
+                            NativeMethods.NullHandleRef,
+                            flags: NativeMethods.SWP_NOSIZE
+                                | NativeMethods.SWP_NOMOVE
+                                | NativeMethods.SWP_NOZORDER
+                                | NativeMethods.SWP_NOACTIVATE
+                                | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                    }
+                    catch
+                    {
+                        SetState(STATE_VISIBLE, !value);
+                        throw;
+                    }
+                }
 
                 if (GetVisibleCore() != value)
                 {
-                    if (!value)
-                    {
-                        SelectNextIfFocused();
-                    }
-
-                    bool fireChange = false;
-
-                    if (GetTopLevel())
-                    {
-
-                        // The processing of WmShowWindow will set the visibility
-                        // bit and call CreateControl()
-                        //
-                        if (IsHandleCreated || value)
-                        {
-                            SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), value ? ShowParams : NativeMethods.SW_HIDE);
-                        }
-                    }
-                    else if (IsHandleCreated || value && parent != null && parent.Created)
-                    {
-
-                        // We want to mark the control as visible so that CreateControl
-                        // knows that we are going to be displayed... however in case
-                        // an exception is thrown, we need to back the change out.
-                        //
-                        SetState(STATE_VISIBLE, value);
-                        fireChange = true;
-                        try
-                        {
-                            if (value)
-                            {
-                                CreateControl();
-                            }
-
-                            SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle),
-                                                           NativeMethods.NullHandleRef,
-                                                           0, 0, 0, 0,
-                                                           NativeMethods.SWP_NOSIZE
-                                                           | NativeMethods.SWP_NOMOVE
-                                                           | NativeMethods.SWP_NOZORDER
-                                                           | NativeMethods.SWP_NOACTIVATE
-                                                           | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
-                        }
-                        catch
-                        {
-                            SetState(STATE_VISIBLE, !value);
-                            throw;
-                        }
-                    }
-                    if (GetVisibleCore() != value)
-                    {
-                        SetState(STATE_VISIBLE, value);
-                        fireChange = true;
-                    }
-
-                    if (fireChange)
-                    {
-                        // We do not do this in the OnPropertyChanged event for visible
-                        // Lots of things could cause us to become visible, including a
-                        // parent window.  We do not want to indescriminiately layout
-                        // due to this, but we do want to layout if the user changed
-                        // our visibility.
-                        //
-
-                        using (new LayoutTransaction(parent, this, PropertyNames.Visible))
-                        {
-                            OnVisibleChanged(EventArgs.Empty);
-                        }
-                    }
-                    UpdateRoot();
-                }
-                else
-                { // value of Visible property not changed, but raw bit may have
-
-                    if (!GetState(STATE_VISIBLE) && !value && IsHandleCreated)
-                    {
-                        // PERF - setting Visible=false twice can get us into this else block
-                        // which makes us process WM_WINDOWPOS* messages - make sure we've already
-                        // visible=false - if not, make it so.
-                        if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle)))
-                        {
-                            // we're already invisible - bail.
-                            return;
-                        }
-                    }
-
                     SetState(STATE_VISIBLE, value);
+                    fireChange = true;
+                }
 
-                    // If the handle is already created, we need to update the window style.
-                    // This situation occurs when the parent control is not currently visible,
-                    // but the child control has already been created.
-                    //
-                    if (IsHandleCreated)
+                if (fireChange)
+                {
+                    // We do not do this in the OnPropertyChanged event for visible
+                    // Lots of things could cause us to become visible, including a
+                    // parent window.  We do not want to indescriminiately layout
+                    // due to this, but we do want to layout if the user changed
+                    // our visibility.
+                    using (new LayoutTransaction(parent, this, PropertyNames.Visible))
                     {
-
-                        SafeNativeMethods.SetWindowPos(
-                                                          new HandleRef(window, Handle), NativeMethods.NullHandleRef, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE |
-                                                          NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE |
-                                                          (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                        OnVisibleChanged(EventArgs.Empty);
                     }
                 }
+                UpdateRoot();
             }
-            finally
+            else
             {
-                Interop.HandleCollector.ResumeCollect();
+                // value of Visible property not changed, but raw bit may have
+
+                if (!GetState(STATE_VISIBLE) && !value && IsHandleCreated)
+                {
+                    // PERF - setting Visible=false twice can get us into this else block
+                    // which makes us process WM_WINDOWPOS* messages - make sure we've already 
+                    // visible=false - if not, make it so.
+                    if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle)))
+                    {
+                        // we're already invisible - bail.
+                        return;
+                    }
+                }
+
+                SetState(STATE_VISIBLE, value);
+
+                // If the handle is already created, we need to update the window style.
+                // This situation occurs when the parent control is not currently visible,
+                // but the child control has already been created.
+                if (IsHandleCreated)
+                {
+                    SafeNativeMethods.SetWindowPos(
+                        new HandleRef(window, Handle),
+                        NativeMethods.NullHandleRef,
+                        flags: NativeMethods.SWP_NOSIZE
+                            | NativeMethods.SWP_NOMOVE
+                            | NativeMethods.SWP_NOZORDER
+                            | NativeMethods.SWP_NOACTIVATE
+                            | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                }
             }
         }
 
@@ -12832,8 +12787,10 @@ namespace System.Windows.Forms
                 state |= STATE_NOZORDER;
                 try
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(ctl.window, ctl.Handle), new HandleRef(null, prevHandle), 0, 0, 0, 0,
-                                                   NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    SafeNativeMethods.SetWindowPos(
+                        new HandleRef(ctl.window, ctl.Handle),
+                        new HandleRef(null, prevHandle),
+                        flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
                 }
                 finally
                 {
@@ -12887,9 +12844,13 @@ namespace System.Windows.Forms
                 }
 
                 SafeNativeMethods.SetWindowPos(
-                                              new HandleRef(this, Handle), NativeMethods.NullHandleRef, 0, 0, 0, 0,
-                                              NativeMethods.SWP_DRAWFRAME | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE
-                                              | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
+                    new HandleRef(this, Handle),
+                    NativeMethods.NullHandleRef,
+                    flags: NativeMethods.SWP_DRAWFRAME
+                        | NativeMethods.SWP_NOACTIVATE
+                        | NativeMethods.SWP_NOMOVE
+                        | NativeMethods.SWP_NOSIZE
+                        | NativeMethods.SWP_NOZORDER);
 
                 Invalidate(true);
             }
@@ -14351,18 +14312,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void WndProc(ref Message m)
         {
-            /*
-            if( GetState(STATE_DISPOSED))
-            {
-                Debug.Fail("Attempting to process a windows message in a disposed control.  This may be OK if the app domain is being unloaded.");
-                DefWndProc(ref m);
-                return;
-            }
-            */
-
             // inlined code from GetStyle(...) to ensure no perf hit
             // for a method call...
-            //
+
             if ((controlStyle & ControlStyles.EnableNotifyMessage) == ControlStyles.EnableNotifyMessage)
             {
                 // pass message *by value* to avoid the possibility
@@ -14691,8 +14643,8 @@ namespace System.Windows.Forms
                     break;
 
                 default:
+
                     // If we received a thread execute message, then execute it.
-                    //
                     if (m.Msg == threadCallbackMessage && m.Msg != 0)
                     {
                         InvokeMarshaledCallbacks();
@@ -14709,40 +14661,6 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    // If we have to route the mousewheel messages, do it (this logic was taken
-                    // from the MFC sources...)
-                    //
-                    if (mouseWheelRoutingNeeded)
-                    {
-                        if (m.Msg == mouseWheelMessage)
-                        {
-                            Keys keyState = Keys.None;
-                            keyState |= (Keys)((UnsafeNativeMethods.GetKeyState((int)Keys.ControlKey) < 0) ? NativeMethods.MK_CONTROL : 0);
-                            keyState |= (Keys)((UnsafeNativeMethods.GetKeyState((int)Keys.ShiftKey) < 0) ? NativeMethods.MK_SHIFT : 0);
-
-                            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
-
-                            if (hwndFocus == IntPtr.Zero)
-                            {
-                                SendMessage(m.Msg, (IntPtr)((unchecked((int)(long)m.WParam) << 16) | (int)keyState), m.LParam);
-                            }
-                            else
-                            {
-                                IntPtr result = IntPtr.Zero;
-                                IntPtr hwndDesktop = UnsafeNativeMethods.GetDesktopWindow();
-
-                                while (result == IntPtr.Zero && hwndFocus != IntPtr.Zero && hwndFocus != hwndDesktop)
-                                {
-                                    result = UnsafeNativeMethods.SendMessage(new HandleRef(null, hwndFocus),
-                                                                       Interop.WindowMessages.WM_MOUSEWHEEL,
-                                                                       (unchecked((int)(long)m.WParam) << 16) | (int)keyState,
-                                                                       m.LParam);
-                                    hwndFocus = UnsafeNativeMethods.GetParent(new HandleRef(null, hwndFocus));
-                                }
-                            }
-                        }
-                    }
-
                     if (m.Msg == NativeMethods.WM_MOUSEENTER)
                     {
                         WmMouseEnter(ref m);
@@ -14752,7 +14670,6 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
             }
-
         }
 
         /// <summary>
@@ -19337,9 +19254,7 @@ namespace System.Windows.Forms
             {
                 Font font = (Font)obj;
                 NativeMethods.tagFONTDESC fontDesc = new NativeMethods.tagFONTDESC();
-                NativeMethods.LOGFONT logFont = new NativeMethods.LOGFONT();
-
-                font.ToLogFont(logFont);
+                NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(font);
 
                 fontDesc.lpstrName = font.Name;
                 fontDesc.cySize = (long)(font.SizeInPoints * 10000);
@@ -19664,7 +19579,7 @@ namespace System.Windows.Forms
                     SafeNativeMethods.SelectObject(hBitmapDC, hOriginalBmp);
                     success = SafeNativeMethods.DeleteObject(hBitmap);
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = UnsafeNativeMethods.DeleteCompatibleDC(hBitmapDC);
+                    success = UnsafeNativeMethods.DeleteDC(hBitmapDC);
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally
@@ -20401,7 +20316,6 @@ namespace System.Windows.Forms
                 }
 #endif
                 handle = font.ToHfont();
-                Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             }
 
             internal IntPtr Handle

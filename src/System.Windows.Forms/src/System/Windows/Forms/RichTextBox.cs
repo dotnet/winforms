@@ -2996,14 +2996,9 @@ namespace System.Windows.Forms
             return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_SETCHARFORMAT, charRange, cf);
         }
 
-        private void SetCharFormatFont(bool selectionOnly, Font value)
+        private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
         {
             ForceHandleCreate();
-            NativeMethods.LOGFONT logfont = new NativeMethods.LOGFONT();
-
-            value.ToLogFont(logfont);
-
-            byte[] bytesFaceName;
 
             int dwMask = RichTextBoxConstants.CFM_FACE | RichTextBoxConstants.CFM_SIZE | RichTextBoxConstants.CFM_BOLD |
                 RichTextBoxConstants.CFM_ITALIC | RichTextBoxConstants.CFM_STRIKEOUT | RichTextBoxConstants.CFM_UNDERLINE |
@@ -3030,21 +3025,23 @@ namespace System.Windows.Forms
                 dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
             }
 
-            bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
-
-            NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
-            for (int i = 0; i < bytesFaceName.Length; i++)
+            NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(value);
+            NativeMethods.CHARFORMATW charFormat = new NativeMethods.CHARFORMATW
             {
-                cfW.szFaceName[i] = bytesFaceName[i];
-            }
+                cbSize = sizeof(NativeMethods.CHARFORMATW),
+                dwMask = dwMask,
+                dwEffects = dwEffects,
+                yHeight = (int)(value.SizeInPoints * 20),
+                bCharSet = logFont.lfCharSet,
+                bPitchAndFamily = logFont.lfPitchAndFamily,
+                FaceName = logFont.FaceName
+            };
 
-            cfW.dwMask = dwMask;
-            cfW.dwEffects = dwEffects;
-            cfW.yHeight = (int)(value.SizeInPoints * 20);
-            cfW.bCharSet = logfont.lfCharSet;
-            cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
-
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
+            UnsafeNativeMethods.SendMessage(
+                new HandleRef(this, Handle),
+                Interop.RichEditMessages.EM_SETCHARFORMAT,
+                selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL,
+                ref charFormat);
         }
 
         private static void SetupLogPixels(IntPtr hDC)

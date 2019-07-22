@@ -8,7 +8,6 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    // Miscellaneous utilities
     static internal class ClientUtils
     {
         private const int SurrogateRangeStart = 0xD800;

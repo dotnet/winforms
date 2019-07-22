@@ -215,11 +215,16 @@ namespace System.Windows.Forms
         CF_NOVERTFONTS = 0x01000000,
         CP_WINANSI = 1004;
 
-        public const int cmb4 = 0x0473,
-        CS_DBLCLKS = 0x0008,
-        CS_DROPSHADOW = 0x00020000,
-        CS_SAVEBITS = 0x0800,
-        CF_TEXT = 1,
+        public const int cmb4 = 0x0473;
+
+        public enum ClassStyle : uint
+        {
+            CS_DBLCLKS = 0x0008,
+            CS_DROPSHADOW = 0x00020000,
+            CS_SAVEBITS = 0x0800
+        }
+
+        public const int CF_TEXT = 1,
         CF_BITMAP = 2,
         CF_METAFILEPICT = 3,
         CF_SYLK = 4,
@@ -1834,9 +1839,7 @@ namespace System.Windows.Forms
         WC_TREEVIEW = "SysTreeView32",
         WC_TABCONTROL = "SysTabControl32",
         MSH_MOUSEWHEEL = "MSWHEEL_ROLLMSG",
-        MSH_SCROLL_LINES = "MSH_SCROLL_LINES_MSG",
-        MOUSEZ_CLASSNAME = "MouseZ",
-        MOUSEZ_TITLE = "Magellan MSWHEEL";
+        MSH_SCROLL_LINES = "MSH_SCROLL_LINES_MSG";
 
         public const int CHILDID_SELF = 0;
 
@@ -2322,7 +2325,7 @@ namespace System.Windows.Forms
                 this.bottom = bottom;
             }
 
-            public RECT(Drawing.Rectangle r)
+            public RECT(Rectangle r)
             {
                 left = r.Left;
                 top = r.Top;
@@ -2330,18 +2333,14 @@ namespace System.Windows.Forms
                 bottom = r.Bottom;
             }
 
-            public static RECT FromXYWH(int x, int y, int width, int height)
-            {
-                return new RECT(x, y, x + width, y + height);
-            }
+            public static implicit operator Rectangle(RECT r)
+                => Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
 
-            public Drawing.Size Size
-            {
-                get
-                {
-                    return new Drawing.Size(right - left, bottom - top);
-                }
-            }
+            public static RECT FromXYWH(int x, int y, int width, int height)
+                => new RECT(x, y, x + width, y + height);
+
+            public Size Size
+                => new Size(right - left, bottom - top);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2357,47 +2356,27 @@ namespace System.Windows.Forms
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class WNDCLASS_I
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct NONCLIENTMETRICSW
         {
-            public int style = 0;
-            public IntPtr lpfnWndProc = IntPtr.Zero;
-            public int cbClsExtra = 0;
-            public int cbWndExtra = 0;
-            public IntPtr hInstance = IntPtr.Zero;
-            public IntPtr hIcon = IntPtr.Zero;
-            public IntPtr hCursor = IntPtr.Zero;
-            public IntPtr hbrBackground = IntPtr.Zero;
-            public IntPtr lpszMenuName = IntPtr.Zero;
-            public IntPtr lpszClassName = IntPtr.Zero;
-        }
+            public uint cbSize;
+            public int iBorderWidth;
+            public int iScrollWidth;
+            public int iScrollHeight;
+            public int iCaptionWidth;
+            public int iCaptionHeight;
+            public LOGFONTW lfCaptionFont;
+            public int iSmCaptionWidth;
+            public int iSmCaptionHeight;
+            public LOGFONTW lfSmCaptionFont;
+            public int iMenuWidth;
+            public int iMenuHeight;
+            public LOGFONTW lfMenuFont;
+            public LOGFONTW lfStatusFont;
+            public LOGFONTW lfMessageFont;
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NONCLIENTMETRICS
-        {
-            public int cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
-            public int iBorderWidth = 0;
-            public int iScrollWidth = 0;
-            public int iScrollHeight = 0;
-            public int iCaptionWidth = 0;
-            public int iCaptionHeight = 0;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfCaptionFont = null;
-            public int iSmCaptionWidth = 0;
-            public int iSmCaptionHeight = 0;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfSmCaptionFont = null;
-            public int iMenuWidth = 0;
-            public int iMenuHeight = 0;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfMenuFont = null;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT lfStatusFont = null;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfMessageFont = null;
-            // Necessary since Windows Vista.
-            // Since we are supporting >= Windows 7, this is safe to add.
-            public int iPaddedBorderWidth = 0;
+            // This is supported on Windows vista and later
+            public int iPaddedBorderWidth;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2853,19 +2832,18 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class LOGBRUSH
+        public struct LOGBRUSH
         {
             public int lbStyle;
             public int lbColor;
             public IntPtr lbHatch;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LOGFONT
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct LOGFONTW
         {
-            public LOGFONT()
-            {
-            }
+            private const int LF_FACESIZE = 32;
+
             public int lfHeight;
             public int lfWidth;
             public int lfEscapement;
@@ -2879,8 +2857,34 @@ namespace System.Windows.Forms
             public byte lfClipPrecision;
             public byte lfQuality;
             public byte lfPitchAndFamily;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string lfFaceName;
+            private fixed char _lfFaceName[LF_FACESIZE];
+            private Span<char> lfFaceName
+            {
+                get { fixed (char* c = _lfFaceName) { return new Span<char>(c, LF_FACESIZE); } }
+            }
+
+            public ReadOnlySpan<char> FaceName
+            {
+                get => lfFaceName.SliceAtFirstNull();
+                set => SpanHelpers.CopyAndTerminate(value, lfFaceName);
+            }
+
+            // Font.ToLogFont will copy LOGFONT into a blittable struct,
+            // but we need to box it upfront so we can unbox.
+
+            public static LOGFONTW FromFont(Font font)
+            {
+                object logFont = new LOGFONTW();
+                font.ToLogFont(logFont);
+                return (LOGFONTW)logFont;
+            }
+
+            public static LOGFONTW FromFont(Font font, Graphics graphics)
+            {
+                object logFont = new LOGFONTW();
+                font.ToLogFont(logFont, graphics);
+                return (LOGFONTW)logFont;
+            }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -3684,19 +3688,19 @@ namespace System.Windows.Forms
             VT_TYPEMASK = 4095
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class WNDCLASS_D
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct WNDCLASS
         {
-            public int style;
-            public WndProc lpfnWndProc;
-            public int cbClsExtra = 0;
-            public int cbWndExtra = 0;
-            public IntPtr hInstance = IntPtr.Zero;
-            public IntPtr hIcon = IntPtr.Zero;
-            public IntPtr hCursor = IntPtr.Zero;
-            public IntPtr hbrBackground = IntPtr.Zero;
-            public string lpszMenuName = null;
-            public string lpszClassName = null;
+            public ClassStyle style;
+            public IntPtr lpfnWndProc;
+            public int cbClsExtra;
+            public int cbWndExtra;
+            public IntPtr hInstance;
+            public IntPtr hIcon;
+            public IntPtr hCursor;
+            public IntPtr hbrBackground;
+            public char* lpszMenuName;
+            public char* lpszClassName;
         }
 
         public class MSOCM
@@ -3921,11 +3925,11 @@ namespace System.Windows.Forms
             public int y;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct HIGHCONTRAST_I
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct HIGHCONTRASTW
         {
-            public int cbSize;
-            public int dwFlags;
+            public uint cbSize;
+            public uint dwFlags;
             public IntPtr lpszDefaultScheme;
         }
 
@@ -4639,19 +4643,31 @@ namespace System.Windows.Forms
             public int cpMax;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public class CHARFORMATW
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct CHARFORMATW
         {
-            public int cbSize = Marshal.SizeOf<CHARFORMATW>();
+            private const int LF_FACESIZE = 32;
+
+            public int cbSize;
             public int dwMask;
             public int dwEffects;
             public int yHeight;
-            public int yOffset = 0;
-            public int crTextColor = 0;
+            public int yOffset;
+            public int crTextColor;
             public byte bCharSet;
             public byte bPitchAndFamily;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] szFaceName = new byte[64];
+
+            private fixed char _szFaceName[LF_FACESIZE];
+            private Span<char> szFaceName
+            {
+                get { fixed (char* c = _szFaceName) { return new Span<char>(c, LF_FACESIZE); } }
+            }
+
+            public ReadOnlySpan<char> FaceName
+            {
+                get => szFaceName.SliceAtFirstNull();
+                set => SpanHelpers.CopyAndTerminate(value, szFaceName);
+            }
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
@@ -4824,6 +4840,7 @@ namespace System.Windows.Forms
             SHOWCODE = 0x2
         }
 
+#pragma warning disable CA1712 // Don't prefix enum values with enum type
         public enum OLECMDID
         {
             OLECMDID_SAVEAS = 4,
@@ -4850,6 +4867,7 @@ namespace System.Windows.Forms
             OLECMDF_INVISIBLE = 0x00000010,
             OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
         }
+#pragma warning enable CA1712
 
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES
@@ -5723,28 +5741,17 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        private static extern bool IntDeleteObject(IntPtr hObject);
-
-        public static bool DeleteObject(IntPtr hObject)
-        {
-            Interop.HandleCollector.Remove(hObject, Interop.CommonHandles.GDI);
-            return IntDeleteObject(hObject);
-        }
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
+        public static extern bool DeleteObject(IntPtr hObject);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, [In, Out] ref RECT rc, bool fErase);
+        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
-
-        public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
-        {
-            return Interop.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
+        public static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();

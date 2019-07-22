@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Internal
                     break;
             }
 
-            IntUnsafeNativeMethods.DeleteObject(new HandleRef(this, handleToDelete));
+            NativeMethods.DeleteObject(handleToDelete);
         }
 
         //
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Internal
         {
             // Note: All input params can be null but not at the same time.  See MSDN for information.
 
-            IntPtr hdc = IntUnsafeNativeMethods.CreateDC(driverName, deviceName, fileName, devMode);
+            IntPtr hdc = UnsafeNativeMethods.CreateDC(driverName, deviceName, fileName, devMode);
             return new DeviceContext(hdc, DeviceContextType.NamedDevice);
         }
 
@@ -251,7 +251,7 @@ namespace System.Windows.Forms.Internal
         {
             // Note: All input params can be null but not at the same time.  See MSDN for information.
 
-            IntPtr hdc = IntUnsafeNativeMethods.CreateIC(driverName, deviceName, fileName, devMode);
+            IntPtr hdc = UnsafeNativeMethods.CreateIC(driverName, deviceName, fileName, devMode);
             return new DeviceContext(hdc, DeviceContextType.Information);
         }
 
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Internal
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed,
             // the HDC is no longer valid.
 
-            IntPtr compatibleDc = IntUnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hdc));
+            IntPtr compatibleDc = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hdc));
             return new DeviceContext(compatibleDc, DeviceContextType.Memory);
         }
 
@@ -327,7 +327,7 @@ namespace System.Windows.Forms.Internal
                     Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteHDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
 #endif
 
-                    IntUnsafeNativeMethods.DeleteHDC(new HandleRef(this, hDC));
+                    UnsafeNativeMethods.DeleteDC(new HandleRef(this, hDC));
 
                     hDC = IntPtr.Zero;
                     break;
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                     Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
 #endif
-                    IntUnsafeNativeMethods.DeleteDC(new HandleRef(this, hDC));
+                    UnsafeNativeMethods.DeleteDC(new HandleRef(this, hDC));
 
                     hDC = IntPtr.Zero;
                     break;
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.Internal
 
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved.
                 // For example, the default font is System.
-                hDC = IntUnsafeNativeMethods.GetDC(new HandleRef(this, hWnd));
+                hDC = UnsafeNativeMethods.GetDC(new HandleRef(this, hWnd));
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("hdc[0x{0:x8}]=DC.GetHdc(hWnd=0x{1:x8})", unchecked((int) this.hDC), unchecked((int) this.hWnd))));
 #endif
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                 int retVal =
 #endif
-                IntUnsafeNativeMethods.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
+                UnsafeNativeMethods.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
                 // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("[ret={0}]=DC.ReleaseDC(hDc=0x{1:x8}, hWnd=0x{2:x8})", retVal, unchecked((int) this.hDC), unchecked((int) this.hWnd))));
@@ -559,8 +559,8 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public void TranslateTransform(int dx, int dy)
         {
-            IntNativeMethods.POINT orgn = new IntNativeMethods.POINT();
-            IntUnsafeNativeMethods.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, orgn);
+            Point origin = new Point();
+            IntUnsafeNativeMethods.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
         }
 
         public override bool Equals(object obj)

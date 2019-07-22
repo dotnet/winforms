@@ -704,7 +704,7 @@ namespace System.Windows.Forms.Design
             private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, NativeMethods.RECT rcIn,
                                         int state, int backColor, int textColor)
             {
-                IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
+                Size size = new Size();
                 IntNativeMethods.RECT rc2 = new IntNativeMethods.RECT();
                 IntNativeMethods.RECT rc = new IntNativeMethods.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
@@ -730,12 +730,12 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the height of the font
-                IntUnsafeNativeMethods.GetTextExtentPoint32(new HandleRef(null, dc), itemText, size);
+                IntUnsafeNativeMethods.GetTextExtentPoint32W(new HandleRef(null, dc), itemText, itemText.Length, ref size);
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;
-                rc2.top = rc.top + (((rc.bottom - rc.top) - size.cy) >> 1);
-                rc2.bottom = rc2.top + size.cy;
+                rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
+                rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
                 IntUnsafeNativeMethods.DrawText(new HandleRef(null, dc), itemText, ref rc2,
