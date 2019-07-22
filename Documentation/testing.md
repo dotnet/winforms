@@ -48,6 +48,7 @@ To test from Visual Studio, open Winforms.sln in Visual Studio and test how you 
 
 * When testing from Visual Studio, test errors show up as normal in the Test Explorer.
 * To troubleshoot, debug the selected test and set breakpoints as you normally would.
+* For common issues when running tests through Visual Studio, see [Testing in Visual Studio](https://github.com/dotnet/winforms/blob/master/Documentation/testing-in-vs.md)
 
 ## Adding new unit tests
 
