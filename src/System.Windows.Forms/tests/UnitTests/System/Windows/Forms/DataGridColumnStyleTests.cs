@@ -193,34 +193,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void HeaderText_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void HeaderText_Set_GetReturnsExpected(string value, string expected)
         {
             var style = new SubDataGridColumnStyle
             {
                 HeaderText = value
             };
-            Assert.Equal(value ?? string.Empty, style.HeaderText);
+            Assert.Same(expected, style.HeaderText);
 
             // Set same.
             style.HeaderText = value;
-            Assert.Equal(value ?? string.Empty, style.HeaderText);
+            Assert.Same(expected, style.HeaderText);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void HeaderText_SetWithPropertyDescriptor_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void HeaderText_SetWithPropertyDescriptor_GetReturnsExpected(string value, string expected)
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
             var style = new SubDataGridColumnStyle(property)
             {
                 HeaderText = value
             };
-            Assert.Equal(value ?? string.Empty, style.HeaderText);
+            Assert.Same(expected, style.HeaderText);
 
             // Set same.
             style.HeaderText = value;
-            Assert.Equal(value ?? string.Empty, style.HeaderText);
+            Assert.Same(expected, style.HeaderText);
         }
 
         [Fact]
@@ -274,23 +274,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void MappingName_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void MappingName_Set_GetReturnsExpected(string value, string expected)
         {
             var style = new SubDataGridColumnStyle
             {
                 MappingName = value
             };
-            Assert.Equal(value ?? string.Empty, style.MappingName);
+            Assert.Same(expected, style.MappingName);
 
             // Set same.
             style.MappingName = value;
-            Assert.Equal(value ?? string.Empty, style.MappingName);
+            Assert.Same(expected, style.MappingName);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void MappingName_SetWithDataGridView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void MappingName_SetWithDataGridView_GetReturnsExpected(string value, string expected)
         {
             var dataGrid = new DataGrid();
             var tableStyle = new DataGridTableStyle();
@@ -299,11 +299,11 @@ namespace System.Windows.Forms.Tests
             tableStyle.GridColumnStyles.Add(style);
 
             style.MappingName = value;
-            Assert.Equal(value ?? string.Empty, style.MappingName);
+            Assert.Same(expected, style.MappingName);
 
             // Set same.
             style.MappingName = value;
-            Assert.Equal(value ?? string.Empty, style.MappingName);
+            Assert.Same(expected, style.MappingName);
         }
 
         [Fact]
