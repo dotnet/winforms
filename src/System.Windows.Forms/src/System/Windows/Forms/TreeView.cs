@@ -1758,7 +1758,7 @@ namespace System.Windows.Forms
             // ForceScrollbarUpdate call WM_SETREDRAW( FALSE ) followed by WM_SETREDRAW( TRUE )
             // So if TreeView.BeginUpdate is called
             // ForceScrollbarUpdate effectively causes tree view to ignore BeginUpdate and cause control to update on every change.
-            // So gaurd against this scenario by using the new internal method on Control.
+            // So guard against this scenario by using the new internal method on Control.
             if (!IsUpdating())
             {
                 if (IsHandleCreated)

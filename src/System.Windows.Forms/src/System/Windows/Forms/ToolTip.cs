@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Setting TTM_TRACKPOSITION will cause redundant POP and Draw Messages.
-        /// Hence we gaurd against this by having this private Flag.
+        /// Hence we guard against this by having this private flag.
         /// </summary>
         private bool _trackPosition = false;
 
