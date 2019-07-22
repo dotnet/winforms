@@ -2756,8 +2756,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnSelectionChangeCommittedInternal(EventArgs e)
         {
-            //There are cases where if we disable the combo while in this event handler, it sends the message again.
-            //This is a recursion gaurd to ensure we only send one commit per user action.
+            // There are cases where if we disable the combo while in this event handler, it sends the message again.
+            // This is a recursion guard to ensure we only send one commit per user action.
             if (allowCommit)
             {
                 try
