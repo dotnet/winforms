@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
-        public void Control_LocationGetSet(Point value)
+        public void Control_Location_Set_GetReturnsExpected(Point value)
         {
             var control = new Control
             {
@@ -1901,6 +1901,131 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.Location = value;
             Assert.Equal(value, control.Location);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        public void Control_Location_SetWithParent_GetReturnsExpected(Point value)
+        {
+            var parent = new Control();
+            var control = new Control
+            {
+                Parent = parent,
+                Location = value
+            };
+            Assert.Equal(value, control.Location);
+
+            // Set same.
+            control.Location = value;
+            Assert.Equal(value, control.Location);
+        }
+
+        [Fact]
+        public void Control_Location_SetWithHandle_DoesNotCallInvalidate()
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            // Set different.
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(0, invalidatedCallCount);
+
+            // Set same.
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(0, invalidatedCallCount);
+
+            // Set different.
+            control.Location = new Point(2, 3);
+            Assert.Equal(new Point(2, 3), control.Location);
+            Assert.Equal(0, invalidatedCallCount);
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void Control_Location_SetWithHandleWithTransparentBackColor_DoesNotCallInvalidate(bool supportsTransparentBackgroundColor, int expectedInvalidatedCallCount)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            control.BackColor = Color.FromArgb(254, 255, 255, 255);
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            // Set different.
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+
+            // Set same.
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+
+            // Set different.
+            control.Location = new Point(2, 3);
+            Assert.Equal(new Point(2, 3), control.Location);
+            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+        }
+
+        [Fact]
+        public void Control_Location_SetWithHandler_CallsLocationChanged()
+        {
+            var control = new Control();
+            int locationChangedCallCount = 0;
+            EventHandler locationChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+            control.LocationChanged += locationChangedHandler;
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                moveCallCount++;
+            };
+            control.Move += moveHandler;
+
+            // Set different.
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+
+            // Set same.
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+
+            // Set different x.
+            control.Location = new Point(2, 2);
+            Assert.Equal(new Point(2, 2), control.Location);
+            Assert.Equal(2, locationChangedCallCount);
+            Assert.Equal(2, moveCallCount);
+
+            // Set different y.
+            control.Location = new Point(2, 3);
+            Assert.Equal(new Point(2, 3), control.Location);
+            Assert.Equal(3, locationChangedCallCount);
+            Assert.Equal(3, moveCallCount);
+
+            // Remove handler.
+            control.LocationChanged -= locationChangedHandler;
+            control.Move -= moveHandler;
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.Equal(3, locationChangedCallCount);
+            Assert.Equal(3, moveCallCount);
         }
 
         [Theory]
@@ -2147,18 +2272,6 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(wasAdded);
             Assert.True(wasRemoved);
-        }
-
-        [Fact]
-        public void Control_LocationChanged()
-        {
-            bool wasChanged = false;
-            var cont = new Control();
-            cont.LocationChanged += (sender, args) => wasChanged = true;
-
-            cont.Location = new Point(1, 1);
-
-            Assert.True(wasChanged);
         }
 
         [Theory]
@@ -4005,26 +4118,135 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
+        public void Control_OnLocationChanged_Invoke_CallsLocationChangedAndMove(EventArgs eventArgs)
         {
             var control = new SubControl();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            int locationChangedCallCount = 0;
+            EventHandler locationChangedHandler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
-                callCount++;
+                locationChangedCallCount++;
+            };
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                moveCallCount++;
             };
 
             // Call with handler.
-            control.Leave += handler;
-            control.OnLeave(eventArgs);
-            Assert.Equal(1, callCount);
+            control.LocationChanged += locationChangedHandler;
+            control.Move += moveHandler;
+            control.OnLocationChanged(eventArgs);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
 
             // Remove handler.
-            control.Leave -= handler;
-            control.OnLeave(eventArgs);
-            Assert.Equal(1, callCount);
+            control.LocationChanged -= locationChangedHandler;
+            control.Move -= moveHandler;
+            control.OnLocationChanged(eventArgs);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnLocationChanged_InvokeWithHandle_CallsLocationChangedAndMove(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int locationChangedCallCount = 0;
+            EventHandler locationChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                locationChangedCallCount++;
+            };
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                moveCallCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.LocationChanged += locationChangedHandler;
+            control.Move += moveHandler;
+            control.Invalidated += invalidatedHandler;
+            control.OnLocationChanged(eventArgs);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(0, invalidatedCallCount);
+
+            // Remove handler.
+            control.LocationChanged -= locationChangedHandler;
+            control.Move -= moveHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.OnLocationChanged(eventArgs);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(0, invalidatedCallCount);
+        }
+
+        public static IEnumerable<object[]> OnLocationChanged_HandleWithTransparentBackColor_TestData()
+        {
+            foreach (object[] testData in CommonTestHelper.GetEventArgsTheoryData())
+            {
+                yield return new object[] { true, testData[0], 1 };
+                yield return new object[] { false, testData[0], 0 };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(OnLocationChanged_HandleWithTransparentBackColor_TestData))]
+        public void Control_OnLocationChanged_InvokeWithHandleWithTransparentBackColor_CallsLocationChangedAndMoveAndInvalidated(bool supportsTransparentBackgroundColor, EventArgs eventArgs, int expectedInvalidatedCallCount)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            control.BackColor = Color.FromArgb(254, 255, 255, 255);
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int locationChangedCallCount = 0;
+            EventHandler locationChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                locationChangedCallCount++;
+            };
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                moveCallCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.LocationChanged += locationChangedHandler;
+            control.Move += moveHandler;
+            control.Invalidated += invalidatedHandler;
+            control.OnLocationChanged(eventArgs);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+
+            // Remove handler.
+            control.LocationChanged -= locationChangedHandler;
+            control.Move -= moveHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.OnLocationChanged(eventArgs);
+            Assert.Equal(1, locationChangedCallCount);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         }
 
         [Theory]
@@ -4189,6 +4411,97 @@ namespace System.Windows.Forms.Tests
             control.OnMouseWheel(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(eventArgs.Handled);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnMove_Invoke_CallsMove(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                moveCallCount++;
+            };
+
+            // Call with handler.
+            control.Move += moveHandler;
+            control.OnMove(eventArgs);
+            Assert.Equal(1, moveCallCount);
+
+            // Remove handler.
+            control.Move -= moveHandler;
+            control.OnMove(eventArgs);
+            Assert.Equal(1, moveCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnMove_InvokeWithHandle_CallsMove(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                moveCallCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.Move += moveHandler;
+            control.Invalidated += invalidatedHandler;
+            control.OnMove(eventArgs);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(0, invalidatedCallCount);
+
+            // Remove handler.
+            control.Move -= moveHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.OnMove(eventArgs);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(0, invalidatedCallCount);
+        }
+
+        [Theory]
+        [MemberData(nameof(OnLocationChanged_HandleWithTransparentBackColor_TestData))]
+        public void Control_OnMove_InvokeWithHandleWithTransparentBackColor_CallsMoveAndInvalidated(bool supportsTransparentBackgroundColor, EventArgs eventArgs, int expectedInvalidatedCallCount)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            control.BackColor = Color.FromArgb(254, 255, 255, 255);
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int moveCallCount = 0;
+            EventHandler moveHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                moveCallCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.Move += moveHandler;
+            control.Invalidated += invalidatedHandler;
+            control.OnMove(eventArgs);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+
+            // Remove handler.
+            control.Move -= moveHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.OnMove(eventArgs);
+            Assert.Equal(1, moveCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         }
 
         [Theory]
@@ -4423,6 +4736,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
+            public new void OnLocationChanged(EventArgs e) => base.OnLocationChanged(e);
+
             public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
 
             public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
@@ -4434,6 +4749,8 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseUp(MouseEventArgs e) => base.OnMouseUp(e);
 
             public new void OnMouseWheel(MouseEventArgs e) => base.OnMouseWheel(e);
+
+            public new void OnMove(EventArgs e) => base.OnMove(e);
 
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
 
