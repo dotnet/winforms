@@ -89,7 +89,8 @@ namespace System.Windows.Forms
             {
                 return true;
             }
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.AreDpiAwarenessContextsEqual)))
+
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 return AreDpiAwarenessContextsEqual(dpiContextA, dpiContextB);
             }
@@ -103,7 +104,7 @@ namespace System.Windows.Forms
         /// <returns> returns thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext TryGetThreadDpiAwarenessContext()
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 return GetThreadDpiAwarenessContext();
             }
@@ -120,7 +121,7 @@ namespace System.Windows.Forms
         /// <returns> returns old thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext TrySetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.SetThreadDpiAwarenessContext)))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 if (dpiContext == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
                 {
@@ -146,8 +147,7 @@ namespace System.Windows.Forms
         {
             DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetWindowDpiAwarenessContext") &&
-                ApiHelper.IsApiAvailable(ExternDll.User32, "GetAwarenessFromDpiAwarenessContext"))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 // Works only >= Windows 10/1607
                 IntPtr awarenessContext = GetWindowDpiAwarenessContext(hWnd);
@@ -182,6 +182,7 @@ namespace System.Windows.Forms
 
         #endregion
 
+#pragma warning disable CA1712 // Do not prefix enum values with type name
         internal enum DPI_AWARENESS
         {
             DPI_AWARENESS_INVALID = -1,
@@ -189,5 +190,6 @@ namespace System.Windows.Forms
             DPI_AWARENESS_SYSTEM_AWARE = 1,
             DPI_AWARENESS_PER_MONITOR_AWARE = 2
         }
+#pragma warning restore CA1712 // Do not prefix enum values with type name
     }
 }

@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
     <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
     <Compile Include="..\..\Common\src\CommonUnsafeNativeMethods.cs" Link="misc\CommonUnsafeNativeMethods.cs" />
     <Compile Include="..\..\Common\src\CompModSwitches.cs" Link="misc\CompModSwitches.cs" />
@@ -37,6 +36,7 @@
     <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
     <Compile Include="..\..\Common\src\FileDialog_Vista_Interop.cs" Link="System\Windows\Forms\FileDialog_Vista_Interop.cs" />
     <Compile Include="..\..\Common\src\NativeMethods.cs" Link="System\Windows\Forms\NativeMethods.cs" />
+    <Compile Include="..\..\Common\src\OsVersion.cs" Link="Common\OsVersion.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
     <Compile Include="..\..\Common\src\SafeNativeMethods.cs" Link="System\Windows\Forms\SafeNativeMethods.cs" />
     <Compile Include="..\..\Common\src\SpanHelpers.cs" Link="Common\SpanHelpers.cs" />
@@ -46,6 +46,8 @@
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
+    <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
+    <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
   </ItemGroup>
   <ItemGroup>

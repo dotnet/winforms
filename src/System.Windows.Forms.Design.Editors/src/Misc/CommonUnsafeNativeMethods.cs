@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// <returns>true/false</returns>
         public static bool TryFindDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "AreDpiAwarenessContextsEqual"))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 return AreDpiAwarenessContextsEqual(dpiContextA, dpiContextB);
             }
@@ -96,9 +96,9 @@ namespace System.Windows.Forms
         /// <returns> returns old thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext TrySetThreadDpiAwarenessContext(DpiAwarenessContext dpiCOntext)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "SetThreadDpiAwarenessContext"))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
-                return SetThreadDpiAwarenessContext(dpiCOntext);
+                return GetThreadDpiAwarenessContext();
             }
             else
             {

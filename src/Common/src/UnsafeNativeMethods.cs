@@ -703,7 +703,7 @@ namespace System.Windows.Forms
         /// <returns>returns system metrics for dpi</returns>
         public static int TryGetSystemMetricsForDpi(int nIndex, uint dpi)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.GetSystemMetricsForDpi)))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 return GetSystemMetricsForDpi(nIndex, dpi);
             }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe static bool TrySystemParametersInfoForDpi(ref NativeMethods.NONCLIENTMETRICSW metrics, uint dpi)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.SystemParametersInfoForDpi)))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 metrics.cbSize = (uint)sizeof(NativeMethods.NONCLIENTMETRICSW);
                 return SystemParametersInfoForDpi(
