@@ -301,6 +301,11 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (useVisualStyleBackColor == value)
+                {
+                    return;
+                }
+
                 useVisualStyleBackColor = value;
                 Invalidate(true);
             }
