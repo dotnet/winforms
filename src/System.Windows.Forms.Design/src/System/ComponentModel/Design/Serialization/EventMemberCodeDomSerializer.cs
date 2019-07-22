@@ -56,10 +56,8 @@ namespace System.ComponentModel.Design.Serialization
 
             try
             {
-                IEventBindingService eventBindings = (IEventBindingService)manager.GetService(typeof(IEventBindingService));
-
                 // If the IEventBindingService is not available, we don't throw - we just don't do anything.
-                if (eventBindings != null)
+                if (manager.GetService(typeof(IEventBindingService)) is IEventBindingService eventBindings)
                 {
                     PropertyDescriptor prop = eventBindings.GetEventProperty(eventToSerialize);
                     string methodName = (string)prop.GetValue(value);
