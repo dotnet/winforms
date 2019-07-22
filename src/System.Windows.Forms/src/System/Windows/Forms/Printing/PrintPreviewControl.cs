@@ -532,7 +532,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            Brush backBrush = new SolidBrush(BackColor);
+            Color backColor = GetBackColor(SystemInformation.HighContrast);
+            Brush backBrush = new SolidBrush(backColor);
 
             try
             {
@@ -996,6 +997,35 @@ namespace System.Windows.Forms
         internal override bool ShouldSerializeForeColor()
         {
             return !ForeColor.Equals(Color.White);
+        }
+
+        /// <summary>
+        /// Gets back color respectively to the High Contrast theme is applied or not
+        /// and taking into account saved custom back color.
+        /// </summary>
+        /// <param name="isHighContract">Indicates whether High Contrast theme is applied or not.</param>
+        /// <returns>
+        /// Standard back color for PrintPreview control in standard theme (1),
+        /// contrasted color if there is High Contrast theme applied (2) and
+        /// custom color if this is set irrespectively to HC or not HC mode (3).
+        /// </returns>
+        private Color GetBackColor(bool isHighContract)
+        {
+            return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
+        }
+
+        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
+
+        internal readonly struct TestAccessor
+        {
+            private readonly PrintPreviewControl _control;
+
+            public TestAccessor(PrintPreviewControl control)
+            {
+                _control = control;
+            }
+
+            public Color GetBackColor(bool isHighContrast) => _control.GetBackColor(isHighContrast);
         }
     }
 }
