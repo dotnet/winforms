@@ -1203,7 +1203,7 @@ namespace System.Windows.Forms
                 {
                     // Note: empty value is provided due to this Accessible object
                     // represents the control container but not the contained control
-                    // control itself.
+                    // itself.
                     return string.Empty;
                 }
             }

@@ -1548,7 +1548,6 @@ namespace System.Windows.Forms
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
             toolStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(pageCounter)).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
