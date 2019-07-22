@@ -9270,45 +9270,41 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Core layout logic. Inheriting controls should override this function
-        ///  to do any custom layout logic. It is not neccessary to call
-        ///  base.layoutCore, however for normal docking and anchoring
-        ///  functions to work, base.layoutCore must be called.
+        /// Core layout logic. Inheriting controls should override this function to do any custom
+        /// layout logic. It is not neccessary to call base.OnLayout, however for normal docking
+        /// an functions to work, base.OnLayout must be called.
         /// Raises the <see cref='Layout'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLayout(LayoutEventArgs levent)
         {
-            // Ask the site to change the view...
+            // Ask the site to change the view.
             if (IsActiveX)
             {
                 ActiveXViewChanged();
-            } ((LayoutEventHandler)Events[EventLayout])?.Invoke(this, levent);
+            }
+            
+            ((LayoutEventHandler)Events[EventLayout])?.Invoke(this, levent);
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
-
             if (parentRequiresLayout && ParentInternal != null)
             {
                 // LayoutEngine.Layout can return true to request that our parent resize us because
-                // we did not have enough room for our contents.  We can not just call PerformLayout
-                // because this container is currently suspended.  PerformLayout will check this state
+                // we did not have enough room for our contents. We can not just call PerformLayout
+                // because this container is currently suspended. PerformLayout will check this state
                 // flag and PerformLayout on our parent.
                 ParentInternal.SetState(STATE_LAYOUTISDIRTY, true);
             }
         }
 
         /// <summary>
-        ///  Called when the last resume layout call is made.  If performLayout is true
-        ///  a layout will occur as soon as this call returns.  Layout is
-        ///  still suspended when this call is made.  The default implementation
-        ///  calls OnChildLayoutResuming on the parent, if it exists.
+        /// Called when the last resume layout call is made. If performLayout is true a layout will
+        /// occur as soon as this call returns. Layout is still suspended when this call is made.
+        /// The default implementation calls OnChildLayoutResuming on the parent, if it exists.
         /// </summary>
         internal virtual void OnLayoutResuming(bool performLayout)
         {
-            if (ParentInternal != null)
-            {
-                ParentInternal.OnChildLayoutResuming(this, performLayout);
-            }
+            ParentInternal?.OnChildLayoutResuming(this, performLayout);
         }
 
         internal virtual void OnLayoutSuspended()
@@ -14144,7 +14140,7 @@ namespace System.Windows.Forms
 
                     if (c is ContainerControl knowncontainer)
                     {
-                        activateSucceed = knowncontainer.ActivateControlInternal(this);
+                        activateSucceed = knowncontainer.ActivateControl(this);
                     }
                     else
                     {

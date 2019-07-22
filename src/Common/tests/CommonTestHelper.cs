@@ -505,6 +505,17 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<LayoutEventArgs> GetLayoutEventArgsTheoryData()
+        {
+            var data = new TheoryData<LayoutEventArgs>
+            {
+                null,
+                new LayoutEventArgs(null, null),
+                new LayoutEventArgs(new Control(), "affectedProperty")
+            };
+            return data;
+        }
+
         public static TheoryData<MouseEventArgs> GetMouseEventArgsTheoryData()
         {
             return new TheoryData<MouseEventArgs>

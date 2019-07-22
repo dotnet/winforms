@@ -29,11 +29,12 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
-            Assert.True(control.CausesValidation);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);
@@ -440,6 +441,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedVScroll, control.VScroll);
         }
 
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ScrollableControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            var control = new SubScrollableControl();
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           control.Layout -= handler;
+           control.OnLayout(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+
 #pragma warning disable 0618
         [Fact]
         public void ScrollableControl_ScaleCore_InvokeWithDockPadding_Success()
@@ -678,6 +703,8 @@ namespace System.Windows.Forms.Tests
 
             public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;
@@ -717,6 +744,8 @@ namespace System.Windows.Forms.Tests
             public new void AdjustFormScrollbars(bool displayScrollbars) => base.AdjustFormScrollbars(displayScrollbars);
 
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
+
+            public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
 

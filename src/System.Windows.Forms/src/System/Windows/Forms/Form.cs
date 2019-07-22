@@ -289,7 +289,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form parentForm = ParentFormInternal;
+                Form parentForm = ParentForm;
                 if (parentForm == null)
                 {
                     return formState[FormStateIsActive] != 0;
@@ -2911,7 +2911,7 @@ namespace System.Windows.Forms
             }
             else if (Active)
             {
-                ActivateControlInternal(this);
+                ActivateControl(this);
             }
 
             // Note: It is possible that we are raising this event when the activeMdiChild is null,
@@ -4156,7 +4156,7 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropMergedMenu, null);
             }
 
-            Form parForm = ParentFormInternal;
+            Form parForm = ParentForm;
             if (parForm != null)
             {
                 parForm.MenuChanged(0, parForm.Menu);
@@ -4169,17 +4169,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void LayoutMdi(MdiLayout value)
         {
-            if (ctlClient == null)
-            {
-                return;
-            }
-            ctlClient.LayoutMdi(value);
+            ctlClient?.LayoutMdi(value);
         }
 
         // Package scope for menu interop
         internal void MenuChanged(int change, Menu menu)
         {
-            Form parForm = ParentFormInternal;
+            Form parForm = ParentForm;
             if (parForm != null && this == parForm.ActiveMdiChildInternal)
             {
                 parForm.MenuChanged(change, menu);
@@ -4247,20 +4243,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Override of AutoScaleModeChange method from ContainerControl.  We use
-        ///  this to keep our own AutoScale property in sync.
+        /// Override of AutoScaleModeChange method from ContainerControl. We use this to keep our
+        /// own AutoScale property in sync.
         /// </summary>
-        internal override void OnAutoScaleModeChanged()
+        private protected override void OnAutoScaleModeChanged()
         {
             base.OnAutoScaleModeChanged();
-            // Obsolete code required here for backwards compat
-#pragma warning disable 618
             if (formStateEx[FormStateExSettingAutoScale] != 1)
             {
+            // Obsolete code required here for backwards compat
+#pragma warning disable 618
                 AutoScale = false;
-            }
 #pragma warning restore 618
-
+            }
         }
 
         protected override void OnBackgroundImageChanged(EventArgs e)
@@ -5009,7 +5004,7 @@ namespace System.Windows.Forms
 
             // I've added a special case for UserControls because they shouldn't cycle back to the
             // beginning if they don't have a parent form, such as when they're on an ActiveXBridge.
-            if (IsMdiChild || ParentFormInternal == null)
+            if (IsMdiChild || ParentForm == null)
             {
                 bool selected = SelectNextControl(null, forward, true, true, false);
 
@@ -5342,7 +5337,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Form form = ParentFormInternal;
+                Form form = ParentForm;
                 if (form != null)
                 {
                     form.ActiveControl = this;

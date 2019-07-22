@@ -27,7 +27,9 @@ namespace System.Windows.Forms.Tests
             Assert.True(scrollBar.Bounds.Width > 0);
             Assert.True(scrollBar.Bounds.Height > 0);
             Assert.True(scrollBar.Bottom > 0);
+            Assert.False(scrollBar.CanEnableIme);
             Assert.True(scrollBar.CanRaiseEvents);
+            Assert.True(scrollBar.CausesValidation);
             Assert.Equal(0, scrollBar.ClientRectangle.X);
             Assert.Equal(0, scrollBar.ClientRectangle.Y);
             Assert.True(scrollBar.ClientRectangle.Width > 0);
@@ -35,7 +37,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(scrollBar.ClientSize.Width > 0);
             Assert.True(scrollBar.ClientSize.Height > 0);
             Assert.Null(scrollBar.Container);
-            Assert.True(scrollBar.CausesValidation);
             Assert.Empty(scrollBar.Controls);
             Assert.Same(scrollBar.Controls, scrollBar.Controls);
             Assert.False(scrollBar.Created);
@@ -165,6 +166,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubHScrollBar : HScrollBar
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;

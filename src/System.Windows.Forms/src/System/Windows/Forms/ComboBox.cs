@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms
                         {
                             if (c is ContainerControl container)
                             {
-                                if (!container.ActivateControlInternal(this, false))
+                                if (!container.ActivateControl(this, originator: false))
                                 {
                                     return;
                                 }

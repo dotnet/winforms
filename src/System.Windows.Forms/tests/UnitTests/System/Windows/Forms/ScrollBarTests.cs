@@ -25,6 +25,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(scrollBar.BindingContext);
             Assert.Equal(0, scrollBar.Bottom);
             Assert.Equal(Rectangle.Empty, scrollBar.Bounds);
+            Assert.False(scrollBar.CanEnableIme);
             Assert.True(scrollBar.CanRaiseEvents);
             Assert.True(scrollBar.CausesValidation);
             Assert.Equal(Rectangle.Empty, scrollBar.ClientRectangle);
@@ -1954,6 +1955,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubScrollBar : ScrollBar
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;
