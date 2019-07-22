@@ -49,9 +49,45 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> TextBox_ShouldRenderPlaceHolderText_TestData()
         {
-            var textBox = new TextBox();
-            var message = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
-            yield return new object[] { textBox, message, false };
+            // Test PlaceholderText
+            var tb = new SubTextBox() { PlaceholderText = "", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            var msg = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            yield return new object[] { tb, msg, false };
+
+            // Test PlaceholderText
+            tb = new SubTextBox() { PlaceholderText = null, IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            msg = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            yield return new object[] { tb, msg, false };
+
+            // Test Message
+            msg.Msg = Interop.WindowMessages.WM_USER;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            yield return new object[] { tb, msg, false };
+
+            // Test UserPaint
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = true, IsFocused = false, TextCount = 0 };
+            yield return new object[] { tb, msg, false };
+
+            // Test Focused
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = true, TextCount = 0 };
+            yield return new object[] { tb, msg, false };
+
+            // Test TextLength
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 1 };
+            yield return new object[] { tb, msg, false };
+
+            // Test WM_PAINT
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            yield return new object[] { tb, msg, true };
+
+            // Test WM_KILLFOCUS
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            msg.Msg = Interop.WindowMessages.WM_KILLFOCUS;
+            yield return new object[] { tb, msg, true };
         }
 
         [Theory]
@@ -197,6 +233,10 @@ namespace System.Windows.Forms.Tests
 
         private class SubTextBox : TextBox
         {
+            public int TextCount;
+            public bool IsFocused;
+            public bool TextAccessed;
+
             public override string PlaceholderText { get => base.PlaceholderText; set => base.PlaceholderText = value; }
 
             // used to test that PlaceholderText won't raise TextChanged event.
@@ -205,9 +245,8 @@ namespace System.Windows.Forms.Tests
                 this.CreateAccessibilityInstance();
             }
 
-            public override bool Focused => false;
-
-            public bool TextAccessed;
+            public override bool Focused => IsFocused;
+            public override int TextLength => TextCount;
 
             public override string Text
             {
@@ -217,6 +256,12 @@ namespace System.Windows.Forms.Tests
                     return base.Text;
                 }
                 set => base.Text = value;
+            }
+
+            public bool IsUserPaint
+            {
+                get => GetStyle(ControlStyles.UserPaint);
+                set => SetStyle(ControlStyles.UserPaint, value);
             }
         }
     }
