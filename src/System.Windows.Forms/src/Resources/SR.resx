@@ -5753,10 +5753,10 @@ Stack trace where the illegal operation occurred was:
   <data name="TabControlSelectingEventDescr" xml:space="preserve">
     <value>Occurs when a tab page is being selected. </value>
   </data>
-  <data name="TABCONTROLTabPageNotOnTabControl" xml:space="preserve">
+  <data name="TabControlTabPageNotOnTabControl" xml:space="preserve">
     <value>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</value>
   </data>
-  <data name="TABCONTROLTabPageOnTabPage" xml:space="preserve">
+  <data name="TabControlTabPageOnTabPage" xml:space="preserve">
     <value>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</value>
   </data>
   <data name="TabControlTabsDescr" xml:space="preserve">

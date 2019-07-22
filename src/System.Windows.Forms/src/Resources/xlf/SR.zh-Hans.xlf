@@ -9511,12 +9511,12 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">此操作系统不支持该功能。</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">无法将 TabPage 添加到“{0}”。  只能将 TabPages 添加到 TabControls。</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">无法将 TabPage 添加到其他 TabPage。  TabPages 只能添加到 TabControls。</target>
         <note />

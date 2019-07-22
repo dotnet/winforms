@@ -9511,12 +9511,12 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Funkcja nie jest obsługiwana w tym systemie operacyjnym.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Nie można dodać elementu TabPage do elementu „{0}”. Elementy TabPage mogą być dodawane tylko do elementów TabControl.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">Nie można dodać elementu TabPage do innego elementu TabPage. Elementy TabPage mogą być dodawane tylko do elementów TabControl.</target>
         <note />

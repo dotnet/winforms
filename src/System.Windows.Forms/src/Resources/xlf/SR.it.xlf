@@ -9511,12 +9511,12 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Funzionalità non supportata in questo sistema operativo.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Impossibile aggiungere un oggetto TabPage a '{0}'. Gli oggetti TabPage possono essere aggiunti solo a una classe TabControl.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">Impossibile aggiungere un oggetto TabPage a un altro oggetto TabPage. Gli oggetti TabPage possono essere aggiunti solo a una classe TabControl.</target>
         <note />
