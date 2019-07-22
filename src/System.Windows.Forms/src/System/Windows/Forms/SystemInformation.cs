@@ -627,7 +627,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a value indicating whether a mouse wheel is present on the system.
+        ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
         /// </summary>
         /// <remarks>
         ///  This was never really correct. All versions of Windows NT from 4.0 onward
@@ -639,11 +639,10 @@ namespace System.Windows.Forms
             => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0;
 
         /// <summary>
-        ///  Gets a value indicating whether there is a mouse with a mouse wheel
-        ///  installed on this machine.
+        ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
         /// </summary>
         public static bool MouseWheelPresent
-            => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0;
+            => NativeMouseWheelSupport;
 
         /// <summary>
         ///  Gets the bounds of the virtual screen.
