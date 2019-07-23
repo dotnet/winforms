@@ -73,11 +73,22 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
-        public void DrawBackground_NullGraphics_ThrowsNullReferenceException()
+        public static IEnumerable<object[]> NullGraphics_TestData()
         {
-            var e = new DrawItemEventArgs(null, SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.None);
-            Assert.Throws<NullReferenceException>(() => e.DrawBackground());
+            yield return new object[] { null, new Rectangle(-1, -2, -3, -4), 0, DrawItemState.None, Color.Empty, Color.Empty };
+            yield return new object[] { null, new Rectangle(-1, -2, -3, -4), 0, DrawItemState.Focus, Color.Empty, Color.Empty };
+            yield return new object[] { null, new Rectangle(-1, -2, -3, -4), 0, DrawItemState.Focus | DrawItemState.NoFocusRect, Color.Empty, Color.Empty };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.None, Color.Red, Color.Blue };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.Focus, Color.Red, Color.Blue };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus | DrawItemState.NoFocusRect, Color.Red, Color.Blue };
+        }
+
+        [Theory]
+        [MemberData(nameof(NullGraphics_TestData))]
+        public void DrawBackground_NullGraphics_Nop(Font font, Rectangle bounds, int index, DrawItemState state, Color foreColor, Color backColor)
+        {
+            var e = new DrawItemEventArgs(null, font, bounds, index, state, foreColor, backColor);
+            e.DrawBackground();
         }
 
         [Fact]
@@ -92,19 +103,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(DrawItemState.None)]
-        [InlineData(DrawItemState.Focus | DrawItemState.NoFocusRect)]
-        public void DrawFocusRectangle_NullGraphics_Nop(DrawItemState state)
+        [MemberData(nameof(NullGraphics_TestData))]
+        public void DrawFocusRectangle_NullGraphics_Nop(Font font, Rectangle bounds, int index, DrawItemState state, Color foreColor, Color backColor)
         {
-            var e = new DrawItemEventArgs(null, SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, state);
+            var e = new DrawItemEventArgs(null, font, bounds, index, state, foreColor, backColor);
             e.DrawFocusRectangle();
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_NullGraphics_ThrowsArgumentNullException()
-        {
-            var e = new DrawItemEventArgs(null, SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.Focus);
-            Assert.Throws<ArgumentNullException>("graphics", () => e.DrawFocusRectangle());
         }
     }
 }

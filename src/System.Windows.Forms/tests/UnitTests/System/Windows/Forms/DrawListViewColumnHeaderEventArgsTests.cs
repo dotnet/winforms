@@ -50,6 +50,14 @@ namespace System.Windows.Forms.Tests
                     DrawDefault = value
                 };
                 Assert.Equal(value, e.DrawDefault);
+
+                // Set same.
+                e.DrawDefault = value;
+                Assert.Equal(value, e.DrawDefault);
+
+                // Set different.
+                e.DrawDefault = !value;
+                Assert.Equal(!value, e.DrawDefault);
             }
         }
 
@@ -64,18 +72,18 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
-        public void DrawBackground_NullGraphics_ThrowsNullReferenceException()
+        public static IEnumerable<object[]> NullGraphics_TestData()
         {
-            var e = new DrawListViewColumnHeaderEventArgs(null, new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
-            if (Application.RenderWithVisualStyles)
-            {
-                Assert.Throws<ArgumentNullException>("dc", () => e.DrawBackground());
-            }
-            else
-            {
-                Assert.Throws<NullReferenceException>(() => e.DrawBackground());
-            }
+            yield return new object[] { new Rectangle(-1, -2, -3, -4), 0, null, ListViewItemStates.Default, Color.Empty, Color.Empty, null };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont };
+        }
+
+        [Theory]
+        [MemberData(nameof(NullGraphics_TestData))]
+        public void DrawBackground_NullGraphics_Nop(Rectangle bounds, int columnIndex, ColumnHeader header, ListViewItemStates state, Color foreColor, Color backColor, Font font)
+        {
+            var e = new DrawListViewColumnHeaderEventArgs(null, bounds, columnIndex, header, state, foreColor, backColor, font);
+            e.DrawBackground();
         }
 
         [Theory]
@@ -104,23 +112,30 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
-        public void DrawText_NullGraphics_ThrowsArgumentNullException()
+        [Theory]
+        [MemberData(nameof(NullGraphics_TestData))]
+        public void DrawText_NullGraphics_Nop(Rectangle bounds, int columnIndex, ColumnHeader header, ListViewItemStates state, Color foreColor, Color backColor, Font font)
         {
-            var e = new DrawListViewColumnHeaderEventArgs(null, new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
-            Assert.Throws<ArgumentNullException>("dc", () => e.DrawText());
-            Assert.Throws<ArgumentNullException>("dc", () => e.DrawText(TextFormatFlags.Left));
+            var e = new DrawListViewColumnHeaderEventArgs(null, bounds, columnIndex, header, state, foreColor, backColor, font);
+            e.DrawText();
         }
 
-        [Fact]
-        public void DrawText_NullHeader_ThrowsNullReferenceException()
+        public static IEnumerable<object[]> NullHeader_TestData()
+        {
+            yield return new object[] { new Rectangle(-1, -2, -3, -4), 0, ListViewItemStates.Default, Color.Empty, Color.Empty, null };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont };
+        }
+
+        [Theory]
+        [MemberData(nameof(NullHeader_TestData))]
+        public void DrawText_NullHeader_Nop(Rectangle bounds, int columnIndex, ListViewItemStates state, Color foreColor, Color backColor, Font font)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DrawListViewColumnHeaderEventArgs(graphics, new Rectangle(1, 2, 3, 4), -1, null, ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
-                Assert.Throws<NullReferenceException>(() => e.DrawText());
-                Assert.Throws<NullReferenceException>(() => e.DrawText(TextFormatFlags.Left));
+                var e = new DrawListViewColumnHeaderEventArgs(null, bounds, columnIndex, null, state, foreColor, backColor, font);
+                e.DrawText();
+                e.DrawText(TextFormatFlags.Left);
             }
         }
     }

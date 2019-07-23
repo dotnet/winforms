@@ -78,6 +78,15 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+            if ((ItemIndex == -1 && Item == null) || (ItemIndex != -1 && SubItem == null))
+            {
+                return;
+            }
+
             Color backColor = (ItemIndex == -1) ? Item.BackColor : SubItem.BackColor;
             using (var backBrush = new SolidBrush(backColor))
             {
@@ -90,6 +99,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawFocusRectangle(Rectangle bounds)
         {
+            if (Graphics == null || Item == null)
+            {
+                return;
+            }
+
             if ((ItemState & ListViewItemStates.Focused) == ListViewItemStates.Focused)
             {
                 ControlPaint.DrawFocusRectangle(Graphics, Rectangle.Inflate(bounds, -1, -1), Item.ForeColor, Item.BackColor);
@@ -101,8 +115,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText()
         {
-            // Map the ColumnHeader::TextAlign to the TextFormatFlags.
-            HorizontalAlignment hAlign = Header.TextAlign;
+            // Map the ColumnHeader.TextAlign to the TextFormatFlags.
+            HorizontalAlignment hAlign = Header?.TextAlign ?? HorizontalAlignment.Left;
             TextFormatFlags flags = (hAlign == HorizontalAlignment.Left) ? TextFormatFlags.Left :
                                                    ((hAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter :
                                                    TextFormatFlags.Right);
@@ -116,6 +130,15 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+            if ((ItemIndex == -1 && Item == null) || (ItemIndex != -1 && SubItem == null))
+            {
+                return;
+            }
+
             string text = (ItemIndex == -1) ? Item.Text : SubItem.Text;
             Font font = (ItemIndex == -1) ? Item.Font : SubItem.Font;
             Color color = (ItemIndex == -1) ? Item.ForeColor : SubItem.ForeColor;

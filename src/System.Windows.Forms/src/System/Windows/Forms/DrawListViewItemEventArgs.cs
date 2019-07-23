@@ -58,6 +58,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
+            if (Graphics == null || Item == null)
+            {
+                return;
+            }
+
             using (var backBrush = new SolidBrush(Item.BackColor))
             {
                 Graphics.FillRectangle(backBrush, Bounds);
@@ -70,6 +75,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawFocusRectangle()
         {
+            if (Graphics == null || Item == null)
+            {
+                return;
+            }
+
             if ((State & ListViewItemStates.Focused) == ListViewItemStates.Focused)
             {
                 ControlPaint.DrawFocusRectangle(Graphics, UpdateBounds(Bounds, drawText: false), Item.ForeColor, Item.BackColor);
@@ -89,13 +99,18 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
+            if (Graphics == null || Item == null)
+            {
+                return;
+            }
+
             TextRenderer.DrawText(Graphics, Item.Text, Item.Font, UpdateBounds(Bounds, drawText: true), Item.ForeColor, flags);
         }
 
         private Rectangle UpdateBounds(Rectangle originalBounds, bool drawText)
         {
             Rectangle resultBounds = originalBounds;
-            if (Item.ListView.View == View.Details)
+            if (Item.ListView != null && Item.ListView.View == View.Details)
             {
                 // Note: this logic will compute the bounds so they align w/ the system drawn bounds only
                 // for the default font.

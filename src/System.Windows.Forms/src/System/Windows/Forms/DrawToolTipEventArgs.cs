@@ -65,6 +65,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+
             using (var backBrush = new SolidBrush(_backColor))
             {
                 Graphics.FillRectangle(backBrush, Bounds);
@@ -85,6 +90,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+
             TextRenderer.DrawText(Graphics, ToolTipText, Font, Bounds, _foreColor, flags);
         }
 
@@ -93,6 +103,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBorder()
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+
             ControlPaint.DrawBorder(Graphics, Bounds, SystemColors.WindowFrame, ButtonBorderStyle.Solid);
         }
     }

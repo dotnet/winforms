@@ -80,6 +80,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+
             if (Application.RenderWithVisualStyles)
             {
                 var vsr = new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
@@ -119,6 +124,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText()
         {
+            if (Graphics == null)
+            {
+                return;
+            }
+
             HorizontalAlignment hAlign = Header.TextAlign;
             TextFormatFlags flags = (hAlign == HorizontalAlignment.Left) ? TextFormatFlags.Left :
                                     ((hAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter :
@@ -133,7 +143,12 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
-            string text = Header.Text;
+            if (Graphics == null)
+            {
+                return;
+            }
+
+            string text = Header?.Text;
             int padding = TextRenderer.MeasureText(" ", Font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
 
