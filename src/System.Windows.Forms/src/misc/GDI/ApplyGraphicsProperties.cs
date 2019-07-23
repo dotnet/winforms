@@ -2,28 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-    using System;
-
     /// <summary>
-    ///     Enumeration defining the different Graphics properties to apply to a WindowsGraphics when creating it
-    ///     from a Graphics object.
+    ///  Enumeration defining the different Graphics properties to apply to a WindowsGraphics when creating it
+    ///  from a Graphics object.
     /// </summary>
-
     [Flags]
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    enum ApplyGraphicsProperties
+    internal enum ApplyGraphicsProperties
     {
         // No properties to be applied to the DC obtained from the Graphics object.
         None = 0x00000000,

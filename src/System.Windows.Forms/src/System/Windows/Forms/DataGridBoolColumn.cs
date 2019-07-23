@@ -2,22 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.ComponentModel;
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>Specifies a column in
-    ///       which each cell contains a check box for representing
-    ///       a boolean value.</para>
+    ///  Specifies a column in
+    ///  which each cell contains a check box for representing
+    ///  a boolean value.
     /// </summary>
     public class DataGridBoolColumn : DataGridColumnStyle
     {
@@ -38,12 +32,12 @@ namespace System.Windows.Forms
         private static readonly object EventAllowNull = new object();
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridBoolColumn'/> class.</para>
+        /// Initializes a new instance of the <see cref='DataGridBoolColumn'/> class.
         /// </summary>
         public DataGridBoolColumn() : base() { }
 
         /// <summary>
-        /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the specified <see cref='System.Data.DataColumn'/>.</para>
+        /// Initializes a new instance of a <see cref='DataGridBoolColumn'/> with the specified <see cref='Data.DataColumn'/>.
         /// </summary>
         public DataGridBoolColumn(PropertyDescriptor prop)
             : base(prop) { }
@@ -52,10 +46,10 @@ namespace System.Windows.Forms
             : base(prop, isDefault) { }
 
         /// <summary>
-        ///    <para>Gets or sets the actual value used when setting the 
-        ///       value of the column to <see langword='true'/> .</para>
+        ///  Gets or sets the actual value used when setting the
+        ///  value of the column to <see langword='true'/> .
         /// </summary>
-        [TypeConverterAttribute(typeof(StringConverter)),
+        [TypeConverter(typeof(StringConverter)),
         DefaultValue(true)]
         public object TrueValue
         {
@@ -81,10 +75,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the actual value used when setting the value of the column to 
-        ///    <see langword='false'/>.</para>
+        ///  Gets or sets the actual value used when setting the value of the column to
+        ///  <see langword='false'/>.
         /// </summary>
-        [TypeConverterAttribute(typeof(StringConverter)), DefaultValue(false)]
+        [TypeConverter(typeof(StringConverter)), DefaultValue(false)]
         public object FalseValue
         {
             get
@@ -109,10 +103,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the actual value used when setting the value of the column to 
-        ///    <see langword='null'/>.</para>
+        ///  Gets or sets the actual value used when setting the value of the column to
+        ///  <see langword='null'/>.
         /// </summary>
-        [TypeConverterAttribute(typeof(StringConverter))]
+        [TypeConverter(typeof(StringConverter))]
         public object NullValue
         {
             get
@@ -164,7 +158,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the value at the specified row.</para>
+        ///  Gets the value at the specified row.
         /// </summary>
         protected internal override object GetColumnValueAtRow(CurrencyManager lm, int row)
         {
@@ -196,7 +190,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Sets the value a a specified row.</para>
+        ///  Sets the value a a specified row.
         /// </summary>
         protected internal override void SetColumnValueAtRow(CurrencyManager lm, int row, object value)
         {
@@ -218,8 +212,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets the optimum width and height of a cell given
-        ///       a specific value to contain.</para>
+        ///  Gets the optimum width and height of a cell given
+        ///  a specific value to contain.
         /// </summary>
         protected internal override Size GetPreferredSize(Graphics g, object value)
         {
@@ -227,8 +221,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets
-        ///       the height of a cell in a column.</para>
+        ///  Gets
+        ///  the height of a cell in a column.
         /// </summary>
         protected internal override int GetMinimumHeight()
         {
@@ -236,9 +230,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the height used when resizing columns.
-        ///    </para>
+        ///  Gets the height used when resizing columns.
         /// </summary>
         protected internal override int GetPreferredHeight(Graphics g, object value)
         {
@@ -246,9 +238,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initiates a request to interrupt an edit procedure.
-        ///    </para>
+        ///  Initiates a request to interrupt an edit procedure.
         /// </summary>
         protected internal override void Abort(int rowNum)
         {
@@ -259,9 +249,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initiates a request to complete an editing procedure.
-        ///    </para>
+        ///  Initiates a request to complete an editing procedure.
         /// </summary>
         protected internal override bool Commit(CurrencyManager dataSource, int rowNum)
         {
@@ -279,9 +267,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Prepares the cell for editing a value.
-        ///    </para>
+        ///  Prepares the cell for editing a value.
         /// </summary>
         protected internal override void Edit(CurrencyManager source,
                                     int rowNum,
@@ -311,10 +297,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Provides a handler for determining which key was pressed, and whether to
-        ///       process it.
-        ///    </para>
+        ///  Provides a handler for determining which key was pressed, and whether to
+        ///  process it.
         /// </summary>
         internal override bool KeyPress(int rowNum, Keys keyData)
         {
@@ -331,10 +315,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Indicates whether the a mouse down event occurred at the specified row, at
-        ///       the specified x and y coordinates.
-        ///    </para>
+        ///  Indicates whether the a mouse down event occurred at the specified row, at
+        ///  the specified x and y coordinates.
         /// </summary>
         internal override bool MouseDown(int rowNum, int x, int y)
         {
@@ -371,9 +353,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
-        /// with the given <see cref='System.Drawing.Graphics'/>,
-        /// <see cref='System.Drawing.Rectangle'/> and row number.</para>
+        /// Draws the <see cref='DataGridBoolColumn'/>
+        /// with the given <see cref='Graphics'/>,
+        /// <see cref='Rectangle'/> and row number.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
         {
@@ -381,9 +363,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
-        /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
-        /// row number, and alignment settings. </para>
+        /// Draws the <see cref='DataGridBoolColumn'/>
+        /// with the given <see cref='Graphics'/>, <see cref='Rectangle'/>,
+        /// row number, and alignment settings.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight)
         {
@@ -391,8 +373,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
-        ///    row number, <see cref='System.Drawing.Brush'/>, and <see cref='System.Drawing.Color'/>. </para>
+        /// Draws the <see cref='DataGridBoolColumn'/> with the given <see cref='Graphics'/>, <see cref='Rectangle'/>,
+        ///  row number, <see cref='Brush'/>, and <see cref='Color'/>.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                      Brush backBrush, Brush foreBrush,
@@ -410,7 +392,7 @@ namespace System.Windows.Forms
             Region r = g.Clip;
             g.ExcludeClip(box);
 
-            System.Drawing.Brush selectionBrush = DataGridTableStyle.IsDefault ? DataGridTableStyle.DataGrid.SelectionBackBrush : DataGridTableStyle.SelectionBackBrush;
+            Brush selectionBrush = DataGridTableStyle.IsDefault ? DataGridTableStyle.DataGrid.SelectionBackBrush : DataGridTableStyle.SelectionBackBrush;
             if (isSelected && editingRow == rowNum && !IsReadOnly())
             {
                 g.FillRectangle(selectionBrush, bounds);
@@ -435,7 +417,7 @@ namespace System.Windows.Forms
             if (IsReadOnly() && isSelected && source.Position == rowNum)
             {
                 bounds.Inflate(-1, -1);
-                System.Drawing.Pen pen = new System.Drawing.Pen(selectionBrush)
+                Pen pen = new Pen(selectionBrush)
                 {
                     DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
                 };
@@ -447,7 +429,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether null values are allowed.</para>
+        ///  Gets or sets a value indicating whether null values are allowed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -484,7 +466,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Enters a <see langword='null'/> into the column.</para>
+        /// Enters a <see langword='null'/> into the column.
         /// </summary>
         protected internal override void EnterNullValue()
         {
@@ -514,7 +496,6 @@ namespace System.Windows.Forms
 
         private void ToggleValue()
         {
-
             if (currentValue is bool && ((bool)currentValue) == false)
             {
                 currentValue = true;

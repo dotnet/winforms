@@ -13,8 +13,8 @@ namespace System.Windows.Forms
     public class SplitterEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes an instance of the <see cref='System.Windows.Forms.SplitterEventArgs'/> class with the specified coordinates
-        /// of the mouse pointer and the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/>.
+        /// Initializes an instance of the <see cref='SplitterEventArgs'/> class with the specified coordinates
+        /// of the mouse pointer and the upper-left corner of the <see cref='Splitter'/>.
         /// </summary>
         public SplitterEventArgs(int x, int y, int splitX, int splitY)
         {
@@ -35,12 +35,12 @@ namespace System.Windows.Forms
         public int Y { get; }
 
         /// <summary>
-        /// Gets the x-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
+        /// Gets the x-coordinate of the upper-left corner of the <see cref='Splitter'/> (in client coordinates).
         /// </summary>
         public int SplitX { get; set; }
 
         /// <summary>
-        /// Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
+        /// Gets the y-coordinate of the upper-left corner of the <see cref='Splitter'/> (in client coordinates).
         /// </summary>
         public int SplitY { get; set; }
     }

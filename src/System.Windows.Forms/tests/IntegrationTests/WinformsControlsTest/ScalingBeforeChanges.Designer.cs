@@ -34,9 +34,9 @@ namespace WinformsControlsTest
         {
             this.checkBox1 = new WinformsControlsTest.MyCheckBox();
             this.SuspendLayout();
-            // 
+            //
             // checkBox1
-            // 
+            //
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(39, 73);
             this.checkBox1.Name = "checkBox1";
@@ -44,9 +44,9 @@ namespace WinformsControlsTest
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "checkBox1";
             this.checkBox1.UseVisualStyleBackColor = true;
-            // 
+            //
             // Form1
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(284, 261);

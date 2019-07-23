@@ -2,29 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel.Design;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
+using System.Xml;
+
 namespace System.Resources
 {
 
-    using System.Diagnostics;
-    using System.Runtime.Serialization;
-    using System;
-    using System.Windows.Forms;
-    using System.Reflection;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.IO;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Collections.Specialized;
-    using System.Runtime.CompilerServices;
-    using System.Resources;
-    using System.Xml;
-    using System.ComponentModel.Design;
-    using System.Globalization;
-
     /// <summary>
-    ///     ResX resource reader.
+    ///  ResX resource reader.
     /// </summary>
     public class ResXResourceReader : IResourceReader
     {
@@ -46,7 +39,6 @@ namespace System.Resources
         string resHeaderWriterType = null;
         bool useResXDataNodes = false;
 
-
         private ResXResourceReader(ITypeResolutionService typeResolver)
         {
             this.typeResolver = typeResolver;
@@ -58,7 +50,6 @@ namespace System.Resources
             this.assemblyNames = assemblyNames;
             aliasResolver = new ReaderAliasResolver();
         }
-
 
         public ResXResourceReader(string fileName) : this(fileName, (ITypeResolutionService)null, (IAliasResolver)null)
         {
@@ -85,7 +76,6 @@ namespace System.Resources
             this.typeResolver = typeResolver;
             this.aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
-
 
         public ResXResourceReader(Stream stream) : this(stream, (ITypeResolutionService)null, (IAliasResolver)null)
         {
@@ -130,15 +120,13 @@ namespace System.Resources
             this.aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-
-
         ~ResXResourceReader()
         {
             Dispose(false);
         }
 
         /// <summary>
-        ///     BasePath for relatives filepaths with ResXFileRefs.
+        ///  BasePath for relatives filepaths with ResXFileRefs.
         /// </summary>
         public string BasePath
         {
@@ -157,10 +145,10 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
-        ///     object and returns it. This property gives the user control over whether this unwrapping should
-        ///     happen, or a ResXFileRef object should be returned. Default is true for backward compat and common case
-        ///     scenario.
+        ///  ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
+        ///  object and returns it. This property gives the user control over whether this unwrapping should
+        ///  happen, or a ResXFileRef object should be returned. Default is true for backward compat and common case
+        ///  scenario.
         /// </summary>
         public bool UseResXDataNodes
         {
@@ -179,7 +167,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Closes and files or streams being used by the reader.
+        ///  Closes and files or streams being used by the reader.
         /// </summary>
         // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public void Close()
@@ -232,7 +220,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Demand loads the resource data.
+        ///  Demand loads the resource data.
         /// </summary>
         private void EnsureResData()
         {
@@ -279,10 +267,8 @@ namespace System.Resources
             }
         }
 
-
-
         /// <summary>
-        ///     Creates a reader with the specified file contents.
+        ///  Creates a reader with the specified file contents.
         /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents)
         {
@@ -290,7 +276,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Creates a reader with the specified file contents.
+        ///  Creates a reader with the specified file contents.
         /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents, ITypeResolutionService typeResolver)
         {
@@ -301,7 +287,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Creates a reader with the specified file contents.
+        ///  Creates a reader with the specified file contents.
         /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents, AssemblyName[] assemblyNames)
         {
@@ -326,7 +312,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
+        ///  Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
         /// </summary>
         public IDictionaryEnumerator GetMetadataEnumerator()
         {
@@ -335,7 +321,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Attempts to return the line and column (Y, X) of the XML reader.
+        ///  Attempts to return the line and column (Y, X) of the XML reader.
         /// </summary>
         private Point GetPosition(XmlReader reader)
         {
@@ -349,7 +335,6 @@ namespace System.Resources
 
             return pt;
         }
-
 
         private void ParseXml(XmlTextReader reader)
         {
@@ -475,7 +460,7 @@ namespace System.Resources
 
                 // The "1.1" schema requires the correct casing of the strings
                 // in the resheader, however the "1.0" schema had a different
-                // casing. By checking the Equals first, we should 
+                // casing. By checking the Equals first, we should
                 // see significant performance improvements.
                 //
 
@@ -586,7 +571,6 @@ namespace System.Resources
             aliasResolver.PushAlias(alias, assemblyName);
         }
 
-
         private void ParseDataNode(XmlTextReader reader, bool isMetaData)
         {
             DataNodeInfo nodeInfo = new DataNodeInfo
@@ -637,10 +621,10 @@ namespace System.Resources
                             WhitespaceHandling oldValue = reader.WhitespaceHandling;
                             try
                             {
-                                // based on the documentation at http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmltextreaderclasswhitespacehandlingtopic.asp 
+                                // based on the documentation at http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmltextreaderclasswhitespacehandlingtopic.asp
                                 // this is ok because:
                                 // "Because the XmlTextReader does not have DTD information available to it,
-                                // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope." 
+                                // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope."
                                 // the xml:space would not be present for anything else than string and char (see ResXResourceWriter)
                                 // so this would not cause any breaking change while reading data from Everett (we never outputed
                                 // xml:space then) or from whidbey that is not specifically either a string or a char.
@@ -694,7 +678,6 @@ namespace System.Resources
 
         private string GetAliasFromTypeName(string typeName)
         {
-
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(indexStart + 2);
 
@@ -702,12 +685,10 @@ namespace System.Resources
 
         private string GetTypeFromTypeName(string typeName)
         {
-
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(0, indexStart);
 
         }
-
 
         private sealed class ReaderAliasResolver : IAliasResolver
         {

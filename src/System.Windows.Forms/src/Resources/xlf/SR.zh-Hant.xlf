@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">ActiveX 控制項是無視窗的控制項。這個版本的 .Net Framework 不支援這個控制項。</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">ActiveX 控制項是無視窗的控制項。這個版本的 .Net 不支援這個控制項。</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ just-in-time (JIT) debugging instead of this dialog box.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET Framework 組態工具進行相關的設定。
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET 組態工具進行相關的設定。
 
 如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。
 
@@ -5204,12 +5204,12 @@ If you click Continue, the application will ignore this error and attempt to con
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET Framework 組態工具進行相關的設定。
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET 組態工具進行相關的設定。
 
 如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。如果您按下 [結束]，應用程式將立即關閉。
 

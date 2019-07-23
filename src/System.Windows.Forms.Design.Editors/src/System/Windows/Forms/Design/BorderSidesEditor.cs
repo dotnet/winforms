@@ -93,7 +93,6 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public IWindowsFormsEditorService EditorService
             {
-                [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
                 get;
                 private set;
             }
@@ -133,9 +132,9 @@ namespace System.Windows.Forms.Design
                 splitterLabel = new Label();
                 tableLayoutPanel1.SuspendLayout();
                 SuspendLayout();
-                // 
+                //
                 // tableLayoutPanel1
-                // 
+                //
                 resources.ApplyResources(tableLayoutPanel1, "tableLayoutPanel1");
                 tableLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 tableLayoutPanel1.BackColor = SystemColors.Window;
@@ -156,51 +155,51 @@ namespace System.Windows.Forms.Design
                 tableLayoutPanel1.RowStyles.Add(new RowStyle());
                 tableLayoutPanel1.RowStyles.Add(new RowStyle());
                 tableLayoutPanel1.Margin = new Padding(0);
-                // 
+                //
                 // noneCheckBox
-                // 
+                //
                 resources.ApplyResources(noneCheckBox, "noneCheckBox");
                 noneCheckBox.Name = "noneCheckBox";
                 noneCheckBox.Margin = new Padding(3, 3, 3, 1);
-                // 
+                //
                 // allCheckBox
-                // 
+                //
                 resources.ApplyResources(allCheckBox, "allCheckBox");
                 allCheckBox.Name = "allCheckBox";
                 allCheckBox.Margin = new Padding(3, 3, 3, 1);
-                // 
+                //
                 // topCheckBox
-                // 
+                //
                 resources.ApplyResources(topCheckBox, "topCheckBox");
                 topCheckBox.Margin = new Padding(20, 1, 3, 1);
                 topCheckBox.Name = "topCheckBox";
-                // 
+                //
                 // bottomCheckBox
-                // 
+                //
                 resources.ApplyResources(bottomCheckBox, "bottomCheckBox");
                 bottomCheckBox.Margin = new Padding(20, 1, 3, 1);
                 bottomCheckBox.Name = "bottomCheckBox";
-                // 
+                //
                 // rightCheckBox
-                // 
+                //
                 resources.ApplyResources(rightCheckBox, "rightCheckBox");
                 rightCheckBox.Margin = new Padding(20, 1, 3, 1);
                 rightCheckBox.Name = "rightCheckBox";
-                // 
+                //
                 // leftCheckBox
-                // 
+                //
                 resources.ApplyResources(leftCheckBox, "leftCheckBox");
                 leftCheckBox.Margin = new Padding(20, 1, 3, 1);
                 leftCheckBox.Name = "leftCheckBox";
-                // 
+                //
                 // splitterLabel
-                // 
+                //
                 resources.ApplyResources(splitterLabel, "splitterLabel");
                 splitterLabel.BackColor = SystemColors.ControlDark;
                 splitterLabel.Name = "splitterLabel";
-                // 
+                //
                 // Control
-                // 
+                //
                 resources.ApplyResources(this, "$this");
                 Controls.Add(tableLayoutPanel1);
                 Padding = new Padding(1, 1, 1, 1);

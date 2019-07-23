@@ -261,7 +261,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// The TemplateNode. This is the object that actually creates miniToolStrip and manages InSitu editing.
-        /// </summary>       
+        /// </summary>
         internal ToolStripTemplateNode Editor
         {
             get => _tn;
@@ -565,8 +565,6 @@ namespace System.Windows.Forms.Design
         }
 
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         internal ToolStripItem AddNewItem(Type t, string text, bool enterKeyPressed, bool tabKeyPressed)
         {
             Debug.Assert(_host != null, "Why didn't we get a designer host?");
@@ -578,7 +576,7 @@ namespace System.Windows.Forms.Design
                 _addingItem = true;
                 // Suspend the Layout as we are about to add Item to the ToolStrip
                 ToolStrip.SuspendLayout();
-                // The code in ComponentAdded will actually get the add done. 
+                // The code in ComponentAdded will actually get the add done.
                 IComponent component = _host.CreateComponent(t, NameFromText(text, t, Component.Site));
                 ToolStripItemDesigner designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 try
@@ -902,7 +900,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
         {
             // If another ToolStrip is getting added and we are currently selected then unselect us .. the newly added toolStrip should get selected.
@@ -1255,7 +1252,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         /// <summary>
         /// We add our BodyGlyphs as well as bodyGlyphs for the ToolStripItems here.
         /// </summary>
@@ -1413,7 +1409,6 @@ namespace System.Windows.Forms.Design
         /// Get the designer set up to run.
         /// </summary>
         // EditorServiceContext is newed up to add Edit Items verb.
-        [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
         public override void Initialize(IComponent component)
         {
             base.Initialize(component);
@@ -1570,7 +1565,7 @@ namespace System.Windows.Forms.Design
                     }
                     parent.Controls.SetChildIndex(ToolStrip, index);
                 }
-                // If we are not a MenuStrip then we still need to be first to be laid out "after the menuStrip" 
+                // If we are not a MenuStrip then we still need to be first to be laid out "after the menuStrip"
                 else
                 {
                     int index = -1;
@@ -1812,7 +1807,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Add item on Drop and it its a MenuItem, open its dropDown.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         protected override void OnDragDrop(DragEventArgs de)
         {
             base.OnDragDrop(de);
@@ -1916,7 +1910,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            // show the dropDown for the primarySelection before the Drag-Drop operation started. 
+                            // show the dropDown for the primarySelection before the Drag-Drop operation started.
                             if (primaryItem is ToolStripDropDownItem primaryDropDownItem)
                             {
                                 if (_host.GetDesigner(primaryDropDownItem) is ToolStripMenuItemDesigner dropDownItemDesigner)
@@ -1967,7 +1961,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         /// <summary>
         /// Everytime we add Item .. the TemplateNode needs to go at the end if its not there.
         /// </summary>
@@ -2006,7 +1999,6 @@ namespace System.Windows.Forms.Design
             //always dismiss this so we don't collapse the dropdown when the user clicks @ design time
             e.Cancel = (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked);
         }
-
 
         /// <summary>
         /// Remove the Glyphs for Items on the overflow when the Overflow closes.

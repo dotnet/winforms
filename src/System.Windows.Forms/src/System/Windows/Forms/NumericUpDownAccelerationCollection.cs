@@ -2,29 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
     /// <summary>
-    ///     Represents a SORTED collection of NumericUpDownAcceleration objects in the NumericUpDown Control.
-    ///     The elements in the collection are sorted by the NumericUpDownAcceleration.Seconds property.
+    ///  Represents a SORTED collection of NumericUpDownAcceleration objects in the NumericUpDown Control.
+    ///  The elements in the collection are sorted by the NumericUpDownAcceleration.Seconds property.
     /// </summary>
     [ListBindable(false)]
     public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollection<NumericUpDownAcceleration>, IEnumerable<NumericUpDownAcceleration>
     {
         readonly List<NumericUpDownAcceleration> items;
 
-
         /// ICollection<NumericUpDownAcceleration> implementation.
 
         /// <summary>
-        ///     Adds an item (NumericUpDownAcceleration object) to the ICollection.
-        ///     The item is added preserving the collection sorted.
+        ///  Adds an item (NumericUpDownAcceleration object) to the ICollection.
+        ///  The item is added preserving the collection sorted.
         /// </summary>
         public void Add(NumericUpDownAcceleration acceleration)
         {
@@ -48,7 +45,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Removes all items from the ICollection.
+        ///  Removes all items from the ICollection.
         /// </summary>
         public void Clear()
         {
@@ -56,7 +53,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the IList contains a specific value.
+        ///  Determines whether the IList contains a specific value.
         /// </summary>
         public bool Contains(NumericUpDownAcceleration acceleration)
         {
@@ -64,7 +61,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Copies the elements of the ICollection to an Array, starting at a particular Array index.
+        ///  Copies the elements of the ICollection to an Array, starting at a particular Array index.
         /// </summary>
         public void CopyTo(NumericUpDownAcceleration[] array, int index)
         {
@@ -72,7 +69,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets the number of elements contained in the ICollection.
+        ///  Gets the number of elements contained in the ICollection.
         /// </summary>
         public int Count
         {
@@ -80,8 +77,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets a value indicating whether the ICollection is read-only.
-        ///     This collection property returns false always.
+        ///  Gets a value indicating whether the ICollection is read-only.
+        ///  This collection property returns false always.
         /// </summary>
         public bool IsReadOnly
         {
@@ -89,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Removes the specified item from the ICollection.
+        ///  Removes the specified item from the ICollection.
         /// </summary>
         public bool Remove(NumericUpDownAcceleration acceleration)
         {
@@ -98,16 +95,15 @@ namespace System.Windows.Forms
 
         /// IEnumerable<NumericUpDownAcceleration> implementation.
 
-
         /// <summary>
-        ///     Returns an enumerator that can iterate through the collection.
+        ///  Returns an enumerator that can iterate through the collection.
         /// </summary>
         IEnumerator<NumericUpDownAcceleration> IEnumerable<NumericUpDownAcceleration>.GetEnumerator()
         {
             return items.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)items).GetEnumerator();
         }
@@ -115,7 +111,7 @@ namespace System.Windows.Forms
         /// NumericUpDownAccelerationCollection methods.
 
         /// <summary>
-        ///     Class constructor.
+        ///  Class constructor.
         /// </summary>
         public NumericUpDownAccelerationCollection()
         {
@@ -123,7 +119,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adds the elements of specified array to the collection, keeping the collection sorted.
+        ///  Adds the elements of specified array to the collection, keeping the collection sorted.
         /// </summary>
         public void AddRange(params NumericUpDownAcceleration[] accelerations)
         {
@@ -150,8 +146,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets (ReadOnly) the element at the specified index. In C#, this property is the indexer for 
-        ///     the IList class. 
+        ///  Gets (ReadOnly) the element at the specified index. In C#, this property is the indexer for
+        ///  the IList class.
         /// </summary>
         public NumericUpDownAcceleration this[int index]
         {

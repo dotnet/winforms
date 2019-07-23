@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using Message = System.Windows.Forms.Message;
-
     internal class GridToolTip : Control
     {
         readonly Control[] controls;
@@ -98,9 +94,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         /// <summary>
-        ///     The createParams to create the window.
+        ///  The createParams to create the window.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -125,7 +120,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private NativeMethods.TOOLINFO_T GetTOOLINFO(Control c)
         {
-
             int index = Array.IndexOf(controls, c);
 
             Debug.Assert(index != -1, "Failed to find control in tooltip array");

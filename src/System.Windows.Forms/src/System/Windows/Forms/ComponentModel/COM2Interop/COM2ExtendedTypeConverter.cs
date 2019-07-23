@@ -2,20 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Globalization;
+using System.Collections;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Globalization;
-
-    using System.Collections;
-
     /// <summary>
     /// Base class for value editors that extend basic functionality.
     /// calls will be delegated to the "base value editor".
@@ -44,7 +36,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public TypeConverter GetWrappedConverter(Type t)
         {
-
             TypeConverter converter = innerConverter;
 
             while (converter != null)
@@ -66,10 +57,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-
         /// <summary>
-        ///      Determines if this converter can convert an object in the given source
-        ///      type to the native type of the converter.
+        ///  Determines if this converter can convert an object in the given source
+        ///  type to the native type of the converter.
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -81,8 +71,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Determines if this converter can convert an object to the given destination
-        ///      type.
+        ///  Determines if this converter can convert an object to the given destination
+        ///  type.
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
@@ -94,7 +84,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Converts the given object to the converter's native type.
+        ///  Converts the given object to the converter's native type.
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
@@ -106,11 +96,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Converts the given object to another type.  The most common types to convert
-        ///      are to and from a string object.  The default implementation will make a call
-        ///      to ToString on the object if the object is valid and if the destination
-        ///      type is string.  If this cannot convert to the desitnation type, this will
-        ///      throw a NotSupportedException.
+        ///  Converts the given object to another type.  The most common types to convert
+        ///  are to and from a string object.  The default implementation will make a call
+        ///  to ToString on the object if the object is valid and if the destination
+        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
@@ -122,9 +112,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Creates an instance of this type given a set of property values
-        ///      for the object.  This is useful for objects that are immutable, but still
-        ///      want to provide changable properties.
+        ///  Creates an instance of this type given a set of property values
+        ///  for the object.  This is useful for objects that are immutable, but still
+        ///  want to provide changable properties.
         /// </summary>
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
@@ -136,8 +126,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Determines if changing a value on this object should require a call to
-        ///      CreateInstance to create a new value.
+        ///  Determines if changing a value on this object should require a call to
+        ///  CreateInstance to create a new value.
         /// </summary>
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
         {
@@ -149,9 +139,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Retrieves the set of properties for this type.  By default, a type has
-        ///      does not return any properties.  An easy implementation of this method
-        ///      can just call TypeDescriptor.GetProperties for the correct data type.
+        ///  Retrieves the set of properties for this type.  By default, a type has
+        ///  does not return any properties.  An easy implementation of this method
+        ///  can just call TypeDescriptor.GetProperties for the correct data type.
         /// </summary>
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
@@ -163,8 +153,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Determines if this object supports properties.  By default, this
-        ///      is false.
+        ///  Determines if this object supports properties.  By default, this
+        ///  is false.
         /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context)
         {
@@ -176,10 +166,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Retrieves a collection containing a set of standard values
-        ///      for the data type this validator is designed for.  This
-        ///      will return null if the data type does not support a
-        ///      standard set of values.
+        ///  Retrieves a collection containing a set of standard values
+        ///  for the data type this validator is designed for.  This
+        ///  will return null if the data type does not support a
+        ///  standard set of values.
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
@@ -191,12 +181,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Determines if the list of standard values returned from
-        ///      GetStandardValues is an exclusive list.  If the list
-        ///      is exclusive, then no other values are valid, such as
-        ///      in an enum data type.  If the list is not exclusive,
-        ///      then there are other valid values besides the list of
-        ///      standard values GetStandardValues provides.
+        ///  Determines if the list of standard values returned from
+        ///  GetStandardValues is an exclusive list.  If the list
+        ///  is exclusive, then no other values are valid, such as
+        ///  in an enum data type.  If the list is not exclusive,
+        ///  then there are other valid values besides the list of
+        ///  standard values GetStandardValues provides.
         /// </summary>
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
         {
@@ -208,8 +198,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Determines if this object supports a standard set of values
-        ///      that can be picked from a list.
+        ///  Determines if this object supports a standard set of values
+        ///  that can be picked from a list.
         /// </summary>
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
@@ -221,7 +211,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///      Determines if the given object value is valid for this type.
+        ///  Determines if the given object value is valid for this type.
         /// </summary>
         public override bool IsValid(ITypeDescriptorContext context, object value)
         {

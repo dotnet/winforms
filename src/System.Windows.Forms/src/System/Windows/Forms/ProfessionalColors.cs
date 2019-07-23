@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.VisualStyles;
+using Microsoft.Win32;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Windows.Forms;
-    using System.Windows.Forms.VisualStyles;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.Collections;
-    using System.Diagnostics;
-
     public sealed class ProfessionalColors
     {
         [ThreadStatic]
@@ -22,7 +18,6 @@ namespace System.Windows.Forms
 
         [ThreadStatic]
         private static object colorFreshnessKey = null;
-
 
         internal static ProfessionalColorTable ColorTable
         {
@@ -72,13 +67,11 @@ namespace System.Windows.Forms
             get { return ColorTable.ButtonSelectedHighlightBorder; }
         }
 
-
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightDescr))]
         public static Color ButtonPressedHighlight
         {
             get { return ColorTable.ButtonPressedHighlight; }
         }
-
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightBorderDescr))]
         public static Color ButtonPressedHighlightBorder
@@ -194,28 +187,6 @@ namespace System.Windows.Forms
             get { return ColorTable.GripLight; }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientBeginDescr))]
         public static Color ImageMarginGradientBegin
         {
@@ -311,7 +282,6 @@ namespace System.Windows.Forms
         {
             get { return ColorTable.MenuItemPressedGradientEnd; }
         }
-
 
         [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientBeginDescr))]
         public static Color RaftingContainerGradientBegin
@@ -425,7 +395,6 @@ namespace System.Windows.Forms
               get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdLight); }
           } */
 
-
         private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
         {
             SetScheme();
@@ -448,7 +417,6 @@ namespace System.Windows.Forms
         }
 
     }
-
 
 }
 

@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.Paint'/>event of a <see cref='System.Windows.Forms.Control'/>class.
+    /// Represents the method that will handle the <see cref='Control.Paint'/>event of a <see cref='Control'/>class.
     /// </summary>
     public delegate void PaintEventHandler(object sender, PaintEventArgs e);
 }

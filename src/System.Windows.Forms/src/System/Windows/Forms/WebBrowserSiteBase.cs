@@ -38,9 +38,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>
         /// Dispose(release the cookie)
-        ///     </para>
         /// </summary>
         public void Dispose()
         {
@@ -48,9 +46,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>
         /// Release the cookie if we're disposing
-        ///     </para>
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -59,10 +55,9 @@ namespace System.Windows.Forms
                 StopEvents();
             }
         }
+
         /// <summary>
-        ///     <para>
         /// Retrieves the WebBrowserBase object set in the constructor.
-        ///     </para>
         /// </summary>
         internal WebBrowserBase Host
         {
@@ -192,7 +187,6 @@ namespace System.Windows.Forms
             container = Host.GetParentContainer();
             return NativeMethods.S_OK;
         }
-
 
         int UnsafeNativeMethods.IOleClientSite.ShowObject()
         {
@@ -379,7 +373,6 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-
         //
         // Virtual overrides:
         //
@@ -419,7 +412,6 @@ namespace System.Windows.Forms
                 throw;
             }
         }
-
 
         //
         // Internal helper methods:

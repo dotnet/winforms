@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnNavigating'/> event.
+    /// Provides data for the <see cref='WebBrowser.OnNavigating'/> event.
     /// </summary>
     public class WebBrowserNavigatingEventArgs : CancelEventArgs
     {
@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         private readonly string _targetFrameName;
 
         /// <summary>
-        /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatingEventArgs'/> class.
+        /// Creates an instance of the <see cref='WebBrowserNavigatingEventArgs'/> class.
         /// </summary>
         public WebBrowserNavigatingEventArgs(Uri url, string targetFrameName)
         {

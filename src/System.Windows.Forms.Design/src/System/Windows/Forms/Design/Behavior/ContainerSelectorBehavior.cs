@@ -57,7 +57,6 @@ namespace System.Windows.Forms.Design.Behavior
             _okToMove = false;
         }
 
-
         public Control ContainerControl
         {
             get => _containerControl;

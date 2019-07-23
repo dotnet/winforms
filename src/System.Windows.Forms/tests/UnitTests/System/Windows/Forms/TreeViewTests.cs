@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Tests
                 BackColor = value
             };
             Assert.Equal(expected, control.BackColor);
-            
+
             // Set same.
             control.BackColor  = value;
             Assert.Equal(expected, control.BackColor);
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Tests
                 BackgroundImage = value
             };
             Assert.Equal(value, control.BackgroundImage);
-            
+
             // Set same.
             control.BackgroundImage  = value;
             Assert.Equal(value, control.BackgroundImage);
@@ -277,7 +277,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.BorderStyle = BorderStyle.None;
             Assert.Equal(BorderStyle.None, treeView.BorderStyle);
@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.CheckBoxes = true;
             Assert.True(treeView.CheckBoxes);
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.CheckBoxes = true;
             Assert.True(treeView.CheckBoxes);
@@ -567,7 +567,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.DoubleBuffered = true;
             Assert.True(treeView.DoubleBuffered);
@@ -619,7 +619,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.DoubleBuffered = true;
             Assert.True(treeView.DoubleBuffered);
@@ -700,7 +700,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.DrawMode = TreeViewDrawMode.OwnerDrawText;
             Assert.Equal(TreeViewDrawMode.OwnerDrawText, treeView.DrawMode);
@@ -752,7 +752,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.DrawMode = TreeViewDrawMode.OwnerDrawText;
             Assert.Equal(TreeViewDrawMode.OwnerDrawText, treeView.DrawMode);
@@ -905,7 +905,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.FullRowSelect = true;
             Assert.True(treeView.FullRowSelect);
@@ -957,7 +957,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.FullRowSelect = true;
             Assert.True(treeView.FullRowSelect);
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.HideSelection = false;
             Assert.False(treeView.HideSelection);
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.HideSelection = false;
             Assert.False(treeView.HideSelection);
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.HotTracking = true;
             Assert.True(treeView.HotTracking);
@@ -1239,7 +1239,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.HotTracking = true;
             Assert.True(treeView.HotTracking);
@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms.Tests
         {
             var treeView = new TreeView();
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-             
+
             treeView.ImageKey = value;
             Assert.Equal(expected, treeView.ImageKey);
             Assert.Equal(-1, treeView.ImageIndex);
@@ -1721,7 +1721,7 @@ namespace System.Windows.Forms.Tests
             {
                 ImageList = new ImageList()
             };
-            
+
             treeView.ImageList = value;
             Assert.Same(value, treeView.ImageList);
 
@@ -1788,7 +1788,7 @@ namespace System.Windows.Forms.Tests
                 ImageList = new ImageList()
             };
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             treeView.ImageList = value;
             Assert.Same(value, treeView.ImageList);
 
@@ -1806,7 +1806,7 @@ namespace System.Windows.Forms.Tests
                 StateImageList = value
             };
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             treeView.ImageList = value;
             Assert.Same(value, treeView.ImageList);
 
@@ -2113,7 +2113,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.LabelEdit = true;
             Assert.True(treeView.LabelEdit);
@@ -2165,7 +2165,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.LabelEdit = true;
             Assert.True(treeView.LabelEdit);
@@ -2326,7 +2326,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             treeView.RightToLeftLayoutChanged += handler;
-            
+
             // Set different.
             treeView.RightToLeftLayout = true;
             Assert.True(treeView.RightToLeftLayout);
@@ -2372,7 +2372,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.RightToLeftLayout = true;
             Assert.True(treeView.RightToLeftLayout);
@@ -2424,7 +2424,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.RightToLeftLayout = true;
             Assert.True(treeView.RightToLeftLayout);
@@ -2513,7 +2513,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.Scrollable = false;
             Assert.False(treeView.Scrollable);
@@ -2565,7 +2565,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.Scrollable = false;
             Assert.False(treeView.Scrollable);
@@ -2933,7 +2933,7 @@ namespace System.Windows.Forms.Tests
         {
             var treeView = new TreeView();
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-             
+
             treeView.SelectedImageKey = value;
             Assert.Equal(expected, treeView.SelectedImageKey);
             Assert.Equal(-1, treeView.SelectedImageIndex);
@@ -3049,7 +3049,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.ShowLines = true;
             Assert.True(treeView.ShowLines);
@@ -3101,7 +3101,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.ShowLines = false;
             Assert.False(treeView.ShowLines);
@@ -3190,7 +3190,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.ShowNodeToolTips = true;
             Assert.True(treeView.ShowNodeToolTips);
@@ -3242,7 +3242,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.ShowNodeToolTips = true;
             Assert.True(treeView.ShowNodeToolTips);
@@ -3331,7 +3331,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.ShowPlusMinus = false;
             Assert.False(treeView.ShowPlusMinus);
@@ -3383,7 +3383,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.ShowPlusMinus = false;
             Assert.False(treeView.ShowPlusMinus);
@@ -3472,7 +3472,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.ShowRootLines = false;
             Assert.False(treeView.ShowRootLines);
@@ -3524,7 +3524,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.ShowRootLines = false;
             Assert.False(treeView.ShowRootLines);
@@ -3613,7 +3613,7 @@ namespace System.Windows.Forms.Tests
             };
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
-            
+
             // Set different.
             treeView.Sorted = true;
             Assert.True(treeView.Sorted);
@@ -3665,7 +3665,7 @@ namespace System.Windows.Forms.Tests
             treeView.StyleChanged += styleChangedHandler;
             treeView.Invalidated += invalidatedHandler;
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             // Set different.
             treeView.Sorted = true;
             Assert.True(treeView.Sorted);
@@ -3716,7 +3716,7 @@ namespace System.Windows.Forms.Tests
             {
                 StateImageList = new ImageList()
             };
-            
+
             treeView.StateImageList = value;
             Assert.Same(value, treeView.StateImageList);
 
@@ -3749,7 +3749,7 @@ namespace System.Windows.Forms.Tests
                 StateImageList = new ImageList()
             };
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-            
+
             treeView.StateImageList = value;
             Assert.Same(value, treeView.StateImageList);
 
@@ -3842,11 +3842,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, treeView.Text);
+            Assert.Equal(expected, treeView.Text);
 
             // Set same.
             treeView.Text = value;
-            Assert.Same(expected, treeView.Text);
+            Assert.Equal(expected, treeView.Text);
         }
 
         [Fact]

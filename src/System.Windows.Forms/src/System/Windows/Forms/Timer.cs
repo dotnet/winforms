@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
@@ -27,21 +26,20 @@ namespace System.Windows.Forms
 
         private GCHandle _timerRoot;
 
-
         // Holder for the HWND that handles our Timer messages.
         private TimerNativeWindow _timerWindow;
 
         private readonly object _syncObj = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Timer'/> class.
+        /// Initializes a new instance of the <see cref='Timer'/> class.
         /// </summary>
         public Timer() : base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Timer'/> class with the specified container.
+        /// Initializes a new instance of the <see cref='Timer'/> class with the specified container.
         /// </summary>
         public Timer(IContainer container) : this()
         {
@@ -168,7 +166,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.Timer.Tick'/> event.
+        /// Raises the <see cref='Tick'/> event.
         /// </summary>
         protected virtual void OnTick(EventArgs e) => _onTimer?.Invoke(this, e);
 

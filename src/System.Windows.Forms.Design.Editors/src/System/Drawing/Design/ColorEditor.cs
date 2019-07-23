@@ -27,7 +27,6 @@ namespace System.Drawing.Design
         /// <summary>
         /// Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider == null)
@@ -78,9 +77,6 @@ namespace System.Drawing.Design
         /// Paints a representative value of the given object to the provided canvas.
         /// Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
-        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
             if (e.Value is Color color)
@@ -168,7 +164,6 @@ namespace System.Drawing.Design
                 CustomColors = customColors;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public Color[] CustomColors { get; }
 
             internal int FocusedCell => Get1DFrom2D(focus);
@@ -695,7 +690,6 @@ namespace System.Drawing.Design
             /// <summary>
             /// Retrieves the array of custom colors for our use.
             /// </summary>
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             private Color[] CustomColors
             {
                 get
@@ -723,7 +717,7 @@ namespace System.Drawing.Design
             /// </summary>
             public IWindowsFormsEditorService EditorService => edSvc;
 
-            /// <summary> 
+            /// <summary>
             /// Array of system colors.
             /// </summary>
             private object[] SystemColorValues => systemColorConstants ?? (systemColorConstants = GetConstants(typeof(SystemColors)));
@@ -875,7 +869,6 @@ namespace System.Drawing.Design
                 commonHeightSet = systemHeightSet = false;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
             private void OnListClick(object sender, EventArgs e)
             {
                 ListBox lb = (ListBox)sender;
@@ -1162,7 +1155,6 @@ namespace System.Drawing.Design
         /// </summary>
         private class SystemColorComparer : IComparer
         {
-            [SuppressMessage("Microsoft.Globalization", "CA130:UseOrdinalStringComparison")]
             public int Compare(object x, object y)
             {
                 return string.Compare(((Color)x).Name, ((Color)y).Name, false, CultureInfo.InvariantCulture);

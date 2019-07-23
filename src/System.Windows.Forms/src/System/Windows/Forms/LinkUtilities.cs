@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using Microsoft.Win32;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     internal class LinkUtilities
     {
-
         // IE fonts and colors
         static Color ielinkColor = Color.Empty;
         static Color ieactiveLinkColor = Color.Empty;
@@ -25,8 +22,8 @@ namespace System.Windows.Forms
         const string IEAnchorColorHover = "Anchor Color Hover";
 
         /// <summary>
-        ///     Retrieves a named IE color from the registry. There are constants at the top
-        ///     of this file of the valid names to retrieve.
+        ///  Retrieves a named IE color from the registry. There are constants at the top
+        ///  of this file of the valid names to retrieve.
         /// </summary>
         private static Color GetIEColor(string name)
         {
@@ -122,7 +119,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Retrieves the IE settings for link behavior from the registry.
+        ///  Retrieves the IE settings for link behavior from the registry.
         /// </summary>
         public static LinkBehavior GetIELinkBehavior()
         {
@@ -131,7 +128,7 @@ namespace System.Windows.Forms
             {
                 key = Registry.CurrentUser.OpenSubKey(IEMainRegPath);
             }
-            catch (System.Security.SecurityException)
+            catch (Security.SecurityException)
             {
                 // User does not have right to access Registry path HKCU\\Software\\Microsoft\\Internet Explorer\\Main.
                 // Catch SecurityException silently and let the return value fallback to AlwaysUnderline.

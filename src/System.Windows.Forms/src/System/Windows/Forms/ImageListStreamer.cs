@@ -2,29 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Globalization;
-
-    /// <summary>
-    /// </summary>
     [Serializable]
     public sealed class ImageListStreamer : ISerializable, IDisposable
     {
-
         // compressed magic header.  If we see this, the image stream is compressed.
         // (unicode for MSFT).
-        //
         private static readonly byte[] HEADER_MAGIC = new byte[] { 0x4D, 0x53, 0x46, 0X74 };
         private static readonly object internalSyncObject = new object();
 
@@ -57,7 +46,7 @@ namespace System.Windows.Forms
                         byte[] dat = (byte[])sie.Value;
                         if (dat != null)
                         {
-                            // We enclose this imagelist handle create in a theming scope.                        
+                            // We enclose this imagelist handle create in a theming scope.
                             IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
 
                             try
@@ -93,12 +82,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Compresses the given input, returning a new array that represents
-        ///     the compressed data.
+        ///  Compresses the given input, returning a new array that represents
+        ///  the compressed data.
         /// </summary>
         private byte[] Compress(byte[] input)
         {
-
             int finalLength = 0;
             int idx = 0;
             int compressedIdx = 0;
@@ -161,12 +149,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Decompresses the given input, returning a new array that represents
-        ///     the uncompressed data.
+        ///  Decompresses the given input, returning a new array that represents
+        ///  the uncompressed data.
         /// </summary>
         private byte[] Decompress(byte[] input)
         {
-
             int finalLength = 0;
             int idx = 0;
             int outputIdx = 0;
@@ -247,8 +234,8 @@ namespace System.Windows.Forms
 
         private bool WriteImageList(IntPtr imagelistHandle, Stream stream)
         {
-            // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix 
-            // There isn't a reliable way to tell which version of comctl fusion is binding to. 
+            // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix
+            // There isn't a reliable way to tell which version of comctl fusion is binding to.
             // So for now, we try to bind to WriteEx, and if that entry point isn't found, we use Write.
 
             try
@@ -265,7 +252,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Disposes the native image list handle.
+        ///  Disposes the native image list handle.
         /// </summary>
         public void Dispose()
         {

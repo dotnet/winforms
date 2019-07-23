@@ -14,14 +14,14 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///     Code model serializer for primitive types.
+    ///  Code model serializer for primitive types.
     /// </summary>
     internal class PrimitiveCodeDomSerializer : CodeDomSerializer
     {
         private static PrimitiveCodeDomSerializer s_defaultSerializer;
 
         /// <summary>
-        ///     Retrieves a default static instance of this serializer.
+        ///  Retrieves a default static instance of this serializer.
         /// </summary>
         internal new static PrimitiveCodeDomSerializer Default
         {
@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
@@ -60,10 +60,10 @@ namespace System.ComponentModel.Design.Serialization
                 }
 				return expression;
             }
-                
+
 		    if (!(value is bool || value is char || value is int || value is float || value is double))
             {
-                // Generate a cast for all other types because we won't parse them properly otherwise 
+                // Generate a cast for all other types because we won't parse them properly otherwise
                 // because we won't know to convert them to the narrow form.
                 expression = new CodeCastExpression(new CodeTypeReference(value.GetType()), expression);
             }

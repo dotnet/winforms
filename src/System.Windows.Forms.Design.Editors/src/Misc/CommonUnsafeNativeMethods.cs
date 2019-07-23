@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     internal class CommonUnsafeNativeMethods
     {
         #region PInvoke General
-        // If this value is used, %windows%\system32 is searched for the DLL 
+        // If this value is used, %windows%\system32 is searched for the DLL
         // and its dependencies. Directories in the standard search path are not searched.
         // Windows 7: this value requires KB2533623 to be installed.
         // Windows Server 2003 and Windows XP: This value is not supported.
@@ -40,8 +40,8 @@ namespace System.Windows.Forms
             IntPtr module = IntPtr.Zero;
 
             // KB2533623 introduced the LOAD_LIBRARY_SEARCH_SYSTEM32 flag. It also introduced
-            // the AddDllDirectory function. We test for presence of AddDllDirectory as an 
-            // indirect evidence for the support of LOAD_LIBRARY_SEARCH_SYSTEM32 flag. 
+            // the AddDllDirectory function. We test for presence of AddDllDirectory as an
+            // indirect evidence for the support of LOAD_LIBRARY_SEARCH_SYSTEM32 flag.
             IntPtr kernel32 = GetModuleHandle(ExternDll.Kernel32);
             if (kernel32 != IntPtr.Zero)
             {
@@ -51,10 +51,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // LOAD_LIBRARY_SEARCH_SYSTEM32 is not supported on this OS. 
+                    // LOAD_LIBRARY_SEARCH_SYSTEM32 is not supported on this OS.
                     // Fall back to using plain ol' LoadLibrary
                     // There is risk that this call might fail, or that it might be
-                    // susceptible to DLL hijacking. 
+                    // susceptible to DLL hijacking.
                     module = LoadLibrary(libraryName);
                 }
             }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
 
         /// <summary>
-        /// Tries to compare two DPIawareness context values. Return true if they were equal. 
+        /// Tries to compare two DPIawareness context values. Return true if they were equal.
         /// Return false when they are not equal or underlying OS does not support this API.
         /// </summary>
         /// <returns>true/false</returns>

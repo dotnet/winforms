@@ -2,27 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Drawing;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Globalization;
-
     /// <summary>
-    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewColumn'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
-    /// control.</para>
+    /// Represents a collection of <see cref='DataGridViewColumn'/> objects in the <see cref='DataGrid'/>
+    /// control.
     /// </summary>
-    [
-        ListBindable(false),
-        SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), // Columns are only disposed in the designer.
-        SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewColumnCollection> implementation
-    ]
+    [ListBindable(false)]
     public class DataGridViewColumnCollection : BaseCollection, IList
     {
         private CollectionChangeEventHandler onCollectionChanged;
@@ -87,7 +79,6 @@ namespace System.Windows.Forms
             RemoveAt(index);
         }
 
-
         /* ICollection interface implementation */
 
         int ICollection.Count
@@ -119,14 +110,12 @@ namespace System.Windows.Forms
             items.CopyTo(array, index);
         }
 
-
         /* IEnumerable interface implementation */
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return items.GetEnumerator();
         }
-
 
         public DataGridViewColumnCollection(DataGridView dataGridView)
         {
@@ -160,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the DataGridViewColumn with the specified index.
+        ///  Retrieves the DataGridViewColumn with the specified index.
         /// </summary>
         public DataGridViewColumn this[int index]
         {
@@ -171,7 +160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the DataGridViewColumn with the Name provided.
+        ///  Retrieves the DataGridViewColumn with the Name provided.
         /// </summary>
         public DataGridViewColumn this[string columnName]
         {
@@ -213,7 +202,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewColumn'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewColumn'/> to this collection.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(string columnName, string headerText)
@@ -228,7 +217,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewColumn'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewColumn'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridViewColumn dataGridViewColumn)
         {
@@ -247,8 +236,8 @@ namespace System.Windows.Forms
 
             InvalidateCachedColumnsOrder();
             int index = items.Add(dataGridViewColumn);
-            dataGridViewColumn.IndexInternal = index;
-            dataGridViewColumn.DataGridViewInternal = dataGridView;
+            dataGridViewColumn.Index = index;
+            dataGridViewColumn.DataGridView = dataGridView;
             UpdateColumnCaches(dataGridViewColumn, true);
             DataGridView.OnAddedColumn(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), false /*changeIsInsertion*/, new Point(-1, -1));
@@ -336,8 +325,8 @@ namespace System.Windows.Forms
             {
                 InvalidateCachedColumnsOrder();
                 index = items.Add(dataGridViewColumn);
-                dataGridViewColumn.IndexInternal = index;
-                dataGridViewColumn.DataGridViewInternal = dataGridView;
+                dataGridViewColumn.Index = index;
+                dataGridViewColumn.DataGridView = dataGridView;
                 UpdateColumnCaches(dataGridViewColumn, true);
                 DataGridView.OnAddedColumn(dataGridViewColumn);
             }
@@ -366,11 +355,11 @@ namespace System.Windows.Forms
                 {
                     DataGridViewColumn dataGridViewColumn = this[columnIndex];
                     // Detach the column...
-                    dataGridViewColumn.DataGridViewInternal = null;
+                    dataGridViewColumn.DataGridView = null;
                     // ...and its potential header cell
                     if (dataGridViewColumn.HasHeaderCell)
                     {
-                        dataGridViewColumn.HeaderCell.DataGridViewInternal = null;
+                        dataGridViewColumn.HeaderCell.DataGridView = null;
                     }
                 }
 
@@ -408,7 +397,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridViewColumn is contained in this collection.
+        ///  Checks to see if a DataGridViewColumn is contained in this collection.
         /// </summary>
         public virtual bool Contains(DataGridViewColumn dataGridViewColumn)
         {
@@ -899,7 +888,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Inserts a <see cref='System.Windows.Forms.DataGridViewColumn'/> in this collection.</para>
+        /// Inserts a <see cref='DataGridViewColumn'/> in this collection.
         /// </summary>
         public virtual void Insert(int columnIndex, DataGridViewColumn dataGridViewColumn)
         {
@@ -933,8 +922,8 @@ namespace System.Windows.Forms
             }
             InvalidateCachedColumnsOrder();
             items.Insert(columnIndex, dataGridViewColumn);
-            dataGridViewColumn.IndexInternal = columnIndex;
-            dataGridViewColumn.DataGridViewInternal = dataGridView;
+            dataGridViewColumn.Index = columnIndex;
+            dataGridViewColumn.DataGridView = dataGridView;
             UpdateColumnCaches(dataGridViewColumn, true);
             DataGridView.OnInsertedColumn_PreNotification(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), true /*changeIsInsertion*/, newCurrentCell);
@@ -1033,9 +1022,6 @@ namespace System.Windows.Forms
             DataGridView.OnColumnCollectionChanged_PostNotification(dataGridViewColumn);
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // We don't want to use DataGridViewElement here.
-        ]
         public virtual void Remove(DataGridViewColumn dataGridViewColumn)
         {
             if (dataGridViewColumn == null)
@@ -1123,7 +1109,7 @@ namespace System.Windows.Forms
             DataGridView.OnRemovingColumn(dataGridViewColumn, out Point newCurrentCell, force);
             InvalidateCachedColumnsOrder();
             items.RemoveAt(index);
-            dataGridViewColumn.DataGridViewInternal = null;
+            dataGridViewColumn.DataGridView = null;
             UpdateColumnCaches(dataGridViewColumn, false);
             DataGridView.OnRemovedColumn_PreNotification(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewColumn), false /*changeIsInsertion*/, newCurrentCell);

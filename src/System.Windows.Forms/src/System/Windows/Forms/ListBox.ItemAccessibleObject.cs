@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ListBoxItemAccessibleObject : AccessibleObject
         {
-            private readonly ListBox.ItemArray.Entry _itemEntry;
+            private readonly ItemArray.Entry _itemEntry;
             private readonly ListBoxAccessibleObject _owningAccessibleObject;
             private readonly ListBox _owningListBox;
             private readonly IAccessible _systemIAccessible;
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             public ListBoxItemAccessibleObject(ListBox owningListBox, object itemEntry, ListBoxAccessibleObject owningAccessibleObject)
             {
                 _owningListBox = owningListBox;
-                _itemEntry = (ListBox.ItemArray.Entry)itemEntry;
+                _itemEntry = (ItemArray.Entry)itemEntry;
                 _owningAccessibleObject = owningAccessibleObject;
                 _systemIAccessible = owningAccessibleObject.GetSystemIAccessibleInternal();
             }

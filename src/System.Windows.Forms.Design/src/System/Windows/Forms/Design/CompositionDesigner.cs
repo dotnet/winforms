@@ -11,18 +11,18 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     <para> Provides a root designer implementation for designing components.</para>
+    ///  Provides a root designer implementation for designing components.
     /// </summary>
     public class ComponentDocumentDesigner : ComponentDesigner, IRootDesigner, IToolboxUser, IOleDragClient,
         ITypeDescriptorFilterService
     {
         /// <summary>
-        ///     <para>Gets  the control for this designer.</para>
+        ///  Gets  the control for this designer.
         /// </summary>
         public Control Control => throw new NotImplementedException(SR.NotImplementedByDesign);
 
         /// <summary>
-        ///     <para>Indicates whether the tray should auto arrange controls.</para>
+        ///  Indicates whether the tray should auto arrange controls.
         /// </summary>
         public bool TrayAutoArrange
         {
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     <para>Indicates whether the tray should contain a large icon.</para>
+        ///  Indicates whether the tray should contain a large icon.
         /// </summary>
         public bool TrayLargeIcon
         {
@@ -69,25 +69,21 @@ namespace System.Windows.Forms.Design
         ViewTechnology[] IRootDesigner.SupportedTechnologies => throw new NotImplementedException();
 
         /// <summary>
-        ///     <para>
-        ///         Initializes the designer with the specified component.
-        ///     </para>
-        /// </summary>
+            ///  Initializes the designer with the specified component.
+            /// </summary>
         public override void Initialize(IComponent component)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     The view for this document.  The designer
-        ///     should assume that the view will be shown shortly
-        ///     after this call is made and make any necessary
-        ///     preparations.
+        ///  The view for this document.  The designer
+        ///  should assume that the view will be shown shortly
+        ///  after this call is made and make any necessary
+        ///  preparations.
         /// </summary>
-
         //We can live with this one. We have obsoleted some of the enum values. This method
         //only takes on argument, so it is pretty obvious what argument is bad.
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         object IRootDesigner.GetView(ViewTechnology technology)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
@@ -119,22 +115,18 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     <para>
-        ///         Disposes of the resources (other than memory) used by
-        ///         the <see cref='System.Windows.Forms.Design.ComponentDocumentDesigner' />.
-        ///     </para>
-        /// </summary>
+            ///  Disposes of the resources (other than memory) used by
+        ///  the <see cref='System.Windows.Forms.Design.ComponentDocumentDesigner' />.
+            /// </summary>
         protected override void Dispose(bool disposing)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Gets a value indicating whether the specified tool is supported by this
-        ///         designer.
-        ///     </para>
-        /// </summary>
+            ///  Gets a value indicating whether the specified tool is supported by this
+        ///  designer.
+            /// </summary>
         [CLSCompliant(false)]
         protected virtual bool GetToolSupported(ToolboxItem tool)
         {
@@ -142,13 +134,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     <para>
-        ///         Allows a
-        ///         designer to filter the set of properties the component
-        ///         it is designing will expose through the TypeDescriptor
-        ///         object.
-        ///     </para>
-        /// </summary>
+            ///  Allows a
+        ///  designer to filter the set of properties the component
+        ///  it is designing will expose through the TypeDescriptor
+        ///  object.
+            /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);

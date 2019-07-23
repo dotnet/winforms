@@ -1,11 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -39,7 +38,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Converts the given object to the converter's native type.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "ConvertFromString returns an object")]
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string stringValue)

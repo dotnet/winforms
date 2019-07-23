@@ -2,33 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-
-    using System.Runtime.Serialization.Formatters;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using Microsoft.Win32;
-
-
     // This grid entry is used for immutable objects.  An immutable object is identified
     // through it's TypeConverter, which returns TRUE to ShouldCreateInstance.  For this case,
     // we never go through the property descriptor to change the value, but recreate each
     // time.
-    //
     internal class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
-
         internal ImmutablePropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyDescriptor propInfo, bool hide)
         : base(ownerGrid, peParent, propInfo, hide)
         {
@@ -48,7 +33,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return base.PropertyValue;
             }
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             set
             {
                 // Create a new instance of the value and set it into the parent grid entry.
@@ -127,4 +111,3 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
     }
 }
-

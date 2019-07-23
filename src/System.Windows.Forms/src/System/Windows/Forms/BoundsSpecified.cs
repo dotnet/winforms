@@ -38,13 +38,13 @@ namespace System.Windows.Forms
         Location = X | Y,
 
         /// <summary>
-        /// Both <see cref='System.Windows.Forms.Control.Width'/> and <see cref='System.Windows.Forms.Control.Height'/>
+        /// Both <see cref='Control.Width'/> and <see cref='Control.Height'/>
         /// property values of the control are defined.
         /// </summary>
         Size = Width | Height,
 
         /// <summary>
-        /// Both <see cref='System.Windows.Forms.Control.Location'/> and <see cref='System.Windows.Forms.Control.Size'/>
+        /// Both <see cref='Control.Location'/> and <see cref='Control.Size'/>
         /// property values are defined.
         /// </summary>
         All = Location | Size,

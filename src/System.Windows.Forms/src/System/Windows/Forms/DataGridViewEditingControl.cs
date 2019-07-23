@@ -4,10 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
     public interface IDataGridViewEditingControl
     {
         DataGridView EditingControlDataGridView
@@ -16,7 +12,6 @@ namespace System.Windows.Forms
             set;
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         object EditingControlFormattedValue
         {
             get;
@@ -49,7 +44,6 @@ namespace System.Windows.Forms
 
         bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey);
 
-        [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context);
 
         void PrepareEditingControlForEdit(bool selectAll);

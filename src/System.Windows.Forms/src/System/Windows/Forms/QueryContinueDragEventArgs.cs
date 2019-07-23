@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/> event.
+    /// Provides data for the <see cref='Control.QueryContinueDrag'/> event.
     /// </summary>
     [ComVisible(true)]
     public class QueryContinueDragEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.QueryContinueDragEventArgs'/> class.
+        /// Initializes a new instance of the <see cref='QueryContinueDragEventArgs'/> class.
         /// </summary>
         public QueryContinueDragEventArgs(int keyState, bool escapePressed, DragAction action)
         {

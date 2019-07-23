@@ -2,27 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Globalization;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     internal class ArrayElementGridEntry : GridEntry
     {
-
         protected int index;
-
 
         public ArrayElementGridEntry(PropertyGrid ownerGrid, GridEntry peParent, int index)
         : base(ownerGrid, peParent)
@@ -31,7 +18,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetFlag(FLAG_RENDER_READONLY, (peParent.Flags & FLAG_RENDER_READONLY) != 0 || peParent.ForceReadOnly);
         }
 
-
         public override GridItemType GridItemType
         {
             get
@@ -39,7 +25,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return GridItemType.ArrayValue;
             }
         }
-
 
         public override bool IsValueEditable
         {
@@ -56,8 +41,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return "[" + index.ToString(CultureInfo.CurrentCulture) + "]";
             }
         }
-
-
 
         public override Type PropertyType
         {

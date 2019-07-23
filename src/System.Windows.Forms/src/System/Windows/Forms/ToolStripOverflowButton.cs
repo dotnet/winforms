@@ -2,23 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms.Design;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Windows.Forms.Design;
-
-
     /// <summary>
     /// ToolStripOverflowButton
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]
     public class ToolStripOverflowButton : ToolStripDropDownButton
     {
-
         // we need to cache this away as the Parent property gets reset a lot.
         private readonly ToolStrip parentToolStrip;
 
@@ -28,7 +23,6 @@ namespace System.Windows.Forms
         private static int maxWidth = MAX_WIDTH;
         private static int maxHeight = MAX_HEIGHT;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripOverflowButton(ToolStrip parentToolStrip)
         {
             if (!isScalingInitialized)
@@ -72,7 +66,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         internal override bool OppositeDropDownAlign
         {
             get { return true; }
@@ -103,7 +96,6 @@ namespace System.Windows.Forms
         {
             return new ToolStripOverflowButtonAccessibleObject(this);
         }
-
 
         protected override ToolStripDropDown CreateDefaultDropDown()
         {
@@ -164,7 +156,6 @@ namespace System.Windows.Forms
             public ToolStripOverflowButtonAccessibleObject(ToolStripOverflowButton owner) : base(owner)
             {
             }
-
 
             public override string Name
             {

@@ -28,24 +28,13 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr GetFocus();
 
         [DllImport(ExternDll.Ole32)]
-        public static extern int ReadClassStg(HandleRef pStg, [In] [Out] ref Guid pclsid);
+        public static extern int ReadClassStg(HandleRef pStg, ref Guid pclsid);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntGetDC(HandleRef hWnd);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern IntPtr GetDC(HandleRef hWnd);
 
-        public static IntPtr GetDC(HandleRef hWnd)
-        {
-            return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
-        }
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
-        private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
-
-        public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
-        {
-            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
-            return IntReleaseDC(hWnd, hDC);
-        }
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDeviceCaps(HandleRef hDC, int nIndex);

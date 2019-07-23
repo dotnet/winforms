@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 
@@ -13,10 +12,9 @@ namespace System.Windows.Forms
     /// Specifies key codes and modifiers.
     /// </summary>
     [Flags]
-    [TypeConverterAttribute(typeof(KeysConverter))]
+    [TypeConverter(typeof(KeysConverter))]
     [Editor("System.Windows.Forms.Design.ShortcutKeysEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     [ComVisible(true)]
-    [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags", Justification = "Certain members of Keys enum are actually meant to be OR'ed.")]
     public enum Keys
     {
         /// <summary>
@@ -65,9 +63,7 @@ namespace System.Windows.Forms
         XButton2 = 0x06,
 
         /// <summary>
-        ///    <para>
         /// The BACKSPACE key.
-        ///    </para>
         /// </summary>
         Back = 0x08,
 
@@ -478,7 +474,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// The Application key (Microsoft Natural Keyboard).
         /// </summary>
-
         Apps = 0x5D,
 
         /// <summary>
@@ -489,13 +484,11 @@ namespace System.Windows.Forms
         /// <summary>
         /// The 0 key on the numeric keypad.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumPad0 = 0x60,
 
         /// <summary>
         /// The 1 key on the numeric keypad.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumPad1 = 0x61,
 
         /// <summary>
@@ -691,7 +684,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// The NUM LOCK key.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumLock = 0x90,
 
         /// <summary>

@@ -2,32 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     internal class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
-
-
         private readonly MergePropertyDescriptor mergedPd;
         private readonly object[] objs;
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
-                                                                                                    // control over who does what in the constructor.
-        ]
         public MultiPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, object[] objectArray, PropertyDescriptor[] propInfo, bool hide)
         : base(ownerGrid, peParent, hide)
         {
@@ -178,7 +163,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public override string GetPropertyTextValue(object value)
         {
-
             bool allEqual = true;
             try
             {
@@ -343,7 +327,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(propertyInfo is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
                     Debug.Assert(obj is object[], "Did not get an array of objects!!");
 
-
                     if (propertyInfo is MergePropertyDescriptor mpd)
                     {
                         object[] objs = (object[])obj;
@@ -395,7 +378,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
         }
-
 
         public override bool OnComponentChanging()
         {

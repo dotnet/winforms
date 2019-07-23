@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-
     internal class ToolStripProfessionalLowResolutionRenderer : ToolStripProfessionalRenderer
     {
-
         public ToolStripProfessionalLowResolutionRenderer()
         {
         }
@@ -32,7 +30,6 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
-
             if (e.ToolStrip is MenuStrip)
             {
                 return;
@@ -51,13 +48,12 @@ namespace System.Windows.Forms
             }
         }
 
-
         private void RenderToolStripBorderInternal(ToolStripRenderEventArgs e)
         {
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
             Graphics g = e.Graphics;
 
-            // have to create a pen here because we're not allowed to modify the SystemPens. 
+            // have to create a pen here because we're not allowed to modify the SystemPens.
             using (Pen p = new Pen(SystemColors.ButtonShadow))
             {
                 p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;

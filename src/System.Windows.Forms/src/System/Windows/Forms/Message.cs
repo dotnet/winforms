@@ -21,26 +21,24 @@ namespace System.Windows.Forms
         public int Msg { get; set; }
 
         /// <summary>
-        /// Specifies the <see cref='System.Windows.Forms.Message.wparam'/> of the message.
+        /// Specifies the <see cref='Message.wparam'/> of the message.
         /// </summary>
         public IntPtr WParam { get; set; }
 
         /// <summary>
-        /// Specifies the <see cref='System.Windows.Forms.Message.lparam'/> of the message.
+        /// Specifies the <see cref='Message.lparam'/> of the message.
         /// </summary>
         public IntPtr LParam { get; set; }
 
-        /// <summary>
-        /// </summary>
         public IntPtr Result { get; set; }
 
         /// <summary>
-        /// Gets the <see cref='System.Windows.Forms.Message.lparam'/> value, and converts the value to an object.
+        /// Gets the <see cref='Message.lparam'/> value, and converts the value to an object.
         /// </summary>
         public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
         /// <summary>
-        /// Creates a new <see cref='System.Windows.Forms.Message'/> object.
+        /// Creates a new <see cref='Message'/> object.
         /// </summary>
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {

@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
@@ -124,7 +123,7 @@ namespace System.ComponentModel.Design
                 _typeService = GetService(typeof(TypeDescriptionProviderService)) as TypeDescriptionProviderService;
                 _typeServiceChecked = true;
             }
-            // TypeDescriptionProviderService is attached at design time only 
+            // TypeDescriptionProviderService is attached at design time only
             if (_typeService != null)
             {
                 // Check for the attribute that VsTargetFrameworkProvider injects on reflection types to see if VsTargetFrameworkProvider is already attached.
@@ -290,7 +289,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called by DesignerSurface to begin loading the designer.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         internal void BeginLoad(DesignerLoader loader)
         {
             if (_loader != null && _loader != loader)
@@ -693,7 +691,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called to unload the design surface.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void Unload()
         {
             _surface?.OnUnloading();
@@ -868,7 +865,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IComponentChangeService.OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
         {
-
             if (!((IDesignerHost)this).Loading)
             {
                 (_events[s_eventComponentChanged] as ComponentChangedEventHandler)?.Invoke(this, new ComponentChangedEventArgs(component, member, oldValue, newValue));
@@ -1182,7 +1178,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// This is called by the designer loader to indicate that the load has  terminated.  If there were errors, they should be passed in the errorCollection as a collection of exceptions (if they are not exceptions the designer loader host may just call ToString on them).  If the load was successful then errorCollection should either be null or contain an empty collection.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         void IDesignerLoaderHost.EndLoad(string rootClassName, bool successful, ICollection errorCollection)
         {
             bool wasLoading = _state[s_stateLoading];
@@ -1197,7 +1192,7 @@ namespace System.ComponentModel.Design
                 _rootComponentClassName = _rootComponent.Site.Name;
             }
 
-            // If the loader indicated success, but it never created a component, that is an error.  
+            // If the loader indicated success, but it never created a component, that is an error.
             if (successful && _rootComponent == null)
             {
                 ArrayList errorList = new ArrayList();
@@ -1598,7 +1593,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal class Site : ISite, IServiceContainer, IDictionaryService
         {
-
             private readonly IComponent _component;
             private Hashtable _dictionary;
             private readonly DesignerHost _host;

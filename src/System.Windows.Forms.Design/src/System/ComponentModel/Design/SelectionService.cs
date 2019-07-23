@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,7 +15,6 @@ namespace System.ComponentModel.Design
     /// </summary>
     internal sealed class SelectionService : ISelectionService, IDisposable
     {
-
         // These are the selection types we use for context help.
         private static readonly string[] s_selectionKeywords = new string[] { "None", "Single", "Multiple" };
 
@@ -117,7 +115,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// called anytime the selection has changed.  We update our UI for the selection, and then we fire a juicy change event.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void OnSelectionChanged()
         {
             if (_state[s_stateTransaction])
@@ -264,8 +261,7 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         /// Disposes the entire selection service.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// </summary>
         void IDisposable.Dispose()
         {
             if (_selection != null)
@@ -395,7 +391,7 @@ namespace System.ComponentModel.Design
             if (fAuto)
             {
                 fToggle = (Control.ModifierKeys & (Keys.Control | Keys.Shift)) > 0;
-                fAdd |= System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Shift;
+                fAdd |= Control.ModifierKeys == Keys.Shift;
                 // If we are in auto mode, and if we are toggling or adding new controls, then cancel out the primary flag.
                 if (fToggle || fAdd)
                 {

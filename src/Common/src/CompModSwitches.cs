@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.ComponentModel.CompModSwitches.get_DGEditColumnEditing():System.Diagnostics.TraceSwitch")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.ComponentModel.CompModSwitches.get_LayoutPerformance():System.Diagnostics.TraceSwitch")]
+using System.Diagnostics;
 
 namespace System.ComponentModel
 {
-    using System.Diagnostics;
-
     internal static class CompModSwitches
     {
-
         private static TraceSwitch activeX;
         private static TraceSwitch flowLayout;
         private static TraceSwitch dataCursor;

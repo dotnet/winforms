@@ -7,9 +7,9 @@ using System.ComponentModel;
 
 namespace System.Drawing.Design
 {
-    /// <summary>Represents a delegate to be added to <see cref='System.Drawing.Design.IPropertyValueUIService'/>.</summary>
-    /// <param name="context">An <see cref="System.ComponentModel.ITypeDescriptorContext" /> that can be used to obtain context information. </param>
-    /// <param name="propDesc">A <see cref="System.ComponentModel.PropertyDescriptor" /> that represents the property being queried. </param>
-    /// <param name="valueUIItemList">An <see cref="System.Collections.ArrayList" /> of <see cref="System.Drawing.Design.PropertyValueUIItem" /> objects containing the UI items associated with the property. </param>
+    /// <summary>Represents a delegate to be added to <see cref='IPropertyValueUIService'/>.</summary>
+    /// <param name="context">An <see cref="ITypeDescriptorContext" /> that can be used to obtain context information. </param>
+    /// <param name="propDesc">A <see cref="PropertyDescriptor" /> that represents the property being queried. </param>
+    /// <param name="valueUIItemList">An <see cref="ArrayList" /> of <see cref="PropertyValueUIItem" /> objects containing the UI items associated with the property. </param>
     public delegate void PropertyValueUIHandler(ITypeDescriptorContext context, PropertyDescriptor propDesc, ArrayList valueUIItemList);
 }

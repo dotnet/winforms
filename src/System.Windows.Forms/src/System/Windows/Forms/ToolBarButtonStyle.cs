@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// A space or line between toolbar buttons. The appearance depends on
-        /// the value of the <see cref='System.Windows.Forms.ToolBar.Appearance'/>
+        /// the value of the <see cref='ToolBar.Appearance'/>
         /// property.
         /// </summary>
         Separator = 3,

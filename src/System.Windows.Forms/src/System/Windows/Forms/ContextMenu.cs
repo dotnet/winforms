@@ -2,27 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-
     /// <summary>
-    ///     This class is used to put context menus on your form and show them for
-    ///     controls at runtime.  It basically acts like a regular Menu control,
-    ///     but can be set for the ContextMenu property that most controls have.
+    ///  This class is used to put context menus on your form and show them for
+    ///  controls at runtime.  It basically acts like a regular Menu control,
+    ///  but can be set for the ContextMenu property that most controls have.
     /// </summary>
-    [
-    DefaultEvent(nameof(Popup)),
-    ]
+    [DefaultEvent(nameof(Popup))]
     public class ContextMenu : Menu
     {
-
         private EventHandler onPopup;
         private EventHandler onCollapse;
         internal Control sourceControl;
@@ -30,7 +23,7 @@ namespace System.Windows.Forms
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
 
         /// <summary>
-        ///     Creates a new ContextMenu object with no items in it by default.
+        ///  Creates a new ContextMenu object with no items in it by default.
         /// </summary>
         public ContextMenu()
             : base(null)
@@ -38,7 +31,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a ContextMenu object with the given MenuItems.
+        ///  Creates a ContextMenu object with the given MenuItems.
         /// </summary>
         public ContextMenu(MenuItem[] menuItems)
             : base(menuItems)
@@ -46,8 +39,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The last control that was acted upon that resulted in this context
-        ///     menu being displayed.
+        ///  The last control that was acted upon that resulted in this context
+        ///  menu being displayed.
         /// </summary>
         [
         Browsable(false),
@@ -70,7 +63,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Fires when the context menu collapses.
+        ///  Fires when the context menu collapses.
         /// </summary>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse
@@ -80,9 +73,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
-        ///     text alignment and reading order will be from right to left.
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
+        ///  text alignment and reading order will be from right to left.
         /// </summary>
         // Add a DefaultValue attribute so that the Reset context menu becomes
         // available in the Property Grid but the default value remains No.
@@ -136,7 +129,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     Fires the popup event
+        ///  Fires the popup event
         /// </summary>
         protected internal virtual void OnPopup(EventArgs e)
         {
@@ -144,15 +137,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Fires the collapse event
+        ///  Fires the collapse event
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
             onCollapse?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// </summary>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control)
         {
             sourceControl = control;
@@ -165,7 +156,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns true if the RightToLeft should be persisted in code gen.
+        ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
         internal virtual bool ShouldSerializeRightToLeft()
         {
@@ -177,8 +168,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Displays the context menu at the specified position.  This method
-        ///     doesn't return until the menu is dismissed.
+        ///  Displays the context menu at the specified position.  This method
+        ///  doesn't return until the menu is dismissed.
         /// </summary>
         public void Show(Control control, Point pos)
         {
@@ -186,15 +177,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Displays the context menu at the specified position.  This method
-        ///     doesn't return until the menu is dismissed.
+        ///  Displays the context menu at the specified position.  This method
+        ///  doesn't return until the menu is dismissed.
         /// </summary>
         public void Show(Control control, Point pos, LeftRightAlignment alignment)
         {
-
-            // This code below looks wrong but it's correct. 
+            // This code below looks wrong but it's correct.
             // WinForms Left alignment means we want the menu to show up left of the point it is invoked from.
-            // We specify TPM_RIGHTALIGN which tells win32 to align the right side of this 
+            // We specify TPM_RIGHTALIGN which tells win32 to align the right side of this
             // menu with the point (which aligns it Left visually)
             if (alignment == LeftRightAlignment.Left)
             {

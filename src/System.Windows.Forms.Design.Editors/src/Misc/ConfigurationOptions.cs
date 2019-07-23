@@ -68,7 +68,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine("Exception while reading Framework version : " + e.ToString());
+                        Debug.WriteLine("Exception while reading .NET version : " + e.ToString());
                     }
                 }
 

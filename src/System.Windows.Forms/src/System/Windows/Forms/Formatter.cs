@@ -22,10 +22,9 @@ namespace System.Windows.Forms
         /// Used when pushing a value from a back-end data source into a data-bound property on a control.
         ///
         /// The real conversion work happens inside FormatObjectInternal(). Before calling FormatObjectInternal(),
-        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real 
+        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
-        ///
         /// </summary>
         public static object FormatObject(object value,
                                           Type targetType,
@@ -81,7 +80,6 @@ namespace System.Windows.Forms
         /// - Performs some special-case conversions (eg. Boolean to CheckState)
         /// - Uses TypeConverters or IConvertible where appropriate
         /// - Throws a FormatException is no suitable conversion can be found
-        ///
         /// </summary>
         private static object FormatObjectInternal(object value,
                                                    Type targetType,
@@ -114,7 +112,7 @@ namespace System.Windows.Forms
                     return CheckState.Indeterminate;
                 }
 
-                // Just pass null through: if this is a value type, it's been unwrapped here, so we return null 
+                // Just pass null through: if this is a value type, it's been unwrapped here, so we return null
                 // and the caller has to wrap if appropriate.
                 return null;
             }
@@ -131,7 +129,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            //The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the 
+            //The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the
             //type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
             Type sourceType = value.GetType();
             TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
@@ -215,10 +213,9 @@ namespace System.Windows.Forms
         /// Used when pulling input from a data-bound property on a control to store in a back-end data source.
         ///
         /// The real conversion work happens inside ParseObjectInternal(). Before calling ParseObjectInternal(),
-        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real 
+        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
-        ///
         /// </summary>
         public static object ParseObject(object value,
                                          Type targetType,
@@ -269,7 +266,6 @@ namespace System.Windows.Forms
         /// - Performs some special-case conversions (eg. CheckState to Boolean)
         /// - Uses TypeConverters or IConvertible where appropriate
         /// - Throws a FormatException is no suitable conversion can be found
-        ///
         /// </summary>
         private static object ParseObjectInternal(object value,
                                                   Type targetType,
@@ -404,7 +400,7 @@ namespace System.Windows.Forms
         {
             if (formattedNullValue is string formattedNullValueStr && value is string valueStr)
             {
-                // Use same optimization as in WindowsFormsUtils.SafeCompareStrings(...). This addresses 
+                // Use same optimization as in WindowsFormsUtils.SafeCompareStrings(...). This addresses
                 if (formattedNullValueStr.Length != valueStr.Length)
                 {
                     return false;
@@ -455,7 +451,7 @@ namespace System.Windows.Forms
                 mi = targetType.GetMethod("Parse",
                                         BindingFlags.Public | BindingFlags.Static,
                                         null,
-                                        new Type[] { stringType, typeof(System.Globalization.NumberStyles), typeof(System.IFormatProvider) },
+                                        new Type[] { stringType, typeof(NumberStyles), typeof(IFormatProvider) },
                                         null);
                 if (mi != null)
                 {
@@ -465,7 +461,7 @@ namespace System.Windows.Forms
                 mi = targetType.GetMethod("Parse",
                                         BindingFlags.Public | BindingFlags.Static,
                                         null,
-                                        new Type[] { stringType, typeof(System.IFormatProvider) },
+                                        new Type[] { stringType, typeof(IFormatProvider) },
                                         null);
                 if (mi != null)
                 {

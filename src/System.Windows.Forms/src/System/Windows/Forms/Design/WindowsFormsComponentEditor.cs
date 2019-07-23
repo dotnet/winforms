@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design
 {
     /// <summary>
     /// Provides a base class for editors that support any type of
-    /// <see cref='System.ComponentModel.IComponent'/> objects.
+    /// <see cref='IComponent'/> objects.
     /// </summary>
     public abstract class WindowsFormsComponentEditor : ComponentEditor
     {
@@ -44,12 +44,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the set of <see cref='System.Windows.Forms.Design.ComponentEditorPage'/> pages to be used.
+        /// Gets the set of <see cref='ComponentEditorPage'/> pages to be used.
         /// </summary>
         protected virtual Type[] GetComponentEditorPages() => null;
 
         /// <summary>
-        /// Gets the index of the <see cref='System.Windows.Forms.Design.ComponentEditorPage'/>
+        /// Gets the index of the <see cref='ComponentEditorPage'/>
         /// to be shown by default as the first active page.
         /// </summary>
         protected virtual int GetInitialComponentEditorPageIndex() => 0;

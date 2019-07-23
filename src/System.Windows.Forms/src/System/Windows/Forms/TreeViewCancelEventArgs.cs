@@ -2,27 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
+using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
     /// <summary>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnBeforeCheck'/>,
-    ///    <see cref='System.Windows.Forms.TreeView.OnBeforeCollapse'/>,
-    ///    <see cref='System.Windows.Forms.TreeView.OnBeforeExpand'/>,
-    ///       or <see cref='System.Windows.Forms.TreeView.OnBeforeSelect'/> event.
-    ///
-    ///    </para>
+    ///  Provides data for the <see cref='TreeView.OnBeforeCheck'/>,
+    ///  <see cref='TreeView.OnBeforeCollapse'/>,
+    ///  <see cref='TreeView.OnBeforeExpand'/>,
+    ///  or <see cref='TreeView.OnBeforeSelect'/> event.
     /// </summary>
     public class TreeViewCancelEventArgs : CancelEventArgs
     {

@@ -92,7 +92,6 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal bool IgnoreNextMouseUp
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             set
             {
                 _ignoreNextMouseUp = value;

@@ -2,20 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System.Text;
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using Microsoft.Win32;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Runtime.Versioning;
-
     internal class DataGridParentRows
     {
         // siting
@@ -47,7 +42,6 @@ namespace System.Windows.Forms
         private int totalHeight = 0;
         private int textRegionHeight = 0;
 
-
         // now that we have left and right arrows, we also have layout
         private readonly Layout layout = new Layout();
 
@@ -60,7 +54,7 @@ namespace System.Windows.Forms
 
         // a horizOffset of 0 means that the layout for the parent
         // rows is left aligned.
-        // a horizOffset of 1 means that the leftmost unit of information ( let it be a 
+        // a horizOffset of 1 means that the leftmost unit of information ( let it be a
         // table name, a column name or a column value ) is not visible.
         // a horizOffset of 2 means that the leftmost 2 units of information are not visible, and so on
         //
@@ -277,7 +271,7 @@ namespace System.Windows.Forms
         // =------------------------------------------------------------------
 
         /// <summary>
-        ///      Adds a DataGridState object to the top of the list of parents.
+        ///  Adds a DataGridState object to the top of the list of parents.
         /// </summary>
         internal void AddParent(DataGridState dgs)
         {
@@ -320,7 +314,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the top most parent in the list of parents.
+        ///  Retrieves the top most parent in the list of parents.
         /// </summary>
         internal DataGridState GetTopParent()
         {
@@ -332,7 +326,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Determines if there are any parent rows contained in this object.
+        ///  Determines if there are any parent rows contained in this object.
         /// </summary>
         internal bool IsEmpty()
         {
@@ -340,7 +334,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Similar to GetTopParent() but also removes it.
+        ///  Similar to GetTopParent() but also removes it.
         /// </summary>
         internal DataGridState PopTop()
         {
@@ -391,7 +385,7 @@ namespace System.Windows.Forms
             //
             textRegionHeight = (int)dataGrid.Font.Height + 2;
 
-            // make the height of the Column.Font count for the height 
+            // make the height of the Column.Font count for the height
             // of the parentRows;
             //
             // if the user wants to programatically
@@ -614,7 +608,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Paints the parent rows
+        ///  Paints the parent rows
         /// </summary>
         internal void Paint(Graphics g, Rectangle visualbounds, bool alignRight)
         {
@@ -651,7 +645,7 @@ namespace System.Windows.Forms
             g.FillRectangle(borderBrush, border);
         }
 
-        // will return the width of the text box that will fit all the 
+        // will return the width of the text box that will fit all the
         // tables names
         private int GetTableBoxWidth(Graphics g, Font font)
         {
@@ -904,9 +898,9 @@ namespace System.Windows.Forms
         private void PaintDownButton(Graphics g, Rectangle bounds)
         {
             g.DrawLine(Pens.Black, bounds.X, bounds.Y, bounds.X + bounds.Width, bounds.Y);  // the top
-            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y, bounds.X + bounds.Width, bounds.Y + bounds.Height);  // the right side 
-            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y + bounds.Height, bounds.X, bounds.Y + bounds.Height);  // the right side 
-            g.DrawLine(Pens.Black, bounds.X, bounds.Y + bounds.Height, bounds.X, bounds.Y);  // the left side 
+            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y, bounds.X + bounds.Width, bounds.Y + bounds.Height);  // the right side
+            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y + bounds.Height, bounds.X, bounds.Y + bounds.Height);  // the right side
+            g.DrawLine(Pens.Black, bounds.X, bounds.Y + bounds.Height, bounds.X, bounds.Y);  // the left side
         }
 
         private void PaintLeftArrow(Graphics g, Rectangle bounds, bool alignToRight)
@@ -1078,7 +1072,7 @@ namespace System.Windows.Forms
                     paintBounds.Width = Math.Min(bounds.Width - cx, colsDataWidths[i]);
                     paintBounds.X = MirrorRect(bounds, paintBounds, alignToRight);
 
-                    // when we paint the data grid parent rows, we want to paint the data at the position 
+                    // when we paint the data grid parent rows, we want to paint the data at the position
                     // stored in the currency manager.
                     cols[i].Paint(g, paintBounds, (CurrencyManager)dataGrid.BindingContext[dgs.DataSource, dgs.DataMember],
                                     dataGrid.BindingContext[dgs.DataSource, dgs.DataMember].Position, BackBrush, ForeBrush, alignToRight);
@@ -1115,8 +1109,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Draws on the screen the text. It is used only to paint the Table Name and the column Names
-        ///      Returns the width of bounding rectangle that was passed in
+        ///  Draws on the screen the text. It is used only to paint the Table Name and the column Names
+        ///  Returns the width of bounding rectangle that was passed in
         /// </summary>
         private int PaintText(Graphics g, Rectangle textBounds, string text, Font font, bool bold, bool alignToRight)
         {
@@ -1143,7 +1137,7 @@ namespace System.Windows.Forms
                 format.Alignment = StringAlignment.Far;
             }
             format.FormatFlags |= StringFormatFlags.NoWrap;
-            // part 1, section 3: put the table and the column name in the 
+            // part 1, section 3: put the table and the column name in the
             // parent rows at the same height as the dataGridTextBoxColumn draws the string
             //
             textBounds.Offset(0, 2);
@@ -1304,8 +1298,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///      Returns the currently focused child, if any.
-            ///      Returns this if the object itself is focused.
+            ///  Returns the currently focused child, if any.
+            ///  Returns this if the object itself is focused.
             /// </summary>
             public override AccessibleObject GetFocused()
             {
@@ -1353,7 +1347,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///      Navigate to the next or previous grid entry.
+            ///  Navigate to the next or previous grid entry.
             /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir)
             {

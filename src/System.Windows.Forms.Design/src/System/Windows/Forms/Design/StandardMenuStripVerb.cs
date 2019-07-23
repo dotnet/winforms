@@ -37,7 +37,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// When the verb is invoked, use all the stuff above to show the dialog, etc.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void InsertItems()
         {
             DesignerActionUIService actionUIService = (DesignerActionUIService)_host.GetService(typeof(DesignerActionUIService));
@@ -67,9 +66,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void CreateStandardMenuStrip(System.ComponentModel.Design.IDesignerHost host, MenuStrip tool)
         {
             // build the static menu items structure.
@@ -254,12 +250,8 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void CreateStandardToolStrip(IDesignerHost host, ToolStrip tool)
         {
-
             // build the static menu items structure.
             //
             string[] menuItemNames = new string[] { SR.StandardMenuNew, SR.StandardMenuOpen, SR.StandardMenuSave, SR.StandardMenuPrint, "-", SR.StandardToolCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardToolHelp };
@@ -410,7 +402,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Helper Function to get Images from types.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private Bitmap GetImage(string name)
         {
             Bitmap image = null;
@@ -456,7 +447,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Computes a name from a text label by removing all spaces and non-alphanumeric characters.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private string NameFromText(string text, Type itemType, INameCreationService nameCreationService, bool adjustCapitalization)
         {
             string baseName;

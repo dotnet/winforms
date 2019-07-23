@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Reflection;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -10,7 +9,7 @@ using System.Collections;
 
 namespace System.Windows.Forms
 {
-    [TypeConverterAttribute(typeof(LinkArea.LinkAreaConverter))]
+    [TypeConverter(typeof(LinkAreaConverter))]
     [Serializable]
     public struct LinkArea
     {
@@ -48,10 +47,7 @@ namespace System.Windows.Forms
             return this == a;
         }
 
-        public override string ToString()
-        {
-            return "{Start=" + Start + ", Length=" + Length + "}";
-        }
+        public override string ToString() => $"{{Start={Start}, Length={Length}}}";
 
         public static bool operator ==(LinkArea linkArea1, LinkArea linkArea2)
         {
@@ -63,7 +59,7 @@ namespace System.Windows.Forms
             return !(linkArea1 == linkArea2);
         }
 
-        public override int GetHashCode() => start << 4 | length;
+        public override int GetHashCode() => HashCode.Combine(start, length);
 
         /// <summary>
         /// LinkAreaConverter is a class that can be used to convert LinkArea from one data type
@@ -222,7 +218,6 @@ namespace System.Windows.Forms
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);
                 return props.Sort(new string[] { nameof(LinkArea.Start), nameof(LinkArea.Length) });
             }
-
 
             /// <summary>
             /// Determines if this object supports properties. By default, this is false.

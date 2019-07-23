@@ -2,22 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Globalization;
-
     /// <summary> this is the menu that merges into the MdiWindowListItem
-    ///          in an MDI parent when an MDI child is maximized.
+    ///  in an MDI parent when an MDI child is maximized.
     /// </summary>
     internal class MdiWindowListStrip : MenuStrip
     {
-
         private Form mdiParent = null;
         private ToolStripMenuItem mergeItem;
         private MenuStrip mergedMenu;
@@ -67,13 +61,13 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> Given a form, the items on this toolstrip populate with the mdi children 
-        ///     with mnemonics 1-9 and More Windows menu item.
-        ///     These items can then be merged into a menustrip.
+        /// <summary> Given a form, the items on this toolstrip populate with the mdi children
+        ///  with mnemonics 1-9 and More Windows menu item.
+        ///  These items can then be merged into a menustrip.
         ///
-        ///     Based on similar code in MenuItem.cs::PopulateMdiList(), which is unfortunately just different 
-        ///     enough in its working environment that we can't readily combine the two.
-        ///     But if you're fixing something here, chances are that the same issue will need scrutiny over there.
+        ///  Based on similar code in MenuItem.cs::PopulateMdiList(), which is unfortunately just different
+        ///  enough in its working environment that we can't readily combine the two.
+        ///  But if you're fixing something here, chances are that the same issue will need scrutiny over there.
         ///</summary>
         public void PopulateItems(Form mdiParent, ToolStripMenuItem mdiMergeItem, bool includeSeparator)
         {
@@ -166,7 +160,6 @@ namespace System.Windows.Forms
         /// <summary> handler for More Windows... This is similar to MenuItem.cs</summary>
         private void OnMoreWindowsMenuItemClick(object sender, EventArgs e)
         {
-
             Form[] forms = mdiParent.MdiChildren;
 
             if (forms != null)

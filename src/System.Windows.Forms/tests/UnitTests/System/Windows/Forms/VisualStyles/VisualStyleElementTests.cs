@@ -421,12 +421,12 @@ namespace System.Windows.Forms.VisualStyles.Tests
             yield return new object[] { I(() => VisualStyleElement.ToolTip.Standard.Link), "TOOLTIP", 1, 2 };
 
             yield return new object[] { I(() => VisualStyleElement.ToolTip.StandardTitle.Normal), "TOOLTIP", 2, 0 };
-            
+
             yield return new object[] { I(() => VisualStyleElement.ToolTip.Balloon.Normal), "TOOLTIP", 3, 1 };
             yield return new object[] { I(() => VisualStyleElement.ToolTip.Balloon.Link), "TOOLTIP", 3, 2 };
 
             yield return new object[] { I(() => VisualStyleElement.ToolTip.BalloonTitle.Normal), "TOOLTIP", 4, 0 };
-    
+
             yield return new object[] { I(() => VisualStyleElement.ToolTip.Close.Normal), "TOOLTIP", 5, 1 };
             yield return new object[] { I(() => VisualStyleElement.ToolTip.Close.Hot), "TOOLTIP", 5, 2 };
             yield return new object[] { I(() => VisualStyleElement.ToolTip.Close.Pressed), "TOOLTIP", 5, 3 };

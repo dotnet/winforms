@@ -2,34 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel.Design;
+using System.Drawing;
+using System.Text;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Text;
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     internal class HotCommands : PropertyGrid.SnappableControl
     {
-
         private object component;
         private DesignerVerb[] verbs;
         private LinkLabel label;
         private bool allowVisible = true;
         private int optimalHeight = -1;
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // HotCommands window is not visible
-                                                                                                        // So we don't have to localize its text.
-        ]
         internal HotCommands(PropertyGrid owner) : base(owner)
         {
             Text = "Command Pane";
@@ -96,7 +82,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return label;
             }
         }
-
 
         public virtual bool WouldBeVisible
         {
@@ -269,7 +254,6 @@ namespace System.Windows.Forms.PropertyGridInternal
     [Runtime.InteropServices.ComVisible(true)]
     internal class HotCommandsAccessibleObject : Control.ControlAccessibleObject
     {
-
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>

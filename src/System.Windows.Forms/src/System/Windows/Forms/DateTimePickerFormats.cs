@@ -2,15 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Constants that specify how the date and time picker control displays
     /// date and time information.
-    /// </summary>    
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
+    /// </summary>
     public enum DateTimePickerFormat
     {
         /// <summary>

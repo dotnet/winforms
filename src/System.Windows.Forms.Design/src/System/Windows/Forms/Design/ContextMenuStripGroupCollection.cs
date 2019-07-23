@@ -10,7 +10,6 @@ namespace System.Windows.Forms.Design
     {
         public ContextMenuStripGroupCollection()
         {
-
         }
 
         public ContextMenuStripGroup this[string key]

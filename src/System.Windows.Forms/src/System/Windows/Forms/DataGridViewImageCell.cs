@@ -2,25 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.Drawing.Drawing2D;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
     public class DataGridViewImageCell : DataGridViewCell
     {
         private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
         private static readonly int PropImageCellDescription = PropertyStore.CreateKey();
         private static readonly int PropImageCellLayout = PropertyStore.CreateKey();
-        private static readonly Type defaultTypeImage = typeof(System.Drawing.Image);
-        private static readonly Type defaultTypeIcon = typeof(System.Drawing.Icon);
+        private static readonly Type defaultTypeImage = typeof(Image);
+        private static readonly Type defaultTypeIcon = typeof(Icon);
         private static readonly Type cellType = typeof(DataGridViewImageCell);
         private static Bitmap errorBmp = null;
         private static Icon errorIco = null;
@@ -270,7 +267,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType);
             }
@@ -300,7 +297,6 @@ namespace System.Windows.Forms
 
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -357,7 +353,6 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errBounds = PaintPrivate(graphics,
@@ -393,8 +388,6 @@ namespace System.Windows.Forms
 
             return errBounds;
         }
-
-
 
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
@@ -751,7 +744,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -845,7 +838,7 @@ namespace System.Windows.Forms
                                 {
                                     if (img != null)
                                     {
-                                        // 
+                                        //
 
                                         ImageAttributes attr = new ImageAttributes();
 
@@ -953,7 +946,6 @@ namespace System.Windows.Forms
 
         protected class DataGridViewImageCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-
             public DataGridViewImageCellAccessibleObject(DataGridViewCell owner) : base(owner)
             {
             }

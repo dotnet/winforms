@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests
                 FlowDirection = value
             };
             Assert.Equal(value, panel.FlowDirection);
-            
+
             // Set same
             panel.FlowDirection = value;
             Assert.Equal(value, panel.FlowDirection);
@@ -143,11 +143,11 @@ namespace System.Windows.Forms.Tests
                 WrapContents = value
             };
             Assert.Equal(value, panel.WrapContents);
-            
+
             // Set same
             panel.WrapContents = value;
             Assert.Equal(value, panel.WrapContents);
-            
+
             // Set different
             panel.WrapContents = !value;
             Assert.Equal(!value, panel.WrapContents);

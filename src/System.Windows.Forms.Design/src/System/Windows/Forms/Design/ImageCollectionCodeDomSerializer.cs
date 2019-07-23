@@ -7,14 +7,13 @@ using System.ComponentModel.Design.Serialization;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     This serializer serializes images.
+    ///  This serializer serializes images.
     /// </summary>
-
     public class ImageListCodeDomSerializer : CodeDomSerializer
     {
         /// <summary>
-        ///     This method takes a CodeDomObject and deserializes into a real object.
-        ///     We don't do anything here.
+        ///  This method takes a CodeDomObject and deserializes into a real object.
+        ///  We don't do anything here.
         /// </summary>
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
@@ -22,7 +21,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {

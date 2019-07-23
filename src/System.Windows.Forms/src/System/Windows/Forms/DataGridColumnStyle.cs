@@ -5,19 +5,17 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the appearance and text formatting and behavior of a <see cref='System.Windows.Forms.DataGrid'/> control column.
+    /// Specifies the appearance and text formatting and behavior of a <see cref='DataGrid'/> control column.
     /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(HeaderText))]
-    [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Fixing this would be a breaking change")]
     public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
     {
         private HorizontalAlignment _alignment = HorizontalAlignment.Left;
@@ -43,17 +41,16 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// In a derived class, initializes a new instance of the
-        /// <see cref='System.Windows.Forms.DataGridColumnStyle'/> class.
+        /// <see cref='DataGridColumnStyle'/> class.
         /// </summary>
         public DataGridColumnStyle()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridColumnStyle'/>
+        /// Initializes a new instance of the <see cref='DataGridColumnStyle'/>
         /// class with the specified <see cref='T:System.ComponentModel.PropertyDescriptor'/>.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Changing this would be a breaking change.")]
         public DataGridColumnStyle(PropertyDescriptor prop) : this()
         {
             PropertyDescriptor = prop;
@@ -79,7 +76,6 @@ namespace System.Windows.Forms
 #if DEBUG
         internal bool IsDefault { get; }
 #endif
-
 
         /// <summary>
         /// Gets or sets the alignment of text in a column.
@@ -116,7 +112,6 @@ namespace System.Windows.Forms
         /// When overridden in a derived class, updates the value of a specified row with
         /// the given text.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText)
         {
         }
@@ -131,8 +126,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref='System.Data.DataColumn'/> that determines the
-        /// attributes of data displayed by the <see cref='System.Windows.Forms.DataGridColumnStyle'/>.
+        /// Gets or sets the <see cref='Data.DataColumn'/> that determines the
+        /// attributes of data displayed by the <see cref='DataGridColumnStyle'/>.
         /// </summary>
         [DefaultValue(null)]
         [Browsable(false)]
@@ -163,7 +158,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref='System.Windows.Forms.DataGrid'/>
+        /// When overridden in a derived class, sets the <see cref='DataGrid'/>
         /// control that this column belongs to.
         /// </summary>
         protected virtual void SetDataGrid(DataGrid value)
@@ -172,7 +167,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref='System.Windows.Forms.DataGrid'/>
+        /// When overridden in a derived class, sets the <see cref='DataGrid'/>
         /// for the column.
         /// </summary>
         protected virtual void SetDataGridInColumn(DataGrid value)
@@ -284,7 +279,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_headerTextEvent, value);
         }
 
-        [Editor("System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
+        [Editor("System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         [Localizable(true)]
         [DefaultValue("")]
         public string MappingName
@@ -421,14 +416,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Suspends the painting of the column until the <see cref='System.Windows.Forms.DataGridColumnStyle.EndUpdate'/>
+        /// Suspends the painting of the column until the <see cref='EndUpdate'/>
         /// method is called.
         /// </summary>
         protected void BeginUpdate() => _updating = true;
 
         /// <summary>
         /// Resumes the painting of columns suspended by calling the
-        /// <see cref='System.Windows.Forms.DataGridColumnStyle.BeginUpdate'/> method.
+        /// <see cref='BeginUpdate'/> method.
         /// </summary>
         protected void EndUpdate()
         {
@@ -466,7 +461,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets the value in the specified row from the specified System.Windows.Forms.ListManager.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum)
         {
             CheckValidDataSource(source);
@@ -517,31 +511,27 @@ namespace System.Windows.Forms
         /// When overridden in a derived class, initiates a request to interrrupt an edit
         /// procedure.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal abstract void Abort(int rowNum);
 
         /// <summary>
         /// When overridden in a derived class, inititates a request to complete an
         /// editing procedure.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal abstract bool Commit(CurrencyManager dataSource, int rowNum);
 
         /// <summary>
         /// When overridden in a deriving class, prepares a cell for editing.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal virtual void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly)
         {
             Edit(source, rowNum, bounds, readOnly, null, true);
         }
 
         /// <summary>
-        /// Prepares the cell for editing, passing the specified <see cref='System.Data.DataView'/>,
-        /// row number, <see cref='System.Drawing.Rectangle'/>, argument indicating whether
+        /// Prepares the cell for editing, passing the specified <see cref='Data.DataView'/>,
+        /// row number, <see cref='Rectangle'/>, argument indicating whether
         /// the column is read-only, and the text to display in the new control.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal virtual void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly, string displayText)
         {
             Edit(source, rowNum, bounds, readOnly, displayText, true);
@@ -550,7 +540,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// When overridden in a deriving class, prepares a cell for editing.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal abstract void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible);
 
         /// <summary>
@@ -599,25 +588,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Paints the a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified
-        /// <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
+        /// Paints the a <see cref='DataGridColumnStyle'/> with the specified
+        /// <see cref='Graphics'/>, <see cref='Rectangle'/>,
         /// System.Windows.Forms.CurrencyManager, and row number.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum);
 
         /// <summary>
-        /// When overridden in a derived class, paints a <see cref='System.Windows.Forms.DataGridColumnStyle'/>
-        /// with the specified <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
+        /// When overridden in a derived class, paints a <see cref='DataGridColumnStyle'/>
+        /// with the specified <see cref='Graphics'/>, <see cref='Rectangle'/>,
         /// see Rectangle, row number, and alignment.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight);
 
         /// <summary>
-        /// Paints a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>, see System.Data.DataView, row number, background color, foreground color, and alignment.
+        /// Paints a <see cref='DataGridColumnStyle'/> with the specified <see cref='Graphics'/>, <see cref='Rectangle'/>, see System.Data.DataView, row number, background color, foreground color, and alignment.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                     Brush backBrush, Brush foreBrush, bool alignToRight)
         {
@@ -669,7 +655,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Sets the value in a specified row with the value from a specified see DataView.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
         {
             CheckValidDataSource(source);

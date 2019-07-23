@@ -5,11 +5,9 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -39,10 +37,9 @@ namespace System.Windows.Forms
         private IntPtr _dialogHWnd;
 
         /// <summary>
-        /// In an inherited class, initializes a new instance of the <see cref='System.Windows.Forms.FileDialog'/>
+        /// In an inherited class, initializes a new instance of the <see cref='FileDialog'/>
         /// class.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Fixing this would be a breaking change")]
         internal FileDialog()
         {
             Reset();
@@ -63,7 +60,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a value indicating whether the dialog box displays a warning
-        /// if the user specifies a file name that does not exist.</para>
+        /// if the user specifies a file name that does not exist.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -420,7 +417,6 @@ namespace System.Windows.Forms
             return ok;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         private protected static bool FileExists(string fileName)
         {
             try
@@ -598,7 +594,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.FileDialog.FileOk'/> event.
+        /// Raises the <see cref='FileOk'/> event.
         /// </summary>
         protected void OnFileOk(CancelEventArgs e)
         {
@@ -660,7 +656,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/> with the
+        /// Prompts the user with a <see cref='MessageBox'/> with the
         /// given parameters. It also ensures that the focus is set back on the window that
         /// had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
@@ -680,7 +676,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/> when a
+        /// Prompts the user with a <see cref='MessageBox'/> when a
         /// file does not exist.
         /// </summary>
         private void PromptFileNotFound(string fileName)

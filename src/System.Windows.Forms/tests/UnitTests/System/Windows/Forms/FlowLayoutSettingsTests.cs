@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
 
             settings.FlowDirection = value;
             Assert.Equal(value, settings.FlowDirection);
-            
+
             // Set same
             settings.FlowDirection = value;
             Assert.Equal(value, settings.FlowDirection);
@@ -56,11 +56,11 @@ namespace System.Windows.Forms.Tests
 
             settings.WrapContents = value;
             Assert.Equal(value, settings.WrapContents);
-            
+
             // Set same
             settings.WrapContents = value;
             Assert.Equal(value, settings.WrapContents);
-            
+
             // Set different
             settings.WrapContents = !value;
             Assert.Equal(!value, settings.WrapContents);

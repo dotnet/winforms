@@ -9,23 +9,20 @@ namespace System.Windows.Forms
     /// </summary>
     public interface IButtonControl
     {
-
         /// <summary>
         /// Gets and sets the dialog result of the Button control. This is used as the result
         /// for the dialog on which the button is set to be an "accept" or "cancel" button.
-        ///       
         /// </summary>
         DialogResult DialogResult { get; set; }
 
         /// <summary>
         /// Notifies a control that it is the default button so that its appearance and behavior
         /// is adjusted accordingly.
-        ///       
         /// </summary>
         void NotifyDefault(bool value);
 
         /// <summary>
-        /// Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the control.
+        /// Generates a <see cref='Control.Click'/> event for the control.
         /// </summary>
         void PerformClick();
     }

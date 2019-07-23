@@ -977,7 +977,7 @@ namespace System.Windows.Forms.Tests
             var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
             Assert.Same(dataGridViewAdvancedBorderStyleInput, cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, true, true, true, true));
         }
-        
+
         public static IEnumerable<object[]> AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStylePlaceholder_TestData()
         {
             yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.None } };
@@ -2362,7 +2362,6 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseMove(DataGridViewCellMouseEventArgs e) => base.OnMouseMove(e);
 
             public new void OnMouseUp(DataGridViewCellMouseEventArgs e) => base.OnMouseUp(e);
-
 
             public new void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
             {

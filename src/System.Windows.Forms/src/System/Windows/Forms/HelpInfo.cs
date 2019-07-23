@@ -33,7 +33,6 @@ namespace System.Windows.Forms
             Option = NativeMethods.HLP_NAVIGATOR;
         }
 
-
         public HelpInfo(string helpfilepath, HelpNavigator navigator, object param)
         {
             HelpFilePath = helpfilepath;
@@ -52,7 +51,6 @@ namespace System.Windows.Forms
         public HelpNavigator Navigator { get; }
 
         public object Param { get; }
-
 
         public override string ToString()
         {

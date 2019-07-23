@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design.Behavior
                     rules = SelectionRules.BottomSizeable | SelectionRules.LeftSizeable;
                     break;
                 case GrabHandleGlyphType.MiddleTop:
-                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and UpperRight handles, 1 HANDLESIZE for the MiddleTop handle, 1 HANDLESIZE for padding 
+                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and UpperRight handles, 1 HANDLESIZE for the MiddleTop handle, 1 HANDLESIZE for padding
                     if (controlBounds.Width >= (2 * DesignerUtils.HANDLEOVERLAP) + (2 * DesignerUtils.HANDLESIZE))
                     {
                         bounds = new Rectangle(controlBounds.X + (controlBounds.Width / 2) - (DesignerUtils.HANDLESIZE / 2), (controlBounds.Y + DesignerUtils.HANDLEOVERLAP) - DesignerUtils.HANDLESIZE, DesignerUtils.HANDLESIZE, DesignerUtils.HANDLESIZE);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                     break;
                 case GrabHandleGlyphType.MiddleBottom:
-                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for LowerLeft and LowerRight handles, 1 HANDLESIZE for the MiddleBottom handle, 1 HANDLESIZE for padding 
+                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for LowerLeft and LowerRight handles, 1 HANDLESIZE for the MiddleBottom handle, 1 HANDLESIZE for padding
                     if (controlBounds.Width >= (2 * DesignerUtils.HANDLEOVERLAP) + (2 * DesignerUtils.HANDLESIZE))
                     {
                         bounds = new Rectangle(controlBounds.X + (controlBounds.Width / 2) - (DesignerUtils.HANDLESIZE / 2), controlBounds.Bottom - DesignerUtils.HANDLEOVERLAP, DesignerUtils.HANDLESIZE, DesignerUtils.HANDLESIZE);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                     break;
                 case GrabHandleGlyphType.MiddleLeft:
-                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and LowerLeft handles, 1 HANDLESIZE for the MiddleLeft handle, 1 HANDLESIZE for padding 
+                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and LowerLeft handles, 1 HANDLESIZE for the MiddleLeft handle, 1 HANDLESIZE for padding
                     if (controlBounds.Height >= (2 * DesignerUtils.HANDLEOVERLAP) + (2 * DesignerUtils.HANDLESIZE))
                     {
                         bounds = new Rectangle((controlBounds.X + DesignerUtils.HANDLEOVERLAP) - DesignerUtils.HANDLESIZE, controlBounds.Y + (controlBounds.Height / 2) - (DesignerUtils.HANDLESIZE / 2), DesignerUtils.HANDLESIZE, DesignerUtils.HANDLESIZE);
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                     break;
                 case GrabHandleGlyphType.MiddleRight:
-                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperRight and LowerRight handles, 1 HANDLESIZE for the MiddleRight handle, 1 HANDLESIZE for padding 
+                    // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperRight and LowerRight handles, 1 HANDLESIZE for the MiddleRight handle, 1 HANDLESIZE for padding
                     if (controlBounds.Height >= (2 * DesignerUtils.HANDLEOVERLAP) + (2 * DesignerUtils.HANDLESIZE))
                     {
                         bounds = new Rectangle(controlBounds.Right - DesignerUtils.HANDLEOVERLAP, controlBounds.Y + (controlBounds.Height / 2) - (DesignerUtils.HANDLESIZE / 2), DesignerUtils.HANDLESIZE, DesignerUtils.HANDLESIZE);

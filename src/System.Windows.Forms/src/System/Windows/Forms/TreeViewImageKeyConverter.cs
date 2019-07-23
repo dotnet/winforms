@@ -2,18 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System.Collections;
     using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
     using System.Globalization;
-    using System.Reflection;
-    using System.Collections.Specialized;
 
     /// <summary>
     /// ImageIndexConverter is a class that can be used to convert
@@ -21,7 +13,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class TreeViewImageKeyConverter : ImageKeyConverter
     {
-
         /// <summary>
         /// Converts the given object to another type.  The most common types to convert
         /// are to and from a string object.  The default implementation will make a call

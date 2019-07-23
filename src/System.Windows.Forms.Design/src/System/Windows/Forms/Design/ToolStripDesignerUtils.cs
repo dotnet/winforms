@@ -52,7 +52,6 @@ namespace System.Windows.Forms.Design
         #endregion
 
         // Get the Correct bounds for painting...
-        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public static void GetAdjustedBounds(ToolStripItem item, ref Rectangle r)
         {
             // adjust bounds as per item
@@ -190,8 +189,7 @@ namespace System.Windows.Forms.Design
             return currentName;
         }
 
-
-        /// <summary> 
+        /// <summary>
         /// The first item returned should be the DefaultItem to create on the ToolStrip
         /// </summary>
         public static Type[] GetStandardItemTypes(IComponent component)
@@ -235,7 +233,6 @@ namespace System.Windows.Forms.Design
             }
             return visiblity;
         }
-
 
         public static Type[] GetCustomItemTypes(IComponent component, IServiceProvider serviceProvider)
         {
@@ -316,7 +313,7 @@ namespace System.Windows.Forms.Design
             return Array.Empty<Type>();
         }
 
-        /// <summary> 
+        /// <summary>
         /// wraps the result of GetStandardItemTypes in ItemTypeToolStripMenuItems.
         /// </summary>
         public static ToolStripItem[] GetStandardItemMenuItems(IComponent component, EventHandler onClick, bool convertTo)
@@ -338,7 +335,7 @@ namespace System.Windows.Forms.Design
             return items;
         }
 
-        /// <summary> 
+        /// <summary>
         /// wraps the result of GetCustomItemTypes in ItemTypeToolStripMenuItems.
         /// </summary>
         public static ToolStripItem[] GetCustomItemMenuItems(IComponent component, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider)
@@ -363,7 +360,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// build up a list of standard items separated by the custom items
         /// </summary>
-
         public static NewItemsContextMenuStrip GetNewItemDropDown(IComponent component, ToolStripItem currentItem, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider, bool populateCustom)
         {
             NewItemsContextMenuStrip contextMenu = new NewItemsContextMenuStrip(component, currentItem, onClick, convertTo, serviceProvider);
@@ -524,7 +520,6 @@ namespace System.Windows.Forms.Design
             private static bool s_dropShadowSettingValid;
             private static bool s_dropShadowEnabled;
 
-
             static DisplayInformation()
             {
                 SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
@@ -588,7 +583,6 @@ namespace System.Windows.Forms.Design
             }
             public static bool IsDropShadowEnabled
             {
-                [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
                 get
                 {
                     if (s_dropShadowSettingValid)

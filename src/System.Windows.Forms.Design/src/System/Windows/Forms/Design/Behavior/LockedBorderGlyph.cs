@@ -24,7 +24,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void InitializeGlyph(Rectangle controlBounds, SelectionBorderGlyphType type)
         {
-
             hitTestCursor = Cursors.Default; // always default cursor for locked
             rules = SelectionRules.None; // never change sel rules for locked
 
@@ -35,7 +34,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         /// <summary>
         /// Simple painting logic for locked Glyphs.
-        /// </summary>        
+        /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
             DesignerUtils.DrawSelectionBorder(pe.Graphics, bounds);

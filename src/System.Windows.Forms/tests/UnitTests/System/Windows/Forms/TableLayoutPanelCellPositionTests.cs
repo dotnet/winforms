@@ -216,7 +216,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new TableLayoutPanelCellPosition(1, 2), position);
         }
 
-
         [Fact]
         public void TableLayoutPanelCellPosition_ConverterCreateInstance_NullPropertyValues_ThrowsArgumentNullException()
         {

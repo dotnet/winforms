@@ -2,24 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-
     internal class RadioButtonPopupAdapter : RadioButtonFlatAdapter
     {
-
         internal RadioButtonPopupAdapter(ButtonBase control) : base(control) { }
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
         {
-            System.Drawing.Graphics g = e.Graphics;
+            Graphics g = e.Graphics;
             if (Control.Appearance == Appearance.Button)
             {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
@@ -44,7 +37,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal override void PaintOver(PaintEventArgs e, CheckState state)
         {
-            System.Drawing.Graphics g = e.Graphics;
+            Graphics g = e.Graphics;
             if (Control.Appearance == Appearance.Button)
             {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
@@ -70,7 +63,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal override void PaintDown(PaintEventArgs e, CheckState state)
         {
-            System.Drawing.Graphics g = e.Graphics;
+            Graphics g = e.Graphics;
             if (Control.Appearance == Appearance.Button)
             {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);

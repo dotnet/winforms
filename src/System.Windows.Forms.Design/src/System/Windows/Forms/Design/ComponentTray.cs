@@ -77,7 +77,6 @@ namespace System.Windows.Forms.Design
         /// will monitor component additions and removals and create
         /// appropriate UI objects in its space.
         /// </summary>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         public ComponentTray(IDesigner mainDesigner, IServiceProvider serviceProvider)
         {
             AutoScroll = true;
@@ -961,7 +960,6 @@ namespace System.Windows.Forms.Design
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription("ControlLocationDescr")]
         [DesignOnly(true)]
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         public Point GetLocation(IComponent receiver)
         {
             PropertyDescriptor loc = TypeDescriptor.GetProperties(receiver.GetType())["Location"];
@@ -1443,7 +1441,7 @@ namespace System.Windows.Forms.Design
             // Now, if we have a selection, paint it
             if (selectedObjects != null)
             {
-                bool first = true;//indicates the first iteration of our foreach loop  
+                bool first = true;//indicates the first iteration of our foreach loop
                 HatchBrush selectionBorderBrush;
                 if (SystemInformation.HighContrast)
                 {
@@ -1966,7 +1964,6 @@ namespace System.Windows.Forms.Design
                 Text = name;
                 _inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
                 TabStop = false;
-
 
             }
 
@@ -2708,7 +2705,6 @@ namespace System.Windows.Forms.Design
                 return null;
             }
 
-
             /// <summary>
             /// Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
             /// </summary>
@@ -2732,7 +2728,6 @@ namespace System.Windows.Forms.Design
                 }
                 return false;
             }
-
 
             /// <summary>
             /// Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.

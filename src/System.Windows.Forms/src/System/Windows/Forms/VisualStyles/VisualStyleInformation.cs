@@ -2,39 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA905:SystemAndMicrosoftNamespacesRequireApproval", Scope = "namespace", Target = "System.Windows.Forms.VisualStyles")]
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.VisualStyles
 {
-
-    using System;
-    using System.Text;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics.CodeAnalysis;
-
-
     /// <summary>
-    ///    <para> 
-    ///         Provides information about the current visual style. 
-    ///         NOTE: 
-    ///         1) These properties (except SupportByOS, which is always meaningful) are meaningful only 
-    ///            if visual styles are supported and have currently been applied by the user.
-    ///         2) A subset of these use VisualStyleRenderer objects, so they are
-    ///            not meaningful unless VisualStyleRenderer.IsSupported is true.
-    ///   </para>
+    ///
+    ///  Provides information about the current visual style.
+    ///  NOTE:
+    ///  1) These properties (except SupportByOS, which is always meaningful) are meaningful only
+    ///  if visual styles are supported and have currently been applied by the user.
+    ///  2) A subset of these use VisualStyleRenderer objects, so they are
+    ///  not meaningful unless VisualStyleRenderer.IsSupported is true.
     /// </summary>
     public static class VisualStyleInformation
     {
-
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
 
         /// <summary>
-        /// Used to find whether visual styles are supported by the current OS. Same as 
+        /// Used to find whether visual styles are supported by the current OS. Same as
         /// using the OSFeature class to see if themes are supported.
         /// This is always supported on platforms that .NET Core supports.
         /// </summary>
@@ -65,7 +54,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's color scheme name.
+        ///  The current visual style's color scheme name.
         /// </summary>
         public static unsafe string ColorScheme
         {
@@ -87,7 +76,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's size name.
+        ///  The current visual style's size name.
         /// </summary>
         public static unsafe string Size
         {
@@ -109,7 +98,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's display name.
+        ///  The current visual style's display name.
         /// </summary>
         public static unsafe string DisplayName
         {
@@ -125,7 +114,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's company.
+        ///  The current visual style's company.
         /// </summary>
         public static string Company
         {
@@ -141,7 +130,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The name of the current visual style's author.
+        ///  The name of the current visual style's author.
         /// </summary>
         public static string Author
         {
@@ -157,7 +146,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's copyright information.
+        ///  The current visual style's copyright information.
         /// </summary>
         public static string Copyright
         {
@@ -173,12 +162,10 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's url.
+        ///  The current visual style's url.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings")]
         public static string Url
         {
-            [SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings")]
             get
             {
                 if (IsEnabledByUser)
@@ -191,7 +178,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's version.
+        ///  The current visual style's version.
         /// </summary>
         public static string Version
         {
@@ -207,7 +194,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The current visual style's description.
+        ///  The current visual style's description.
         /// </summary>
         public static string Description
         {
@@ -223,7 +210,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    Returns true if the current theme supports flat menus, else false.
+        ///  Returns true if the current theme supports flat menus, else false.
         /// </summary>
         public static bool SupportsFlatMenus
         {
@@ -248,7 +235,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    The minimum color depth supported by the current visual style.
+        ///  The minimum color depth supported by the current visual style.
         /// </summary>
         public static int MinimumColorDepth
         {
@@ -276,7 +263,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        ///    Border Color that Windows renders for controls like TextBox and ComboBox.
+        ///  Border Color that Windows renders for controls like TextBox and ComboBox.
         /// </summary>
         public static Color TextControlBorder
         {
@@ -300,9 +287,8 @@ namespace System.Windows.Forms.VisualStyles
             }
         }
 
-
         /// <summary>
-        ///    This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
+        ///  This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
         /// </summary>
         public static Color ControlHighlightHot
         {

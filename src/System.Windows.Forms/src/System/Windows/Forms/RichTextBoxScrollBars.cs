@@ -5,8 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how a <see cref='System.Windows.Forms.RichTextBox'/> control displays scroll bars.
-    ///
+    /// Specifies how a <see cref='RichTextBox'/> control displays scroll bars.
     /// </summary>
     public enum RichTextBoxScrollBars
     {

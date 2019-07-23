@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         Checked = NativeMethods.ODS_CHECKED,
 
         /// <summary>
-        /// The item is the editing portion of a <see cref='System.Windows.Forms.ComboBox'/> .
+        /// The item is the editing portion of a <see cref='ComboBox'/> .
         /// </summary>
         ComboBoxEdit = NativeMethods.ODS_COMBOBOXEDIT,
 

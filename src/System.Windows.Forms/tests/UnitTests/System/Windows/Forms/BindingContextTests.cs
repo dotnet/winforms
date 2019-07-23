@@ -369,7 +369,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(context.Contains(1, string.Empty));
         }
 
-
         public static IEnumerable<object[]> Contains_DataSourceDataMember_TestData()
         {
             var context = new BindingContext();

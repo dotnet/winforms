@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Layout
 
         private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
         {
-#if DEBUG        
+#if DEBUG
             if (CompModSwitches.FlowLayout.TraceInfo)
             {
                 Debug.WriteLine("FlowLayout::Layout("
@@ -26,10 +26,10 @@ namespace System.Windows.Forms.Layout
                     + "args=" + args.ToString() + ")");
             }
             Debug.Indent();
-#endif            
+#endif
 
-            // ScrollableControl will first try to get the layoutbounds from the derived control when 
-            // trying to figure out if ScrollBars should be added.        
+            // ScrollableControl will first try to get the layoutbounds from the derived control when
+            // trying to figure out if ScrollBars should be added.
             CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, /* measureOnly = */ false));
 #if DEBUG
             Debug.Unindent();
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Layout
 
         internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
         {
-#if DEBUG        
+#if DEBUG
             if (CompModSwitches.FlowLayout.TraceInfo)
             {
                 Debug.WriteLine("FlowLayout::GetPreferredSize("
@@ -322,10 +322,10 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         /// The goal of the FlowLayout Engine is to always layout from left to right. In order to achieve different
-        /// flow directions we have "Proxies" for the Container (the thing laying out) and for setting the bounds of the 
-        /// child elements. 
+        /// flow directions we have "Proxies" for the Container (the thing laying out) and for setting the bounds of the
+        /// child elements.
         ///
-        /// We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow direction of RightToLeft, 
+        /// We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow direction of RightToLeft,
         /// the RightToLeft container proxy detects when we're going to set the bounds and translates it to the right.
         ///
         /// In order to do a vertical flow, such as TopDown, we pretend we're laying out horizontally. The main way this is
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.Layout
                         // Offset the X coordinate.
                         if (IsVertical)
                         {
-                            // Offset the Y value here, since it is really the X value.                          
+                            // Offset the Y value here, since it is really the X value.
                             value.Y = DisplayRect.Bottom - value.Bottom;
                         }
                         else
@@ -451,7 +451,7 @@ namespace System.Windows.Forms.Layout
                 Rectangle newBounds = bounds;
                 newBounds.X = DisplayRect.Right - bounds.X - bounds.Width + ElementProxy.Margin.Left - ElementProxy.Margin.Right;
 
-                // Since DisplayRect.Right and bounds.X are both adjusted for the AutoScrollPosition, we need add it back here.               
+                // Since DisplayRect.Right and bounds.X are both adjusted for the AutoScrollPosition, we need add it back here.
                 if (Container is FlowLayoutPanel flp)
                 {
                     Point ptScroll = flp.AutoScrollPosition;
@@ -462,11 +462,11 @@ namespace System.Windows.Forms.Layout
                         {
                             // We need to treat Vertical a litte differently. It really helps if you draw this out.
                             // Remember that when we layout BottomUp, we first layout TopDown, then call this method.
-                            // When we layout TopDown we layout in flipped rectangles. I.e. x becomes y, y becomes x, 
+                            // When we layout TopDown we layout in flipped rectangles. I.e. x becomes y, y becomes x,
                             // height becomes width, width becomes height. We do our layout, then when we eventually
                             // set the bounds of the child elements, we flip back. Thus, x will eventually
-                            // become y. We need to adjust for scrolling - but only in the y direction - 
-                            // and since x becomes y, we adjust x. But since AutoScrollPoisition has not been swapped, 
+                            // become y. We need to adjust for scrolling - but only in the y direction -
+                            // and since x becomes y, we adjust x. But since AutoScrollPoisition has not been swapped,
                             // we need to use its Y coordinate when offsetting.
 
                             pt.Offset(ptScroll.Y, 0);
@@ -502,10 +502,10 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// For TopDown we're really still laying out horizontally. The element proxy is the one 
-        /// which flips all the rectangles and rotates itself into the vertical orientation. 
-        /// to achieve right to left, we actually have to do something non-intuitive - instead of 
-        /// sending the control to the right, we have to send the control to the bottom. When the rotation 
+        /// For TopDown we're really still laying out horizontally. The element proxy is the one
+        /// which flips all the rectangles and rotates itself into the vertical orientation.
+        /// to achieve right to left, we actually have to do something non-intuitive - instead of
+        /// sending the control to the right, we have to send the control to the bottom. When the rotation
         /// is complete - that's equivilant to pushing it to the right.
         /// </summary>
         private class TopDownProxy : ContainerProxy
@@ -526,14 +526,14 @@ namespace System.Windows.Forms.Layout
             protected override bool IsVertical => true;
 
             /// <summary>
-            /// For BottomUp we're really still laying out horizontally. The element proxy is the one 
-            /// which flips all the rectangles and rotates itself into the vertical orientation. 
-            /// BottomUp is the analog of RightToLeft - meaning, in order to place a control at the bottom, 
+            /// For BottomUp we're really still laying out horizontally. The element proxy is the one
+            /// which flips all the rectangles and rotates itself into the vertical orientation.
+            /// BottomUp is the analog of RightToLeft - meaning, in order to place a control at the bottom,
             /// the control has to be placed to the right. When the rotation is complete, that's the equivilant of
             /// pushing it to the right. This must be done all the time.
             ///
-            /// To achieve right to left, we actually have to do something non-intuitive - instead of 
-            /// sending the control to the right, we have to send the control to the bottom. When the rotation 
+            /// To achieve right to left, we actually have to do something non-intuitive - instead of
+            /// sending the control to the right, we have to send the control to the bottom. When the rotation
             /// is complete - that's equivilant to pushing it to the right.
             /// </summary>
             public override Rectangle Bounds
@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     // push the control to the bottom.
-                    // Do NOT use LayoutUtils.RTLTranslate as we want to preserve the padding.Right on the right...  
+                    // Do NOT use LayoutUtils.RTLTranslate as we want to preserve the padding.Right on the right...
                     base.Bounds = RTLTranslateNoMarginSwap(value);
                 }
             }

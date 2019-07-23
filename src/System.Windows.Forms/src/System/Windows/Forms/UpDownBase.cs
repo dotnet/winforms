@@ -2,31 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.VisualStyles;
+using Microsoft.Win32;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Threading;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Windows.Forms.VisualStyles;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>Implements the basic
-    ///       functionality required by an up-down control.</para>
+    ///  Implements the basic
+    ///  functionality required by an up-down control.
     /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     Designer("System.Windows.Forms.Design.UpDownBaseDesigner, " + AssemblyRef.SystemDesign),
-    System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors") // Shipped in Everett
     ]
     public abstract class UpDownBase : ContainerControl
     {
-
         private const int DefaultWheelScrollLinesPerPage = 1;
         private const int DefaultButtonsWidth = 16;
         private const int DefaultControlWidth = 120;
@@ -58,7 +53,7 @@ namespace System.Windows.Forms
         private bool userEdit = false;
 
         /// <summary>
-        ///     The current border for this edit control.
+        ///  The current border for this edit control.
         /// </summary>
         private BorderStyle borderStyle = DefaultBorderStyle;
 
@@ -74,10 +69,8 @@ namespace System.Windows.Forms
         internal int defaultButtonsWidth = DefaultButtonsWidth;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.UpDownBase'/>
-        ///       class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='UpDownBase'/>
+        ///  class.
         /// </summary>
         public UpDownBase()
         {
@@ -115,8 +108,6 @@ namespace System.Windows.Forms
 
         // AutoScroll is not relevant to an UpDownBase
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoScroll
         {
@@ -132,8 +123,6 @@ namespace System.Windows.Forms
 
         // AutoScrollMargin is not relevant to an UpDownBase
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public Size AutoScrollMargin
         {
@@ -149,8 +138,6 @@ namespace System.Windows.Forms
 
         // AutoScrollMinSize is not relevant to an UpDownBase
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public Size AutoScrollMinSize
         {
@@ -165,7 +152,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Override to re-expose AutoSize.</para>
+        ///  Override to re-expose AutoSize.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -190,10 +177,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the background color for the
-        ///       text box portion of the up-down control.
-        ///    </para>
+        ///  Gets or sets the background color for the
+        ///  text box portion of the up-down control.
         /// </summary>
         public override Color BackColor
         {
@@ -209,8 +194,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage
         {
@@ -231,8 +214,6 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout
         {
@@ -254,10 +235,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the border style for
-        ///       the up-down control.
-        ///    </para>
+        ///  Gets or sets the border style for
+        ///  the up-down control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -289,10 +268,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the text
-        ///       property is being changed internally by its parent class.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the text
+        ///  property is being changed internally by its parent class.
         /// </summary>
         protected bool ChangingText
         {
@@ -307,8 +284,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         public override ContextMenu ContextMenu
         {
             get
@@ -335,14 +310,11 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Returns the parameters needed to create the handle. Inheriting classes
-        ///       can override this to provide extra functionality. They should not,
-        ///       however, forget to call base.getCreateParams() first to get the struct
-        ///       filled up with the basic info.
-        ///    </para>
+        ///  Returns the parameters needed to create the handle. Inheriting classes
+        ///  can override this to provide extra functionality. They should not,
+        ///  however, forget to call base.getCreateParams() first to get the struct
+        ///  filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -368,8 +340,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -380,8 +352,6 @@ namespace System.Windows.Forms
         }
 
         // DockPadding is not relevant to UpDownBase
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public DockPaddingEdges DockPadding
         {
@@ -392,7 +362,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns true if this control has focus.
+        ///  Returns true if this control has focus.
         /// </summary>
         [
         Browsable(false),
@@ -408,9 +378,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Indicates the foreground color for the control.
-        ///    </para>
+        ///  Indicates the foreground color for the control.
         /// </summary>
         public override Color ForeColor
         {
@@ -426,11 +394,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether
-        ///       the user can use the UP
-        ///       ARROW and DOWN ARROW keys to select values.
-        ///    </para>
+        ///  Gets or sets a value indicating whether
+        ///  the user can use the UP
+        ///  ARROW and DOWN ARROW keys to select values.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -439,7 +405,6 @@ namespace System.Windows.Forms
         ]
         public bool InterceptArrowKeys
         {
-
             get
             {
                 return interceptArrowKeys;
@@ -502,10 +467,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the height of
-        ///       the up-down control.
-        ///    </para>
+        ///  Gets the height of
+        ///  the up-down control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -535,14 +498,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       a
-        ///       value
-        ///       indicating whether the text may only be changed by the
-        ///       use
-        ///       of the up or down buttons.
-        ///    </para>
+        ///  Gets or sets
+        ///  a
+        ///  value
+        ///  indicating whether the text may only be changed by the
+        ///  use
+        ///  of the up or down buttons.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -551,7 +512,6 @@ namespace System.Windows.Forms
         ]
         public bool ReadOnly
         {
-
             get
             {
                 return upDownEdit.ReadOnly;
@@ -564,10 +524,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the text
-        ///       displayed in the up-down control.
-        ///    </para>
+        ///  Gets or sets the text
+        ///  displayed in the up-down control.
         /// </summary>
         [
         Localizable(true)
@@ -603,11 +561,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets the alignment of the text in the up-down
-        ///       control.
-        ///    </para>
+        ///  Gets or
+        ///  sets the alignment of the text in the up-down
+        ///  control.
         /// </summary>
         [
         Localizable(true),
@@ -641,12 +597,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets the
-        ///       alignment
-        ///       of the up and down buttons on the up-down control.
-        ///    </para>
+        ///  Gets
+        ///  or sets the
+        ///  alignment
+        ///  of the up and down buttons on the up-down control.
         /// </summary>
         [
         Localizable(true),
@@ -656,7 +610,6 @@ namespace System.Windows.Forms
         ]
         public LeftRightAlignment UpDownAlign
         {
-
             get
             {
                 return upDownAlign;
@@ -689,11 +642,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets a value indicating whether a value has been entered by the
-        ///       user.
-        ///    </para>
+        ///  Gets
+        ///  or sets a value indicating whether a value has been entered by the
+        ///  user.
         /// </summary>
         protected bool UserEdit
         {
@@ -708,18 +659,14 @@ namespace System.Windows.Forms
             }
         }
 
-
         ////////////////////////////////////////////////////////////////////////
         // Methods
         //
         ////////////////////////////////////////////////////////////////////////
 
-
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, handles the pressing of the down button
-        ///       on the up-down control.
-        ///    </para>
+        ///  When overridden in a derived class, handles the pressing of the down button
+        ///  on the up-down control.
         /// </summary>
         public abstract void DownButton();
 
@@ -746,11 +693,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///       When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-        ///       For UpDown controls, scale the width of the up/down buttons.
-        ///       Must call the base class method to get the current DPI values. This method is invoked only when 
-        ///       Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
-        ///       EnableDpiChangedMessageHandling config switch turned on.
+        ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
+        ///  For UpDown controls, scale the width of the up/down buttons.
+        ///  Must call the base class method to get the current DPI values. This method is invoked only when
+        ///  Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
+        ///  EnableDpiChangedMessageHandling config switch turned on.
         /// </summary>
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
@@ -760,17 +707,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>When overridden in a derived class, raises the Changed event.
-        /// event.</para>
+        /// When overridden in a derived class, raises the Changed event.
+        /// event.
         /// </summary>
         protected virtual void OnChanged(object source, EventArgs e)
         {
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initialize the updown. Adds the upDownEdit and updown buttons.
-        ///    </para>
+        ///  Initialize the updown. Adds the upDownEdit and updown buttons.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -780,9 +725,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Tear down the updown.
-        ///    </para>
+        ///  Tear down the updown.
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -791,8 +734,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles painting the buttons on the control.
-        ///
+        ///  Handles painting the buttons on the control.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -862,8 +804,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyDown'/>
-        /// event.</para>
+        /// Raises the <see cref='Control.KeyDown'/>
+        /// event.
         /// </summary>
         protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
         {
@@ -895,8 +837,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyPress'/>
-        /// event.</para>
+        /// Raises the <see cref='Control.KeyPress'/>
+        /// event.
         /// </summary>
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
@@ -905,7 +847,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
+        /// Raises the <see cref='Control.LostFocus'/> event.
         /// </summary>
         protected virtual void OnTextBoxLostFocus(object source, EventArgs e)
         {
@@ -916,7 +858,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
+        /// Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected virtual void OnTextBoxResize(object source, EventArgs e)
         {
@@ -925,8 +867,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the TextBoxTextChanged event.
-        /// event.</para>
+        /// Raises the TextBoxTextChanged event.
+        /// event.
         /// </summary>
         protected virtual void OnTextBoxTextChanged(object source, EventArgs e)
         {
@@ -945,7 +887,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Called from the UpDownButtons member. Provided for derived controls to have a finer way to handle the event.
+        ///  Called from the UpDownButtons member. Provided for derived controls to have a finer way to handle the event.
         /// </summary>
         internal virtual void OnStartTimer()
         {
@@ -956,7 +898,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/> event.
+        ///  Raises the <see cref='Control.OnMouseDown'/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -969,10 +911,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseUp'/> event.
-        ///
-        ///    </para>
+        ///  Raises the <see cref='Control.OnMouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -999,7 +938,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.OnMouseWheel'/> event.</para>
+        /// Raises the <see cref='Control.OnMouseWheel'/> event.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -1064,22 +1003,18 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    Handle the layout event. The size of the upDownEdit control, and the
-        ///    position of the UpDown control must be modified.
+        ///  Handle the layout event. The size of the upDownEdit control, and the
+        ///  position of the UpDown control must be modified.
         /// </summary>
         protected override void OnLayout(LayoutEventArgs e)
         {
-
             PositionControls();
             base.OnLayout(e);
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the FontChanged event.
-        ///    </para>
+        ///  Raises the FontChanged event.
         /// </summary>
         protected override void OnFontChanged(EventArgs e)
         {
@@ -1094,9 +1029,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///
-        ///     Handles UpDown events, which are generated by clicking on
-        ///     the updown buttons in the child updown control.
-        ///
+        ///  Handles UpDown events, which are generated by clicking on
+        ///  the updown buttons in the child updown control.
         /// </summary>
         private void OnUpDown(object source, UpDownEventArgs e)
         {
@@ -1112,8 +1046,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Calculates the size and position of the upDownEdit control and
-        ///     the updown buttons.
+        ///  Calculates the size and position of the upDownEdit control and
+        ///  the updown buttons.
         /// </summary>
         private void PositionControls()
         {
@@ -1124,7 +1058,6 @@ namespace System.Windows.Forms
             int totalClientWidth = clientArea.Width;
             bool themed = Application.RenderWithVisualStyles;
             BorderStyle borderStyle = BorderStyle;
-
 
             // determine how much to squish in - Fixed3d and FixedSingle have 2PX border
             int borderWidth = (borderStyle == BorderStyle.None) ? 0 : 2;
@@ -1179,19 +1112,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Selects a range of
-        ///       text in the up-down control.
-        ///    </para>
+        ///  Selects a range of
+        ///  text in the up-down control.
         /// </summary>
         public void Select(int start, int length)
         {
             upDownEdit.Select(start, length);
         }
 
-
         /// <summary>
-        ///   Child controls run their
+        ///  Child controls run their
         /// </summary>
         private MouseEventArgs TranslateMouseEvent(Control child, MouseEventArgs e)
         {
@@ -1207,17 +1137,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, handles the pressing of the up button on the up-down control.
-        ///    </para>
+        ///  When overridden in a derived class, handles the pressing of the up button on the up-down control.
         /// </summary>
         public abstract void UpButton();
 
         /// <summary>
-        ///    <para>
-        ///       When overridden
-        ///       in a derived class, updates the text displayed in the up-down control.
-        ///    </para>
+        ///  When overridden
+        ///  in a derived class, updates the text displayed in the up-down control.
         /// </summary>
         protected abstract void UpdateEditText();
 
@@ -1230,17 +1156,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in a
-        ///       derived class, validates the text displayed in the up-down control.
-        ///    </para>
+        ///  When overridden in a
+        ///  derived class, validates the text displayed in the up-down control.
         /// </summary>
         protected virtual void ValidateEditText()
         {
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
@@ -1277,7 +1199,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    This Function sets the ToolTip for this composite control.
+        ///  This Function sets the ToolTip for this composite control.
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string caption)
         {
@@ -1345,7 +1267,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///
-            ///     Handles detecting when the mouse button is released.
+            ///  Handles detecting when the mouse button is released.
             ///
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
@@ -1390,10 +1312,9 @@ namespace System.Windows.Forms
                 }
             }
 
-
             /// <summary>
-            /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyUp'/>
-            /// event.</para>
+            /// Raises the <see cref='Control.KeyUp'/>
+            /// event.
             /// </summary>
             protected override void OnKeyUp(KeyEventArgs e)
             {
@@ -1453,17 +1374,17 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///
-        ///     Nested class UpDownButtons
+        ///  Nested class UpDownButtons
         ///
-        ///     A control representing the pair of buttons on the end of the upDownEdit control.
-        ///     This class handles drawing the updown buttons, and detecting mouse actions
-        ///     on these buttons. Acceleration on the buttons is handled. The control
-        ///     sends UpDownEventArgss to the parent UpDownBase class when a button is pressed,
-        ///     or when the acceleration determines that another event should be generated.
+        ///  A control representing the pair of buttons on the end of the upDownEdit control.
+        ///  This class handles drawing the updown buttons, and detecting mouse actions
+        ///  on these buttons. Acceleration on the buttons is handled. The control
+        ///  sends UpDownEventArgss to the parent UpDownBase class when a button is pressed,
+        ///  or when the acceleration determines that another event should be generated.
         /// </summary>
         internal class UpDownButtons : Control
         {
-            // 
+            //
 
             /////////////////////////////////////////////////////////////////////
             // Member variables
@@ -1505,7 +1426,6 @@ namespace System.Windows.Forms
                 this.parent = parent;
             }
 
-
             /////////////////////////////////////////////////////////////////////
             // Methods
             //
@@ -1513,7 +1433,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///
-            ///     Adds a handler for the updown button event.
+            ///  Adds a handler for the updown button event.
             /// </summary>
             public event UpDownEventHandler UpDown
             {
@@ -1586,10 +1506,10 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///
-            ///     Handles detecting mouse hits on the buttons. This method
-            ///     detects which button was hit (up or down), fires a
-            ///     updown event, captures the mouse, and starts a timer
-            ///     for repeated updown events.
+            ///  Handles detecting mouse hits on the buttons. This method
+            ///  detects which button was hit (up or down), fires a
+            ///  updown event, captures the mouse, and starts a timer
+            ///  for repeated updown events.
             ///
             /// </summary>
             protected override void OnMouseDown(MouseEventArgs e)
@@ -1620,7 +1540,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///
-            ///     Handles detecting mouse movement.
+            ///  Handles detecting mouse movement.
             ///
             /// </summary>
             protected override void OnMouseMove(MouseEventArgs e)
@@ -1710,7 +1630,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///
-            ///     Handles detecting when the mouse button is released.
+            ///  Handles detecting when the mouse button is released.
             ///
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
@@ -1753,7 +1673,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///
-            ///     Handles detecting when the mouse leaves.
+            ///  Handles detecting when the mouse leaves.
             ///
             /// </summary>
             protected override void OnMouseLeave(EventArgs e)
@@ -1765,7 +1685,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Handles painting the buttons on the control.
+            ///  Handles painting the buttons on the control.
             ///
             /// </summary>
             protected override void OnPaint(PaintEventArgs e)
@@ -1831,7 +1751,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Occurs when the UpDown buttons are pressed and when the acceleration timer tick event is raised.
+            ///  Occurs when the UpDown buttons are pressed and when the acceleration timer tick event is raised.
             /// </summary>
             protected virtual void OnUpDown(UpDownEventArgs upevent)
             {
@@ -1839,7 +1759,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Starts the timer for generating updown events
+            ///  Starts the timer for generating updown events
             /// </summary>
             protected void StartTimer()
             {
@@ -1858,7 +1778,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Stops the timer for generating updown events
+            ///  Stops the timer for generating updown events
             /// </summary>
             protected void StopTimer()
             {
@@ -1872,7 +1792,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Generates updown events when the timer calls this function.
+            ///  Generates updown events when the timer calls this function.
             /// </summary>
             private void TimerHandler(object source, EventArgs args)
             {
@@ -1884,8 +1804,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // onUpDown method calls customer's ValueCHanged event handler which might enter the message loop and 
-                // process the mouse button up event, which results in timer being disposed 
+                // onUpDown method calls customer's ValueCHanged event handler which might enter the message loop and
+                // process the mouse button up event, which results in timer being disposed
                 OnUpDown(new UpDownEventArgs((int)pushed));
 
                 if (timer != null)
@@ -1968,8 +1888,6 @@ namespace System.Windows.Forms
                         return downButton;
                     }
                 }
-
-
 
                 /// <summary>
                 /// </summary>

@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         protected override ArrayList List => _list ?? (_list = new ArrayList());
 
         /// <summary>
-        /// Gets the <see cref='System.Windows.Forms.Binding'/> at the specified index.
+        /// Gets the <see cref='Binding'/> at the specified index.
         /// </summary>
         public Binding this[int index] => (Binding)List[index];
 
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='System.Windows.Forms.Binding'/> to the collection.
+        /// Adds a <see cref='Binding'/> to the collection.
         /// </summary>
         protected virtual void AddCore(Binding dataBinding)
         {
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
         protected virtual void ClearCore() => List.Clear();
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.BindingsCollection.CollectionChanging'/> event.
+        /// Raises the <see cref='CollectionChanging'/> event.
         /// </summary>
         protected virtual void OnCollectionChanging(CollectionChangeEventArgs e)
         {
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.BindingsCollection.CollectionChanged'/> event.
+        /// Raises the <see cref='CollectionChanged'/> event.
         /// </summary>
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs ccevent)
         {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
         internal protected void RemoveAt(int index) => Remove(this[index]);
 
         /// <summary>
-        /// Removes the specified <see cref='System.Windows.Forms.Binding'/> from the collection.
+        /// Removes the specified <see cref='Binding'/> from the collection.
         /// </summary>
         protected virtual void RemoveCore(Binding dataBinding) => List.Remove(dataBinding);
 

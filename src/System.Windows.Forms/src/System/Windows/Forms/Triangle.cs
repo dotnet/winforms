@@ -4,16 +4,12 @@
 
 namespace System.Windows.Forms
 {
-
     using System.Diagnostics;
     using System;
-
-    using System.Windows.Forms;
     using System.Drawing;
-    using Microsoft.Win32;
 
     /// <summary>
-    ///      This class fully encapsulates the painting logic for a triangle.  (Used by DataGrid)
+    ///  This class fully encapsulates the painting logic for a triangle.  (Used by DataGrid)
     /// </summary>
     internal static class Triangle
     {

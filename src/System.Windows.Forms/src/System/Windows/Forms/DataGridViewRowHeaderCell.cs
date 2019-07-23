@@ -2,23 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.Windows.Forms.VisualStyles;
-    using System.ComponentModel;
-    using System.Windows.Forms.Internal;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
-    /// <summary>
-    ///    <para></para>
-    /// </summary>
     public class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     {
         private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
@@ -143,7 +136,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewRowHeaderCell)System.Activator.CreateInstance(thisType);
             }
@@ -166,8 +159,6 @@ namespace System.Windows.Forms
         {
             return rightToLeft ? DataGridViewRowHeaderCell.LeftArrowStarBitmap : DataGridViewRowHeaderCell.RightArrowStarBitmap;
         }
-
-
 
         private static Bitmap GetBitmapFromIcon(string iconName)
         {
@@ -348,7 +339,6 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -708,7 +698,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -1125,7 +1115,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para></para>
         /// </summary>
         public override string ToString()
         {

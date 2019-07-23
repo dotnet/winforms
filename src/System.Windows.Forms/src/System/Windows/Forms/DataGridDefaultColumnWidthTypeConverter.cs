@@ -2,16 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System;
-    using System.IO;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     public class DataGridPreferredColumnWidthTypeConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

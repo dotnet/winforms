@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the location of tick marks in a <see cref='System.Windows.Forms.TrackBar'/>
+    /// Specifies the location of tick marks in a <see cref='TrackBar'/>
     /// control.
     /// </summary>
     public enum TickStyle

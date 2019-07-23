@@ -4,23 +4,10 @@
 
 namespace System.Resources
 {
-    using System.Diagnostics;
-
-    using System;
-    using System.Windows.Forms;
-    using System.Reflection;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.IO;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Resources;
-    using System.Globalization;
-
     /// <summary>
-    ///     ResX Null Reference class.  This class allows ResX to store null values.
-    ///     It is a placeholder that is written into the file.  On read, it is replaced
-    ///     with null.
+    ///  ResX Null Reference class.  This class allows ResX to store null values.
+    ///  It is a placeholder that is written into the file.  On read, it is replaced
+    ///  with null.
     /// </summary>
     [Serializable]
     internal sealed class ResXNullRef
