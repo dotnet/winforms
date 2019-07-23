@@ -313,7 +313,7 @@ namespace System.Windows.Forms
             get => _dataSource;
             set
             {
-                if (_parentControl != null && value != null && !string.IsNullOrEmpty(_dataMember))
+                if (_parentControl != null && _parentControl.BindingContext != null && value != null && !string.IsNullOrEmpty(_dataMember))
                 {
                     // Let's check if the datamember exists in the new data source
                     try
