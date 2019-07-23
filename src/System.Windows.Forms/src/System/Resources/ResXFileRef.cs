@@ -2,31 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text;
+
 namespace System.Resources
 {
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Windows.Forms;
-    using System.Reflection;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.IO;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Resources;
-    using System.Text;
-    using System.Globalization;
-    using System.Runtime.Serialization;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///     ResX File Reference class. This allows the developer to represent
-    ///     a link to an external resource. When the resource manager asks
-    ///     for the value of the resource item, the external resource is loaded.
+    ///  ResX File Reference class. This allows the developer to represent
+    ///  a link to an external resource. When the resource manager asks
+    ///  for the value of the resource item, the external resource is loaded.
     /// </summary>
-    [TypeConverterAttribute(typeof(ResXFileRef.Converter)), Serializable]
+    [TypeConverter(typeof(Converter)), Serializable]
     public class ResXFileRef
     {
         private string fileName;
@@ -35,9 +27,9 @@ namespace System.Resources
         private Encoding textFileEncoding;
 
         /// <summary>
-        ///     Creates a new ResXFileRef that points to the specified file.
-        ///     The type refered to by typeName must support a constructor
-        ///     that accepts a System.IO.Stream as a parameter.
+        ///  Creates a new ResXFileRef that points to the specified file.
+        ///  The type refered to by typeName must support a constructor
+        ///  that accepts a System.IO.Stream as a parameter.
         /// </summary>
         public ResXFileRef(string fileName, string typeName)
         {
@@ -51,16 +43,15 @@ namespace System.Resources
             textFileEncoding = null;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMethodsAsStatic")]
         [OnDeserialized]
         private void OnDeserialized(StreamingContext ctx)
         {
         }
 
         /// <summary>
-        ///     Creates a new ResXFileRef that points to the specified file.
-        ///     The type refered to by typeName must support a constructor
-        ///     that accepts a System.IO.Stream as a parameter.
+        ///  Creates a new ResXFileRef that points to the specified file.
+        ///  The type refered to by typeName must support a constructor
+        ///  that accepts a System.IO.Stream as a parameter.
         /// </summary>
         public ResXFileRef(string fileName, string typeName, Encoding textFileEncoding) : this(fileName, typeName)
         {
@@ -97,8 +88,8 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    path1+result = path2
-        ///   A string which is the relative path difference between path1 and
+        ///  path1+result = path2
+        ///  A string which is the relative path difference between path1 and
         ///  path2 such that if path1 and the calculated difference are used
         ///  as arguments to Combine(), path2 is returned
         /// </summary>
@@ -143,7 +134,6 @@ namespace System.Resources
 
         internal void MakeFilePathRelative(string basePath)
         {
-
             if (string.IsNullOrEmpty(basePath))
             {
                 return;
@@ -203,7 +193,6 @@ namespace System.Resources
             }
 
             // "value" is the parameter name of ConvertFrom, which calls this method.
-            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             internal static string[] ParseResxFileRefString(string stringValue)
             {
                 string[] result = null;
@@ -220,7 +209,7 @@ namespace System.Resources
                             throw new ArgumentException(nameof(stringValue));
                         }
 
-                        fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... " 
+                        fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... "
                         if (lastIndexOfQuote + 2 > stringValue.Length)
                         {
                             throw new ArgumentException(nameof(stringValue));
@@ -321,5 +310,3 @@ namespace System.Resources
         }
     }
 }
-
-

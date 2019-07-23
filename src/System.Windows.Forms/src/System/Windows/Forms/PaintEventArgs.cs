@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.Paint'/>
+    /// Provides data for the <see cref='Control.Paint'/>
     /// event.
     /// NOTE: Please keep this class consistent with PrintPageEventArgs.
     /// </summary>
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.PaintEventArgs'/>
+        /// Initializes a new instance of the <see cref='PaintEventArgs'/>
         /// class with the specified graphics and clipping rectangle.
         /// </summary>
         public PaintEventArgs(Graphics graphics, Rectangle clipRect)
@@ -88,9 +88,9 @@ namespace System.Windows.Forms
         internal IntPtr HDC => _graphics == null ? _dc : IntPtr.Zero;
 
         /// <summary>
-        /// Gets the <see cref='System.Drawing.Graphics'/> object used to paint.
+        /// Gets the <see cref='Drawing.Graphics'/> object used to paint.
         /// </summary>
-        public System.Drawing.Graphics Graphics
+        public Graphics Graphics
         {
             get
             {
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Disposes of the resources (other than memory) used by the
-        /// <see cref='System.Windows.Forms.PaintEventArgs'/>.
+        /// <see cref='PaintEventArgs'/>.
         /// </summary>
         public void Dispose()
         {

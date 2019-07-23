@@ -2,24 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Internal;
+
 namespace System.Windows.Forms.Design
 {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Internal;
-    using System.Drawing;
-    using System.Reflection;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms.ComponentModel;
-    using Microsoft.Win32;
-    using Message = System.Windows.Forms.Message;
-
     /// <summary>
-    /// <para>Provides a user interface for <see cref='System.Windows.Forms.Design.WindowsFormsComponentEditor'/>.</para>
+    /// Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch)
@@ -54,13 +48,10 @@ namespace System.Windows.Forms.Design
         private const int STRIP_HEIGHT = 4;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorForm'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='ComponentEditorForm'/> class.
         /// </summary>
         public ComponentEditorForm(object component, Type[] pageTypes) : base()
         {
-
             if (!(component is IComponent))
             {
                 throw new ArgumentException(SR.ComponentEditorFormBadComponent, "component");
@@ -84,7 +75,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Applies any changes in the set of ComponentPageControl to the actual component.
+        ///  Applies any changes in the set of ComponentPageControl to the actual component.
         /// </summary>
         internal virtual void ApplyChanges(bool lastApply)
         {
@@ -137,20 +128,11 @@ namespace System.Windows.Forms.Design
                         pageSites[n].GetPageControl().OnApplyComplete();
                     }
                 }
-
-                /*
-                if (transaction != null) {
-                    transaction.Commit();
-                    CreateNewTransaction();                    
-                }
-                */
             }
         }
 
         /// <summary>
-        ///    <para>
-        ///       Hide the property
-        ///    </para>
+        ///  Hide the property
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
@@ -172,16 +154,15 @@ namespace System.Windows.Forms.Design
             remove => base.AutoSizeChanged -= value;
         }
 
-
         /*
         private void CreateNewTransaction() {
             IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));            
+            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));
         }
         */
 
         /// <summary>
-        ///     Handles ok/cancel/apply/help button click events
+        ///  Handles ok/cancel/apply/help button click events
         /// </summary>
         private void OnButtonClick(object sender, EventArgs e)
         {
@@ -205,7 +186,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Lays out the UI of the form.
+        ///  Lays out the UI of the form.
         /// </summary>
         private void OnConfigureUI()
         {
@@ -277,7 +258,6 @@ namespace System.Windows.Forms.Design
             }
             Text = caption;
 
-
             Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
                                                      maxSize.Width, maxSize.Height);
             pageHost.Bounds = pageHostBounds;
@@ -348,19 +328,14 @@ namespace System.Windows.Forms.Design
             });
 
 #pragma warning disable 618
-            // continuing with the old autoscale base size stuff, it works, 
+            // continuing with the old autoscale base size stuff, it works,
             // and is currently set to a non-standard height
             AutoScaleBaseSize = new Size(5, 14);
             ApplyAutoScaling();
 #pragma warning restore 618
 
-
         }
 
-        /// <summary>
-        /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
@@ -377,10 +352,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary>
-        /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnHelpRequested(HelpEventArgs e)
         {
             base.OnHelpRequested(e);
@@ -388,7 +360,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Called to initialize this form with the new component.
+        ///  Called to initialize this form with the new component.
         /// </summary>
         private void OnNewObjects()
         {
@@ -425,7 +397,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Handles switching between pages.
+        ///  Handles switching between pages.
         /// </summary>
         protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e)
         {
@@ -461,9 +433,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para>Provides a method to override in order to pre-process input messages before 
-        ///       they are dispatched.</para>
-        /// </summary>        
+        ///  Provides a method to override in order to pre-process input messages before
+        ///  they are dispatched.
+        /// </summary>
         public override bool PreProcessMessage(ref Message msg)
         {
             if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
@@ -475,8 +447,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Sets the controls of the form to dirty.  This enables the "apply"
-        ///     button.
+        ///  Sets the controls of the form to dirty.  This enables the "apply"
+        ///  button.
         /// </summary>
         internal virtual void SetDirty()
         {
@@ -486,7 +458,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para>Shows the form. The form will have no owner window.</para>
+        ///  Shows the form. The form will have no owner window.
         /// </summary>
         public virtual DialogResult ShowForm()
         {
@@ -494,7 +466,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para> Shows the form and the specified page. The form will have no owner window.</para>
+        ///  Shows the form and the specified page. The form will have no owner window.
         /// </summary>
         public virtual DialogResult ShowForm(int page)
         {
@@ -502,7 +474,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para>Shows the form with the specified owner.</para>
+        ///  Shows the form with the specified owner.
         /// </summary>
         public virtual DialogResult ShowForm(IWin32Window owner)
         {
@@ -510,7 +482,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para>Shows the form and the specified page with the specified owner.</para>
+        ///  Shows the form and the specified page with the specified owner.
         /// </summary>
         public virtual DialogResult ShowForm(IWin32Window owner, int page)
         {
@@ -538,7 +510,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Shows help for the active page.
+        ///  Shows help for the active page.
         /// </summary>
         private void ShowPageHelp()
         {
@@ -551,8 +523,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Implements a standard version of ComponentEditorPageSite for use within a
-        ///     ComponentEditorForm.
+        ///  Implements a standard version of ComponentEditorPageSite for use within a
+        ///  ComponentEditorForm.
         /// </summary>
         private sealed class ComponentEditorPageSite : IComponentEditorPageSite
         {
@@ -564,7 +536,7 @@ namespace System.Windows.Forms.Design
             private readonly ComponentEditorForm form;
 
             /// <summary>
-            ///     Creates the page site.
+            ///  Creates the page site.
             /// </summary>
             internal ComponentEditorPageSite(Control parent, Type pageClass, IComponent component, ComponentEditorForm form)
             {
@@ -590,7 +562,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Called by the ComponentEditorForm to activate / deactivate the page.
+            ///  Called by the ComponentEditorForm to activate / deactivate the page.
             /// </summary>
             internal bool Active
             {
@@ -633,7 +605,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Called by a page to return a parenting control for itself.
+            ///  Called by a page to return a parenting control for itself.
             /// </summary>
             public Control GetControl()
             {
@@ -641,7 +613,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Called by the ComponentEditorForm to get the actual page.
+            ///  Called by the ComponentEditorForm to get the actual page.
             /// </summary>
             internal ComponentEditorPage GetPageControl()
             {
@@ -649,7 +621,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Called by a page to mark it's contents as dirty.
+            ///  Called by a page to mark it's contents as dirty.
             /// </summary>
             public void SetDirty()
             {
@@ -662,8 +634,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary>
-        /// </summary>
         //  This should be moved into a shared location
         //  Its a duplication of what exists in the StyleBuilder.
         internal sealed class PageSelector : TreeView
@@ -680,7 +650,6 @@ namespace System.Windows.Forms.Design
 
             private IntPtr hbrushDither;
 
-
             public PageSelector()
             {
                 HotTracking = true;
@@ -696,8 +665,6 @@ namespace System.Windows.Forms.Design
                 Indent = 0;
                 FullRowSelect = true;
             }
-
-
 
             protected override CreateParams CreateParams
             {
@@ -737,7 +704,7 @@ namespace System.Windows.Forms.Design
             private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, NativeMethods.RECT rcIn,
                                         int state, int backColor, int textColor)
             {
-                IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
+                Size size = new Size();
                 IntNativeMethods.RECT rc2 = new IntNativeMethods.RECT();
                 IntNativeMethods.RECT rc = new IntNativeMethods.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
@@ -763,12 +730,12 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the height of the font
-                IntUnsafeNativeMethods.GetTextExtentPoint32(new HandleRef(null, dc), itemText, size);
+                IntUnsafeNativeMethods.GetTextExtentPoint32W(new HandleRef(null, dc), itemText, itemText.Length, ref size);
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;
-                rc2.top = rc.top + (((rc.bottom - rc.top) - size.cy) >> 1);
-                rc2.bottom = rc2.top + size.cy;
+                rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
+                rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
                 IntUnsafeNativeMethods.DrawText(new HandleRef(null, dc), itemText, ref rc2,

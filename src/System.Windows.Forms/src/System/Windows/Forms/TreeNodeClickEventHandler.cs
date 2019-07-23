@@ -5,9 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='System.Windows.Forms.TreeView.OnNodeClick'/>,
-    /// <see cref='System.Windows.Forms.TreeView.OnNodeClick'/>, <see cref='System.Windows.Forms.TreeView.OnNodeClick'/>,
-    /// or <see cref='System.Windows.Forms.TreeView.BeforeSelect'/> event of a <see cref='System.Windows.Forms.TreeView'/>
+    /// Represents the method that will handle the <see cref='TreeView.OnNodeClick'/>,
+    /// <see cref='TreeView.OnNodeClick'/>, <see cref='TreeView.OnNodeClick'/>,
+    /// or <see cref='TreeView.BeforeSelect'/> event of a <see cref='TreeView'/>
     /// </summary>
     public delegate void TreeNodeMouseClickEventHandler(object sender, TreeNodeMouseClickEventArgs e);
 }

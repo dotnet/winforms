@@ -38,9 +38,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    Override AutoSize to make it hidden from the user in the designer 
+        ///  Override AutoSize to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -87,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Override Anchor to make it hidden from the user in the designer 
+        ///  Override Anchor to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -107,8 +106,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates what type of border the Splitter control has.  This value
-        ///     comes from the System.Windows.Forms.BorderStyle enumeration.
+        ///  Indicates what type of border the Splitter control has.  This value
+        ///  comes from the System.Windows.Forms.BorderStyle enumeration.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -128,10 +127,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The dock property. The dock property controls to which edge
-        ///     of the container this control is docked to. For example, when docked to
-        ///     the top of the container, the control will be displayed flush at the
-        ///     top of the container, extending the length of the container.
+        ///  The dock property. The dock property controls to which edge
+        ///  of the container this control is docked to. For example, when docked to
+        ///  the top of the container, the control will be displayed flush at the
+        ///  top of the container, extending the length of the container.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -151,7 +150,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Override DockPadding to make it hidden from the user in the designer 
+        ///  Override DockPadding to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -167,7 +166,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The height of this SplitterPanel
+        ///  The height of this SplitterPanel
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -204,7 +203,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override Location to make it hidden from the user in the designer
+        ///  Override Location to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -235,9 +234,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    Override AutoSize to make it hidden from the user in the designer 
+        ///  Override AutoSize to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -256,9 +254,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    Override AutoSize to make it hidden from the user in the designer 
+        ///  Override AutoSize to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -278,9 +275,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Name of this control. The designer will set this to the same
-        ///     as the programatic Id "(name)" of the control.  The name can be
-        ///     used as a key into the ControlCollection.
+        ///  Name of this control. The designer will set this to the same
+        ///  as the programatic Id "(name)" of the control.  The name can be
+        ///  used as a key into the ControlCollection.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -300,7 +297,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The parent of this control.
+        ///  The parent of this control.
         /// </summary>
         internal SplitContainer Owner
         {
@@ -311,7 +308,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The parent of this control.
+        ///  The parent of this control.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -331,7 +328,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override Size to make it hidden from the user in the designer
+        ///  Override Size to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -355,7 +352,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override TabIndex to make it hidden from the user in the designer
+        ///  Override TabIndex to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -374,9 +371,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Override TabStop to make it hidden from the user in the designer
+        ///  Override TabStop to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -396,7 +392,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override Visible to make it hidden from the user in the designer
+        ///  Override Visible to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -416,7 +412,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The width of this control.
+        ///  The width of this control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -453,7 +449,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override VisibleChanged to make it hidden from the user in the designer
+        ///  Override VisibleChanged to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -467,7 +463,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override DockChanged to make it hidden from the user in the designer
+        ///  Override DockChanged to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -481,7 +477,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override LocationChanged to make it hidden from the user in the designer
+        ///  Override LocationChanged to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -495,7 +491,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override TabIndexChanged to make it hidden from the user in the designer
+        ///  Override TabIndexChanged to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -509,7 +505,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Override TabStopChanged to make it hidden from the user in the designer
+        ///  Override TabStopChanged to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),

@@ -2,28 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.Layout;
+using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Text;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Forms.Layout;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    ///    <para>
-    ///       Encapsulates
-    ///       a standard Windows(r) group
-    ///       box.
-    ///    </para>
+    ///  Encapsulates
+    ///  a standard Windows(r) group
+    ///  box.
     /// </summary>
     [
     ComVisible(true),
@@ -40,9 +31,7 @@ namespace System.Windows.Forms
         FlatStyle flatStyle = FlatStyle.Standard;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.GroupBox'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='GroupBox'/> class.
         /// </summary>
         public GroupBox() : base()
         {
@@ -59,10 +48,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the control will allow drag and
-        ///       drop operations and events to be used.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the control will allow drag and
+        ///  drop operations and events to be used.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public override bool AllowDrop
@@ -78,7 +65,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Override to re-expose AutoSize.</para>
+        ///  Override to re-expose AutoSize.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -103,7 +90,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
@@ -167,7 +154,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Set the default Padding to 3 so that it is consistent with Everett
+        ///  Set the default Padding to 3 so that it is consistent with Everett
         /// </summary>
         protected override Padding DefaultPadding
         {
@@ -178,8 +165,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -190,11 +177,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a rectangle that represents the
-        ///       dimensions of the <see cref='System.Windows.Forms.GroupBox'/>
-        ///       .
-        ///    </para>
+        ///  Gets a rectangle that represents the
+        ///  dimensions of the <see cref='GroupBox'/>
+        ///  .
         /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -216,7 +201,6 @@ namespace System.Windows.Forms
                     fontHeight = (int)Font.Height;
                     cachedFont = Font;
                 }
-
 
                 //for efficiency, so that we don't need to read property store four times
                 Padding padding = Padding;
@@ -269,7 +253,6 @@ namespace System.Windows.Forms
                         Refresh();
                     }
 
-
                 }
             }
         }
@@ -283,12 +266,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the user may
-        ///       press the TAB key to give the focus to the <see cref='System.Windows.Forms.GroupBox'/>
-        ///       .
-        ///
-        ///    </para>
+        ///  Gets or sets a value indicating whether the user may
+        ///  press the TAB key to give the focus to the <see cref='GroupBox'/>
+        ///  .
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public bool TabStop
@@ -345,7 +325,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
+        ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
         [
         DefaultValue(false),
@@ -365,9 +345,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the control supports rendering text using GDI+ and GDI.
-        ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
-        ///     value if the child control supports it.
+        ///  Determines whether the control supports rendering text using GDI+ and GDI.
+        ///  This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
+        ///  value if the child control supports it.
         /// </summary>
         internal override bool SupportsUseCompatibleTextRendering
         {
@@ -400,7 +380,6 @@ namespace System.Windows.Forms
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
         }
-
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -476,8 +455,6 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-
-
             // BACKCOMPAT requirement:
             // Why the Height/Width >= 10 check? This is because uxtheme doesn't seem to handle those cases
             // similar to what we do for the non-themed case, so if someone is using the groupbox as a
@@ -580,7 +557,6 @@ namespace System.Windows.Forms
                             flags |= IntTextFormatFlags.RightToLeft;
                             flags |= IntTextFormatFlags.Right;
                         }
-
 
                         using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                         {
@@ -695,8 +671,6 @@ namespace System.Windows.Forms
             return prefSize + totalPadding;
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnFontChanged(EventArgs e)
         {
             fontHeight = -1;
@@ -706,8 +680,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     We use this to process mnemonics and send them on to the first child
-        ///     control.
+        ///  We use this to process mnemonics and send them on to the first child
+        ///  control.
         /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
@@ -718,10 +692,8 @@ namespace System.Windows.Forms
             }
             return false;
         }
-        [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
-
             if (factor.Width != 1F && factor.Height != 1F)
             {
                 // Make sure when we're scaling by non-unity to clear the font cache
@@ -736,18 +708,17 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Text: " + Text;
         }
 
         /// <summary>
-        ///     The Windows group box doesn't erase the background so we do it
-        ///     ourselves here.
+        ///  The Windows group box doesn't erase the background so we do it
+        ///  ourselves here.
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
@@ -766,7 +737,6 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-
             if (OwnerDraw)
             {
                 base.WndProc(ref m);
@@ -802,7 +772,7 @@ namespace System.Windows.Forms
             return new GroupBoxAccessibleObject(this);
         }
 
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         internal class GroupBoxAccessibleObject : ControlAccessibleObject
         {
             internal GroupBoxAccessibleObject(GroupBox owner) : base(owner)

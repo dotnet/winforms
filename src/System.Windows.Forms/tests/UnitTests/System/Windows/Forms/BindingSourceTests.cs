@@ -203,7 +203,6 @@ namespace System.Windows.Forms.Tests
                 var nonEmptyArray = new int[] { 1, 2, 3 };
                 yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray };
 
-
                 var mockNonEmptyListSource = new Mock<IListSource>(MockBehavior.Strict);
                 mockNonEmptyListSource
                     .Setup(s => s.GetList())
@@ -273,7 +272,6 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_Object_String_BindingList_TestData()
         {
-            
             foreach (string dataMember in new string[] { null, string.Empty })
             {
                 var emptyList = new List<int> { };

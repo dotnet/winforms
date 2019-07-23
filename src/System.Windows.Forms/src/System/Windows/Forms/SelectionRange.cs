@@ -2,47 +2,37 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Globalization;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.IO;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///     This is a class that represents the date selection range of a MonthCalendar control.
+    ///  This is a class that represents the date selection range of a MonthCalendar control.
     /// </summary>
     [
-    TypeConverterAttribute(typeof(SelectionRangeConverter))
+    TypeConverter(typeof(SelectionRangeConverter))
     ]
     public sealed class SelectionRange
     {
         /// <summary>
-        ///     The lower limit of the selection range.
+        ///  The lower limit of the selection range.
         /// </summary>
         private DateTime start = DateTime.MinValue.Date;
 
         /// <summary>
-        ///     The upper limit of the selection range.
+        ///  The upper limit of the selection range.
         /// </summary>
         private DateTime end = DateTime.MaxValue.Date;
 
         /// <summary>
-        ///     Create a new SelectionRange object with the range [null, null].
+        ///  Create a new SelectionRange object with the range [null, null].
         /// </summary>
         public SelectionRange()
         {
         }
 
         /// <summary>
-        ///     Create a new SelectionRange object with the given range.
+        ///  Create a new SelectionRange object with the given range.
         /// </summary>
         public SelectionRange(DateTime lower, DateTime upper)
         {
@@ -65,7 +55,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Create a new SelectionRange object given an existing SelectionRange object.
+        ///  Create a new SelectionRange object given an existing SelectionRange object.
         /// </summary>
         public SelectionRange(SelectionRange range)
         {
@@ -74,7 +64,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the ending time of this range.
+        ///  Returns the ending time of this range.
         /// </summary>
         public DateTime End
         {
@@ -89,7 +79,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Starting time of this range
+        ///  Starting time of this range
         /// </summary>
         public DateTime Start
         {
@@ -104,7 +94,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {

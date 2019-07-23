@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Automation
     /// </summary>
     public enum AutomationNotificationKind
     {
-
         /// <summary>
         /// The current element container has had something added to it that should be presented to the user.
         /// </summary>

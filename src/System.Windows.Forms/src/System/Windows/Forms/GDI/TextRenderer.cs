@@ -2,18 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.Internal;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Diagnostics;
-
-
     /// <summary>
-    ///    <para>
-    ///     This class provides API for drawing GDI text.
-    ///    </para>
+    ///  This class provides API for drawing GDI text.
     /// </summary>
     public sealed class TextRenderer
     {
@@ -336,7 +331,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         internal static Color DisabledTextColor(Color backColor)
         {

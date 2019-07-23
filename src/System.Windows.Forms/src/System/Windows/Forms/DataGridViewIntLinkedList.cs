@@ -2,16 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-
     /// <summary>
-    /// <para>Represents a linked list of integers</para>
+    /// Represents a linked list of integers
     /// </summary>
     internal class DataGridViewIntLinkedList : IEnumerable
     {
@@ -204,7 +201,7 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/>  linked list.</para>
+    /// Represents an emunerator of elements in a <see cref='DataGridViewIntLinkedList'/>  linked list.
     /// </summary>
     internal class DataGridViewIntLinkedListEnumerator : IEnumerator
     {
@@ -251,7 +248,7 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/> linked list.</para>
+    /// Represents an element in a <see cref='DataGridViewIntLinkedList'/> linked list.
     /// </summary>
     internal class DataGridViewIntLinkedListElement
     {

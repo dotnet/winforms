@@ -2,25 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Specialized;
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-
-
-    // this class encapsulates the logic for Renderer and RenderMode so it can 
+    // this class encapsulates the logic for Renderer and RenderMode so it can
     // be shared across classes.
     internal class ToolStripRendererSwitcher
     {
-
         private static readonly int stateUseDefaultRenderer = BitVector32.CreateMask();
         private static readonly int stateAttachedRendererChanged = BitVector32.CreateMask(stateUseDefaultRenderer);
 
-
         private ToolStripRenderer renderer = null;
-        private Type currentRendererType = typeof(System.Type);
+        private Type currentRendererType = typeof(Type);
         private BitVector32 state = new BitVector32();
 
         private readonly ToolStripRenderMode defaultRenderMode = ToolStripRenderMode.ManagerRenderMode;
@@ -30,7 +25,6 @@ namespace System.Windows.Forms
             this.defaultRenderMode = defaultRenderMode;
             RenderMode = defaultRenderMode;
         }
-
 
         public ToolStripRendererSwitcher(Control owner)
         {
@@ -66,13 +60,13 @@ namespace System.Windows.Forms
             }
             set
             {
-                // if the value happens to be null, the next get 
+                // if the value happens to be null, the next get
                 // will autogenerate a new ToolStripRenderer.
                 if (renderer != value)
                 {
                     state[stateUseDefaultRenderer] = (value == null);
                     renderer = value;
-                    currentRendererType = (renderer != null) ? renderer.GetType() : typeof(System.Type);
+                    currentRendererType = (renderer != null) ? renderer.GetType() : typeof(Type);
 
                     OnRendererChanged(EventArgs.Empty);
                 }

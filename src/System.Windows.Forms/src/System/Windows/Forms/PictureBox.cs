@@ -2,28 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Versioning;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.IO;
-    using System.Drawing;
-    using System.Net;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Threading;
-    using System.Windows.Forms.Layout;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para> Displays an image that can be a graphic from a bitmap, 
-    ///       icon, or metafile, as well as from
-    ///       an enhanced metafile, JPEG, or GIF files.</para>
+    ///  Displays an image that can be a graphic from a bitmap,
+    ///  icon, or metafile, as well as from
+    ///  an enhanced metafile, JPEG, or GIF files.
     /// </summary>
     [
     ComVisible(true),
@@ -36,20 +29,19 @@ namespace System.Windows.Forms
     ]
     public class PictureBox : Control, ISupportInitialize
     {
-
         /// <summary>
-        ///     The type of border this control will have.
+        ///  The type of border this control will have.
         /// </summary>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
         /// <summary>
-        ///     The image being displayed.
+        ///  The image being displayed.
         /// </summary>
         private Image image;
 
         /// <summary>
-        ///     Controls how the image is placed within our bounds, or how we are
-        ///     sized to fit said image.
+        ///  Controls how the image is placed within our bounds, or how we are
+        ///  sized to fit said image.
         /// </summary>
         private PictureBoxSizeMode sizeMode = PictureBoxSizeMode.Normal;
         private Size savedSize;
@@ -82,12 +74,10 @@ namespace System.Windows.Forms
         [ThreadStatic]
         private static Image defaultErrorImageForThread = null;
 
-
         private static readonly object defaultInitialImageKey = new object();
         private static readonly object defaultErrorImageKey = new object();
         private static readonly object loadCompletedKey = new object();
         private static readonly object loadProgressChangedKey = new object();
-
 
         private const int PICTUREBOXSTATE_asyncOperationInProgress = 0x00000001;
         private const int PICTUREBOXSTATE_cancellationPending = 0x00000002;
@@ -98,38 +88,34 @@ namespace System.Windows.Forms
         private const int PICTUREBOXSTATE_inInitialization = 0x00000040;
 
         // PERF: take all the bools and put them into a state variable
-        private System.Collections.Specialized.BitVector32 pictureBoxState; // see PICTUREBOXSTATE_ consts above
+        private Collections.Specialized.BitVector32 pictureBoxState; // see PICTUREBOXSTATE_ consts above
 
         // http://msdn.microsoft.com/en-us/library/93z9ee4x(v=VS.100).aspx
-        // if we load an image from a stream, 
+        // if we load an image from a stream,
         // we must keep the stream open for the lifetime of the Image
         StreamReader localImageStreamReader = null;
         Stream uriImageStream = null;
 
         /// <summary>
-        ///    <para>Creates a new picture with all default properties and no 
-        ///       Image. The default PictureBox.SizeMode will be PictureBoxSizeMode.NORMAL.
-        ///    </para>
+        ///  Creates a new picture with all default properties and no
+        ///  Image. The default PictureBox.SizeMode will be PictureBoxSizeMode.NORMAL.
         /// </summary>
         public PictureBox()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
-            pictureBoxState = new System.Collections.Specialized.BitVector32(PICTUREBOXSTATE_useDefaultErrorImage |
+            pictureBoxState = new Collections.Specialized.BitVector32(PICTUREBOXSTATE_useDefaultErrorImage |
                                                                              PICTUREBOXSTATE_useDefaultInitialImage);
 
             SetStyle(ControlStyles.Opaque | ControlStyles.Selectable, false);
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.SupportsTransparentBackColor, true);
-
 
             TabStop = false;
             savedSize = Size;
         }
 
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop
         {
@@ -144,8 +130,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Indicates the
-        ///       border style for the control.</para>
+        ///  Indicates the
+        ///  border style for the control.
         /// </summary>
         [
         DefaultValue(BorderStyle.None),
@@ -189,7 +175,7 @@ namespace System.Windows.Forms
             }
             catch (UriFormatException)
             {
-                // It's a relative pathname, get its full path as a file. 
+                // It's a relative pathname, get its full path as a file.
                 path = Path.GetFullPath(path);
                 uri = new Uri(path);
             }
@@ -227,10 +213,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Returns the parameters needed to create the handle. Inheriting classes
-        ///       can override this to provide extra functionality. They should not,
-        ///       however, forget to call base.getCreateParams() first to get the struct
-        ///       filled up with the basic info.</para>
+        ///  Returns the parameters needed to create the handle. Inheriting classes
+        ///  can override this to provide extra functionality. They should not,
+        ///  however, forget to call base.getCreateParams() first to get the struct
+        ///  filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -261,8 +247,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -280,8 +266,6 @@ namespace System.Windows.Forms
         ]
         public Image ErrorImage
         {
-
-
             get
             {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] approach used
@@ -315,8 +299,6 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
@@ -338,8 +320,6 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font
         {
@@ -361,7 +341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Retrieves the Image that the <see cref='System.Windows.Forms.PictureBox'/> is currently displaying.</para>
+        /// Retrieves the Image that the <see cref='PictureBox'/> is currently displaying.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -371,7 +351,6 @@ namespace System.Windows.Forms
         ]
         public Image Image
         {
-
             get
             {
                 return image;
@@ -404,7 +383,7 @@ namespace System.Windows.Forms
 
                 pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation] = !string.IsNullOrEmpty(imageLocation);
 
-                // Reset main image if it hasn't been directly specified. 
+                // Reset main image if it hasn't been directly specified.
                 if (string.IsNullOrEmpty(imageLocation) &&
                     imageInstallationType != ImageInstallationType.DirectlySpecified)
                 {
@@ -480,8 +459,6 @@ namespace System.Windows.Forms
         ]
         public Image InitialImage
         {
-
-
             get
             {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] approach
@@ -610,7 +587,6 @@ namespace System.Windows.Forms
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoad1Descr)),
-        SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings") // PM review done
         ]
         public void Load(string url)
         {
@@ -663,7 +639,7 @@ namespace System.Windows.Forms
 
             // Invoke BeginGetResponse on a threadpool thread, as it has
             // unpredictable latency, since, on first call, it may load in the
-            // configuration system (this is NCL 
+            // configuration system (this is NCL
             (new WaitCallback(BeginGetResponseDelegate)).BeginInvoke(req, null, null);
         }
 
@@ -827,11 +803,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadAsync1Descr)),
-        SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings") // PM review done
         ]
         public void LoadAsync(string url)
         {
@@ -877,8 +851,6 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft
         {
@@ -899,13 +871,13 @@ namespace System.Windows.Forms
             remove => base.RightToLeftChanged -= value;
         }
 
-        // Be sure not to re-serialized initial image if it's the default. 
+        // Be sure not to re-serialized initial image if it's the default.
         private bool ShouldSerializeInitialImage()
         {
             return !pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage];
         }
 
-        // Be sure not to re-serialized error image if it's the default. 
+        // Be sure not to re-serialized error image if it's the default.
         private bool ShouldSerializeErrorImage()
         {
             return !pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage];
@@ -921,7 +893,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Indicates how the image is displayed.</para>
+        ///  Indicates how the image is displayed.
         /// </summary>
         [
         DefaultValue(PictureBoxSizeMode.Normal),
@@ -975,8 +947,6 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
         {
@@ -998,8 +968,6 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public int TabIndex
         {
@@ -1020,9 +988,7 @@ namespace System.Windows.Forms
             remove => base.TabIndexChanged -= value;
         }
 
-        /// <hideinheritance/>        
-        /// <summary>
-        /// </summary>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text
         {
@@ -1081,8 +1047,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     If the PictureBox has the SizeMode property set to AutoSize, this makes
-        ///     sure that the picturebox is large enough to hold the image.
+        ///  If the PictureBox has the SizeMode property set to AutoSize, this makes
+        ///  sure that the picturebox is large enough to hold the image.
         /// </summary>
         private void AdjustSize()
         {
@@ -1129,8 +1095,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1231,11 +1195,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overridden onPaint to make sure that the image is painted correctly.
+        ///  Overridden onPaint to make sure that the image is painted correctly.
         /// </summary>
         protected override void OnPaint(PaintEventArgs pe)
         {
-
             if (pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation])
             {
                 try
@@ -1279,7 +1242,6 @@ namespace System.Windows.Forms
             base.OnPaint(pe); // raise Paint event
         }
 
-
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
@@ -1293,7 +1255,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     OnResize override to invalidate entire control in Stetch mode
+        ///  OnResize override to invalidate entire control in Stetch mode
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -1314,11 +1276,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", SizeMode: " + sizeMode.ToString("G");
         }

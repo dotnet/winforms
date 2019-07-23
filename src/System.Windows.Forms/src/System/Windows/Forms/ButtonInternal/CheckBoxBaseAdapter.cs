@@ -2,22 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Internal;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.VisualStyles;
-    using System.Runtime.InteropServices;
-
     internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
     {
-
         protected const int flatCheckSize = 11;
 
         [ThreadStatic]
@@ -152,7 +145,6 @@ namespace System.Windows.Forms.ButtonInternal
         // used by DataGridViewCheckBoxCell
         internal static void DrawCheckOnly(int checkSize, bool controlChecked, bool controlEnabled, CheckState controlCheckState, Graphics g, LayoutData layout, ColorData colors, Color checkColor, Color checkBackground)
         {
-
             // check
             //
             if (controlChecked)
@@ -329,7 +321,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             if (string.IsNullOrEmpty(Control.Text))
             {
-                // When a CheckBox has no text, AutoSize sets the size to zero 
+                // When a CheckBox has no text, AutoSize sets the size to zero
                 // and thus there's no place around which to draw the focus rectangle.
                 // So, when AutoSize == true we want the focus rectangle to be rendered inside the box.
                 // Otherwise, it should encircle all the available space next to the box (like it's done in WPF and ComCtl32).

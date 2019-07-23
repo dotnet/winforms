@@ -2,25 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
 
     /// <summary>
-    ///     Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
-    ///     the standard positioning and mnemonic handling code that is necessary
-    ///     in a user control.
+    ///  Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
+    ///  the standard positioning and mnemonic handling code that is necessary
+    ///  in a user control.
     /// </summary>
     [
     ComVisible(true),
@@ -36,9 +30,9 @@ namespace System.Windows.Forms
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
         /// <summary>
-        ///    Creates a new UserControl object. A vast majority of people
-        ///    will not want to instantiate this class directly, but will be a
-        ///    sub-class of it.
+        ///  Creates a new UserControl object. A vast majority of people
+        ///  will not want to instantiate this class directly, but will be a
+        ///  sub-class of it.
         /// </summary>
         public UserControl()
         {
@@ -49,7 +43,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Override to re-expose AutoSize.</para>
+        ///  Override to re-expose AutoSize.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -66,7 +60,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Re-expose AutoSizeChanged.</para>
+        ///  Re-expose AutoSizeChanged.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler AutoSizeChanged
@@ -76,7 +70,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
@@ -119,7 +113,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates whether controls in this container will be automatically validated when the focus changes.
+        ///  Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </summary>
         [
         Browsable(true),
@@ -148,9 +142,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> 
-        ///       Indicates the borderstyle for the UserControl.
-        ///    </para>
+        ///
+        ///  Indicates the borderstyle for the UserControl.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -182,11 +175,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Returns the parameters needed to create the handle.  Inheriting classes
-        ///    can override this to provide extra functionality.  They should not,
-        ///    however, forget to call base.getCreateParams() first to get the struct
-        ///    filled up with the basic info.This is required as we now need to pass the 
-        ///    styles for appropriate BorderStyle that is set by the user.
+        ///  Returns the parameters needed to create the handle.  Inheriting classes
+        ///  can override this to provide extra functionality.  They should not,
+        ///  however, forget to call base.getCreateParams() first to get the struct
+        ///  filled up with the basic info.This is required as we now need to pass the
+        ///  styles for appropriate BorderStyle that is set by the user.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -212,7 +205,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The default size for this user control.
+        ///  The default size for this user control.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -223,7 +216,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs before the control becomes visible.</para>
+        ///  Occurs before the control becomes visible.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.UserControlOnLoadDescr))]
         public event EventHandler Load
@@ -257,9 +250,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Validates all selectable child controls in the container, including descendants. This is
-        ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
-        ///     for details of exactly which child controls will be validated.
+        ///  Validates all selectable child controls in the container, including descendants. This is
+        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
+        ///  for details of exactly which child controls will be validated.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren()
@@ -268,8 +261,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Validates all the child controls in the container. Exactly which controls are
-        ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
+        ///  Validates all the child controls in the container. Exactly which controls are
+        ///  validated and which controls are skipped is determined by <paramref name="flags"/>.
         /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren(ValidationConstraints validationConstraints)
@@ -300,7 +293,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Raises the CreateControl event.</para>
+        ///  Raises the CreateControl event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnCreateControl()
@@ -311,7 +304,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The Load event is fired before the control becomes visible for the first time.</para>
+        ///  The Load event is fired before the control becomes visible for the first time.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLoad(EventArgs e)
@@ -322,7 +315,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     OnResize override to invalidate entire control in Stetch mode
+        ///  OnResize override to invalidate entire control in Stetch mode
         /// </summary>
         protected override void OnResize(EventArgs e)
         {

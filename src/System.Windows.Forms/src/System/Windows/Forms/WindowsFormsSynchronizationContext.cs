@@ -2,16 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Threading;
-using System.Windows.Forms;
 using System.Diagnostics;
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///     SynchronizationContext subclass used by the Windows Forms package.
+    ///  SynchronizationContext subclass used by the Windows Forms package.
     /// </summary>
     public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable
     {
@@ -27,7 +25,6 @@ namespace System.Windows.Forms
 
         [ThreadStatic]
         private static SynchronizationContext previousSyncContext;
-
 
         public WindowsFormsSynchronizationContext()
         {
@@ -129,7 +126,7 @@ namespace System.Windows.Forms
         // Instantiate and install a WF op sync context, and save off the old one.
         internal static void InstallIfNeeded()
         {
-            // Exit if we shouldn't auto-install, if we've already installed and we haven't uninstalled, 
+            // Exit if we shouldn't auto-install, if we've already installed and we haven't uninstalled,
             // or if we're being called recursively (creating the WF
             // async op sync context can create a parking window control).
             if (!AutoInstall || inSyncContextInstallation)

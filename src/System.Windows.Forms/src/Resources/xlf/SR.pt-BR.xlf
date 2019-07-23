@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">O controle ActiveX é um controle sem janelas. Não há suporte para esses controles nesta versão do .NET Framework.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">O controle ActiveX é um controle sem janelas. Não há suporte para esses controles nesta versão do .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ depuração just-in-time (JIT) em vez desta caixa de diálogo.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">O aplicativo tentou executar uma operação não permitida pela política de segurança. Para conceder a permissão necessária ao aplicativo, contate o administrador de sistema ou use a ferramenta Microsoft .NET Framework Configuration.
+        <target state="translated">O aplicativo tentou executar uma operação não permitida pela política de segurança. Para conceder a permissão necessária ao aplicativo, contate o administrador de sistema ou use a ferramenta Microsoft .NET Configuration.
 
 Se você clicar em Continuar, o aplicativo ignorará o erro e tentará continuar.
 
@@ -5204,12 +5204,12 @@ Se você clicar em Continuar, o aplicativo ignorará o erro e tentará continuar
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">O aplicativo tentou executar uma operação não permitida pela política de segurança. Para conceder a permissão necessária ao aplicativo, contate o administrador de sistema ou use a ferramenta Microsoft .NET Framework Configuration.
+        <target state="translated">O aplicativo tentou executar uma operação não permitida pela política de segurança. Para conceder a permissão necessária ao aplicativo, contate o administrador de sistema ou use a ferramenta Microsoft .NET Configuration.
 
 Se você clicar em Continuar, o aplicativo ignorará o erro e tentará continuar. Se você clicar em Sair, o aplicativo será fechado imediatamente
 

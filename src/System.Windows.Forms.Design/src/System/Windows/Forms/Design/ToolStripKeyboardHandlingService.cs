@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
         private bool _commandsAdded = false;
         private bool _copyInProgress = false;
         private bool _cutOrDeleteInProgress = false;
-        private bool _contextMenuShownByKeyBoard = false; //We should know when the contextMenu is shown by KeyBoard shortcut. 
+        private bool _contextMenuShownByKeyBoard = false; //We should know when the contextMenu is shown by KeyBoard shortcut.
         private object _ownerItemAfterCut = null; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
 
         /// <summary>
@@ -101,7 +101,6 @@ namespace System.Windows.Forms.Design
                 }
             }
         }
-
 
         // We need to listen to MenuCommands.Delete since we are going to change the selection here instead of OnComponentRemoved The OnComponentRemoved gets called through various different places like Partial Reload, Full Reload and Undo-Redo transactions Changing the selection in "OnComponentRemoved" thus is expensive in terms of flicker and code that gets run causing PERF hit.
         internal bool CutOrDeleteInProgress
@@ -566,7 +565,7 @@ namespace System.Windows.Forms.Design
         // Handler for Paste Command
         private void OnCommandPaste(object sender, EventArgs e)
         {
-            //IF TemplateNode is Active DO NOT Support Paste. This is what MainMenu did 
+            //IF TemplateNode is Active DO NOT Support Paste. This is what MainMenu did
             // We used to incorrectly paste the item to the parent's collection; so inorder to make a simple fix I am being consistent with MainMenu
             if (TemplateNodeActive)
             {
@@ -1112,7 +1111,7 @@ namespace System.Windows.Forms.Design
 
             if (tool != null || primarySelection is ToolStripItem)
             {
-                // Remove the Panel if any 
+                // Remove the Panel if any
                 BehaviorService behaviorService = (BehaviorService)_provider.GetService(typeof(BehaviorService));
                 if (behaviorService != null)
                 {
@@ -1196,7 +1195,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (right)
                         {
-                            //no where to go .. since we are on DesignerToolStripControlHost for DropDown.    
+                            //no where to go .. since we are on DesignerToolStripControlHost for DropDown.
                         }
                         else
                         {
@@ -1276,7 +1275,6 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-
         /// <summary>
         /// This is the private helper function which is used to select the toolStripItem in the 'down' direction.
         /// </summary>
@@ -1298,7 +1296,7 @@ namespace System.Windows.Forms.Design
                 currentSelection = ShiftPrimaryItem;
             }
 
-            //Check for ContextMenuStrip first... 
+            //Check for ContextMenuStrip first...
             if (currentSelection is ContextMenuStrip contextMenu)
             {
                 if (down)
@@ -1749,7 +1747,6 @@ namespace System.Windows.Forms.Design
         /// This function allows the service to rotate the TabSelection when TAB key is pressed.
         /// </summary>
         // Okay to suppress because of complex code path
-        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public void RotateTab(bool backwards)
         {
             Control ctl;
@@ -1774,7 +1771,7 @@ namespace System.Windows.Forms.Design
             if (currentSelection == null)
             {
                 currentSelection = SelectedDesignerControl;
-                // If we are on templateNode and tabbing ahead ...  the select the next Control on the parent ... 
+                // If we are on templateNode and tabbing ahead ...  the select the next Control on the parent ...
                 if (currentSelection != null)
                 {
                     if (currentSelection is DesignerToolStripControlHost templateNodeItem && (!templateNodeItem.IsOnDropDown || (templateNodeItem.IsOnDropDown && templateNodeItem.IsOnOverflow)))
@@ -1792,7 +1789,7 @@ namespace System.Windows.Forms.Design
                                     if (targetSelection != null)
                                     {
                                         ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray. 
+                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                         while (controlDesigner != null)
                                         {
                                             // if the targetSelection from the Tray is a control .. try the next one.
@@ -1906,7 +1903,7 @@ namespace System.Windows.Forms.Design
                                         if (targetSelection != null)
                                         {
                                             ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray. 
+                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                             while (controlDesigner != null)
                                             {
                                                 // if the targetSelection from the Tray is a control .. try the next one.

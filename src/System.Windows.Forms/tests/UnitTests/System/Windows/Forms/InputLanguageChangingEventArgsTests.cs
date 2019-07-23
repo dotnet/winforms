@@ -10,7 +10,6 @@ namespace System.Windows.Forms.Tests
 {
     public class InputLanguageChangingEventArgsTests
     {
-#if false
         public static IEnumerable<object[]> Ctor_CultureInfo_Bool_TestData()
         {
             yield return new object[] { CultureInfo.InvariantCulture, true };
@@ -49,7 +48,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(inputLanguage.Culture, e.Culture);
             Assert.Equal(sysCharSet, e.SysCharSet);
         }
-#endif
 
         [Fact]
         public void Ctor_NullCultureInfo_ThrowsNullReferenceException()

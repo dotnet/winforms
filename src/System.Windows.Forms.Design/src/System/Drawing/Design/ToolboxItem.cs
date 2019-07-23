@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -107,7 +106,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the bitmap that will be used on the toolbox for this item. 
+        /// Gets or sets the bitmap that will be used on the toolbox for this item.
         /// Use this property on the design surface as this bitmap is scaled according to the current the DPI setting.
         /// </summary>
         public Bitmap Bitmap
@@ -219,7 +218,6 @@ namespace System.Drawing.Design
         /// </summary>
         public bool IsTransient
         {
-            [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
             get
             {
                 return (bool)Properties["IsTransient"];
@@ -508,16 +506,11 @@ namespace System.Drawing.Design
                    (name1 != null && name2 != null && name1.FullName == name2.FullName);
         }
 
-        public override int GetHashCode()
-        {
-            int typeHash = TypeName?.GetHashCode() ?? 0;
-            int displayHash = DisplayName?.GetHashCode() ?? 0;
-            return unchecked(typeHash ^ displayHash);
-        }
+        public override int GetHashCode() => HashCode.Combine(TypeName, DisplayName);
 
         /// <summary>
         /// Filters a property value before returning it.  This allows a property to always clone values,
-        ///    or to provide a default value when none exists.
+        ///  or to provide a default value when none exists.
         /// </summary>
         protected virtual object FilterPropertyValue(string propertyName, object value)
         {
@@ -571,11 +564,10 @@ namespace System.Drawing.Design
 
         /// <summary>
         /// This utility function can be used to load a type given a name.  AssemblyName and
-        ///     designer host can be null, but if they are present they will be used to help
-        ///     locate the type.  If reference is true, the given assembly name will be added
-        ///     to the designer host's set of references.
+        ///  designer host can be null, but if they are present they will be used to help
+        ///  locate the type.  If reference is true, the given assembly name will be added
+        ///  to the designer host's set of references.
         /// </summary>
-        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
         protected virtual Type GetType(IDesignerHost host, AssemblyName assemblyName, string typeName, bool reference)
         {
             ITypeResolutionService ts = null;
@@ -844,7 +836,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Locks this toolbox item.  Locking a toolbox item makes it read-only and 
+        /// Locks this toolbox item.  Locking a toolbox item makes it read-only and
         /// prevents any changes to its properties.
         /// </summary>
         public virtual void Lock()
@@ -855,7 +847,6 @@ namespace System.Drawing.Design
         /// <summary>
         ///Saves the state of this ToolboxItem to the specified serialization info
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         protected virtual void Serialize(SerializationInfo info, StreamingContext context)
         {
             if (s_toolboxItemPersist.TraceVerbose)
@@ -877,7 +868,6 @@ namespace System.Drawing.Design
         /// Raises the OnComponentsCreated event. This
         /// will be called when this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnComponentsCreated(ToolboxComponentsCreatedEventArgs args)
         {
             _componentsCreatedEvent?.Invoke(this, args);
@@ -887,7 +877,6 @@ namespace System.Drawing.Design
         /// Raises the OnCreateComponentsInvoked event. This
         /// will be called before this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnComponentsCreating(ToolboxComponentsCreatingEventArgs args)
         {
             _componentsCreatingEvent?.Invoke(this, args);
@@ -897,7 +886,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         /// Called as a helper to ValidatePropertyValue to validate that an object
-        ///    is of a given type.
+        ///  is of a given type.
         /// </summary>
         protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
         {
@@ -919,7 +908,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         /// This is called whenever a value is set in the property dictionary.  It gives you a chance
-        /// to change the value of an object before comitting it, our reject it by throwing an 
+        /// to change the value of an object before comitting it, our reject it by throwing an
         /// exception.
         /// </summary>
         protected virtual object ValidatePropertyValue(string propertyName, object value)
@@ -995,7 +984,6 @@ namespace System.Drawing.Design
             return value;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             Serialize(info, context);

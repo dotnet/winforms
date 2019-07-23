@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Stores the specified data and its associated format in  this instance,
         /// using autoConvert to specify whether the data can be converted to
-        /// another format.</para>
+        /// another format.
         /// </summary>
         void SetData(string format, bool autoConvert, object data);
 

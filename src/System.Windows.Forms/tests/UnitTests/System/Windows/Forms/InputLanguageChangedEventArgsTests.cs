@@ -10,7 +10,6 @@ namespace System.Windows.Forms.Tests
 {
     public class InputLanguageChangedEventArgsTests
     {
-#if false
         public static IEnumerable<object[]> Ctor_CultureInfo_Byte_TestData()
         {
             yield return new object[] { CultureInfo.InvariantCulture, 0 };
@@ -18,13 +17,19 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_InputLanguage_Byte_TestData))]
+        [MemberData(nameof(Ctor_CultureInfo_Byte_TestData))]
         public void Ctor_CultureInfo_Byte(CultureInfo culture, byte charSet)
         {
             var e = new InputLanguageChangedEventArgs(culture, charSet);
             Assert.Equal(InputLanguage.FromCulture(culture), e.InputLanguage);
             Assert.Equal(culture, e.Culture);
             Assert.Equal(charSet, e.CharSet);
+        }
+
+        [Fact]
+        public void Ctor_NullCultureInfo_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangedEventArgs((CultureInfo)null, 0));
         }
 
         public static IEnumerable<object[]> Ctor_InputLanguage_Byte_TestData()
@@ -47,13 +52,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(inputLanguage, e.InputLanguage);
             Assert.Equal(inputLanguage.Culture, e.Culture);
             Assert.Equal(charSet, e.CharSet);
-        }
-#endif
-
-        [Fact]
-        public void Ctor_NullCultureInfo_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangedEventArgs((CultureInfo)null, 0));
         }
 
         [Fact]

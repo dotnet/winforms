@@ -2,18 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.ChangeUICues'/> event.
+    /// Provides data for the <see cref='Control.ChangeUICues'/> event.
     /// </summary>
     public class UICuesEventArgs : EventArgs
     {
         private readonly UICues _uicues;
 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public UICuesEventArgs(UICues uicues)
         {
             _uicues = uicues;

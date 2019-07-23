@@ -13,14 +13,14 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///     Code model serializer for enum types.
+    ///  Code model serializer for enum types.
     /// </summary>
     internal class EnumCodeDomSerializer : CodeDomSerializer
     {
         private static EnumCodeDomSerializer s_defaultSerializer;
 
         /// <summary>
-        ///     Retrieves a default static instance of this serializer.
+        ///  Retrieves a default static instance of this serializer.
         /// </summary>
         internal new static EnumCodeDomSerializer Default
         {
@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
@@ -61,7 +61,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // EnumConverter (and anything that is overridden to support enums)
-                    // should be providing us a conversion to Enum[] for flag styles.  
+                    // should be providing us a conversion to Enum[] for flag styles.
                     // If it doesn't, we will emit a warning and just do a cast from the enum value.
 
                     CodeTypeReferenceExpression enumType = new CodeTypeReferenceExpression(value.GetType());

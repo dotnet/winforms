@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -29,13 +27,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32)]
         public static extern int StretchDIBits(HandleRef hdc, int XDest, int YDest, int nDestWidth, int nDestHeight, int XSrc, int YSrc, int nSrcWidth, int nSrcHeight, byte[] lpBits, ref NativeMethods.BITMAPINFO_FLAT lpBitsInfo, int iUsage, int dwRop);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateCompatibleBitmap", CharSet = CharSet.Auto)]
-        public static extern IntPtr IntCreateCompatibleBitmap(HandleRef hDC, int width, int height);
-
-        public static IntPtr CreateCompatibleBitmap(HandleRef hDC, int width, int height)
-        {
-            return Interop.HandleCollector.Add(IntCreateCompatibleBitmap(hDC, width, height), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr CreateCompatibleBitmap(HandleRef hDC, int width, int height);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, [In, Out] NativeMethods.SCROLLINFO si);
@@ -119,25 +112,14 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
         public static extern bool ExternalDeleteObject(HandleRef hObject);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        internal static extern bool IntDeleteObject(HandleRef hObject);
-
-        public static bool DeleteObject(HandleRef hObject)
-        {
-            Interop.HandleCollector.Remove((IntPtr)hObject, Interop.CommonHandles.GDI);
-            return IntDeleteObject(hObject);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        internal static extern bool DeleteObject(HandleRef hObject);
 
         [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
-        public static extern SafeNativeMethods.IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
+        public static extern IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateSolidBrush", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreateSolidBrush(int crColor);
-
-        public static IntPtr CreateSolidBrush(int crColor)
-        {
-            return Interop.HandleCollector.Add(IntCreateSolidBrush(crColor), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr CreateSolidBrush(int crColor);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowExtEx(HandleRef hDC, int x, int y, [In, Out] NativeMethods.SIZE size);
@@ -153,7 +135,7 @@ namespace System.Windows.Forms
         public static extern bool InitCommonControlsEx(NativeMethods.INITCOMMONCONTROLSEX icc);
 
 #if DEBUG
-        private static readonly System.Collections.ArrayList validImageListHandles = ArrayList.Synchronized(new System.Collections.ArrayList());
+        private static readonly ArrayList validImageListHandles = ArrayList.Synchronized(new ArrayList());
 
         [DllImport(ExternDll.Comctl32, EntryPoint = "ImageList_Create")]
         private static extern IntPtr IntImageList_Create(int cx, int cy, int flags, int cInitial, int cGrow);
@@ -184,8 +166,8 @@ namespace System.Windows.Forms
         public static extern bool ImageList_Destroy(HandleRef himl);
 #endif
 
-        // unfortunately, the neat wrapper to Assert for DEBUG assumes that this was created by 
-        // our version of ImageList_Create, which is not always the case for the TreeView's internal 
+        // unfortunately, the neat wrapper to Assert for DEBUG assumes that this was created by
+        // our version of ImageList_Create, which is not always the case for the TreeView's internal
         // native state image list. Use separate EntryPoint thunk to skip this check:
         [DllImport(ExternDll.Comctl32, EntryPoint = "ImageList_Destroy")]
         public static extern bool ImageList_Destroy_Native(HandleRef himl);
@@ -286,13 +268,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumDisplayMonitors(HandleRef hdc, NativeMethods.COMRECT rcClip, NativeMethods.MonitorEnumProc lpfnEnum, IntPtr dwData);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateHalftonePalette", CharSet = CharSet.Auto)]
-        private static extern IntPtr /*HPALETTE*/ IntCreateHalftonePalette(HandleRef hdc);
-
-        public static IntPtr /*HPALETTE*/ CreateHalftonePalette(HandleRef hdc)
-        {
-            return Interop.HandleCollector.Add(IntCreateHalftonePalette(hdc), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr /*HPALETTE*/ CreateHalftonePalette(HandleRef hdc);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetPaletteEntries(HandleRef hpal, int iStartIndex, int nEntries, int[] lppe);
@@ -300,60 +277,29 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern int GetTextMetricsW(HandleRef hDC, ref NativeMethods.TEXTMETRIC lptm);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateDIBSection", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreateDIBSection(HandleRef hdc, HandleRef pbmi, int iUsage, byte[] ppvBits, IntPtr hSection, int dwOffset);
-        public static IntPtr CreateDIBSection(HandleRef hdc, HandleRef pbmi, int iUsage, byte[] ppvBits, IntPtr hSection, int dwOffset)
-        {
-            return Interop.HandleCollector.Add(IntCreateDIBSection(hdc, pbmi, iUsage, ppvBits, hSection, dwOffset), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr CreateDIBSection(HandleRef hdc, HandleRef pbmi, int iUsage, byte[] ppvBits, IntPtr hSection, int dwOffset);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateBitmap", CharSet = CharSet.Auto)]
-        private static extern IntPtr /*HBITMAP*/ IntCreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, IntPtr lpvBits);
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, IntPtr lpvBits);
 
-        public static IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, IntPtr lpvBits)
-        {
-            return Interop.HandleCollector.Add(IntCreateBitmap(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, short[] lpvBits);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateBitmap", CharSet = CharSet.Auto)]
-        private static extern IntPtr /*HBITMAP*/ IntCreateBitmapShort(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, short[] lpvBits);
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
 
-        public static IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, short[] lpvBits)
-        {
-            return Interop.HandleCollector.Add(IntCreateBitmapShort(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr /*HBRUSH*/ CreatePatternBrush(HandleRef hbmp);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateBitmap", CharSet = CharSet.Auto)]
-        private static extern IntPtr /*HBITMAP*/ IntCreateBitmapByte(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr CreateBrushIndirect(ref NativeMethods.LOGBRUSH lb);
 
-        public static IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits)
-        {
-            return Interop.HandleCollector.Add(IntCreateBitmapByte(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr CreatePen(int nStyle, int nWidth, int crColor);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreatePatternBrush", CharSet = CharSet.Auto)]
-        private static extern IntPtr /*HBRUSH*/ IntCreatePatternBrush(HandleRef hbmp);
-
-        public static IntPtr /*HBRUSH*/ CreatePatternBrush(HandleRef hbmp)
-        {
-            return Interop.HandleCollector.Add(IntCreatePatternBrush(hbmp), Interop.CommonHandles.GDI);
-        }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateBrushIndirect", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreateBrushIndirect(NativeMethods.LOGBRUSH lb);
-
-        public static IntPtr CreateBrushIndirect(NativeMethods.LOGBRUSH lb)
-        {
-            return Interop.HandleCollector.Add(IntCreateBrushIndirect(lb), Interop.CommonHandles.GDI);
-        }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreatePen", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreatePen(int nStyle, int nWidth, int crColor);
-
-        public static IntPtr CreatePen(int nStyle, int nWidth, int crColor)
-        {
-            return Interop.HandleCollector.Add(IntCreatePen(nStyle, nWidth, crColor), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr ExtCreatePen(int fnStyle, int dwWidth, ref NativeMethods.LOGBRUSH lplb, int dwStyleCount, int[] lpStyle);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetViewportExtEx(HandleRef hDC, int x, int y, NativeMethods.SIZE size);
@@ -373,21 +319,13 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int IntersectClipRect(HandleRef hDC, int x1, int y1, int x2, int y2);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "CopyImage", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCopyImage(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags);
-        public static IntPtr CopyImage(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags)
-        {
-            return Interop.HandleCollector.Add(IntCopyImage(hImage, uType, cxDesired, cyDesired, fuFlags), Interop.CommonHandles.GDI);
-        }
-        public static IntPtr CopyImageAsCursor(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags)
-        {
-            return Interop.HandleCollector.Add(IntCopyImage(hImage, uType, cxDesired, cyDesired, fuFlags), Interop.CommonHandles.Cursor);
-        }
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern IntPtr CopyImage(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool AdjustWindowRectEx(ref NativeMethods.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle);
 
-        // This API is available only starting Windows 10 RS1 
+        // This API is available only starting Windows 10 RS1
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool AdjustWindowRectExForDpi(ref NativeMethods.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle, uint dpi);
 
@@ -436,13 +374,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, [In, Out] NativeMethods.POINT point);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
-
-        public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
-        {
-            return Interop.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), Interop.CommonHandles.GDI);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CombineRgn(HandleRef hRgn, HandleRef hRgn1, HandleRef hRgn2, int nCombineMode);
@@ -489,8 +422,14 @@ namespace System.Windows.Forms
         public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
-                                               int x, int y, int cx, int cy, int flags);
+        public static extern bool SetWindowPos(
+            HandleRef hWnd,
+            HandleRef hWndInsertAfter,
+            int x = 0,
+            int y = 0,
+            int cx = 0,
+            int cy = 0,
+            int flags = 0);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
@@ -552,8 +491,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool KillTimer(HandleRef hwnd, int idEvent);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto),
-            SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api")]
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int MessageBox(HandleRef hWnd, string text, string caption, int type);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -673,13 +611,13 @@ namespace System.Windows.Forms
         public static extern int GetThemeFilename(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszThemeFilename, int cchMaxBuffChars);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeFont(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int iPropId, NativeMethods.LOGFONT pFont);
+        public static extern int GetThemeFont(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int iPropId, ref NativeMethods.LOGFONTW pFont);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeInt(HandleRef hTheme, int iPartId, int iStateId, int iPropId, ref int piVal);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, System.Windows.Forms.VisualStyles.ThemeSizeType eSize, [Out] NativeMethods.SIZE psz);
+        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, [Out] NativeMethods.SIZE psz);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, [Out] NativeMethods.POINT pPoint);
@@ -694,7 +632,7 @@ namespace System.Windows.Forms
         public static extern int GetThemeTextExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [MarshalAs(UnmanagedType.LPWStr)] string pszText, int iCharCount, int dwTextFlags, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pExtentRect);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref System.Windows.Forms.VisualStyles.TextMetrics ptm);
+        public static extern int GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref VisualStyles.TextMetrics ptm);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, [In] NativeMethods.POINTSTRUCT ptTest, ref int pwHitTestCode);
@@ -728,11 +666,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool SetProcessDPIAware();
 
-        // for Windows 8.1 and above 
+        // for Windows 8.1 and above
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         public static extern int SetProcessDpiAwareness(NativeMethods.PROCESS_DPI_AWARENESS awareness);
 
-        // for Windows 8.1 and above 
+        // for Windows 8.1 and above
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
 
@@ -758,7 +696,6 @@ namespace System.Windows.Forms
         // Color conversion
         public static int RGBToCOLORREF(int rgbValue)
         {
-
             // clear the A value, swap R & B values
             int bValue = (rgbValue & 0xFF) << 16;
 
@@ -785,7 +722,6 @@ namespace System.Windows.Forms
         [ComImport(), Guid("BEF6E003-A874-101A-8BBA-00AA00300CAB"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
         public interface IFontDisp
         {
-
             string Name { get; set; }
 
             long Size { get; set; }

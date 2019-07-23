@@ -2,18 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Runtime.InteropServices;
-
     /// <summary>
-    /// <para>Represents a <see cref='System.Windows.Forms.TextBox'/> control that is hosted in a 
-    /// <see cref='System.Windows.Forms.DataGridTextBoxColumn'/> .</para>
+    /// Represents a <see cref='TextBox'/> control that is hosted in a
+    /// <see cref='DataGridTextBoxColumn'/> .
     /// </summary>
     [
     ComVisible(true),
@@ -23,7 +19,6 @@ namespace System.Windows.Forms
     ]
     public class DataGridTextBox : TextBox
     {
-
         private bool isInEditOrNavigateMode = true;
 
         // only needed to signal the dataGrid that an edit
@@ -35,7 +30,7 @@ namespace System.Windows.Forms
             TabStop = false;
         }
         /// <summary>
-        /// <para>Sets the <see cref='System.Windows.Forms.DataGrid'/> to which this <see cref='System.Windows.Forms.TextBox'/> control belongs.</para>
+        /// Sets the <see cref='DataGrid'/> to which this <see cref='TextBox'/> control belongs.
         /// </summary>
         public void SetDataGrid(DataGrid parentGrid)
         {
@@ -65,14 +60,14 @@ namespace System.Windows.Forms
         {
             base.OnKeyPress(e);
 
-            // Shift-Space should not cause the grid to 
+            // Shift-Space should not cause the grid to
             // be put in edit mode
             if (e.KeyChar == ' ' && (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
             {
                 return;
             }
 
-            // if the edit box is in ReadOnly mode, then do not tell the DataGrid about the 
+            // if the edit box is in ReadOnly mode, then do not tell the DataGrid about the
             // edit
             if (ReadOnly)
             {
@@ -149,7 +144,7 @@ namespace System.Windows.Forms
                     // or if the entire text is selected and we did not start editing
                     // send this character to the dataGrid
                     // else, process the KeyEvent
-                    // 
+                    //
                     if (SelectionStart + SelectionLength == 0 ||
                         (IsInEditOrNavigateMode && SelectionLength == Text.Length))
                     {
@@ -158,7 +153,7 @@ namespace System.Windows.Forms
 
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Down:
-                    // if the end of the selection is on the last line of the text then 
+                    // if the end of the selection is on the last line of the text then
                     // send this character to the dataGrid
                     // else, process the KeyEvent
                     //
@@ -170,7 +165,7 @@ namespace System.Windows.Forms
 
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Up:
-                    // if the end of the selection is on the first line of the text then 
+                    // if the end of the selection is on the first line of the text then
                     // send this character to the dataGrid
                     // else, process the KeyEvent
                     //
@@ -216,7 +211,7 @@ namespace System.Windows.Forms
                             return true;
                         }
 
-                        // if the user pressed the SHIFT key at the same time with 
+                        // if the user pressed the SHIFT key at the same time with
                         // the space key, send the key message to the DataGrid
                         return ProcessKeyPreview(ref m);
                     }
@@ -230,7 +225,7 @@ namespace System.Windows.Forms
                             return true;
                         }
 
-                        // if the user pressed the Control key at the same time with 
+                        // if the user pressed the Control key at the same time with
                         // the space key, send the key message to the DataGrid
                         return ProcessKeyPreview(ref m);
                     }
@@ -253,7 +248,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            // the edit control will use the 
+                            // the edit control will use the
                             // delete key: we are in Edit mode now:
                             IsInEditOrNavigateMode = false;
                             dataGrid.ColumnStartedEditing(Bounds);

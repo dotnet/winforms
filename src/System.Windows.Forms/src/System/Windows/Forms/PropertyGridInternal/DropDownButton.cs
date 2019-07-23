@@ -2,22 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.ButtonInternal;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms.PropertyGridInternal
 {
-
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Forms.ButtonInternal;
-    using Microsoft.Win32;
-
     internal sealed class DropDownButton : Button
     {
-
         private bool useComboBoxTheme = false;
 
         private bool ignoreMouse;
@@ -28,12 +20,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetAccessibleName();
         }
 
-
         // when the holder is open, we don't fire clicks
         //
         public bool IgnoreMouse
         {
-
             get
             {
                 return ignoreMouse;
@@ -87,7 +77,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.OnMouseDown(e);
             }
         }
-
 
         protected override void OnPaint(PaintEventArgs pevent)
         {
@@ -168,10 +157,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
     internal class DropDownButtonAdapter : ButtonStandardAdapter
     {
-
         internal DropDownButtonAdapter(ButtonBase control) : base(control) { }
 
-        private void DDB_Draw3DBorder(System.Drawing.Graphics g, Rectangle r, bool raised)
+        private void DDB_Draw3DBorder(Graphics g, Rectangle r, bool raised)
         {
             if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
             {
@@ -238,7 +226,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, ButtonBaseAdapter.LayoutData layout)
+        internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
             ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, IsHighContrastHighlighted() && !Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
         }
@@ -251,7 +239,6 @@ namespace System.Windows.Forms.PropertyGridInternal
     [Runtime.InteropServices.ComVisible(true)]
     internal class DropDownButtonAccessibleObject : Control.ControlAccessibleObject
     {
-
         private readonly DropDownButton _owningDropDownButton;
         private readonly PropertyGridView _owningPropertyGrid;
 

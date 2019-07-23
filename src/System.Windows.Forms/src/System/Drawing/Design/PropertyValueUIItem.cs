@@ -10,8 +10,8 @@ namespace System.Drawing.Design
     public class PropertyValueUIItem
     {
         /// <summary>Constructor that accepts the necessary information to display this item.</summary>
-        /// <param name="uiItemImage"><see cref="System.Drawing.Image"/> representing the 8 x 8 icon to display.</param>
-        /// <param name="handler">The <see cref="System.Drawing.Design.PropertyValueUIItemInvokeHandler"/> to invoke when the item is double clicked.</param>
+        /// <param name="uiItemImage"><see cref="Drawing.Image"/> representing the 8 x 8 icon to display.</param>
+        /// <param name="handler">The <see cref="PropertyValueUIItemInvokeHandler"/> to invoke when the item is double clicked.</param>
         /// <param name="tooltip">The ToolTip to display for this item.</param>
         public PropertyValueUIItem(Image uiItemImage, PropertyValueUIItemInvokeHandler handler, string tooltip)
         {

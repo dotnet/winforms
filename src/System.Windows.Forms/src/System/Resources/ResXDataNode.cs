@@ -2,38 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+
 namespace System.Resources
 {
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System;
-    using System.Linq;
-    using System.Windows.Forms;
-    using System.Reflection;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.IO;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
-    using System.Resources;
-    using System.Xml;
-    using System.ComponentModel.Design;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
-    /// <summary>
-    ///    
-    /// </summary>
     [Serializable]
     public sealed class ResXDataNode : ISerializable
     {
-
         private static readonly char[] SpecialChars = new char[] { ' ', '\r', '\n' };
 
         private DataNodeInfo nodeInfo;
@@ -89,18 +78,10 @@ namespace System.Resources
             };
         }
 
-        /// <summary>
-        ///    
-        /// </summary>        
         public ResXDataNode(string name, object value) : this(name, value, null)
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "name" is the name of the param passed in.
-                                                                                                        // So we don't have to localize it.
-        ]
         public ResXDataNode(string name, object value, Func<Type, string> typeNameConverter)
         {
             if (name == null)
@@ -128,18 +109,10 @@ namespace System.Resources
             this.value = value;
         }
 
-        /// <summary>
-        ///    
-        /// </summary>  
         public ResXDataNode(string name, ResXFileRef fileRef) : this(name, fileRef, null)
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "name" is the name of the param passed in.
-                                                                                                        // So we don't have to localize it.
-        ]
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter)
         {
             if (string.IsNullOrEmpty(name))
@@ -160,10 +133,9 @@ namespace System.Resources
 
         private void InitializeDataNode(string basePath)
         {
-
             // we can only use our internal type resolver here
             // because we only want to check if this is a ResXFileRef node
-            // and we can't be sure that we have a typeResolutionService that can 
+            // and we can't be sure that we have a typeResolutionService that can
             // recognize this. It's not very clean but this should work.
             Type nodeType = null;
             if (!string.IsNullOrEmpty(nodeInfo.TypeName)) // can be null if we have a string (default for string is TypeName == null)
@@ -194,9 +166,7 @@ namespace System.Resources
             }
         }
 
-
         /// <summary>
-        ///    
         /// </summary>
         public string Comment
         {
@@ -216,7 +186,6 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    
         /// </summary>
         public string Name
         {
@@ -229,10 +198,6 @@ namespace System.Resources
                 }
                 return result;
             }
-            [
-                SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "Name" is the name of the property.
-                                                                                                            // So we don't have to localize it.
-            ]
             set
             {
                 if (value == null)
@@ -247,9 +212,6 @@ namespace System.Resources
             }
         }
 
-        /// <summary>
-        ///    
-        /// </summary>
         public ResXFileRef FileRef
         {
             get
@@ -268,7 +230,6 @@ namespace System.Resources
                 return fileRef;
             }
         }
-
 
         private string FileRefFullPath
         {
@@ -417,9 +378,7 @@ namespace System.Resources
 
             if (!string.IsNullOrEmpty(mimeTypeName))
             {
-                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
-                    || string.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
-                    || string.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType))
+                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType))
                 {
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData = FromBase64WrappedString(text);
@@ -566,8 +525,8 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Might return the position in the resx file of the current node, if known
-        ///    otherwise, will return Point(0,0) since point is a struct 
+        ///  Might return the position in the resx file of the current node, if known
+        ///  otherwise, will return Point(0,0) since point is a struct
         /// </summary>
         public Point GetNodePosition()
         {
@@ -575,8 +534,8 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Get the FQ type name for this datanode.
-        ///    We return typeof(object) for ResXNullRef
+        ///  Get the FQ type name for this datanode.
+        ///  We return typeof(object) for ResXNullRef
         /// </summary>
         public string GetValueTypeName(ITypeResolutionService typeResolver)
         {
@@ -604,7 +563,7 @@ namespace System.Resources
                 // if typename is null, the default is just a string
                 if (string.IsNullOrEmpty(result))
                 {
-                    // we still dont know... do we have a mimetype? if yes, our only option is to 
+                    // we still dont know... do we have a mimetype? if yes, our only option is to
                     // deserialize to know what we're dealing with... very inefficient...
                     if (!string.IsNullOrEmpty(nodeInfo.MimeType))
                     {
@@ -657,7 +616,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Get the FQ type name for this datanode
+        ///  Get the FQ type name for this datanode
         /// </summary>
         public string GetValueTypeName(AssemblyName[] names)
         {
@@ -665,11 +624,10 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Get the value contained in this datanode
+        ///  Get the value contained in this datanode
         /// </summary>
         public object GetValue(ITypeResolutionService typeResolver)
         {
-
             if (value != null)
             {
                 return value;
@@ -712,7 +670,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Get the value contained in this datanode
+        ///  Get the value contained in this datanode
         /// </summary>
         public object GetValue(AssemblyName[] names)
         {
@@ -721,7 +679,6 @@ namespace System.Resources
 
         private static byte[] FromBase64WrappedString(string text)
         {
-
             if (text.IndexOfAny(SpecialChars) != -1)
             {
                 StringBuilder sb = new StringBuilder(text.Length);
@@ -751,7 +708,7 @@ namespace System.Resources
             {
 
                 // If we cannot find the strong-named type, then try to see
-                // if the TypeResolver can bind to partial names. For this, 
+                // if the TypeResolver can bind to partial names. For this,
                 // we will strip out the partial names and keep the rest of the
                 // strong-name information to try again.
 
@@ -780,10 +737,9 @@ namespace System.Resources
             return resolvedType;
         }
 
-
         /// <summary>
-        ///    Get the value contained in this datanode
-        /// </summary>        
+        ///  Get the value contained in this datanode
+        /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
             DataNodeInfo nodeInfo = GetDataNodeInfo();
@@ -894,11 +850,11 @@ namespace System.Resources
         // Get the multitarget-aware string representation for the give type.
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            // Normally we don't change typeName when changing the target framework, 
-            // only assembly version or assembly name might change, thus we are setting 
+            // Normally we don't change typeName when changing the target framework,
+            // only assembly version or assembly name might change, thus we are setting
             // typeName only if it changed with the framework version.
-            // If binder passes in a null, BinaryFormatter will use the original value or 
-            // for un-serializable types will redirect to another type. 
+            // If binder passes in a null, BinaryFormatter will use the original value or
+            // for un-serializable types will redirect to another type.
             // For example:
             //
             // Encoding = Encoding.GetEncoding("shift_jis");
@@ -937,7 +893,8 @@ namespace System.Resources
         private Hashtable cachedAssemblies;
         private Hashtable cachedTypes;
 
-        private static readonly string NetFrameworkPath = Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "Microsoft.Net\\Framework");
+        private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "dotnet\\shared");
+        private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), "dotnet\\shared");
 
         internal AssemblyNamesTypeResolutionService(AssemblyName[] names)
         {
@@ -950,10 +907,8 @@ namespace System.Resources
         }
 
         //
-        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
         public Assembly GetAssembly(AssemblyName name, bool throwOnError)
         {
-
             Assembly result = null;
 
             if (cachedAssemblies == null)
@@ -1107,7 +1062,7 @@ namespace System.Resources
             {
                 // Only cache types from .Net framework  because they don't need to update.
                 // For simplicity, don't cache custom types
-                if (IsNetFrameworkAssembly(result.Assembly.Location))
+                if (IsDotNetAssembly(result.Assembly.Location))
                 {
                     cachedTypes[name] = result;
                 }
@@ -1119,15 +1074,14 @@ namespace System.Resources
         /// <summary>
         /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
-        private bool IsNetFrameworkAssembly(string assemblyPath)
+        private bool IsDotNetAssembly(string assemblyPath)
         {
-            return assemblyPath != null && assemblyPath.StartsWith(NetFrameworkPath, StringComparison.OrdinalIgnoreCase);
+            return assemblyPath != null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
         }
 
         public void ReferenceAssembly(AssemblyName name)
         {
             throw new NotSupportedException();
         }
-
     }
 }

@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.GiveFeedback'/> event.
+    /// Provides data for the <see cref='Control.GiveFeedback'/> event.
     /// </summary>
     [ComVisible(true)]
     public class GiveFeedbackEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.GiveFeedbackEventArgs'/> class.
+        /// Initializes a new instance of the <see cref='GiveFeedbackEventArgs'/> class.
         /// </summary>
         public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors)
         {

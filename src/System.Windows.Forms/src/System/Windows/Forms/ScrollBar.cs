@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -16,7 +15,6 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(Scroll))]
-    [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Already shipped as public API")]
     public abstract class ScrollBar : Control
     {
         private static readonly object s_scrollEvent = new object();
@@ -32,7 +30,7 @@ namespace System.Windows.Forms
         private bool _scaleScrollBarForDpiChange = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollBar'/> class.
+        /// Initializes a new instance of the <see cref='ScrollBar'/> class.
         /// </summary>
         public ScrollBar() : base()
         {
@@ -199,7 +197,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollBar.Value'/>
+        /// Gets or sets a value to be added or subtracted to the <see cref='Value'/>
         /// property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -291,7 +289,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollBar.Value'/>
+        /// Gets or sets the value to be added or subtracted to the <see cref='Value'/>
         /// property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -419,7 +417,6 @@ namespace System.Windows.Forms
             remove => base.MouseClick -= value;
         }
 
-
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick
@@ -464,8 +461,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the <see cref='System.Windows.Forms.ScrollBar.Value'/> property has
-        /// changed, either by a <see cref='System.Windows.Forms.ScrollBar.OnScroll'/> event
+        /// Occurs when the <see cref='Value'/> property has
+        /// changed, either by a <see cref='OnScroll'/> event
         /// or programatically.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
@@ -521,7 +518,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.ScrollBar.ValueChanged'/> event.
+        /// Raises the <see cref='ValueChanged'/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
@@ -578,7 +575,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.ScrollBar.ValueChanged'/> event.
+        /// Raises the <see cref='ValueChanged'/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {

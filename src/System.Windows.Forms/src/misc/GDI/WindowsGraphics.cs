@@ -7,41 +7,25 @@
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR CREATING AND DISPOSING A WINDOWSGRAPHICS AS WELL
 // GETTING, DISPOSING AND WORKING WITH A DC.
 
-#if DRAWING_DESIGN_NAMESPACE
-namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
-{
-    using System;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Runtime.Versioning;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
+namespace System.Windows.Forms.Internal
+{
     /// <summary>
-    ///     WindowsGraphics is a library for rendering text and drawing using GDI; it was
-    ///     created to address performance and compatibility issues found in GDI+ Graphics
-    ///     class.
-    ///     
-    ///     Note: WindowsGraphics is a stateful component, DC properties are persisted from 
-    ///     method calls, as opposed to Graphics (GDI+) which performs attomic operations and 
-    ///     always restores the hdc.
-    ///     The underlying hdc is always saved and restored on dispose so external HDCs won't
-    ///     be modified by WindowsGraphics.  So we don't need to restore previous objects into 
-    ///     the dc in method calls.
+    ///  WindowsGraphics is a library for rendering text and drawing using GDI; it was
+    ///  created to address performance and compatibility issues found in GDI+ Graphics
+    ///  class.
+    ///
+    ///  Note: WindowsGraphics is a stateful component, DC properties are persisted from
+    ///  method calls, as opposed to Graphics (GDI+) which performs attomic operations and
+    ///  always restores the hdc.
+    ///  The underlying hdc is always saved and restored on dispose so external HDCs won't
+    ///  be modified by WindowsGraphics.  So we don't need to restore previous objects into
+    ///  the dc in method calls.
     ///</summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
+    internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         // Wrapper around the window dc this object refers to.
         // Note: this dc is only disposed when owned (created) by the WindowsGraphics.
@@ -64,12 +48,10 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Creates a WindowsGraphics from a memory DeviceContext object compatible with the primary screen device.
-        ///     This object is suitable for performing text measuring but not for drawing into it because it does 
-        ///     not have a backup bitmap.
+        ///  Creates a WindowsGraphics from a memory DeviceContext object compatible with the primary screen device.
+        ///  This object is suitable for performing text measuring but not for drawing into it because it does
+        ///  not have a backup bitmap.
         /// </summary>
-
-
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
@@ -82,12 +64,10 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Creates a WindowsGraphics from a memory DeviceContext object compatible with the a screen device.
-        ///     This object is suitable for performing text measuring but not for drawing into it because it does 
-        ///     not have a backup bitmap.
+        ///  Creates a WindowsGraphics from a memory DeviceContext object compatible with the a screen device.
+        ///  This object is suitable for performing text measuring but not for drawing into it because it does
+        ///  not have a backup bitmap.
         /// </summary>
-
-
         public static WindowsGraphics CreateMeasurementWindowsGraphics(IntPtr screenDC)
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(screenDC);
@@ -110,8 +90,6 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-
-
         public static WindowsGraphics FromHdc(IntPtr hDc)
         {
             Debug.Assert(hDc != IntPtr.Zero, "null hDc");
@@ -126,37 +104,33 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Creates a WindowsGraphics object from a Graphics object.  Clipping and coordinate transforms
-        ///     are preserved.
-        ///     
-        ///     Notes: 
-        ///     - The passed Graphics object cannot be used until the WindowsGraphics is disposed
-        ///     since it borrows the hdc from the Graphics object locking it.
-        ///     - Changes to the hdc using the WindowsGraphics object are not preserved into the Graphics object;
-        ///     the hdc is returned to the Graphics object intact.
-        ///     
-        ///     Some background about how Graphics uses the internal hdc when created from an existing one
-        ///     (mail from GillesK from GDI+ team):
-        ///     User has an HDC with a particular state:
-        ///     Graphics object gets created based on that HDC. We query the HDC for its state and apply it to the Graphics. 
-        ///     At this stage, we do a SaveHDC and clear everything out of it.
-        ///     User calls GetHdc. We restore the HDC to the state it was in and give it to the user.
-        ///     User calls ReleaseHdc, we save the current state of the HDC and clear everything 
-        ///     (so that the graphics state gets applied next time we use it).
-        ///     Next time the user calls GetHdc we give him back the state after the second ReleaseHdc. 
-        ///     (But the state changes between the GetHdc and ReleaseHdc are not applied to the Graphics).
-        ///     Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and 
-        ///     things get a lot more complicated.
+        ///  Creates a WindowsGraphics object from a Graphics object.  Clipping and coordinate transforms
+        ///  are preserved.
+        ///
+        ///  Notes:
+        ///  - The passed Graphics object cannot be used until the WindowsGraphics is disposed
+        ///  since it borrows the hdc from the Graphics object locking it.
+        ///  - Changes to the hdc using the WindowsGraphics object are not preserved into the Graphics object;
+        ///  the hdc is returned to the Graphics object intact.
+        ///
+        ///  Some background about how Graphics uses the internal hdc when created from an existing one
+        ///  (mail from GillesK from GDI+ team):
+        ///  User has an HDC with a particular state:
+        ///  Graphics object gets created based on that HDC. We query the HDC for its state and apply it to the Graphics.
+        ///  At this stage, we do a SaveHDC and clear everything out of it.
+        ///  User calls GetHdc. We restore the HDC to the state it was in and give it to the user.
+        ///  User calls ReleaseHdc, we save the current state of the HDC and clear everything
+        ///  (so that the graphics state gets applied next time we use it).
+        ///  Next time the user calls GetHdc we give him back the state after the second ReleaseHdc.
+        ///  (But the state changes between the GetHdc and ReleaseHdc are not applied to the Graphics).
+        ///  Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and
+        ///  things get a lot more complicated.
         /// </summary>
-
-
         public static WindowsGraphics FromGraphics(Graphics g)
         {
             ApplyGraphicsProperties properties = ApplyGraphicsProperties.All;
             return WindowsGraphics.FromGraphics(g, properties);
         }
-
-
 
         public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
         {
@@ -192,7 +166,7 @@ namespace System.Experimental.Gdi
                     {
                         // We have to create the WindowsRegion and dipose the Region object before locking the Graphics object,
                         // in case of an unlikely exception before releasing the WindowsRegion, the finalizer will do it for us.
-                        // (no try-finally block since this method is used frequently - perf).                        
+                        // (no try-finally block since this method is used frequently - perf).
                         // If the Graphics.Clip has not been set (Region.IsInfinite) we don't need to apply it to the DC.
                         if (!clipRgn.IsInfinite(g))
                         {
@@ -212,7 +186,7 @@ namespace System.Experimental.Gdi
                 using (wr)
                 {
                     // If the Graphics object was created from a native DC the actual clipping region is the intersection
-                    // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as 
+                    // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as
                     // Graphics.VisibleClipBounds.
                     wg.DeviceContext.IntersectClip(wr);
 
@@ -241,20 +215,15 @@ namespace System.Experimental.Gdi
             }
         }
 
-
         // Okay to suppress.
-        //"WindowsGraphics object does not own the Graphics object.  For instance in a control’s Paint event we pass the 
-        //GraphicsContainer object to TextRenderer, which uses WindowsGraphics; 
+        //"WindowsGraphics object does not own the Graphics object.  For instance in a control’s Paint event we pass the
+        //GraphicsContainer object to TextRenderer, which uses WindowsGraphics;
         //if the Graphics object is disposed then further painting will be broken."
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
-
 
         internal void Dispose(bool disposing)
         {
@@ -293,8 +262,6 @@ namespace System.Experimental.Gdi
                 }
             }
         }
-
-
 
         public IntPtr GetHdc()
         {

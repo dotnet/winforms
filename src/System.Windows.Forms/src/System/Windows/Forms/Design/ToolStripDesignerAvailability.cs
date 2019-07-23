@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms.Design
 {
     [Flags]
-    [SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Fixing this would be a breaking change")]
     public enum ToolStripItemDesignerAvailability
     {
         None = 0x00000000,

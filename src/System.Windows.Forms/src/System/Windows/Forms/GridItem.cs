@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Attempts to select this GridItem in the PropertyGrid.
+        /// Attempts to select this GridItem in the PropertyGrid.
         /// </summary>
         public abstract bool Select();
     }

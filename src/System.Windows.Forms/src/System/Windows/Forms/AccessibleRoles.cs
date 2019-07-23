@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -415,7 +413,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// A control designed for entering Internet Protocol (IP) addresses.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase")]
         IpAddress = 0x3f,
 
         /// <summary>

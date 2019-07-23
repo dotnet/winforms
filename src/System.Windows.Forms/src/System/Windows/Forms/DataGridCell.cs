@@ -2,28 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Identifies a cell in the grid.
-    /// </summary>    
-    [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
+    /// </summary>
     public struct DataGridCell
     {
         /// <summary>
-        /// Gets or sets the number of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.
+        /// Gets or sets the number of a column in the <see cref='DataGrid'/> control.
         /// </summary>
         public int ColumnNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.
+        /// Gets or sets the number of a row in the <see cref='DataGrid'/> control.
         /// </summary>
         public int RowNumber { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridCell'/> class.
+        /// Initializes a new instance of the <see cref='DataGridCell'/> class.
         /// </summary>
         public DataGridCell(int r, int c)
         {
@@ -32,10 +29,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref='System.Windows.Forms.DataGridCell'/> is
-        /// identical to a second <see cref='System.Windows.Forms.DataGridCell'/>.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2231:OverrideOperatorEqualsOnOverridingValueTypeEquals")]
+        /// Gets a value indicating whether the <see cref='DataGridCell'/> is
+        /// identical to a second <see cref='DataGridCell'/>.
+        /// </summary>
         public override bool Equals(object o)
         {
             if (!(o is DataGridCell rhs))

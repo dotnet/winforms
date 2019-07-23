@@ -17,11 +17,11 @@ namespace System.Windows.Forms.Design
     /// <summary>
     /// This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
     /// DesignerFrame
-    ///     ScrollableControl
-    ///         Designer
-    ///     Splitter
-    ///     ScrollableControl
-    ///         Component Tray
+    ///  ScrollableControl
+    ///  Designer
+    ///  Splitter
+    ///  ScrollableControl
+    ///  Component Tray
     /// The splitter and second scrollable control are created on demand when a tray is added.
     /// </summary>
     internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IContainsThemedScrollbarWindows
@@ -36,7 +36,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.DesignerFrame'/> class.
         /// </summary>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         public DesignerFrame(ISite site)
         {
             Text = "DesignerFrame";
@@ -379,7 +378,6 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Creates a new overlay control.
             /// </summary>
-            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             public OverlayControl(IServiceProvider provider)
             {
                 _provider = provider;
@@ -394,7 +392,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Demand creates a ptr to the BehaviorService 
+            /// Demand creates a ptr to the BehaviorService
             /// </summary>
             private BehaviorService BehaviorService
             {

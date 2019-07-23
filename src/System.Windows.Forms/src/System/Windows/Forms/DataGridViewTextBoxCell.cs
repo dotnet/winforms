@@ -2,18 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.ComponentModel;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.ComponentModel;
-    using System.Windows.Forms.Internal;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>Identifies a cell in the dataGridView.</para>
+    ///  Identifies a cell in the dataGridView.
     /// </summary>
     public class DataGridViewTextBoxCell : DataGridViewCell
     {
@@ -46,8 +43,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a new AccessibleObject for this DataGridViewTextBoxCell instance.
         /// The AccessibleObject instance returned by this method supports ControlType UIA property.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.7.2 or opt-in into this feature using a compatibility switch. 
         /// </summary>
         /// <returns>
         /// AccessibleObject for this DataGridViewTextBoxCell instance.
@@ -137,7 +132,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewTextBoxCell)System.Activator.CreateInstance(thisType);
             }
@@ -298,7 +293,6 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle textBounds = PaintPrivate(graphics,
@@ -350,7 +344,6 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -618,7 +611,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;

@@ -317,5 +317,23 @@
       <Version>9.0.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\WinformsControlsTest\Images\LargeA.bmp">
+      <Link>Images\LargeA.bmp</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\Images\LargeABlue.bmp">
+      <Link>Images\LargeABlue.bmp</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\Images\SmallA.bmp">
+      <Link>Images\SmallA.bmp</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\Images\SmallABlue.bmp">
+      <Link>Images\SmallABlue.bmp</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

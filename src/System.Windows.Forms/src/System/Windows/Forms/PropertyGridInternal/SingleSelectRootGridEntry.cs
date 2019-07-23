@@ -2,23 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     {
         protected object objValue;
@@ -32,10 +23,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         private IComponentChangeService changeService;
         protected bool forceReadOnlyChecked;
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
-                                                                                                    // control over who does what in the constructor.
-        ]
         internal SingleSelectRootGridEntry(PropertyGridView gridEntryHost, object value, GridEntry parent, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)
         : base(gridEntryHost.OwnerGrid, parent)
         {
@@ -53,10 +40,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             InternalExpanded = true;
         }
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
-                                                                                                    // control over who does what in the constructor.
-        ]
         internal SingleSelectRootGridEntry(PropertyGridView view, object value, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType) : this(view, value, null, baseProvider, host, tab, sortType)
         {
         }
@@ -211,8 +194,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Retrieves the keyword that the VS help dynamic help window will
-        ///     use when this IPE is selected.
+        ///  Retrieves the keyword that the VS help dynamic help window will
+        ///  use when this IPE is selected.
         /// </summary>
         public override string HelpKeyword
         {
@@ -255,7 +238,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Gets or sets the value for the property that is represented 
+        /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
         /// </summary>
         public override object PropertyValue
@@ -319,7 +302,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
         }
 
-
         /// <summary>
         /// Sets the value of this GridEntry from text
         /// </summary>
@@ -336,7 +318,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     PropertySort &= ~PropertySort.Categorized;
                 }
-
 
                 // recreate the children
                 if (Expandable && ChildCollection != null)
@@ -357,8 +338,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if ((PropertySort & PropertySort.Categorized) != 0)
                 {
 
-
-                    // first, walk through all the entires and 
+                    // first, walk through all the entires and
                     // group them by their category by adding
                     // them to a hashtable of arraylists.
                     //

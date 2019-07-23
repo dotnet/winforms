@@ -8,7 +8,6 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-
     public sealed class HtmlElementEventArgs : EventArgs
     {
         private readonly HtmlShimManager _shimManager;
@@ -69,19 +68,19 @@ namespace System.Windows.Forms
         public int KeyPressedCode => NativeHTMLEventObj.GetKeyCode();
 
         /// <summary>
-        /// Indicates whether the Alt key was pressed, if this information is 
+        /// Indicates whether the Alt key was pressed, if this information is
         /// provided to the IHtmlEventObj
         /// </summary>
         public bool AltKeyPressed => NativeHTMLEventObj.GetAltKey();
 
         /// <summary>
-        /// Indicates whether the Ctrl key was pressed, if this information is 
+        /// Indicates whether the Ctrl key was pressed, if this information is
         /// provided to the IHtmlEventObj
         /// </summary>
         public bool CtrlKeyPressed => NativeHTMLEventObj.GetCtrlKey();
 
         /// <summary>
-        /// Indicates whether the Shift key was pressed, if this information is 
+        /// Indicates whether the Shift key was pressed, if this information is
         /// provided to the IHtmlEventObj
         /// </summary>
         public bool ShiftKeyPressed => NativeHTMLEventObj.GetShiftKey();

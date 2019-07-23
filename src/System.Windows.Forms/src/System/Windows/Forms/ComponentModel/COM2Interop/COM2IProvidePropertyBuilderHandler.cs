@@ -2,18 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing.Design;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Drawing.Design;
-
     internal class Com2IProvidePropertyBuilderHandler : Com2ExtendedBrowsingHandler
     {
-
         public override Type Interface
         {
             get
@@ -67,7 +63,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             }
         }
-
 
         /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty

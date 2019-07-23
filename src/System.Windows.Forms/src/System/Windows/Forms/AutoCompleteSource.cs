@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the AutoCompleteSource for ComboBox and TextBox AutoComplete Feature.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum AutoCompleteSource
     {
         /// <summary>

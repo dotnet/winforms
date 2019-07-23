@@ -2,20 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Globalization;
-
     /// <summary>
-    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
-    /// control.</para>
+    /// Represents a collection of <see cref='DataGridTableStyle'/> objects in the <see cref='DataGrid'/>
+    /// control.
     /// </summary>
     [ListBindable(false)]
     public class GridTableStylesCollection : BaseCollection, IList
@@ -115,10 +110,10 @@ namespace System.Windows.Forms
 
         /* implemented in BaseCollection
         /// <summary>
-        ///      Retrieves the number of GridTables in the collection.
+        ///  Retrieves the number of GridTables in the collection.
         /// </summary>
         /// <returns>
-        ///      The number of GridTables in the collection.
+        ///  The number of GridTables in the collection.
         /// </returns>
         public override int Count {
             get {
@@ -128,7 +123,7 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        ///      Retrieves the DataGridTable with the specified index.
+        ///  Retrieves the DataGridTable with the specified index.
         /// </summary>
         public DataGridTableStyle this[int index]
         {
@@ -139,7 +134,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves the DataGridTable with the name provided.
+        ///  Retrieves the DataGridTable with the name provided.
         /// </summary>
         public DataGridTableStyle this[string tableName]
         {
@@ -181,7 +176,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridTableStyle'/> to this collection.</para>
+        /// Adds a <see cref='DataGridTableStyle'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridTableStyle table)
         {
@@ -245,7 +240,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridTableStyle is contained in this collection.
+        ///  Checks to see if a DataGridTableStyle is contained in this collection.
         /// </summary>
         public bool Contains(DataGridTableStyle table)
         {
@@ -254,8 +249,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Checks to see if a <see cref='System.Windows.Forms.DataGridTableStyle'/> with the given name
-        ///    is contained in this collection.</para>
+        /// Checks to see if a <see cref='DataGridTableStyle'/> with the given name
+        ///  is contained in this collection.
         /// </summary>
         public bool Contains(string name)
         {

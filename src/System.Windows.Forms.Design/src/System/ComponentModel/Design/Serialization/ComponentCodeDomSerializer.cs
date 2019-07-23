@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,10 +15,8 @@ using System.Text;
 
 namespace System.ComponentModel.Design.Serialization
 {
-
     internal class ComponentCodeDomSerializer : CodeDomSerializer
     {
-
         private Type[] _containerConstructor = null;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
@@ -37,7 +35,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Retrieves a default static instance of this serializer.
+        ///  Retrieves a default static instance of this serializer.
         /// </summary>
         internal new static ComponentCodeDomSerializer Default
         {
@@ -60,7 +58,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Determines if we can cache the results of serializing a component.
+        ///  Determines if we can cache the results of serializing a component.
         /// </summary>
 		private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
         {
@@ -97,13 +95,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///    This method is invoked during deserialization to obtain an instance of an object.  When this is called, an instance
-        ///    of the requested type should be returned.  This implementation calls base and then tries to deserialize design
-        ///    time properties for the component.
+        ///  This method is invoked during deserialization to obtain an instance of an object.  When this is called, an instance
+        ///  of the requested type should be returned.  This implementation calls base and then tries to deserialize design
+        ///  time properties for the component.
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-
             object instance = base.DeserializeInstance(manager, type, parameters, name, addToContainer);
 
             if (instance != null)
@@ -116,9 +113,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
             CodeStatementCollection statements = null;
@@ -204,7 +200,7 @@ namespace System.ComponentModel.Design.Serialization
                         Trace("Creating LHS expression");
                         if (inheritanceLevel == InheritanceLevel.NotInherited)
                         {
-                            // See if there is a "GenerateMember" property.  If so, 
+                            // See if there is a "GenerateMember" property.  If so,
                             // we might want to generate a local variable.  Otherwise,
                             // we want to generate a field.
                             PropertyDescriptor generateProp = props["GenerateMember"];
@@ -247,7 +243,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                 if (inheritanceLevel == InheritanceLevel.NotInherited)
                                 {
-                                    // We need to generate the field declaration.  See if there is a modifiers property on 
+                                    // We need to generate the field declaration.  See if there is a modifiers property on
                                     // the object.  If not, look for a DefaultModifies, and finally assume it's private.
                                     CodeMemberField field = new CodeMemberField(typeName, name);
                                     PropertyDescriptor modifersProp = props["Modifiers"];
@@ -296,7 +292,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (generateObject)
                         {
                             // Ok, now that we've decided if we have a local or a member variable, its now time to serialize the rest of the code.
-                            // The first step is to create an assign statement to "new" the object.  For that, we need to know if 
+                            // The first step is to create an assign statement to "new" the object.  For that, we need to know if
                             // the component wants a special IContainer constructor or not.  For that to be valid we must also know
                             // that we can get to an actual IContainer.
                             IContainer container = manager.GetService(typeof(IContainer)) as IContainer;
@@ -316,7 +312,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                // For compat reasons we ignore the isCompleteOld value here.  
+                                // For compat reasons we ignore the isCompleteOld value here.
                                 assignRhs = SerializeCreationExpression(manager, value, out bool isCompleteOld);
                                 Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
                             }
@@ -327,7 +323,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (assignLhs == null)
                                 {
                                     // We cannot do much more for this object.  If isComplete is true,
-                                    // then the RHS now becomes our LHS.  Otherwise, I'm afraid we have 
+                                    // then the RHS now becomes our LHS.  Otherwise, I'm afraid we have
                                     // just failed to serialize this object.
                                     if (isComplete)
                                     {
@@ -369,9 +365,9 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 // Now verify that this control implements ISupportInitialize in the project target framework
                                 // Don't use operator "is" but rather use IsAssignableFrom on the reflection types.
-                                // We have other places where we use operator "is", for example "is IComponent" to generate 
-                                // specific CodeDOM objects, however we don't have cases of objects which were not an IComponent 
-                                // in a downlevel framework and became an IComponent in a newer framework, so I'm not replacing 
+                                // We have other places where we use operator "is", for example "is IComponent" to generate
+                                // specific CodeDOM objects, however we don't have cases of objects which were not an IComponent
+                                // in a downlevel framework and became an IComponent in a newer framework, so I'm not replacing
                                 // all instances of operator "is" by IsAssignableFrom.
                                 reflectionType = GetReflectionTypeHelper(manager, value);
                                 supportInitialize = GetReflectionTypeFromTypeHelper(manager, typeof(ISupportInitialize)).IsAssignableFrom(reflectionType);
@@ -432,9 +428,9 @@ namespace System.ComponentModel.Design.Serialization
                                     entry = new ComponentCache.Entry(cache);
 
                                     // We cache components even if they're not valid so dependencies are
-                                    // still tracked correctly (see comment below).  The problem is, we will create a 
+                                    // still tracked correctly (see comment below).  The problem is, we will create a
                                     // new entry object even if there is still an existing one that is just invalid, and it
-                                    // might have dependencies that will be lost.  
+                                    // might have dependencies that will be lost.
                                     // we need to make sure we copy over any dependencies that are also tracked.
                                     ComponentCache.Entry oldEntry = null;
                                     oldEntry = cache.GetEntryAll(value);
@@ -486,7 +482,7 @@ namespace System.ComponentModel.Design.Serialization
                                         entry.Statements.Insert(0, new CodeCommentStatement(name));
                                         entry.Statements.Insert(0, new CodeCommentStatement(string.Empty));
 
-                                        // 
+                                        //
                                         // cache the statements for future usage if possible. We only do this for the main serialization manager, not
                                         // for any other seriallization managers that may be calling us for undo or clipboard functions.
                                         if (correctManager && cache != null && cache.Enabled)
@@ -516,7 +512,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
 
-                            // Regarless, apply statements.  Either we created them or we got them 
+                            // Regarless, apply statements.  Either we created them or we got them
                             // out of the cache.
                             statements.AddRange(entry.Statements);
 
@@ -552,7 +548,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This emits a method invoke to IPersistComponentSettings.LoadComponentSettings.
+        ///  This emits a method invoke to IPersistComponentSettings.LoadComponentSettings.
         /// </summary>
         private void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value)
         {
@@ -573,7 +569,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This emits a method invoke to ISupportInitialize.
+        ///  This emits a method invoke to ISupportInitialize.
         /// </summary>
         private void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName)
         {

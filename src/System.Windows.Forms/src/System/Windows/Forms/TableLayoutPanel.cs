@@ -2,20 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Windows.Forms.Layout;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-
     [ProvideProperty("ColumnSpan", typeof(Control))]
     [ProvideProperty("RowSpan", typeof(Control))]
     [ProvideProperty("Row", typeof(Control))]
@@ -59,7 +54,7 @@ namespace System.Windows.Forms
                 if (value != null && value.IsStub)
                 {
                     // WINRES only scenario.
-                    // we only support table layout settings that have been created from a type converter.  
+                    // we only support table layout settings that have been created from a type converter.
                     // this is here for localization (WinRes) support.
                     using (new LayoutTransaction(this, this, PropertyNames.LayoutSettings))
                     {
@@ -75,8 +70,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -91,7 +84,6 @@ namespace System.Windows.Forms
                 Debug.Assert(BorderStyle == value, "BorderStyle should be the same as we set it");
             }
         }
-
 
         [
         DefaultValue(TableLayoutPanelCellBorderStyle.None),
@@ -149,9 +141,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
-        ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
-        ///       when the TableLayoutPanel is over-filled.
+        ///  Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
+        ///  become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
+        ///  when the TableLayoutPanel is over-filled.
         /// </summary>
         [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -205,10 +197,8 @@ namespace System.Windows.Forms
             get { return _tableLayoutSettings.ColumnStyles; }
         }
 
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override Control.ControlCollection CreateControlsInstance()
+        protected override ControlCollection CreateControlsInstance()
         {
             return new TableLayoutControlCollection(this);
         }
@@ -292,8 +282,6 @@ namespace System.Windows.Forms
             _tableLayoutSettings.SetCellPosition(control, position);
         }
 
-
-
         //get the column position of the control
         [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
@@ -320,7 +308,6 @@ namespace System.Windows.Forms
             return (Control)_tableLayoutSettings.GetControlFromPosition(column, row);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Control instead of IArrangedElement intentionally
         public TableLayoutPanelCellPosition GetPositionFromControl(Control control)
         {
             return _tableLayoutSettings.GetPositionFromControl(control);
@@ -328,7 +315,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
-        /// </summary>        
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetColumnWidths()
         {
@@ -348,7 +335,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
-        /// </summary>        
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetRowHeights()
         {
@@ -366,7 +353,6 @@ namespace System.Windows.Forms
             return rh;
         }
 
-
         #endregion
 
         #region PaintCode
@@ -379,8 +365,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    When a layout fires, make sure we're painting all of our
-        ///    cell borders.
+        ///  When a layout fires, make sure we're painting all of our
+        ///  cell borders.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLayout(LayoutEventArgs levent)
@@ -388,7 +374,6 @@ namespace System.Windows.Forms
             base.OnLayout(levent);
             Invalidate();
         }
-
 
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e)
         {
@@ -399,8 +384,6 @@ namespace System.Windows.Forms
         {
             base.OnPaintBackground(e);
 
-
-
             // paint borderstyles on top of the background image in WM_ERASEBKGND
 
             int cellBorderWidth = CellBorderWidth;
@@ -408,8 +391,6 @@ namespace System.Windows.Forms
             TableLayout.Strip[] colStrips = containerInfo.Columns;
             TableLayout.Strip[] rowStrips = containerInfo.Rows;
             TableLayoutPanelCellBorderStyle cellBorderStyle = CellBorderStyle;
-
-
 
             if (colStrips == null || rowStrips == null)
             {
@@ -476,7 +457,6 @@ namespace System.Windows.Forms
                 totalColumnWidths += colStrips[i].MinSize;
             }
 
-
             if (!HScroll && !VScroll && cellBorderStyle != TableLayoutPanelCellBorderStyle.None)
             {
                 Rectangle tableBounds = new Rectangle(cellBorderWidth / 2 + displayRect.X, cellBorderWidth / 2 + displayRect.Y, displayRect.Width - cellBorderWidth, displayRect.Height - cellBorderWidth);
@@ -508,17 +488,15 @@ namespace System.Windows.Forms
 
         }
 
-
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
-
             base.ScaleCore(dx, dy);
             ScaleAbsoluteStyles(new SizeF(dx, dy));
         }
 
         /// <summary>
-        ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
+        ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
@@ -531,7 +509,7 @@ namespace System.Windows.Forms
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             int i = 0;
 
-            // The last row/column can be larger than the 
+            // The last row/column can be larger than the
             // absolutely styled column width.
             int lastRowHeight = -1;
             int lastRow = containerInfo.Rows.Length - 1;
@@ -586,7 +564,7 @@ namespace System.Windows.Forms
 
         }
 
-        #endregion 
+        #endregion
     }
 
     /// <summary>

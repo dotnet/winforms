@@ -2,27 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.IO;
-    using System.Collections;
-    using System.Globalization;
-    using System.Reflection;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     internal class MergePropertyDescriptor : PropertyDescriptor
     {
-
         private readonly PropertyDescriptor[] descriptors;
 
         private enum TriState
@@ -38,19 +29,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private MultiMergeCollection collection;
 
-
         public MergePropertyDescriptor(PropertyDescriptor[] descriptors) : base(descriptors[0].Name, null)
         {
             this.descriptors = descriptors;
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, gets the type of the
-        ///       component this property
-        ///       is bound to.
-        ///    </para>
+        ///  When overridden in a derived class, gets the type of the
+        ///  component this property
+        ///  is bound to.
         /// </summary>
         public override Type ComponentType
         {
@@ -61,9 +48,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the type converter for this property.
-        ///    </para>
+        ///  Gets the type converter for this property.
         /// </summary>
         public override TypeConverter Converter
         {
@@ -82,11 +67,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a value
-        ///       indicating whether this property should be localized, as
-        ///       specified in the <see cref='System.ComponentModel.LocalizableAttribute'/>.
-        ///    </para>
+        ///  Gets a value
+        ///  indicating whether this property should be localized, as
+        ///  specified in the <see cref='LocalizableAttribute'/>.
         /// </summary>
         public override bool IsLocalizable
         {
@@ -109,11 +92,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in
-        ///       a derived class, gets a value
-        ///       indicating whether this property is read-only.
-        ///    </para>
+        ///  When overridden in
+        ///  a derived class, gets a value
+        ///  indicating whether this property is read-only.
         /// </summary>
         public override bool IsReadOnly
         {
@@ -135,12 +116,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class,
-        ///       gets the type of the property.
-        ///    </para>
+        ///  When overridden in a derived class,
+        ///  gets the type of the property.
         /// </summary>
         public override Type PropertyType
         {
@@ -159,12 +137,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, indicates whether
-        ///       resetting the <paramref name="component "/>will change the value of the
-        ///    <paramref name="component"/>.
-        /// </para>
-        /// </summary>
+        ///  When overridden in a derived class, indicates whether
+        ///  resetting the <paramref name="component "/>will change the value of the
+        ///  <paramref name="component"/>.
+            /// </summary>
         public override bool CanResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");
@@ -186,9 +162,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     This method attempts to copy the given value so unique values are
-        ///     always passed to each object.  If the object cannot be copied it
-        ///     will be returned.
+        ///  This method attempts to copy the given value so unique values are
+        ///  always passed to each object.  If the object cannot be copied it
+        ///  will be returned.
         /// </summary>
         private object CopyValue(object value)
         {
@@ -237,8 +213,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-
-
             // How about serialization?
             if (clonedValue == null && type.IsSerializable)
             {
@@ -259,16 +233,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       Creates a collection of attributes using the
-        ///       array of attributes that you passed to the constructor.
-        ///    </para>
+        ///  Creates a collection of attributes using the
+        ///  array of attributes that you passed to the constructor.
         /// </summary>
         protected override AttributeCollection CreateAttributeCollection()
         {
             return new MergedAttributeCollection(this);
         }
-
 
         private object GetPropertyOwnerForComponent(Array a, int i)
         {
@@ -281,23 +252,18 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets an editor of the specified type.
-        ///    </para>
+        ///  Gets an editor of the specified type.
         /// </summary>
         public override object GetEditor(Type editorBaseType)
         {
             return descriptors[0].GetEditor(editorBaseType);
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, gets the current
-        ///       value
-        ///       of the
-        ///       property on a component.
-        ///    </para>
+        ///  When overridden in a derived class, gets the current
+        ///  value
+        ///  of the
+        ///  property on a component.
         /// </summary>
         public override object GetValue(object component)
         {
@@ -371,16 +337,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, resets the
-        ///       value
-        ///       for this property
-        ///       of the component.
-        ///    </para>
+        ///  When overridden in a derived class, resets the
+        ///  value
+        ///  for this property
+        ///  of the component.
         /// </summary>
         public override void ResetValue(object component)
         {
-
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
             Array a = (Array)component;
             for (int i = 0; i < descriptors.Length; i++)
@@ -391,7 +354,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void SetCollectionValues(Array a, IList listValue)
         {
-
             try
             {
                 if (collection != null)
@@ -429,10 +391,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, sets the value of
-        ///       the component to a different value.
-        ///    </para>
+        ///  When overridden in a derived class, sets the value of
+        ///  the component to a different value.
         /// </summary>
         public override void SetValue(object component, object value)
         {
@@ -453,13 +413,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       When overridden in a derived class, indicates whether the
-        ///       value of
-        ///       this property needs to be persisted.
-        ///    </para>
+        ///  When overridden in a derived class, indicates whether the
+        ///  value of
+        ///  this property needs to be persisted.
         /// </summary>
-
         public override bool ShouldSerializeValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");
@@ -476,7 +433,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private class MultiMergeCollection : ICollection
         {
-
             private object[] items;
             private bool locked;
 
@@ -486,7 +442,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///     Retrieves the number of items.
+            ///  Retrieves the number of items.
             /// </summary>
             public int Count
             {
@@ -503,9 +459,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-
             /// <summary>
-            ///     Prevents the contents of the collection from being re-initialized;
+            ///  Prevents the contents of the collection from being re-initialized;
             /// </summary>
             public bool Locked
             {
@@ -631,9 +586,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     attrCollection.CopyTo(collections[i], 0);
                     Array.Sort(collections[i], GridEntry.AttributeTypeSorter);
                 }
-                
+
                 ArrayList mergedList = new ArrayList();
-    
+
                 // merge the sorted lists -- note that lists aren't fully sorted just by
                 // Attribute.TypeId
                 //
@@ -642,35 +597,35 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Attribute pivotAttr = collections[0][i];
                     bool match = true;
                     for (int j = 1; j < collections.Length; j++) {
-    
+
                         if (posArray[j] >= collections[j].Length) {
                             match = false;
                             break;
                         }
-    
+
                         // check to see if we're on a match
                         //
                         if (pivotAttr.Equals(collections[j][posArray[j]])) {
                             posArray[j] += 1;
                             continue;
                         }
-    
+
                         int jPos = posArray[j];
                         Attribute jAttr = collections[j][jPos];
-    
+
                         match = false;
-    
+
                         // if we aren't on a match, check all the items until we're past
                         // where the matching item would be
                         while (GridEntry.AttributeTypeSorter.Compare(jAttr, pivotAttr) <= 0) {
-                            
+
                             // got a match!
                             if (pivotAttr.Equals(jAttr)) {
                                 posArray[j] = jPos + 1;
                                 match = true;
                                 break;
                             }
-    
+
                             // try again
                             jPos++;
                             if (jPos < collections[j].Length) {
@@ -680,20 +635,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 break;
                             }
                         }
-    
+
                         // if we got here, there is no match, quit for this guy
                         if (!match) {
                             posArray[j] = jPos;
                             break;
                         }
                     }
-    
+
                     // do we have a match?
                     if (match) {
                         mergedList.Add(pivotAttr);
                     }
                 }
-    
+
                 // create our merged array
                 Attribute[] mergedAttrs = new Attribute[mergedList.Count];
                 mergedList.CopyTo(mergedAttrs, 0);

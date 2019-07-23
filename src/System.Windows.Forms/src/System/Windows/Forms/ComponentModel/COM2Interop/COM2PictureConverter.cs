@@ -2,23 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
-
     /// <summary>
     /// This class maps an IPicture to a System.Drawing.Image.
     /// </summary>
     internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
     {
-
         object lastManaged;
         IntPtr lastNativeHandle;
         WeakReference pictureRef;
@@ -35,7 +28,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Returns the managed type that this editor maps the property type to.
+        ///  Returns the managed type that this editor maps the property type to.
         /// </summary>
         public override Type ManagedType
         {
@@ -46,11 +39,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Converts the native value into a managed value
+        ///  Converts the native value into a managed value
         /// </summary>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
-
             if (nativeValue == null)
             {
                 return null;
@@ -95,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Converts the managed value into a native value
+        ///  Converts the managed value into a native value
         /// </summary>
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {

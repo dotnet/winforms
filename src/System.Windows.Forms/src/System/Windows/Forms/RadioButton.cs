@@ -2,32 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.ButtonInternal;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Windows.Forms.ButtonInternal;
-
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms.Layout;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>
-    ///       Encapsulates a
-    ///       standard
-    ///       Windows radio button (option button).
-    ///    </para>
+    ///  Encapsulates a
+    ///  standard
+    ///  Windows radio button (option button).
     /// </summary>
     [
     ComVisible(true),
@@ -41,7 +27,6 @@ namespace System.Windows.Forms
     ]
     public class RadioButton : ButtonBase
     {
-
         private static readonly object EVENT_CHECKEDCHANGED = new object();
         private static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
@@ -59,10 +44,8 @@ namespace System.Windows.Forms
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.RadioButton'/>
-        ///       class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='RadioButton'/>
+        ///  class.
         /// </summary>
         public RadioButton() : base()
         {
@@ -81,9 +64,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets a value indicating whether the <see cref='System.Windows.Forms.RadioButton.Checked'/>
+        /// Gets or sets a value indicating whether the <see cref='Checked'/>
         /// value and the appearance of
-        /// the control automatically change when the control is clicked.</para>
+        /// the control automatically change when the control is clicked.
         /// </summary>
         [
         DefaultValue(true),
@@ -108,11 +91,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the appearance of the radio
-        ///       button
-        ///       control is drawn.
-        ///    </para>
+        ///  Gets or sets the appearance of the radio
+        ///  button
+        ///  control is drawn.
         /// </summary>
         [
         DefaultValue(Appearance.Normal),
@@ -166,12 +147,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets the location of the check box portion of the
-        ///       radio button control.
-        ///       
-        ///    </para>
+        ///  Gets or
+        ///  sets the location of the check box portion of the
+        ///  radio button control.
         /// </summary>
         [
         Localizable(true),
@@ -205,11 +183,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the
-        ///       control is checked or not.
-        ///       
-        ///    </para>
+        ///  Gets or sets a value indicating whether the
+        ///  control is checked or not.
         /// </summary>
         [
         Bindable(true),
@@ -260,8 +235,6 @@ namespace System.Windows.Forms
             remove => base.MouseDoubleClick -= value;
         }
 
-        /// <summary>
-        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -293,8 +266,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -307,8 +280,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         /// For RadioButton controls, scale the width of the system-style padding and height of the radio button image.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when 
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        /// Must call the base class method to get the current DPI values. This method is invoked only when
+        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
         /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
@@ -391,11 +364,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the value indicating whether the user can give the focus to this
-        ///       control using the TAB key.
-        ///       
-        ///    </para>
+        ///  Gets or sets the value indicating whether the user can give the focus to this
+        ///  control using the TAB key.
         /// </summary>
         [
         Localizable(true),
@@ -414,11 +384,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Occurs when the
-        ///       value of the <see cref='System.Windows.Forms.RadioButton.Checked'/>
-        ///       property changes.
-        ///    </para>
+        ///  Occurs when the
+        ///  value of the <see cref='Checked'/>
+        ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.RadioButtonOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged
@@ -428,18 +396,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Constructs the new instance of the accessibility object for this control. Subclasses
-        ///       should not call base.CreateAccessibilityObject.
-        ///    </para>
+        ///  Constructs the new instance of the accessibility object for this control. Subclasses
+        ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new RadioButtonAccessibleObject(this);
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -453,10 +417,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.CheckBox.CheckedChanged'/>
-        ///       event.
-        ///    </para>
+        ///  Raises the <see cref='CheckBox.CheckedChanged'/>
+        ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
@@ -466,7 +428,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     We override this to implement the autoCheck functionality.
+        ///  We override this to implement the autoCheck functionality.
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
@@ -477,8 +439,6 @@ namespace System.Windows.Forms
             base.OnClick(e);
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnEnter(EventArgs e)
         {
             // Just like the Win32 RadioButton, fire a click if the
@@ -502,7 +462,7 @@ namespace System.Windows.Forms
                     //we enter the radioButton by pressing Tab
                     PerformAutoUpdates(true);
                     //reset the TabStop so we can come back later
-                    //notice that PerformAutoUpdates will set the 
+                    //notice that PerformAutoUpdates will set the
                     //TabStop of this button to false
                     TabStop = true;
                 }
@@ -510,8 +470,6 @@ namespace System.Windows.Forms
             base.OnEnter(e);
         }
 
-        /// <summary>
-        /// </summary>
         private void PerformAutoUpdates(bool tabbedInto)
         {
             if (autoCheck)
@@ -526,7 +484,7 @@ namespace System.Windows.Forms
                     Control parent = ParentInternal;
                     if (parent != null)
                     {
-                        Control.ControlCollection children = parent.Controls;
+                        ControlCollection children = parent.Controls;
                         for (int i = 0; i < children.Count; i++)
                         {
                             Control ctl = children[i];
@@ -546,14 +504,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Removes tabstops from all radio buttons, other than the one that currently has the focus.
+        ///  Removes tabstops from all radio buttons, other than the one that currently has the focus.
         /// </summary>
         private void WipeTabStops(bool tabbedInto)
         {
             Control parent = ParentInternal;
             if (parent != null)
             {
-                Control.ControlCollection children = parent.Controls;
+                ControlCollection children = parent.Controls;
                 for (int i = 0; i < children.Count; i++)
                 {
                     Control ctl = children[i];
@@ -596,10 +554,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
-        ///       
-        ///    </para>
+        ///  Raises the <see cref='ButtonBase.OnMouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -626,10 +581,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the
-        ///       button, simulating a click by a user.
-        ///    </para>
+        ///  Generates a <see cref='Control.Click'/> event for the
+        ///  button, simulating a click by a user.
         /// </summary>
         public void PerformClick()
         {
@@ -646,8 +599,6 @@ namespace System.Windows.Forms
 
         }
 
-        /// <summary>
-        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect)
@@ -666,21 +617,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Checked: " + Checked.ToString();
         }
 
-        /// <summary>
-        /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject
         {
-
             public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
             {
             }

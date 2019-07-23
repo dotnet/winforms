@@ -4,14 +4,13 @@
 
 namespace System.ComponentModel
 {
-
     using System;
     using System.Collections;
 
     /// <summary>
-    ///     This is a hashtable that stores object keys as weak references.  
-    ///     It monitors memory usage and will periodically scavenge the
-    ///     hash table to clean out dead references.
+    ///  This is a hashtable that stores object keys as weak references.
+    ///  It monitors memory usage and will periodically scavenge the
+    ///  hash table to clean out dead references.
     /// </summary>
     internal sealed class WeakHashtable : Hashtable
     {
@@ -25,7 +24,7 @@ namespace System.ComponentModel
         }
 
         /// <summary>
-        ///     Override of clear that performs a scavenge.
+        ///  Override of clear that performs a scavenge.
         /// </summary>
         public override void Clear()
         {
@@ -33,7 +32,7 @@ namespace System.ComponentModel
         }
 
         /// <summary>
-        ///     Override of remove that performs a scavenge.
+        ///  Override of remove that performs a scavenge.
         /// </summary>
         public override void Remove(object key)
         {
@@ -41,8 +40,8 @@ namespace System.ComponentModel
         }
 
         /// <summary>
-        ///     Override of Item that wraps a weak reference around the
-        ///     key and performs a scavenge.
+        ///  Override of Item that wraps a weak reference around the
+        ///  key and performs a scavenge.
         /// </summary>
         public void SetWeak(object key, object value)
         {
@@ -51,16 +50,16 @@ namespace System.ComponentModel
         }
 
         /// <summary>
-        ///     This method checks to see if it is necessary to
-        ///     scavenge keys, and if it is it performs a scan
-        ///     of all keys to see which ones are no longer valid.
-        ///     To determine if we need to scavenge keys we need to
-        ///     try to track the current GC memory.  Our rule of
-        ///     thumb is that if GC memory is decreasing and our
-        ///     key count is constant we need to scavenge.  We
-        ///     will need to see if this is too often for extreme
-        ///     use cases like the CompactFramework (they add
-        ///     custom type data for every object at design time).
+        ///  This method checks to see if it is necessary to
+        ///  scavenge keys, and if it is it performs a scan
+        ///  of all keys to see which ones are no longer valid.
+        ///  To determine if we need to scavenge keys we need to
+        ///  try to track the current GC memory.  Our rule of
+        ///  thumb is that if GC memory is decreasing and our
+        ///  key count is constant we need to scavenge.  We
+        ///  will need to see if this is too often for extreme
+        ///  use cases like the CompactFramework (they add
+        ///  custom type data for every object at design time).
         /// </summary>
         private void ScavengeKeys()
         {
@@ -161,12 +160,12 @@ namespace System.ComponentModel
         }
 
         /// <summary>
-        ///     A subclass of WeakReference that overrides GetHashCode and
-        ///     Equals so that the weak reference returns the same equality
-        ///     semantics as the object it wraps.  This will always return
-        ///     the object's hash code and will return True for a Equals
-        ///     comparison of the object it is wrapping.  If the object
-        ///     it is wrapping has finalized, Equals always returns false.
+        ///  A subclass of WeakReference that overrides GetHashCode and
+        ///  Equals so that the weak reference returns the same equality
+        ///  semantics as the object it wraps.  This will always return
+        ///  the object's hash code and will return True for a Equals
+        ///  comparison of the object it is wrapping.  If the object
+        ///  it is wrapping has finalized, Equals always returns false.
         /// </summary>
         private sealed class EqualityWeakReference : WeakReference
         {
@@ -196,25 +195,7 @@ namespace System.ComponentModel
                 return false;
             }
 
-            public override int GetHashCode()
-            {
-                return _hashCode;
-            }
+            public override int GetHashCode() => _hashCode;
         }
-
-
-        /* The folowing code has been removed to prevent FXCOP violation
-           It is left here incase it needs to be resurected
-        /// <summary>
-        ///     Override of add that wraps a weak reference around the
-        ///     key and performs a scavenge.
-        /// </summary>
-        public void AddWeak(object key, object value)
-        {
-            ScavengeKeys();
-            base.Add(new EqualityWeakReference(key), value);
-        }
-        */
     }
 }
-

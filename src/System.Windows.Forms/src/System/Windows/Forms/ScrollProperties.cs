@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollProperties.LargeChange'/>
+        /// Gets or sets a value to be added or subtracted to the <see cref='LargeChange'/>
         /// property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -183,7 +182,7 @@ namespace System.Windows.Forms
         internal abstract int VerticalDisplayPosition { get; }
 
         /// <summary>
-        /// Gets or sets the value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollBar.Value'/>
+        /// Gets or sets the value to be added or subtracted to the <see cref='ScrollBar.Value'/>
         /// property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -194,8 +193,8 @@ namespace System.Windows.Forms
             get
             {
                 // We can't have SmallChange > LargeChange, but we shouldn't manipulate
-                // the set values for these properties, so we just return the smaller 
-                // value here. 
+                // the set values for these properties, so we just return the smaller
+                // value here.
                 return Math.Min(_smallChange, LargeChange);
             }
             set

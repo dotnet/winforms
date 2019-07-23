@@ -2,29 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       This is a read only collection of Forms exposed as a static property of the 
-    ///       Application class. This is used to store all the currently loaded forms in an app.
-    ///    </para>
+    ///  This is a read only collection of Forms exposed as a static property of the
+    ///  Application class. This is used to store all the currently loaded forms in an app.
     /// </summary>
     public class FormCollection : ReadOnlyCollectionBase
     {
-
         internal static object CollectionSyncRoot = new object();
 
         /// <summary>
-        ///    <para>
-        ///       Gets a form specified by name, if present, else returns null. If there are multiple
-        ///       forms with matching names, the first form found is returned.
-        ///    </para>
+        ///  Gets a form specified by name, if present, else returns null. If there are multiple
+        ///  forms with matching names, the first form found is returned.
         /// </summary>
         public virtual Form this[string name]
         {
@@ -48,9 +40,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets a form specified by index.
-        ///    </para>
+        ///  Gets a form specified by index.
         /// </summary>
         public virtual Form this[int index]
         {
@@ -67,7 +57,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Used internally to add a Form to the FormCollection
+        ///  Used internally to add a Form to the FormCollection
         /// </summary>
         internal void Add(Form form)
         {
@@ -78,7 +68,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Used internally to check if a Form is in the FormCollection
+        ///  Used internally to check if a Form is in the FormCollection
         /// </summary>
         internal bool Contains(Form form)
         {
@@ -91,7 +81,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Used internally to add a Form to the FormCollection
+        ///  Used internally to add a Form to the FormCollection
         /// </summary>
         internal void Remove(Form form)
         {

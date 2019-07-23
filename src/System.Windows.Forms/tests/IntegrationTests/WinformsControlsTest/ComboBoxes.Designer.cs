@@ -46,9 +46,9 @@ namespace WinformsControlsTest
             this.comboBox12 = new System.Windows.Forms.ComboBox();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             this.SuspendLayout();
-            // 
+            //
             // comboBox1
-            // 
+            //
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
@@ -58,9 +58,9 @@ namespace WinformsControlsTest
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 3;
-            // 
+            //
             // comboBox2
-            // 
+            //
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox2.FormattingEnabled = true;
@@ -74,9 +74,9 @@ namespace WinformsControlsTest
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 4;
-            // 
+            //
             // comboBox3
-            // 
+            //
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Items.AddRange(new object[] {
             "dropdown",
@@ -88,9 +88,9 @@ namespace WinformsControlsTest
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(121, 21);
             this.comboBox3.TabIndex = 5;
-            // 
+            //
             // comboBox4
-            // 
+            //
             this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Items.AddRange(new object[] {
@@ -102,9 +102,9 @@ namespace WinformsControlsTest
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(121, 21);
             this.comboBox4.TabIndex = 6;
-            // 
+            //
             // comboBox5
-            // 
+            //
             this.comboBox5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox5.FormattingEnabled = true;
             this.comboBox5.Items.AddRange(new object[] {
@@ -113,9 +113,9 @@ namespace WinformsControlsTest
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(121, 21);
             this.comboBox5.TabIndex = 7;
-            // 
+            //
             // comboBox6
-            // 
+            //
             this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox6.FormattingEnabled = true;
@@ -126,9 +126,9 @@ namespace WinformsControlsTest
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(121, 21);
             this.comboBox6.TabIndex = 8;
-            // 
+            //
             // comboBox7
-            // 
+            //
             this.comboBox7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox7.FormattingEnabled = true;
             this.comboBox7.Items.AddRange(new object[] {
@@ -138,9 +138,9 @@ namespace WinformsControlsTest
             this.comboBox7.Name = "comboBox7";
             this.comboBox7.Size = new System.Drawing.Size(121, 21);
             this.comboBox7.TabIndex = 9;
-            // 
+            //
             // comboBox8
-            // 
+            //
             this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox8.FormattingEnabled = true;
@@ -151,9 +151,9 @@ namespace WinformsControlsTest
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(121, 21);
             this.comboBox8.TabIndex = 10;
-            // 
+            //
             // comboBox9
-            // 
+            //
             this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
             this.comboBox9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox9.FormattingEnabled = true;
@@ -164,9 +164,9 @@ namespace WinformsControlsTest
             this.comboBox9.Name = "comboBox9";
             this.comboBox9.Size = new System.Drawing.Size(121, 150);
             this.comboBox9.TabIndex = 14;
-            // 
+            //
             // comboBox10
-            // 
+            //
             this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
             this.comboBox10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox10.FormattingEnabled = true;
@@ -177,9 +177,9 @@ namespace WinformsControlsTest
             this.comboBox10.Name = "comboBox10";
             this.comboBox10.Size = new System.Drawing.Size(121, 150);
             this.comboBox10.TabIndex = 13;
-            // 
+            //
             // comboBox11
-            // 
+            //
             this.comboBox11.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
             this.comboBox11.FormattingEnabled = true;
             this.comboBox11.Items.AddRange(new object[] {
@@ -191,9 +191,9 @@ namespace WinformsControlsTest
             this.comboBox11.Name = "comboBox11";
             this.comboBox11.Size = new System.Drawing.Size(121, 150);
             this.comboBox11.TabIndex = 12;
-            // 
+            //
             // comboBox12
-            // 
+            //
             this.comboBox12.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
             this.comboBox12.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox12.FormattingEnabled = true;
@@ -208,9 +208,9 @@ namespace WinformsControlsTest
             this.comboBox12.Name = "comboBox12";
             this.comboBox12.Size = new System.Drawing.Size(121, 150);
             this.comboBox12.TabIndex = 11;
-            // 
+            //
             // currentDPILabel1
-            // 
+            //
             this.currentDPILabel1.AutoSize = true;
             this.currentDPILabel1.Location = new System.Drawing.Point(18, 173);
             this.currentDPILabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -218,9 +218,9 @@ namespace WinformsControlsTest
             this.currentDPILabel1.Size = new System.Drawing.Size(90, 13);
             this.currentDPILabel1.TabIndex = 15;
             this.currentDPILabel1.Text = "Current scaling is 100%";
-            // 
+            //
             // ComboBoxes
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(831, 198);

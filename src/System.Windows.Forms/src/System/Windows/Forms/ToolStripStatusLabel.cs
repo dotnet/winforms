@@ -25,7 +25,6 @@ namespace System.Windows.Forms
         private bool spring = false;
         private AutomationLiveSetting liveSetting;
 
-
         /// <summary>
         /// A non selectable ToolStrip item
         /// </summary>
@@ -57,8 +56,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a new AccessibleObject for this ToolStripStatusLabel instance.
         /// The AccessibleObject instance returned by this method supports UIA Live Region feature.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.7.3 or opted into this feature using compatibility switches. 
         /// </summary>
         /// <returns>
         /// AccessibleObject for this ToolStripStatusLabel instance.
@@ -90,7 +87,6 @@ namespace System.Windows.Forms
                 base.Alignment = value;
             }
         }
-
 
         [
         DefaultValue(Border3DStyle.Flat),
@@ -230,7 +226,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public override System.Drawing.Size GetPreferredSize(System.Drawing.Size constrainingSize)
+        public override Size GetPreferredSize(Size constrainingSize)
         {
             if (BorderSides != ToolStripStatusLabelBorderSides.None)
             {
@@ -242,14 +238,11 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-
             if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
@@ -277,8 +270,6 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// Raises the LiveRegionChanged UIA event.
-            /// To make this method effective, the applications must be recompiled to target .NET Framework 4.7.3
-            /// or opted into this feature using compatibility switches.
             /// </summary>
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()
@@ -325,7 +316,5 @@ namespace System.Windows.Forms
     }
 
 }
-
-
 
 

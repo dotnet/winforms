@@ -2,25 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///      This class fully encapsulates the painting logic for an addnew row
-    ///      appearing in a DataGrid.
+    ///  This class fully encapsulates the painting logic for an addnew row
+    ///  appearing in a DataGrid.
     /// </summary>
     internal class DataGridAddNewRow : DataGridRow
     {
-
         private bool dataBound = false;
 
         public DataGridAddNewRow(DataGrid dGrid, DataGridTableStyle gridTable, int rowNum)
@@ -33,11 +24,11 @@ namespace System.Windows.Forms
         // =------------------------------------------------------------------
 
         /// <summary>
-        ///      Since the DataView does not return a valid DataRow for
-        ///      a newly added row, the DataGrid sets this property to
-        ///      true to signal that the AddNewRow can safely render
-        ///      row contents and permit editing, etc because a DataRecord
-        ///      exists in the cursor that created this row.
+        ///  Since the DataView does not return a valid DataRow for
+        ///  a newly added row, the DataGrid sets this property to
+        ///  true to signal that the AddNewRow can safely render
+        ///  row contents and permit editing, etc because a DataRecord
+        ///  exists in the cursor that created this row.
         /// </summary>
         public bool DataBound
         {
@@ -81,7 +72,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Paints the row.
+        ///  Paints the row.
         /// </summary>
         public override int Paint(Graphics g, Rectangle bounds, Rectangle trueRowBounds, int firstVisibleColumn, int columnCount)
         {

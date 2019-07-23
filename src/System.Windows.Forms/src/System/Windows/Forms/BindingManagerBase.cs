@@ -4,12 +4,10 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Changing this would be a breaking change")]
     public abstract class BindingManagerBase
     {
         private BindingsCollection _bindings;
@@ -65,7 +63,6 @@ namespace System.Windows.Forms
 
         public BindingManagerBase() { }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Changing this would be a breaking change")]
         internal BindingManagerBase(object dataSource)
         {
             SetDataSource(dataSource);

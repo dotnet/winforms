@@ -17,13 +17,23 @@ namespace System.Windows.Forms.Tests
         public void Control_Ctor_Default()
         {
             var control = new SubControl();
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
+            Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(Size.Empty, control.ClientSize);
+            Assert.Equal(Rectangle.Empty, control.ClientRectangle);
+            Assert.Null(control.Container);
             Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
             Assert.Equal(new Padding(3), control.DefaultMargin);
@@ -31,26 +41,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
             Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
+            Assert.Equal(0, control.Width);
         }
 
         [Theory]
@@ -58,13 +78,23 @@ namespace System.Windows.Forms.Tests
         public void Control_Ctor_String(string text, string expectedText)
         {
             var control = new SubControl(text);
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
+            Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(Size.Empty, control.ClientSize);
+            Assert.Equal(Rectangle.Empty, control.ClientRectangle);
+            Assert.Null(control.Container);
             Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
             Assert.Equal(new Padding(3), control.DefaultMargin);
@@ -72,29 +102,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
             Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Equal(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
+            Assert.Equal(0, control.Width);
         }
 
-        public static IEnumerable<object[]> Ctor_String_Int_Int_Int_Int()
+        public static IEnumerable<object[]> Ctor_String_Int_Int_Int_Int_TestData()
         {
             yield return new object[] { null, -1, -2, -3, -4, string.Empty };
             yield return new object[] { string.Empty, 0, 0, 0, 0, string.Empty };
@@ -102,17 +143,27 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_String_Int_Int_Int_Int))]
-        public void Control_ConstructorSize(string text, int left, int top, int width, int height, string expectedText)
+        [MemberData(nameof(Ctor_String_Int_Int_Int_Int_TestData))]
+        public void Ctor_String_Int_Int_Int_Int(string text, int left, int top, int width, int height, string expectedText)
         {
             var control = new SubControl(text, left, top, width, height);
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Null(control.BindingContext);
             Assert.Equal(top + height, control.Bottom);
+            Assert.Equal(new Rectangle(left, top, width, height), control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
+            Assert.Equal(new Size(width, height), control.ClientSize);
+            Assert.Null(control.Container);
             Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
             Assert.Equal(new Padding(3), control.DefaultMargin);
@@ -120,26 +171,37 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
             Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(height, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(left, control.Left);
             Assert.Equal(new Point(left, top), control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(left + width, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Null(control.Site);
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Equal(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
+            Assert.Equal(width, control.Width);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_TestData()
@@ -154,13 +216,23 @@ namespace System.Windows.Forms.Tests
         public void Control_Ctor_Control_String(Control parent, string text, string expectedText)
         {
             var control = new SubControl(parent, text);
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Null(control.BindingContext);
             Assert.Equal(0, control.Bottom);
+            Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(Rectangle.Empty, control.ClientRectangle);
+            Assert.Equal(Size.Empty, control.ClientSize);
+            Assert.Null(control.Container);
             Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
             Assert.Equal(new Padding(3), control.DefaultMargin);
@@ -168,26 +240,37 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
             Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Padding.Empty, control.Padding);
             Assert.Same(parent, control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Same(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
+            Assert.Equal(0, control.Width);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_Int_Int_Int_Int_TestData()
@@ -202,13 +285,25 @@ namespace System.Windows.Forms.Tests
         public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height, string expectedText)
         {
             var control = new SubControl(parent, text, left, top, width, height);
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Null(control.BindingContext);
             Assert.Equal(top + height, control.Bottom);
+            Assert.Equal(new Rectangle(left, top, width, height), control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
+            Assert.Equal(new Size(width, height), control.ClientSize);
+            Assert.Null(control.Container);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
             Assert.Equal(new Padding(3), control.DefaultMargin);
@@ -216,26 +311,37 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
             Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(height, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(left, control.Left);
             Assert.Equal(new Point(left, top), control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Padding.Empty, control.Padding);
             Assert.Same(parent, control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(left + width, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Null(control.Site);
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Same(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
+            Assert.Equal(width, control.Width);
         }
 
         [Fact]
@@ -289,7 +395,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(cont.Created);
         }
 
-
         /// <summary>
         /// Data for the CreateControlInternal test
         /// </summary>
@@ -313,22 +418,66 @@ namespace System.Windows.Forms.Tests
 
         #region Tabbing
 
-        /// <summary>
-        /// Data for the TabIndexGetSet test
-        /// </summary>
-        public static TheoryData<uint> TabIndexGetSetData =>
-            CommonTestHelper.GetUIntTheoryData();
-
         [Theory]
-        [MemberData(nameof(TabIndexGetSetData))]
-        public void Control_TabIndexGetSet(uint expected)
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void Control_TabIndex_Set_GetReturnsExpected(int value)
         {
-            var cont = new Control
+            var control = new Control
             {
-                TabIndex = (int)expected
+                TabIndex = value
             };
+            Assert.Equal(value, control.TabIndex);
 
-            Assert.Equal(expected, (uint)cont.TabIndex);
+            // Set same.
+            control.TabIndex = value;
+            Assert.Equal(value, control.TabIndex);
+        }
+
+        [Fact]
+        public void Control_TabIndex_SetWithHandler_CallsTabIndexChanged()
+        {
+            var control = new Control
+            {
+                TabIndex = 0
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.TabIndexChanged += handler;
+
+            // Set different.
+            control.TabIndex = 1;
+            Assert.Equal(1, control.TabIndex);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.TabIndex = 1;
+            Assert.Equal(1, control.TabIndex);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.TabIndex = 2;
+            Assert.Equal(2, control.TabIndex);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.TabIndexChanged -= handler;
+            control.TabIndex = 1;
+            Assert.Equal(1, control.TabIndex);
+            Assert.Equal(2, callCount);
+        }
+
+        [Fact]
+        public void Control_TabIndex_SetNegative_CallsArgumentOutOfRangeException()
+        {
+            var control = new Control();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.TabIndex = -1);
         }
 
         [Theory]
@@ -741,44 +890,202 @@ namespace System.Windows.Forms.Tests
             Assert.True(wasChanged);
         }
 
-        [Fact]
-        public void Control_ParentChangedFromSet()
+        public static IEnumerable<object[]> Parent_Set_TestData()
         {
-            bool wasChanged = false;
-            var cont = new Control();
-            cont.ParentChanged += (sender, args) => wasChanged = true;
-            var parent = new Control();
+            yield return new object[] { null };
+            yield return new object[] { new Control() };
+        }
 
-            cont.Parent = parent;
+        [Theory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Control_Parent_Set_GetReturnsExpected(Control value)
+        {
+            var control = new Control
+            {
+                Parent = value
+            };
+            Assert.Same(value, control.Parent);
 
-            Assert.True(wasChanged);
+            // Set same.
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+        }
+
+        [Theory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Control_Parent_SetWithNonNullOldParent_GetReturnsExpected(Control value)
+        {
+            var oldParent = new Control();
+            var control = new Control
+            {
+                Parent = oldParent
+            };
+            
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Empty(oldParent.Controls);
+
+            // Set same.
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Empty(oldParent.Controls);
         }
 
         [Fact]
-        public void Control_ParentGetSet()
+        public void Control_Parent_SetNonNull_AddsToControls()
         {
             var parent = new Control();
-            var cont = new Control
+            var control = new Control
             {
                 Parent = parent
             };
+            Assert.Same(parent, control.Parent);
+            Assert.Same(control, Assert.Single(parent.Controls));
 
-            Assert.NotNull(cont.Parent);
-            Assert.Equal(parent, cont.Parent);
+            // Set same.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Same(control, Assert.Single(parent.Controls));
         }
 
         [Fact]
-        public void Control_ParentInternalGetSet()
+        public void Control_Parent_SetWithHandler_CallsParentChanged()
         {
             var parent = new Control();
-            var cont = new Control
+            var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ParentChanged += handler;
+
+            // Set different.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(1, callCount);
+
+            // Set null.
+            control.Parent = null;
+            Assert.Null(control.Parent);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ParentChanged -= handler;
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(2, callCount);
+        }
+
+        [Fact]
+        public void Control_Parent_SetSame_ThrowsArgumentException()
+        {
+            var control = new Control();
+            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Null(control.Parent);
+        }
+
+        [Theory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Control_ParentInternal_Set_GetReturnsExpected(Control value)
+        {
+            var control = new Control
+            {
+                ParentInternal = value
+            };
+            Assert.Same(value, control.ParentInternal);
+
+            // Set same.
+            control.ParentInternal = value;
+            Assert.Same(value, control.ParentInternal);
+        }
+
+        [Theory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Control_ParentInternal_SetWithNonNullOldParent_GetReturnsExpected(Control value)
+        {
+            var oldParent = new Control();
+            var control = new Control
+            {
+                ParentInternal = oldParent
+            };
+            
+            control.ParentInternal = value;
+            Assert.Same(value, control.ParentInternal);
+            Assert.Empty(oldParent.Controls);
+
+            // Set same.
+            control.ParentInternal = value;
+            Assert.Same(value, control.ParentInternal);
+            Assert.Empty(oldParent.Controls);
+        }
+
+        [Fact]
+        public void Control_ParentInternal_SetNonNull_AddsToControls()
+        {
+            var parent = new Control();
+            var control = new Control
             {
                 ParentInternal = parent
             };
+            Assert.Same(parent, control.ParentInternal);
+            Assert.Same(control, Assert.Single(parent.Controls));
 
-            Assert.NotNull(cont.Parent);
-            Assert.Equal(parent, cont.ParentInternal);
-            Assert.True(parent.Controls.Contains(cont));
+            // Set same.
+            control.ParentInternal = parent;
+            Assert.Same(parent, control.ParentInternal);
+            Assert.Same(control, Assert.Single(parent.Controls));
+        }
+
+        [Fact]
+        public void Control_ParentInternal_SetWithHandler_CallsParentChanged()
+        {
+            var parent = new Control();
+            var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ParentChanged += handler;
+
+            // Set different.
+            control.ParentInternal = parent;
+            Assert.Same(parent, control.ParentInternal);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.ParentInternal = parent;
+            Assert.Same(parent, control.ParentInternal);
+            Assert.Equal(1, callCount);
+
+            // Set null.
+            control.ParentInternal = null;
+            Assert.Null(control.ParentInternal);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ParentChanged -= handler;
+            control.ParentInternal = parent;
+            Assert.Same(parent, control.ParentInternal);
+            Assert.Equal(2, callCount);
+        }
+
+        [Fact]
+        public void Control_ParentInternal_SetSame_ThrowsArgumentException()
+        {
+            var control = new Control();
+            Assert.Throws<ArgumentException>(null, () => control.ParentInternal = control);
+            Assert.Null(control.ParentInternal);
         }
 
         [Fact]
@@ -1406,22 +1713,114 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.Padding);
         }
 
-        /// <summary>
-        /// Data for the AnchorGetSet test
-        /// </summary>
-        public static TheoryData<AnchorStyles> AnchorData =>
-            CommonTestHelper.GetEnumTheoryData<AnchorStyles>();
+        public static IEnumerable<object[]> Anchor_Set_TestData()
+        {
+            yield return new object[] { AnchorStyles.Top, AnchorStyles.Top };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Bottom, AnchorStyles.Top | AnchorStyles.Bottom };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Left, AnchorStyles.Top | AnchorStyles.Left };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Right };
+            yield return new object[] { AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
+
+            yield return new object[] { AnchorStyles.Bottom, AnchorStyles.Bottom };
+            yield return new object[] { AnchorStyles.Bottom | AnchorStyles.Left, AnchorStyles.Bottom | AnchorStyles.Left };
+            yield return new object[] { AnchorStyles.Bottom | AnchorStyles.Right, AnchorStyles.Bottom | AnchorStyles.Right };
+            yield return new object[] { AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
+
+            yield return new object[] { AnchorStyles.Left, AnchorStyles.Left };
+            yield return new object[] { AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Left | AnchorStyles.Right };
+
+            yield return new object[] { AnchorStyles.Right, AnchorStyles.Right };
+
+            yield return new object[] { AnchorStyles.None, AnchorStyles.None };
+            yield return new object[] { (AnchorStyles)(-1), AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
+            yield return new object[] { (AnchorStyles)int.MaxValue, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
+        }
 
         [Theory]
-        [MemberData(nameof(AnchorData))]
-        public void Control_AnchorGetSet(AnchorStyles expected)
+        [MemberData(nameof(Anchor_Set_TestData))]
+        public void Control_Anchor_Set_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
         {
-            var cont = new Control
+            var control = new Control
             {
-                Anchor = expected
+                Anchor = value
+            };
+            Assert.Equal(expected, control.Anchor);
+            Assert.Equal(DockStyle.None, control.Dock);
+
+            // Set same.
+            control.Anchor = value;
+            Assert.Equal(expected, control.Anchor);
+            Assert.Equal(DockStyle.None, control.Dock);
+        }
+
+        [Theory]
+        [MemberData(nameof(Anchor_Set_TestData))]
+        public void Control_Anchor_SetWithOldValue_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
+        {
+            var control = new Control
+            {
+                Anchor = AnchorStyles.Left
             };
 
-            Assert.Equal(expected, cont.Anchor);
+            control.Anchor = value;
+            Assert.Equal(expected, control.Anchor);
+            Assert.Equal(DockStyle.None, control.Dock);
+
+            // Set same.
+            control.Anchor = value;
+            Assert.Equal(expected, control.Anchor);
+            Assert.Equal(DockStyle.None, control.Dock);
+        }
+
+        public static IEnumerable<object[]> Anchor_SetWithDock_TestData()
+        {
+            foreach (DockStyle dock in Enum.GetValues(typeof(DockStyle)))
+            {
+                yield return new object[] { dock, AnchorStyles.Top, AnchorStyles.Top, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Bottom, AnchorStyles.Top | AnchorStyles.Bottom, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Left, AnchorStyles.Top | AnchorStyles.Left, dock };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Right, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, DockStyle.None };
+
+                yield return new object[] { dock, AnchorStyles.Bottom, AnchorStyles.Bottom, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Bottom | AnchorStyles.Left, AnchorStyles.Bottom | AnchorStyles.Left, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Bottom | AnchorStyles.Right, AnchorStyles.Bottom | AnchorStyles.Right, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, DockStyle.None };
+
+                yield return new object[] { dock, AnchorStyles.Left, AnchorStyles.Left, DockStyle.None };
+                yield return new object[] { dock, AnchorStyles.Left | AnchorStyles.Right, AnchorStyles.Left | AnchorStyles.Right, DockStyle.None };
+
+                yield return new object[] { dock, AnchorStyles.Right, AnchorStyles.Right, DockStyle.None };
+
+                yield return new object[] { dock, AnchorStyles.None, AnchorStyles.None, DockStyle.None };
+                yield return new object[] { dock, (AnchorStyles)(-1), AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, DockStyle.None };
+                yield return new object[] { dock, (AnchorStyles)int.MaxValue, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, DockStyle.None };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Anchor_SetWithDock_TestData))]
+        public void Control_Anchor_SetWithDock_GetReturnsExpected(DockStyle dock, AnchorStyles value, AnchorStyles expectedAnchor, DockStyle expectedDock)
+        {
+            var control = new Control
+            {
+                Dock = dock
+            };
+
+            control.Anchor = value;
+            Assert.Equal(expectedAnchor, control.Anchor);
+            Assert.Equal(expectedDock, control.Dock);
+
+            // Set same.
+            control.Anchor = value;
+            Assert.Equal(expectedAnchor, control.Anchor);
+            Assert.Equal(expectedDock, control.Dock);
         }
 
         [Fact]
@@ -1692,8 +2091,6 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, cont.Width);
         }
-
-
 
         #endregion
 
@@ -2062,7 +2459,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.Visible);
         }
 
-
         [Fact]
         public void Control_Hide_InvokeWithHandler_CallsVisibleChanged()
         {
@@ -2188,11 +2584,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, control.Text);
+            Assert.Equal(expected, control.Text);
 
             // Set same.
             control.Text = value;
-            Assert.Same(expected, control.Text);
+            Assert.Equal(expected, control.Text);
         }
 
         [Theory]
@@ -2876,7 +3272,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.UseWaitCursor);
         }
 
-
         [Theory]
         [InlineData(true, true)]
         [InlineData(false, true)] // setting is impossible; default is false
@@ -2902,22 +3297,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(mock.Object, cont.WindowTarget);
         }
 
-        /// <summary>
-        /// Data for the AllowDropGetSet test
-        /// </summary>
-        public static TheoryData<bool> AllowDropData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [Theory]
-        [MemberData(nameof(AllowDropData))]
-        public void Control_AllowDropGetSet(bool expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_AllowDrop_Set_GetReturnsExpected(bool value)
         {
-            var cont = new Control
+            var control = new Control
             {
-                AllowDrop = expected
+                AllowDrop = value
             };
+            Assert.Equal(value, control.AllowDrop);
 
-            Assert.Equal(expected, cont.AllowDrop);
+            // Set same.
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+
+            // Set different.
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+        }
+
+        [Fact]
+        public void Control_AllowDrop_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Throws<InvalidOperationException>(() => control.AllowDrop = true);
+            Assert.False(control.AllowDrop);
+
+            // Can set to false.
+            control.AllowDrop = false;
+            Assert.False(control.AllowDrop);
+        }
+
+        [StaTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_AllowDrop_SetWithHandleSTA_GetReturnsExpected(bool value)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+
+            // Set same.
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+
+            // Set different.
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
         }
 
         [Theory]
@@ -3015,22 +3444,61 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        /// <summary>
-        /// Data for the CausesValidationGetSet test
-        /// </summary>
-        public static TheoryData<bool> CausesValidationData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [Theory]
-        [MemberData(nameof(CausesValidationData))]
-        public void Control_CausesValidationGetSet(bool expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_CausesValidation_Set_GetReturnsExpected(bool value)
         {
-            var cont = new Control
+            var control = new Control
             {
-                CausesValidation = expected
+                CausesValidation = value
             };
+            Assert.Equal(value, control.CausesValidation);
+            
+            // Set same
+            control.CausesValidation = value;
+            Assert.Equal(value, control.CausesValidation);
+            
+            // Set different
+            control.CausesValidation = !value;
+            Assert.Equal(!value, control.CausesValidation);
+        }
 
-            Assert.Equal(expected, cont.CausesValidation);
+        [Fact]
+        public void Control_CausesValidation_SetWithHandler_CallsCausesValidationChanged()
+        {
+            var control = new Control
+            {
+                CausesValidation = true
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.CausesValidationChanged += handler;
+
+            // Set different.
+            control.CausesValidation = false;
+            Assert.False(control.CausesValidation);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.CausesValidation = false;
+            Assert.False(control.CausesValidation);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.CausesValidation = true;
+            Assert.True(control.CausesValidation);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.CausesValidationChanged -= handler;
+            control.CausesValidation = false;
+            Assert.False(control.CausesValidation);
+            Assert.Equal(2, callCount);
         }
 
         [Theory]
@@ -3134,25 +3602,166 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value ?? Cursors.Default, control.Cursor);
         }
 
-        /// <summary>
-        /// Data for the DockGetSet test
-        /// </summary>
-        public static TheoryData<DockStyle> DockGetSetData =>
-            CommonTestHelper.GetEnumTheoryData<DockStyle>();
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        public void Control_Dock_Set_GetReturnsExpected(DockStyle value)
+        {
+            var control = new Control
+            {
+                Dock = value
+            };
+            Assert.Equal(value, control.Dock);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+
+            // Set same.
+            control.Dock = value;
+            Assert.Equal(value, control.Dock);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+        }
 
         [Theory]
-        [MemberData(nameof(DockGetSetData))]
-        public void Control_DockGetSet(DockStyle expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        public void Control_Dock_SetWithOldValue_GetReturnsExpected(DockStyle value)
         {
-            var cont = new Control
+            var control = new Control
             {
-                Dock = expected
+                Dock = DockStyle.Top
             };
+             
+            control.Dock = value;
+            Assert.Equal(value, control.Dock);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
 
-            Assert.Equal(expected, cont.Dock);
+            // Set same.
+            control.Dock = value;
+            Assert.Equal(value, control.Dock);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+        }
+
+        public static IEnumerable<object[]> Dock_SetWithAnchor_TestData()
+        {
+            foreach (AnchorStyles anchor in Enum.GetValues(typeof(AnchorStyles)))
+            {
+                foreach (DockStyle value in Enum.GetValues(typeof(DockStyle)))
+                {
+                    yield return new object[] { anchor, value, value == DockStyle.None ? anchor : AnchorStyles.Top | AnchorStyles.Left };
+                }
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Dock_SetWithAnchor_TestData))]
+        public void Control_Dock_SetWithAnchor_GetReturnsExpected(AnchorStyles anchor, DockStyle value, AnchorStyles expectedAnchor)
+        {
+            var control = new Control
+            {
+                Anchor = anchor
+            };
+             
+            control.Dock = value;
+            Assert.Equal(value, control.Dock);
+            Assert.Equal(expectedAnchor, control.Anchor);
+
+            // Set same.
+            control.Dock = value;
+            Assert.Equal(value, control.Dock);
+            Assert.Equal(expectedAnchor, control.Anchor);
+        }
+
+        [Fact]
+        public void Control_Dock_SetWithHandler_CallsDockChanged()
+        {
+            var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.DockChanged += handler;
+
+            // Set different.
+            control.Dock = DockStyle.Top;
+            Assert.Equal(DockStyle.Top, control.Dock);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Dock = DockStyle.Top;
+            Assert.Equal(DockStyle.Top, control.Dock);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.Dock = DockStyle.Left;
+            Assert.Equal(DockStyle.Left, control.Dock);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.DockChanged -= handler;
+            control.Dock = DockStyle.Top;
+            Assert.Equal(DockStyle.Top, control.Dock);
+            Assert.Equal(2, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
+        public void Control_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
+        {
+            var control = new Control();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.Dock = value);
         }
 
         #endregion
+
+        [Theory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void Control_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            var control = new SubControl();
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnCausesValidationChanged_Invoke_CallsCausesValidationChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.CausesValidationChanged += handler;
+            control.OnCausesValidationChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.CausesValidationChanged -= handler;
+            control.OnCausesValidationChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
@@ -3199,6 +3808,222 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.DoubleClick -= handler;
             control.OnDoubleClick(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        public void Control_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            KeyEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.KeyDown += handler;
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.KeyDown -= handler;
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        public void Control_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            KeyPressEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.KeyPress += handler;
+            control.OnKeyPress(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.KeyPress -= handler;
+            control.OnKeyPress(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        public void Control_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            KeyEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.KeyUp += handler;
+            control.OnKeyUp(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.KeyUp -= handler;
+            control.OnKeyUp(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnEnabledChanged_Invoke_CallsEnabledChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.EnabledChanged += handler;
+            control.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.EnabledChanged -= handler;
+            control.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Enter += handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Enter -= handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void Control_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Leave += handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
             Assert.Equal(1, callCount);
         }
 
@@ -3390,8 +4215,131 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.ParentChanged += handler;
+            control.OnParentChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.ParentChanged -= handler;
+            control.OnParentChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnResize_Invoke_CallsResize(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.Resize += handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, invalidatedCallCount);
+
+            // Remove handler.
+            control.Resize -= handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, invalidatedCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnResize_InvokeWithResizeRedraw_CallsResizeAndInvalidate(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.Resize += handler;
+            control.Invalidated += invalidatedHandler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+
+            // Remove handler.
+            control.Resize -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnVisibleChanged_Invoke_CallsVisibleChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.VisibleChanged += handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.VisibleChanged -= handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.UserPaint, false)]
+        public void Control_SetStyle_Invoke_GetStyleReturnsExpected(ControlStyles flag, bool value)
+        {
+            var control = new SubControl();
+            control.SetStyle(flag, value);
+            Assert.Equal(value, control.GetStyle(flag));
+
+            // Set same.
+            control.SetStyle(flag, value);
+            Assert.Equal(value, control.GetStyle(flag));
+        }
+
         [Fact]
-        public void ToString_Invoke_ReturnsExpected()
+        public void Control_ToString_Invoke_ReturnsExpected()
         {
             var control = new Control();
             Assert.Equal("System.Windows.Forms.Control", control.ToString());
@@ -3419,6 +4367,10 @@ namespace System.Windows.Forms.Tests
             {
             }
 
+            public new bool CanEnableIme => base.CanEnableIme;
+
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
             public new CreateParams CreateParams => base.CreateParams;
 
             public new Cursor DefaultCursor => base.DefaultCursor;
@@ -3435,15 +4387,41 @@ namespace System.Windows.Forms.Tests
 
             public new Size DefaultSize => base.DefaultSize;
 
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
+
             public new ImeMode ImeModeBase
             {
                 get => base.ImeModeBase;
                 set => base.ImeModeBase = value;
             }
 
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new void OnCausesValidationChanged(EventArgs e) => base.OnCausesValidationChanged(e);
+
             public new void OnClick(EventArgs e) => base.OnClick(e);
 
             public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
+
+            public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
+
+            public new void OnEnter(EventArgs e) => base.OnEnter(e);
+
+            public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
+
+            public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
+
+            public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
+
+            public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
+
+            public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
+
+            public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
+
+            public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
             public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
 
@@ -3458,6 +4436,14 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseWheel(MouseEventArgs e) => base.OnMouseWheel(e);
 
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
+
+            public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
+
+            public new void OnResize(EventArgs e) => base.OnResize(e);
+
+            public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }
     }
 }

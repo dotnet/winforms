@@ -2,28 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Net;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Text;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       Represents the HTML 1.0 Help engine.
-    ///    </para>
+    ///  Represents the HTML 1.0 Help engine.
     /// </summary>
     public class Help
     {
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch WindowsFormsHelpTrace = new TraceSwitch("WindowsFormsHelpTrace", "Debug help system");
 #else
         internal static readonly TraceSwitch WindowsFormsHelpTrace;
@@ -68,10 +61,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays
-        ///       the contents of the Help file at located at a specified Url.
-        ///    </para>
+        ///  Displays
+        ///  the contents of the Help file at located at a specified Url.
         /// </summary>
         public static void ShowHelp(Control parent, string url)
         {
@@ -79,11 +70,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the contents of
-        ///       the Help
-        ///       file for a specific topic found at the specified Url.
-        ///    </para>
+        ///  Displays the contents of
+        ///  the Help
+        ///  file for a specific topic found at the specified Url.
         /// </summary>
         public static void ShowHelp(Control parent, string url, HelpNavigator navigator)
         {
@@ -91,11 +80,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the contents of
-        ///       the Help
-        ///       file for a specific topic found at the specified Url.
-        ///    </para>
+        ///  Displays the contents of
+        ///  the Help
+        ///  file for a specific topic found at the specified Url.
         /// </summary>
         public static void ShowHelp(Control parent, string url, string keyword)
         {
@@ -110,12 +97,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the contents of the Help file located at
-        ///       the Url
-        ///       supplied by the
-        ///       user.
-        ///    </para>
+        ///  Displays the contents of the Help file located at
+        ///  the Url
+        ///  supplied by the
+        ///  user.
         /// </summary>
         public static void ShowHelp(Control parent, string url, HelpNavigator command, object parameter)
         {
@@ -133,9 +118,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the index of the specified file.
-        ///    </para>
+        ///  Displays the index of the specified file.
         /// </summary>
         public static void ShowHelpIndex(Control parent, string url)
         {
@@ -145,9 +128,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays a Help pop-up window.
-        ///    </para>
+        ///  Displays a Help pop-up window.
         /// </summary>
         public static void ShowPopup(Control parent, string caption, Point location)
         {
@@ -164,8 +145,7 @@ namespace System.Windows.Forms
                 pop.idString = 0;
                 pop.pt = new NativeMethods.POINT(location.X, location.Y);
 
-                // Looks like a windows 
-
+                // Looks like a windows
 
                 pop.clrBackground = Color.FromKnownColor(KnownColor.Window).ToArgb() & 0x00ffffff;
 
@@ -179,7 +159,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Displays HTML 1.0 Help with the specified parameters
+        ///  Displays HTML 1.0 Help with the specified parameters
         /// </summary>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param)
         {
@@ -269,14 +249,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Displays HTMLFile with the specified parameters
+        ///  Displays HTMLFile with the specified parameters
         /// </summary>
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         private static void ShowHTMLFile(Control parent, string url, HelpNavigator command, object param)
         {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTMLHelp:: " + url + ", " + command.ToString("G") + ", " + param);
@@ -313,7 +288,6 @@ namespace System.Windows.Forms
             {
                 handle = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
             }
-
 
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tExecuting '" + file.ToString() + "'");
             UnsafeNativeMethods.ShellExecute_NoBFM(handle, null, file.ToString(), null, null, NativeMethods.SW_NORMAL);
@@ -412,7 +386,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
+        ///  Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
         /// </summary>
         private static int MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam)
         {

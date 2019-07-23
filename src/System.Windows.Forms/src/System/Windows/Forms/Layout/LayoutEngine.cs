@@ -4,7 +4,6 @@
 
 //#define LAYOUT_PERFWATCH
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout
@@ -48,7 +47,6 @@ namespace System.Windows.Forms.Layout
         private const int LayoutWatch = 100;
 #endif
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
         {
             if (container == null)
@@ -63,7 +61,7 @@ namespace System.Windows.Forms.Layout
             Debug.Indent();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-#endif            
+#endif
             bool parentNeedsLayout = LayoutCore(CastToArrangedElement(container), layoutEventArgs);
 
 #if LAYOUT_PERFWATCH

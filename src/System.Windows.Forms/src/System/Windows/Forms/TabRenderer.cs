@@ -2,24 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.Internal;
-    using System.Windows.Forms.VisualStyles;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>
-    ///       This is a rendering class for the Tab control.
-    ///    </para>
+    ///  This is a rendering class for the Tab control.
     /// </summary>
     public sealed class TabRenderer
     {
-
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
@@ -30,10 +22,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns true if this class is supported for the current OS and user/application settings, 
-        ///       otherwise returns false.
-        ///    </para>
+        ///  Returns true if this class is supported for the current OS and user/application settings,
+        ///  otherwise returns false.
         /// </summary>
         public static bool IsSupported
         {
@@ -44,13 +34,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
-        ]
         public static void DrawTabItem(Graphics g, Rectangle bounds, TabItemState state)
         {
             InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
@@ -59,9 +44,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, bool focused, TabItemState state)
         {
@@ -78,9 +61,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, TabItemState state)
         {
@@ -88,9 +69,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, bool focused, TabItemState state)
         {
@@ -100,9 +79,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, TextFormatFlags flags, bool focused, TabItemState state)
         {
@@ -121,9 +98,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
         {
@@ -143,9 +118,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
         {
@@ -155,9 +128,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a Tab item.
-        ///    </para>
+        ///  Renders a Tab item.
         /// </summary>
         public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, TextFormatFlags flags, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
         {
@@ -178,13 +149,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a TabPage.
-        ///    </para>
+        ///  Renders a TabPage.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
-        ]
         public static void DrawTabPage(Graphics g, Rectangle bounds)
         {
             InitializeRenderer(VisualStyleElement.Tab.Pane.Normal, 0);

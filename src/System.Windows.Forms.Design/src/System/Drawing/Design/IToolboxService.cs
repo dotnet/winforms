@@ -77,22 +77,22 @@ namespace System.Drawing.Design
         ToolboxItem GetSelectedToolboxItem(IDesignerHost host);
 
         /// <summary>
-        /// Gets all .NET Framework tools on the toolbox.
+        /// Gets all .NET tools on the toolbox.
         /// </summary>
         ToolboxItemCollection GetToolboxItems();
 
         /// <summary>
-        /// Gets all .NET Framework tools on the toolbox.
+        /// Gets all .NET tools on the toolbox.
         /// </summary>
         ToolboxItemCollection GetToolboxItems(IDesignerHost host);
 
         /// <summary>
-        /// Gets all .NET Framework tools on the toolbox fopr specific category.
+        /// Gets all .NET tools on the toolbox fopr specific category.
         /// </summary>
         ToolboxItemCollection GetToolboxItems(string category);
 
         /// <summary>
-        /// Gets all .NET Framework tools on the toolbox for specific category.
+        /// Gets all .NET tools on the toolbox for specific category.
         /// </summary>
         ToolboxItemCollection GetToolboxItems(string category, IDesignerHost host);
 
@@ -157,7 +157,7 @@ namespace System.Drawing.Design
         object SerializeToolboxItem(ToolboxItem toolboxItem);
 
         /// <summary>
-        /// Sets the current application's cursor to a cursor that represents the 
+        /// Sets the current application's cursor to a cursor that represents the
         /// currently selected tool.
         /// </summary>
         /// <returns>bool</returns>

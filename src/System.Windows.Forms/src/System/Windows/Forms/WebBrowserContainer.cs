@@ -176,7 +176,6 @@ namespace System.Windows.Forms
             return NativeMethods.S_FALSE;
         }
 
-
         //
         // Private helper methods:
         //

@@ -2,26 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System.Text;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using System.Windows.Forms.ComponentModel;
-    using System.Windows.Forms.Layout;
-    using System.Globalization;
-    using System.Diagnostics;
-    using System.Windows.Forms.VisualStyles;
-    using Microsoft.Win32;
-    using System.Collections.Specialized;
-
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -258,9 +247,9 @@ namespace System.Windows.Forms
 
         private const int FOCUS_RECT_OFFSET = 2;
 
-        private System.Collections.Specialized.BitVector32 dataGridViewState1;  // see DATAGRIDVIEWSTATE1_ consts above
-        private System.Collections.Specialized.BitVector32 dataGridViewState2;  // see DATAGRIDVIEWSTATE2_ consts above
-        private System.Collections.Specialized.BitVector32 dataGridViewOper;   // see DATAGRIDVIEWOPER_ consts above
+        private Collections.Specialized.BitVector32 dataGridViewState1;  // see DATAGRIDVIEWSTATE1_ consts above
+        private Collections.Specialized.BitVector32 dataGridViewState2;  // see DATAGRIDVIEWSTATE2_ consts above
+        private Collections.Specialized.BitVector32 dataGridViewOper;   // see DATAGRIDVIEWOPER_ consts above
 
         private const BorderStyle defaultBorderStyle = BorderStyle.FixedSingle;
         private const DataGridViewAdvancedCellBorderStyle defaultAdvancedCellBorderStyle = DataGridViewAdvancedCellBorderStyle.Single;
@@ -343,11 +332,11 @@ namespace System.Windows.Forms
         private DataGridViewRowPostPaintEventArgs dgvrpope;
         private DataGridViewRowPrePaintEventArgs dgvrprpe;
 
-        // the sum of the widths in pixels of the scrolling columns preceding 
+        // the sum of the widths in pixels of the scrolling columns preceding
         // the first visible scrolling column
         private int horizontalOffset;
 
-        // the sum of the heights in pixels of the scrolling rows preceding 
+        // the sum of the heights in pixels of the scrolling rows preceding
         // the first visible scrolling row
         private int verticalOffset;
 
@@ -381,7 +370,7 @@ namespace System.Windows.Forms
         private int keyboardResizeStep;
         private Rectangle resizeClipRectangle;
 
-        private System.Windows.Forms.Timer vertScrollTimer, horizScrollTimer;
+        private Timer vertScrollTimer, horizScrollTimer;
 
         private readonly Hashtable converters;
         private Hashtable pens;
@@ -411,7 +400,7 @@ namespace System.Windows.Forms
 #pragma warning restore 0414
 #endif
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridView'/> class.</para>
+        /// Initializes a new instance of the <see cref='DataGridView'/> class.
         /// </summary>
         public DataGridView()
         {
@@ -424,17 +413,15 @@ namespace System.Windows.Forms
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
-            dataGridViewState1 = new System.Collections.Specialized.BitVector32(0x00000000);
-            dataGridViewState2 = new System.Collections.Specialized.BitVector32(0x00000000);
-            dataGridViewOper = new System.Collections.Specialized.BitVector32(0x00000000);
+            dataGridViewState1 = new Collections.Specialized.BitVector32(0x00000000);
+            dataGridViewState2 = new Collections.Specialized.BitVector32(0x00000000);
+            dataGridViewOper = new Collections.Specialized.BitVector32(0x00000000);
 
             dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible
                                     | DATAGRIDVIEWSTATE1_rowHeadersVisible
                                     | DATAGRIDVIEWSTATE1_autoGenerateColumns
                                     | DATAGRIDVIEWSTATE1_allowUserToAddRows
                                     | DATAGRIDVIEWSTATE1_allowUserToDeleteRows] = true;
-
-
 
             dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon
                                     | DATAGRIDVIEWSTATE2_enableHeadersVisualStyles
@@ -446,7 +433,6 @@ namespace System.Windows.Forms
                                     | DATAGRIDVIEWSTATE2_showRowErrors
                                     | DATAGRIDVIEWSTATE2_allowHorizontalScrollbar
                                     | DATAGRIDVIEWSTATE2_usedFillWeightsDirty] = true;
-
 
             displayedBandsInfo = new DisplayedBandsData();
             lstRows = new ArrayList();
@@ -836,10 +822,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a global value indicating if the dataGridView's columns are resizable with the mouse.
-        ///       The resizable aspect of a column can be overridden by DataGridViewColumn.Resizable.
-        ///    </para>
+        ///  Gets or sets a global value indicating if the dataGridView's columns are resizable with the mouse.
+        ///  The resizable aspect of a column can be overridden by DataGridViewColumn.Resizable.
         /// </summary>
         [
             DefaultValue(true),
@@ -873,10 +857,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a global value indicating if the dataGridView's rows are resizable with the mouse.
-        ///       The resizable aspect of a row can be overridden by DataGridViewRow.Resizable.
-        ///    </para>
+        ///  Gets or sets a global value indicating if the dataGridView's rows are resizable with the mouse.
+        ///  The resizable aspect of a row can be overridden by DataGridViewRow.Resizable.
         /// </summary>
         [
             DefaultValue(true),
@@ -968,10 +950,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///    <para>
-        ///    </para>
-        /// </summary>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -1004,7 +982,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Overriding base implementation for perf gains. </para>
+        ///  Overriding base implementation for perf gains.
         /// </summary>
         public override bool AutoSize
         {
@@ -1020,9 +998,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Gets or sets the columns' autosizing mode. Standard inheritance model is used:
-        ///           Columns with AutoSizeMode property set to NotSet will use this auto size mode.
-        ///    </para>
+        ///  Gets or sets the columns' autosizing mode. Standard inheritance model is used:
+        ///  Columns with AutoSizeMode property set to NotSet will use this auto size mode.
         /// </summary>
         [
             DefaultValue(DataGridViewAutoSizeColumnsMode.None),
@@ -1051,7 +1028,6 @@ namespace System.Windows.Forms
                     default:
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnsMode));
                 }
-
 
                 if (autoSizeColumnsMode != value)
                 {
@@ -1098,7 +1074,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Gets or sets the rows' autosizing mode. </para>
+        ///  Gets or sets the rows' autosizing mode.
         /// </summary>
         [
             DefaultValue(DataGridViewAutoSizeRowsMode.None),
@@ -1186,7 +1162,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the background color of the dataGridView.</para>
+        ///  Gets or sets the background color of the dataGridView.
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -1881,9 +1857,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value that determines the behavior for adjusting the column headers height.
-        ///    </para>
+        ///  Gets or sets a value that determines the behavior for adjusting the column headers height.
         /// </summary>
         [
             DefaultValue(DataGridViewColumnHeadersHeightSizeMode.EnableResizing),
@@ -1938,10 +1912,8 @@ namespace System.Windows.Forms
         internal bool TextBoxControlWasDetached { get; set; }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets a value indicating if the dataGridView's column headers are visible.
-        ///    </para>
+        ///  Gets
+        ///  or sets a value indicating if the dataGridView's column headers are visible.
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -1990,7 +1962,7 @@ namespace System.Windows.Forms
         }
 
         [
-            Editor("System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
+            Editor("System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
             MergableProperty(false)
         ]
@@ -2190,7 +2162,7 @@ namespace System.Windows.Forms
         [
          DefaultValue(""),
          SRCategory(nameof(SR.CatData)),
-         Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
+         Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)),
          SRDescription(nameof(SR.DataGridViewDataMemberDescr))
         ]
         public string DataMember
@@ -2499,8 +2471,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the client rect of the display area of the control.
-        ///     The DataGridView control return its client rectangle minus the potential scrollbars.
+        ///  Returns the client rect of the display area of the control.
+        ///  The DataGridView control return its client rectangle minus the potential scrollbars.
         /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -2666,10 +2638,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///     Determines whether the DataGridView's header cells render using XP theming visual styles or not
-        ///     when visual styles are enabled in the application.
-        ///    </para>
+        ///  Determines whether the DataGridView's header cells render using XP theming visual styles or not
+        ///  when visual styles are enabled in the application.
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -3084,7 +3054,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the grid color of the dataGridView (when Single mode is used).</para>
+        ///  Gets or sets the grid color of the dataGridView (when Single mode is used).
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -3289,7 +3259,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(HorizontalScrollingOffset), value, 0));
                 }
-                // Intentionally ignoring the out of range situation. 
+                // Intentionally ignoring the out of range situation.
                 // else if (value > widthNotVisible && widthNotVisible > 0)
                 //{
                 //    throw new ArgumentOutOfRangeException(string.Format(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
@@ -3309,14 +3279,14 @@ namespace System.Windows.Forms
             }
         }
 
-        private System.Windows.Forms.Timer HorizScrollTimer
+        private Timer HorizScrollTimer
         {
             get
             {
                 if (horizScrollTimer == null)
                 {
-                    horizScrollTimer = new System.Windows.Forms.Timer();
-                    horizScrollTimer.Tick += new System.EventHandler(HorizScrollTimer_Tick);
+                    horizScrollTimer = new Timer();
+                    horizScrollTimer.Tick += new EventHandler(HorizScrollTimer_Tick);
                 }
                 return horizScrollTimer;
             }
@@ -3957,10 +3927,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dataGridView's row headers are
-        ///       visible.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the dataGridView's row headers are
+        ///  visible.
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -4075,9 +4043,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value that determines the behavior for adjusting the row headers width.
-        ///    </para>
+        ///  Gets or sets a value that determines the behavior for adjusting the row headers width.
         /// </summary>
         [
             DefaultValue(DataGridViewRowHeadersWidthSizeMode.EnableResizing),
@@ -4100,7 +4066,7 @@ namespace System.Windows.Forms
                 }
                 if (rowHeadersWidthSizeMode != value)
                 {
-                    /*if (value != DataGridViewRowHeadersWidthSizeMode.EnableResizing && 
+                    /*if (value != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
                      *    value != DataGridViewRowHeadersWidthSizeMode.DisableResizing &&
                      *    !this.RowHeadersVisible)
                     {
@@ -4232,7 +4198,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Possible return values are given by the ScrollBars enumeration.
+        ///  Possible return values are given by the ScrollBars enumeration.
         /// </summary>
         [
             DefaultValue(ScrollBars.Both),
@@ -4290,10 +4256,6 @@ namespace System.Windows.Forms
         ]
         public DataGridViewSelectedCellCollection SelectedCells
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops"), // not legitimate
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // consider using generics instead of DataGridViewIntLinkedList
-            ]
             get
             {
                 DataGridViewSelectedCellCollection stcc = new DataGridViewSelectedCellCollection();
@@ -4301,7 +4263,7 @@ namespace System.Windows.Forms
                 {
                     case DataGridViewSelectionMode.CellSelect:
                         {
-                            // Note: If we change the design and decide that SelectAll() should use band selection, 
+                            // Note: If we change the design and decide that SelectAll() should use band selection,
                             // we need to add those to the selected cells.
                             stcc.AddCellLinkedList(individualSelectedCells);
                             break;
@@ -4344,14 +4306,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public DataGridViewSelectedColumnCollection SelectedColumns
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // consider using generics instead of DataGridViewIntLinkedList
-            ]
             get
             {
                 DataGridViewSelectedColumnCollection strc = new DataGridViewSelectedColumnCollection();
@@ -4373,15 +4330,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-        ]
+        [Browsable(false)]
         public DataGridViewSelectedRowCollection SelectedRows
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes"), // using specialized DataGridViewIntLinkedList class instead of generics
-                SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // not legitimate
-            ]
             get
             {
                 DataGridViewSelectedRowCollection strc = new DataGridViewSelectedRowCollection();
@@ -4566,7 +4517,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon] = value;
 
-                    // invalidate the row header to pick up the new ShowEditingIcon value 
+                    // invalidate the row header to pick up the new ShowEditingIcon value
                     if (RowHeadersVisible)
                     {
                         if (VirtualMode || DataSource != null)
@@ -4681,10 +4632,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///    <para>
-        ///    </para>
-        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
@@ -4739,7 +4686,6 @@ namespace System.Windows.Forms
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Design", "CA1023:IndexersShouldNotBeMultidimensional")
         ]
         public DataGridViewCell this[int columnIndex, int rowIndex]
         {
@@ -4757,8 +4703,7 @@ namespace System.Windows.Forms
 
         [
             Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Design", "CA1023:IndexersShouldNotBeMultidimensional")
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public DataGridViewCell this[string columnName, int rowIndex]
         {
@@ -4803,12 +4748,12 @@ namespace System.Windows.Forms
                     if (topLeftHeaderCell != null)
                     {
                         // Detach existing header cell
-                        topLeftHeaderCell.DataGridViewInternal = null;
+                        topLeftHeaderCell.DataGridView = null;
                     }
                     topLeftHeaderCell = value;
                     if (value != null)
                     {
-                        topLeftHeaderCell.DataGridViewInternal = this;
+                        topLeftHeaderCell.DataGridView = this;
                     }
                     if (ColumnHeadersVisible && RowHeadersVisible)
                     {
@@ -4893,23 +4838,19 @@ namespace System.Windows.Forms
             }
         }
 
-        private System.Windows.Forms.Timer VertScrollTimer
+        private Timer VertScrollTimer
         {
             get
             {
                 if (vertScrollTimer == null)
                 {
-                    vertScrollTimer = new System.Windows.Forms.Timer();
-                    vertScrollTimer.Tick += new System.EventHandler(VertScrollTimer_Tick);
+                    vertScrollTimer = new Timer();
+                    vertScrollTimer.Tick += new EventHandler(VertScrollTimer_Tick);
                 }
                 return vertScrollTimer;
             }
         }
 
-        /// <summary>
-        ///    <para>
-        ///    </para>
-        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
@@ -5909,13 +5850,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
         }
 
-        /*
-        public event DataGridViewRowCancelEventHandler UserAddingRow
-        {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
-        }*/
-
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_UserDeletedRowDescr))
@@ -5941,9 +5875,6 @@ namespace System.Windows.Forms
         // ISupportInitialize //
         //                    //
         ////////////////////////
-        [
-            SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")
-        ]
         void ISupportInitialize.BeginInit()
         {
             if (dataGridViewState2[DATAGRIDVIEWSTATE2_initializing])
@@ -5954,9 +5885,6 @@ namespace System.Windows.Forms
             dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] = true;
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")
-        ]
         void ISupportInitialize.EndInit()
         {
             dataGridViewState2[DATAGRIDVIEWSTATE2_initializing] = false;

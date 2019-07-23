@@ -2,35 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.ComponentModel;
-    using System.IO;
-    using Microsoft.Win32;
-    using System.Runtime.Serialization;
-    using System.Globalization;
-
-
     /// <summary>
-    ///    <para>
-    ///       Represents the image used to paint the mouse pointer.
-    ///       Different cursor shapes are used to inform the user what operation the mouse will
-    ///       have.
-    ///    </para>
+    ///  Represents the image used to paint the mouse pointer.
+    ///  Different cursor shapes are used to inform the user what operation the mouse will
+    ///  have.
     /// </summary>
-    // 
-    [
-    TypeConverterAttribute(typeof(CursorConverter)),
-    Serializable,
-    Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))
-    ]
+    [TypeConverter(typeof(CursorConverter)),
+        Serializable,
+        Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))]
     public sealed class Cursor : IDisposable, ISerializable
     {
         private static Size cursorSize = System.Drawing.Size.Empty;
@@ -71,10 +61,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Private constructor. If you want a standard system cursor, use one of the
-        ///     definitions in the Cursors class.
+        ///  Private constructor. If you want a standard system cursor, use one of the
+        ///  definitions in the Cursors class.
         /// </summary>
-        // 
+        //
         internal Cursor(int nResourceId, int dummy)
         {
             LoadFromResourceId(nResourceId);
@@ -97,9 +87,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/> class with the specified handle.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='Cursor'/> class with the specified handle.
         /// </summary>
         public Cursor(IntPtr handle)
         {
@@ -113,11 +101,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/>
-        ///       class with
-        ///       the specified filename.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='Cursor'/>
+        ///  class with
+        ///  the specified filename.
         /// </summary>
         public Cursor(string fileName)
         {
@@ -137,19 +123,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/> class from the specified resource.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
         public Cursor(Type type, string resource) : this(type.Module.Assembly.GetManifestResourceStream(type, resource))
         {
         }
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/> class from the
-        ///       specified data stream.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='Cursor'/> class from the
+        ///  specified data stream.
         /// </summary>
         public Cursor(Stream stream)
         {
@@ -158,13 +140,10 @@ namespace System.Windows.Forms
             LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets a <see cref='System.Drawing.Rectangle'/> that represents the current clipping rectangle for this <see cref='System.Windows.Forms.Cursor'/> in
-        ///       screen coordinates.
-        ///    </para>
+        ///  Gets or
+        ///  sets a <see cref='Rectangle'/> that represents the current clipping rectangle for this <see cref='Cursor'/> in
+        ///  screen coordinates.
         /// </summary>
         public static Rectangle Clip
         {
@@ -179,7 +158,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Implemented separately to be used internally from safe places.
+        ///  Implemented separately to be used internally from safe places.
         /// </summary>
         internal static Rectangle ClipInternal
         {
@@ -204,11 +183,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets a <see cref='System.Windows.Forms.Cursor'/> that
-        ///       represents the current mouse cursor. The value is NULL if the current mouse cursor is not visible.
-        ///    </para>
+        ///  Gets or
+        ///  sets a <see cref='Cursor'/> that
+        ///  represents the current mouse cursor. The value is NULL if the current mouse cursor is not visible.
         /// </summary>
         public static Cursor Current
         {
@@ -239,10 +216,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       the Win32 handle for this <see cref='System.Windows.Forms.Cursor'/> .
-        ///    </para>
+        ///  Gets
+        ///  the Win32 handle for this <see cref='Cursor'/> .
         /// </summary>
         public IntPtr Handle
         {
@@ -257,11 +232,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///     returns the "hot" location of the cursor.
-        ///    </para>
+        ///  Returns the "hot" location of the cursor.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Minor, not worth breaking change
         public Point HotSpot
         {
             get
@@ -280,7 +252,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     // GetIconInfo creates bitmaps for the hbmMask and hbmColor members of ICONINFO.
-                    // The calling application must manage these bitmaps and delete them when they are no longer necessary. 
+                    // The calling application must manage these bitmaps and delete them when they are no longer necessary.
 
                     if (info.hbmMask != IntPtr.Zero)
                     {
@@ -302,10 +274,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a <see cref='System.Drawing.Point'/> that specifies the current cursor
-        ///       position in screen coordinates.
-        ///    </para>
+        ///  Gets or sets a <see cref='Point'/> that specifies the current cursor
+        ///  position in screen coordinates.
         /// </summary>
         public static Point Position
         {
@@ -322,10 +292,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       the size of this <see cref='System.Windows.Forms.Cursor'/> object.
-        ///    </para>
+        ///  Gets
+        ///  the size of this <see cref='Cursor'/> object.
         /// </summary>
         public Size Size
         {
@@ -364,7 +332,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Duplicates this the Win32 handle of this <see cref='System.Windows.Forms.Cursor'/>.
+        ///  Duplicates this the Win32 handle of this <see cref='Cursor'/>.
         /// </summary>
         public IntPtr CopyHandle()
         {
@@ -373,8 +341,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Destroys the Win32 handle of this <see cref='System.Windows.Forms.Cursor'/>, if the
-        /// <see cref='System.Windows.Forms.Cursor'/> 
+        ///  Destroys the Win32 handle of this <see cref='Cursor'/>, if the
+        /// <see cref='Cursor'/>
         /// owns the handle
         /// </summary>
         private void DestroyHandle()
@@ -386,8 +354,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Cleans up the resources allocated by this object.  Once called, the cursor
-        ///     object is no longer useful.
+        ///  Cleans up the resources allocated by this object.  Once called, the cursor
+        ///  object is no longer useful.
         /// </summary>
         public void Dispose()
         {
@@ -415,10 +383,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Draws this image to a graphics object.  The drawing command originates on the graphics
-        ///     object, but a graphics object generally has no idea how to render a given image.  So,
-        ///     it passes the call to the actual image.  This version crops the image to the given
-        ///     dimensions and allows the user to specify a rectangle within the image to draw.
+        ///  Draws this image to a graphics object.  The drawing command originates on the graphics
+        ///  object, but a graphics object generally has no idea how to render a given image.  So,
+        ///  it passes the call to the actual image.  This version crops the image to the given
+        ///  dimensions and allows the user to specify a rectangle within the image to draw.
         /// </summary>
         // This method is way more powerful than what we expose, but I'll leave it in place.
         private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
@@ -533,9 +501,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Draws this <see cref='System.Windows.Forms.Cursor'/> to a <see cref='System.Drawing.Graphics'/>.
-        ///    </para>
+        ///  Draws this <see cref='Cursor'/> to a <see cref='Graphics'/>.
         /// </summary>
         public void Draw(Graphics g, Rectangle targetRect)
         {
@@ -543,7 +509,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Draws this <see cref='System.Windows.Forms.Cursor'/> to a <see cref='System.Drawing.Graphics'/>.
+        ///  Draws this <see cref='Cursor'/> to a <see cref='Graphics'/>.
         /// </summary>
         public void DrawStretched(Graphics g, Rectangle targetRect)
         {
@@ -551,7 +517,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Cleans up Windows resources for this object.
+        ///  Cleans up Windows resources for this object.
         /// </summary>
         ~Cursor()
         {
@@ -579,10 +545,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Hides the cursor. For every call to Cursor.hide() there must be a
-        ///       balancing call to Cursor.show().
-        ///    </para>
+        ///  Hides the cursor. For every call to Cursor.hide() there must be a
+        ///  balancing call to Cursor.show().
         /// </summary>
         public static void Hide()
         {
@@ -621,7 +585,7 @@ namespace System.Windows.Forms
             if (info.hbmColor != IntPtr.Zero)
             {
                 UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
-                SafeNativeMethods.IntDeleteObject(new HandleRef(null, info.hbmColor));
+                SafeNativeMethods.DeleteObject(new HandleRef(null, info.hbmColor));
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight);
             }
             else if (info.hbmMask != IntPtr.Zero)
@@ -632,19 +596,16 @@ namespace System.Windows.Forms
 
             if (info.hbmMask != IntPtr.Zero)
             {
-                SafeNativeMethods.IntDeleteObject(new HandleRef(null, info.hbmMask));
+                SafeNativeMethods.DeleteObject(new HandleRef(null, info.hbmMask));
             }
             return iconSize;
         }
 
-
-
         /// <summary>
-        ///     Loads a picture from the requested stream.
+        ///  Loads a picture from the requested stream.
         /// </summary>
         private void LoadPicture(UnsafeNativeMethods.IStream stream)
         {
-
             if (stream == null)
             {
                 throw new ArgumentNullException(nameof(stream));
@@ -669,8 +630,13 @@ namespace System.Windows.Forms
                             picSize = DpiHelper.LogicalToDeviceUnits(picSize);
                         }
 
-                        handle = SafeNativeMethods.CopyImageAsCursor(new HandleRef(this, cursorHandle), NativeMethods.IMAGE_CURSOR,
-                            picSize.Width, picSize.Height, 0);
+                        handle = SafeNativeMethods.CopyImage(
+                            new HandleRef(this, cursorHandle),
+                            NativeMethods.IMAGE_CURSOR,
+                            picSize.Width,
+                            picSize.Height,
+                            0);
+
                         ownHandle = true;
                     }
                     else
@@ -697,7 +663,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Saves a picture from the requested stream.
+        ///  Saves a picture from the requested stream.
         /// </summary>
         internal void SavePicture(Stream stream)
         {
@@ -713,7 +679,7 @@ namespace System.Windows.Forms
             {
                 stream.Write(cursorData, 0, cursorData.Length);
             }
-            catch (System.Security.SecurityException)
+            catch (Security.SecurityException)
             {
                 // dont eat security exceptions.
                 throw;
@@ -726,10 +692,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the cursor. For every call to Cursor.show() there must have been
-        ///       a previous call to Cursor.hide().
-        ///    </para>
+        ///  Displays the cursor. For every call to Cursor.show() there must have been
+        ///  a previous call to Cursor.hide().
         /// </summary>
         public static void Show()
         {
@@ -737,11 +701,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Retrieves a human readable string representing this
-        ///    <see cref='System.Windows.Forms.Cursor'/>
-        ///    .
-        /// </para>
+        ///  Retrieves a human readable string representing this
+        ///  <see cref='Cursor'/>
+        ///  .
         /// </summary>
         public override string ToString()
         {

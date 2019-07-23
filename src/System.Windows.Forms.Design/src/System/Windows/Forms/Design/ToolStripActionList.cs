@@ -62,7 +62,6 @@ namespace System.Windows.Forms.Design
         }
 
         //helper function to get the property on the actual Control
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private object GetProperty(string propertyName)
         {
             PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
@@ -75,7 +74,6 @@ namespace System.Windows.Forms.Design
         }
 
         //helper function to change the property on the actual Control
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void ChangeProperty(string propertyName, object value)
         {
             PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
@@ -89,7 +87,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Controls whether the Chrome is Automatically shown on selection
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public override bool AutoShow
         {
             get => _autoShow;
@@ -104,9 +101,7 @@ namespace System.Windows.Forms.Design
 
         public DockStyle Dock
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             get => (DockStyle)GetProperty("Dock");
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             set
             {
                 if (value != Dock)
@@ -118,9 +113,7 @@ namespace System.Windows.Forms.Design
 
         public ToolStripRenderMode RenderMode
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             get => (ToolStripRenderMode)GetProperty("RenderMode");
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             set
             {
                 if (value != RenderMode)
@@ -132,9 +125,7 @@ namespace System.Windows.Forms.Design
 
         public ToolStripGripStyle GripStyle
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             get => (ToolStripGripStyle)GetProperty("GripStyle");
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             set
             {
                 if (value != GripStyle)
@@ -144,7 +135,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void InvokeEmbedVerb()
         {
             // Hide the Panel...
@@ -156,7 +146,6 @@ namespace System.Windows.Forms.Design
             _changeParentVerb.ChangeParent();
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void InvokeInsertStandardItemsVerb()
         {
             _standardItemsVerb.InsertItems();

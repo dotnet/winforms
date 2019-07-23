@@ -475,7 +475,6 @@ namespace System.ComponentModel.Design
                 _owner = owner;
             }
 
-
             public int GetNewStorage(out UnsafeNativeMethods.IStorage storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");

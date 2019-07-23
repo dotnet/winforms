@@ -2,77 +2,70 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-
-    using System.Threading;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       This class provides methods to perform locale based comparison of strings
-    ///       and sorting of arrays.
-    ///    </para>
+    ///  This class provides methods to perform locale based comparison of strings
+    ///  and sorting of arrays.
     /// </summary>
     internal sealed class StringSorter
     {
         /// <summary>
-        ///     Ignore case when comparing two strings. When this flag is specified in
-        ///     calls to compare() and sort(), two strings are considered equal if they
-        ///     differ only in casing.
+        ///  Ignore case when comparing two strings. When this flag is specified in
+        ///  calls to compare() and sort(), two strings are considered equal if they
+        ///  differ only in casing.
         /// </summary>
         public const int IgnoreCase = 0x00000001;
 
         /// <summary>
-        ///     Do not differentiate between Hiragana and Katakana characters. When this
-        ///     flag is specified in calls to compare() and sort(), corresponding
-        ///     Hiragana and Katakana characters compare as equal.
+        ///  Do not differentiate between Hiragana and Katakana characters. When this
+        ///  flag is specified in calls to compare() and sort(), corresponding
+        ///  Hiragana and Katakana characters compare as equal.
         /// </summary>
         public const int IgnoreKanaType = 0x00010000;
 
         /// <summary>
-        ///     Ignore nonspacing marks (accents, diacritics, and vowel marks). When
-        ///     this flag is specified in calls to compare() and sort(), strings compare
-        ///     as equal if they differ only in how characters are accented.
+        ///  Ignore nonspacing marks (accents, diacritics, and vowel marks). When
+        ///  this flag is specified in calls to compare() and sort(), strings compare
+        ///  as equal if they differ only in how characters are accented.
         /// </summary>
         public const int IgnoreNonSpace = 0x00000002;
 
         /// <summary>
-        ///     Ignore symbols. When this flag is specified in calls to compare() and
-        ///     sort(), strings compare as equal if they differ only in what symbol
-        ///     characters they contain.
+        ///  Ignore symbols. When this flag is specified in calls to compare() and
+        ///  sort(), strings compare as equal if they differ only in what symbol
+        ///  characters they contain.
         /// </summary>
         public const int IgnoreSymbols = 0x00000004;
 
         /// <summary>
-        ///     Ignore character widths. When this flag is specified in calls to
-        ///     compare() and sort(), string comparisons do not differentiate between a
-        ///     single-ubyte character and the same character as a double-ubyte character.
+        ///  Ignore character widths. When this flag is specified in calls to
+        ///  compare() and sort(), string comparisons do not differentiate between a
+        ///  single-ubyte character and the same character as a double-ubyte character.
         /// </summary>
         public const int IgnoreWidth = 0x00020000;
 
         /// <summary>
-        ///     Treat punctuation the same as symbols. Typically, strings are compared
-        ///     using what is called a "word sort" technique. In a word sort, all
-        ///     punctuation marks and other nonalphanumeric characters, except for the
-        ///     hyphen and the apostrophe, come before any alphanumeric character. The
-        ///     hyphen and the apostrophe are treated differently than the other
-        ///     nonalphanumeric symbols, in order to ensure that words such as "coop"
-        ///     and "co-op" stay together within a sorted list. If the STRINGSORT flag
-        ///     is specified, strings are compared using what is called a "string sort"
-        ///     technique. In a string sort, the hyphen and apostrophe are treated just
-        ///     like any other nonalphanumeric symbols: they come before the
-        ///     alphanumeric symbols.
+        ///  Treat punctuation the same as symbols. Typically, strings are compared
+        ///  using what is called a "word sort" technique. In a word sort, all
+        ///  punctuation marks and other nonalphanumeric characters, except for the
+        ///  hyphen and the apostrophe, come before any alphanumeric character. The
+        ///  hyphen and the apostrophe are treated differently than the other
+        ///  nonalphanumeric symbols, in order to ensure that words such as "coop"
+        ///  and "co-op" stay together within a sorted list. If the STRINGSORT flag
+        ///  is specified, strings are compared using what is called a "string sort"
+        ///  technique. In a string sort, the hyphen and apostrophe are treated just
+        ///  like any other nonalphanumeric symbols: they come before the
+        ///  alphanumeric symbols.
         /// </summary>
         public const int StringSort = 0x00001000;
 
         /// <summary>
-        ///     Descending sort. When this flag is specified in a call to sort(), the
-        ///     strings are sorted in descending order. This flag should not be used in
-        ///     calls to compare().
+        ///  Descending sort. When this flag is specified in a call to sort(), the
+        ///  strings are sorted in descending order. This flag should not be used in
+        ///  calls to compare().
         /// </summary>
         public const int Descending = unchecked((int)0x80000000);
 
@@ -86,8 +79,8 @@ namespace System.Windows.Forms
         private readonly bool descending;
 
         /// <summary>
-        ///     Constructs a StringSorter. Instances are created by the sort() routines,
-        ///     but never by the user.
+        ///  Constructs a StringSorter. Instances are created by the sort() routines,
+        ///  but never by the user.
         /// </summary>
         private StringSorter(CultureInfo culture, string[] keys, object[] items, int options)
         {
@@ -118,8 +111,6 @@ namespace System.Windows.Forms
             descending = (options & Descending) != 0;
         }
 
-        /// <summary>
-        /// </summary>
         internal static int ArrayLength(object[] array)
         {
             if (array == null)
@@ -133,8 +124,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Compares two strings using the default locale and no additional string
-        ///     comparison flags.
+        ///  Compares two strings using the default locale and no additional string
+        ///  comparison flags.
         /// </summary>
         public static int Compare(string s1, string s2)
         {
@@ -142,8 +133,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Compares two strings using the default locale with the given set of
-        ///     string comparison flags.
+        ///  Compares two strings using the default locale with the given set of
+        ///  string comparison flags.
         /// </summary>
         public static int Compare(string s1, string s2, int options)
         {
@@ -151,16 +142,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Compares two strings using a given locale and a given set of comparison
-        ///     flags. If the two strings are of different lengths, they are compared up
-        ///     to the length of the shortest one. If they are equal to that point, then
-        ///     the return value will indicate that the longer string is greater. Notice
-        ///     that if the return value is 0, the two strings are "equal" in the
-        ///     collation sense, though not necessarily identical.
-        ///     A <embedcode term='null'/> string always sorts before a non-null string. Two
+        ///  Compares two strings using a given locale and a given set of comparison
+        ///  flags. If the two strings are of different lengths, they are compared up
+        ///  to the length of the shortest one. If they are equal to that point, then
+        ///  the return value will indicate that the longer string is greater. Notice
+        ///  that if the return value is 0, the two strings are "equal" in the
+        ///  collation sense, though not necessarily identical.
+        ///  A <embedcode term='null'/> string always sorts before a non-null string. Two
         /// <embedcode term='null'/> strings are considered equal.
-        ///     The <paramref name='options'/> parameter is a combination of zero or more of
-        ///     the following flags: <code>IGNORECASE</code>, <code>IGNOREKANATYPE</code>,
+        ///  The <paramref name='options'/> parameter is a combination of zero or more of
+        ///  the following flags: <code>IGNORECASE</code>, <code>IGNOREKANATYPE</code>,
         /// <code>IGNORENONSPACE</code>, <code>IGNORESYMBOLS</code>,
         /// <code>IGNOREWIDTH</code>, and <code>STRINGSORT</code>.
         /// </summary>
@@ -169,8 +160,6 @@ namespace System.Windows.Forms
             return Compare(culture.LCID, s1, s2, options);
         }
 
-        /// <summary>
-        /// </summary>
         private static int Compare(int lcid, string s1, string s2, int options)
         {
             if (s1 == null)
@@ -186,8 +175,6 @@ namespace System.Windows.Forms
             return string.Compare(s1, s2, false, CultureInfo.CurrentCulture);
         }
 
-        /// <summary>
-        /// </summary>
         private int CompareKeys(string s1, string s2)
         {
             int result = Compare(lcid, s1, s2, options);
@@ -195,10 +182,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Implementation of Quicksort algorithm. Within the outer <code>do</code>
-        ///     loop, the method recurses on the shorter side and loops on the longer
-        ///     side. This bounds the recursive depth by log2(n) in the worst case.
-        ///     Otherwise, worst case recursive depth would be n.
+        ///  Implementation of Quicksort algorithm. Within the outer <code>do</code>
+        ///  loop, the method recurses on the shorter side and loops on the longer
+        ///  side. This bounds the recursive depth by log2(n) in the worst case.
+        ///  Otherwise, worst case recursive depth would be n.
         /// </summary>
         private void QuickSort(int left, int right)
         {
@@ -261,11 +248,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts an object array based on the string representation of the
-        ///     elements. If the <code>items</code> parameter is not a string array, the
+        ///  Sorts an object array based on the string representation of the
+        ///  elements. If the <code>items</code> parameter is not a string array, the
         /// <code>toString</code> method of each of the elements is called to
-        ///     produce the string representation. The objects are then sorted by their
-        ///     string representations using the default locale.
+        ///  produce the string representation. The objects are then sorted by their
+        ///  string representations using the default locale.
         /// </summary>
         public static void Sort(object[] items)
         {
@@ -273,11 +260,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a range in an object array based on the string representation of
-        ///     the elements. If the <code>items</code> parameter is not a string array,
-        ///     the <code>toString</code> method of each of the elements is called to
-        ///     produce the string representation. The objects are then sorted by their
-        ///     string representations using the default locale.
+        ///  Sorts a range in an object array based on the string representation of
+        ///  the elements. If the <code>items</code> parameter is not a string array,
+        ///  the <code>toString</code> method of each of the elements is called to
+        ///  produce the string representation. The objects are then sorted by their
+        ///  string representations using the default locale.
         /// </summary>
         public static void Sort(object[] items, int index, int count)
         {
@@ -285,8 +272,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a string array and an object array based on the elements of the
-        ///     string array. The arrays are sorted using the default locale.
+        ///  Sorts a string array and an object array based on the elements of the
+        ///  string array. The arrays are sorted using the default locale.
         /// </summary>
         public static void Sort(string[] keys, object[] items)
         {
@@ -294,9 +281,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a range in a string array and a range in an object array based on
-        ///     the elements of the string array. The arrays are sorted using the
-        ///     default locale.
+        ///  Sorts a range in a string array and a range in an object array based on
+        ///  the elements of the string array. The arrays are sorted using the
+        ///  default locale.
         /// </summary>
         public static void Sort(string[] keys, object[] items, int index, int count)
         {
@@ -304,12 +291,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts an object array based on the string representation of the
-        ///     elements. If the <code>items</code> parameter is not a string array, the
+        ///  Sorts an object array based on the string representation of the
+        ///  elements. If the <code>items</code> parameter is not a string array, the
         /// <code>toString</code> method of each of the elements is called to
-        ///     produce the string representation. The objects are then sorted by their
-        ///     string representations using the default locale and the given sorting
-        ///     options.
+        ///  produce the string representation. The objects are then sorted by their
+        ///  string representations using the default locale and the given sorting
+        ///  options.
         /// </summary>
         public static void Sort(object[] items, int options)
         {
@@ -317,12 +304,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a range in an object array based on the string representation of
-        ///     the elements. If the <code>items</code> parameter is not a string array,
-        ///     the <code>toString</code> method of each of the elements is called to
-        ///     produce the string representation. The objects are then sorted by their
-        ///     string representations using the default locale and the given sorting
-        ///     options.
+        ///  Sorts a range in an object array based on the string representation of
+        ///  the elements. If the <code>items</code> parameter is not a string array,
+        ///  the <code>toString</code> method of each of the elements is called to
+        ///  produce the string representation. The objects are then sorted by their
+        ///  string representations using the default locale and the given sorting
+        ///  options.
         /// </summary>
         public static void Sort(object[] items, int index, int count, int options)
         {
@@ -330,9 +317,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a string array and an object array based on the elements of the
-        ///     string array. The arrays are sorted using the default locale and the
-        ///     given sorting options.
+        ///  Sorts a string array and an object array based on the elements of the
+        ///  string array. The arrays are sorted using the default locale and the
+        ///  given sorting options.
         /// </summary>
         public static void Sort(string[] keys, object[] items, int options)
         {
@@ -340,9 +327,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a range in a string array and a range in an object array based on
-        ///     the elements of the string array. The arrays are sorted using the
-        ///     default locale and the given sorting options.
+        ///  Sorts a range in a string array and a range in an object array based on
+        ///  the elements of the string array. The arrays are sorted using the
+        ///  default locale and the given sorting options.
         /// </summary>
         public static void Sort(string[] keys, object[] items, int index, int count, int options)
         {
@@ -350,12 +337,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts an object array based on the string representation of the
-        ///     elements. If the <code>items</code> parameter is not a string array, the
+        ///  Sorts an object array based on the string representation of the
+        ///  elements. If the <code>items</code> parameter is not a string array, the
         /// <code>toString</code> method of each of the elements is called to
-        ///     produce the string representation. The objects are then sorted by their
-        ///     string representations using the given locale and the given sorting
-        ///     options.
+        ///  produce the string representation. The objects are then sorted by their
+        ///  string representations using the given locale and the given sorting
+        ///  options.
         /// </summary>
         public static void Sort(CultureInfo culture, object[] items, int options)
         {
@@ -363,12 +350,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a range in an object array based on the string representation of
-        ///     the elements. If the <code>items</code> parameter is not a string array,
-        ///     the <code>toString</code> method of each of the elements is called to
-        ///     produce the string representation. The objects are then sorted by their
-        ///     string representations using the given locale and the given sorting
-        ///     options.
+        ///  Sorts a range in an object array based on the string representation of
+        ///  the elements. If the <code>items</code> parameter is not a string array,
+        ///  the <code>toString</code> method of each of the elements is called to
+        ///  produce the string representation. The objects are then sorted by their
+        ///  string representations using the given locale and the given sorting
+        ///  options.
         /// </summary>
         public static void Sort(CultureInfo culture, object[] items, int index, int count, int options)
         {
@@ -376,9 +363,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a string array and an object array based on the elements of the
-        ///     string array. The arrays are sorted using the given locale and the
-        ///     given sorting options.
+        ///  Sorts a string array and an object array based on the elements of the
+        ///  string array. The arrays are sorted using the given locale and the
+        ///  given sorting options.
         /// </summary>
         public static void Sort(CultureInfo culture, string[] keys, object[] items, int options)
         {
@@ -386,18 +373,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts a range in a string array and a range in an object array based on
-        ///     the elements of the string array. Elements in the <code>keys</code>
-        ///     array specify the sort keys for corresponding elements in the
+        ///  Sorts a range in a string array and a range in an object array based on
+        ///  the elements of the string array. Elements in the <code>keys</code>
+        ///  array specify the sort keys for corresponding elements in the
         /// <code>items</code> array. The range of elements given by the
         /// <code>index</code> and <code>count</code> parameters is sorted in both
-        ///     arrays according to the given locale and sorting options.
-        ///     If the <code>keys</code> parameter is <code>null</code>, the sort keys
-        ///     are instead computed by calling the <code>toString</code> method of each
-        ///     element in the <code>items</code> array.
+        ///  arrays according to the given locale and sorting options.
+        ///  If the <code>keys</code> parameter is <code>null</code>, the sort keys
+        ///  are instead computed by calling the <code>toString</code> method of each
+        ///  element in the <code>items</code> array.
         /// <code>null</code> keys always sort before a non-null keys.
-        ///     The <code>options</code> parameter is a combination of zero or more of
-        ///     the following flags: <code>IGNORECASE</code>, <code>IGNOREKANATYPE</code>,
+        ///  The <code>options</code> parameter is a combination of zero or more of
+        ///  the following flags: <code>IGNORECASE</code>, <code>IGNOREKANATYPE</code>,
         /// <code>IGNORENONSPACE</code>, <code>IGNORESYMBOLS</code>,
         /// <code>IGNOREWIDTH</code>, <code>STRINGSORT</code>, and
         /// <code>DESCENDING</code>.

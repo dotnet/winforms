@@ -84,7 +84,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         /// Indexer.  This will return the statement collection for the given owner.
-        /// It will return null only if the owner is not in the table.  
+        /// It will return null only if the owner is not in the table.
         /// </summary>
         public CodeStatementCollection this[object statementOwner]
         {

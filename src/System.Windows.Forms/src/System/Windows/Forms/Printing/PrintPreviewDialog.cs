@@ -1,25 +1,17 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Drawing.Printing;
-    using System.Windows.Forms.Design;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para> Represents a
-    ///       dialog box form that contains a <see cref='System.Windows.Forms.PrintPreviewControl'/>.</para>
+    ///  Represents a
+    ///  dialog box form that contains a <see cref='Forms.PrintPreviewControl'/>.
     /// </summary>
     [
     ComVisible(true),
@@ -37,34 +29,34 @@ namespace System.Windows.Forms
         private System.Windows.Forms.ToolStrip toolStrip1;
         private ToolStripNumericUpDown pageCounterItem;
         private NumericUpDown pageCounter;
-        private System.Windows.Forms.ToolStripButton printToolStripButton;
-        private System.Windows.Forms.ToolStripSplitButton zoomToolStripSplitButton;
-        private System.Windows.Forms.ToolStripMenuItem autoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem8;
-        private System.Windows.Forms.ToolStripSeparator separatorToolStripSeparator;
-        private System.Windows.Forms.ToolStripButton onepageToolStripButton;
-        private System.Windows.Forms.ToolStripButton twopagesToolStripButton;
-        private System.Windows.Forms.ToolStripButton threepagesToolStripButton;
-        private System.Windows.Forms.ToolStripButton fourpagesToolStripButton;
-        private System.Windows.Forms.ToolStripButton sixpagesToolStripButton;
-        private System.Windows.Forms.ToolStripSeparator separatorToolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton closeToolStripButton;
-        private System.Windows.Forms.ToolStripLabel pageToolStripLabel;
+        private ToolStripButton printToolStripButton;
+        private ToolStripSplitButton zoomToolStripSplitButton;
+        private ToolStripMenuItem autoToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem toolStripMenuItem4;
+        private ToolStripMenuItem toolStripMenuItem5;
+        private ToolStripMenuItem toolStripMenuItem6;
+        private ToolStripMenuItem toolStripMenuItem7;
+        private ToolStripMenuItem toolStripMenuItem8;
+        private ToolStripSeparator separatorToolStripSeparator;
+        private ToolStripButton onepageToolStripButton;
+        private ToolStripButton twopagesToolStripButton;
+        private ToolStripButton threepagesToolStripButton;
+        private ToolStripButton fourpagesToolStripButton;
+        private ToolStripButton sixpagesToolStripButton;
+        private ToolStripSeparator separatorToolStripSeparator1;
+        private ToolStripButton closeToolStripButton;
+        private ToolStripLabel pageToolStripLabel;
+        
         readonly ImageList imageList;
 
         /// <summary>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>
+        /// Initializes a new instance of the <see cref='PrintPreviewDialog'/> class.
         /// </summary>
         public PrintPreviewDialog()
         {
-
 #pragma warning disable 618
             base.AutoScaleBaseSize = new Size(5, 13);
 #pragma warning restore 618
@@ -78,8 +70,8 @@ namespace System.Windows.Forms
         //subhag addition
         //-------------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// <para>Indicates the <see cref='System.Windows.Forms.Button'/> control on the form that is clicked when
-        ///    the user presses the ENTER key.</para>
+        /// Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  the user presses the ENTER key.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public IButtonControl AcceptButton
@@ -94,11 +86,9 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the form will adjust its size
-        ///       to fit the height of the font used on the form and scale
-        ///       its controls.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the form will adjust its size
+        ///  to fit the height of the font used on the form and scale
+        ///  its controls.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool AutoScale
@@ -118,10 +108,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the form implements
-        ///       autoscrolling.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the form implements
+        ///  autoscrolling.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll
@@ -138,9 +126,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Hide the property
-        ///    </para>
+        ///  Hide the property
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
@@ -163,9 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Hide the property
-        ///    </para>
+        ///  Hide the property
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AutoValidate AutoValidate
@@ -188,8 +172,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The background color of this control. This is an ambient property and
-        ///     will always return a non-null value.
+        ///  The background color of this control. This is an ambient property and
+        ///  will always return a non-null value.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
@@ -210,10 +194,10 @@ namespace System.Windows.Forms
             remove => base.BackColorChanged -= value;
         }
         /// <summary>
-        ///    <para>Gets
-        ///       or
-        ///       sets the button control that will be clicked when the
-        ///       user presses the ESC key.</para>
+        ///  Gets
+        ///  or
+        ///  sets the button control that will be clicked when the
+        ///  user presses the ESC key.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public IButtonControl CancelButton
@@ -228,8 +212,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether a control box is displayed in the
-        ///       caption bar of the form.</para>
+        ///  Gets or sets a value indicating whether a control box is displayed in the
+        ///  caption bar of the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool ControlBox
@@ -245,7 +229,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Hide the property
+        ///  Hide the property
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenuStrip ContextMenuStrip
@@ -268,9 +252,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the border style of the form.
-        ///    </para>
+        ///  Gets or sets the border style of the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormBorderStyle FormBorderStyle
@@ -285,10 +267,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether a
-        ///       help button should be displayed in the caption box of the form.
-        ///    </para>
+        ///  Gets or sets a value indicating whether a
+        ///  help button should be displayed in the caption box of the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool HelpButton
@@ -303,15 +283,11 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the icon for the form.
-        ///    </para>
+        ///  Gets or sets the icon for the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Icon Icon
         {
-
-
             get
             {
                 return base.Icon;
@@ -322,10 +298,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the form is a container for multiple document interface
-        ///       (MDI) child forms.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the form is a container for multiple document interface
+        ///  (MDI) child forms.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool IsMdiContainer
@@ -340,11 +314,9 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value
-        ///       indicating whether the form will receive key events
-        ///       before the event is passed to the control that has focus.
-        ///    </para>
+        ///  Gets or sets a value
+        ///  indicating whether the form will receive key events
+        ///  before the event is passed to the control that has focus.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool KeyPreview
@@ -359,9 +331,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or Sets the maximum size the dialog can be resized to.
-        ///    </para>
+        ///  Gets or Sets the maximum size the dialog can be resized to.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size MaximumSize
@@ -382,8 +352,8 @@ namespace System.Windows.Forms
             remove => base.MaximumSizeChanged -= value;
         }
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether the maximize button is
-        ///       displayed in the caption bar of the form.</para>
+        ///  Gets or sets a value indicating whether the maximize button is
+        ///  displayed in the caption bar of the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool MaximizeBox
@@ -399,7 +369,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Hide the value
+        ///  Hide the value
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Padding Margin
@@ -422,10 +392,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.MainMenu'/>
-        ///       that is displayed in the form.
-        ///    </para>
+        ///  Gets or sets the <see cref='MainMenu'/>
+        ///  that is displayed in the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public MainMenu Menu
@@ -441,9 +409,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the minimum size the form can be resized to.
-        ///    </para>
+        ///  Gets the minimum size the form can be resized to.
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size MinimumSize
@@ -465,9 +431,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Hide the value
-        ///    </para>
+        ///  Hide the value
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Padding Padding
@@ -490,9 +454,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the size of the form.
-        ///    </para>
+        ///  Gets or sets the size of the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size Size
@@ -513,10 +475,8 @@ namespace System.Windows.Forms
             remove => base.SizeChanged -= value;
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the
-        ///       starting position of the form at run time.
-        ///    </para>
+        ///  Gets or sets the
+        ///  starting position of the form at run time.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormStartPosition StartPosition
@@ -531,8 +491,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether the form should be displayed as the top-most
-        ///       form of your application.</para>
+        ///  Gets or sets a value indicating whether the form should be displayed as the top-most
+        ///  form of your application.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TopMost
@@ -548,7 +508,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets the color that will represent transparent areas of the form.</para>
+        ///  Gets or sets the color that will represent transparent areas of the form.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Color TransparencyKey
@@ -564,7 +524,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Hide the value</para>
+        ///  Hide the value
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool UseWaitCursor
@@ -580,9 +540,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Gets or sets the form's window state.
-        ///       </para>
-        /// </summary>
+        ///  Gets or sets the form's window state.
+            /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormWindowState WindowState
         {
@@ -596,7 +555,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///      The accessible role of the control
+        ///  The accessible role of the control
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public AccessibleRole AccessibleRole
@@ -611,7 +570,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///      The accessible description of the control
+        ///  The accessible description of the control
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public string AccessibleDescription
@@ -626,7 +585,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///      The accessible name of the control
+        ///  The accessible name of the control
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public string AccessibleName
@@ -641,8 +600,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para> 
-        ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
+        ///
+        ///  Indicates whether entering the control causes validation on the controls requiring validation.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool CausesValidation
@@ -663,7 +622,7 @@ namespace System.Windows.Forms
             remove => base.CausesValidationChanged -= value;
         }
         /// <summary>
-        ///     Retrieves the bindings for this control.
+        ///  Retrieves the bindings for this control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ControlBindingsCollection DataBindings
@@ -674,15 +633,13 @@ namespace System.Windows.Forms
             }
         }
 
-
         protected override Size DefaultMinimumSize
         {
             get { return new Size(375, 250); }
         }
 
-
         /// <summary>
-        ///    <para>Indicates whether the control is currently enabled.</para>
+        ///  Indicates whether the control is currently enabled.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool Enabled
@@ -703,7 +660,7 @@ namespace System.Windows.Forms
             remove => base.EnabledChanged -= value;
         }
         /// <summary>
-        ///     The location of this control.
+        ///  The location of this control.
         /// </summary>
         [Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -738,8 +695,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     The AllowDrop property. If AllowDrop is set to true then
-        ///     this control will allow drag and drop operations and events to be used.
+        ///  The AllowDrop property. If AllowDrop is set to true then
+        ///  this control will allow drag and drop operations and events to be used.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop
@@ -754,8 +711,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     Retrieves the cursor that will be displayed when the mouse is over this
-        ///     control.
+        ///  Retrieves the cursor that will be displayed when the mouse is over this
+        ///  control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor
@@ -777,7 +734,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The background image of the control.
+        ///  The background image of the control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
@@ -799,7 +756,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The background image layout of the control.
+        ///  The background image layout of the control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
@@ -820,8 +777,8 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageLayoutChanged -= value;
         }
         /// <summary>
-        ///     Specifies a value that determines the IME (Input Method Editor) status of the 
-        ///     object when that object is selected.
+        ///  Specifies a value that determines the IME (Input Method Editor) status of the
+        ///  object when that object is selected.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
@@ -843,11 +800,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets the size of the auto-scroll
-        ///       margin.
-        ///    </para>
+        ///  Gets or
+        ///  sets the size of the auto-scroll
+        ///  margin.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size AutoScrollMargin
@@ -862,7 +817,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>Gets or sets the mimimum size of the auto-scroll.</para>
+        ///  Gets or sets the mimimum size of the auto-scroll.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size AutoScrollMinSize
@@ -877,9 +832,9 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     The current value of the anchor property. The anchor property
-        ///     determines which edges of the control are anchored to the container's
-        ///     edges.
+        ///  The current value of the anchor property. The anchor property
+        ///  determines which edges of the control are anchored to the container's
+        ///  edges.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AnchorStyles Anchor
@@ -894,7 +849,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>Indicates whether the control is visible.</para>
+        ///  Indicates whether the control is visible.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool Visible
@@ -915,7 +870,7 @@ namespace System.Windows.Forms
             remove => base.VisibleChanged -= value;
         }
         /// <summary>
-        ///     The foreground color of the control.
+        ///  The foreground color of the control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
@@ -937,9 +892,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
-        ///     control placement and text will be from right to left.
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
+        ///  control placement and text will be from right to left.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft
@@ -955,10 +910,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///     control placement and text will be from right to left.
+        ///  control placement and text will be from right to left.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool RightToLeftLayout
@@ -989,10 +944,9 @@ namespace System.Windows.Forms
             remove => base.RightToLeftLayoutChanged -= value;
         }
 
-
         /// <summary>
-        ///    <para>Indicates whether the user can give the focus to this control using the TAB 
-        ///       key. This property is read-only.</para>
+        ///  Indicates whether the user can give the focus to this control using the TAB
+        ///  key. This property is read-only.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
@@ -1014,7 +968,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The current text associated with this control.
+        ///  The current text associated with this control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text
@@ -1037,10 +991,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The dock property. The dock property controls to which edge
-        ///     of the container this control is docked to. For example, when docked to
-        ///     the top of the container, the control will be displayed flush at the
-        ///     top of the container, extending the length of the container.
+        ///  The dock property. The dock property controls to which edge
+        ///  of the container this control is docked to. For example, when docked to
+        ///  the top of the container, the control will be displayed flush at the
+        ///  top of the container, extending the length of the container.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override DockStyle Dock
@@ -1062,8 +1016,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Retrieves the current font for this control. This will be the font used
-        ///     by default for painting and text in the control.
+        ///  Retrieves the current font for this control. This will be the font used
+        ///  by default for painting and text in the control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font
@@ -1085,8 +1039,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The contextMenu associated with this control. The contextMenu
-        ///     will be shown when the user right clicks the mouse on the control.
+        ///  The contextMenu associated with this control. The contextMenu
+        ///  will be shown when the user right clicks the mouse on the control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenu ContextMenu
@@ -1108,8 +1062,6 @@ namespace System.Windows.Forms
         }
 
         // DockPadding is not relevant to UpDownBase
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public DockPaddingEdges DockPadding
         {
@@ -1139,9 +1091,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       PrintPreviewDialog does not support AutoScaleBaseSize.
-        ///    </para>
+        ///  PrintPreviewDialog does not support AutoScaleBaseSize.
         /// </summary>
         /// Keeping implementation of obsoleted AutoScaleBaseSize API
 #pragma warning disable 618
@@ -1165,9 +1115,7 @@ namespace System.Windows.Forms
 #pragma warning restore 618
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the document to preview.
-        ///    </para>
+        ///  Gets or sets the document to preview.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1200,8 +1148,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets a value indicating the <see cref='System.Windows.Forms.PrintPreviewControl'/> 
-        /// contained in this form.</para>
+        /// Gets or sets a value indicating the <see cref='Forms.PrintPreviewControl'/>
+        /// contained in this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1214,9 +1162,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Opacity does not apply to PrintPreviewDialogs.
-        ///    </para>
+        ///  Opacity does not apply to PrintPreviewDialogs.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new double Opacity
@@ -1257,44 +1203,40 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // The default page count is 1.
-                                                                                                        // So we don't have to localize it.
-        ]
         void InitForm()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintPreviewDialog));
-            toolStrip1 = new System.Windows.Forms.ToolStrip();
-            printToolStripButton = new System.Windows.Forms.ToolStripButton();
-            zoomToolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
-            autoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
-            separatorToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            onepageToolStripButton = new System.Windows.Forms.ToolStripButton();
-            twopagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            threepagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            fourpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            sixpagesToolStripButton = new System.Windows.Forms.ToolStripButton();
-            separatorToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            closeToolStripButton = new System.Windows.Forms.ToolStripButton();
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(PrintPreviewDialog));
+            toolStrip1 = new ToolStrip();
+            printToolStripButton = new ToolStripButton();
+            zoomToolStripSplitButton = new ToolStripSplitButton();
+            autoToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
+            toolStripMenuItem3 = new ToolStripMenuItem();
+            toolStripMenuItem4 = new ToolStripMenuItem();
+            toolStripMenuItem5 = new ToolStripMenuItem();
+            toolStripMenuItem6 = new ToolStripMenuItem();
+            toolStripMenuItem7 = new ToolStripMenuItem();
+            toolStripMenuItem8 = new ToolStripMenuItem();
+            separatorToolStripSeparator = new ToolStripSeparator();
+            onepageToolStripButton = new ToolStripButton();
+            twopagesToolStripButton = new ToolStripButton();
+            threepagesToolStripButton = new ToolStripButton();
+            fourpagesToolStripButton = new ToolStripButton();
+            sixpagesToolStripButton = new ToolStripButton();
+            separatorToolStripSeparator1 = new ToolStripSeparator();
+            closeToolStripButton = new ToolStripButton();
             pageCounterItem = new ToolStripNumericUpDown();
             pageCounter = pageCounterItem.NumericUpDownControl;
             pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             toolStrip1.SuspendLayout();
             SuspendLayout();
 
-            // 
+            //
             // toolStrip1
-            // 
+            //
             resources.ApplyResources(toolStrip1, "toolStrip1");
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            toolStrip1.Items.AddRange(new ToolStripItem[] {
             printToolStripButton,
             zoomToolStripSplitButton,
             separatorToolStripSeparator,
@@ -1309,19 +1251,19 @@ namespace System.Windows.Forms
             toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
-            // 
+            //
             // printToolStripButton
-            // 
+            //
             printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             printToolStripButton.Name = "printToolStripButton";
             resources.ApplyResources(printToolStripButton, "printToolStripButton");
 
-            // 
+            //
             // zoomToolStripSplitButton
-            // 
+            //
             zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             zoomToolStripSplitButton.DoubleClickEnabled = true;
-            zoomToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            zoomToolStripSplitButton.DropDownItems.AddRange(new ToolStripItem[] {
             autoToolStripMenuItem,
             toolStripMenuItem1,
             toolStripMenuItem2,
@@ -1335,135 +1277,134 @@ namespace System.Windows.Forms
             zoomToolStripSplitButton.SplitterWidth = 1;
             resources.ApplyResources(zoomToolStripSplitButton, "zoomToolStripSplitButton");
 
-
-            // 
+            //
             // autoToolStripMenuItem
-            // 
+            //
             autoToolStripMenuItem.CheckOnClick = true;
             autoToolStripMenuItem.DoubleClickEnabled = true;
             autoToolStripMenuItem.Checked = true;
             autoToolStripMenuItem.Name = "autoToolStripMenuItem";
             resources.ApplyResources(autoToolStripMenuItem, "autoToolStripMenuItem");
 
-            // 
+            //
             // toolStripMenuItem1
-            // 
+            //
             toolStripMenuItem1.CheckOnClick = true;
             toolStripMenuItem1.DoubleClickEnabled = true;
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             resources.ApplyResources(toolStripMenuItem1, "toolStripMenuItem1");
 
-            // 
+            //
             // toolStripMenuItem2
-            // 
+            //
             toolStripMenuItem2.CheckOnClick = true;
             toolStripMenuItem2.DoubleClickEnabled = true;
             toolStripMenuItem2.Name = "toolStripMenuItem2";
             resources.ApplyResources(toolStripMenuItem2, "toolStripMenuItem2");
 
-            // 
+            //
             // toolStripMenuItem3
-            // 
+            //
             toolStripMenuItem3.CheckOnClick = true;
             toolStripMenuItem3.DoubleClickEnabled = true;
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             resources.ApplyResources(toolStripMenuItem3, "toolStripMenuItem3");
 
-            // 
+            //
             // toolStripMenuItem4
-            // 
+            //
             toolStripMenuItem4.CheckOnClick = true;
             toolStripMenuItem4.DoubleClickEnabled = true;
             toolStripMenuItem4.Name = "toolStripMenuItem4";
             resources.ApplyResources(toolStripMenuItem4, "toolStripMenuItem4");
 
-            // 
+            //
             // toolStripMenuItem5
-            // 
+            //
             toolStripMenuItem5.CheckOnClick = true;
             toolStripMenuItem5.DoubleClickEnabled = true;
             toolStripMenuItem5.Name = "toolStripMenuItem5";
             resources.ApplyResources(toolStripMenuItem5, "toolStripMenuItem5");
 
-            // 
+            //
             // toolStripMenuItem6
-            // 
+            //
             toolStripMenuItem6.CheckOnClick = true;
             toolStripMenuItem6.DoubleClickEnabled = true;
             toolStripMenuItem6.Name = "toolStripMenuItem6";
             resources.ApplyResources(toolStripMenuItem6, "toolStripMenuItem6");
 
-            // 
+            //
             // toolStripMenuItem7
-            // 
+            //
             toolStripMenuItem7.CheckOnClick = true;
             toolStripMenuItem7.DoubleClickEnabled = true;
             toolStripMenuItem7.Name = "toolStripMenuItem7";
             resources.ApplyResources(toolStripMenuItem7, "toolStripMenuItem7");
 
-            // 
+            //
             // toolStripMenuItem8
-            // 
+            //
             toolStripMenuItem8.CheckOnClick = true;
             toolStripMenuItem8.DoubleClickEnabled = true;
             toolStripMenuItem8.Name = "toolStripMenuItem8";
             resources.ApplyResources(toolStripMenuItem8, "toolStripMenuItem8");
 
-            // 
+            //
             // separatorToolStripSeparator
-            // 
+            //
             separatorToolStripSeparator.Name = "separatorToolStripSeparator";
 
-            // 
+            //
             // onepageToolStripButton
-            // 
+            //
             onepageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             onepageToolStripButton.Name = "onepageToolStripButton";
             resources.ApplyResources(onepageToolStripButton, "onepageToolStripButton");
 
-            // 
+            //
             // twopagesToolStripButton
-            // 
+            //
             twopagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             twopagesToolStripButton.Name = "twopagesToolStripButton";
             resources.ApplyResources(twopagesToolStripButton, "twopagesToolStripButton");
 
-            // 
+            //
             // threepagesToolStripButton
-            // 
+            //
             threepagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             threepagesToolStripButton.Name = "threepagesToolStripButton";
             resources.ApplyResources(threepagesToolStripButton, "threepagesToolStripButton");
 
-            // 
+            //
             // fourpagesToolStripButton
-            // 
+            //
             fourpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             fourpagesToolStripButton.Name = "fourpagesToolStripButton";
             resources.ApplyResources(fourpagesToolStripButton, "fourpagesToolStripButton");
 
-            // 
+            //
             // sixpagesToolStripButton
-            // 
+            //
             sixpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             sixpagesToolStripButton.Name = "sixpagesToolStripButton";
             resources.ApplyResources(sixpagesToolStripButton, "sixpagesToolStripButton");
 
-            // 
+            //
             // separatorToolStripSeparator1
-            // 
+            //
             separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
 
-            // 
+            //
             // closeToolStripButton
-            // 
+            //
             closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
             closeToolStripButton.Name = "closeToolStripButton";
             resources.ApplyResources(closeToolStripButton, "closeToolStripButton");
 
-            // 
+            //
             // pageCounter
-            // 
+            //
             resources.ApplyResources(pageCounter, "pageCounter");
             pageCounter.Text = "1";
             pageCounter.TextAlign = HorizontalAlignment.Right;
@@ -1473,9 +1414,9 @@ namespace System.Windows.Forms
             pageCounter.ValueChanged += new EventHandler(UpdownMove);
             pageCounter.Name = "pageCounter";
 
-            // 
+            //
             // pageToolStripLabel
-            // 
+            //
             pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             pageToolStripLabel.Name = "pageToolStripLabel";
             resources.ApplyResources(pageToolStripLabel, "pageToolStripLabel");
@@ -1486,22 +1427,22 @@ namespace System.Windows.Forms
             previewControl.StartPageChanged += new EventHandler(previewControl_StartPageChanged);
 
             //EVENTS and Images ...
-            printToolStripButton.Click += new System.EventHandler(OnprintToolStripButtonClick);
-            autoToolStripMenuItem.Click += new System.EventHandler(ZoomAuto);
-            toolStripMenuItem1.Click += new System.EventHandler(Zoom500);
-            toolStripMenuItem2.Click += new System.EventHandler(Zoom250);
-            toolStripMenuItem3.Click += new System.EventHandler(Zoom150);
-            toolStripMenuItem4.Click += new System.EventHandler(Zoom100);
-            toolStripMenuItem5.Click += new System.EventHandler(Zoom75);
-            toolStripMenuItem6.Click += new System.EventHandler(Zoom50);
-            toolStripMenuItem7.Click += new System.EventHandler(Zoom25);
-            toolStripMenuItem8.Click += new System.EventHandler(Zoom10);
-            onepageToolStripButton.Click += new System.EventHandler(OnonepageToolStripButtonClick);
-            twopagesToolStripButton.Click += new System.EventHandler(OntwopagesToolStripButtonClick);
-            threepagesToolStripButton.Click += new System.EventHandler(OnthreepagesToolStripButtonClick);
-            fourpagesToolStripButton.Click += new System.EventHandler(OnfourpagesToolStripButtonClick);
-            sixpagesToolStripButton.Click += new System.EventHandler(OnsixpagesToolStripButtonClick);
-            closeToolStripButton.Click += new System.EventHandler(OncloseToolStripButtonClick);
+            printToolStripButton.Click += new EventHandler(OnprintToolStripButtonClick);
+            autoToolStripMenuItem.Click += new EventHandler(ZoomAuto);
+            toolStripMenuItem1.Click += new EventHandler(Zoom500);
+            toolStripMenuItem2.Click += new EventHandler(Zoom250);
+            toolStripMenuItem3.Click += new EventHandler(Zoom150);
+            toolStripMenuItem4.Click += new EventHandler(Zoom100);
+            toolStripMenuItem5.Click += new EventHandler(Zoom75);
+            toolStripMenuItem6.Click += new EventHandler(Zoom50);
+            toolStripMenuItem7.Click += new EventHandler(Zoom25);
+            toolStripMenuItem8.Click += new EventHandler(Zoom10);
+            onepageToolStripButton.Click += new EventHandler(OnonepageToolStripButtonClick);
+            twopagesToolStripButton.Click += new EventHandler(OntwopagesToolStripButtonClick);
+            threepagesToolStripButton.Click += new EventHandler(OnthreepagesToolStripButtonClick);
+            fourpagesToolStripButton.Click += new EventHandler(OnfourpagesToolStripButtonClick);
+            sixpagesToolStripButton.Click += new EventHandler(OnsixpagesToolStripButtonClick);
+            closeToolStripButton.Click += new EventHandler(OncloseToolStripButtonClick);
             closeToolStripButton.Paint += new PaintEventHandler(OncloseToolStripButtonPaint);
             //Images
             toolStrip1.ImageList = imageList;
@@ -1535,9 +1476,9 @@ namespace System.Windows.Forms
             toolStrip1.Items.Add(pageCounterItem);
             toolStrip1.Items.Add(pageToolStripLabel);
 
-            // 
+            //
             // Form1
-            // 
+            //
             resources.ApplyResources(this, "$this");
 
             Controls.Add(previewControl);
@@ -1551,14 +1492,10 @@ namespace System.Windows.Forms
             ResumeLayout(false);
             PerformLayout();
 
-
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Forces the preview to be regenerated every time the dialog comes up
-        ///    </para>
+        ///  Forces the preview to be regenerated every time the dialog comes up
         /// </summary>
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -1567,9 +1504,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Creates the handle for the PrintPreviewDialog. If a
-        ///       subclass overrides this function,
-        ///       it must call the base implementation.</para>
+        ///  Creates the handle for the PrintPreviewDialog. If a
+        ///  subclass overrides this function,
+        ///  it must call the base implementation.
         /// </summary>
         protected override void CreateHandle()
         {
@@ -1602,10 +1539,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       In Everett we used to TAB around the PrintPreviewDialog. Now since the PageCounter is added into the ToolStrip we dont
-        ///       This is breaking from Everett.
-        ///    </para>
+        ///  In Everett we used to TAB around the PrintPreviewDialog. Now since the PageCounter is added into the ToolStrip we dont
+        ///  This is breaking from Everett.
         /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
@@ -1618,9 +1553,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       AutoScaleBaseSize should never be persisted for PrintPreviewDialogs.
-        ///    </para>
+        ///  AutoScaleBaseSize should never be persisted for PrintPreviewDialogs.
         /// </summary>
         internal override bool ShouldSerializeAutoScaleBaseSize()
         {
@@ -1634,7 +1567,7 @@ namespace System.Windows.Forms
             return !Text.Equals(string.Format(SR.PrintPreviewDialog_PrintPreview));
         }
 
-        void OncloseToolStripButtonClick(object sender, System.EventArgs e)
+        void OncloseToolStripButtonClick(object sender, EventArgs e)
         {
             Close();
         }
@@ -1644,7 +1577,6 @@ namespace System.Windows.Forms
             pageCounter.Value = previewControl.StartPage + 1;
         }
 
-
         void CheckZoomMenu(ToolStripMenuItem toChecked)
         {
             foreach (ToolStripMenuItem item in zoomToolStripSplitButton.DropDownItems)
@@ -1652,7 +1584,6 @@ namespace System.Windows.Forms
                 item.Checked = toChecked == item;
             }
         }
-
 
         void ZoomAuto(object sender, EventArgs eventargs)
         {
@@ -1729,8 +1660,7 @@ namespace System.Windows.Forms
             }
         }
 
-
-        void OnprintToolStripButtonClick(object sender, System.EventArgs e)
+        void OnprintToolStripButtonClick(object sender, EventArgs e)
         {
             if (previewControl.Document != null)
             {
@@ -1738,43 +1668,42 @@ namespace System.Windows.Forms
             }
         }
 
-        void OnzoomToolStripSplitButtonClick(object sender, System.EventArgs e)
+        void OnzoomToolStripSplitButtonClick(object sender, EventArgs e)
         {
             ZoomAuto(null, EventArgs.Empty);
         }
 
         //--------
-        void OnonepageToolStripButtonClick(object sender, System.EventArgs e)
+        void OnonepageToolStripButtonClick(object sender, EventArgs e)
         {
             previewControl.Rows = 1;
             previewControl.Columns = 1;
         }
 
-        void OntwopagesToolStripButtonClick(object sender, System.EventArgs e)
+        void OntwopagesToolStripButtonClick(object sender, EventArgs e)
         {
             previewControl.Rows = 1;
             previewControl.Columns = 2;
         }
 
-        void OnthreepagesToolStripButtonClick(object sender, System.EventArgs e)
+        void OnthreepagesToolStripButtonClick(object sender, EventArgs e)
         {
             previewControl.Rows = 1;
             previewControl.Columns = 3;
         }
 
-        void OnfourpagesToolStripButtonClick(object sender, System.EventArgs e)
+        void OnfourpagesToolStripButtonClick(object sender, EventArgs e)
         {
             previewControl.Rows = 2;
             previewControl.Columns = 2;
         }
 
-        void OnsixpagesToolStripButtonClick(object sender, System.EventArgs e)
+        void OnsixpagesToolStripButtonClick(object sender, EventArgs e)
         {
             previewControl.Rows = 2;
             previewControl.Columns = 3;
         }
         //----------------------
-
 
         void UpdownMove(object sender, EventArgs eventargs)
         {

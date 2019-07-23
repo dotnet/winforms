@@ -7,9 +7,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -26,7 +24,6 @@ namespace System.ComponentModel.Design.Serialization
         private static readonly Attribute[] s_runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly object s_initMethodKey = new object();
         private static TypeCodeDomSerializer s_default;
-
 
         internal static TypeCodeDomSerializer Default
         {
@@ -199,7 +196,7 @@ namespace System.ComponentModel.Design.Serialization
                     OrderedCodeStatementCollection[] statementArray = new OrderedCodeStatementCollection[_statementTable.Count];
                     _statementTable.Values.CopyTo(statementArray, 0);
                     Array.Sort(statementArray, StatementOrderComparer.s_default);
-                    // make sure we have fully deserialized everything that is referenced in the statement table. Skip the root object for last 
+                    // make sure we have fully deserialized everything that is referenced in the statement table. Skip the root object for last
                     OrderedCodeStatementCollection rootStatements = null;
                     foreach (OrderedCodeStatementCollection statements in statementArray)
                     {
@@ -232,7 +229,6 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         /// This takes the given name and deserializes it from our name table.  Before blindly deserializing it checks the contents of the name table to see if the object already exists within it. We do this because deserializing one object may call back into us through OnResolveName and deserialize another.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private object DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection statements)
         {
             object value = null;
@@ -423,7 +419,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.   
+        /// This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.
         /// The default implementation of Serialize performs the following tasks:
         /// •    Context Seeding.  The serialization context will be “seeded” with data including the RootContext, and CodeTypeDeclaration.
         /// •    Member Serialization.  Next Serialize will walk all of the members and call SerializeToExpression.  Because serialization is done opportunistically in SerializeToExpression, this ensures that we do not serialize twice.
@@ -584,7 +580,6 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-
             // Final step -- walk through all of the sections and emit them to the type declaration.
             foreach (CodeMethodMap map in methodMap)
             {
@@ -593,7 +588,6 @@ namespace System.ComponentModel.Design.Serialization
                 Trace("...generated {0} statements into method {1}", map.Method.Statements.Count, map.Method.Name);
             }
         }
-
 
         #region OrderedStatementsCollection Class
         private class StatementOrderComparer : IComparer

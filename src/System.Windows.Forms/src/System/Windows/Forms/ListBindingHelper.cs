@@ -2,22 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Diagnostics.CodeAnalysis;
-
-    /// <summary>
-    /// </summary>
     public static class ListBindingHelper
     {
-
         private static Attribute[] browsableAttribute;
 
         private static Attribute[] BrowsableAttributeList
@@ -68,7 +63,7 @@ namespace System.Windows.Forms
             PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
             if (dmProp == null)
             {
-                throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
+                throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
             }
 
             object currentItem;
@@ -206,7 +201,7 @@ namespace System.Windows.Forms
                 // Add the data member property to the list accessors
                 int len = (listAccessors == null) ? 1 : (listAccessors.Length + 1);
                 PropertyDescriptor[] listAccessors2 = new PropertyDescriptor[len];
-                listAccessors2[0] = dmProp ?? throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
+                listAccessors2[0] = dmProp ?? throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
                 for (int i = 1; i < len; ++i)
                 {
                     listAccessors2[i] = listAccessors[i - 1];
@@ -541,11 +536,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// 
+        ///
         /// Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
         /// determine that the type represents a collection or list. The return type of that indexer is used to
         /// determine the underlying item type.
-        /// 
+        ///
         /// PROCESS: We look for the first public instance property on the type that is an 'indexer'. This property
         /// is usually - but not always - called "Item". So we look at 'indexer parameters' to identify true indexers,
         /// rather than looking at the property name. And we also ignore any indexers that return an item type of just
@@ -553,7 +548,6 @@ namespace System.Windows.Forms
         ///
         /// NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
         /// based types, ie. types we already know are supposed to be treated as lists (rather than list items).
-        ///
         /// </summary>
         private static PropertyInfo GetTypedIndexer(Type type)
         {
@@ -564,7 +558,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            System.Reflection.PropertyInfo[] props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             for (int idx = 0; idx < props.Length; idx++)
             {

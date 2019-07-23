@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> Add_InvalidNameCreationServiceParentProvider_TestData()
         {
             yield return new object[] { null };
-            
+
             var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
             nullMockServiceProvider
                 .Setup(p => p.GetService(typeof(INameCreationService)))
@@ -830,7 +830,7 @@ namespace System.ComponentModel.Design.Tests
             var surface = new DesignSurface();
             INestedContainer container1 = surface.CreateNestedContainer(new Component(), "containerName");
             INestedContainer container2 = surface.CreateNestedContainer(new Component(), "containerName");
-            
+
             var otherComponent = new RootDesignerComponent();
             var component = new RootDesignerComponent();
             container1.Add(otherComponent);
@@ -847,7 +847,7 @@ namespace System.ComponentModel.Design.Tests
             var surface = new DesignSurface();
             INestedContainer container1 = surface.CreateNestedContainer(new Component(), "containerName");
             INestedContainer container2 = surface.CreateNestedContainer(new Component(), "containerName");
-            
+
             var otherComponent = new RootDesignerComponent();
             container1.Add(otherComponent);
             container2.Remove(otherComponent);
@@ -886,7 +886,7 @@ namespace System.ComponentModel.Design.Tests
                 componentRemovedCallCount++;
             };
             changeService.ComponentRemoved += componentRemovedHandler;
-            
+
             container.Add(component1);
             container.Add(component2);
 
@@ -1079,7 +1079,7 @@ namespace System.ComponentModel.Design.Tests
             protected override void Dispose(bool disposing)
             {
                 Disposed?.Invoke(this, EventArgs.Empty);
-            }   
+            }
         }
 
         [Designer(typeof(DisposingDesigner))]

@@ -93,8 +93,8 @@
         <note />
       </trans-unit>
       <trans-unit id="printToolStripButton.AccessibleName">
-        <source>Print Button</source>
-        <target state="translated">印刷ボタン</target>
+        <source>Print</source>
+        <target state="translated">印刷</target>
         <note />
       </trans-unit>
       <trans-unit id="printToolStripButton.Text">

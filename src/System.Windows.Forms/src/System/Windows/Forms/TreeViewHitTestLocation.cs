@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
 
         /// <summary>
-        ///      PlusMinus.
+        ///  PlusMinus.
         /// </summary>
         PlusMinus = NativeMethods.TVHT_ONITEMBUTTON,
     }
