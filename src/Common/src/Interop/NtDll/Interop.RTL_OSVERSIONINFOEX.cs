@@ -9,11 +9,15 @@ internal partial class Interop
 {
     internal partial class NtDll
     {
+        /// <summary>
+        ///  Version info structure for <see cref="RtlGetVersion(out RTL_OSVERSIONINFOEX)" />
+        /// </summary>
+        /// <remarks>
+        ///  Note that this structure is the exact same defintion as OSVERSIONINFOEX.
+        /// </remarks>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         internal unsafe struct RTL_OSVERSIONINFOEX
         {
-            // Note that this structure is the exact same defintion as OSVERSIONINFOEX
-
             internal uint dwOSVersionInfoSize;
             internal uint dwMajorVersion;
             internal uint dwMinorVersion;
