@@ -27,47 +27,48 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionErrorProvider))]
     public class ErrorProvider : Component, IExtenderProvider, ISupportInitialize
     {
-        private readonly Hashtable items = new Hashtable();
-        private readonly Hashtable windows = new Hashtable();
-        private Icon icon = DefaultIcon;
-        private IconRegion region;
-        private int itemIdCounter;
-        private int blinkRate;
-        private ErrorBlinkStyle blinkStyle;
-        private bool showIcon = true; // used for blinking
-        private bool inSetErrorManager = false;
-        private bool setErrorManagerOnEndInit = false;
-        private bool initializing = false;
+        private readonly Hashtable _items = new Hashtable();
+        private readonly Hashtable _windows = new Hashtable();
+        private Icon _icon = DefaultIcon;
+        private IconRegion _region;
+        private int _itemIdCounter;
+        private int _blinkRate;
+        private ErrorBlinkStyle _blinkStyle;
+        private bool _showIcon = true; // used for blinking
+        private bool _inSetErrorManager;
+        private bool _setErrorManagerOnEndInit;
+        private bool _initializing;
 
         [ThreadStatic]
-        private static Icon defaultIcon = null;
+        private static Icon t_defaultIcon;
 
-        private const int defaultBlinkRate = 250;
-        private const ErrorBlinkStyle defaultBlinkStyle = ErrorBlinkStyle.BlinkIfDifferentError;
-        private const ErrorIconAlignment defaultIconAlignment = ErrorIconAlignment.MiddleRight;
+        private const int DefaultBlinkRate = 250;
+        private const ErrorBlinkStyle DefaultBlinkStyle = ErrorBlinkStyle.BlinkIfDifferentError;
+        private const ErrorIconAlignment DefaultIconAlignment = ErrorIconAlignment.MiddleRight;
 
         // data binding
-        private ContainerControl parentControl;
-        private object dataSource = null;
-        private string dataMember = null;
-        private BindingManagerBase errorManager;
-        private readonly EventHandler currentChanged;
+        private ContainerControl _parentControl;
+        private object _dataSource;
+        private string _dataMember;
+        private BindingManagerBase _errorManager;
+        private readonly EventHandler _currentChanged;
 
         // listen to the OnPropertyChanged event in the ContainerControl
-        private readonly EventHandler propChangedEvent;
+        private readonly EventHandler _propChangedEvent;
 
-        private EventHandler onRightToLeftChanged;
-        private bool rightToLeft = false;
+        private EventHandler _onRightToLeftChanged;
+
+        private bool _rightToLeft = false;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public ErrorProvider()
         {
-            icon = DefaultIcon;
-            blinkRate = defaultBlinkRate;
-            blinkStyle = defaultBlinkStyle;
-            currentChanged = new EventHandler(ErrorManager_CurrentChanged);
+            _icon = DefaultIcon;
+            _blinkRate = DefaultBlinkRate;
+            _blinkStyle = DefaultBlinkStyle;
+            _currentChanged = new EventHandler(ErrorManager_CurrentChanged);
         }
 
         public ErrorProvider(ContainerControl parentControl) : this()
@@ -77,9 +78,9 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(parentControl));
             }
 
-            this.parentControl = parentControl;
-            propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
-            parentControl.BindingContextChanged += propChangedEvent;
+            _parentControl = parentControl;
+            _propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
+            parentControl.BindingContextChanged += _propChangedEvent;
         }
 
         public ErrorProvider(IContainer container) : this()
@@ -116,11 +117,11 @@ namespace System.Windows.Forms
         /// Returns or sets when the error icon flashes.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(defaultBlinkStyle)]
+        [DefaultValue(DefaultBlinkStyle)]
         [SRDescription(nameof(SR.ErrorProviderBlinkStyleDescr))]
         public ErrorBlinkStyle BlinkStyle
         {
-            get => blinkRate == 0 ? ErrorBlinkStyle.NeverBlink : blinkStyle;
+            get => _blinkRate == 0 ? ErrorBlinkStyle.NeverBlink : _blinkStyle;
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ErrorBlinkStyle.BlinkIfDifferentError, (int)ErrorBlinkStyle.NeverBlink))
@@ -129,12 +130,12 @@ namespace System.Windows.Forms
                 }
 
                 // If the blinkRate == 0, then set blinkStyle = neverBlink
-                if (blinkRate == 0)
+                if (_blinkRate == 0)
                 {
                     value = ErrorBlinkStyle.NeverBlink;
                 }
 
-                if (blinkStyle == value)
+                if (_blinkStyle == value)
                 {
                     return;
                 }
@@ -142,25 +143,25 @@ namespace System.Windows.Forms
                 if (value == ErrorBlinkStyle.AlwaysBlink)
                 {
                     // Need to start blinking on all the controlItems in our items hashTable.
-                    showIcon = true;
-                    blinkStyle = ErrorBlinkStyle.AlwaysBlink;
-                    foreach (ErrorWindow w in windows.Values)
+                    _showIcon = true;
+                    _blinkStyle = ErrorBlinkStyle.AlwaysBlink;
+                    foreach (ErrorWindow w in _windows.Values)
                     {
                         w.StartBlinking();
                     }
                 }
-                else if (blinkStyle == ErrorBlinkStyle.AlwaysBlink)
+                else if (_blinkStyle == ErrorBlinkStyle.AlwaysBlink)
                 {
                     // Need to stop blinking.
-                    blinkStyle = value;
-                    foreach (ErrorWindow w in windows.Values)
+                    _blinkStyle = value;
+                    foreach (ErrorWindow w in _windows.Values)
                     {
                         w.StopBlinking();
                     }
                 }
                 else
                 {
-                    blinkStyle = value;
+                    _blinkStyle = value;
                 }
             }
         }
@@ -175,24 +176,24 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ErrorProviderContainerControlDescr))]
         public ContainerControl ContainerControl
         {
-            get => parentControl;
+            get => _parentControl;
             set
             {
-                if (parentControl == value)
+                if (_parentControl == value)
                 {
                     return;
                 }
 
-                if (parentControl != null)
+                if (_parentControl != null)
                 {
-                    parentControl.BindingContextChanged -= propChangedEvent;
+                    _parentControl.BindingContextChanged -= _propChangedEvent;
                 }
 
-                parentControl = value;
+                _parentControl = value;
 
-                if (parentControl != null)
+                if (_parentControl != null)
                 {
-                    parentControl.BindingContextChanged += propChangedEvent;
+                    _parentControl.BindingContextChanged += _propChangedEvent;
                 }
 
                 SetErrorManager(DataSource, DataMember, force: true);
@@ -209,15 +210,15 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlRightToLeftDescr))]
         public virtual bool RightToLeft
         {
-            get => rightToLeft;
+            get => _rightToLeft;
             set
             {
-                if (value == rightToLeft)
+                if (value == _rightToLeft)
                 {
                     return;
                 }
 
-                rightToLeft = value;
+                _rightToLeft = value;
                 OnRightToLeftChanged(EventArgs.Empty);
             }
         }
@@ -226,8 +227,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged
         {
-            add => onRightToLeftChanged += value;
-            remove => onRightToLeftChanged -= value;
+            add => _onRightToLeftChanged += value;
+            remove => _onRightToLeftChanged -= value;
         }
 
         /// <summary>
@@ -243,12 +244,12 @@ namespace System.Windows.Forms
 
         private void SetErrorManager(object newDataSource, string newDataMember, bool force)
         {
-            if (inSetErrorManager)
+            if (_inSetErrorManager)
             {
                 return;
             }
 
-            inSetErrorManager = true;
+            _inSetErrorManager = true;
             try
             {
                 bool dataSourceChanged = DataSource != newDataSource;
@@ -261,34 +262,34 @@ namespace System.Windows.Forms
                 }
 
                 // Set the dataSource and the dataMember
-                dataSource = newDataSource;
-                dataMember = newDataMember;
+                _dataSource = newDataSource;
+                _dataMember = newDataMember;
 
-                if (initializing)
+                if (_initializing)
                 {
-                    setErrorManagerOnEndInit = true;
+                    _setErrorManagerOnEndInit = true;
                 }
                 else
                 {
                     // Unwire the errorManager:
-                    UnwireEvents(errorManager);
+                    UnwireEvents(_errorManager);
 
                     // Get the new errorManager
-                    if (parentControl != null && dataSource != null && parentControl.BindingContext != null)
+                    if (_parentControl != null && _dataSource != null && _parentControl.BindingContext != null)
                     {
-                        errorManager = parentControl.BindingContext[dataSource, dataMember];
+                        _errorManager = _parentControl.BindingContext[_dataSource, _dataMember];
                     }
                     else
                     {
-                        errorManager = null;
+                        _errorManager = null;
                     }
 
                     // Wire the events
-                    WireEvents(errorManager);
+                    WireEvents(_errorManager);
 
                     // See if there are errors at the current item in the list, without waiting for
                     // the position to change
-                    if (errorManager != null)
+                    if (_errorManager != null)
                     {
                         UpdateBinding();
                     }
@@ -296,7 +297,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                inSetErrorManager = false;
+                _inSetErrorManager = false;
             }
         }
 
@@ -309,20 +310,20 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ErrorProviderDataSourceDescr))]
         public object DataSource
         {
-            get => dataSource;
+            get => _dataSource;
             set
             {
-                if (parentControl != null && value != null && !string.IsNullOrEmpty(dataMember))
+                if (_parentControl != null && value != null && !string.IsNullOrEmpty(_dataMember))
                 {
                     // Let's check if the datamember exists in the new data source
                     try
                     {
-                        errorManager = parentControl.BindingContext[value, dataMember];
+                        _errorManager = _parentControl.BindingContext[value, _dataMember];
                     }
                     catch (ArgumentException)
                     {
                         // The data member doesn't exist in the data source, so set it to null
-                        dataMember = string.Empty;
+                        _dataMember = string.Empty;
                     }
                 }
 
@@ -330,7 +331,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeDataSource() => dataSource != null;
+        private bool ShouldSerializeDataSource() => _dataSource != null;
 
         /// <summary>
         /// Indicates the sub-list of data from the DataSource to bind errors against.
@@ -341,7 +342,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ErrorProviderDataMemberDescr))]
         public string DataMember
         {
-            get => dataMember;
+            get => _dataMember;
             set
             {
                 if (value == null)
@@ -353,7 +354,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeDataMember() => !string.IsNullOrEmpty(dataMember);
+        private bool ShouldSerializeDataMember() => !string.IsNullOrEmpty(_dataMember);
 
         public void BindToDataAndErrors(object newDataSource, string newDataMember)
         {
@@ -367,7 +368,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            listManager.CurrentChanged += currentChanged;
+            listManager.CurrentChanged += _currentChanged;
             listManager.BindingComplete += new BindingCompleteEventHandler(ErrorManager_BindingComplete);
 
             if (listManager is CurrencyManager currManager)
@@ -384,7 +385,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            listManager.CurrentChanged -= currentChanged;
+            listManager.CurrentChanged -= _currentChanged;
             listManager.BindingComplete -= new BindingCompleteEventHandler(ErrorManager_BindingComplete);
 
             if (listManager is CurrencyManager currManager)
@@ -405,7 +406,7 @@ namespace System.Windows.Forms
 
         private void ErrorManager_BindingsChanged(object sender, CollectionChangeEventArgs e)
         {
-            ErrorManager_CurrentChanged(errorManager, e);
+            ErrorManager_CurrentChanged(_errorManager, e);
         }
 
         private void ParentControl_BindingContextChanged(object sender, EventArgs e)
@@ -415,16 +416,16 @@ namespace System.Windows.Forms
 
         public void UpdateBinding()
         {
-            ErrorManager_CurrentChanged(errorManager, EventArgs.Empty);
+            ErrorManager_CurrentChanged(_errorManager, EventArgs.Empty);
         }
 
         private void ErrorManager_ItemChanged(object sender, ItemChangedEventArgs e)
         {
-            BindingsCollection errBindings = errorManager.Bindings;
+            BindingsCollection errBindings = _errorManager.Bindings;
             int bindingsCount = errBindings.Count;
 
             // If the list became empty then reset the errors
-            if (e.Index == -1 && errorManager.Count == 0)
+            if (e.Index == -1 && _errorManager.Count == 0)
             {
                 for (int j = 0; j < bindingsCount; j++)
                 {
@@ -443,26 +444,26 @@ namespace System.Windows.Forms
 
         private void ErrorManager_CurrentChanged(object sender, EventArgs e)
         {
-            Debug.Assert(sender == errorManager, "who else can send us messages?");
+            Debug.Assert(sender == _errorManager, "who else can send us messages?");
 
             // Flush the old list
-            if (errorManager.Count == 0)
+            if (_errorManager.Count == 0)
             {
                 return;
             }
 
-            object value = errorManager.Current;
+            object value = _errorManager.Current;
             if (!(value is IDataErrorInfo))
             {
                 return;
             }
 
-            BindingsCollection errBindings = errorManager.Bindings;
+            BindingsCollection errBindings = _errorManager.Bindings;
             int bindingsCount = errBindings.Count;
 
             // We need to delete the blinkPhases from each controlItem (suppose that the error that
             // we get is the same error. then we want to show the error and not blink )
-            foreach (ControlItem ctl in items.Values)
+            foreach (ControlItem ctl in _items.Values)
             {
                 ctl.BlinkPhase = 0;
             }
@@ -517,12 +518,12 @@ namespace System.Windows.Forms
         /// Returns or set the rate in milliseconds at which the error icon flashes.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(defaultBlinkRate)]
+        [DefaultValue(DefaultBlinkRate)]
         [SRDescription(nameof(SR.ErrorProviderBlinkRateDescr))]
         [RefreshProperties(RefreshProperties.Repaint)]
         public int BlinkRate
         {
-            get => blinkRate;
+            get => _blinkRate;
             set
             {
                 if (value < 0)
@@ -530,9 +531,9 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, SR.BlinkRateMustBeZeroOrMore);
                 }
 
-                blinkRate = value;
+                _blinkRate = value;
                 // If we set the blinkRate = 0 then set BlinkStyle = NeverBlink
-                if (blinkRate == 0)
+                if (_blinkRate == 0)
                 {
                     BlinkStyle = ErrorBlinkStyle.NeverBlink;
                 }
@@ -546,15 +547,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (defaultIcon == null)
+                if (t_defaultIcon == null)
                 {
                     lock (typeof(ErrorProvider))
                     {
-                        defaultIcon ??= new Icon(typeof(ErrorProvider), "Error");
+                        t_defaultIcon ??= new Icon(typeof(ErrorProvider), "Error");
                     }
                 }
 
-                return defaultIcon;
+                return t_defaultIcon;
             }
         }
 
@@ -570,14 +571,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return icon;
+                return _icon;
             }
             set
             {
-                icon = value ?? throw new ArgumentNullException(nameof(value));
+                _icon = value ?? throw new ArgumentNullException(nameof(value));
                 DisposeRegion();
-                ErrorWindow[] array = new ErrorWindow[windows.Values.Count];
-                windows.Values.CopyTo(array, 0);
+                ErrorWindow[] array = new ErrorWindow[_windows.Values.Count];
+                _windows.Values.CopyTo(array, 0);
                 for (int i = 0; i < array.Length; i++)
                 {
                     array[i].Update(timerCaused: false);
@@ -588,14 +589,14 @@ namespace System.Windows.Forms
         /// <summary>
         /// Create the icon region on demand.
         /// </summary>
-        internal IconRegion Region => region ??= new IconRegion(Icon);
+        internal IconRegion Region => _region ??= new IconRegion(Icon);
 
         /// <summary>
         /// Begin bulk member initialization - deferring binding to data source until EndInit is reached
         /// </summary>
         void ISupportInitialize.BeginInit()
         {
-            initializing = true;
+            _initializing = true;
         }
 
         /// <summary>
@@ -603,11 +604,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void EndInitCore()
         {
-            initializing = false;
+            _initializing = false;
 
-            if (setErrorManagerOnEndInit)
+            if (_setErrorManagerOnEndInit)
             {
-                setErrorManagerOnEndInit = false;
+                _setErrorManagerOnEndInit = false;
                 SetErrorManager(DataSource, DataMember, true);
             }
         }
@@ -654,19 +655,19 @@ namespace System.Windows.Forms
         /// </summary>
         public void Clear()
         {
-            ErrorWindow[] w = new ErrorWindow[windows.Values.Count];
-            windows.Values.CopyTo(w, 0);
+            ErrorWindow[] w = new ErrorWindow[_windows.Values.Count];
+            _windows.Values.CopyTo(w, 0);
             for (int i = 0; i < w.Length; i++)
             {
                 w[i].Dispose();
             }
-            windows.Clear();
-            foreach (ControlItem item in items.Values)
+            _windows.Clear();
+            foreach (ControlItem item in _items.Values)
             {
                 item?.Dispose();
             }
 
-            items.Clear();
+            _items.Clear();
         }
 
         /// <summary>
@@ -687,7 +688,7 @@ namespace System.Windows.Forms
             {
                 Clear();
                 DisposeRegion();
-                UnwireEvents(errorManager);
+                UnwireEvents(_errorManager);
             }
             base.Dispose(disposing);
         }
@@ -697,10 +698,10 @@ namespace System.Windows.Forms
         /// </summary>
         void DisposeRegion()
         {
-            if (region != null)
+            if (_region != null)
             {
-                region.Dispose();
-                region = null;
+                _region.Dispose();
+                _region = null;
             }
         }
 
@@ -714,11 +715,11 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(control));
             }
 
-            ControlItem item = (ControlItem)items[control];
+            ControlItem item = (ControlItem)_items[control];
             if (item == null)
             {
-                item = new ControlItem(this, control, (IntPtr)(++itemIdCounter));
-                items[control] = item;
+                item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
+                _items[control] = item;
             }
             return item;
         }
@@ -728,11 +729,11 @@ namespace System.Windows.Forms
         /// </summary>
         internal ErrorWindow EnsureErrorWindow(Control parent)
         {
-            ErrorWindow window = (ErrorWindow)windows[parent];
+            ErrorWindow window = (ErrorWindow)_windows[parent];
             if (window == null)
             {
                 window = new ErrorWindow(this, parent);
-                windows[parent] = window;
+                _windows[parent] = window;
             }
 
             return window;
@@ -750,7 +751,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Returns where the error icon should be placed relative to the control.
         /// </summary>
-        [DefaultValue(defaultIconAlignment)]
+        [DefaultValue(DefaultIconAlignment)]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ErrorProviderIconAlignmentDescr))]
@@ -770,12 +771,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e)
         {
-            foreach (ErrorWindow w in windows.Values)
+            foreach (ErrorWindow w in _windows.Values)
             {
                 w.Update(false);
             }
 
-            onRightToLeftChanged?.Invoke(this, e);
+            _onRightToLeftChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -815,24 +816,24 @@ namespace System.Windows.Forms
         internal class ErrorWindow : NativeWindow
         {
             private readonly ArrayList items = new ArrayList();
-            private readonly Control parent;
-            private readonly ErrorProvider provider;
-            private Rectangle windowBounds = Rectangle.Empty;
-            private Timer timer;
-            private NativeWindow tipWindow;
+            private readonly Control _parent;
+            private readonly ErrorProvider _provider;
+            private Rectangle _windowBounds;
+            private Timer _timer;
+            private NativeWindow _tipWindow;
 
-            private DeviceContext mirrordc = null;
-            private Size mirrordcExtent = Size.Empty;
-            private Point mirrordcOrigin = Point.Empty;
-            private DeviceContextMapMode mirrordcMode = DeviceContextMapMode.Text;
+            private DeviceContext _mirrordc;
+            private Size _mirrordcExtent;
+            private Point _mirrordcOrigin;
+            private DeviceContextMapMode _mirrordcMode = DeviceContextMapMode.Text;
 
             /// <summary>
             /// Construct an error window for this provider and control parent.
             /// </summary>
             public ErrorWindow(ErrorProvider provider, Control parent)
             {
-                this.provider = provider;
-                this.parent = parent;
+                _provider = provider;
+                _parent = parent;
             }
 
             /// <summary>
@@ -852,7 +853,7 @@ namespace System.Windows.Forms
                 toolInfo.uId = item.Id;
                 toolInfo.lpszText = item.Error;
                 toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
-                UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);
+                UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);
 
                 Update(timerCaused: false);
             }
@@ -869,7 +870,7 @@ namespace System.Windows.Forms
             {
                 if (Handle == IntPtr.Zero)
                 {
-                    if (!parent.IsHandleCreated)
+                    if (!_parent.IsHandleCreated)
                     {
                         return false;
                     }
@@ -882,7 +883,7 @@ namespace System.Windows.Forms
                         Y = 0,
                         Width = 0,
                         Height = 0,
-                        Parent = parent.Handle
+                        Parent = _parent.Handle
                     };
 
                     CreateHandle(cparams);
@@ -899,12 +900,12 @@ namespace System.Windows.Forms
                         ClassName = NativeMethods.TOOLTIPS_CLASS,
                         Style = NativeMethods.TTS_ALWAYSTIP
                     };
-                    tipWindow = new NativeWindow();
-                    tipWindow.CreateHandle(cparams);
+                    _tipWindow = new NativeWindow();
+                    _tipWindow.CreateHandle(cparams);
 
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
-                    SafeNativeMethods.SetWindowPos(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_SETDELAYTIME, NativeMethods.TTDT_INITIAL, 0);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    SafeNativeMethods.SetWindowPos(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_SETDELAYTIME, NativeMethods.TTDT_INITIAL, 0);
                 }
 
                 return true;
@@ -915,15 +916,15 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureDestroyed()
             {
-                if (timer != null)
+                if (_timer != null)
                 {
-                    timer.Dispose();
-                    timer = null;
+                    _timer.Dispose();
+                    _timer = null;
                 }
-                if (tipWindow != null)
+                if (_tipWindow != null)
                 {
-                    tipWindow.DestroyHandle();
-                    tipWindow = null;
+                    _tipWindow.DestroyHandle();
+                    _tipWindow = null;
                 }
 
                 // Hide the window and invalidate the parent to ensure
@@ -932,18 +933,18 @@ namespace System.Windows.Forms
                 //
                 SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
                                                NativeMethods.HWND_TOP,
-                                               windowBounds.X,
-                                               windowBounds.Y,
-                                               windowBounds.Width,
-                                               windowBounds.Height,
+                                               _windowBounds.X,
+                                               _windowBounds.Y,
+                                               _windowBounds.Width,
+                                               _windowBounds.Height,
                                                NativeMethods.SWP_HIDEWINDOW
                                                | NativeMethods.SWP_NOSIZE
                                                | NativeMethods.SWP_NOMOVE);
-                parent?.Invalidate(true);
+                _parent?.Invalidate(true);
                 DestroyHandle();
 
-                Debug.Assert(mirrordc == null, "Why is mirrordc non-null?");
-                mirrordc?.Dispose();
+                Debug.Assert(_mirrordc == null, "Why is mirrordc non-null?");
+                _mirrordc?.Dispose();
             }
 
             /// <summary>
@@ -956,36 +957,36 @@ namespace System.Windows.Forms
             /// </summary>
             private void CreateMirrorDC(IntPtr hdc, int originOffset)
             {
-                Debug.Assert(mirrordc == null, "Why is mirrordc non-null? Did you not call RestoreMirrorDC?");
+                Debug.Assert(_mirrordc == null, "Why is mirrordc non-null? Did you not call RestoreMirrorDC?");
 
-                mirrordc = DeviceContext.FromHdc(hdc);
-                if (parent.IsMirrored && mirrordc != null)
+                _mirrordc = DeviceContext.FromHdc(hdc);
+                if (_parent.IsMirrored && _mirrordc != null)
                 {
-                    mirrordc.SaveHdc();
-                    mirrordcExtent = mirrordc.ViewportExtent;
-                    mirrordcOrigin = mirrordc.ViewportOrigin;
+                    _mirrordc.SaveHdc();
+                    _mirrordcExtent = _mirrordc.ViewportExtent;
+                    _mirrordcOrigin = _mirrordc.ViewportOrigin;
 
-                    mirrordcMode = mirrordc.SetMapMode(DeviceContextMapMode.Anisotropic);
-                    mirrordc.ViewportExtent = new Size(-(mirrordcExtent.Width), mirrordcExtent.Height);
-                    mirrordc.ViewportOrigin = new Point(mirrordcOrigin.X + originOffset, mirrordcOrigin.Y);
+                    _mirrordcMode = _mirrordc.SetMapMode(DeviceContextMapMode.Anisotropic);
+                    _mirrordc.ViewportExtent = new Size(-(_mirrordcExtent.Width), _mirrordcExtent.Height);
+                    _mirrordc.ViewportOrigin = new Point(_mirrordcOrigin.X + originOffset, _mirrordcOrigin.Y);
                 }
             }
 
             private void RestoreMirrorDC()
             {
-                if (parent.IsMirrored && mirrordc != null)
+                if (_parent.IsMirrored && _mirrordc != null)
                 {
-                    mirrordc.ViewportExtent = mirrordcExtent;
-                    mirrordc.ViewportOrigin = mirrordcOrigin;
-                    mirrordc.SetMapMode(mirrordcMode);
-                    mirrordc.RestoreHdc();
-                    mirrordc.Dispose();
+                    _mirrordc.ViewportExtent = _mirrordcExtent;
+                    _mirrordc.ViewportOrigin = _mirrordcOrigin;
+                    _mirrordc.SetMapMode(_mirrordcMode);
+                    _mirrordc.RestoreHdc();
+                    _mirrordc.Dispose();
                 }
 
-                mirrordc = null;
-                mirrordcExtent = Size.Empty;
-                mirrordcOrigin = Point.Empty;
-                mirrordcMode = DeviceContextMapMode.Text;
+                _mirrordc = null;
+                _mirrordcExtent = Size.Empty;
+                _mirrordcOrigin = Point.Empty;
+                _mirrordcMode = DeviceContextMapMode.Text;
             }
 
             /// <summary>
@@ -998,15 +999,15 @@ namespace System.Windows.Forms
                 IntPtr hdc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
                 try
                 {
-                    CreateMirrorDC(hdc, windowBounds.Width - 1);
+                    CreateMirrorDC(hdc, _windowBounds.Width - 1);
 
                     try
                     {
                         for (int i = 0; i < items.Count; i++)
                         {
                             ControlItem item = (ControlItem)items[i];
-                            Rectangle bounds = item.GetIconBounds(provider.Region.Size);
-                            SafeNativeMethods.DrawIconEx(new HandleRef(this, mirrordc.Hdc), bounds.X - windowBounds.X, bounds.Y - windowBounds.Y, new HandleRef(provider.Region, provider.Region.IconHandle), bounds.Width, bounds.Height, 0, NativeMethods.NullHandleRef, NativeMethods.DI_NORMAL);
+                            Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
+                            SafeNativeMethods.DrawIconEx(new HandleRef(this, _mirrordc.Hdc), bounds.X - _windowBounds.X, bounds.Y - _windowBounds.Y, new HandleRef(_provider.Region, _provider.Region.IconHandle), bounds.Width, bounds.Height, 0, NativeMethods.NullHandleRef, NativeMethods.DI_NORMAL);
                         }
                     }
                     finally
@@ -1035,10 +1036,10 @@ namespace System.Windows.Forms
                 {
                     blinkPhase += ((ControlItem)items[i]).BlinkPhase;
                 }
-                if (blinkPhase == 0 && provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
+                if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
-                    Debug.Assert(timer != null);
-                    timer.Stop();
+                    Debug.Assert(_timer != null);
+                    _timer.Stop();
                 }
                 Update(timerCaused: true);
             }
@@ -1072,13 +1073,13 @@ namespace System.Windows.Forms
             {
                 items.Remove(item);
 
-                if (tipWindow != null)
+                if (_tipWindow != null)
                 {
                     NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
                     toolInfo.cbSize = Marshal.SizeOf(toolInfo);
                     toolInfo.hwnd = Handle;
                     toolInfo.uId = item.Id;
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_DELTOOL, 0, toolInfo);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_DELTOOL, 0, toolInfo);
                 }
 
                 if (items.Count == 0)
@@ -1095,22 +1096,22 @@ namespace System.Windows.Forms
             /// Start the blinking process. The timer will fire until there are no more
             /// icons that need to blink.
             /// </summary>
-            internal void StartBlinking()
+            public void StartBlinking()
             {
-                if (timer == null)
+                if (_timer == null)
                 {
-                    timer = new Timer();
-                    timer.Tick += new EventHandler(OnTimer);
+                    _timer = new Timer();
+                    _timer.Tick += new EventHandler(OnTimer);
                 }
 
-                timer.Interval = provider.BlinkRate;
-                timer.Start();
+                _timer.Interval = _provider.BlinkRate;
+                _timer.Start();
                 Update(timerCaused: false);
             }
 
-            internal void StopBlinking()
+            public void StopBlinking()
             {
-                timer?.Stop();
+                _timer?.Stop();
                 Update(timerCaused: false);
             }
 
@@ -1121,20 +1122,20 @@ namespace System.Windows.Forms
             /// </summary>
             public void Update(bool timerCaused)
             {
-                IconRegion iconRegion = provider.Region;
+                IconRegion iconRegion = _provider.Region;
                 Size size = iconRegion.Size;
-                windowBounds = Rectangle.Empty;
+                _windowBounds = Rectangle.Empty;
                 for (int i = 0; i < items.Count; i++)
                 {
                     ControlItem item = (ControlItem)items[i];
                     Rectangle iconBounds = item.GetIconBounds(size);
-                    if (windowBounds.IsEmpty)
+                    if (_windowBounds.IsEmpty)
                     {
-                        windowBounds = iconBounds;
+                        _windowBounds = iconBounds;
                     }
                     else
                     {
-                        windowBounds = Rectangle.Union(windowBounds, iconBounds);
+                        _windowBounds = Rectangle.Union(_windowBounds, iconBounds);
                     }
                 }
 
@@ -1146,13 +1147,13 @@ namespace System.Windows.Forms
                     {
                         ControlItem item = (ControlItem)items[i];
                         Rectangle iconBounds = item.GetIconBounds(size);
-                        iconBounds.X -= windowBounds.X;
-                        iconBounds.Y -= windowBounds.Y;
+                        iconBounds.X -= _windowBounds.X;
+                        iconBounds.Y -= _windowBounds.Y;
 
                         bool showIcon = true;
                         if (!item.ToolTipShown)
                         {
-                            switch (provider.BlinkStyle)
+                            switch (_provider.BlinkStyle)
                             {
                                 case ErrorBlinkStyle.NeverBlink:
                                     // always show icon
@@ -1163,7 +1164,7 @@ namespace System.Windows.Forms
                                     break;
 
                                 case ErrorBlinkStyle.AlwaysBlink:
-                                    showIcon = ((i & 1) == 0) == provider.showIcon;
+                                    showIcon = ((i & 1) == 0) == _provider._showIcon;
                                     break;
                             }
                         }
@@ -1175,7 +1176,7 @@ namespace System.Windows.Forms
                             iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
                         }
 
-                        if (tipWindow != null)
+                        if (_tipWindow != null)
                         {
                             NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
                             toolInfo.cbSize = Marshal.SizeOf(toolInfo);
@@ -1184,11 +1185,11 @@ namespace System.Windows.Forms
                             toolInfo.lpszText = item.Error;
                             toolInfo.rect = NativeMethods.RECT.FromXYWH(iconBounds.X, iconBounds.Y, iconBounds.Width, iconBounds.Height);
                             toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
-                            if (provider.RightToLeft)
+                            if (_provider.RightToLeft)
                             {
                                 toolInfo.uFlags |= NativeMethods.TTF_RTLREADING;
                             }
-                            UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_SETTOOLINFO, 0, toolInfo);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_SETTOOLINFO, 0, toolInfo);
                         }
 
                         if (timerCaused && item.BlinkPhase > 0)
@@ -1198,16 +1199,16 @@ namespace System.Windows.Forms
                     }
                     if (timerCaused)
                     {
-                        provider.showIcon = !provider.showIcon;
+                        _provider._showIcon = !_provider._showIcon;
                     }
 
                     DeviceContext dc = null;
                     dc = DeviceContext.FromHwnd(Handle);
                     try
                     {
-                        CreateMirrorDC(dc.Hdc, windowBounds.Width);
+                        CreateMirrorDC(dc.Hdc, _windowBounds.Width);
 
-                        Graphics graphics = Graphics.FromHdcInternal(mirrordc.Hdc);
+                        Graphics graphics = Graphics.FromHdcInternal(_mirrordc.Hdc);
                         try
                         {
                             windowRegionHandle = windowRegion.GetHrgn(graphics);
@@ -1243,8 +1244,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, windowBounds.X, windowBounds.Y,
-                                     windowBounds.Width, windowBounds.Height, NativeMethods.SWP_NOACTIVATE);
+                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, _windowBounds.X, _windowBounds.Y,
+                                     _windowBounds.Width, _windowBounds.Height, NativeMethods.SWP_NOACTIVATE);
                 SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, false);
             }
 
@@ -1280,13 +1281,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ControlItem
         {
-            private string error;
-            private readonly Control control;
-            private ErrorWindow window;
-            private readonly ErrorProvider provider;
-            private int iconPadding;
-            private ErrorIconAlignment iconAlignment;
-            private const int startingBlinkPhase = 10; // We want to blink 5 times
+            private string _error;
+            private readonly Control _control;
+            private ErrorWindow _window;
+            private readonly ErrorProvider _provider;
+            private int _iconPadding;
+            private ErrorIconAlignment _iconAlignment;
+            private const int _startingBlinkPhase = 10; // We want to blink 5 times
 
             /// <summary>
             /// Construct the item with its associated control, provider, and a unique ID. The ID is
@@ -1294,32 +1295,32 @@ namespace System.Windows.Forms
             /// </summary>
             public ControlItem(ErrorProvider provider, Control control, IntPtr id)
             {
-                iconAlignment = defaultIconAlignment;
-                error = string.Empty;
+                _iconAlignment = DefaultIconAlignment;
+                _error = string.Empty;
                 Id = id;
-                this.control = control;
-                this.provider = provider;
-                this.control.HandleCreated += new EventHandler(OnCreateHandle);
-                this.control.HandleDestroyed += new EventHandler(OnDestroyHandle);
-                this.control.LocationChanged += new EventHandler(OnBoundsChanged);
-                this.control.SizeChanged += new EventHandler(OnBoundsChanged);
-                this.control.VisibleChanged += new EventHandler(OnParentVisibleChanged);
-                this.control.ParentChanged += new EventHandler(OnParentVisibleChanged);
+                _control = control;
+                _provider = provider;
+                _control.HandleCreated += new EventHandler(OnCreateHandle);
+                _control.HandleDestroyed += new EventHandler(OnDestroyHandle);
+                _control.LocationChanged += new EventHandler(OnBoundsChanged);
+                _control.SizeChanged += new EventHandler(OnBoundsChanged);
+                _control.VisibleChanged += new EventHandler(OnParentVisibleChanged);
+                _control.ParentChanged += new EventHandler(OnParentVisibleChanged);
             }
 
             public void Dispose()
             {
-                if (control != null)
+                if (_control != null)
                 {
-                    control.HandleCreated -= new EventHandler(OnCreateHandle);
-                    control.HandleDestroyed -= new EventHandler(OnDestroyHandle);
-                    control.LocationChanged -= new EventHandler(OnBoundsChanged);
-                    control.SizeChanged -= new EventHandler(OnBoundsChanged);
-                    control.VisibleChanged -= new EventHandler(OnParentVisibleChanged);
-                    control.ParentChanged -= new EventHandler(OnParentVisibleChanged);
+                    _control.HandleCreated -= new EventHandler(OnCreateHandle);
+                    _control.HandleDestroyed -= new EventHandler(OnDestroyHandle);
+                    _control.LocationChanged -= new EventHandler(OnBoundsChanged);
+                    _control.SizeChanged -= new EventHandler(OnBoundsChanged);
+                    _control.VisibleChanged -= new EventHandler(OnParentVisibleChanged);
+                    _control.ParentChanged -= new EventHandler(OnParentVisibleChanged);
                 }
 
-                error = string.Empty;
+                _error = string.Empty;
             }
 
             /// <summary>
@@ -1342,15 +1343,15 @@ namespace System.Windows.Forms
             /// </summary>
             public int IconPadding
             {
-                get => iconPadding;
+                get => _iconPadding;
                 set
                 {
-                    if (iconPadding == value)
+                    if (_iconPadding == value)
                     {
                         return;
                     }
 
-                    iconPadding = value;
+                    _iconPadding = value;
                     UpdateWindow();
                 }
             }
@@ -1360,7 +1361,7 @@ namespace System.Windows.Forms
             /// </summary>
             public string Error
             {
-                get => error;
+                get => _error;
                 set
                 {
                     if (value == null)
@@ -1370,13 +1371,13 @@ namespace System.Windows.Forms
 
                     // If the error is the same and the blinkStyle is not AlwaysBlink, then
                     // we should not add the error and not start blinking.
-                    if (error.Equals(value) && provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
+                    if (_error.Equals(value) && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                     {
                         return;
                     }
 
-                    bool adding = error.Length == 0;
-                    error = value;
+                    bool adding = _error.Length == 0;
+                    _error = value;
                     if (value.Length == 0)
                     {
                         RemoveFromWindow();
@@ -1389,7 +1390,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (provider.BlinkStyle != ErrorBlinkStyle.NeverBlink)
+                            if (_provider.BlinkStyle != ErrorBlinkStyle.NeverBlink)
                             {
                                 StartBlinking();
                             }
@@ -1407,7 +1408,7 @@ namespace System.Windows.Forms
             /// </summary>
             public ErrorIconAlignment IconAlignment
             {
-                get => iconAlignment;
+                get => _iconAlignment;
                 set
                 {
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ErrorIconAlignment.TopLeft, (int)ErrorIconAlignment.BottomRight))
@@ -1415,12 +1416,12 @@ namespace System.Windows.Forms
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ErrorIconAlignment));
                     }
 
-                    if (iconAlignment == value)
+                    if (_iconAlignment == value)
                     {
                         return;
                     }
 
-                    iconAlignment = value;
+                    _iconAlignment = value;
                     UpdateWindow();
                 }
             }
@@ -1432,7 +1433,7 @@ namespace System.Windows.Forms
 
             internal ErrorIconAlignment RTLTranslateIconAlignment(ErrorIconAlignment align)
             {
-                if (provider.RightToLeft)
+                if (_provider.RightToLeft)
                 {
                     switch (align)
                     {
@@ -1473,12 +1474,12 @@ namespace System.Windows.Forms
                     case ErrorIconAlignment.TopLeft:
                     case ErrorIconAlignment.MiddleLeft:
                     case ErrorIconAlignment.BottomLeft:
-                        x = control.Left - size.Width - iconPadding;
+                        x = _control.Left - size.Width - _iconPadding;
                         break;
                     case ErrorIconAlignment.TopRight:
                     case ErrorIconAlignment.MiddleRight:
                     case ErrorIconAlignment.BottomRight:
-                        x = control.Right + iconPadding;
+                        x = _control.Right + _iconPadding;
                         break;
                 }
 
@@ -1486,15 +1487,15 @@ namespace System.Windows.Forms
                 {
                     case ErrorIconAlignment.TopLeft:
                     case ErrorIconAlignment.TopRight:
-                        y = control.Top;
+                        y = _control.Top;
                         break;
                     case ErrorIconAlignment.MiddleLeft:
                     case ErrorIconAlignment.MiddleRight:
-                        y = control.Top + (control.Height - size.Height) / 2;
+                        y = _control.Top + (_control.Height - size.Height) / 2;
                         break;
                     case ErrorIconAlignment.BottomLeft:
                     case ErrorIconAlignment.BottomRight:
-                        y = control.Bottom - size.Height;
+                        y = _control.Bottom - size.Height;
                         break;
                 }
 
@@ -1505,7 +1506,7 @@ namespace System.Windows.Forms
             /// If this control's error icon has been added to the error window, then update the
             /// window state because some property has changed.
             /// </summary>
-            private void UpdateWindow() => window?.Update(timerCaused: false);
+            private void UpdateWindow() => _window?.Update(timerCaused: false);
 
             /// <summary>
             /// If this control's error icon has been added to the error window, then start blinking
@@ -1513,10 +1514,10 @@ namespace System.Windows.Forms
             /// </summary>
             private void StartBlinking()
             {
-                if (window != null)
+                if (_window != null)
                 {
-                    BlinkPhase = startingBlinkPhase;
-                    window.StartBlinking();
+                    BlinkPhase = _startingBlinkPhase;
+                    _window.StartBlinking();
                 }
             }
 
@@ -1526,15 +1527,15 @@ namespace System.Windows.Forms
             private void AddToWindow()
             {
                 // if we are recreating the control, then add the control.
-                if (window == null &&
-                    (control.Created || control.RecreatingHandle) &&
-                    control.Visible && control.ParentInternal != null &&
-                    error.Length > 0)
+                if (_window == null &&
+                    (_control.Created || _control.RecreatingHandle) &&
+                    _control.Visible && _control.ParentInternal != null &&
+                    _error.Length > 0)
                 {
-                    window = provider.EnsureErrorWindow(control.ParentInternal);
-                    window.Add(this);
+                    _window = _provider.EnsureErrorWindow(_control.ParentInternal);
+                    _window.Add(this);
                     // Make sure that we blink if the style is set to AlwaysBlink or BlinkIfDifferrentError
-                    if (provider.BlinkStyle != ErrorBlinkStyle.NeverBlink)
+                    if (_provider.BlinkStyle != ErrorBlinkStyle.NeverBlink)
                     {
                         StartBlinking();
                     }
@@ -1546,10 +1547,10 @@ namespace System.Windows.Forms
             /// </summary>
             private void RemoveFromWindow()
             {
-                if (window != null)
+                if (_window != null)
                 {
-                    window.Remove(this);
-                    window = null;
+                    _window.Remove(this);
+                    _window = null;
                 }
             }
 
