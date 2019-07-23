@@ -35,23 +35,23 @@ namespace WinformsControlsTest
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             this.SuspendLayout();
-            // 
+            //
             // monthCalendar1
-            // 
+            //
             this.monthCalendar1.Location = new System.Drawing.Point(18, 18);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 0;
-            // 
+            //
             // currentDPILabel1
-            // 
+            //
             this.currentDPILabel1.Location = new System.Drawing.Point(18, 208);
             this.currentDPILabel1.Name = "currentDPILabel1";
             this.currentDPILabel1.Size = new System.Drawing.Size(227, 23);
             this.currentDPILabel1.TabIndex = 1;
             this.currentDPILabel1.Text = "currentDPILabel1";
-            // 
+            //
             // Calendar
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);

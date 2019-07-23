@@ -2,24 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.Drawing;
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Configuration;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Text;
-    using System.Text.RegularExpressions;
-
-    /// <summary> 
-    ///     A settings class used by the ToolStripManager to save toolstrip settings.
+    /// <summary>
+    ///  A settings class used by the ToolStripManager to save toolstrip settings.
     /// </summary>
     internal class ToolStripSettings : ApplicationSettingsBase
     {
-
         internal ToolStripSettings(string settingsKey) : base(settingsKey) { }
 
         [UserScopedSetting]
@@ -117,7 +114,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         public override void Save()
         {
             IsDefault = false;
@@ -125,9 +121,9 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <summary> 
-    ///     Helper class used by ToolStripManager that implements most of the logic to save out and apply
-    ///     settings for toolstrips on a form.
+    /// <summary>
+    ///  Helper class used by ToolStripManager that implements most of the logic to save out and apply
+    ///  settings for toolstrips on a form.
     /// </summary>
     internal class ToolStripSettingsManager
     {
@@ -205,7 +201,6 @@ namespace System.Windows.Forms
             }
 
             SuspendAllLayout(form);
-
 
             // iterate through all the toolstrips and build up a hash of where the items
             // are right now.
@@ -338,9 +333,6 @@ namespace System.Windows.Forms
             return itemLocationHash;
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")
-        ]
         private ArrayList FindControls(Type baseType, bool searchAllChildren, Control.ControlCollection controlsToLookIn, ArrayList foundControls)
         {
             if ((controlsToLookIn == null) || (foundControls == null))
@@ -437,8 +429,8 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> 
-        ///     Light weight structure that captures the properties we want to save as settings.
+        /// <summary>
+        ///  Light weight structure that captures the properties we want to save as settings.
         /// </summary>
         private struct SettingsStub
         {

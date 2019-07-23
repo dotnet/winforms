@@ -4,23 +4,16 @@
 
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-    using System;
-
     /// <summary>
-    ///    <para>
-    ///       Specifies the return value for HITTEST on treeview.
-    ///    </para>
+    ///  Specifies the return value for HITTEST on treeview.
     /// </summary>
     public class TreeViewHitTestInfo
     {
-
         private readonly TreeViewHitTestLocations loc;
         private readonly TreeNode node;
 
         /// <summary>
-        ///     Creates a TreeViewHitTestInfo instance.
+        ///  Creates a TreeViewHitTestInfo instance.
         /// </summary>
         public TreeViewHitTestInfo(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
         {
@@ -28,9 +21,8 @@ namespace System.Windows.Forms
             loc = hitLocation;
         }
 
-
         /// <summary>
-        ///     This gives the exact location returned by hit test on treeview.
+        ///  This gives the exact location returned by hit test on treeview.
         /// </summary>
         public TreeViewHitTestLocations Location
         {
@@ -41,7 +33,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This gives the node returned by hit test on treeview.
+        ///  This gives the node returned by hit test on treeview.
         /// </summary>
         public TreeNode Node
         {

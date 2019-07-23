@@ -2,14 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Drawing.Printing;
-using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
@@ -109,7 +103,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Name of the NativeHtmlWindow</para>
+        ///  Name of the NativeHtmlWindow
         /// </summary>
         public string Name
         {
@@ -150,7 +144,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets size for the window</para>
+        ///  Gets or sets size for the window
         /// </summary>
         public Size Size
         {
@@ -226,7 +220,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Moves the Window to the position requested</para>
+        ///  Moves the Window to the position requested
         /// </summary>
         public void MoveTo(int x, int y)
         {
@@ -234,7 +228,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Moves the Window to the point requested</para>
+        ///  Moves the Window to the point requested
         /// </summary>
         public void MoveTo(Point point)
         {
@@ -246,45 +240,40 @@ namespace System.Windows.Forms
             NativeHtmlWindow.Navigate(url.ToString());
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
-        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public void Navigate(string urlString)
         {
             NativeHtmlWindow.Navigate(urlString);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
-        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
         {
             UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
         {
             return Open(url.ToString(), target, windowOptions, replaceEntry);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
-        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public HtmlWindow OpenNew(string urlString, string windowOptions)
         {
             UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public HtmlWindow OpenNew(Uri url, string windowOptions)
         {
             return OpenNew(url.ToString(), windowOptions);
@@ -301,7 +290,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Resize the window to the width/height requested</para>
+        ///  Resize the window to the width/height requested
         /// </summary>
         public void ResizeTo(int width, int height)
         {
@@ -309,7 +298,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Resize the window to the Size requested</para>
+        ///  Resize the window to the Size requested
         /// </summary>
         public void ResizeTo(Size size)
         {
@@ -317,7 +306,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Scroll the window to the position requested</para>
+        ///  Scroll the window to the position requested
         /// </summary>
         public void ScrollTo(int x, int y)
         {
@@ -325,7 +314,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Scroll the window to the point requested</para>
+        ///  Scroll the window to the point requested
         /// </summary>
         public void ScrollTo(Point point)
         {
@@ -377,9 +366,6 @@ namespace System.Windows.Forms
             add => WindowShim.AddHandler(EventUnload, value);
             remove => WindowShim.RemoveHandler(EventUnload, value);
         }
-
-
-
 
         //
         // Private classes:
@@ -463,20 +449,18 @@ namespace System.Windows.Forms
             public void onafterprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
         }
 
-
-
         ///<summary>
         /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
-        ///                  and our CLR callbacks.  
-        ///             
-        ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
-        ///     HTMLWindowEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-        ///                        on an instance of HTMLWindowEvents2.  The HTMLWindowEvents2 class then fires the event.
+        ///        and our CLR callbacks.
         ///
-        ///     IHTMLWindow3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
-        ///                                 for a method named DISPID=0.  For each event that's subscribed, we create 
-        ///                                 a new HtmlToClrEventProxy, detect the callback and fire the corresponding
-        ///                                 CLR event.
+        ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
+        ///  HTMLWindowEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
+        ///              on an instance of HTMLWindowEvents2.  The HTMLWindowEvents2 class then fires the event.
+        ///
+        ///  IHTMLWindow3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
+        ///                       for a method named DISPID=0.  For each event that's subscribed, we create
+        ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
+        ///                       CLR event.
         ///</summary>
         internal class HtmlWindowShim : HtmlShim
         {
@@ -499,11 +483,11 @@ namespace System.Windows.Forms
             }
 
             /// Support IHtmlDocument3.AttachHandler
-            public override void AttachEventHandler(string eventName, System.EventHandler eventHandler)
+            public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event, 
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on 
+                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
+                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
@@ -528,7 +512,7 @@ namespace System.Windows.Forms
             }
 
             /// Support IHTMLWindow3.DetachHandler
-            public override void DetachEventHandler(string eventName, System.EventHandler eventHandler)
+            public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
                 if (proxy != null)
@@ -575,7 +559,6 @@ namespace System.Windows.Forms
 
         #region operators
 
-        [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlWindow left, HtmlWindow right)
         {
             //Not equal if only one's null.
@@ -617,10 +600,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode()
-        {
-            return htmlWindow2 == null ? 0 : htmlWindow2.GetHashCode();
-        }
+        public override int GetHashCode() => htmlWindow2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

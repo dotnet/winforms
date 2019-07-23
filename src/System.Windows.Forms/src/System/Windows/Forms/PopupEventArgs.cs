@@ -24,12 +24,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The Associated Window for which the tooltip is being painted. 
+        /// The Associated Window for which the tooltip is being painted.
         /// </summary>
         public IWin32Window AssociatedWindow { get; }
 
         /// <summary>
-        /// The control for which the tooltip is being painted. 
+        /// The control for which the tooltip is being painted.
         /// </summary>
         public Control AssociatedControl { get; }
 
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         public Size ToolTipSize { get; set; }
 
         /// <summary>
-        /// Whether the tooltip is Ballooned. 
+        /// Whether the tooltip is Ballooned.
         /// </summary>
         public bool IsBalloon { get; }
     }

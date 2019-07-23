@@ -39,7 +39,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets a value indicating whether the 
+        /// Gets a value indicating whether the
         /// <see cref='System.Drawing.Design.ToolboxItemCollection'/> contains the specified <see cref='System.Drawing.Design.ToolboxItem'/>.
         /// </summary>
         public bool Contains(ToolboxItem value)
@@ -49,7 +49,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         /// Copies the <see cref='System.Drawing.Design.ToolboxItemCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the
-        ///    specified index.
+        ///  specified index.
         /// </summary>
         public void CopyTo(ToolboxItem[] array, int index)
         {

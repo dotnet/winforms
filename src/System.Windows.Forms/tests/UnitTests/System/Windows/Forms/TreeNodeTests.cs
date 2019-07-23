@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, treeNode.StateImageIndex);
             Assert.Empty(treeNode.StateImageKey);
             Assert.Null(treeNode.Tag);
-            Assert.Same(expectedText, treeNode.Text);
+            Assert.Equal(expectedText, treeNode.Text);
             Assert.Empty(treeNode.ToolTipText);
             Assert.Null(treeNode.TreeView);
         }
@@ -267,11 +267,11 @@ namespace System.Windows.Forms.Tests
                 Checked = value
             };
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);
@@ -287,11 +287,11 @@ namespace System.Windows.Forms.Tests
 
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);
@@ -308,11 +308,11 @@ namespace System.Windows.Forms.Tests
 
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);
@@ -330,11 +330,11 @@ namespace System.Windows.Forms.Tests
 
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set same
             treeNode.Checked = value;
             Assert.Equal(value, treeNode.Checked);
-            
+
             // Set different
             treeNode.Checked = !value;
             Assert.Equal(!value, treeNode.Checked);

@@ -8,12 +8,12 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanging'/> event.
+    /// Provides data for the <see cref='Form.InputLanguageChanging'/> event.
     /// </summary>
     public class InputLanguageChangingEventArgs : CancelEventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangingEventArgs'/> class with the
+        /// Initializes a new instance of the <see cref='InputLanguageChangingEventArgs'/> class with the
         /// specified locale, character set, and acceptance.
         /// </summary>
         public InputLanguageChangingEventArgs(CultureInfo culture, bool sysCharSet)
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangingEventArgs'/> class with the
+        /// Initializes a new instance of the <see cref='InputLanguageChangingEventArgs'/> class with the
         /// specified input language, character set, and acceptance of a language change.
         /// </summary>
         public InputLanguageChangingEventArgs(InputLanguage inputLanguage, bool sysCharSet)

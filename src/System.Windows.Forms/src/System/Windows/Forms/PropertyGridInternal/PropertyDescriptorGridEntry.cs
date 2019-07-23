@@ -2,26 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using Microsoft.Win32;
-    using System.Globalization;
-
-
     internal class PropertyDescriptorGridEntry : GridEntry
     {
         internal PropertyDescriptor propertyInfo;
@@ -44,7 +35,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         private static int scaledImageSizeY = IMAGE_SIZE;
         private static bool isScalingInitialized = false;
 
-
         private const int IMAGE_SIZE = 8;
         private const byte ParensAroundNameUnknown = (byte)0xFF;
         private const byte ParensAroundNameNo = (byte)0;
@@ -54,28 +44,18 @@ namespace System.Windows.Forms.PropertyGridInternal
         static IComponent targetComponent;
         static EventDescriptor targetEventdesc;
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
-                                                                                                    // control over who does what in the constructor.
-        ]
         internal PropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, bool hide)
         : base(ownerGrid, peParent)
         {
             activeXHide = hide;
         }
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
-                                                                                                    // control over who does what in the constructor.
-        ]
         internal PropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyDescriptor propInfo, bool hide)
         : base(ownerGrid, peParent)
         {
-
             activeXHide = hide;
             Initialize(propInfo);
         }
-
 
         /// <summary>
         /// specify that this grid entry should be allowed to be merged for.
@@ -99,8 +79,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Retrieves the keyword that the VS help dynamic help window will
-        ///     use when this IPE is selected.
+        ///  Retrieves the keyword that the VS help dynamic help window will
+        ///  use when this IPE is selected.
         /// </summary>
         public override string HelpKeyword
         {
@@ -155,7 +135,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         else
                         {
 
-                            // make sure this property is declared on a class that 
+                            // make sure this property is declared on a class that
                             // is related to the component we're looking at.
                             // if it's not, it could be a shadow property so we need
                             // to try to find the real property.
@@ -181,11 +161,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             else
                             {
 
-                                // 
-
-
-
-
+                                //
 
                                 //if (helpAttribute != null && !helpAttribute.IsDefaultAttribute()) {
                                 //    typeName = helpAttribute.HelpKeyword;
@@ -225,7 +201,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.Enumerable && !IsPropertyReadOnly;
             }
         }
-
 
         internal virtual bool IsPropertyReadOnly
         {
@@ -270,7 +245,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         public override string PropertyCategory
         {
             get
@@ -285,7 +259,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      Retrieves the PropertyDescriptor that is surfacing the given object/
+        ///  Retrieves the PropertyDescriptor that is surfacing the given object/
         /// </summary>
         public override PropertyDescriptor PropertyDescriptor
         {
@@ -294,7 +268,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return propertyInfo;
             }
         }
-
 
         public override string PropertyDescription
         {
@@ -332,8 +305,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
-
         public override Type PropertyType
         {
             get
@@ -341,7 +312,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return propertyInfo.PropertyType;
             }
         }
-
 
         /// <summary>
         /// Gets or sets the value for the property that is represented
@@ -467,12 +437,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return exceptionEditor;
                 }
 
-                editor = (UITypeEditor)propertyInfo.GetEditor(typeof(System.Drawing.Design.UITypeEditor));
+                editor = (UITypeEditor)propertyInfo.GetEditor(typeof(UITypeEditor));
 
                 return base.UITypeEditor;
             }
         }
-
 
         /// <summary>
         /// Invokes the type editor for editing this item.
@@ -490,7 +459,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
         }
-
 
         internal override Point GetLabelToolTipLocation(int mouseX, int mouseY)
         {
@@ -536,7 +504,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             isSerializeContentsProp = (propertyInfo.SerializationVisibility == DesignerSerializationVisibility.Content);
 
-
             Debug.Assert(propInfo != null, "Can't create propEntry because of null prop info");
 
             if (!activeXHide && IsPropertyReadOnly)
@@ -561,7 +528,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // find the next parent property with a differnet value owner
                 object owner = ge.GetValueOwner();
 
-                // when owner is an instance of a value type, 
+                // when owner is an instance of a value type,
                 // we can't just use == in the following while condition testing
                 bool isValueType = owner.GetType().IsValueType;
 
@@ -682,7 +649,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             NotifyParentChange(this);
         }
 
-
         public override bool OnMouseClick(int x, int y, int count, MouseButtons button)
         {
             if (pvUIItems != null && count == 2 && ((button & MouseButtons.Left) == MouseButtons.Left))
@@ -699,7 +665,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return base.OnMouseClick(x, y, count, button);
         }
 
-        public override void PaintLabel(System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+        public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
             base.PaintLabel(g, rect, clipRect, selected, paintFullLabel);
 
@@ -738,8 +704,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
-
         private object SetPropertyValue(object obj, object objVal, bool reset, string undoText)
         {
             DesignerTransaction trans = null;
@@ -756,7 +720,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ClearCachedValues();
 
                 IDesignerHost host = DesignerHost;
-
 
                 if (host != null)
                 {
@@ -790,7 +753,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                 }
-
 
                 bool wasExpanded = InternalExpanded;
                 int childCount = -1;
@@ -927,7 +889,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected void SetPropertyValueCore(object obj, object value, bool doUndo)
         {
-
             if (propertyInfo == null)
             {
                 return;
@@ -989,11 +950,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Navigates code to the given event.
+        ///  Navigates code to the given event.
         /// </summary>
         protected bool ViewEvent(object obj, string newHandler, EventDescriptor eventdesc, bool alwaysNavigate)
         {
-
             object value = GetPropertyValueCore(obj);
 
             string handler = value as string;
@@ -1078,7 +1038,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     newHandler = eventBindings.CreateUniqueMethodName(component, eventdesc);
                 }
 
-
                 if (newHandler != null)
                 {
 
@@ -1152,8 +1111,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Displays the user code for the given event.  This will return true if the user
-        ///     code could be displayed, or false otherwise.
+        ///  Displays the user code for the given event.  This will return true if the user
+        ///  code could be displayed, or false otherwise.
         /// </summary>
         static private void ShowCodeIdle(object sender, EventArgs e)
         {
@@ -1169,7 +1128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         /// Creates a new AccessibleObject for this PropertyDescriptorGridEntry instance.
-        /// The AccessibleObject instance returned by this method supports IsEnabled UIA property. 
+        /// The AccessibleObject instance returned by this method supports IsEnabled UIA property.
         /// </summary>
         /// <returns>
         /// AccessibleObject for this PropertyDescriptorGridEntry instance.
@@ -1182,7 +1141,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         [ComVisible(true)]
         protected class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject
         {
-
             private readonly PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;
 
             public PropertyDescriptorGridEntryAccessibleObject(PropertyDescriptorGridEntry owner) : base(owner)
@@ -1295,17 +1253,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      The exception converter is a type converter that displays an exception to the user.
+        ///  The exception converter is a type converter that displays an exception to the user.
         /// </summary>
         private class ExceptionConverter : TypeConverter
         {
-
             /// <summary>
-            ///      Converts the given object to another type.  The most common types to convert
-            ///      are to and from a string object.  The default implementation will make a call
-            ///      to ToString on the object if the object is valid and if the destination
-            ///      type is string.  If this cannot convert to the desitnation type, this will
-            ///      throw a NotSupportedException.
+            ///  Converts the given object to another type.  The most common types to convert
+            ///  are to and from a string object.  The default implementation will make a call
+            ///  to ToString on the object if the object is valid and if the destination
+            ///  type is string.  If this cannot convert to the desitnation type, this will
+            ///  throw a NotSupportedException.
             /// </summary>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
             {
@@ -1326,15 +1283,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///      The exception editor displays a message to the user.
+        ///  The exception editor displays a message to the user.
         /// </summary>
         private class ExceptionEditor : UITypeEditor
         {
-
             /// <summary>
-            ///      Edits the given object value using the editor style provided by
-            ///      GetEditorStyle.  A service provider is provided so that any
-            ///      required editing services can be obtained.
+            ///  Edits the given object value using the editor style provided by
+            ///  GetEditorStyle.  A service provider is provided so that any
+            ///  required editing services can be obtained.
             /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
@@ -1367,8 +1323,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///      Retrieves the editing style of the Edit method.  If the method
-            ///      is not supported, this will return None.
+            ///  Retrieves the editing style of the Edit method.  If the method
+            ///  is not supported, this will return None.
             /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
             {

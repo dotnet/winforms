@@ -9,7 +9,7 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and SelectionService to update the StatusBar Information.  
+    /// This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and SelectionService to update the StatusBar Information.
     /// </summary>
     internal class StatusCommandUI
     {

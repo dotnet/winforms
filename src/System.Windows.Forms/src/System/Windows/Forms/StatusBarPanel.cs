@@ -2,26 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>
-    ///       Stores the <see cref='System.Windows.Forms.StatusBar'/>
-    ///       control panel's information.
-    ///    </para>
+    ///  Stores the <see cref='StatusBar'/>
+    ///  control panel's information.
     /// </summary>
     [
     ToolboxItem(false),
@@ -30,7 +19,6 @@ namespace System.Windows.Forms
     ]
     public class StatusBarPanel : Component, ISupportInitialize
     {
-
         private const int DEFAULTWIDTH = 100;
         private const int DEFAULTMINWIDTH = 10;
         private const int PANELTEXTINSET = 3;
@@ -42,7 +30,7 @@ namespace System.Windows.Forms
         private Icon icon = null;
 
         private HorizontalAlignment alignment = HorizontalAlignment.Left;
-        private System.Windows.Forms.StatusBarPanelBorderStyle borderStyle = System.Windows.Forms.StatusBarPanelBorderStyle.Sunken;
+        private StatusBarPanelBorderStyle borderStyle = System.Windows.Forms.StatusBarPanelBorderStyle.Sunken;
         private StatusBarPanelStyle style = StatusBarPanelStyle.Text;
 
         // these are package scope so the parent can get at them.
@@ -59,20 +47,15 @@ namespace System.Windows.Forms
         private object userData;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
-        ///    </para>
+        ///  Initializes a new default instance of the <see cref='StatusBarPanel'/> class.
         /// </summary>
         public StatusBarPanel()
         {
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Alignment'/>
-        ///       property.
-        ///
-        ///    </para>
+        ///  Gets or sets the <see cref='Alignment'/>
+        ///  property.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -103,11 +86,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.AutoSize'/>
-        ///       property.
-        ///
-        ///    </para>
+        ///  Gets or sets the <see cref='AutoSize'/>
+        ///  property.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -137,14 +117,10 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.BorderStyle'/>
+        ///  Gets or sets the <see cref='BorderStyle'/>
         ///
-        ///       property.
-        ///
-        ///    </para>
+        ///  property.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -178,8 +154,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal bool Created
         {
             get
@@ -189,11 +163,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Icon'/>
-        ///       property.
-        ///
-        ///    </para>
+        ///  Gets or sets the <see cref='Icon'/>
+        ///  property.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -203,13 +174,11 @@ namespace System.Windows.Forms
         ]
         public Icon Icon
         {
-
             get
             {
                 // unfortunately we have no way of getting the icon from the control.
                 return icon;
             }
-
 
             set
             {
@@ -238,9 +207,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Expose index internally
-        ///    </para>
+        ///  Expose index internally
         /// </summary>
         internal int Index
         {
@@ -254,11 +221,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the minimum width the <see cref='System.Windows.Forms.StatusBarPanel'/> can be within the <see cref='System.Windows.Forms.StatusBar'/>
-        ///       control.
-        ///
-        ///    </para>
+        ///  Gets or sets the minimum width the <see cref='StatusBarPanel'/> can be within the <see cref='StatusBar'/>
+        ///  control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -294,9 +258,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the name of the panel.
-        ///    </para>
+        ///  Gets or sets the name of the panel.
         /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
@@ -320,12 +282,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Represents the <see cref='System.Windows.Forms.StatusBar'/>
-        ///       control which hosts the
-        ///       panel.
-        ///
-        ///    </para>
+        ///  Represents the <see cref='StatusBar'/>
+        ///  control which hosts the
+        ///  panel.
         /// </summary>
         [Browsable(false)]
         public StatusBar Parent
@@ -337,9 +296,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Expose a direct setter for parent internally
-        ///    </para>
+        ///  Expose a direct setter for parent internally
         /// </summary>
         internal StatusBar ParentInternal
         {
@@ -350,9 +307,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Expose right internally
-        ///    </para>
+        ///  Expose right internally
         /// </summary>
         internal int Right
         {
@@ -367,10 +322,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the style of the panel.
-        ///
-        ///    </para>
+        ///  Gets or sets the style of the panel.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -420,9 +372,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the text of the panel.
-        ///    </para>
+        ///  Gets or sets the text of the panel.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -468,10 +418,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets
-        ///       or sets the panel's tool tip text.
-        ///    </para>
+        ///  Gets
+        ///  or sets the panel's tool tip text.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -520,11 +468,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the width of the <see cref='System.Windows.Forms.StatusBarPanel'/> within the <see cref='System.Windows.Forms.StatusBar'/>
-        ///       control.
-        ///
-        ///    </para>
+        ///  Gets or sets the width of the <see cref='StatusBarPanel'/> within the <see cref='StatusBar'/>
+        ///  control.
         /// </summary>
         [
         Localizable(true),
@@ -551,15 +496,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Handles tasks required when the control is being initialized.
+        ///  Handles tasks required when the control is being initialized.
         /// </summary>
         public void BeginInit()
         {
             initializing = true;
         }
 
-        /// <summary>
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -577,7 +520,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called when initialization of the control is complete.
+        ///  Called when initialization of the control is complete.
         /// </summary>
         public void EndInit()
         {
@@ -590,7 +533,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gets the width of the contents of the panel
+        ///  Gets the width of the contents of the panel
         /// </summary>
         internal int GetContentsWidth(bool newPanel)
         {
@@ -624,8 +567,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the index of the panel by making the parent control search
-        ///     for it within its list.
+        ///  Returns the index of the panel by making the parent control search
+        ///  for it within its list.
         /// </summary>
         private int GetIndex()
         {
@@ -633,7 +576,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets all the properties for this panel.
+        ///  Sets all the properties for this panel.
         /// </summary>
         internal void Realize()
         {
@@ -699,7 +642,6 @@ namespace System.Windows.Forms
                         border |= NativeMethods.SBT_OWNERDRAW;
                         break;
                 }
-
 
                 int wparam = GetIndex() | border;
                 if (parent.RightToLeft == RightToLeft.Yes)
@@ -771,10 +713,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Retrieves a string that contains information about the
-        ///       panel.
-        ///    </para>
+        ///  Retrieves a string that contains information about the
+        ///  panel.
         /// </summary>
         public override string ToString()
         {

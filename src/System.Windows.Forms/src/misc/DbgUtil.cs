@@ -2,25 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Globalization;
 
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
-[assembly: SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops", Scope = "member", Target = "System.Windows.Forms.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
-
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Internal
-#endif
 {
     /// <summary>
     /// Debug help utility.
@@ -48,9 +36,8 @@ namespace System.Internal
 
         // Methods
 
-
         /// <summary>
-        ///   Call this method from your Dispose(bool) to assert that unmanaged resources has been explicitly disposed.
+        ///  Call this method from your Dispose(bool) to assert that unmanaged resources has been explicitly disposed.
         /// </summary>
         [Conditional("DEBUG")] // This code will be compiled into the assembly anyways, it is up to the compiler to ignore the call.
         public static void AssertFinalization(object obj, bool disposing)
@@ -61,26 +48,26 @@ namespace System.Internal
                 return;
             }
 
-            try 
+            try
             {
                 BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Static | BindingFlags.Instance;
                 FieldInfo allocSiteFld = obj.GetType().GetField("AllocationSite", bindingFlags);
                 string allocationSite = allocSiteFld != null ? allocSiteFld.GetValue( obj ).ToString() : "<Allocation site unavailable>";
-                
+
                 // ignore ojects created by WindowsGraphicsCacheManager.
                 if( allocationSite.Contains("WindowsGraphicsCacheManager") )
                 {
                     return;
                 }
-    
+
                 Debug.Fail("Object Disposed through finalization - it should be explicitly disposed.");
-                Debug.WriteLine("Allocation stack:\r\n" + allocationSite); 
-            } 
+                Debug.WriteLine("Allocation stack:\r\n" + allocationSite);
+            }
             catch(Exception ex)
             {
                 try
                 {
-                    Debug.WriteLine("Exception thrown while trying to get allocation stack: " + ex); 
+                    Debug.WriteLine("Exception thrown while trying to get allocation stack: " + ex);
                 }
                 catch
                 {
@@ -89,8 +76,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string message)
         {
@@ -102,8 +87,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1)
         {
@@ -116,8 +99,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2)
         {
@@ -130,8 +111,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2, object arg3)
         {
@@ -144,8 +123,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2, object arg3, object arg4)
         {
@@ -158,8 +135,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2, object arg3, object arg4, object arg5)
         {
@@ -172,8 +147,6 @@ namespace System.Internal
 #endif
         }
 
-        /// <summary>
-        /// </summary>
         [Conditional("DEBUG")] // This code will be compiled into the assembly anyways, it is up to the compiler to ignore the call.
         private static void AssertWin32Impl(bool expression, string format, object[] args)
         {
@@ -189,16 +162,15 @@ namespace System.Internal
         //
         // WARNING: Your PInvoke function needs to have the DllImport.SetLastError=true for this method
         // to work properly.  From the MSDN:
-        // GetLastWin32Error exposes the Win32 GetLastError API method from Kernel32.DLL. This method exists 
-        // because it is not safe to make a direct platform invoke call to GetLastError to obtain this information. 
-        // If you want to access this error code, you must call GetLastWin32Error rather than writing your own 
-        // platform invoke definition for GetLastError and calling it. The common language runtime can make 
+        // GetLastWin32Error exposes the Win32 GetLastError API method from Kernel32.DLL. This method exists
+        // because it is not safe to make a direct platform invoke call to GetLastError to obtain this information.
+        // If you want to access this error code, you must call GetLastWin32Error rather than writing your own
+        // platform invoke definition for GetLastError and calling it. The common language runtime can make
         // internal calls to APIs that overwrite the operating system maintained GetLastError.
         //
         // You can only use this method to obtain error codes if you apply the System.Runtime.InteropServices.DllImportAttribute
         // to the method signature and set the SetLastError field to true.
-        //              
-        [SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke")]
+        //
         public static string GetLastErrorStr()
         {
             int MAX_SIZE = 255;
@@ -234,8 +206,8 @@ namespace System.Internal
         }
 
         /// <summary>
-        ///   Duplicated here from ClientUtils not to depend on that code because this class is to be
-        ///   compiled into System.Drawing and System.Windows.Forms.
+        ///  Duplicated here from ClientUtils not to depend on that code because this class is to be
+        ///  compiled into System.Drawing and System.Windows.Forms.
         /// </summary>
         private static bool IsCriticalException(Exception ex)
         {
@@ -243,12 +215,12 @@ namespace System.Internal
                 //ex is NullReferenceException ||
                 ex is StackOverflowException ||
                 ex is OutOfMemoryException ||
-                ex is System.Threading.ThreadAbortException;
+                ex is Threading.ThreadAbortException;
         }
 
         /// <summary>
-        ///   Returns information about the top stack frames in a string format.  The input param determines the number of
-        ///   frames to include.
+        ///  Returns information about the top stack frames in a string format.  The input param determines the number of
+        ///  frames to include.
         /// </summary>
         public static string StackFramesToStr(int maxFrameCount)
         {
@@ -334,8 +306,8 @@ namespace System.Internal
         }
 
         /// <summary>
-        ///   Returns information about the top stack frames in a string format.  The input param determines the number of
-        ///   frames to include.  The 'message' parameter is used as the header of the returned string.
+        ///  Returns information about the top stack frames in a string format.  The input param determines the number of
+        ///  frames to include.  The 'message' parameter is used as the header of the returned string.
         /// </summary>
         public static string StackTraceToStr(string message, int frameCount)
         {
@@ -343,7 +315,7 @@ namespace System.Internal
         }
 
         /// <summary>
-        ///   Returns information about the top stack frames in a string format. The 'message' parameter is used as the header of the returned string.
+        ///  Returns information about the top stack frames in a string format. The 'message' parameter is used as the header of the returned string.
         /// </summary>
         public static string StackTraceToStr(string message)
         {

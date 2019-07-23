@@ -74,7 +74,6 @@ namespace System.Windows.Forms.Design
             return (parentDesigner is ToolStripDesigner);
         }
 
-
         /// <summary>
         /// Designer Custom ContextMenu.
         /// </summary>
@@ -122,7 +121,6 @@ namespace System.Windows.Forms.Design
             get => _editorNode;
             set => _editorNode = value;
         }
-
 
         // ToolStripItems if Inherited ACT as Readonly.
         protected override InheritanceAttribute InheritanceAttribute
@@ -322,8 +320,6 @@ namespace System.Windows.Forms.Design
         /// This is called by the TemplateNode to Commit the Edit. This Function Simply changes the "Text and Image" property of the  current ToolStripItem.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         internal virtual void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
         {
             ToolStripItem newItem = null;
@@ -723,8 +719,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// This will morph the current item to the provided type "t" of the item...
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         internal virtual ToolStripItem MorphCurrentItem(Type t)
         {
             ToolStripItem newItem = null;
@@ -805,7 +799,7 @@ namespace System.Windows.Forms.Design
                     FireComponentChanging(dropDownItem);
                     parent.Items.Remove(ToolStripItem);
                     host.DestroyComponent(ToolStripItem);
-                    //Create our new Item                                   
+                    //Create our new Item
                     ToolStripItem component = (ToolStripItem)host.CreateComponent(t, name);
                     //Since destroying the original item took away its DropDownItems. We need to Deserialize the items again...
                     if (component is ToolStripDropDownItem)
@@ -1109,7 +1103,6 @@ namespace System.Windows.Forms.Design
             host.DestroyComponent(ToolStripItem);
         }
 
-
         // <summary>
         // Resets the ToolStripItemAutoSize to be the default autosize
         // <summary/>
@@ -1196,7 +1189,6 @@ namespace System.Windows.Forms.Design
                 }
             }
         }
-
 
         // Sets the Item visibility to honor WYSIWYG
         internal void SetItemVisible(bool toolStripSelected, ToolStripDesigner designer)

@@ -2,22 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.Serialization;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Globalization;
-    using System.Windows.Forms.Layout;
-    using System.Reflection;
-    using System.Runtime.Serialization;
-
     /// <summary>this is a wrapper class to expose interesting properties of TableLayout</summary>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
@@ -25,8 +19,6 @@ namespace System.Windows.Forms
     ]
     public sealed class TableLayoutSettings : LayoutSettings, ISerializable
     {
-
-
         private static readonly int[] borderStyleToOffset = {
             /*None = */ 0,
             /*Single = */ 1,
@@ -47,7 +39,6 @@ namespace System.Windows.Forms
 
         internal TableLayoutSettings(IArrangedElement owner) : base(owner) { }
 
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         internal TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
@@ -71,7 +62,6 @@ namespace System.Windows.Forms
         {
             get { return (TableLayout)LayoutEngine; }
         }
-
 
         /// <summary> internal as this is a TableLayoutPanel feature only </summary>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
@@ -199,9 +189,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
-        ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
-        ///       when the TableLayoutPanel is over-filled.
+        ///  Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
+        ///  become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
+        ///  when the TableLayoutPanel is over-filled.
         /// </summary>
         [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -260,7 +250,7 @@ namespace System.Windows.Forms
 
         }
 
-        #region Extended Properties   
+        #region Extended Properties
 
         public int GetColumnSpan(object control)
         {
@@ -382,7 +372,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Set the row position of the element
-        /// If we set the row position to -1, it will automatically switch the control from 
+        /// If we set the row position to -1, it will automatically switch the control from
         /// absolutely positioned to non-absolutely positioned
         /// </summary>
         public void SetRow(object control, int row)
@@ -458,7 +448,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Set the column position of the element
-        /// If we set the column position to -1, it will automatically switch the control from 
+        /// If we set the column position to -1, it will automatically switch the control from
         /// absolutely positioned to non-absolutely positioned
         /// </summary>
         public void SetColumn(object control, int column)
@@ -598,12 +588,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> TableLayoutSettingsStub 
-        ///               contains information about 
+        /// <summary> TableLayoutSettingsStub
+        ///     contains information about
         /// </summary>
         private class TableLayoutSettingsStub
         {
-
             private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1);
             private TableLayoutColumnStyleCollection columnStyles;
             private TableLayoutRowStyleCollection rowStyles;
@@ -615,11 +604,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary> ApplySettings - applies settings from the stub into a full-fledged
-            ///          TableLayoutSettings.
+            ///  TableLayoutSettings.
             ///
-            ///          NOTE: this is a one-time only operation - there is data loss to the stub
-            ///          as a result of calling this function. we hand as much over to the other guy
-            ///          so we dont have to reallocate anything
+            ///  NOTE: this is a one-time only operation - there is data loss to the stub
+            ///  as a result of calling this function. we hand as much over to the other guy
+            ///  so we dont have to reallocate anything
             /// </summary>
             internal void ApplySettings(TableLayoutSettings settings)
             {
@@ -630,7 +619,7 @@ namespace System.Windows.Forms
                 if (containerInfo.Container is Control appliedControl && controlsInfo != null)
                 {
 
-                    // we store the control names, look up the controls 
+                    // we store the control names, look up the controls
                     // in the appliedControl's control collection and apply the row,column settings.
                     foreach (object controlName in controlsInfo.Keys)
                     {
@@ -665,7 +654,7 @@ namespace System.Windows.Forms
 
                 //
                 // assign over the row and column styles
-                // 
+                //
                 containerInfo.RowStyles = rowStyles;
                 containerInfo.ColumnStyles = columnStyles;
 
@@ -677,8 +666,6 @@ namespace System.Windows.Forms
                 isValid = false;
 
             }
-
-
 
             public TableLayoutColumnStyleCollection ColumnStyles
             {
@@ -806,7 +793,6 @@ namespace System.Windows.Forms
                 }
             }
 
-
         } // end of System.Windows.Forms.TableLayoutSettings
 
         internal class StyleConverter : TypeConverter
@@ -853,23 +839,18 @@ namespace System.Windows.Forms
 
     public class ColumnStyle : TableLayoutStyle
     {
-
-
         public ColumnStyle() { }
-
 
         public ColumnStyle(SizeType sizeType)
         {
             SizeType = sizeType;
         }
 
-
         public ColumnStyle(SizeType sizeType, float width)
         {
             SizeType = sizeType;
             Width = width;
         }
-
 
         public float Width
         {
@@ -878,11 +859,8 @@ namespace System.Windows.Forms
         }
     }
 
-
     public class RowStyle : TableLayoutStyle
     {
-
-
         public RowStyle() { }
 
         public RowStyle(SizeType sizeType)
@@ -890,13 +868,11 @@ namespace System.Windows.Forms
             SizeType = sizeType;
         }
 
-
         public RowStyle(SizeType sizeType, float height)
         {
             SizeType = sizeType;
             Height = height;
         }
-
 
         public float Height
         {

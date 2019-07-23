@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.Internal;
 
 namespace System.Windows.Forms
@@ -15,8 +14,6 @@ namespace System.Windows.Forms
     /// Additionally, TextFormatFlags has some extra values.
     /// </summary>
     [Flags]
-    [SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "PM team has reviewed and decided on naming changes already")]
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum TextFormatFlags
     {
         Bottom = IntTextFormatFlags.Bottom,
@@ -47,7 +44,6 @@ namespace System.Windows.Forms
         Top = IntTextFormatFlags.Top, // default
         VerticalCenter = IntTextFormatFlags.VerticalCenter,
 
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Justification = "Not a compound word")]
         WordBreak = IntTextFormatFlags.WordBreak,
         WordEllipsis = IntTextFormatFlags.WordEllipsis,
 

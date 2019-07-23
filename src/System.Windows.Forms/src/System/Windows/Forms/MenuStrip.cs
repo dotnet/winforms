@@ -2,30 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Layout;
-
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionMenuStrip))
     ]
     public class MenuStrip : ToolStrip
     {
-
-
         private ToolStripMenuItem mdiWindowListItem = null;
 
         private static readonly object EventMenuActivate = new object();
         private static readonly object EventMenuDeactivate = new object();
-
-
 
         public MenuStrip()
         {
@@ -56,7 +49,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [
         DefaultValue(false),
         SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
@@ -68,10 +60,10 @@ namespace System.Windows.Forms
             get => base.CanOverflow;
             set => base.CanOverflow = value;
         }
-        protected override bool DefaultShowItemToolTips 
+        protected override bool DefaultShowItemToolTips
             => false;
 
-        protected override Padding DefaultGripMargin 
+        protected override Padding DefaultGripMargin
             =>
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Ensure grip aligns properly when set visible.
@@ -80,7 +72,7 @@ namespace System.Windows.Forms
                        new Padding(2, 2, 0, 2);
 
         /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
-        protected override Size DefaultSize 
+        protected override Size DefaultSize
             => DpiHelper.IsPerMonitorV2Awareness ?
                DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
                new Size(200, 24);
@@ -146,14 +138,14 @@ namespace System.Windows.Forms
         [MergableProperty(false)]
         [SRDescription(nameof(SR.MenuStripMdiWindowListItem))]
         [SRCategory(nameof(SR.CatBehavior))]
-        [TypeConverterAttribute(typeof(MdiWindowListItemConverter))]
+        [TypeConverter(typeof(MdiWindowListItemConverter))]
         public ToolStripMenuItem MdiWindowListItem
         {
             get => mdiWindowListItem;
             set => mdiWindowListItem = value;
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance() 
+        protected override AccessibleObject CreateAccessibilityInstance()
             => new MenuStripAccessibleObject(this);
 
         protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
@@ -252,7 +244,6 @@ namespace System.Windows.Forms
         /// <param name=m></param>
         protected override void WndProc(ref Message m)
         {
-
             if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
             {
                 // call menu activate before we actually take focus.
@@ -269,10 +260,9 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         internal class MenuStripAccessibleObject : ToolStripAccessibleObject
         {
-
             public MenuStripAccessibleObject(MenuStrip owner)
                 : base(owner)
             {

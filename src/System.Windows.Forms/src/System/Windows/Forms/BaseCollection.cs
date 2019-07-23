@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class BaseCollection : MarshalByRefObject, ICollection
     {
-
         /// <summary>
         /// Gets the total number of elements in a collection.
         /// </summary>

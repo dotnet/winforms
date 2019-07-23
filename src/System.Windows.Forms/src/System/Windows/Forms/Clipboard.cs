@@ -3,35 +3,31 @@
 // See the LICENSE file in the project root for more information.
 
 
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Runtime.InteropServices.ComTypes;
-
-    using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-    using System.Globalization;
-    using System.Collections;
-
     /// <summary>
-    ///    <para>Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.</para>
+    ///  Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.
     /// </summary>
     public sealed class Clipboard
     {
-
         // not creatable...
         //
         private Clipboard()
         {
         }
 
-        // 
+        //
         // Checks the validity of format while setting data into ClipBoard
         //
         private static bool IsFormatValid(DataObject data)
@@ -41,7 +37,6 @@ namespace System.Windows.Forms
 
         internal static bool IsFormatValid(string[] formats)
         {
-
             Debug.Assert(formats != null, "Null returned from GetFormats");
             if (formats != null)
             {
@@ -69,7 +64,6 @@ namespace System.Windows.Forms
 
         internal static bool IsFormatValid(FORMATETC[] formats)
         {
-
             Debug.Assert(formats != null, "Null returned from GetFormats");
             if (formats != null)
             {
@@ -93,7 +87,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Places nonpersistent data on the system <see cref='System.Windows.Forms.Clipboard'/>.</para>
+        /// Places nonpersistent data on the system <see cref='Clipboard'/>.
         /// </summary>
         public static void SetDataObject(object data)
         {
@@ -101,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Overload that uses default values for retryTimes and retryDelay.</para>
+        /// Overload that uses default values for retryTimes and retryDelay.
         /// </summary>
         public static void SetDataObject(object data, bool copy)
         {
@@ -109,15 +103,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Places data on the system <see cref='System.Windows.Forms.Clipboard'/> and uses copy to specify whether the data 
-        ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
-        ///    after the application exits.</para>
+        /// Places data on the system <see cref='Clipboard'/> and uses copy to specify whether the data
+        ///  should remain on the <see cref='Clipboard'/>
+        ///  after the application exits.
         /// </summary>
         public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
         {
             if (Application.OleRequired() != System.Threading.ApartmentState.STA)
             {
-                throw new System.Threading.ThreadStateException(SR.ThreadMustBeSTA);
+                throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
 
             if (data == null)
@@ -134,7 +128,6 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(retryDelay), retryDelay, string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryDelay), retryDelay, 0));
             }
-
 
             DataObject dataObject = null;
             if (!(data is IComDataObject))
@@ -193,8 +186,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Retrieves the data that is currently on the system
-        ///    <see cref='System.Windows.Forms.Clipboard'/>.</para>
+        ///  Retrieves the data that is currently on the system
+        ///  <see cref='Clipboard'/>.
         /// </summary>
         public static IDataObject GetDataObject()
         {
@@ -205,13 +198,13 @@ namespace System.Windows.Forms
                 // to query the clipboard from your finalizer or non-ui MTA thread
                 // silently fail, instead of making your app die.
                 //
-                // however, if you are trying to write a normal windows forms app and 
+                // however, if you are trying to write a normal windows forms app and
                 // forget to set the STAThread attribute, we will correctly report
                 // an error to aid in debugging.
                 //
                 if (Application.MessageLoop)
                 {
-                    throw new System.Threading.ThreadStateException(SR.ThreadMustBeSTA);
+                    throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
                 }
                 else
                 {
@@ -256,7 +249,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        // <-- WHIDBEY ADDITIONS 
+        // <-- WHIDBEY ADDITIONS
 
         public static void Clear()
         {
@@ -523,7 +516,7 @@ namespace System.Windows.Forms
 
         private static void ThrowIfFailed(int hr)
         {
-            // 
+            //
             if (hr != 0)
             {
                 ExternalException e = new ExternalException(SR.ClipboardOperationFailed, hr);

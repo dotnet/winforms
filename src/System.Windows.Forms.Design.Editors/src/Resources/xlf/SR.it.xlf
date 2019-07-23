@@ -127,6 +127,11 @@
         <target state="translated">Apri file</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>

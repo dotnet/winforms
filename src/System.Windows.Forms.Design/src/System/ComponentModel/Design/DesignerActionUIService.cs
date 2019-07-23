@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
 {
@@ -29,8 +27,7 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         /// Disposes all resources and unhooks all events.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// </summary>
         public void Dispose()
         {
             if (_serviceProvider != null)
@@ -77,7 +74,6 @@ namespace System.ComponentModel.Design
         {
             _designerActionUIStateChangedEventHandler?.Invoke(this, e);
         }
-
 
         public bool ShouldAutoShow(IComponent component)
         {

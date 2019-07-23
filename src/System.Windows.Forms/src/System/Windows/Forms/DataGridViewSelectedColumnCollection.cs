@@ -2,21 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-
-    [
-        ListBindable(false),
-        SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewSelectedColumnCollection> implementation
-    ]
+    [ListBindable(false)]
     public class DataGridViewSelectedColumnCollection : BaseCollection, IList
     {
         readonly ArrayList items = new ArrayList();
@@ -118,34 +109,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
+        /// Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         internal int Add(DataGridViewColumn dataGridViewColumn)
         {
             return items.Add(dataGridViewColumn);
         }
-
-        /* Unused at this point
-        internal void AddRange(DataGridViewColumn[] dataGridViewColumns)
-        {
-            Debug.Assert(dataGridViewColumns != null);
-            foreach(DataGridViewColumn dataGridViewColumn in dataGridViewColumns) 
-            {
-                this.items.Add(dataGridViewColumn);
-            }
-        }
-        */
-
-        /* Unused at this point
-        internal void AddColumnCollection(DataGridViewColumnCollection dataGridViewColumns)
-        {
-            Debug.Assert(dataGridViewColumns != null);
-            foreach(DataGridViewColumn dataGridViewColumn in dataGridViewColumns) 
-            {
-                this.items.Add(dataGridViewColumn);
-            }
-        }
-        */
 
         [
             EditorBrowsable(EditorBrowsableState.Never)
@@ -156,7 +125,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Checks to see if a DataGridViewCell is contained in this collection.
+        ///  Checks to see if a DataGridViewCell is contained in this collection.
         /// </summary>
         public bool Contains(DataGridViewColumn dataGridViewColumn)
         {
@@ -168,10 +137,7 @@ namespace System.Windows.Forms
             items.CopyTo(array, index);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Never),
-            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Insert(int index, DataGridViewColumn dataGridViewColumn)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));

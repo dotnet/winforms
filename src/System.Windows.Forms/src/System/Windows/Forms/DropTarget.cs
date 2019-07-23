@@ -29,7 +29,6 @@ namespace System.Windows.Forms
 
         private DragEventArgs CreateDragEventArgs(object pDataObj, int grfKeyState, NativeMethods.POINTL pt, int pdwEffect)
         {
-
             IDataObject data = null;
 
             if (pDataObj == null)
@@ -130,6 +129,4 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
     }
-
-
 }

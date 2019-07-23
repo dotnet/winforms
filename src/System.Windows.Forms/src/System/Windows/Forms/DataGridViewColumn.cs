@@ -2,22 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Text;
+using System.ComponentModel;
+using System.Globalization;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Globalization;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    ///    <para> Base class for the columns in a data grid view.</para>
+    ///  Base class for the columns in a data grid view.
     /// </summary>
     [
         Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign),
-        TypeConverterAttribute(typeof(DataGridViewColumnConverter)),
+        TypeConverter(typeof(DataGridViewColumnConverter)),
         ToolboxItem(false),
         DesignTimeVisible(false)
     ]
@@ -34,27 +31,19 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal = 0x10;
 
         private byte flags;  // see DATAGRIDVIEWCOLUMN_ consts above
-        private DataGridViewCell cellTemplate;
         private string name;
         private int displayIndex;
-        private int desiredFillWidth = 0;
-        private int desiredMinimumWidth = 0;
         private float fillWeight, usedFillWeight;
         private DataGridViewAutoSizeColumnMode autoSizeMode;
-        private int boundColumnIndex = -1;
         private string dataPropertyName = string.Empty;
-        private TypeConverter boundColumnConverter = null;
 
         // needed for IComponent
-        private ISite site = null;
         private EventHandler disposed = null;
 
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewColumn'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='DataGridViewColumn'/> class.
         /// </summary>
         public DataGridViewColumn() : this((DataGridViewCell)null)
         {
@@ -67,9 +56,8 @@ namespace System.Windows.Forms
             Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
             MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
             name = string.Empty;
-            _bandIsRow = false;
             displayIndex = -1;
-            this.cellTemplate = cellTemplate;
+            CellTemplate = cellTemplate;
             autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
         }
 
@@ -165,65 +153,18 @@ namespace System.Windows.Forms
 
         // TypeConverter of the PropertyDescriptor attached to this column
         // in databound cases. Null otherwise.
-        internal TypeConverter BoundColumnConverter
-        {
-            get
-            {
-                return boundColumnConverter;
-            }
-            set
-            {
-                boundColumnConverter = value;
-            }
-        }
+        internal TypeConverter BoundColumnConverter { get; set; }
 
-        internal int BoundColumnIndex
-        {
-            get
-            {
-                return boundColumnIndex;
-            }
-            set
-            {
-                boundColumnIndex = value;
-            }
-        }
+        internal int BoundColumnIndex { get; set; } = -1;
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public virtual DataGridViewCell CellTemplate
-        {
-            get
-            {
-                return cellTemplate;
-            }
-            set
-            {
-                cellTemplate = value;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual DataGridViewCell CellTemplate { get; set; }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-        ]
-        public Type CellType
-        {
-            get
-            {
-                if (cellTemplate != null)
-                {
-                    return cellTemplate.GetType();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public Type CellType => CellTemplate?.GetType();
 
         [
             DefaultValue(null),
@@ -245,8 +186,8 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             DefaultValue(""),
-            TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
-            Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
+            Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)),
             SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr)),
             SRCategory(nameof(SR.CatData))
         ]
@@ -292,7 +233,6 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDefaultCellStyle()
         {
-
             if (!HasDefaultCellStyle)
             {
                 return false;
@@ -315,29 +255,9 @@ namespace System.Windows.Forms
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        internal int DesiredFillWidth
-        {
-            get
-            {
-                return desiredFillWidth;
-            }
-            set
-            {
-                desiredFillWidth = value;
-            }
-        }
+        internal int DesiredFillWidth { get; set; }
 
-        internal int DesiredMinimumWidth
-        {
-            get
-            {
-                return desiredMinimumWidth;
-            }
-            set
-            {
-                desiredMinimumWidth = value;
-            }
-        }
+        internal int DesiredMinimumWidth { get; set; }
 
         [
             Browsable(false),
@@ -810,18 +730,18 @@ namespace System.Windows.Forms
                 // Change needed to bring the design time and the runtime "Name" property together.
                 // The ExtenderProvider adds a "Name" property of its own. It does this for all IComponents.
                 // The "Name" property added by the ExtenderProvider interacts only w/ the Site property.
-                // The Control class' Name property can be changed only thru the "Name" property provided by the 
+                // The Control class' Name property can be changed only thru the "Name" property provided by the
                 // Extender Service.
                 //
                 // However, the user can change the DataGridView::Name property in the DataGridViewEditColumnDialog.
-                // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name, 
+                // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name,
                 // the DataGridViewColumn should always go first to the Site.Name to retrieve the name.
                 //
                 // NOTE: one side effect of bringing together the design time and the run time "Name" properties is that DataGridViewColumn::Name changes.
                 // However, DataGridView does not fire ColumnNameChanged event.
                 // We can't fix this because ISite does not provide Name change notification. So in effect
                 // DataGridViewColumn does not know when its name changed.
-                // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged 
+                // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged
                 // being fired.
                 //
                 if (Site != null && !string.IsNullOrEmpty(Site.Name))
@@ -865,8 +785,8 @@ namespace System.Windows.Forms
                 if (IsDataBound &&
                     DataGridView != null &&
                     DataGridView.DataConnection != null &&
-                    boundColumnIndex != -1 &&
-                    DataGridView.DataConnection.DataFieldIsReadOnly(boundColumnIndex) &&
+                    BoundColumnIndex != -1 &&
+                    DataGridView.DataConnection.DataFieldIsReadOnly(BoundColumnIndex) &&
                     !value)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly));
@@ -891,21 +811,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public ISite Site
-        {
-            get
-            {
-                return site;
-            }
-            set
-            {
-                site = value;
-            }
-        }
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ISite Site { get; set; }
 
         [
             DefaultValue(DataGridViewColumnSortMode.NotSortable),
@@ -1062,7 +970,7 @@ namespace System.Windows.Forms
 
         public override object Clone()
         {
-            // 
+            //
 
             DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
             if (dataGridViewColumn != null)
@@ -1072,7 +980,7 @@ namespace System.Windows.Forms
             return dataGridViewColumn;
         }
 
-        internal void CloneInternal(DataGridViewColumn dataGridViewColumn)
+        private protected void CloneInternal(DataGridViewColumn dataGridViewColumn)
         {
             base.CloneInternal(dataGridViewColumn);
 
@@ -1080,16 +988,7 @@ namespace System.Windows.Forms
             dataGridViewColumn.displayIndex = -1;
             dataGridViewColumn.HeaderText = HeaderText;
             dataGridViewColumn.DataPropertyName = DataPropertyName;
-
-            // dataGridViewColumn.boundColumnConverter = columnTemplate.BoundColumnConverter;  setting the DataPropertyName should also set the bound column converter later on.
-            if (dataGridViewColumn.CellTemplate != null)
-            {
-                dataGridViewColumn.cellTemplate = (DataGridViewCell)CellTemplate.Clone();
-            }
-            else
-            {
-                dataGridViewColumn.cellTemplate = null;
-            }
+            dataGridViewColumn.CellTemplate = (DataGridViewCell)CellTemplate?.Clone();
 
             if (HasHeaderCell)
             {
@@ -1107,14 +1006,10 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    // 
+                    //
                     lock (this)
                     {
-                        if (site != null && site.Container != null)
-                        {
-                            site.Container.Remove(this);
-                        }
-
+                        Site?.Container?.Remove(this);
                         disposed?.Invoke(this, EventArgs.Empty);
                     }
                 }

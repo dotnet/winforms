@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
     /// do not have HWNDS, this guy's got to figure out who the event was really supposed
-    /// to go to and pass it on to it. 
+    /// to go to and pass it on to it.
     /// </summary>
     internal class ToolStripDropTargetManager : IDropTarget
     {
@@ -25,8 +25,7 @@ namespace System.Windows.Forms
         private bool dropTargetIsEntered;
 #endif
 
-
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch DragDropDebug = new TraceSwitch("DragDropDebug", "Debug ToolStrip DragDrop code");
 #else
         internal static readonly TraceSwitch DragDropDebug;
@@ -61,7 +60,6 @@ namespace System.Windows.Forms
         /// <param name=dropTarget></param>	
         public void EnsureUnRegistered(IDropTarget dropTarget)
         {
-
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Attempting to unregister droptarget");
             for (int i = 0; i < owner.Items.Count; i++)
             {
@@ -98,7 +96,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG ENTER] ==============");
 
-            // If we are supporting Item Reordering 
+            // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
             if (owner.AllowItemReorder && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
@@ -131,7 +129,7 @@ namespace System.Windows.Forms
                     // just null out the last drop target manager.
 
                     // the other valid reason for being here is that we've done an AllowItemReorder
-                    // and we dont have a ToolStripItem contain within the data (say someone drags a link 
+                    // and we dont have a ToolStripItem contain within the data (say someone drags a link
                     // from IE over the ToolStrip)
 
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "No one wanted it.");
@@ -156,12 +154,11 @@ namespace System.Windows.Forms
         /// <param name=e></param>	
         public void OnDragOver(DragEventArgs e)
         {
-
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG OVER] ==============");
 
             IDropTarget newDropTarget = null;
 
-            // If we are supporting Item Reordering 
+            // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
             if (owner.AllowItemReorder && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
@@ -212,7 +209,7 @@ namespace System.Windows.Forms
         /// Summary of OnDragLeave.
         /// </summary>
         /// <param name=e></param>	
-        public void OnDragLeave(System.EventArgs e)
+        public void OnDragLeave(EventArgs e)
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG LEAVE] ==============");
 
@@ -256,9 +253,8 @@ namespace System.Windows.Forms
             lastDropTarget = null;
         }
 
-
         /// <summary>
-        ///     Used to actually register the control as a drop target.
+        ///  Used to actually register the control as a drop target.
         /// </summary>
         /// <param name=accept></param>	
         private void SetAcceptDrops(bool accept)
@@ -305,7 +301,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// if we have a new active item, fire drag leave and
-        /// enter.  This corresponds to the case where you 
+        /// enter.  This corresponds to the case where you
         /// are dragging between items and havent actually
         /// left the ToolStrip's client area.
         /// </summary>
@@ -313,7 +309,6 @@ namespace System.Windows.Forms
         /// <param name=e></param>	
         private void UpdateDropTarget(IDropTarget newTarget, DragEventArgs e)
         {
-
             if (newTarget != lastDropTarget)
             {
 
@@ -336,8 +331,6 @@ namespace System.Windows.Forms
             }
 
         }
-
-
 
     }
 

@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// This class represents all the information to render the toolStrip
-        /// </summary>        
+        /// </summary>
         public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel contentPanel)
         {
             Graphics = g;

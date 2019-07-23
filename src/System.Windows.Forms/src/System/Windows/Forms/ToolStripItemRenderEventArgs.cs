@@ -30,6 +30,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// The toolstrip the item is currently parented to
         /// </summary>
-        public ToolStrip ToolStrip => Item.ParentInternal;
+        public ToolStrip ToolStrip => Item?.ParentInternal;
     }
 }

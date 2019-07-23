@@ -12,7 +12,6 @@ using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
 {
-    [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")]
     public abstract class ObjectSelectorEditor : UITypeEditor
     {
         public bool SubObjectSelector = false;
@@ -332,7 +331,6 @@ namespace System.ComponentModel.Design
         /// Suppressed because although the type implements ISerializable --its on the base class and this class
         /// is not modifying the stream to include its local information.  Therefore, we should not publicly advertise this as
         /// Serializable unless explicitly required.
-        [SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
         public class SelectorNode : TreeNode
         {
             public object value = null;

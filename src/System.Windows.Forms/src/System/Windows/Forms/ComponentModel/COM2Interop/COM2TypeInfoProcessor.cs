@@ -2,21 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using Hashtable = System.Collections.Hashtable;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Windows.Forms;
-    using System.Collections;
-    using Hashtable = System.Collections.Hashtable;
-
-    using System.Reflection.Emit;
-    using System.Reflection;
-    using System.Globalization;
-
-
     /// <summary>
     /// This is the main worker class of Com2 property interop. It takes an IDispatch Object
     /// and translates it's ITypeInfo into Com2PropertyDescriptor objects that are understandable
@@ -27,7 +23,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2TypeInfoProcessor
     {
-
         private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
 
         private Com2TypeInfoProcessor()
@@ -55,7 +50,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static Hashtable builtEnums;
         private static Hashtable processedLibraries;
-
 
         /// <summary>
         /// Given an Object, this attempts to locate its type ifo
@@ -109,14 +103,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pTypeInfo;
         }
 
-
         /// <summary>
         /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         /// all available type infos will be returned, otherwise the primary one will be alled.
         /// </summary>
         public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
-
             UnsafeNativeMethods.ITypeInfo[] typeInfos = null;
             int n = 0;
             UnsafeNativeMethods.ITypeInfo temp = null;
@@ -208,14 +200,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return dispid;
         }
 
-
         /// <summary>
         /// Gets the properties for a given Com2 Object.  The returned Com2Properties
         /// Object contains the properties and relevant data about them.
         /// </summary>
         public static Com2Properties GetProperties(object obj)
         {
-
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
 
             if (obj == null || !Marshal.IsComObject(obj))
@@ -233,7 +223,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties :: Didn't get typeinfo");
                 return null;
             }
-
 
             int defaultProp = -1;
             int temp = -1;
@@ -333,7 +322,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 typeInfo.ReleaseTypeAttr(pTypeAttr);
             }
         }
-
 
         /// <summary>
         /// Resolves a value type for a property from a TYPEDESC.  Value types can be
@@ -448,7 +436,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static PropertyDescriptor[] InternalGetProperties(object obj, UnsafeNativeMethods.ITypeInfo typeInfo, int dispidToGet, ref int defaultIndex)
         {
-
             if (typeInfo == null)
             {
                 return null;
@@ -482,7 +469,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             typeInfo = null;
-
 
             // now we take the propertyInfo structures we built up
             // and use them to create the actual descriptors.
@@ -547,18 +533,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-
         private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags)
         {
             string pPropName = null;
             string pPropDesc = null;
 
-
             // get the name and the helpstring
             int hr = typeInfo.GetDocumentation(dispid, ref pPropName, ref pPropDesc, null, null);
 
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
-
 
             if (!NativeMethods.Succeeded(hr))
             {
@@ -763,7 +746,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo)
         {
-
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
             if (enumTypeInfo == null)
@@ -830,7 +812,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             // get the name and the helpstring
 
                             hr = enumTypeInfo.GetDocumentation(varDesc.memid, ref name, ref helpstr, null, null);
-
 
                             if (!NativeMethods.Succeeded(hr))
                             {
@@ -935,7 +916,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-
         private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
@@ -1011,7 +991,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return typeof(short);
                 case NativeMethods.tagVT.VT_UI2:
                     return typeof(ushort);
-
 
                 case NativeMethods.tagVT.VT_I4:
                 case NativeMethods.tagVT.VT_INT:
@@ -1094,7 +1073,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal class CachedProperties
         {
-
             private readonly PropertyDescriptor[] props;
 
             public readonly int MajorVersion;
@@ -1146,80 +1124,35 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private class PropInfo
         {
-
             public const int ReadOnlyUnknown = 0;
             public const int ReadOnlyTrue = 1;
             public const int ReadOnlyFalse = 2;
 
-            string name = null;
-            int dispid = -1;
-            Type valueType = null;
-            readonly ArrayList attributes = new ArrayList();
-            int readOnly = ReadOnlyUnknown;
-            bool isDefault;
-            object typeData;
-            bool nonbrowsable = false;
-            int index;
+            public string Name { get; set; }
 
-            public string Name
-            {
-                get { return name; }
-                set { name = value; }
-            }
-            public int DispId
-            {
-                get { return dispid; }
-                set { dispid = value; }
-            }
-            public Type ValueType
-            {
-                get { return valueType; }
-                set { valueType = value; }
-            }
-            public ArrayList Attributes
-            {
-                get { return attributes; }
-            }
-            public int ReadOnly
-            {
-                get { return readOnly; }
-                set { readOnly = value; }
-            }
-            public bool IsDefault
-            {
-                get { return isDefault; }
-                set { isDefault = value; }
-            }
-            public object TypeData
-            {
-                get { return typeData; }
-                set { typeData = value; }
-            }
-            public bool NonBrowsable
-            {
-                get { return nonbrowsable; }
-                set { nonbrowsable = value; }
-            }
-            public int Index
-            {
-                get { return index; }
-                set { index = value; }
-            }
+            public int DispId { get; set; } = -1;
 
+            public Type ValueType { get; set; }
 
-            public override int GetHashCode()
-            {
-                if (name != null)
-                {
-                    return name.GetHashCode();
-                }
-                return base.GetHashCode();
-            }
+            public ArrayList Attributes { get; } = new ArrayList();
+
+            public int ReadOnly { get; set; } = ReadOnlyUnknown;
+
+            public bool IsDefault { get; set; }
+
+            public object TypeData { get; set; }
+
+            public bool NonBrowsable { get; set; }
+
+            public int Index { get; set; }
+
+            public override int GetHashCode() => Name?.GetHashCode() ?? base.GetHashCode();
         }
     }
 
-
-    // just so we can recognize a variant properly...
+    /// <summary>
+    /// A class included so we can recognize a variant properly.
+    /// </summary>
     public class Com2Variant
     {
     }

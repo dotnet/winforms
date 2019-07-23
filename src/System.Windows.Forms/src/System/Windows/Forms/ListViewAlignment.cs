@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how items align in the <see cref='System.Windows.Forms.ListView'/>.
+    /// Specifies how items align in the <see cref='ListView'/>.
     /// </summary>
     public enum ListViewAlignment
     {
@@ -15,12 +15,12 @@ namespace System.Windows.Forms
         Default = NativeMethods.LVA_DEFAULT,
 
         /// <summary>
-        /// Items are aligned to the top of the <see cref='System.Windows.Forms.ListView'/> control.
+        /// Items are aligned to the top of the <see cref='ListView'/> control.
         /// </summary>
         Top = NativeMethods.LVA_ALIGNTOP,
 
         /// <summary>
-        /// Items are aligned to the left of the <see cref='System.Windows.Forms.ListView'/> control.
+        /// Items are aligned to the left of the <see cref='ListView'/> control.
         /// </summary>
         Left = NativeMethods.LVA_ALIGNLEFT,
 

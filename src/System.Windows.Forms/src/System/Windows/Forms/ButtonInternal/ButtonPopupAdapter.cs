@@ -2,23 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Diagnostics.CodeAnalysis;
-
-
     internal class ButtonPopupAdapter : ButtonBaseAdapter
     {
-
         internal ButtonPopupAdapter(ButtonBase control) : base(control) { }
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
@@ -173,9 +164,7 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-
         // used by the DataGridViewButtonCell
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
         internal static LayoutOptions PaintPopupLayout(Graphics g, bool up, int paintedBorder, Rectangle clientRectangle, Padding padding,
                                                        bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
         {
@@ -192,11 +181,8 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
         private LayoutOptions PaintPopupLayout(PaintEventArgs e, bool up, int paintedBorder)
         {
-
             LayoutOptions layout = CommonLayout();
             layout.borderSize = paintedBorder;
             layout.paddingSize = 2 - paintedBorder;//3 - paintedBorder - (Control.IsDefault ? 1 : 0);

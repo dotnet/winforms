@@ -4,12 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-
     public interface IDataGridViewEditingCell
     {
-        [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         object EditingCellFormattedValue
         {
             get;
@@ -22,7 +18,6 @@ namespace System.Windows.Forms
             set;
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         object GetEditingCellFormattedValue(DataGridViewDataErrorContexts context);
 
         void PrepareEditingCellForEdit(bool selectAll);

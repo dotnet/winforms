@@ -516,7 +516,6 @@ namespace System.Windows.Forms
                     item.ParentInternal = ToolStrip;
                     Point itemLocation = new Point(x, y);
 
-
                     if (!clientRectangle.Contains(x, y))
                     {
                         item.SetPlacement(ToolStripItemPlacement.None);

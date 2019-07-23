@@ -2,26 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Text;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Collections.Specialized;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Runtime.Versioning;
-    using Runtime.CompilerServices;
-
     /// <summary>
-    ///                  PLEASE READ
-    ///                  -----------
+    ///        PLEASE READ
+    ///        -----------
     /// This class is used for more than just Button:
-    /// it's used for things that derive from ButtonBase, 
+    /// it's used for things that derive from ButtonBase,
     /// parts of ToolStripItem, and parts of the DataGridView.
     /// </summary>
     internal abstract class ButtonBaseAdapter
@@ -113,7 +108,6 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Brush CreateDitherBrush(Color color1, Color color2)
         {
-
             // Note: Don't dispose the bitmap here. The texture brush will take ownership
             // of the bitmap. So the bitmap will get disposed by the brush's Dispose().
 
@@ -129,7 +123,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///     Get StringFormat object for rendering text using GDI+ (Graphics).
+        ///  Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </summary>
         internal virtual StringFormat CreateStringFormat()
         {
@@ -137,7 +131,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///     Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
+        ///  Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
         /// </summary>
         internal virtual TextFormatFlags CreateTextFormatFlags()
         {
@@ -257,7 +251,7 @@ namespace System.Windows.Forms.ButtonInternal
                     wg.DrawLine(insetPen, p1, p2); // top (right-left)
                     wg.DrawLine(insetPen, p2, p3); // left( up-down)
 
-                    // Bottom + right inset           
+                    // Bottom + right inset
                     if (disabledHighContrast)
                     {
                         bottomRightInsetPen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
@@ -440,7 +434,7 @@ namespace System.Windows.Forms.ButtonInternal
                     pen.Dispose();
                 }
 
-                // Draw inset - use the back ground color here to have a thinner border 
+                // Draw inset - use the back ground color here to have a thinner border
                 p1.Offset(-1, 2);
                 p2.Offset(1, 1);
                 p3.Offset(1, -1);
@@ -473,7 +467,7 @@ namespace System.Windows.Forms.ButtonInternal
                     pen.Dispose();
                 }
 
-                // Bottom + right inset                        
+                // Bottom + right inset
                 if (disabledHighContrast)
                 {
                     pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
@@ -501,7 +495,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///     Draws a border for the in the 3D style of the popup button.
+        ///  Draws a border for the in the 3D style of the popup button.
         /// </summary>
         protected internal static void Draw3DLiteBorder(Graphics g, Rectangle r, ColorData colors, bool up)
         {
@@ -549,10 +543,8 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       Draws the flat border with specified bordersize. 
-        ///       This function gets called only for Flatstyle == Flatstyle.Flat.
-        ///    </para>
+        ///  Draws the flat border with specified bordersize.
+        ///  This function gets called only for Flatstyle == Flatstyle.Flat.
         /// </summary>
         internal static void DrawFlatBorderWithSize(Graphics g, Rectangle r, Color c, int size)
         {
@@ -613,10 +605,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///    <para>
-        ///       Draws the focus rectangle if the control has focus.
-        ///       
-        ///    </para>
+        ///  Draws the focus rectangle if the control has focus.
         /// </summary>
         void DrawFocus(Graphics g, Rectangle r)
         {
@@ -627,7 +616,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///     Draws the button's image.
+        ///  Draws the button's image.
         /// </summary>
         void DrawImage(Graphics graphics, LayoutData layout)
         {
@@ -679,7 +668,7 @@ namespace System.Windows.Forms.ButtonInternal
             finally
             {
                 if (!layout.options.everettButtonCompat)
-                {// FOR EVERETT COMPATIBILITY - DO NOT CHANGE                              
+                {// FOR EVERETT COMPATIBILITY - DO NOT CHANGE
                     graphics.Clip = oldClip;
                 }
             }
@@ -709,7 +698,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         /// <summary>
-        ///     Draws the button's text. Color c is the foreground color set with enabled/disabled state in mind.
+        ///  Draws the button's text. Color c is the foreground color set with enabled/disabled state in mind.
         /// </summary>
         void DrawText(Graphics g, LayoutData layout, Color c, ColorData colors)
         {
@@ -813,7 +802,6 @@ namespace System.Windows.Forms.ButtonInternal
                                  Color foreColor,
                                  bool drawFocus)
         {
-
             Graphics g = e.Graphics;
 
             Rectangle maxFocus = layout.focus;
@@ -1039,8 +1027,8 @@ namespace System.Windows.Forms.ButtonInternal
             private bool disableWordWrapping;
 
             /// <summary>
-            ///     We don't cache the StringFormat itself because we don't have a deterministic way of disposing it, instead
-            ///     we cache the flags that make it up and create it on demand so it can be disposed by calling code.
+            ///  We don't cache the StringFormat itself because we don't have a deterministic way of disposing it, instead
+            ///  we cache the flags that make it up and create it on demand so it can be disposed by calling code.
             /// </summary>
             public StringFormat StringFormat
             {
@@ -1109,7 +1097,7 @@ namespace System.Windows.Forms.ButtonInternal
                 AllCombined = 0x03
             }
 
-            // Uses checkAlign, imageAlign, and textAlign to figure out how to compose 
+            // Uses checkAlign, imageAlign, and textAlign to figure out how to compose
             // checkSize, imageSize, and textSize into the preferredSize.
             private Size Compose(Size checkSize, Size imageSize, Size textSize)
             {
@@ -1139,7 +1127,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
             }
 
-            // Uses checkAlign, imageAlign, and textAlign to figure out how to decompose 
+            // Uses checkAlign, imageAlign, and textAlign to figure out how to decompose
             // proposedSize into just the space left over for text.
             private Size Decompose(Size checkSize, Size imageSize, Size proposedSize)
             {
@@ -1641,13 +1629,13 @@ namespace System.Windows.Forms.ButtonInternal
                 //This causes a breaking change because images get shrunk to the new clipped size instead of clipped.
                 //********** bottom = Math.Min(layout.imageBounds.Bottom, maxBounds.Bottom);
                 //********** layout.imageBounds.Y = Math.Max(layout.imageBounds.Y, maxBounds.Y);
-                //********** layout.imageBounds.Height = bottom - layout.imageBounds.Y;                
+                //********** layout.imageBounds.Height = bottom - layout.imageBounds.Y;
 
             }
 
             protected virtual Size GetTextSize(Size proposedSize)
             {
-                //set the Prefix field of TextFormatFlags 
+                //set the Prefix field of TextFormatFlags
                 proposedSize = LayoutUtils.FlipSizeIf(verticalText, proposedSize);
                 Size textSize = Size.Empty;
 
@@ -1692,7 +1680,7 @@ namespace System.Windows.Forms.ButtonInternal
                     "textImageRelation = " + textImageRelation + "\n" +
                     "layoutRTL = " + layoutRTL + " }";
             }
-#endif            
+#endif
         }
 
         internal class LayoutData
@@ -1705,7 +1693,7 @@ namespace System.Windows.Forms.ButtonInternal
             internal Rectangle field;
             internal Rectangle focus;
             internal Rectangle imageBounds;
-            internal Point imageStart; // FOR EVERETT COMPATIBILITY - DO NOT CHANGE                      
+            internal Point imageStart; // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
             internal LayoutOptions options;
 
             internal LayoutData(LayoutOptions options)

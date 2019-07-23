@@ -32,10 +32,9 @@ namespace System.Windows.Forms.Design
             public bool genSources = false;
 
             /// <summary>
-            /// Regardless of which version of the library is registered, if at all, use the 
+            /// Regardless of which version of the library is registered, if at all, use the
             /// path supplied on the command line for AxImp to generate the Windows Forms wrappers.
             /// </summary>
-            [SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This class is used to communicate option values between components, it does not have any functionality which might modify these values.")]
             public bool ignoreRegisteredOcx;
 
             /// <summary>

@@ -158,23 +158,11 @@ namespace System.Windows.Forms.Design
                 _service = service;
             }
 
-            public object LastHandler
-            {
-                get => _service._lastHandler;
-                set => _service._lastHandler = value;
-            }
+            public ref object LastHandler => ref _service._lastHandler;
 
-            public Type LastHandlerType
-            {
-                get => _service._lastHandlerType;
-                set => _service._lastHandlerType = value;
-            }
+            public ref Type LastHandlerType => ref _service._lastHandlerType;
 
-            public HandlerEntry HandlerHead
-            {
-                get => _service._handlerHead;
-                set => _service._handlerHead = value;
-            }
+            public ref HandlerEntry HandlerHead => ref _service._handlerHead;
         }
     }
 }

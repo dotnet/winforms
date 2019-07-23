@@ -2,28 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.PrintPreviewControl.PhysicalToPixels(System.Drawing.Size,System.Drawing.Point):System.Drawing.Size")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.PrintPreviewControl.PixelsToPhysical(System.Drawing.Size,System.Drawing.Point):System.Drawing.Size")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.PrintPreviewControl.set_VirtualSize(System.Drawing.Size):System.Void")]
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.ComponentModel;
-    using System.Drawing.Printing;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       The raw "preview" part of print previewing, without any dialogs or buttons.
-    ///       Most PrintPreviewControl's are found on PrintPreviewDialog's,
-    ///       but they don't have to be.
-    ///    </para>
+    ///  The raw "preview" part of print previewing, without any dialogs or buttons.
+    ///  Most PrintPreviewControl's are found on PrintPreviewDialog's,
+    ///  but they don't have to be.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -58,9 +48,7 @@ namespace System.Windows.Forms
         bool exceptionPrinting;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewControl'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='PrintPreviewControl'/> class.
         /// </summary>
         public PrintPreviewControl()
         {
@@ -90,10 +78,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
-        ///       will automatically adjust Zoom to make everything visible.
-        ///    </para>
+        ///  Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
+        ///  will automatically adjust Zoom to make everything visible.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -114,10 +100,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating the document to preview.
-        ///       
-        ///    </para>
+        ///  Gets or sets a value indicating the document to preview.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -135,10 +118,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the number of pages
-        ///       displayed horizontally across the screen.
-        ///    </para>
+        ///  Gets or sets the number of pages
+        ///  displayed horizontally across the screen.
         /// </summary>
         [
         DefaultValue(1),
@@ -161,11 +142,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the CreateParams used to create the window.
-        ///       If a subclass overrides this function, it must call the base implementation.
-        ///       
-        ///    </para>
+        ///  Gets the CreateParams used to create the window.
+        ///  If a subclass overrides this function, it must call the base implementation.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -179,9 +157,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The virtual coordinate of the upper left visible pixel.
+        ///  The virtual coordinate of the upper left visible pixel.
         /// </summary>
-
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
@@ -198,10 +175,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the number of pages
-        ///       displayed vertically down the screen.
-        ///    </para>
+        ///  Gets or sets the number of pages
+        ///  displayed vertically down the screen.
         /// </summary>
         [
         DefaultValue(1),
@@ -225,9 +200,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
-        ///     control placement and text will be from right to left.
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
+        ///  control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -273,10 +248,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the page number of the upper left page.
-        ///       
-        ///    </para>
+        ///  Gets or sets the page number of the upper left page.
         /// </summary>
         [
         DefaultValue(0),
@@ -322,7 +294,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     How big the control would be if the screen was infinitely large.
+        ///  How big the control would be if the screen was infinitely large.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -341,9 +313,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating how large the pages will appear.
-        ///    </para>
+        ///  Gets or sets a value indicating how large the pages will appear.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -431,9 +401,8 @@ namespace System.Windows.Forms
             return pos;
         }
 
-
         // This function computes everything in terms of physical size (millimeters), not pixels
-        // 
+        //
         private void ComputeLayout()
         {
             Debug.Assert(pageInfo != null, "Must call ComputePreview first");
@@ -508,9 +477,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Refreshes the preview of the document.
-        ///    </para>
+        ///  Refreshes the preview of the document.
         /// </summary>
         public void InvalidatePreview()
         {
@@ -519,9 +486,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Invalidate the layout, if necessary.
-        ///    </para>
+        ///  Invalidate the layout, if necessary.
         /// </summary>
         protected override void OnResize(EventArgs eventargs)
         {
@@ -562,15 +527,13 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Paints the control.
-        ///    </para>
+        ///  Paints the control.
         /// </summary>
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            Brush backBrush = new SolidBrush(BackColor);
+            Color backColor = GetBackColor(SystemInformation.HighContrast);
+            Brush backBrush = new SolidBrush(backColor);
 
             try
             {
@@ -662,7 +625,6 @@ namespace System.Windows.Forms
 
                                     imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
                                     Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-
 
                                     int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
                                     int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
@@ -757,7 +719,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the back color to the defaults for the PrintPreviewControl.
+        ///  Resets the back color to the defaults for the PrintPreviewControl.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetBackColor()
@@ -766,7 +728,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the back color to the defaults for the PrintPreviewControl.
+        ///  Resets the back color to the defaults for the PrintPreviewControl.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetForeColor()
@@ -775,12 +737,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_HSCROLL handler
+        ///  WM_HSCROLL handler
         /// </summary>
-
         private void WmHScroll(ref Message m)
         {
-
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar...
             //
@@ -849,12 +809,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     WM_VSCROLL handler
+        ///  WM_VSCROLL handler
         /// </summary>
-
         private void WmVScroll(ref Message m)
         {
-
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar...
             //
@@ -873,13 +831,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_KEYDOWN message.
+        ///  Handles the WM_KEYDOWN message.
         /// </summary>
         //added to handle keyboard events
         //
         private void WmKeyDown(ref Message msg)
         {
-
             Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);
             Point locPos = Position;
             int pos = 0;
@@ -1025,10 +982,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Indicates whether the <see cref='System.Windows.Forms.Control.BackColor'/> property should be
-        ///       persisted.
-        ///    </para>
+        ///  Indicates whether the <see cref='Control.BackColor'/> property should be
+        ///  persisted.
         /// </summary>
         internal override bool ShouldSerializeBackColor()
         {
@@ -1036,14 +991,41 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Indicates whether the <see cref='System.Windows.Forms.Control.ForeColor'/> property should be
-        ///       persisted.
-        ///    </para>
+        ///  Indicates whether the <see cref='Control.ForeColor'/> property should be
+        ///  persisted.
         /// </summary>
         internal override bool ShouldSerializeForeColor()
         {
             return !ForeColor.Equals(Color.White);
+        }
+
+        /// <summary>
+        /// Gets back color respectively to the High Contrast theme is applied or not
+        /// and taking into account saved custom back color.
+        /// </summary>
+        /// <param name="isHighContract">Indicates whether High Contrast theme is applied or not.</param>
+        /// <returns>
+        /// Standard back color for PrintPreview control in standard theme (1),
+        /// contrasted color if there is High Contrast theme applied (2) and
+        /// custom color if this is set irrespectively to HC or not HC mode (3).
+        /// </returns>
+        private Color GetBackColor(bool isHighContract)
+        {
+            return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
+        }
+
+        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
+
+        internal readonly struct TestAccessor
+        {
+            private readonly PrintPreviewControl _control;
+
+            public TestAccessor(PrintPreviewControl control)
+            {
+                _control = control;
+            }
+
+            public Color GetBackColor(bool isHighContrast) => _control.GetBackColor(isHighContrast);
         }
     }
 }

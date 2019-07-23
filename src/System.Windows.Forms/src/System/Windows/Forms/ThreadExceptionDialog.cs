@@ -2,19 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Globalization;
-
     /// <summary>
     ///  Implements a dialog box that is displayed when an unhandled exception occurs in
     ///  a thread.
@@ -24,7 +21,6 @@ namespace System.Windows.Forms
         ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form
     {
-
         private const string DownBitmapName = "down";
         private const string UpBitmapName = "up";
 
@@ -80,7 +76,7 @@ namespace System.Windows.Forms
         private bool detailsVisible = false;
 
         /// <summary>
-        ///    Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.      
+        ///  Initializes a new instance of the <see cref='ThreadExceptionDialog'/> class.
         /// </summary>
         public ThreadExceptionDialog(Exception t)
         {
@@ -133,7 +129,7 @@ namespace System.Windows.Forms
 
                 if (Application.AllowQuit)
                 {
-                    if (t is System.Security.SecurityException)
+                    if (t is Security.SecurityException)
                     {
                         messageFormat = SR.ExDlgSecurityErrorText;
                     }
@@ -145,7 +141,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (t is System.Security.SecurityException)
+                    if (t is Security.SecurityException)
                     {
                         messageFormat = SR.ExDlgSecurityContinueErrorText;
                     }
@@ -161,7 +157,7 @@ namespace System.Windows.Forms
             {
                 messageText = t.GetType().Name;
             }
-            if (t is System.Security.SecurityException)
+            if (t is Security.SecurityException)
             {
                 messageText = string.Format(messageFormat, t.GetType().Name, Trim(messageText));
             }
@@ -204,7 +200,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                catch (System.IO.FileNotFoundException)
+                catch (IO.FileNotFoundException)
                 {
                 }
                 detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
@@ -280,7 +276,7 @@ namespace System.Windows.Forms
             pictureBox.Location = new Point(scaledPictureWidth / 8, scaledPictureHeight / 8);
             pictureBox.Size = new Size(scaledPictureWidth * 3 / 4, scaledPictureHeight * 3 / 4);
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            if (t is System.Security.SecurityException)
+            if (t is Security.SecurityException)
             {
                 pictureBox.Image = SystemIcons.Information.ToBitmap();
             }
@@ -401,7 +397,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Called when the details button is clicked.
+        ///  Called when the details button is clicked.
         /// </summary>
         private void DetailsClick(object sender, EventArgs eventargs)
         {

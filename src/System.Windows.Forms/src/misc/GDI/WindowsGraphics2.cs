@@ -2,34 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR DRAWING WITH A WINDOWSGRAPHICS.
-// (Compiled in System.Windows.Forms but not in System.Drawing).
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms;
-
     /// <summary>
-    ///     See notes on WindowsGraphics.cs file.
-    ///</summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
+    ///  See notes on WindowsGraphics.cs file.
+    /// </summary>
+    internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         // Flag used by TextRenderer to clear the TextRenderer specific flags.
         public const int GdiUnsupportedFlagMask = (unchecked((int)0xFF000000));
@@ -42,19 +24,15 @@ namespace System.Experimental.Gdi
         private TextPaddingOptions paddingFlags;
 
         /// <summary>
-        ///    The padding options to be applied to the text bounding box internally.
+        ///  The padding options to be applied to the text bounding box internally.
         /// </summary>
         public TextPaddingOptions TextPadding
         {
-            //Since Enum.IsDefined is only used within a Debug.Assert, it is okay to leave it
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             get
             {
                 Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), paddingFlags));
                 return paddingFlags;
             }
-            //Since Enum.IsDefined is only used within a Debug.Assert, it is okay to leave it
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), value));
@@ -67,8 +45,6 @@ namespace System.Experimental.Gdi
 
         /// Drawing methods.
 
-        /// <summary>
-        /// </summary>
         public void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
         {
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
@@ -80,7 +56,7 @@ namespace System.Experimental.Gdi
             }
 
             // 2. call the functions
-            // we first draw a path that goes : 
+            // we first draw a path that goes :
             // from center of pie, draw arc (this draw the line to the beginning of the arc
             // then, draw the closing line.
             // paint the path with the pen
@@ -88,7 +64,8 @@ namespace System.Experimental.Gdi
             Point p = new Point(bounds.X + sideLength / 2, bounds.Y + sideLength / 2);
             int radius = sideLength / 2;
             IntUnsafeNativeMethods.BeginPath(hdc);
-            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, null);
+            Point oldPoint = default;
+            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, ref oldPoint);
             IntUnsafeNativeMethods.AngleArc(hdc, p.X, p.Y, radius, startAngle, sweepAngle);
             IntUnsafeNativeMethods.LineTo(hdc, p.X, p.Y);
             IntUnsafeNativeMethods.EndPath(hdc);
@@ -100,7 +77,8 @@ namespace System.Experimental.Gdi
             int nTopRect,   // y-coord of upper-left corner of rectangle
             int nRightRect, // x-coord of lower-right corner of rectangle
             int nBottomRect)
-        { // y-coord of lower-right corner of rectangle
+        {
+            // y-coord of lower-right corner of rectangle
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
             if (pen != null)
@@ -123,13 +101,12 @@ namespace System.Experimental.Gdi
             DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
         }
 
-
         /// Text rendering methods
-        /// 
+        ///
 
         /// <summary>
-        ///     Draws the text at the specified point, using the given Font and foreColor.
-        ///     CR/LF are honored.
+        ///  Draws the text at the specified point, using the given Font and foreColor.
+        ///  CR/LF are honored.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor)
         {
@@ -137,8 +114,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text at the specified point, using the given Font, foreColor and backColor.
-        ///     CR/LF are honored.
+        ///  Draws the text at the specified point, using the given Font, foreColor and backColor.
+        ///  CR/LF are honored.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor)
         {
@@ -146,8 +123,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text at the specified point, using the given Font and foreColor, and according to the 
-        ///     specified flags.
+        ///  Draws the text at the specified point, using the given Font and foreColor, and according to the
+        ///  specified flags.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, IntTextFormatFlags flags)
         {
@@ -155,8 +132,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text at the specified point, using the given Font, foreColor and backColor, and according 
-        ///     to the specified flags.
+        ///  Draws the text at the specified point, using the given Font, foreColor and backColor, and according
+        ///  to the specified flags.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, IntTextFormatFlags flags)
         {
@@ -165,7 +142,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text centered in the given rectangle and using the given Font and foreColor.
+        ///  Draws the text centered in the given rectangle and using the given Font and foreColor.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor)
         {
@@ -173,7 +150,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text centered in the given rectangle and using the given Font, foreColor and backColor.
+        ///  Draws the text centered in the given rectangle and using the given Font, foreColor and backColor.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor)
         {
@@ -181,7 +158,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
+        ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, IntTextFormatFlags flags)
         {
@@ -189,10 +166,10 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Draws the text in the given bounds, using the given Font, foreColor and backColor, and according to the specified
-        ///     TextFormatFlags flags.
-        ///     If font is null, the font currently selected in the hdc is used.
-        ///     If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
+        ///  Draws the text in the given bounds, using the given Font, foreColor and backColor, and according to the specified
+        ///  TextFormatFlags flags.
+        ///  If font is null, the font currently selected in the hdc is used.
+        ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, IntTextFormatFlags flags)
         {
@@ -256,39 +233,9 @@ namespace System.Experimental.Gdi
 
             IntUnsafeNativeMethods.DrawTextEx(hdc, text, ref rect, (int)flags, dtparams);
 
-
-            /* No need to restore previous objects into the dc (see comments on top of the class).
-             *             
-            if (hOldFont != IntPtr.Zero) 
-            {
-                IntUnsafeNativeMethods.SelectObject(hdc, new HandleRef( null, hOldFont));
-            }
-
-            if( foreColor != textColor ) 
-            {
-                this.dc.SetTextColor(textColor);
-            }
-
-            if( backColor != bkColor )
-            {
-                this.dc.SetBackgroundColor(bkColor);
-            }
-        
-            if( bckMode != newMode ) 
-            {
-                this.dc.SetBackgroundMode(bckMode);
-            }
-
-            if( align != DeviceContextTextAlignment.Default )
-            {
-                // Default text alignment required by DrewText.
-                this.dc.SetTextAlignment(align);
-            }
-            */
+            // No need to restore previous objects into the dc (see comments on top of the class).
         }
 
-        /// <summary>
-        /// </summary>
         public Color GetNearestColor(Color color)
         {
             HandleRef hdc = new HandleRef(null, dc.Hdc);
@@ -297,9 +244,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///    <para>
-        ///       Calculates the spacing required for drawing text w/o clipping parts of a glyph.
-        ///    </para>
+        ///  Calculates the spacing required for drawing text w/o clipping parts of a glyph.
         /// </summary>
         public float GetOverhangPadding(WindowsFont font)
         {
@@ -324,7 +269,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Get the bounding box internal text padding to be used when drawing text.
+        ///  Get the bounding box internal text padding to be used when drawing text.
         /// </summary>
         public IntNativeMethods.DRAWTEXTPARAMS GetTextMargins(WindowsFont font)
         {
@@ -361,13 +306,11 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns the Size of the given text using the specified font if not null, otherwise the font currently 
-        ///       set in the dc is used.
-        ///       This method is used to get the size in points of a line of text; it uses GetTextExtentPoint32 function 
-        ///       which computes the width and height of the text ignoring TAB\CR\LF characters. 
-        ///       A text extent is the distance between the beginning of the space and a character that will fit in the space.
-        ///    </para>
+        ///  Returns the Size of the given text using the specified font if not null, otherwise the font currently
+        ///  set in the dc is used.
+        ///  This method is used to get the size in points of a line of text; it uses GetTextExtentPoint32 function
+        ///  which computes the width and height of the text ignoring TAB\CR\LF characters.
+        ///  A text extent is the distance between the beginning of the space and a character that will fit in the space.
         /// </summary>
         public Size GetTextExtent(string text, WindowsFont font)
         {
@@ -376,8 +319,7 @@ namespace System.Experimental.Gdi
                 return Size.Empty;
             }
 
-            IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
-
+            Size size = new Size();
             HandleRef hdc = new HandleRef(null, dc.Hdc);
 
             if (font != null)
@@ -385,7 +327,7 @@ namespace System.Experimental.Gdi
                 dc.SelectFont(font);
             }
 
-            IntUnsafeNativeMethods.GetTextExtentPoint32(hdc, text, size);
+            IntUnsafeNativeMethods.GetTextExtentPoint32W(hdc, text, text.Length, ref size);
 
             // Unselect, but not from Measurement DC as it keeps the same
             // font selected for perf reasons.
@@ -394,12 +336,12 @@ namespace System.Experimental.Gdi
                 dc.ResetFont();
             }
 
-            return new Size(size.cx, size.cy);
+            return new Size(size.Width, size.Height);
         }
 
         /// <summary>
-        ///     Returns the Size in logical units of the given text using the given Font.
-        ///     CR/LF/TAB are taken into account.
+        ///  Returns the Size in logical units of the given text using the given Font.
+        ///  CR/LF/TAB are taken into account.
         /// </summary>
         public Size MeasureText(string text, WindowsFont font)
         {
@@ -407,9 +349,9 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Returns the Size in logical units of the given text using the given Font and using the specified rectangle 
-        ///     as the text bounding box (see overload below for more info).
-        ///     TAB/CR/LF are taken into account.
+        ///  Returns the Size in logical units of the given text using the given Font and using the specified rectangle
+        ///  as the text bounding box (see overload below for more info).
+        ///  TAB/CR/LF are taken into account.
         /// </summary>
         public Size MeasureText(string text, WindowsFont font, Size proposedSize)
         {
@@ -417,28 +359,24 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///     Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
-        ///     The proposed size is used to create a bounding rectangle as follows:
-        ///     - If there are multiple lines of text, DrawText uses the width of the rectangle pointed to by 
-        ///       the lpRect parameter and extends the base of the rectangle to bound the last line of text. 
-        ///     - If the largest word is wider than the rectangle, the width is expanded. 
-        ///     - If the text is less than the width of the rectangle, the width is reduced. 
-        ///     - If there is only one line of text, DrawText modifies the right side of the rectangle so that 
-        ///       it bounds the last character in the line.
-        ///     If the font is null, the hdc's current font will be used.
+        ///  Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
+        ///  The proposed size is used to create a bounding rectangle as follows:
+        ///  - If there are multiple lines of text, DrawText uses the width of the rectangle pointed to by
+        ///  the lpRect parameter and extends the base of the rectangle to bound the last line of text.
+        ///  - If the largest word is wider than the rectangle, the width is expanded.
+        ///  - If the text is less than the width of the rectangle, the width is reduced.
+        ///  - If there is only one line of text, DrawText modifies the right side of the rectangle so that
+        ///  it bounds the last character in the line.
+        ///  If the font is null, the hdc's current font will be used.
         ///
-        ///     Note for vertical fonts (if ever supported): DrawTextEx uses GetTextExtentPoint32 for measuring the text and this 
-        ///     function has the following limitation (from MSDN):
-        ///     - This function assumes that the text is horizontal, that is, that the escapement is always 0. This is true for both 
-        ///       the horizontal and vertical measurements of the text.  The application must convert it explicitly.
+        ///  Note for vertical fonts (if ever supported): DrawTextEx uses GetTextExtentPoint32 for measuring the text and this
+        ///  function has the following limitation (from MSDN):
+        ///  - This function assumes that the text is horizontal, that is, that the escapement is always 0. This is true for both
+        ///  the horizontal and vertical measurements of the text.  The application must convert it explicitly.
         /// </summary>
-
-
         public Size MeasureText(string text, WindowsFont font, Size proposedSize, IntTextFormatFlags flags)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
-
-
 
             if (string.IsNullOrEmpty(text))
             {
@@ -452,7 +390,7 @@ namespace System.Experimental.Gdi
             //
             IntNativeMethods.DRAWTEXTPARAMS dtparams = null;
 
-#if OPTIMIZED_MEASUREMENTDC       
+#if OPTIMIZED_MEASUREMENTDC
             // use the cache if we've got it
             if (MeasurementDCInfo.IsMeasurementDC(DeviceContext))
             {
@@ -490,9 +428,9 @@ namespace System.Experimental.Gdi
                 dc.SelectFont(font);
             }
 
-            // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SingleLine and 
-            // VerticalCenter or Bottom options, DrawTextEx does not bind the rectangle to the actual text height since 
-            // it assumes the text is to be vertically aligned; we need to clear the VerticalCenter and Bottom flags to 
+            // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SingleLine and
+            // VerticalCenter or Bottom options, DrawTextEx does not bind the rectangle to the actual text height since
+            // it assumes the text is to be vertically aligned; we need to clear the VerticalCenter and Bottom flags to
             // get the actual text bounds.
             if (proposedSize.Height >= MaxSize.Height && (flags & IntTextFormatFlags.SingleLine) != 0)
             {
@@ -511,7 +449,7 @@ namespace System.Experimental.Gdi
             IntUnsafeNativeMethods.DrawTextEx(hdc, text, ref rect, (int)flags, dtparams);
 
             /* No need to restore previous objects into the dc (see comments on top of the class).
-             * 
+             *
             if( hOldFont != IntPtr.Zero )
             {
                 this.dc.SelectObject(hOldFont);
@@ -522,17 +460,15 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///    <para>
-        ///      The GDI DrawText does not do multiline alignment when IntTextFormatFlags.SingleLine is not set. This
-        ///      adjustment is to workaround that limitation. We don't want to duplicate SelectObject calls here, 
-        ///      so put your Font in the dc before calling this.
+        ///  The GDI DrawText does not do multiline alignment when IntTextFormatFlags.SingleLine is not set. This
+        ///  adjustment is to workaround that limitation. We don't want to duplicate SelectObject calls here,
+        ///  so put your Font in the dc before calling this.
         ///
-        ///      AdjustForVerticalAlignment is only used when the text is multiline and it fits inside the bounds passed in.
-        ///      In that case we want the horizontal center of the multiline text to be at the horizontal center of the bounds.
+        ///  AdjustForVerticalAlignment is only used when the text is multiline and it fits inside the bounds passed in.
+        ///  In that case we want the horizontal center of the multiline text to be at the horizontal center of the bounds.
         ///
-        ///      If the text is multiline and it does not fit inside the bounds passed in, then return the bounds that were passed in.
-        ///      This way we paint the top of the text at the top of the bounds passed in.
-        ///    </para>
+        ///  If the text is multiline and it does not fit inside the bounds passed in, then return the bounds that were passed in.
+        ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
         public static Rectangle AdjustForVerticalAlignment(HandleRef hdc, string text, Rectangle bounds, IntTextFormatFlags flags, IntNativeMethods.DRAWTEXTPARAMS dtparams)
         {
@@ -618,27 +554,18 @@ namespace System.Experimental.Gdi
             Debug.Assert(brush != null, "brush == null");
 
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
-            IntPtr hBrush = brush.HBrush;  // We don't delete this handle since we didn't create it.   
+            IntPtr hBrush = brush.HBrush;  // We don't delete this handle since we didn't create it.
             IntNativeMethods.RECT rect = new IntNativeMethods.RECT(x, y, x + width, y + height);
 
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            if (brush is WindowsHatchBrush)
-            { 
-                int clr = ColorTranslator.ToWin32(((WindowsHatchBrush)brush).BackGroundColor);
-                IntUnsafeNativeMethods.SetBkColor(hdc, clr );
-                IntUnsafeNativeMethods.SetBkMode(hdc, (int)DeviceContextBackgroundMode.Transparent);
-            }
-#endif
             IntUnsafeNativeMethods.FillRect(hdc, ref rect, new HandleRef(brush, hBrush));
         }
-
 
         // DrawLine overloads
 
         /// <summary>
-        ///     Draws a line starting from p1 (included) to p2 (excluded).  LineTo doesn't paint the last 
-        ///     pixel because if it did the intersection points of connected lines would be drawn multiple 
-        ///     times turning them back to the background color.
+        ///  Draws a line starting from p1 (included) to p2 (excluded).  LineTo doesn't paint the last
+        ///  pixel because if it did the intersection points of connected lines would be drawn multiple
+        ///  times turning them back to the background color.
         /// </summary>
         public void DrawLine(WindowsPen pen, Point p1, Point p2)
         {
@@ -667,9 +594,9 @@ namespace System.Experimental.Gdi
                 dc.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
-            IntNativeMethods.POINT oldPoint = new IntNativeMethods.POINT();
+            Point oldPoint = new Point();
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, oldPoint);
+            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, ref oldPoint);
             IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
@@ -682,12 +609,12 @@ namespace System.Experimental.Gdi
                 dc.SetRasterOperation(rasterOp);
             }
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.x, oldPoint.y, null);
+            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, ref oldPoint);
         }
 
         /// <summary>
-        ///     Returns a TEXTMETRIC structure for the font selected in the device context 
-        ///     represented by this object, in units of pixels.
+        ///  Returns a TEXTMETRIC structure for the font selected in the device context
+        ///  represented by this object, in units of pixels.
         /// </summary>
         public IntNativeMethods.TEXTMETRIC GetTextMetrics()
         {

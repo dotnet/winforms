@@ -4,23 +4,11 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.ComponentModel.Design;
-    using System.Collections;
-    using Microsoft.Win32;
-
     /// <summary>
     /// This base class maps an ole defined data type (OLE_COLOR, IFont, etc.),
-    ///
     /// </summary>
     internal abstract class Com2DataTypeToManagedDataTypeConverter
     {
-
-
         public virtual bool AllowExpand
         {
             get
@@ -30,7 +18,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Returns the managed type that this editor maps the property type to.
+        ///  Returns the managed type that this editor maps the property type to.
         /// </summary>
         public abstract Type ManagedType
         {
@@ -38,12 +26,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///     Converts the native value into a managed value
+        ///  Converts the native value into a managed value
         /// </summary>
         public abstract object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd);
 
         /// <summary>
-        ///     Converts the managed value into a native value
+        ///  Converts the managed value into a native value
         /// </summary>
         public abstract object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet);
     }

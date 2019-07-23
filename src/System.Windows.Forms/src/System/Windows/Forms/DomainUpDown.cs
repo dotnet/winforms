@@ -2,24 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Globalization;
-    using System.Windows.Forms.Layout;
-    using System.Collections;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>Represents a Windows up-down control that displays string values.</para>
+    ///  Represents a Windows up-down control that displays string values.
     /// </summary>
     [
     ComVisible(true),
@@ -31,7 +26,6 @@ namespace System.Windows.Forms
     ]
     public class DomainUpDown : UpDownBase
     {
-
         private readonly static string DefaultValue = string.Empty;
         private readonly static bool DefaultWrap = false;
 
@@ -41,9 +35,8 @@ namespace System.Windows.Forms
         //////////////////////////////////////////////////////////////
 
         /// <summary>
-        ///     Allowable strings for the domain updown.
+        ///  Allowable strings for the domain updown.
         /// </summary>
-
         private DomainUpDownItemCollection domainItems = null;
 
         private string stringValue = DefaultValue;      // Current string value
@@ -57,9 +50,7 @@ namespace System.Windows.Forms
         private bool inSort = false;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DomainUpDown'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='DomainUpDown'/> class.
         /// </summary>
         public DomainUpDown() : base()
         {
@@ -71,10 +62,8 @@ namespace System.Windows.Forms
         // Properties
 
         /// <summary>
-        ///    <para>
-        ///       Gets the collection of objects assigned to the
-        ///       up-down control.
-        ///    </para>
+        ///  Gets the collection of objects assigned to the
+        ///  up-down control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -85,7 +74,6 @@ namespace System.Windows.Forms
         ]
         public DomainUpDownItemCollection Items
         {
-
             get
             {
                 if (domainItems == null)
@@ -118,9 +106,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the index value of the selected item.
-        ///    </para>
+        ///  Gets or sets the index value of the selected item.
         /// </summary>
         [
         Browsable(false),
@@ -130,7 +116,6 @@ namespace System.Windows.Forms
         ]
         public int SelectedIndex
         {
-
             get
             {
                 if (UserEdit)
@@ -158,11 +143,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the selected item based on the index value
-        ///       of the selected item in the
-        ///       collection.
-        ///    </para>
+        ///  Gets or sets the selected item based on the index value
+        ///  of the selected item in the
+        ///  collection.
         /// </summary>
         [
         Browsable(false),
@@ -202,9 +185,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the item collection is sorted.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the item collection is sorted.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -213,7 +194,6 @@ namespace System.Windows.Forms
         ]
         public bool Sorted
         {
-
             get
             {
                 return sorted;
@@ -230,10 +210,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the collection of items continues to
-        ///       the first or last item if the user continues past the end of the list.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the collection of items continues to
+        ///  the first or last item if the user continues past the end of the list.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -243,7 +221,6 @@ namespace System.Windows.Forms
         ]
         public bool Wrap
         {
-
             get
             {
                 return wrap;
@@ -261,10 +238,8 @@ namespace System.Windows.Forms
         //////////////////////////////////////////////////////////////
 
         /// <summary>
-        ///    <para>
-        ///       Occurs when the <see cref='System.Windows.Forms.DomainUpDown.SelectedItem'/> property has
-        ///       been changed.
-        ///    </para>
+        ///  Occurs when the <see cref='SelectedItem'/> property has
+        ///  been changed.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
         public event EventHandler SelectedItemChanged
@@ -274,8 +249,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Constructs the new instance of the accessibility object for this control. Subclasses
-        ///    should not call base.CreateAccessibilityObject.
+        ///  Constructs the new instance of the accessibility object for this control. Subclasses
+        ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
@@ -283,13 +258,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the next item in the object collection.
-        ///    </para>
+        ///  Displays the next item in the object collection.
         /// </summary>
         public override void DownButton()
         {
-
             // Make sure domain values exist, and there are >0 items
             //
             if (domainItems == null)
@@ -302,7 +274,7 @@ namespace System.Windows.Forms
             }
 
             // If the user has entered text, attempt to match it to the domain list
-            //            
+            //
             int matchIndex = -1;
             if (UserEdit)
             {
@@ -333,13 +305,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Tries to find a match of the supplied text in the domain list.
-        ///     If complete is true, a complete match is required for success
-        ///     (i.e. the supplied text is the same length as the matched domain value)
-        ///     Returns the index in the domain list if the match is successful,
-        ///     returns -1 otherwise.
+        ///  Tries to find a match of the supplied text in the domain list.
+        ///  If complete is true, a complete match is required for success
+        ///  (i.e. the supplied text is the same length as the matched domain value)
+        ///  Returns the index in the domain list if the match is successful,
+        ///  returns -1 otherwise.
         /// </summary>
-
         internal int MatchIndex(string text, bool complete)
         {
             return MatchIndex(text, complete, domainIndex);
@@ -347,7 +318,6 @@ namespace System.Windows.Forms
 
         internal int MatchIndex(string text, bool complete, int startPosition)
         {
-
             // Make sure domain values exist
             if (domainItems == null)
             {
@@ -414,11 +384,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       In the case of a DomainUpDown, the handler for changing
-        ///       values is called OnSelectedItemChanged - so just forward it to that
-        ///       function.
-        ///    </para>
+        ///  In the case of a DomainUpDown, the handler for changing
+        ///  values is called OnSelectedItemChanged - so just forward it to that
+        ///  function.
         /// </summary>
         protected override void OnChanged(object source, EventArgs e)
         {
@@ -426,9 +394,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Handles the <see cref='System.Windows.Forms.Control.KeyPress'/>
-        /// event, using the input character to find the next matching item in our 
-        /// item collection.</para>
+        /// Handles the <see cref='Control.KeyPress'/>
+        /// event, using the input character to find the next matching item in our
+        /// item collection.
         /// </summary>
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
@@ -460,25 +428,20 @@ namespace System.Windows.Forms
             base.OnTextBoxKeyPress(source, e);
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.DomainUpDown.SelectedItemChanged'/> event.
-        ///    </para>
+        ///  Raises the <see cref='SelectedItemChanged'/> event.
         /// </summary>
         protected void OnSelectedItemChanged(object source, EventArgs e)
         {
-
             // Call the event handler
             onSelectedItemChanged?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Selects the item in the domain list at the given index
+        ///  Selects the item in the domain list at the given index
         /// </summary>
         private void SelectIndex(int index)
         {
-
             // Sanity check index
 
             Debug.Assert(domainItems != null, "Domain values array is null");
@@ -508,7 +471,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sorts the domain values
+        ///  Sorts the domain values
         /// </summary>
         private void SortDomainItems()
         {
@@ -551,11 +514,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Provides some interesting info about this control in String form.
+        ///  Provides some interesting info about this control in String form.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
 
             if (Items != null)
@@ -567,13 +529,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Displays the previous item in the collection.
-        ///    </para>
+        ///  Displays the previous item in the collection.
         /// </summary>
         public override void UpButton()
         {
-
             // Make sure domain values exist, and there are >0 items
             if (domainItems == null)
             {
@@ -609,7 +568,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // Otherwise, get the previous string in the domain list            
+                // Otherwise, get the previous string in the domain list
                 if (domainIndex > 0)
                 {
                     SelectIndex(domainIndex - 1);
@@ -622,13 +581,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Updates the text in the up-down control to display the selected item.
-        ///    </para>
+        ///  Updates the text in the up-down control to display the selected item.
         /// </summary>
         protected override void UpdateEditText()
         {
-
             Debug.Assert(!UserEdit, "UserEdit should be false");
             // Defensive programming
             UserEdit = false;
@@ -652,8 +608,8 @@ namespace System.Windows.Forms
         // DomainUpDown collection class
 
         /// <summary>
-        /// <para>Encapsulates a collection of objects for use by the <see cref='System.Windows.Forms.DomainUpDown'/>
-        /// class.</para>
+        /// Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
+        /// class.
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList
         {
@@ -753,11 +709,8 @@ namespace System.Windows.Forms
             }
         } // end class DomainUpDownItemCollection
 
-        /// <summary>
-        /// </summary>
         private sealed class DomainUpDownItemCompare : IComparer
         {
-
             public int Compare(object p, object q)
             {
                 if (p == q)
@@ -774,12 +727,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
-
             private DomainItemListAccessibleObject itemList;
 
             /// <summary>
@@ -865,7 +815,6 @@ namespace System.Windows.Forms
 
         internal class DomainItemListAccessibleObject : AccessibleObject
         {
-
             private readonly DomainUpDownAccessibleObject parent;
 
             public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent) : base()
@@ -932,12 +881,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <summary>
-        /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         public class DomainItemAccessibleObject : AccessibleObject
         {
-
             private string name;
             private readonly DomainItemListAccessibleObject parent;
 

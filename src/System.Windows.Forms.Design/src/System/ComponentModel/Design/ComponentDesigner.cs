@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Configuration;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms.Design;
@@ -335,7 +334,7 @@ namespace System.ComponentModel.Design
                         {
                             continue;
                         }
-        
+
                         eventChanged = true;
                         handler = eps.CreateUniqueMethodName((IComponent)comp, defaultEvent);
                     }
@@ -560,7 +559,7 @@ namespace System.ComponentModel.Design
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
         /// </summary>
         private string SettingsKey
@@ -611,7 +610,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when the designer has been associated with a control that is not in it's default state, such as one that has been pasted or drag-dropped onto the designer. 
+        /// Called when the designer has been associated with a control that is not in it's default state, such as one that has been pasted or drag-dropped onto the designer.
         /// This is an opportunity to fixup any shadowed properties in a different way than for default components.
         /// This is called after the other initialize functions.
         /// </summary>
@@ -739,7 +738,7 @@ namespace System.ComponentModel.Design
             bool readOnlyInherit = InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly);
             if (readOnlyInherit)
             {
-                // Now loop through all the properties.  For each one, try to match a pre-created property. 
+                // Now loop through all the properties.  For each one, try to match a pre-created property.
                 // If that fails, then create a new property.
                 PropertyDescriptor[] values = new PropertyDescriptor[properties.Values.Count];
                 properties.Values.CopyTo(values, 0);
@@ -799,10 +798,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component has been changed. 
+        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component has been changed.
         /// You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         protected void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
         {
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService changeSvc)
@@ -812,10 +810,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is about to be changed. 
+        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is about to be changed.
         /// You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         protected void RaiseComponentChanging(MemberDescriptor member)
         {
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService changeSvc)

@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         /// <summary>
         /// Simple painting logic for selection Glyphs.
-        /// </summary> 
+        /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
             DesignerUtils.DrawSelectionBorder(pe.Graphics, bounds);

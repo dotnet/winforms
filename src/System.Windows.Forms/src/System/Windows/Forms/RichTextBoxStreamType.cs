@@ -8,7 +8,6 @@ namespace System.Windows.Forms
     /// Defines the possible kinds of input/output streams used by RichTextBox
     /// control's load/save mechansim. These stream options are also used the
     /// control's text modification methods.
-    ///
     /// </summary>
     public enum RichTextBoxStreamType
     {

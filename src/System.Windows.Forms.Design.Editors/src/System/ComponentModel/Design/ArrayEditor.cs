@@ -11,7 +11,7 @@ namespace System.ComponentModel.Design
     public class ArrayEditor : CollectionEditor
     {
         /// <summary>
-        /// Initializes a new instance of <see cref='System.ComponentModel.Design.ArrayEditor'/> 
+        /// Initializes a new instance of <see cref='System.ComponentModel.Design.ArrayEditor'/>
         /// using the specified type for the array.
         /// </summary>
         public ArrayEditor(Type type) : base(type)

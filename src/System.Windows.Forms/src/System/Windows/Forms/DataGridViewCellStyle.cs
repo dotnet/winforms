@@ -2,20 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Windows.Forms.Design;
-    using System.Drawing.Design;
-    using System.Diagnostics.CodeAnalysis;
-
     [
-        TypeConverterAttribute(typeof(DataGridViewCellStyleConverter)),
-        EditorAttribute("System.Windows.Forms.Design.DataGridViewCellStyleEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
+        TypeConverter(typeof(DataGridViewCellStyleConverter)),
+        Editor("System.Windows.Forms.Design.DataGridViewCellStyleEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
     ]
     public class DataGridViewCellStyle : ICloneable
     {
@@ -38,9 +35,7 @@ namespace System.Windows.Forms
         private DataGridView dataGridView;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCellStyle'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='DataGridViewCellStyle'/> class.
         /// </summary>
         public DataGridViewCellStyle()
         {
@@ -115,9 +110,6 @@ namespace System.Windows.Forms
 
         internal DataGridViewContentAlignment AlignmentInternal
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible") // Enum.IsDefined is OK here. Debug only.
-            ]
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(DataGridViewContentAlignment), value));
@@ -245,7 +237,7 @@ namespace System.Windows.Forms
 
         [
             DefaultValue(""),
-            EditorAttribute("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+            Editor("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
             SRCategory(nameof(SR.CatBehavior)),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]

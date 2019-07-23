@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the part of the <see cref='System.Windows.Forms.DataGridView'/>
+    /// Specifies the part of the <see cref='DataGridView'/>
     /// control where the mouse is.
     /// </summary>
     public enum DataGridViewHitTestType

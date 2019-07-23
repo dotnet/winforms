@@ -25,7 +25,6 @@ namespace System.Windows.Forms
         private bool spring = false;
         private AutomationLiveSetting liveSetting;
 
-
         /// <summary>
         /// A non selectable ToolStrip item
         /// </summary>
@@ -88,7 +87,6 @@ namespace System.Windows.Forms
                 base.Alignment = value;
             }
         }
-
 
         [
         DefaultValue(Border3DStyle.Flat),
@@ -228,7 +226,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public override System.Drawing.Size GetPreferredSize(System.Drawing.Size constrainingSize)
+        public override Size GetPreferredSize(Size constrainingSize)
         {
             if (BorderSides != ToolStripStatusLabelBorderSides.None)
             {
@@ -240,14 +238,11 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-
             if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
@@ -321,7 +316,5 @@ namespace System.Windows.Forms
     }
 
 }
-
-
 
 

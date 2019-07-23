@@ -1525,7 +1525,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void OnPaintAdornments(PaintEventArgs pe)
         {
-
             // If this control is being inherited, paint it
             if (_inheritanceUI != null && pe.ClipRectangle.IntersectsWith(_inheritanceUI.InheritanceGlyphRectangle))
             {
@@ -1909,7 +1908,6 @@ namespace System.Windows.Forms.Design
                             _toolPassThrough = false;
                         }
 
-
                         if (_toolPassThrough)
                         {
                             NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
@@ -2178,7 +2176,7 @@ namespace System.Windows.Forms.Design
                     //{
                     //    DefWndProc(ref m);
                     //}
-                    //else 
+                    //else
                     if (_host != null && _host.RootComponent != null)
                     {
                         if (_host.GetDesigner(_host.RootComponent) is IRootDesigner rd)
@@ -2628,7 +2626,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
         internal void HookChildHandles(IntPtr firstChild)
         {
             IntPtr hwndChild = firstChild;
@@ -2702,7 +2699,6 @@ namespace System.Windows.Forms.Design
             private ControlDesigner _designer;
 
             // AssignHandle calls NativeWindow::OnHandleChanged, but we do not override it so we should be okay
-            [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             public ChildSubClass(ControlDesigner designer, IntPtr hwnd)
             {
                 _designer = designer;
@@ -2733,7 +2729,7 @@ namespace System.Windows.Forms.Design
                 }
                 if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)Interop.WindowMessages.WM_CREATE)
                 {
-                    _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above 
+                    _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above
                 }
 
                 // We want these messages to go through the designer's WndProc method, and we want people to be able to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers window target and call their WndProc.
@@ -2852,7 +2848,6 @@ namespace System.Windows.Forms.Design
 
             public void DefWndProc(ref Message m) => _oldWindowTarget.OnMessage(ref m);
 
-            [SuppressMessage("Microsoft.Usage", "CA2216:DisposableTypesShouldDeclareFinalizer")]
             public void Dispose()
             {
                 // Do nothing. We will pick this up through a null DesignerTarget property when we come out of the message loop.
@@ -3005,7 +3000,7 @@ namespace System.Windows.Forms.Design
 
             public override int GetChildIndex(Control child, bool throwException) => _realCollection.GetChildIndex(child, throwException);
 
-            // we also need to redirect this guy 
+            // we also need to redirect this guy
             public override void SetChildIndex(Control child, int newIndex) => _realCollection.SetChildIndex(child, newIndex);
 
             public override void Clear()
@@ -3135,14 +3130,12 @@ namespace System.Windows.Forms.Design
                 get => _basePropDesc.PropertyType;
             }
 
-
             // since we can't get to the DefaultSize property, we use the existing ShouldSerialize logic.
             public override bool CanResetValue(object component) => _basePropDesc.ShouldSerializeValue(component);
 
             public override object GetValue(object component) => _basePropDesc.GetValue(component);
 
             public override void ResetValue(object component) => _basePropDesc.ResetValue(component);
-
 
             public override void SetValue(object component, object value) => _basePropDesc.SetValue(component, value);
 

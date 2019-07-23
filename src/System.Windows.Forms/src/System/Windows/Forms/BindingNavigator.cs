@@ -2,17 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Runtime.InteropServices;
-
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -23,7 +19,6 @@ namespace System.Windows.Forms
     ]
     public class BindingNavigator : ToolStrip, ISupportInitialize
     {
-
         private BindingSource bindingSource;
 
         private ToolStripItem moveFirstItem;
@@ -45,8 +40,8 @@ namespace System.Windows.Forms
         private bool deleteItemUserEnabled = true;
 
         /// <summary>
-        ///      Creates an empty BindingNavigator tool strip.
-        ///      Call AddStandardItems() to add standard tool strip items.
+        ///  Creates an empty BindingNavigator tool strip.
+        ///  Call AddStandardItems() to add standard tool strip items.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator() : this(false)
@@ -54,7 +49,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Creates a BindingNavigator strip containing standard items, bound to the specified BindingSource.
+        ///  Creates a BindingNavigator strip containing standard items, bound to the specified BindingSource.
         /// </summary>
         public BindingNavigator(BindingSource bindingSource) : this(true)
         {
@@ -62,8 +57,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Creates an empty BindingNavigator tool strip, and adds the strip to the specified container.
-        ///      Call AddStandardItems() to add standard tool strip items.
+        ///  Creates an empty BindingNavigator tool strip, and adds the strip to the specified container.
+        ///  Call AddStandardItems() to add standard tool strip items.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container) : this(false)
@@ -77,7 +72,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Creates a BindingNavigator strip, optionally containing a set of standard tool strip items.
+        ///  Creates a BindingNavigator strip, optionally containing a set of standard tool strip items.
         /// </summary>
         public BindingNavigator(bool addStandardItems)
         {
@@ -88,7 +83,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     ISupportInitialize support. Disables updates to tool strip items during initialization.
+        ///  ISupportInitialize support. Disables updates to tool strip items during initialization.
         /// </summary>
         public void BeginInit()
         {
@@ -96,7 +91,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     ISupportInitialize support. Enables updates to tool strip items after initialization.
+        ///  ISupportInitialize support. Enables updates to tool strip items after initialization.
         /// </summary>
         public void EndInit()
         {
@@ -105,7 +100,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Unhooks the BindingNavigator from the BindingSource.
+        ///  Unhooks the BindingNavigator from the BindingSource.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -118,41 +113,40 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Adds standard set of tool strip items to a BindingNavigator tool strip, for basic
-        ///      navigation operations such as Move First, Move Next, Add New, etc.
+        ///  Adds standard set of tool strip items to a BindingNavigator tool strip, for basic
+        ///  navigation operations such as Move First, Move Next, Add New, etc.
         ///
-        ///      This method is called by the Windows Form Designer when a new BindingNavigator is
-        ///      added to a Form. When creating a BindingNavigator programmatically, this method
-        ///      must be called explicitly.
+        ///  This method is called by the Windows Form Designer when a new BindingNavigator is
+        ///  added to a Form. When creating a BindingNavigator programmatically, this method
+        ///  must be called explicitly.
         ///
-        ///      Override this method in derived classes to define additional or alternative standard items.
-        ///      To ensure optimal design-time support for your derived class, make sure each item has a
-        ///      meaningful value in its Name property. At design time, this will be used to generate a unique
-        ///      name for the corresponding member variable. The item's Name property will then be updated
-        ///      to match the name given to the member variable.
+        ///  Override this method in derived classes to define additional or alternative standard items.
+        ///  To ensure optimal design-time support for your derived class, make sure each item has a
+        ///  meaningful value in its Name property. At design time, this will be used to generate a unique
+        ///  name for the corresponding member variable. The item's Name property will then be updated
+        ///  to match the name given to the member variable.
         ///
-        ///      Note: This method does NOT remove any previous items from the strip, or suspend
-        ///      layout while items are being added. Those are responsibilities of the caller.
+        ///  Note: This method does NOT remove any previous items from the strip, or suspend
+        ///  layout while items are being added. Those are responsibilities of the caller.
         /// </summary>
         public virtual void AddStandardItems()
         {
-
             //
             // Create items
             //
 
-            MoveFirstItem = new System.Windows.Forms.ToolStripButton();
-            MovePreviousItem = new System.Windows.Forms.ToolStripButton();
-            MoveNextItem = new System.Windows.Forms.ToolStripButton();
-            MoveLastItem = new System.Windows.Forms.ToolStripButton();
-            PositionItem = new System.Windows.Forms.ToolStripTextBox();
-            CountItem = new System.Windows.Forms.ToolStripLabel();
-            AddNewItem = new System.Windows.Forms.ToolStripButton();
-            DeleteItem = new System.Windows.Forms.ToolStripButton();
+            MoveFirstItem = new ToolStripButton();
+            MovePreviousItem = new ToolStripButton();
+            MoveNextItem = new ToolStripButton();
+            MoveLastItem = new ToolStripButton();
+            PositionItem = new ToolStripTextBox();
+            CountItem = new ToolStripLabel();
+            AddNewItem = new ToolStripButton();
+            DeleteItem = new ToolStripButton();
 
-            ToolStripSeparator separator1 = new System.Windows.Forms.ToolStripSeparator();
-            ToolStripSeparator separator2 = new System.Windows.Forms.ToolStripSeparator();
-            ToolStripSeparator separator3 = new System.Windows.Forms.ToolStripSeparator();
+            ToolStripSeparator separator1 = new ToolStripSeparator();
+            ToolStripSeparator separator2 = new ToolStripSeparator();
+            ToolStripSeparator separator3 = new ToolStripSeparator();
 
             //
             // Set up strings
@@ -197,7 +191,6 @@ namespace System.Windows.Forms
             Bitmap moveLastImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
             Bitmap addNewImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
             Bitmap deleteImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
-
 
             MoveFirstItem.Image = moveFirstImage;
             MovePreviousItem.Image = movePreviousImage;
@@ -246,14 +239,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      The BindingSource who's list we are currently navigating, or null.
+        ///  The BindingSource who's list we are currently navigating, or null.
         /// </summary>
         [
         DefaultValue(null),
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingNavigatorBindingSourcePropDescr)),
         TypeConverter(typeof(ReferenceConverter)),
-        SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
         ]
         public BindingSource BindingSource
         {
@@ -269,7 +261,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that triggers the 'Move first' action, or null.
+        ///  The ToolStripItem that triggers the 'Move first' action, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -294,7 +286,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that triggers the 'Move previous' action, or null.
+        ///  The ToolStripItem that triggers the 'Move previous' action, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -321,7 +313,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that triggers the 'Move next' action, or null.
+        ///  The ToolStripItem that triggers the 'Move next' action, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -346,7 +338,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that triggers the 'Move last' action, or null.
+        ///  The ToolStripItem that triggers the 'Move last' action, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -371,7 +363,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that triggers the 'Add new' action, or null.
+        ///  The ToolStripItem that triggers the 'Add new' action, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -393,7 +385,7 @@ namespace System.Windows.Forms
             {
                 if (addNewItem != value && value != null)
                 {
-                    value.InternalEnabledChanged += new System.EventHandler(OnAddNewItemEnabledChanged);
+                    value.InternalEnabledChanged += new EventHandler(OnAddNewItemEnabledChanged);
                     addNewItemUserEnabled = value.Enabled;
                 }
                 WireUpButton(ref addNewItem, value, new EventHandler(OnAddNew));
@@ -401,7 +393,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that triggers the 'Delete' action, or null.
+        ///  The ToolStripItem that triggers the 'Delete' action, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -423,7 +415,7 @@ namespace System.Windows.Forms
             {
                 if (deleteItem != value && value != null)
                 {
-                    value.InternalEnabledChanged += new System.EventHandler(OnDeleteItemEnabledChanged);
+                    value.InternalEnabledChanged += new EventHandler(OnDeleteItemEnabledChanged);
                     deleteItemUserEnabled = value.Enabled;
                 }
                 WireUpButton(ref deleteItem, value, new EventHandler(OnDelete));
@@ -432,7 +424,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that displays the current position, or null.
+        ///  The ToolStripItem that displays the current position, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -457,7 +449,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ToolStripItem that displays the total number of items, or null.
+        ///  The ToolStripItem that displays the total number of items, or null.
         /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
@@ -482,7 +474,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Formatting to apply to count displayed in the CountItem tool strip item.
+        ///  Formatting to apply to count displayed in the CountItem tool strip item.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -506,8 +498,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Event raised when the state of the tool strip items needs to be
-        ///     refreshed to reflect the current state of the data.
+        ///  Event raised when the state of the tool strip items needs to be
+        ///  refreshed to reflect the current state of the data.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -520,7 +512,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Refreshes the state of the standard items to reflect the current state of the data.
+        ///  Refreshes the state of the standard items to reflect the current state of the data.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void RefreshItemsCore()
@@ -569,7 +561,7 @@ namespace System.Windows.Forms
 
                 if (AddNewItem != null)
                 {
-                    System.EventHandler handler = new System.EventHandler(OnAddNewItemEnabledChanged);
+                    EventHandler handler = new EventHandler(OnAddNewItemEnabledChanged);
                     addNewItem.InternalEnabledChanged -= handler;
                     addNewItem.Enabled = (addNewItemUserEnabled && allowNew);
                     addNewItem.InternalEnabledChanged += handler;
@@ -577,7 +569,7 @@ namespace System.Windows.Forms
 
                 if (DeleteItem != null)
                 {
-                    System.EventHandler handler = new System.EventHandler(OnDeleteItemEnabledChanged);
+                    EventHandler handler = new EventHandler(OnDeleteItemEnabledChanged);
                     deleteItem.InternalEnabledChanged -= handler;
                     deleteItem.Enabled = (deleteItemUserEnabled && allowRemove && count > 0);
                     deleteItem.InternalEnabledChanged += handler;
@@ -608,8 +600,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
-        ///     Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
+        ///  Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
+        ///  Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
         /// </summary>
         protected virtual void OnRefreshItems()
         {
@@ -621,9 +613,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Triggers form validation. Used by the BindingNavigator's standard items when clicked. If a validation error occurs
-        ///     on the form, focus remains on the active control and the standard item does not perform its standard click action.
-        ///     Custom items may also use this method to trigger form validation and check for success before performing an action.
+        ///  Triggers form validation. Used by the BindingNavigator's standard items when clicked. If a validation error occurs
+        ///  on the form, focus remains on the active control and the standard item does not perform its standard click action.
+        ///  Custom items may also use this method to trigger form validation and check for success before performing an action.
         /// </summary>
         public bool Validate()
         {
@@ -631,7 +623,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Accept new row position entered into PositionItem.
+        ///  Accept new row position entered into PositionItem.
         /// </summary>
         private void AcceptNewPosition()
         {
@@ -649,11 +641,11 @@ namespace System.Windows.Forms
                 // Read new position from item text (and subtract one!)
                 newPosition = Convert.ToInt32(positionItem.Text, CultureInfo.CurrentCulture) - 1;
             }
-            catch (System.FormatException)
+            catch (FormatException)
             {
                 // Ignore bad user input
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
                 // Ignore bad user input
             }
@@ -671,7 +663,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Cancel new row position entered into PositionItem.
+        ///  Cancel new row position entered into PositionItem.
         /// </summary>
         private void CancelNewPosition()
         {
@@ -681,7 +673,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Navigates to first item in BindingSource's list when the MoveFirstItem is clicked.
+        ///  Navigates to first item in BindingSource's list when the MoveFirstItem is clicked.
         /// </summary>
         private void OnMoveFirst(object sender, EventArgs e)
         {
@@ -696,7 +688,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Navigates to previous item in BindingSource's list when the MovePreviousItem is clicked.
+        ///  Navigates to previous item in BindingSource's list when the MovePreviousItem is clicked.
         /// </summary>
         private void OnMovePrevious(object sender, EventArgs e)
         {
@@ -711,7 +703,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Navigates to next item in BindingSource's list when the MoveNextItem is clicked.
+        ///  Navigates to next item in BindingSource's list when the MoveNextItem is clicked.
         /// </summary>
         private void OnMoveNext(object sender, EventArgs e)
         {
@@ -726,7 +718,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Navigates to last item in BindingSource's list when the MoveLastItem is clicked.
+        ///  Navigates to last item in BindingSource's list when the MoveLastItem is clicked.
         /// </summary>
         private void OnMoveLast(object sender, EventArgs e)
         {
@@ -741,7 +733,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adds new item to BindingSource's list when the AddNewItem is clicked.
+        ///  Adds new item to BindingSource's list when the AddNewItem is clicked.
         /// </summary>
         private void OnAddNew(object sender, EventArgs e)
         {
@@ -756,7 +748,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deletes current item from BindingSource's list when the DeleteItem is clicked.
+        ///  Deletes current item from BindingSource's list when the DeleteItem is clicked.
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
@@ -771,7 +763,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
+        ///  Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
         /// </summary>
         private void OnPositionKey(object sender, KeyEventArgs e)
         {
@@ -787,7 +779,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
+        ///  Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
         /// </summary>
         private void OnPositionLostFocus(object sender, EventArgs e)
         {
@@ -795,7 +787,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Refresh tool strip items when something changes in the BindingSource.
+        ///  Refresh tool strip items when something changes in the BindingSource.
         /// </summary>
         private void OnBindingSourceStateChanged(object sender, EventArgs e)
         {
@@ -803,7 +795,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Refresh tool strip items when something changes in the BindingSource's list.
+        ///  Refresh tool strip items when something changes in the BindingSource's list.
         /// </summary>
         private void OnBindingSourceListChanged(object sender, ListChangedEventArgs e)
         {
@@ -811,7 +803,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Refresh the state of the items when the state of the data changes.
+        ///  Refresh the state of the items when the state of the data changes.
         /// </summary>
         private void RefreshItemsInternal()
         {
@@ -852,8 +844,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Wire up some member variable to the specified button item, hooking events
-        ///     on the new button and unhooking them from the previous button, if required.
+        ///  Wire up some member variable to the specified button item, hooking events
+        ///  on the new button and unhooking them from the previous button, if required.
         /// </summary>
         private void WireUpButton(ref ToolStripItem oldButton, ToolStripItem newButton, EventHandler clickHandler)
         {
@@ -877,8 +869,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Wire up some member variable to the specified text box item, hooking events
-        ///     on the new text box and unhooking them from the previous text box, if required.
+        ///  Wire up some member variable to the specified text box item, hooking events
+        ///  on the new text box and unhooking them from the previous text box, if required.
         /// </summary>
         private void WireUpTextBox(ref ToolStripItem oldTextBox, ToolStripItem newTextBox, KeyEventHandler keyUpHandler, EventHandler lostFocusHandler)
         {
@@ -902,8 +894,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Wire up some member variable to the specified label item, hooking events
-        ///     on the new label and unhooking them from the previous label, if required.
+        ///  Wire up some member variable to the specified label item, hooking events
+        ///  on the new label and unhooking them from the previous label, if required.
         /// </summary>
         private void WireUpLabel(ref ToolStripItem oldLabel, ToolStripItem newLabel)
         {
@@ -915,8 +907,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Wire up some member variable to the specified binding source, hooking events
-        ///     on the new binding source and unhooking them from the previous one, if required.
+        ///  Wire up some member variable to the specified binding source, hooking events
+        ///  on the new binding source and unhooking them from the previous one, if required.
         /// </summary>
         private void WireUpBindingSource(ref BindingSource oldBindingSource, BindingSource newBindingSource)
         {

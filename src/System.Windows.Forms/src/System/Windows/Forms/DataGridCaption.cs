@@ -2,29 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.Runtime.Versioning;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>
-    ///       Represents a caption in the DataGrid control.
-    ///    </para>
+    ///  Represents a caption in the DataGrid control.
     /// </summary>
     internal class DataGridCaption
     {
-
         internal EventHandlerList events;
 
         private const int xOffset = 3;
@@ -32,7 +22,6 @@ namespace System.Windows.Forms
         private const int textPadding = 2;
         private const int buttonToText = 4;
         private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
-
 
         private static readonly Point minimumBounds = new Point(50, 30);
 
@@ -196,7 +185,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                // use the dataGridFont only if the user 
+                // use the dataGridFont only if the user
                 // did not set the CaptionFont
                 //
                 if (textFont == null)
@@ -384,7 +373,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adds a listener for the BackwardClicked event.
+        ///  Adds a listener for the BackwardClicked event.
         /// </summary>
         internal event EventHandler BackwardClicked
         {
@@ -392,9 +381,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_BACKWARDCLICKED, value);
         }
 
-
         /// <summary>
-        ///     Adds a listener for the CaptionClicked event.
+        ///  Adds a listener for the CaptionClicked event.
         /// </summary>
         internal event EventHandler CaptionClicked
         {
@@ -565,8 +553,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the dataGrid when it needs the caption
-        ///      to repaint.
+        ///  Called by the dataGrid when it needs the caption
+        ///  to repaint.
         /// </summary>
         internal void Paint(Graphics g, Rectangle bounds, bool alignRight)
         {
@@ -580,7 +568,6 @@ namespace System.Windows.Forms
             int downButtonArea = downButtonVisible && !dataGrid.ParentRowsIsEmpty() ? downButtonWidth + xOffset + buttonToText : 0;
 
             int textWidthLeft = bounds.Width - xOffset - backButtonArea - downButtonArea;
-
 
             textRect = new Rectangle(
                                     bounds.X,
@@ -629,7 +616,7 @@ namespace System.Windows.Forms
             {
                 PaintDownButton(g, downButtonRect);
                 // the rules have changed, yet again.
-                // now: if we show the parent rows and the mouse is 
+                // now: if we show the parent rows and the mouse is
                 // not on top of this icon, then let the icon be depressed.
                 // if the mouse is pressed over the icon, then show the icon pressed
                 // if the mouse is over the icon and not pressed, then show the icon SunkenInner;
@@ -764,8 +751,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the dataGrid when the mouse is pressed
-        ///      inside the caption.
+        ///  Called by the dataGrid when the mouse is pressed
+        ///  inside the caption.
         /// </summary>
         internal void MouseDown(int x, int y)
         {
@@ -787,8 +774,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the dataGrid when the mouse is released
-        ///      inside the caption.
+        ///  Called by the dataGrid when the mouse is released
+        ///  inside the caption.
         /// </summary>
         internal void MouseUp(int x, int y)
         {
@@ -813,8 +800,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the dataGrid when the mouse leaves
-        ///      the caption area.
+        ///  Called by the dataGrid when the mouse leaves
+        ///  the caption area.
         /// </summary>
         internal void MouseLeft()
         {
@@ -824,8 +811,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the dataGrid when the mouse is
-        ///      inside the caption.
+        ///  Called by the dataGrid when the mouse is
+        ///  inside the caption.
         /// </summary>
         internal void MouseOver(int x, int y)
         {
@@ -888,7 +875,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Toggles the direction the "Down Button" is pointing.
+        ///  Toggles the direction the "Down Button" is pointing.
         /// </summary>
         internal bool ToggleDownButtonDirection()
         {

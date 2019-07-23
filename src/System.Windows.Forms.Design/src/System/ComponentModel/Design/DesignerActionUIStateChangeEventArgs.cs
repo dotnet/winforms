@@ -11,7 +11,7 @@ namespace System.ComponentModel.Design
     {
         /// <summary>
         /// Constructor that requires the object in question, the type of change and the remaining actionlists left for the object on the related object.
-        /// </summary> 
+        /// </summary>
         public DesignerActionUIStateChangeEventArgs(object relatedObject, DesignerActionUIStateChangeType changeType)
         {
             RelatedObject = relatedObject;
@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         /// The object this change is related to.
-        /// </summary> 
+        /// </summary>
         public object RelatedObject { get; }
 
         /// <summary>

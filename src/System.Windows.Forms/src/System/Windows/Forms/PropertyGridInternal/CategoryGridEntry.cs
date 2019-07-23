@@ -4,33 +4,18 @@
 
 //#define PAINT_CATEGORY_TRIANGLE
 
+using System.Collections;
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms.PropertyGridInternal
 {
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Collections;
-    using System.Reflection;
-
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     internal class CategoryGridEntry : GridEntry
     {
-
         internal string name;
         private Brush backBrush = null;
         private static Hashtable categoryStates = null;
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
-                                                                                                    // control over who does what in the constructor.
-        ]
         public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry peParent, string name, GridEntry[] childGridEntries)
         : base(ownerGrid, peParent)
         {
@@ -72,7 +57,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetFlag(GridEntry.FLAG_LABEL_BOLD, true);
         }
 
-
         /// <summary>
         /// Returns true if this GridEntry has a value field in the right hand column.
         /// </summary>
@@ -104,12 +88,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override void DisposeChildren()
         {
-
             // categories should never dispose
             //
             return;
         }
-
 
         // we don't want this guy participating in property depth.
         public override int PropertyDepth
@@ -233,9 +215,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             return str;
         }
 
-        public override void PaintLabel(System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+        public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
-
             base.PaintLabel(g, rect, clipRect, false, true);
 
             // now draw the focus rect
@@ -261,21 +242,21 @@ namespace System.Windows.Forms.PropertyGridInternal
             // draw the line along the top
             if (parentPE.GetChildIndex(this) > 0)
             {
-                using (Pen topLinePen = new System.Drawing.Pen(ownerGrid.CategorySplitterColor, 1))
+                using (Pen topLinePen = new Pen(ownerGrid.CategorySplitterColor, 1))
                 {
                     g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
                 }
             }
         }
 
-        public override void PaintValue(object val, System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
+        public override void PaintValue(object val, Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
         {
             base.PaintValue(val, g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected);
 
             // draw the line along the top
             if (parentPE.GetChildIndex(this) > 0)
             {
-                using (Pen topLinePen = new System.Drawing.Pen(ownerGrid.CategorySplitterColor, 1))
+                using (Pen topLinePen = new Pen(ownerGrid.CategorySplitterColor, 1))
                 {
                     g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
                 }
@@ -293,7 +274,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         [Runtime.InteropServices.ComVisible(true)]
         internal class CategoryGridEntryAccessibleObject : GridEntryAccessibleObject
         {
-
             private readonly CategoryGridEntry _owningCategoryGridEntry;
 
             /// <summary>

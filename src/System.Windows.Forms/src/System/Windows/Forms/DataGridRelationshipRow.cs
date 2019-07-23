@@ -2,24 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Runtime.InteropServices;
-
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-
-    using Microsoft.Win32;
-    using System.Diagnostics;
-    using System.Collections;
-    using System.Globalization;
-
     /// <summary>
-    ///      This class fully encapsulates the painting logic for a row
-    ///      appearing in a DataGrid.
+    ///  This class fully encapsulates the painting logic for a row
+    ///  appearing in a DataGrid.
     /// </summary>
     internal class DataGridRelationshipRow : DataGridRow
     {
@@ -176,7 +170,6 @@ namespace System.Windows.Forms
             return new DataGridRelationshipRowAccessibleObject(this);
         }
 
-
         private void Expand()
         {
             Debug.Assert(dgTable.DataGrid.AllowNavigation, "how can the user expand the relations if the grid does not allow navigation?");
@@ -221,20 +214,20 @@ namespace System.Windows.Forms
             }
         }
 
-        // so the edit box will not paint under the 
+        // so the edit box will not paint under the
         // grid line of the row
         public override Rectangle GetCellBounds(int col)
         {
             Rectangle cellBounds = base.GetCellBounds(col);
-            // decrement base.Height by 1, so the edit box will not 
+            // decrement base.Height by 1, so the edit box will not
             // paint over the bottom line.
             cellBounds.Height = base.Height - 1;
             return cellBounds;
         }
 
         /// <summary>
-        ///      Given an origin, this procedure returns
-        ///      a rectangle that describes the location of an outline box.
+        ///  Given an origin, this procedure returns
+        ///  a rectangle that describes the location of an outline box.
         /// </summary>
         private Rectangle GetOutlineRect(int xOrigin, int yOrigin)
         {
@@ -313,9 +306,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the DataGrid when a click occurs in the row's client
-        ///      area.  The coordinates are normalized to the rectangle's top
-        ///      left point.
+        ///  Called by the DataGrid when a click occurs in the row's client
+        ///  area.  The coordinates are normalized to the rectangle's top
+        ///  left point.
         /// </summary>
         private bool PointOverPlusMinusGlyph(int x, int y, Rectangle rowHeaders, bool alignToRight)
         {
@@ -404,7 +397,7 @@ namespace System.Windows.Forms
             return base.OnMouseMove(x, y, rowHeaders, alignToRight);
         }
 
-        // this function will not invalidate all of the 
+        // this function will not invalidate all of the
         // row
         public override void OnMouseLeft(Rectangle rowHeaders, bool alignToRight)
         {
@@ -440,7 +433,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by the DataGrid when a keypress occurs on a row with "focus."
+        ///  Called by the DataGrid when a keypress occurs on a row with "focus."
         /// </summary>
         public override bool OnKeyPress(Keys keyData)
         {
@@ -507,7 +500,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // will reset the FocusedRelation and will invalidate the 
+        // will reset the FocusedRelation and will invalidate the
         // rectangle so that the linkFont is no longer shown
         internal override void LoseChildFocus(Rectangle rowHeaders, bool alignToRight)
         {
@@ -539,7 +532,7 @@ namespace System.Windows.Forms
             Debug.Assert((keyData & Keys.Control) != Keys.Control, "the DataGridRelationshipRow only handles TAB and TAB-SHIFT");
             Debug.Assert((keyData & Keys.Alt) != Keys.Alt, "the DataGridRelationshipRow only handles TAB and TAB-SHIFT");
 
-            // if there are no relationships, this row can't do anything with the 
+            // if there are no relationships, this row can't do anything with the
             // key
             if (dgTable.RelationsList.Count == 0 || dgTable.DataGrid == null || !dgTable.DataGrid.AllowNavigation)
             {
@@ -609,7 +602,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Paints the row.
+        ///  Paints the row.
         /// </summary>
         public override int Paint(Graphics g, Rectangle bounds, Rectangle trueRowBounds, int firstVisibleColumn, int numVisibleColumns)
         {
@@ -702,7 +695,6 @@ namespace System.Windows.Forms
 
         public override void PaintHeader(Graphics g, Rectangle bounds, bool alignToRight, bool isDirty)
         {
-
             DataGrid grid = DataGrid;
 
             Rectangle insideBounds = bounds;
@@ -763,12 +755,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Paints the relationships below the data area.
+        ///  Paints the relationships below the data area.
         /// </summary>
         private void PaintRelations(Graphics g, Rectangle bounds, Rectangle trueRowBounds,
                                     int dataWidth, int firstCol, int nCols, bool alignToRight)
         {
-
             // Calculate the relationship rect.
             // relationshipRect = Rectangle.Empty;
             Rectangle relRect = GetRelationshipRect();
@@ -968,7 +959,7 @@ namespace System.Windows.Forms
             return relation;
         }
 
-        // given the relRect and the rowHeader, this function will return the 
+        // given the relRect and the rowHeader, this function will return the
         // X coordinate of the relationship rectangle as it should appear on the screen
         private int MirrorRelationshipRectangle(Rectangle relRect, Rectangle rowHeader, bool alignToRight)
         {
@@ -982,7 +973,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // given the X and Width of a rectangle R1 contained in rect, 
+        // given the X and Width of a rectangle R1 contained in rect,
         // this will return the X coordinate of the rectangle that corresponds to R1 in Bi-Di transformation
         private int MirrorRectangle(int x, int width, Rectangle rect, bool alignToRight)
         {
@@ -1002,7 +993,6 @@ namespace System.Windows.Forms
             public DataGridRelationshipRowAccessibleObject(DataGridRow owner) : base(owner)
             {
             }
-
 
             protected override void AddChildAccessibleObjects(IList children)
             {
@@ -1234,7 +1224,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///      Navigate to the next or previous grid entry.
+            ///  Navigate to the next or previous grid entry.
             /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir)
             {

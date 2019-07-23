@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Constructor that requires the object in question, the type of change and the remaining actionlists left for the object. on the related object.
-        /// </summary> 
+        /// </summary>
         public DesignerActionListsChangedEventArgs(object relatedObject, DesignerActionListsChangedType changeType, DesignerActionListCollection actionLists)
         {
             _relatedObject = relatedObject;
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// The type of changed that caused the related event to be thrown.
-        /// </summary> 
+        /// </summary>
         public DesignerActionListsChangedType ChangeType
         {
             get => _changeType;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// The object this change is related to.
-        /// </summary> 
+        /// </summary>
         public object RelatedObject
         {
             get => _relatedObject;
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// The remaining actionlists left for the related object.
-        /// </summary> 
+        /// </summary>
         public DesignerActionListCollection ActionLists
         {
             get => _actionLists;

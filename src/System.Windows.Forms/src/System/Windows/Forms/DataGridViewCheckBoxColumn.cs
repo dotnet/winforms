@@ -2,26 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-
-    [ToolboxBitmapAttribute(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn")]
+    [ToolboxBitmap(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn")]
     public class DataGridViewCheckBoxColumn : DataGridViewColumn
     {
         public DataGridViewCheckBoxColumn() : this(false)
         {
         }
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
-        ]
         public DataGridViewCheckBoxColumn(bool threeState)
             : base(new DataGridViewCheckBoxCell(threeState))
         {
@@ -52,7 +47,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && !(value is System.Windows.Forms.DataGridViewCheckBoxCell))
+                if (value != null && !(value is DataGridViewCheckBoxCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
                 }
@@ -216,9 +211,6 @@ namespace System.Windows.Forms
                 }
                 return CheckBoxCellTemplate.ThreeState;
             }
-            [
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // OK to cast a NullValue into a bool and CheckState
-            ]
             set
             {
                 if (ThreeState != value)

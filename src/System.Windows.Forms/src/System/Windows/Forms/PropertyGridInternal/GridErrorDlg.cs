@@ -2,33 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Threading;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.Windows.Forms.ComponentModel;
-    using System.Windows.Forms.Design;
-    using System.ComponentModel.Design;
-    using System.IO;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using Message = System.Windows.Forms.Message;
-    using System.Drawing.Drawing2D;
-
     /// <summary>
-    ///     Implements a dialog that is displayed when an unhandled exception occurs in
-    ///     a thread. This dialog's width is defined by the summary message
-    ///     in the top pane. We don't restrict dialog width in any way.  
-    ///     Use caution and check at all DPI scaling factors if adding a new message
-    ///     to be displayed in the top pane.
+    ///  Implements a dialog that is displayed when an unhandled exception occurs in
+    ///  a thread. This dialog's width is defined by the summary message
+    ///  in the top pane. We don't restrict dialog width in any way.
+    ///  Use caution and check at all DPI scaling factors if adding a new message
+    ///  to be displayed in the top pane.
     /// </summary>
     internal class GridErrorDlg : Form
     {
@@ -64,7 +48,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         public string Message
         {
             set
@@ -73,10 +56,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // We use " " for the text so we leave a small amount of test.
-                                                                                                        // So we don't have to localize it.
-        ]
         public GridErrorDlg(PropertyGrid owner)
         {
             ownerGrid = owner;
@@ -112,7 +91,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Called when the details button is clicked.
+        ///  Called when the details button is clicked.
         /// </summary>
         private void DetailsClick(object sender, EventArgs devent)
         {
@@ -145,8 +124,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///     Tells whether the current resources for this dll have been
-        ///     localized for a RTL language.
+        ///  Tells whether the current resources for this dll have been
+        ///  localized for a RTL language.
         /// </summary>
         private static bool IsRTLResources
         {
@@ -164,145 +143,145 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             detailsBtn = new DetailsButton(this);
-            overarchingTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            buttonTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            okBtn = new System.Windows.Forms.Button();
-            cancelBtn = new System.Windows.Forms.Button();
-            pictureLabelTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            lblMessage = new System.Windows.Forms.Label();
-            pictureBox = new System.Windows.Forms.PictureBox();
-            details = new System.Windows.Forms.TextBox();
+            overarchingTableLayoutPanel = new TableLayoutPanel();
+            buttonTableLayoutPanel = new TableLayoutPanel();
+            okBtn = new Button();
+            cancelBtn = new Button();
+            pictureLabelTableLayoutPanel = new TableLayoutPanel();
+            lblMessage = new Label();
+            pictureBox = new PictureBox();
+            details = new TextBox();
             overarchingTableLayoutPanel.SuspendLayout();
             buttonTableLayoutPanel.SuspendLayout();
             pictureLabelTableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(pictureBox)).BeginInit();
             SuspendLayout();
-            // 
+            //
             // lblMessage
-            // 
+            //
             lblMessage.AutoSize = true;
-            lblMessage.Location = new System.Drawing.Point(73, 30);
-            lblMessage.Margin = new System.Windows.Forms.Padding(3, 30, 3, 0);
+            lblMessage.Location = new Point(73, 30);
+            lblMessage.Margin = new Padding(3, 30, 3, 0);
             lblMessage.Name = "lblMessage";
-            lblMessage.Size = new System.Drawing.Size(208, 43);
+            lblMessage.Size = new Size(208, 43);
             lblMessage.TabIndex = 0;
-            // 
+            //
             // pictureBox
-            // 
-            pictureBox.Location = new System.Drawing.Point(3, 3);
+            //
+            pictureBox.Location = new Point(3, 3);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new System.Drawing.Size(64, 64);
+            pictureBox.Size = new Size(64, 64);
             pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             pictureBox.TabIndex = 5;
             pictureBox.TabStop = false;
             pictureBox.AutoSize = true;
-            // 
+            //
             // detailsBtn
-            // 
+            //
             detailsBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            detailsBtn.Location = new System.Drawing.Point(3, 3);
-            detailsBtn.Margin = new System.Windows.Forms.Padding(12, 3, 29, 3);
+            detailsBtn.Location = new Point(3, 3);
+            detailsBtn.Margin = new Padding(12, 3, 29, 3);
             detailsBtn.Name = "detailsBtn";
-            detailsBtn.Size = new System.Drawing.Size(100, 23);
+            detailsBtn.Size = new Size(100, 23);
             detailsBtn.TabIndex = 4;
-            detailsBtn.Click += new System.EventHandler(DetailsClick);
-            // 
+            detailsBtn.Click += new EventHandler(DetailsClick);
+            //
             // overarchingTableLayoutPanel
-            // 
+            //
             overarchingTableLayoutPanel.AutoSize = true;
             overarchingTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             overarchingTableLayoutPanel.ColumnCount = 1;
-            overarchingTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
             overarchingTableLayoutPanel.Controls.Add(buttonTableLayoutPanel, 0, 1);
             overarchingTableLayoutPanel.Controls.Add(pictureLabelTableLayoutPanel, 0, 0);
-            overarchingTableLayoutPanel.Location = new System.Drawing.Point(1, 0);
-            overarchingTableLayoutPanel.MinimumSize = new System.Drawing.Size(279, 50);
+            overarchingTableLayoutPanel.Location = new Point(1, 0);
+            overarchingTableLayoutPanel.MinimumSize = new Size(279, 50);
             overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
             overarchingTableLayoutPanel.RowCount = 2;
-            overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            overarchingTableLayoutPanel.Size = new System.Drawing.Size(290, 108);
+            overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+            overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+            overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            overarchingTableLayoutPanel.Size = new Size(290, 108);
             overarchingTableLayoutPanel.TabIndex = 6;
-            // 
+            //
             // buttonTableLayoutPanel
-            // 
-            buttonTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            //
+            buttonTableLayoutPanel.Anchor = ((AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             buttonTableLayoutPanel.AutoSize = true;
             buttonTableLayoutPanel.ColumnCount = 3;
             overarchingTableLayoutPanel.SetColumnSpan(buttonTableLayoutPanel, 2);
-            buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            buttonTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            buttonTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            buttonTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
             buttonTableLayoutPanel.Controls.Add(cancelBtn, 2, 0);
             buttonTableLayoutPanel.Controls.Add(okBtn, 1, 0);
             buttonTableLayoutPanel.Controls.Add(detailsBtn, 0, 0);
-            buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 79);
+            buttonTableLayoutPanel.Location = new Point(0, 79);
             buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
             buttonTableLayoutPanel.RowCount = 1;
-            buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            buttonTableLayoutPanel.Size = new System.Drawing.Size(290, 29);
+            buttonTableLayoutPanel.RowStyles.Add(new RowStyle());
+            buttonTableLayoutPanel.Size = new Size(290, 29);
             buttonTableLayoutPanel.TabIndex = 8;
-            // 
+            //
             // okBtn
-            // 
+            //
             okBtn.AutoSize = true;
             okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            okBtn.Location = new System.Drawing.Point(131, 3);
+            okBtn.Location = new Point(131, 3);
             okBtn.Name = "okBtn";
-            okBtn.Size = new System.Drawing.Size(75, 23);
+            okBtn.Size = new Size(75, 23);
             okBtn.TabIndex = 1;
-            okBtn.Click += new System.EventHandler(OnButtonClick);
-            // 
+            okBtn.Click += new EventHandler(OnButtonClick);
+            //
             // cancelBtn
-            // 
+            //
             cancelBtn.AutoSize = true;
             cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            cancelBtn.Location = new System.Drawing.Point(212, 3);
-            cancelBtn.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            cancelBtn.Location = new Point(212, 3);
+            cancelBtn.Margin = new Padding(0, 3, 3, 3);
             cancelBtn.Name = "cancelBtn";
-            cancelBtn.Size = new System.Drawing.Size(75, 23);
+            cancelBtn.Size = new Size(75, 23);
             cancelBtn.TabIndex = 2;
-            cancelBtn.Click += new System.EventHandler(OnButtonClick);
-            // 
+            cancelBtn.Click += new EventHandler(OnButtonClick);
+            //
             // pictureLabelTableLayoutPanel
-            // 
+            //
             pictureLabelTableLayoutPanel.AutoSize = true;
             pictureLabelTableLayoutPanel.AutoSizeMode = Forms.AutoSizeMode.GrowOnly;
             pictureLabelTableLayoutPanel.ColumnCount = 2;
-            pictureLabelTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            pictureLabelTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            pictureLabelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            pictureLabelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             pictureLabelTableLayoutPanel.Controls.Add(lblMessage, 1, 0);
             pictureLabelTableLayoutPanel.Controls.Add(pictureBox, 0, 0);
             pictureLabelTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            pictureLabelTableLayoutPanel.Location = new System.Drawing.Point(3, 3);
+            pictureLabelTableLayoutPanel.Location = new Point(3, 3);
             pictureLabelTableLayoutPanel.Name = "pictureLabelTableLayoutPanel";
             pictureLabelTableLayoutPanel.RowCount = 1;
-            pictureLabelTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-            pictureLabelTableLayoutPanel.Size = new System.Drawing.Size(284, 73);
+            pictureLabelTableLayoutPanel.RowStyles.Add(new RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            pictureLabelTableLayoutPanel.Size = new Size(284, 73);
             pictureLabelTableLayoutPanel.TabIndex = 4;
-            // 
+            //
             // details
-            // 
-            details.Location = new System.Drawing.Point(4, 114);
+            //
+            details.Location = new Point(4, 114);
             details.Multiline = true;
             details.Name = "details";
             details.ReadOnly = true;
             details.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            details.Size = new System.Drawing.Size(273, 100);
+            details.Size = new Size(273, 100);
             details.TabIndex = 3;
             details.TabStop = false;
             details.Visible = false;
-            // 
+            //
             // Form1
-            // 
+            //
             AcceptButton = okBtn;
             AutoSize = true;
             AutoScaleMode = Forms.AutoScaleMode.Font;
             AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             CancelButton = cancelBtn;
-            ClientSize = new System.Drawing.Size(299, 113);
+            ClientSize = new Size(299, 113);
             Controls.Add(details);
             Controls.Add(overarchingTableLayoutPanel);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -355,7 +334,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     parent = parent.Parent;
                 }
 
-                details.Location = new System.Drawing.Point(x, y);
+                details.Location = new Point(x, y);
 
                 if (details.Visible)
                 {
@@ -389,7 +368,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
     internal class DetailsButtonAccessibleObject : Control.ControlAccessibleObject
     {
-
         private readonly DetailsButton ownerItem = null;
 
         public DetailsButtonAccessibleObject(DetailsButton owner) : base(owner)

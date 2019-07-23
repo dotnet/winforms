@@ -45,13 +45,13 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// Specifies the <see langword='IAccessible '/>interface used by this
-        /// <see cref='System.Windows.Forms.AccessibleObject'/>.
+        /// <see cref='AccessibleObject'/>.
         /// </summary>
         private IAccessible systemIAccessible = null;
 
         /// <summary>
         /// Specifies the <see cref='NativeMethods.IEnumVariant'/> used by this
-        /// <see cref='System.Windows.Forms.AccessibleObject'/> .
+        /// <see cref='AccessibleObject'/> .
         /// </summary>
         private UnsafeNativeMethods.IEnumVariant systemIEnumVariant = null;
         private UnsafeNativeMethods.IEnumVariant enumVariant = null;
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the object name.</para>
+        /// Gets or sets the object name.
         /// </summary>
         public virtual string Name
         {
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// When overridden in a derived class, gets or sets the parent of an
-        /// accessible object.</para>
+        /// accessible object.
         /// </summary>
         public virtual AccessibleObject Parent
         {
@@ -276,7 +276,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the state of this accessible object.</para>
+        /// Gets the state of this accessible object.
         /// </summary>
         public virtual AccessibleStates State
         {
@@ -2657,7 +2657,7 @@ namespace System.Windows.Forms
     /// </Summary>
     internal sealed class InternalAccessibleObject : StandardOleMarshalObject,
                                     UnsafeNativeMethods.IAccessibleInternal,
-                                    System.Reflection.IReflect,
+                                    IReflect,
                                     UnsafeNativeMethods.IServiceProvider,
                                     UnsafeNativeMethods.IAccessibleEx,
                                     UnsafeNativeMethods.IRawElementProviderSimple,

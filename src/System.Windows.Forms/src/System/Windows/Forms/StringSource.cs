@@ -2,37 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices.ComTypes;
-    using System.Runtime.InteropServices;
-
     /// <summary>
-    ///    <para> 
-    ///       Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSoucr property.
-    ///       This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
-    ///       The StringSource contains an array of Strings which is passed to the COM object as the custom source.
-    ///    </para>
+    ///  Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSoucr property.
+    ///  This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
+    ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
     internal class StringSource : IEnumString
     {
-
         private string[] strings;
         private int current;
         private int size;
         private UnsafeNativeMethods.IAutoComplete2 autoCompleteObject2;
 
         /// <summary>
-        ///    <para> 
-        ///       SHAutoComplete COM object CLSID.
-        ///    </para>
+        ///  SHAutoComplete COM object CLSID.
         /// </summary>
         private static Guid autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
 
         /// <summary>
-        ///    <para> 
-        ///       Constructor.
-        ///    </para>
+        ///  Constructor.
         /// </summary>
         public StringSource(string[] strings)
         {
@@ -52,14 +45,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> 
-        ///       This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle 
-        ///       to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
-        ///    </para>
+        ///  This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle
+        ///  to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         /// </summary>
         public bool Bind(HandleRef edit, int options)
         {
-
             bool retVal = false;
 
             if (autoCompleteObject2 != null)

@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Drawing.Drawing2D;
-    using System.Diagnostics;
-    using System.Windows.Forms.Layout;
-
     /// <summary>
     /// Summary description for ProfessionalToolStripRenderer.
     /// </summary>
@@ -106,8 +102,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         public bool RoundedEdges
         {
             get
@@ -119,7 +113,6 @@ namespace System.Windows.Forms
                 roundedEdges = value;
             }
         }
-
 
         private bool UseSystemColors
         {
@@ -204,7 +197,7 @@ namespace System.Windows.Forms
             if (horizontal)
             {
                 rightToLeftShift = (rightToLeft) ? -2 : 0;
-                // width of the both lines is 1 pixel and lines are drawn next to each other, this the highlight line is 1 pixel below the black line 
+                // width of the both lines is 1 pixel and lines are drawn next to each other, this the highlight line is 1 pixel below the black line
                 g.DrawLine(SystemPens.ControlText,
                     middle.X - ToolStripRenderer.Offset2X,
                     overflowArrowRect.Y - ToolStripRenderer.Offset2Y,
@@ -238,7 +231,6 @@ namespace System.Windows.Forms
                 base.OnRenderDropDownButtonBackground(e);
                 return;
             }
-
 
             if (e.Item is ToolStripDropDownItem item && item.Pressed && item.HasDropDownItems)
             {
@@ -342,7 +334,6 @@ namespace System.Windows.Forms
             RenderLabelInternal(e);
         }
 
-
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
             if (RendererOverride != null)
@@ -415,7 +406,6 @@ namespace System.Windows.Forms
 
             ToolStrip toolStrip = e.ToolStrip;
             Graphics g = e.Graphics;
-
 
             if (toolStrip is ToolStripDropDown)
             {
@@ -508,7 +498,6 @@ namespace System.Windows.Forms
 
             int numRectangles = (height - (gripPadding * 2)) / 4;
 
-
             if (numRectangles > 0)
             {
                 // a MenuStrip starts its grip lower and has fewer grip rectangles.
@@ -578,7 +567,6 @@ namespace System.Windows.Forms
                 return; // no highlights are painted behind a system menu item
             }
 
-
             if (item.IsOnDropDown) {
                 ScaleObjectSizesIfNeeded(item.DeviceDpi);
 
@@ -636,7 +624,7 @@ namespace System.Windows.Forms
                 }
                 else if (item.Selected)
                 {
-                    //Hot, Pressed behavior 
+                    //Hot, Pressed behavior
                     // Fill with orange
                     Color borderColor = ColorTable.MenuItemBorder;
 
@@ -840,7 +828,7 @@ namespace System.Windows.Forms
             //        RenderBackgroundGradient(e.Graphics, toolStripContentPanel, ColorTable.ToolStripContentPanelGradientBegin, ColorTable.ToolStripContentPanelGradientEnd);
         }
 
-        #region PrivatePaintHelpers 
+        #region PrivatePaintHelpers
 
         // consider make public
         internal override Region GetTransparentRegion(ToolStrip toolStrip)
@@ -857,7 +845,7 @@ namespace System.Windows.Forms
 
             // Render curve
             // eat away at the corners by drawing the parent background
-            // 
+            //
             if (toolStrip.ParentInternal != null)
             {
                 //
@@ -906,15 +894,13 @@ namespace System.Windows.Forms
             return null;
         }
 
-
         // </summary>
-        // We want to make sure the overflow button looks like it's the last thing on 
+        // We want to make sure the overflow button looks like it's the last thing on
         // the toolbar.  This touches up the few pixels that get clobbered by painting the
         // border.
         // </summary>
         private void RenderOverflowButtonEffectsOverBorder(ToolStripRenderEventArgs e)
         {
-
             ToolStrip toolStrip = e.ToolStrip;
             ToolStripItem item = toolStrip.OverflowButton;
             if (!item.Visible)
@@ -949,7 +935,6 @@ namespace System.Windows.Forms
                 g.FillRectangle(b, toolStrip.Width - 2, toolStrip.Height - 1, 1, 1);
             }
 
-
             using (Brush b = new SolidBrush(overflowTopShadow))
             {
                 g.FillRectangle(b, toolStrip.Width - 2, 0, 1, 1);
@@ -960,12 +945,12 @@ namespace System.Windows.Forms
 
         ///<summary>
         ///  This function paints with three colors, beginning, middle, and end.
-        ///   it paints:
-        ///     (1)the entire bounds in the middle color
-        ///     (2)gradient from beginning to middle of width firstGradientWidth
-        ///     (3)gradient from middle to end of width secondGradientWidth
-        ///      
-        ///     if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
+        ///  it paints:
+        ///  (1)the entire bounds in the middle color
+        ///  (2)gradient from beginning to middle of width firstGradientWidth
+        ///  (3)gradient from middle to end of width secondGradientWidth
+        ///
+        ///  if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
         ///</summary>
         private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
         {
@@ -1040,7 +1025,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
             e.Graphics.DrawLine(SystemPens.ButtonHighlight, 0, 0, e.ToolStrip.Width, 0);
@@ -1052,10 +1036,9 @@ namespace System.Windows.Forms
             RenderBackgroundGradient(e.Graphics, statusStrip, ColorTable.StatusStripGradientBegin, ColorTable.StatusStripGradientEnd, statusStrip.Orientation);
         }
 
-
         private void RenderCheckBackground(ToolStripItemImageRenderEventArgs e)
         {
-            // 
+            //
             Rectangle bounds = DpiHelper.IsScalingRequired ? new Rectangle(e.ImageRectangle.Left - 2, (e.Item.Height - e.ImageRectangle.Height) / 2 - 1, e.ImageRectangle.Width + 4, e.ImageRectangle.Height + 2) :
                                 new Rectangle(e.ImageRectangle.Left - 2, 1, e.ImageRectangle.Width + 4, e.Item.Height - 2);
             Graphics g = e.Graphics;
@@ -1135,7 +1118,6 @@ namespace System.Windows.Forms
         // renders the overall gradient
         private void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor, Orientation orientation)
         {
-
             if (control.RightToLeft == RightToLeft.Yes)
             {
                 Color temp = beginColor;
@@ -1179,7 +1161,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         private void RenderToolStripBackgroundInternal(ToolStripRenderEventArgs e) {
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
@@ -1301,13 +1282,13 @@ namespace System.Windows.Forms
             }
             LinearGradientMode mode = (horizontal) ? LinearGradientMode.Vertical : LinearGradientMode.Horizontal;
 
-            // fill main body 
+            // fill main body
             FillWithDoubleGradient(overflowButtonGradientBegin, overflowButtonGradientMiddle, overflowButtonGradientEnd, g, overflowBoundsFill, iconWellGradientWidth, iconWellGradientWidth, mode, false);
 
             // render shadow pixels (ToolStrip only)
             if (drawCurve)
             {
-                // top left and top right shadow pixels 
+                // top left and top right shadow pixels
                 using (Brush b = new SolidBrush(overflowTopShadow/*Color.Orange*/))
                 {
                     if (horizontal)
@@ -1583,7 +1564,6 @@ namespace System.Windows.Forms
 
         private void RenderPressedButtonFill(Graphics g, Rectangle bounds)
         {
-
             if ((bounds.Width == 0) || (bounds.Height == 0))
             {
                 return;  // can't new up a linear gradient brush with no dimension.
@@ -1691,11 +1671,10 @@ namespace System.Windows.Forms
             isScalingInitialized = true;
         }
 
-        // This draws differently sized arrows than the base one... 
+        // This draws differently sized arrows than the base one...
         // used only for drawing the overflow button madness.
         private Point RenderArrowInternal(Graphics g, Rectangle dropDownRect, ArrowDirection direction, Brush brush)
         {
-
             Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
 
             // if the width is odd - favor pushing it over one pixel right.

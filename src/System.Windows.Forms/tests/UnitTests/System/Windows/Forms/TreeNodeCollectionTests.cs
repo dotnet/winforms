@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, treeNode.StateImageIndex);
             Assert.Empty(treeNode.StateImageKey);
             Assert.Null(treeNode.Tag);
-            Assert.Same(expectedText, treeNode.Text);
+            Assert.Equal(expectedText, treeNode.Text);
             Assert.Empty(treeNode.ToolTipText);
             Assert.Same(treeView, treeNode.TreeView);
         }

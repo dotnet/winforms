@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -19,7 +17,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// In the process of shutting down, Windows has closed the application.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Justification = "Verb: Shut down, not noun Shutdown.")]
         WindowsShutDown = 1,
 
         /// <summary>

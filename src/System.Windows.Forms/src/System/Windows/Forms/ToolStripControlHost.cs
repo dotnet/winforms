@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
@@ -32,11 +31,9 @@ namespace System.Windows.Forms
         internal static readonly object EventValidated = new object();
         internal static readonly object EventValidating = new object();
 
-
         /// <summary>
         /// Constructs a ToolStripControlHost
         /// </summary>
-
         public ToolStripControlHost(Control c)
         {
             control = c ?? throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
@@ -70,9 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>
-        /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
-        /// </para>
+        /// Gets or sets the image that is displayed on a <see cref='Label'/>.
         /// </summary>
         [
         Localizable(true),
@@ -211,10 +206,10 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
         }
 
-        /// <summary> 
+        /// <summary>
         //  For control hosts, this property has no effect
         /// as they get their own clicks.  Use ControlStyles.StandardClick
-        /// instead. 
+        /// instead.
         /// </summary>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool DoubleClickEnabled
@@ -251,7 +246,6 @@ namespace System.Windows.Forms
                 Control.Enabled = value;
             }
         }
-
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter
@@ -302,8 +296,6 @@ namespace System.Windows.Forms
         ]
         public override Image Image
         {
-
-
             get
             {
                 return base.Image;
@@ -372,7 +364,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Occurs when the control loses focus.</para>
+        /// Occurs when the control loses focus.
         /// </summary>
         [
         SRCategory(nameof(SR.CatFocus)),
@@ -386,9 +378,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventLostFocus, value);
         }
 
-
         /// <summary>
-        /// <para>Occurs when a key is pressed down while the control has focus.</para>
+        /// Occurs when a key is pressed down while the control has focus.
         /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown
@@ -398,7 +389,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para> Occurs when a key is pressed while the control has focus.</para>
+        ///  Occurs when a key is pressed while the control has focus.
         /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress
@@ -408,7 +399,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para> Occurs when a key is released while the control has focus.</para>
+        ///  Occurs when a key is released while the control has focus.
         /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp
@@ -488,7 +479,6 @@ namespace System.Windows.Forms
                     CommonProperties.UpdateSpecifiedBounds(control, specifiedBounds.X, specifiedBounds.Y, specifiedBounds.Width, specifiedBounds.Height);
                 }
 
-
                 base.Size = value;
 
                 if (control != null)
@@ -504,7 +494,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container. 
+        /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site
@@ -589,7 +579,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventValidating, value);
         }
 
-
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated
         {
@@ -631,7 +620,6 @@ namespace System.Windows.Forms
             Control.Focus();
         }
 
-
         public override Size GetPreferredSize(Size constrainingSize)
         {
             if (control != null)
@@ -643,18 +631,18 @@ namespace System.Windows.Forms
 
         ///
         ///  Handle* wrappers:
-        ///    We sync the event from the hosted control and call resurface it on ToolStripItem.
+        ///  We sync the event from the hosted control and call resurface it on ToolStripItem.
         ///
 
-        private void HandleClick(object sender, System.EventArgs e)
+        private void HandleClick(object sender, EventArgs e)
         {
             OnClick(e);
         }
-        private void HandleBackColorChanged(object sender, System.EventArgs e)
+        private void HandleBackColorChanged(object sender, EventArgs e)
         {
             OnBackColorChanged(e);
         }
-        private void HandleDoubleClick(object sender, System.EventArgs e)
+        private void HandleDoubleClick(object sender, EventArgs e)
         {
             OnDoubleClick(e);
         }
@@ -674,15 +662,15 @@ namespace System.Windows.Forms
         {
             OnDragOver(e);
         }
-        private void HandleEnter(object sender, System.EventArgs e)
+        private void HandleEnter(object sender, EventArgs e)
         {
             OnEnter(e);
         }
-        private void HandleEnabledChanged(object sender, System.EventArgs e)
+        private void HandleEnabledChanged(object sender, EventArgs e)
         {
             OnEnabledChanged(e);
         }
-        private void HandleForeColorChanged(object sender, System.EventArgs e)
+        private void HandleForeColorChanged(object sender, EventArgs e)
         {
             OnForeColorChanged(e);
         }
@@ -714,7 +702,7 @@ namespace System.Windows.Forms
         {
             OnKeyUp(e);
         }
-        private void HandleLeave(object sender, System.EventArgs e)
+        private void HandleLeave(object sender, EventArgs e)
         {
             OnLeave(e);
         }
@@ -797,7 +785,7 @@ namespace System.Windows.Forms
             OnValidating(e);
         }
 
-        private void HandleValidated(object sender, System.EventArgs e)
+        private void HandleValidated(object sender, EventArgs e)
         {
             OnValidated(e);
         }
@@ -819,12 +807,10 @@ namespace System.Windows.Forms
             Control.AccessibleRole = AccessibleRole;
         }
 
-
         protected virtual void OnEnter(EventArgs e)
         {
             RaiseEvent(EventEnter, e);
         }
-
 
         /// <summary>
         /// called when the control has lost focus
@@ -878,7 +864,7 @@ namespace System.Windows.Forms
                 // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
                 element.SetBounds(bounds, BoundsSpecified.None);
 
-                // sometimes a control can ignore the size passed in, use the adjustment 
+                // sometimes a control can ignore the size passed in, use the adjustment
                 // to re-align.
                 if (bounds != control.Bounds)
                 {
@@ -896,7 +882,6 @@ namespace System.Windows.Forms
         {
             // do nothing....
         }
-
 
         protected internal override void OnLayout(LayoutEventArgs e)
         {
@@ -927,21 +912,17 @@ namespace System.Windows.Forms
             base.OnParentChanged(oldParent, newParent);
         }
 
-
-
-
         /// <summary>
-        /// The events from the hosted control are subscribed here.  
+        /// The events from the hosted control are subscribed here.
         /// Override to add/prevent syncing of control events.
         /// NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
         /// </summary>
         protected virtual void OnSubscribeControlEvents(Control control)
         {
-
             if (control != null)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
-                // 
+                //
                 control.Click += new EventHandler(HandleClick);
                 control.BackColorChanged += new EventHandler(HandleBackColorChanged);
                 control.DoubleClick += new EventHandler(HandleDoubleClick);
@@ -980,9 +961,8 @@ namespace System.Windows.Forms
 
         }
 
-
         /// <summary>
-        /// The events from the hosted control are unsubscribed here.  
+        /// The events from the hosted control are unsubscribed here.
         /// Override to unhook events subscribed in OnSubscribeControlEvents.
         /// </summary>
         protected virtual void OnUnsubscribeControlEvents(Control control)
@@ -990,7 +970,7 @@ namespace System.Windows.Forms
             if (control != null)
             {
                 // Please keep this alphabetized and in sync with Subscribe
-                // 
+                //
                 control.Click -= new EventHandler(HandleClick);
                 control.BackColorChanged -= new EventHandler(HandleBackColorChanged);
                 control.DoubleClick -= new EventHandler(HandleDoubleClick);
@@ -1034,7 +1014,6 @@ namespace System.Windows.Forms
             RaiseCancelEvent(EventValidating, e);
         }
 
-
         protected virtual void OnValidated(EventArgs e)
         {
             RaiseEvent(EventValidated, e);
@@ -1065,7 +1044,6 @@ namespace System.Windows.Forms
 
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode)
         {
             if (control != null)
@@ -1099,7 +1077,6 @@ namespace System.Windows.Forms
                 base.SetVisibleCore(visible);
                 inSetVisibleCore = false;
             }
-
 
         }
 
@@ -1174,10 +1151,10 @@ namespace System.Windows.Forms
         }
 
         // Our implementation of ISite:
-        // Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing 
+        // Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         // whether the control is in runtime or designtime.
         // This implementation of ISite would be set to Control.Site when ToolStripControlHost.Site is set at DesignTime. (Refer to Site property on ToolStripControlHost)
-        // This implementation just returns the DesigMode property to be ToolStripControlHost's DesignMode property. 
+        // This implementation just returns the DesigMode property to be ToolStripControlHost's DesignMode property.
         // Everything else is pretty much default implementation.
         private class StubSite : ISite, IDictionaryService
         {
@@ -1192,7 +1169,7 @@ namespace System.Windows.Forms
             }
             // The component sited by this component site.
             /// <summary>
-            ///    <para>When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
+            ///  When implemented by a class, gets the component associated with the <see cref='ISite'/>.
             /// </summary>
             IComponent ISite.Component
             {
@@ -1204,7 +1181,7 @@ namespace System.Windows.Forms
 
             // The container in which the component is sited.
             /// <summary>
-            /// <para>When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.</para>
+            /// When implemented by a class, gets the container associated with the <see cref='ISite'/>.
             /// </summary>
             IContainer ISite.Container
             {
@@ -1216,7 +1193,7 @@ namespace System.Windows.Forms
 
             // Indicates whether the component is in design mode.
             /// <summary>
-            ///    <para>When implemented by a class, determines whether the component is in design mode.</para>
+            ///  When implemented by a class, determines whether the component is in design mode.
             /// </summary>
             bool ISite.DesignMode
             {
@@ -1229,8 +1206,8 @@ namespace System.Windows.Forms
             // The name of the component.
             //
             /// <summary>
-            ///    <para>When implemented by a class, gets or sets the name of
-            ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
+            ///  When implemented by a class, gets or sets the name of
+            ///  the component associated with the <see cref='ISite'/>.
             /// </summary>
             string ISite.Name
             {
@@ -1245,7 +1222,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Returns the requested service.
+            ///  Returns the requested service.
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
@@ -1270,7 +1247,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the key corresponding to the given value.
+            ///  Retrieves the key corresponding to the given value.
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
@@ -1289,7 +1266,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the value corresponding to the given key.
+            ///  Retrieves the value corresponding to the given key.
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
@@ -1301,9 +1278,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Stores the given key-value pair in an object's site.  This key-value
-            ///     pair is stored on a per-object basis, and is a handy place to save
-            ///     additional information about a component.
+            ///  Stores the given key-value pair in an object's site.  This key-value
+            ///  pair is stored on a per-object basis, and is a handy place to save
+            ///  additional information about a component.
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {

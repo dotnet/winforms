@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
     /// </summary>
-    [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
     [Serializable]
     public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
     {

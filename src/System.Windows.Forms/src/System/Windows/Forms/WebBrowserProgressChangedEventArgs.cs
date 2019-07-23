@@ -5,12 +5,12 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnProgressChanged'/> event.
+    /// Provides data for the <see cref='WebBrowser.OnProgressChanged'/> event.
     /// </summary>
     public class WebBrowserProgressChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserProgressChangedEventArgs'/> class.
+        /// Creates an instance of the <see cref='WebBrowserProgressChangedEventArgs'/> class.
         /// </summary>
         public WebBrowserProgressChangedEventArgs(long currentProgress, long maximumProgress)
         {

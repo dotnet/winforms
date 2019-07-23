@@ -27,12 +27,12 @@ namespace System.Windows.Forms.Design
         void InsertOverlay(Control control, int index);
 
         /// <summary>
-        /// Invalidates the overlays 
+        /// Invalidates the overlays
         /// </summary>
         void InvalidateOverlays(Rectangle screenRectangle);
 
         /// <summary>
-        /// Invalidates the overlays 
+        /// Invalidates the overlays
         /// </summary>
         void InvalidateOverlays(Region screenRegion);
     }

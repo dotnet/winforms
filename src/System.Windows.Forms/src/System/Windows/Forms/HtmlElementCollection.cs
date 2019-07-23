@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the total number of elements in the collection.
+        ///  Returns the total number of elements in the collection.
         /// </summary>
         public int Count
         {

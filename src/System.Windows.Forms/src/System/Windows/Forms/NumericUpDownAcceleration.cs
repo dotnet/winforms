@@ -4,16 +4,14 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-
     /// <summary>
-    ///    Comprises the information specifying how acceleration should be performed
-    ///     on a Windows up-down control when the up/down button is pressed for certain
-    ///     amount of time.
+    ///  Comprises the information specifying how acceleration should be performed
+    ///  on a Windows up-down control when the up/down button is pressed for certain
+    ///  amount of time.
     /// </summary>
     public class NumericUpDownAcceleration
     {
-        private int seconds;      // Ideally we would use UInt32 but it is not CLS-compliant.
+        private int seconds;        // Ideally we would use UInt32 but it is not CLS-compliant.
         private decimal increment;  // Ideally we would use UInt32 but NumericUpDown uses Decimal values.
 
         public NumericUpDownAcceleration(int seconds, decimal increment)
@@ -33,8 +31,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines the amount of time for the UpDown control to wait to set the increment
-        ///     step when holding the up/down button.
+        ///  Determines the amount of time for the UpDown control to wait to set the increment
+        ///  step when holding the up/down button.
         /// </summary>
         public int Seconds
         {
@@ -53,11 +51,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines the amount to increment by.
+        ///  Determines the amount to increment by.
         /// </summary>
         public decimal Increment
         {
-
             get
             {
                 return increment;

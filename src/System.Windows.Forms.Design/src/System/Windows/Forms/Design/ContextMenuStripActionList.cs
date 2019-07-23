@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     The Main method to group the ActionItems and pass it to the Panel.
+        ///  The Main method to group the ActionItems and pass it to the Panel.
         /// </summary>
         public override DesignerActionItemCollection GetSortedActionItems()
         {

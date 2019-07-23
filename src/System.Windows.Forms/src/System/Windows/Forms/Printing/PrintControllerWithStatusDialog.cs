@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Threading;
+
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
-    using System;
-    using System.Threading;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.ComponentModel;
-    using System.Drawing.Printing;
-
     public class PrintControllerWithStatusDialog : PrintController
     {
         private readonly PrintController underlyingController;
@@ -31,10 +27,8 @@ namespace System.Windows.Forms
             this.dialogTitle = dialogTitle;
         }
         /// <summary>
-        ///    <para>
-        ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller 
-        ///       and return its IsPreview Property.
-        ///    </para>
+        ///  This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller
+        ///  and return its IsPreview Property.
         /// </summary>
         public override bool IsPreview
         {
@@ -49,9 +43,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Implements StartPrint by delegating to the underlying controller.
-        ///    </para>
+        ///  Implements StartPrint by delegating to the underlying controller.
         /// </summary>
         public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
         {
@@ -65,7 +57,7 @@ namespace System.Windows.Forms
                 backgroundThread = new BackgroundThread(this); // starts running & shows dialog automatically
             }
 
-            // OnStartPrint does the security check... lots of 
+            // OnStartPrint does the security check... lots of
             // extra setup to make sure that we tear down
             // correctly...
             //
@@ -91,9 +83,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Implements StartPage by delegating to the underlying controller.
-        ///    </para>
+        ///  Implements StartPage by delegating to the underlying controller.
         /// </summary>
         public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
         {
@@ -112,9 +102,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Implements EndPage by delegating to the underlying controller.
-        ///    </para>
+        ///  Implements EndPage by delegating to the underlying controller.
         /// </summary>
         public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
         {
@@ -129,9 +117,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Implements EndPrint by delegating to the underlying controller.
-        ///    </para>
+        ///  Implements EndPrint by delegating to the underlying controller.
         /// </summary>
         public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
         {
@@ -172,7 +158,7 @@ namespace System.Windows.Forms
             // on correct thread
             private void Run()
             {
-                // 
+                //
 
                 try
                 {
@@ -256,8 +242,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Tells whether the current resources for this dll have been
-            ///     localized for a RTL language.
+            ///  Tells whether the current resources for this dll have been
+            ///  localized for a RTL language.
             /// </summary>
             private static bool IsRTLResources
             {
@@ -295,12 +281,12 @@ namespace System.Windows.Forms
 
                 tableLayoutPanel1.AutoSize = true;
                 tableLayoutPanel1.ColumnCount = 1;
-                tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(SizeType.Percent, 100F));
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
                 tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-                tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+                tableLayoutPanel1.Location = new Point(0, 0);
                 tableLayoutPanel1.RowCount = 2;
-                tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Percent, 50F));
-                tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Percent, 50F));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
                 tableLayoutPanel1.TabIndex = 0;
                 tableLayoutPanel1.Controls.Add(label1, 0, 0);
                 tableLayoutPanel1.Controls.Add(button1, 0, 1);
@@ -323,7 +309,7 @@ namespace System.Windows.Forms
                 SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
                 Controls.Add(tableLayoutPanel1);
             }
-            private void button1_Click(object sender, System.EventArgs e)
+            private void button1_Click(object sender, EventArgs e)
             {
                 button1.Enabled = false;
                 label1.Text = string.Format(SR.PrintControllerWithStatusDialog_Canceling);

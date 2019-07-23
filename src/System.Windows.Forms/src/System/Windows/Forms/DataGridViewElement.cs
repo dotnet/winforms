@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -12,31 +11,25 @@ namespace System.Windows.Forms
     /// </summary>
     public class DataGridViewElement
     {
-        private DataGridViewElementStates _state; // enabled frozen readOnly resizable selected visible
         private DataGridView _dataGridView;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewElement'/> class.
+        /// Initializes a new instance of the <see cref='DataGridViewElement'/> class.
         /// </summary>
         public DataGridViewElement()
         {
-            _state = DataGridViewElementStates.Visible;
+            State = DataGridViewElementStates.Visible;
         }
 
         internal DataGridViewElement(DataGridViewElement dgveTemplate)
         {
             // Selected and Displayed states are not inherited
-            _state = dgveTemplate.State & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible);
+            State = dgveTemplate.State & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible);
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public virtual DataGridViewElementStates State => _state;
-
-        internal DataGridViewElementStates StateInternal
-        {
-            set => _state = value;
-        }
+        public virtual DataGridViewElementStates State { get; internal set; }
 
         internal bool StateIncludes(DataGridViewElementStates elementState)
         {
@@ -50,13 +43,12 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DataGridView DataGridView => _dataGridView;
-
-        internal DataGridView DataGridViewInternal
+        public DataGridView DataGridView
         {
-            set
+            get => _dataGridView;
+            internal set
             {
-                if (DataGridView != value)
+                if (_dataGridView != value)
                 {
                     _dataGridView = value;
                     OnDataGridViewChanged();
@@ -68,37 +60,31 @@ namespace System.Windows.Forms
         {
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellClick(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellClickInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellContentClick(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellContentClickInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellContentDoubleClick(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellContentDoubleClickInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellValueChanged(DataGridViewCellEventArgs e)
         {
             _dataGridView?.OnCellValueChangedInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseDataError(DataGridViewDataErrorEventArgs e)
         {
             _dataGridView?.OnDataErrorInternal(e);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseMouseWheel(MouseEventArgs e)
         {
             _dataGridView?.OnMouseWheelInternal(e);

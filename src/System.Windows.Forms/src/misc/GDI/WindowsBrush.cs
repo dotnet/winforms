@@ -2,39 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsBrush.FromLogBrush(System.Windows.Forms.Internal.IntNativeMethods+LOGBRUSH):System.Windows.Forms.Internal.WindowsBrush")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsBrush.FromHdc(System.IntPtr):System.Windows.Forms.Internal.WindowsBrush")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsBrush.FromBrush(System.Drawing.Brush):System.Windows.Forms.Internal.WindowsBrush")]
+using System.Diagnostics;
+using System.Drawing;
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///     <para>
-    ///         Encapsulates a GDI Brush object.
-    ///     </para>
+    ///  Encapsulates a GDI Brush object.
     /// </summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    abstract class WindowsBrush : MarshalByRefObject, ICloneable, IDisposable
+    internal abstract class WindowsBrush : MarshalByRefObject, ICloneable, IDisposable
     {
         // Handle to the native Windows brush object.
-        // 
+        //
         private readonly DeviceContext dc;
         private IntPtr nativeHandle;        // Cannot be protected because the class is internal (C# doesn't allow it).
         private readonly Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
@@ -49,15 +28,13 @@ namespace System.Experimental.Gdi
         protected abstract void CreateBrush();
 
         /// <summary>
-        ///     Parameterless constructor to use default color.
-        ///     Notice that the actual object construction is done in the derived classes.
+        ///  Parameterless constructor to use default color.
+        ///  Notice that the actual object construction is done in the derived classes.
         /// </summary>
-
         public WindowsBrush(DeviceContext dc)
         {
             this.dc = dc;
         }
-
 
         public WindowsBrush(DeviceContext dc, Color color)
         {
@@ -109,7 +86,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        ///       Gets the native Win32 brush handle. It creates it on demand.
+        ///  Gets the native Win32 brush handle. It creates it on demand.
         /// </summary>
         protected IntPtr NativeHandle
         {
@@ -132,74 +109,8 @@ namespace System.Experimental.Gdi
             }
         }
 
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-
         /// <summary>
-        ///     Derived classes implement this method to get a native GDI brush wrapper with the same
-        ///     properties as this object.
-        /// </summary>
-        
-        
-        public static WindowsBrush FromBrush(DeviceContext dc, Brush originalBrush)
-        {
-            if(originalBrush is SolidBrush) {
-                return  new WindowsSolidBrush(dc, ((SolidBrush)originalBrush).Color);
-            }
-
-            if(originalBrush is System.Drawing.Drawing2D.HatchBrush) {
-                System.Drawing.Drawing2D.HatchBrush hatchBrush = ((System.Drawing.Drawing2D.HatchBrush)originalBrush);
-                return new WindowsHatchBrush(dc, (WindowsHatchStyle) hatchBrush.HatchStyle, hatchBrush.ForegroundColor, hatchBrush.BackgroundColor);
-            }
-
-            Debug.Fail("Don't know how to convert this brush!");
-            return null;
-        }
-
-        /// <summary>
-        ///     Creates a WindowsBrush from the DC currently selected HBRUSH
-        /// </summary>
-        
-        
-        public static WindowsBrush FromDC(DeviceContext dc)
-        {
-            IntPtr hBrush = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, dc.Hdc), IntNativeMethods.OBJ_BRUSH);
-            IntNativeMethods.LOGBRUSH logBrush = new IntNativeMethods.LOGBRUSH();
-            IntUnsafeNativeMethods.GetObject(new HandleRef(null, hBrush), logBrush);
-
-            // don't call DeleteObject on handle from GetCurrentObject, it is the one selected in the hdc.
-
-            return WindowsBrush.FromLogBrush(dc, logBrush );
-        }
-
-        /// <summary>
-        ///     Creates a WindowsBrush from a LOGBRUSH.
-        /// </summary>
-        
-        
-        public static WindowsBrush FromLogBrush( DeviceContext dc, IntNativeMethods.LOGBRUSH logBrush )
-        {
-            Debug.Assert( logBrush != null, "logBrush is null" );
-
-            switch( logBrush.lbStyle )
-            {
-                // currently supported brushes:
-                case IntNativeMethods.BS_HATCHED:
-                    return new WindowsHatchBrush(dc, (WindowsHatchStyle) logBrush.lbHatch );
-
-                case IntNativeMethods.BS_SOLID:
-                    return new WindowsSolidBrush( dc, Color.FromArgb(logBrush.lbColor) );
-
-                default:
-                    Debug.Fail( "Don't know how to create WindowsBrush from specified logBrush" );
-                    return null;
-            }
-        }
-#endif
-
-        /// <summary>
-        ///    <para>
-        ///       Returns the native Win32 brush handle.
-        ///    </para>
+        ///  Returns the native Win32 brush handle.
         /// </summary>
         public IntPtr HBrush
         {

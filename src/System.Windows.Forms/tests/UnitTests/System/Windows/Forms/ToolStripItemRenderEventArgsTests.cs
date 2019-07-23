@@ -32,21 +32,7 @@ namespace System.Windows.Forms.Tests
             var e = new ToolStripItemRenderEventArgs(g, item);
             Assert.Equal(g, e.Graphics);
             Assert.Equal(item, e.Item);
-            if (item != null)
-            {
-                Assert.Equal(expectedToolStrip, e.ToolStrip);
-            }
-        }
-
-        [Fact]
-        public void ToolStrip_GetWithNullItem_ThrowsNullReferenceException()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new ToolStripItemRenderEventArgs(graphics, null);
-                Assert.Throws<NullReferenceException>(() => e.ToolStrip);
-            }
+            Assert.Equal(expectedToolStrip, e.ToolStrip);
         }
     }
 }

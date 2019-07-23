@@ -2,17 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Net;
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
@@ -33,7 +23,7 @@ namespace System.Windows.Forms
             {
                 if (disposed)
                 {
-                    throw new System.ObjectDisposedException(GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
                 return htmlHistory;
             }
@@ -81,22 +71,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Go to a specific Uri in the history</para>
+        ///  Go to a specific Uri in the history
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public void Go(Uri url)
         {
             Go(url.ToString());
         }
 
         /// <summary>
-        ///    <para>Go to a specific url(string) in the history</para>
+        ///  Go to a specific url(string) in the history
         /// </summary>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
-        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public void Go(string urlString)
         {
             object loc = (object)urlString;
@@ -104,7 +92,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Go to the specified position in the history list</para>
+        ///  Go to the specified position in the history list
         /// </summary>
         public void Go(int relativePosition)
         {

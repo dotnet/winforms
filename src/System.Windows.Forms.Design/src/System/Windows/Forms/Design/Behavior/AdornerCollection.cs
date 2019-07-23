@@ -3,24 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     <para>
-    ///         A collection that stores <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> objects.
-    ///     </para>
+    ///  A collection that stores <see cref='Adorner' /> objects.
     /// </summary>
-    /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' />
-    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
+    /// <seealso cref='BehaviorServiceAdornerCollection' />
     public sealed class BehaviorServiceAdornerCollection : CollectionBase
     {
         /// <summary>
-        ///     <para>
-        ///         Initializes a new instance of
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' />.
-        ///     </para>
+        ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection' />.
         /// </summary>
         public BehaviorServiceAdornerCollection(BehaviorService behaviorService)
         {
@@ -28,11 +21,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     <para>
-        ///         Initializes a new instance of
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> based on another
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' />.
-        ///     </para>
+        ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection'/> based on another
+        ///  <see cref='BehaviorServiceAdornerCollection'/>.
         /// </summary>
         public BehaviorServiceAdornerCollection(BehaviorServiceAdornerCollection value)
         {
@@ -40,15 +30,11 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     <para>
-        ///         Initializes a new instance of
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> containing any array of
-        ///         <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> objects.
-        ///     </para>
+        ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection' />
+        ///  containing any array of <see cref='Adorner' /> objects.
         /// </summary>
         /// <param name='value'>
-        ///     A array of <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> objects with which to intialize the
-        ///     collection
+        ///  A array of <see cref='Adorner' /> objects with which to intialize the collection.
         /// </param>
         public BehaviorServiceAdornerCollection(Adorner[] value)
         {
@@ -56,20 +42,16 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     <para>
-        ///         Represents the entry at the specified index of the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.Adorner' />.
-        ///     </para>
+        ///  Represents the entry at the specified index of the <see cref='Adorner' />.
         /// </summary>
         /// <param name='index'>
-        ///     <para>The zero-based index of the entry to locate in the collection.</para>
+        ///  The zero-based index of the entry to locate in the collection.
         /// </param>
         /// <value>
-        ///     <para> The entry at the specified index of the collection.</para>
+        ///  The entry at the specified index of the collection.
         /// </value>
-        /// <exception cref='System.ArgumentOutOfRangeException'>
-        ///     <paramref name='index' /> is outside the valid range of indexes
-        ///     for the collection.
+        /// <exception cref='ArgumentOutOfRangeException'>
+        ///  <paramref name='index' /> is outside the valid range of indexes for the collection.
         /// </exception>
         public Adorner this[int index]
         {
@@ -78,184 +60,158 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     <para>
-        ///         Adds a <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> with the specified value to the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> .
-        ///     </para>
+        ///  Adds a <see cref='Adorner' /> with the specified value to the
+        ///  <see cref='BehaviorServiceAdornerCollection' /> .
         /// </summary>
-        /// <param name='value'>The <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> to add.</param>
+        /// <param name='value'>The <see cref='Adorner' /> to add.</param>
         /// <returns>
-        ///     <para>The index at which the new element was inserted.</para>
+        ///  The index at which the new element was inserted.
         /// </returns>
-        /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange' />
+        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange' />
         public int Add(Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Copies the elements of an array to the end of the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' />.
-        ///     </para>
+        ///  Copies the elements of an array to the end of the
+        ///  <see cref='BehaviorServiceAdornerCollection' />.
         /// </summary>
         /// <param name='value'>
-        ///     An array of type <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> containing the objects to add to the
-        ///     collection.
+        ///  An array of type <see cref='Adorner' /> containing the objects to add to the
+        ///  collection.
         /// </param>
         /// <returns>
-        ///     <para>None.</para>
+        ///  None.
         /// </returns>
-        /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add' />
+        /// <seealso cref='Add' />
         public void AddRange(Adorner[] value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Adds the contents of another
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> to the end of the
-        ///         collection.
-        ///     </para>
+        ///  Adds the contents of another
+        ///  <see cref='BehaviorServiceAdornerCollection' /> to the end of the
+        ///  collection.
         /// </summary>
         /// <param name='value'>
-        ///     A <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> containing the objects to
-        ///     add to the collection.
+        ///  A <see cref='BehaviorServiceAdornerCollection' /> containing the objects to
+        ///  add to the collection.
         /// </param>
         /// <returns>
-        ///     <para>None.</para>
+        ///  None.
         /// </returns>
-        /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add' />
+        /// <seealso cref='Add' />
         public void AddRange(BehaviorServiceAdornerCollection value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Gets a value indicating whether the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> contains the specified
-        ///         <see cref='System.Windows.Forms.Design.Behavior.Adorner' />.
-        ///     </para>
+        ///  Gets a value indicating whether the
+        ///  <see cref='BehaviorServiceAdornerCollection' /> contains the specified
+        ///  <see cref='Adorner' />.
         /// </summary>
-        /// <param name='value'>The <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> to locate.</param>
+        /// <param name='value'>The <see cref='Adorner' /> to locate.</param>
         /// <returns>
-        ///     <para>
-        ///         <see langword='true' /> if the <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> is contained in the
-        ///         collection;
-        ///         otherwise, <see langword='false' />.
-        ///     </para>
+        ///  <see langword='true' /> if the <see cref='Adorner' /> is contained in the
+        ///  collection;
+        ///  otherwise, <see langword='false' />.
         /// </returns>
-        /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.IndexOf' />
+        /// <seealso cref='IndexOf' />
         public bool Contains(Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Copies the <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> values to a
-        ///         one-dimensional <see cref='System.Array' /> instance at the
-        ///         specified index.
-        ///     </para>
+        ///  Copies the <see cref='BehaviorServiceAdornerCollection' /> values to a
+        ///  one-dimensional <see cref='Array' /> instance at the
+        ///  specified index.
         /// </summary>
         /// <param name='array'>
-        ///     <para>
-        ///         The one-dimensional <see cref='System.Array' /> that is the destination of the values copied from
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> .
-        ///     </para>
+        ///  The one-dimensional <see cref='Array' /> that is the destination of the values copied from
+        ///  <see cref='BehaviorServiceAdornerCollection' /> .
         /// </param>
         /// <param name='index'>The index in <paramref name='array' /> where copying begins.</param>
         /// <returns>
-        ///     <para>None.</para>
+        ///  None.
         /// </returns>
-        /// <exception cref='System.ArgumentException'>
-        ///     <para><paramref name='array' /> is multidimensional.</para>
-        ///     <para>-or-</para>
-        ///     <para>
-        ///         The number of elements in the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> is greater than the
-        ///         available space between <paramref name='arrayIndex' /> and the end of <paramref name='array' />.
-        ///     </para>
+        /// <exception cref='ArgumentException'>
+        ///  <paramref name='array' /> is multidimensional.
+        ///  -or-
+        ///  The number of elements in the
+        ///  <see cref='BehaviorServiceAdornerCollection' /> is greater than the
+        ///  available space between <paramref name='index' /> and the end of <paramref name='array' />.
         /// </exception>
-        /// <exception cref='System.ArgumentNullException'><paramref name='array' /> is <see langword='null' />. </exception>
-        /// <exception cref='System.ArgumentOutOfRangeException'>
-        ///     <paramref name='arrayIndex' /> is less than
-        ///     <paramref name='array' />'s lowbound.
+        /// <exception cref='ArgumentNullException'><paramref name='array' /> is <see langword='null' />. </exception>
+        /// <exception cref='ArgumentOutOfRangeException'>
+        ///  <paramref name='arrayIndex' /> is less than
+        ///  <paramref name='array' />'s lowbound.
         /// </exception>
-        /// <seealso cref='System.Array' />
+        /// <seealso cref='Array' />
         public void CopyTo(Adorner[] array, int index)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Returns the index of a <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> in
-        ///         the <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> .
-        ///     </para>
+        ///  Returns the index of a <see cref='Adorner' /> in
+        ///  the <see cref='BehaviorServiceAdornerCollection' /> .
         /// </summary>
-        /// <param name='value'>The <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> to locate.</param>
+        /// <param name='value'>The <see cref='Adorner' /> to locate.</param>
         /// <returns>
-        ///     <para>
-        ///         The index of the <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> of <paramref name='value' /> in
-        ///         the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' />, if found; otherwise, -1.
-        ///     </para>
+        ///  The index of the <see cref='Adorner' /> of <paramref name='value' /> in
+        ///  the
+        ///  <see cref='BehaviorServiceAdornerCollection' />, if found; otherwise, -1.
         /// </returns>
-        /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Contains' />
+        /// <seealso cref='Contains' />
         public int IndexOf(Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Inserts a <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> into the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> at the specified index.
-        ///     </para>
+        ///  Inserts a <see cref='Adorner' /> into the
+        ///  <see cref='BehaviorServiceAdornerCollection' /> at the specified index.
         /// </summary>
         /// <param name='index'>The zero-based index where <paramref name='value' /> should be inserted.</param>
-        /// <param name=' value'>The <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> to insert.</param>
+        /// <param name=' value'>The <see cref='Adorner' /> to insert.</param>
         /// <returns>
-        ///     <para>None.</para>
+        ///  None.
         /// </returns>
-        /// <seealso cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add' />
+        /// <seealso cref='Add' />
         public void Insert(int index, Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Returns an enumerator that can iterate through
-        ///         the <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> .
-        ///     </para>
+        ///  Returns an enumerator that can iterate through
+        ///  the <see cref='BehaviorServiceAdornerCollection' /> .
         /// </summary>
         /// <returns>
-        ///     <para>None.</para>
+        ///  None.
         /// </returns>
-        /// <seealso cref='System.Collections.IEnumerator' />
+        /// <seealso cref='IEnumerator' />
         public new BehaviorServiceAdornerCollectionEnumerator GetEnumerator()
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-        ///     <para>
-        ///         Removes a specific <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> from the
-        ///         <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> .
-        ///     </para>
+        ///  Removes a specific <see cref='Adorner' /> from the
+        ///  <see cref='BehaviorServiceAdornerCollection' /> .
         /// </summary>
         /// <param name='value'>
-        ///     The <see cref='System.Windows.Forms.Design.Behavior.Adorner' /> to remove from the
-        ///     <see cref='System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection' /> .
+        ///  The <see cref='Adorner' /> to remove from the
+        ///  <see cref='BehaviorServiceAdornerCollection' /> .
         /// </param>
         /// <returns>
-        ///     <para>None.</para>
+        ///  None.
         /// </returns>
-        /// <exception cref='System.ArgumentException'><paramref name='value' /> is not found in the Collection. </exception>
+        /// <exception cref='ArgumentException'><paramref name='value' /> is not found in the Collection. </exception>
         public void Remove(Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);

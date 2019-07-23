@@ -5,9 +5,7 @@
 using System.ComponentModel;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Drawing;
 
@@ -25,7 +23,7 @@ namespace System.Windows.Forms
             int lastListCount = -1;
 
             //
-            // data connection state variables 
+            // data connection state variables
             //
             private BitVector32 dataConnectionState;
             private const int DATACONNECTIONSTATE_dataConnection_inSetDataConnection = 0x00000001;
@@ -293,7 +291,7 @@ namespace System.Windows.Forms
             //      2. Changes to DataGridView::SortGlyphDirection.
             //          Go thru all the data bound columns on the back end and if they map to the sorted dataField
             //          set their SortGlyphDirection to the sort direction on the back end.
-            //          
+            //
             // Note: on IBindingList there is only one column that can be sorted.
             // So if the back end is an IBindingView ( which supports sorting on multiple columns ) this code will not take into
             // account the case that multiple columns are sorted.
@@ -401,7 +399,6 @@ namespace System.Windows.Forms
                     return SortOrder.None;
                 }
 
-
                 GetSortingInformationFromBackend(out PropertyDescriptor sortProperty, out SortOrder sortOrder);
 
                 if (sortOrder == SortOrder.None)
@@ -503,7 +500,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // if the list changed the AddNew and we did not finish the AddNew operation then 
+                // if the list changed the AddNew and we did not finish the AddNew operation then
                 // finish it now and return
                 if (!dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] && owner.newRowIndex == e.NewIndex)
                 {
@@ -599,7 +596,7 @@ namespace System.Windows.Forms
 
                         // if we were on an AddNew transaction then the MASTER table would have had more than 1 row.
                         // So the Child table should not have forcefully added a row on the MASTER table");
-                        // 
+                        //
                         Debug.Assert(dataConnectionState[DATACONNECTIONSTATE_finishedAddNew]);
                     }
 
@@ -642,7 +639,7 @@ namespace System.Windows.Forms
                 }
 
                 // when we get the ListChanged notification the position in the currency manager already changed
-                // so do not change the position when we get the RowEnter event 
+                // so do not change the position when we get the RowEnter event
                 dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = true;
 
                 try
@@ -706,7 +703,7 @@ namespace System.Windows.Forms
                             string dataPropertyName = null;
                             if (e.PropertyDescriptor != null)
                             {
-                                dataPropertyName = ((System.ComponentModel.MemberDescriptor)(e.PropertyDescriptor)).Name;
+                                dataPropertyName = ((MemberDescriptor)(e.PropertyDescriptor)).Name;
                             }
                             for (int columnIndex = 0; columnIndex < owner.Columns.Count; columnIndex++)
                             {
@@ -801,15 +798,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-
-
                 dataConnectionState[DATACONNECTIONSTATE_positionChangingInCurrencyManager] = true;
                 try
                 {
                     if (!owner.InSortOperation)
                     {
                         bool scrollIntoView = true;
-                        // When an item is repositioned in a sorted column, while its 
+                        // When an item is repositioned in a sorted column, while its
                         // row is being committed, don't scroll it into view.
                         if (dataConnectionState[DATACONNECTIONSTATE_rowValidatingInAddNew])
                         {
@@ -980,7 +975,7 @@ namespace System.Windows.Forms
                 // Set the currency manager to null so if someone would want to resurect this data grid view data connection
                 // we would not unwire the events from the curency manager twice.
                 // (NOTE: resurecting a disposed data grid view data connection is not allowed.)
-                // 
+                //
                 currencyManager = null;
             }
 
@@ -992,7 +987,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn = new DataGridViewCheckBoxColumn(type.Equals(typeof(CheckState)));
                 }
-                else if (typeof(System.Drawing.Image).IsAssignableFrom(type) || imageTypeConverter.CanConvertFrom(type))
+                else if (typeof(Image).IsAssignableFrom(type) || imageTypeConverter.CanConvertFrom(type))
                 {
                     dataGridViewColumn = new DataGridViewImageColumn();
                 }
@@ -1068,7 +1063,7 @@ namespace System.Windows.Forms
                 else if (iblv != null)
                 {
                     // Maybe the data view is sorted on multiple columns.
-                    // Go thru the IBindingListView which offers the entire list of sorted columns 
+                    // Go thru the IBindingListView which offers the entire list of sorted columns
                     // and pick the first one as the SortedColumn.
                     ListSortDescriptionCollection sorts = iblv.SortDescriptions;
                     if (sorts != null &&

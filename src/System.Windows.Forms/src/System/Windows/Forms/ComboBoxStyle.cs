@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the <see cref='System.Windows.Forms.ComboBox'/> style.
+    /// Specifies the <see cref='ComboBox'/> style.
     /// </summary>
     public enum ComboBoxStyle
     {

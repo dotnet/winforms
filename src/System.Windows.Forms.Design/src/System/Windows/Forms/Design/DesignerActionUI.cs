@@ -110,7 +110,6 @@ namespace System.ComponentModel.Design
         /// Disposes all UI-related objects and unhooks services.
         /// </summary>
         // Don't need to dispose of designerActionUIService.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
             if (_marshalingControl != null)
@@ -319,7 +318,7 @@ namespace System.ComponentModel.Design
             if (glyph != null)
             {
                 VerifyGlyphIsInAdorner(glyph);
-                // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...                   
+                // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...
                 RecreatePanel(glyph); // recreate the DAP itself
                 UpdateDAPLocation(comp, glyph); // reposition the thing
             }
@@ -685,7 +684,7 @@ namespace System.ComponentModel.Design
 
         bool _cancelClose = false;
         /// <summary>
-        /// This shows the actual chrome paenl that is created by the DesignerActionBehavior object.  
+        /// This shows the actual chrome paenl that is created by the DesignerActionBehavior object.
         /// </summary>
         internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
         {
@@ -824,7 +823,6 @@ namespace System.ComponentModel.Design
 
         protected override void OnClosing(ToolStripDropDownClosingEventArgs e)
         {
-
             Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "_____________________________Begin OnClose " + e.CloseReason.ToString());
             Debug.Indent();
             if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange && _cancelClose)
@@ -833,7 +831,7 @@ namespace System.ComponentModel.Design
                 e.Cancel = true;
                 Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "cancel close prepopulated");
             }
-            // when we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.  
+            // when we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.
             // - if it's a modal window that's owned by VS dont exit
             // - if it's a window that's owned by the toolstrip dropdown dont exit
             else if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange || e.CloseReason == ToolStripDropDownCloseReason.AppClicked)

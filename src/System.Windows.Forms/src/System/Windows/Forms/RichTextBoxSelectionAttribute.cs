@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     /// <summary>
     /// Specifies whether any characters in the
     /// current selection have the style or attribute.
-    ///
     /// </summary>
     public enum RichTextBoxSelectionAttribute
     {

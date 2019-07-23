@@ -13,10 +13,10 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal sealed class DesignerActionGlyph : Glyph
     {
-        internal const int CONTROLOVERLAP_X = 5; // number of pixels the anchor should be offset to the left of the control's upper-right         
+        internal const int CONTROLOVERLAP_X = 5; // number of pixels the anchor should be offset to the left of the control's upper-right
         internal const int CONTROLOVERLAP_Y = 2; // number of pixels the anchor overlaps the control in the y-direction
 
-        private Rectangle _bounds; // the bounds of our glyph 
+        private Rectangle _bounds; // the bounds of our glyph
         private readonly Adorner _adorner; // A ptr back to our adorner - so when we decide to change state, we can invalidate
         private bool _mouseOver; // on mouse over, we shade our image differently, this is used to track that state
         private Rectangle _alternativeBounds = Rectangle.Empty; // if !empty, this represents the bounds of the tray control this gyph is related to
@@ -53,7 +53,6 @@ namespace System.Windows.Forms.Design.Behavior
             get => _bounds;
         }
 
-
         public DockStyle DockEdge
         {
             get => _dockStyle;
@@ -86,7 +85,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns an image representing the 
+        /// Returns an image representing the
         /// </summary>
         private Image GlyphImageClosed
         {

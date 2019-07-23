@@ -8,14 +8,13 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     /// Identifies a row in the dataGridView.
     /// </summary>
-    [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
+    [TypeConverter(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
         private static readonly Type s_rowType = typeof(DataGridViewRow);
@@ -29,11 +28,10 @@ namespace System.Windows.Forms
         private DataGridViewCellCollection _rowCells;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
+        /// Initializes a new instance of the <see cref='DataGridViewRow'/> class.
         /// </summary>
         public DataGridViewRow() : base()
         {
-            _bandIsRow = true;
             MinimumThickness = DefaultMinRowThickness;
             Thickness = Control.DefaultFont.Height + 9;
         }
@@ -56,10 +54,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public DataGridViewCellCollection Cells
-        {
-            get => _rowCells ?? (_rowCells = CreateCellsInstance());
-        }
+        public DataGridViewCellCollection Cells => _rowCells ??= CreateCellsInstance();
 
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -199,7 +194,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool HasErrorText
+        private bool HasErrorText
         {
             get => Properties.ContainsObject(s_propRowErrorText) && Properties.GetObject(s_propRowErrorText) != null;
         }
@@ -510,7 +505,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView != null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
                         else
                         {
@@ -532,7 +527,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView != null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
                         else
                         {
@@ -554,7 +549,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView != null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         }
                         else
                         {
@@ -564,7 +559,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.Single:
-                        if (!isFirstDisplayedRow || DataGridView.ColumnHeadersVisible)
+                        if (!isFirstDisplayedRow || (DataGridView != null && DataGridView.ColumnHeadersVisible))
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
@@ -1121,15 +1116,15 @@ namespace System.Windows.Forms
         {
             if (DataGridView != null)
             {
-                DataGridViewInternal = null;
-                IndexInternal = -1;
+                DataGridView = null;
+                Index = -1;
                 if (HasHeaderCell)
                 {
-                    HeaderCell.DataGridViewInternal = null;
+                    HeaderCell.DataGridView = null;
                 }
                 foreach (DataGridViewCell dataGridViewCell in Cells)
                 {
-                    dataGridViewCell.DataGridViewInternal = null;
+                    dataGridViewCell.DataGridView = null;
                     if (dataGridViewCell.Selected)
                     {
                         dataGridViewCell.SelectedInternal = false;
@@ -1801,6 +1796,11 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
+                    if (owner.DataGridView == null)
+                    {
+                        return Rectangle.Empty;
+                    }
+
                     Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
 
                     int horizontalScrollBarHeight = 0;
@@ -1822,8 +1822,6 @@ namespace System.Windows.Forms
                     {
                         rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
                     }
-
-
 
                     if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
                     {
@@ -1873,7 +1871,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    return owner.DataGridView.AccessibilityObject;
+                    return owner.DataGridView?.AccessibilityObject;
                 }
             }
             public override AccessibleRole Role => AccessibleRole.Row;
@@ -1946,10 +1944,13 @@ namespace System.Windows.Forms
                         accState |= AccessibleStates.Selected;
                     }
 
-                    Rectangle rowBounds = owner.DataGridView.GetRowDisplayRectangle(owner.Index, true /*cutOverflow*/);
-                    if (!rowBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
+                    if (owner.DataGridView != null)
                     {
-                        accState |= AccessibleStates.Offscreen;
+                        Rectangle rowBounds = owner.DataGridView.GetRowDisplayRectangle(owner.Index, true /*cutOverflow*/);
+                        if (!rowBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
+                        {
+                            accState |= AccessibleStates.Offscreen;
+                        }
                     }
 
                     return accState;
@@ -1963,7 +1964,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    if (owner.DataGridView.AllowUserToAddRows && owner.Index == owner.DataGridView.NewRowIndex)
+                    if (owner.DataGridView != null && owner.DataGridView.AllowUserToAddRows && owner.Index == owner.DataGridView.NewRowIndex)
                     {
                         return SR.DataGridView_AccRowCreateNew;
                     }
@@ -1973,7 +1974,7 @@ namespace System.Windows.Forms
                     int childCount = GetChildCount();
 
                     // filter out the row header acc object even when DataGridView::RowHeadersVisible is turned on
-                    int startIndex = owner.DataGridView.RowHeadersVisible ? 1 : 0;
+                    int startIndex = owner.DataGridView != null && owner.DataGridView.RowHeadersVisible ? 1 : 0;
 
                     for (int i = startIndex; i < childCount; i++)
                     {
@@ -2004,6 +2005,11 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
+                if (owner.DataGridView == null)
+                {
+                    return null;
+                }
+
                 if (index == 0 && owner.DataGridView.RowHeadersVisible)
                 {
                     return owner.HeaderCell.AccessibilityObject;
@@ -2027,6 +2033,10 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
+                if (owner.DataGridView == null)
+                {
+                    return 0;
+                }
 
                 int result = owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
                 if (owner.DataGridView.RowHeadersVisible)
@@ -2047,7 +2057,10 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                if (owner.DataGridView.Focused && owner.DataGridView.CurrentCell != null && owner.DataGridView.CurrentCell.RowIndex == owner.Index)
+                if (owner.DataGridView != null &&
+                    owner.DataGridView.Focused &&
+                    owner.DataGridView.CurrentCell != null &&
+                    owner.DataGridView.CurrentCell.RowIndex == owner.Index)
                 {
                     return owner.DataGridView.CurrentCell.AccessibilityObject;
                 }
@@ -2062,6 +2075,11 @@ namespace System.Windows.Forms
                 if (owner == null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
+                }
+
+                if (owner.DataGridView == null)
+                {
+                    return null;
                 }
 
                 switch (navigationDirection)
@@ -2219,7 +2237,6 @@ namespace System.Windows.Forms
                     return owner.DataGridView.AccessibilityObject;
                 }
             }
-
 
             internal override bool IsPatternSupported(int patternId)
             {
